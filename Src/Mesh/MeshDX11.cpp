@@ -1,5 +1,13 @@
-#include <Mesh/Mesh.h>
 #include "MeshDX11.h"
+#include <Window/Window.h>
+#include "../Window/WindowDX11.h"
+#include <Graphics/Graphics.h>
+#include "../Graphics/GraphicsDX11.h"
+#include <Shader/Shader.h>
+#include "../Shader/ShaderDX11.h"
+#include <Texture/Texture.h>
+#include "../Texture/TextureDX11.h"
+
 #include <inttypes.h>
 
 using namespace PGE;
@@ -51,8 +59,8 @@ void MeshDX11::updateInternalData() {
         }
     }
 
-    ID3D11Device* dxDevice = graphics->getWindow()->getDxDevice();
-    ID3D11DeviceContext* dxContext = graphics->getWindow()->getDxContext();
+    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
 
     if (dxVertexBuffer!=nullptr) {
         dxVertexBuffer->Release(); dxVertexBuffer=nullptr;
@@ -87,13 +95,13 @@ void MeshDX11::updateInternalData() {
 }
 
 void MeshDX11::render() {
-    ID3D11DeviceContext* dxContext = graphics->getWindow()->getDxContext();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
 
     updateInternalData();
 
-    graphics->updateDxCBuffer(worldMatrix);
+    ((GraphicsDX11*)graphics)->updateDxCBuffer(worldMatrix);
 
-    graphics->useVertexInputLayout();
+    ((GraphicsDX11*)graphics)->useVertexInputLayout();
 
     UINT stride = sizeof(FLOAT)*12;
     UINT offset = 0;
@@ -109,10 +117,10 @@ void MeshDX11::render() {
 
     dxContext->IASetPrimitiveTopology(dxPrimitiveTopology);
 
-    material->getShader()->useShader();
-    graphics->useMatrixCBuffer();
-    graphics->useSampler();
-    material->getTexture()->useTexture();
+    ((ShaderDX11*)material->getShader())->useShader();
+    ((GraphicsDX11*)graphics)->useMatrixCBuffer();
+    ((GraphicsDX11*)graphics)->useSampler();
+    ((TextureDX11*)material->getTexture())->useTexture();
 
     dxContext->DrawIndexed(primitives.size()*dxIndexMultiplier,0,0);
 }

@@ -28,7 +28,7 @@ String::String(const String& a) {
     int len = a.size();
     wbuffer = new wchar[len+1];
     capacity = len+1;
-    wcscpy(wbuffer,a.wstr());
+    memcpy(wbuffer,a.wstr(),(a.size()+1)*sizeof(wchar));
     strSize = len;
     dominantBuffer = DOMINANT_BUFFER::W;
     syncBuffers();
@@ -38,7 +38,7 @@ String::String(const char* cstr) {
     int len = strlen(cstr);
     cbuffer = new char[len+1];
     capacity = len+1;
-    strcpy(cbuffer,cstr);
+    memcpy(cbuffer, cstr, (len+1)*sizeof(char));
     strSize = len;
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
@@ -48,7 +48,7 @@ String::String(const std::string& cppstr) {
     int len = cppstr.size();
     cbuffer = new char[len+1];
     capacity = len+1;
-    strcpy(cbuffer,cppstr.c_str());
+    memcpy(cbuffer, cppstr.c_str(), (len+1)*sizeof(char));
     strSize = len;
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
@@ -58,7 +58,7 @@ String::String(const wchar* wstr) {
     int len = wcslen(wstr);
     wbuffer = new wchar[len+1];
     capacity = len+1;
-    wcscpy(wbuffer,wstr);
+    memcpy(wbuffer, wstr, (len+1)*sizeof(wchar));
     strSize = len;
     dominantBuffer = DOMINANT_BUFFER::W;
     syncBuffers();
@@ -68,7 +68,7 @@ String::String(const std::wstring& cppwstr) {
     int len = cppwstr.size();
     wbuffer = new wchar[len+1];
     capacity = len+1;
-    wcscpy(wbuffer,cppwstr.c_str());
+    memcpy(wbuffer, cppwstr.c_str(), (len+1)*sizeof(wchar));
     strSize = len;
     dominantBuffer = DOMINANT_BUFFER::W;
     syncBuffers();
@@ -78,8 +78,8 @@ String::String(const String& a,const String& b) {
     int len = a.size()+b.size();
     wbuffer = new wchar[len+1];
     capacity = len+1;
-    wcscpy(wbuffer,a.wstr());
-    wcscpy(wbuffer+a.size(),b.wstr());
+    memcpy(wbuffer, a.wstr(), a.size() * sizeof(wchar));
+    memcpy(wbuffer+a.size(), b.wstr(), (b.size()+1) * sizeof(wchar));
     strSize = len;
     dominantBuffer = DOMINANT_BUFFER::W;
     syncBuffers();
@@ -106,7 +106,7 @@ String::String(wchar w) {
 String::String(int i) {
     cbuffer = new char[32];
     capacity = 32;
-    sprintf(cbuffer,"%d",i);
+    snprintf(cbuffer,32,"%d",i);
     strSize = strlen(cbuffer);
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
@@ -115,19 +115,20 @@ String::String(int i) {
 String::String(float f) {
     cbuffer = new char[32];
     capacity = 32;
-    sprintf(cbuffer,"%f",f);
+    snprintf(cbuffer,32,"%f",f);
     strSize = strlen(cbuffer);
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
 }
 
 String& String::operator=(const String& other) {
+    if (&other == this) return *this;
     if (wbuffer!=nullptr) { delete[] wbuffer; }
     if (cbuffer!=nullptr) { delete[] cbuffer; }
     wbuffer = new wchar[other.capacity];
     cbuffer = new char[other.capacity];
-    wcscpy(wbuffer,other.wstr());
-    strcpy(cbuffer,other.cstr());
+    memcpy(wbuffer,other.wstr(),(other.size()+1)*sizeof(wchar));
+    memcpy(cbuffer,other.cstr(),(other.size()+1)*sizeof(char));
     capacity = other.capacity;
     strSize = other.size();
     return *this;

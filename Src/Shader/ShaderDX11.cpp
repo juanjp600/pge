@@ -1,4 +1,7 @@
+#include <Shader/Shader.h>
 #include "ShaderDX11.h"
+#include <Window/Window.h>
+#include "../Window/WindowDX11.h"
 #include <fstream>
 
 using namespace PGE;
@@ -34,7 +37,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
     }
     fragmentSourceFile.close();
 
-    ID3D11Device* dxDevice = graphics->getWindow()->getDxDevice();
+    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
     dxDevice->CreateVertexShader(vertexShaderBytecode.data(),sizeof(uint8_t)*vertexShaderBytecode.size(),NULL,&dxVertexShader);
     dxDevice->CreatePixelShader(fragmentShaderBytecode.data(),sizeof(uint8_t)*fragmentShaderBytecode.size(),NULL,&dxFragmentShader);
 
@@ -63,7 +66,7 @@ int ShaderDX11::getDxFsCodeLen() const {
 }
 
 void ShaderDX11::useShader() {
-    ID3D11DeviceContext* dxContext = graphics->getWindow()->getDxContext();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
     dxContext->VSSetShader(dxVertexShader,NULL,0);
     dxContext->PSSetShader(dxFragmentShader,NULL,0);
 }

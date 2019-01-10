@@ -158,9 +158,6 @@
     <ClInclude Include="..\..\Src\Window\WindowDX11.h">
       <Filter>Src\Window</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\UserInput\UserInput.h">
-      <Filter>Src\UserInput</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\Texture\TextureDX11.h">
       <Filter>Src\Texture</Filter>
     </ClInclude>

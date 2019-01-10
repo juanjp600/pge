@@ -2,6 +2,7 @@
 #define PGEINTERNAL_GRAPHICS_DX11_H_INCLUDED
 
 #include <Graphics/Graphics.h>
+#include <Shader/Shader.h>
 
 #include <dxgi.h>
 #include <d3dcommon.h>

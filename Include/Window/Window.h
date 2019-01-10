@@ -17,9 +17,10 @@ class Window {
         int getHeight() const;
 
         SDL_Window* getSdlWindow() const; //TODO: move to derived classes
+
+        ~Window(){};
     protected:
         Window(){};
-        ~Window(){};
 
         String caption;
         int width; int height; bool fullscreen;

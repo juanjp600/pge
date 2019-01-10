@@ -89,7 +89,7 @@ Shader* GraphicsDX11::getDefaultShader() {
 }
 
 void GraphicsDX11::updateDxCBuffer(Matrix4x4f worldMatrix) {
-    ID3D11DeviceContext* dxContext = window->getDxContext();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
 
     FLOAT cbufferData[48];
     memcpy(cbufferData,projectionMatrix.transpose().elements,sizeof(FLOAT)*16);
@@ -123,17 +123,17 @@ void GraphicsDX11::updateViewport() {
 }
 
 void GraphicsDX11::useVertexInputLayout() {
-    ID3D11DeviceContext* dxContext = window->getDxContext();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
     dxContext->IASetInputLayout(dxVertexInputLayout);
 }
 
 void GraphicsDX11::useMatrixCBuffer() {
-    ID3D11DeviceContext* dxContext = window->getDxContext();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
     dxContext->VSSetConstantBuffers(0,1,&dxMatrixCBuffer);
 }
 
 void GraphicsDX11::useSampler() {
-    ID3D11DeviceContext* dxContext = window->getDxContext();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
     dxContext->PSSetSamplers(0,1,&dxSamplerState);
 }
 
@@ -141,5 +141,5 @@ void GraphicsDX11::clear(Color color) {
     updateViewport();
 
     float clearColor[4] = {color.red,color.green,color.blue,color.alpha};
-    window->getDxContext()->ClearRenderTargetView( currentRenderTargetView, clearColor );
+    ((WindowDX11*)window)->getDxContext()->ClearRenderTargetView( currentRenderTargetView, clearColor );
 }

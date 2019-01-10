@@ -4,6 +4,8 @@
 #include <Window/Window.h>
 #include <Misc/String.h>
 
+#include <SDL_syswm.h>
+
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <d3d11.h>

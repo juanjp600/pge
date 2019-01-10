@@ -1,6 +1,8 @@
 #ifndef PGEINTERNAL_MESH_DX11_H_INCLUDED
 #define PGEINTERNAL_MESH_DX11_H_INCLUDED
 
+#include <Windows.h>
+
 #include <Mesh/Mesh.h>
 
 #include <dxgi.h>

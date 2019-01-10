@@ -54,7 +54,6 @@
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Texture\TextureDX11.h" />
-    <ClInclude Include="..\..\Src\UserInput\UserInput.h" />
     <ClInclude Include="..\..\Src\Window\WindowDX11.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -65,7 +64,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -90,10 +89,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.8/include;../../Libraries/FreeImage3180/Source</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.8/include;../../Libraries/FreeImage3180/Source</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

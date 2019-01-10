@@ -1,6 +1,8 @@
 #ifndef PGEINTERNAL_TEXTURE_DX11_H_INCLUDED
 #define PGEINTERNAL_TEXTURE_DX11_H_INCLUDED
 
+#include <Windows.h>
+
 #include <Texture/Texture.h>
 
 #include <dxgi.h>

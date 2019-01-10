@@ -1,5 +1,6 @@
-#include <Texture/Texture.h>
 #include "TextureDX11.h"
+#include <Window/Window.h>
+#include "../Window/WindowDX11.h"
 
 #include <stdlib.h>
 #include <inttypes.h>
@@ -8,8 +9,8 @@ using namespace PGE;
 
 TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer) {
     graphics = gfx;
-    ID3D11Device* dxDevice = graphics->getWindow()->getDxDevice();
-    ID3D11DeviceContext* dxContext = graphics->getWindow()->getDxContext();
+    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
 
     filename = "<n/a>";
 
@@ -78,8 +79,8 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
 
 TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
     graphics = gfx;
-    ID3D11Device* dxDevice = graphics->getWindow()->getDxDevice();
-    ID3D11DeviceContext* dxContext = graphics->getWindow()->getDxContext();
+    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
 
     filename = fn;
     name = fn;
@@ -130,7 +131,7 @@ TextureDX11::~TextureDX11() {
 }
 
 void TextureDX11::useTexture() {
-    ID3D11DeviceContext* dxContext = graphics->getWindow()->getDxContext();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
     dxContext->PSSetShaderResources(0,1,&dxShaderResourceView);
 }
 
