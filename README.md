@@ -1,4 +1,4 @@
-#PGE - pulsegun engine
+# PGE - pulsegun engine
 
 Copyright (c) 2019 Juan Pablo Arce
 
