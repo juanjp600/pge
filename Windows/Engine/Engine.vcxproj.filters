@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Src">
+      <UniqueIdentifier>{545d3eef-2696-4b2c-a09d-bf6ae7c60913}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Color">
+      <UniqueIdentifier>{613605a8-11c0-4532-8dc0-0ae31ccd923b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Graphics">
+      <UniqueIdentifier>{e8f52a80-7691-4e35-97c0-637455232187}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Math">
+      <UniqueIdentifier>{6842d52a-fff5-48e8-b85d-a53443c9f4c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\IO">
+      <UniqueIdentifier>{81d3cef7-bfd3-4fc2-a2fe-b060a32518cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Material">
+      <UniqueIdentifier>{bf014d44-d573-4d35-a02f-18fde17649fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Mesh">
+      <UniqueIdentifier>{0950afbc-52c4-4f23-ac2f-c6a346e67691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Window">
+      <UniqueIdentifier>{5f6bbd01-3273-4079-86ea-e3ac9b9f22e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\UserInput">
+      <UniqueIdentifier>{6f3b5972-7d01-4ac1-8eec-8932b36f0ebe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Texture">
+      <UniqueIdentifier>{f3fcd56e-04e1-44d1-8c38-40d54a38f069}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Shader">
+      <UniqueIdentifier>{4ade2d4f-3bde-4d04-9b95-ddc1a3154d8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Misc">
+      <UniqueIdentifier>{f37b0fe0-35f1-41cb-bca8-97ab7d2e6a98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{5d791677-02a4-46b9-8db9-f707bf9673f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Color">
+      <UniqueIdentifier>{2eb7a757-08cb-4b2d-a92e-dd37200cb2d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Graphics">
+      <UniqueIdentifier>{6ca61777-3da8-4774-8ef1-097be111f71b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\IO">
+      <UniqueIdentifier>{cb2f87fe-bb18-46f0-a772-1246f897e509}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Material">
+      <UniqueIdentifier>{57fb4bbc-8ef9-4d50-b731-e6bc7442fe6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Math">
+      <UniqueIdentifier>{f43d4785-3e59-4096-9618-e32b4f1e535e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Mesh">
+      <UniqueIdentifier>{88b125e6-e64f-4e1e-8b00-b4344282f528}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Misc">
+      <UniqueIdentifier>{48d11694-f8d3-4188-ae83-fe3f369d444c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Shader">
+      <UniqueIdentifier>{48dd5594-1690-496a-9d1f-530b307a5050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Texture">
+      <UniqueIdentifier>{a2cf931f-79e6-4f8c-8a55-ecda598805a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\UserInput">
+      <UniqueIdentifier>{dd80612f-92bd-47a2-9b47-b92643a2fc4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Window">
+      <UniqueIdentifier>{53d3a034-f2b7-4796-9aec-486aac004ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\SysEvents">
+      <UniqueIdentifier>{8861551c-1482-4205-8649-e471619f6b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Init">
+      <UniqueIdentifier>{e5101bea-7e15-4b97-8f6a-e53bee0224a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Init">
+      <UniqueIdentifier>{c64f3e6b-c791-45aa-92d1-fa77d74543de}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Src\Color\Color.cpp">
+      <Filter>Src\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp">
+      <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\IO\IO.cpp">
+      <Filter>Src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Math\AABBox.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Math\Line.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Math\Matrix.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Math\Rectangle.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Math\Vector.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Mesh\MeshDX11.cpp">
+      <Filter>Src\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Material\Material.cpp">
+      <Filter>Src\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Window\WindowDX11.cpp">
+      <Filter>Src\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\UserInput\UserInput.cpp">
+      <Filter>Src\UserInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Texture\TextureDX11.cpp">
+      <Filter>Src\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp">
+      <Filter>Src\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Graphics.cpp">
+      <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Mesh\Mesh.cpp">
+      <Filter>Src\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Texture\Texture.cpp">
+      <Filter>Src\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Window\Window.cpp">
+      <Filter>Src\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Misc\String.cpp">
+      <Filter>Src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp">
+      <Filter>Src\SysEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Init\InitWindows.cpp">
+      <Filter>Src\Init</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Mesh\MeshDX11.h">
+      <Filter>Src\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Window\WindowDX11.h">
+      <Filter>Src\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\UserInput\UserInput.h">
+      <Filter>Src\UserInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Texture\TextureDX11.h">
+      <Filter>Src\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Shader\ShaderDX11.h">
+      <Filter>Src\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Color\Color.h">
+      <Filter>Include\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Graphics\Graphics.h">
+      <Filter>Include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\IO\IO.h">
+      <Filter>Include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Material\Material.h">
+      <Filter>Include\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Math\AABBox.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Math\Line.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Math\Matrix.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Math\Rectangle.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Math\Vector.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Mesh\Mesh.h">
+      <Filter>Include\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Misc\String.h">
+      <Filter>Include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Window\Window.h">
+      <Filter>Include\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\UserInput\UserInput.h">
+      <Filter>Include\UserInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Texture\Texture.h">
+      <Filter>Include\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Shader\Shader.h">
+      <Filter>Include\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Init\Init.h">
+      <Filter>Include\Init</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

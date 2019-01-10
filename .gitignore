@@ -1,0 +1,52 @@
+# General
+[Dd]ebug/
+[Rr]elease/
+
+# Visual Studio
+Windows/Engine/.vs/
+*/.vs/
+*.VC.db
+*.VC.VC.db
+*.VC.VC.opendb
+*.suo
+*.obj
+*.ipch
+*.opendb
+*.vcxproj.user
+
+# Xcode
+DerivedData/
+xcuserdata
+*.xccheckout
+*.xcuserstate
+# user settings
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
+
+# Objective-C
+*.hmap
+*.ipa
+
+# Windows
+Thumbs.db
+
+# macOS
+.DS_Store
+
+# Built objects
+*.a
+*.o
+*.lib
+*.obj
+*.dll
+*.log
+*.pdb
+*.tlog
+*.db-shm
+*.db-wal
