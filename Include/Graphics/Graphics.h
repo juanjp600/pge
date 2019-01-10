@@ -10,6 +10,8 @@ namespace PGE {
 
 class Graphics {
     public:
+        static Graphics* create(int w, int h, bool fs);
+
         Window* getWindow() const;
         
         virtual void update();
@@ -22,9 +24,10 @@ class Graphics {
         Matrix4x4f viewMatrix;
 
         Rectanglei viewport;
+
+        ~Graphics(){};
     protected:
         Graphics();
-        ~Graphics(){};
 
         Window* window;
 };

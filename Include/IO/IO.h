@@ -19,8 +19,10 @@ class IO {
 
         std::set<UserInput*> inputs;
         Vector2i mousePos;
-    public:
+
         IO(Window* window);
+    public:
+        static IO* create(Window* window);
         ~IO();
 
         void update();

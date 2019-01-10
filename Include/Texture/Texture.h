@@ -13,8 +13,12 @@ class Texture {
         virtual bool isRenderTarget() const =0;
 
         int getWidth() const; int getHeight() const;
+
+        static Texture* load(Graphics* gfx,String filename);
+        static Texture* create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer);
+        ~Texture() {};
     protected:
-        static FIBITMAP* loadFIBuffer(String filename,int& width,int& height,int& realWidth,int& realHeight);
+        static FIBITMAP* loadFIBuffer(String filename,int& width,int& height,int& realWidth,int& realHeight); //TODO: move elsewhere
 
         int width; int height;
         int realWidth; int realHeight;
@@ -22,7 +26,6 @@ class Texture {
         String filename; String name;
 
         Texture(){};
-        ~Texture(){};
 };
 
 }

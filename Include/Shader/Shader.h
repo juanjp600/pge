@@ -8,6 +8,7 @@ namespace PGE {
 
 class Shader {
     public:
+        static Shader* load(Graphics* gfx, const String& path);
         virtual ~Shader(){};
     protected:
         Shader(){};

@@ -3,6 +3,10 @@
 
 using namespace PGE;
 
+IO* IO::create(Window* window) {
+    return new IO(window);
+}
+
 IO::IO(Window* window) {
     keyboardSubscriber = SysEvents::Subscriber(window->getSdlWindow(),SysEvents::Subscriber::EventType::KEYBOARD);
     mouseSubscriber = SysEvents::Subscriber(window->getSdlWindow(),SysEvents::Subscriber::EventType::MOUSE);

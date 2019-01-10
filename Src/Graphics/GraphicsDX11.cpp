@@ -7,6 +7,10 @@
 
 using namespace PGE;
 
+Graphics* Graphics::create(int w,int h,bool fs) {
+    return new GraphicsDX11(w,h,fs);
+}
+
 GraphicsDX11::GraphicsDX11(int w,int h,bool fs) {
     window = new WindowDX11("PGE",w,h,fs);
 

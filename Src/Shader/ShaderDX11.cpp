@@ -6,6 +6,10 @@
 
 using namespace PGE;
 
+Shader* Shader::load(Graphics* gfx, const String& path) {
+    return new ShaderDX11(gfx,path);
+}
+
 ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {    
     graphics = gfx;
 

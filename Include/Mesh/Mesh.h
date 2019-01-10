@@ -36,6 +36,7 @@ struct Primitive {
 
 class Mesh {
     public:
+        static Mesh* create(Graphics* gfx, Primitive::TYPE pt);
         virtual ~Mesh(){}
 
         int addVertex(const Vertex& v);

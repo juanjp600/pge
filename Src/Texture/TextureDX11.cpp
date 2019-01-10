@@ -7,6 +7,14 @@
 
 using namespace PGE;
 
+Texture* Texture::load(Graphics* gfx,String filename) {
+    return new TextureDX11(gfx,filename);
+}
+
+Texture* Texture::create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer) {
+    return new TextureDX11(gfx,w,h,renderTarget,buffer);
+}
+
 TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer) {
     graphics = gfx;
     ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
