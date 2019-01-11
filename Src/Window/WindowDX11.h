@@ -23,6 +23,7 @@ class WindowDX11 : public Window {
         ID3D11Device* getDxDevice() const;
         ID3D11DeviceContext* getDxContext() const;
         ID3D11RenderTargetView* getBackBufferRtv() const;
+        ID3D11DepthStencilView* getZBufferView() const;
     private:
         WindowDX11(){};
 
@@ -32,6 +33,8 @@ class WindowDX11 : public Window {
         ID3D11Device* dxDevice;
         ID3D11DeviceContext* dxContext;
         ID3D11RenderTargetView* dxBackBufferRtv;
+        ID3D11Texture2D* dxZBufferTexture;
+        ID3D11DepthStencilView* dxZBufferView;
         D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
         ID3D11RasterizerState* dxRasterizerState;
         D3D11_BLEND_DESC dxBlendStateDesc;

@@ -17,6 +17,7 @@ GraphicsDX11::GraphicsDX11(int w,int h,bool fs) {
     viewport = Rectanglei(0,0,w,h);
     updateViewport();
     currentRenderTargetView = ((WindowDX11*)window)->getBackBufferRtv();
+    currentDepthStencilView = ((WindowDX11*)window)->getZBufferView();
 
     projectionMatrix = Matrix4x4f::identity;
     viewMatrix = Matrix4x4f::identity;
@@ -81,4 +82,5 @@ void GraphicsDX11::clear(Color color) {
 
     float clearColor[4] = {color.red,color.green,color.blue,color.alpha};
     ((WindowDX11*)window)->getDxContext()->ClearRenderTargetView( currentRenderTargetView, clearColor );
+    ((WindowDX11*)window)->getDxContext()->ClearDepthStencilView( currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
 }

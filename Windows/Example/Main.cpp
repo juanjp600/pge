@@ -32,7 +32,8 @@ int main(int argc, char** argv) {
     Material* material = new Material(shader,textures);
 
     Mesh* mesh = Mesh::create(graphics, Primitive::TYPE::TRIANGLE);
-    std::vector<Vector2f> uvCoords; uvCoords.push_back(Vector2f(0.f, 0.f)); uvCoords.push_back(Vector2f(0.f, 1.f));
+    std::vector<Vector2f> uvCoords;
+    uvCoords.clear(); uvCoords.push_back(Vector2f(0.f, 0.f)); uvCoords.push_back(Vector2f(0.f, 1.f));
     mesh->addVertex(Vertex(Vector3f(-5.f, -5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(1.f, 1.f, 1.f, 0.f)));
     uvCoords.clear(); uvCoords.push_back(Vector2f(0.f, 1.f)); uvCoords.push_back(Vector2f(0.f, 0.f));
     mesh->addVertex(Vertex(Vector3f(-5.f, 5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(0.5f, 1.f, 1.f, 1.f)));
@@ -69,9 +70,12 @@ int main(int argc, char** argv) {
 
         graphics->clear(Color(testInput.isDown()*1.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),1.f));
         
-        mesh->worldMatrix = Matrix4x4f::constructWorldMat(Vector3f(0,0,7.f),Vector3f(1.f,1.f,1.f),Vector3f(0.f,((float)tick)/13.f,0.f));
+        mesh->worldMatrix = Matrix4x4f::constructWorldMat(Vector3f(0, 0, 8.5f), Vector3f(0.4f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f));
         mesh->render();
-        
+
+        mesh->worldMatrix = Matrix4x4f::constructWorldMat(Vector3f(0, 0, 9.f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, -((float)tick) / 13.f, 0.f));
+        mesh->render();
+
         graphics->swap(true);
 
         tick++;

@@ -26,6 +26,7 @@ class GraphicsDX11 : public Graphics {
         virtual void clear(Color color);
 
         ID3D11RenderTargetView* currentRenderTargetView;
+        ID3D11DepthStencilView* currentDepthStencilView;
     private:
         Rectanglei currentViewport;
 
