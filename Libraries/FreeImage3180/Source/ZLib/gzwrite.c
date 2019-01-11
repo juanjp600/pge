@@ -2,9 +2,7 @@
  * Copyright (C) 2004-2017 Mark Adler
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
-#if !defined(_WIN32)
-#include <unistd.h>
-#endif
+
 #include "gzguts.h"
 
 /* Local functions */

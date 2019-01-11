@@ -107,6 +107,30 @@ extern "C" {
 //   Internal plugins
 // ==========================================================
 
+void DLL_CALLCONV InitBMP(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitCUT(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitICO(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitIFF(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitJPEG(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitKOALA(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitLBM(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitMNG(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitPCD(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitPCX(Plugin *plugin, int format_id);
 void DLL_CALLCONV InitPNG(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitPNM(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitPSD(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitRAS(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitTARGA(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitWBMP(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitXBM(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitXPM(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitDDS(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitGIF(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitHDR(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitSGI(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitPFM(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitPICT(Plugin *plugin, int format_id);
+void DLL_CALLCONV InitJNG(Plugin *plugin, int format_id);
 
 #endif //!PLUGIN_H

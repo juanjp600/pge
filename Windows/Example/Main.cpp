@@ -25,8 +25,8 @@ int main(int argc, char** argv) {
     Graphics* graphics = Graphics::create(1280,720,false);
     IO* io = IO::create(graphics->getWindow());
 
-    Texture* texture0 = Texture::load(graphics, "poster.png");
-    Texture* texture1 = Texture::load(graphics, "poster2.png");
+    Texture* texture0 = Texture::load(graphics, "dirtymetal.jpg");
+    Texture* texture1 = Texture::load(graphics, "fog.jpg");
     Shader* shader = Shader::load(graphics,"default/");
     std::vector<Texture*> textures; textures.push_back(texture0); textures.push_back(texture1);
     Material* material = new Material(shader,textures);
@@ -60,22 +60,23 @@ int main(int argc, char** argv) {
     graphics->projectionMatrix.elements[3][2] = (nearPlane*farPlane / (nearPlane - farPlane));
     graphics->viewMatrix = Matrix4x4f::constructViewMat(Vector3f(0,0,-5),Vector3f(0,0,1),Vector3f(0,-1,0));
 
+    KeyboardInput testInput = KeyboardInput(SDL_SCANCODE_SPACE);
+    io->trackInput(&testInput);
     while (graphics->getWindow()->isOpen()) {
         SysEvents::update();
-
         io->update();
         graphics->update();
 
-        graphics->clear(Color(0.f,0.f,0.5f+0.5f*sin(((float)tick)/100.f),1.f));
+        graphics->clear(Color(testInput.isDown()*1.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),1.f));
         
-        mesh->worldMatrix = Matrix4x4f::constructWorldMat(Vector3f(0,0,7.f),Vector3f(0.9f,1.2f,1.f),Vector3f(0.f,((float)tick)/13.f,0.f));
+        mesh->worldMatrix = Matrix4x4f::constructWorldMat(Vector3f(0,0,7.f),Vector3f(1.f,1.f,1.f),Vector3f(0.f,((float)tick)/13.f,0.f));
         mesh->render();
         
         graphics->swap(true);
 
         tick++;
     }
-
+    io->untrackInput(&testInput);
     delete io;
     delete graphics;
 

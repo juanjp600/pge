@@ -43,11 +43,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.8/include;../../Libraries/FreeImage3180/Source</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source</IncludePath>
     <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.8/include;../../Libraries/FreeImage3180/Source</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source</IncludePath>
     <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -58,7 +58,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;../Engine/$(Platform)/$(Configuration)/Engine.lib;../../Libraries/SDL2-2.0.8/VisualC/lib/bin/$(Platform)/$(Configuration)/SDL2.lib;../../Libraries/SDL2-2.0.8/VisualC/lib/bin/$(Platform)/$(Configuration)/SDL2main.lib;../../Libraries/FreeImage3180/lib/bin/x64/Debug/FreeImaged.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;../Engine/$(Platform)/$(Configuration)/Engine.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2main.lib;../../Libraries/FreeImage3180/x64/Debug/FreeImaged.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -74,7 +74,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;../Engine/$(Platform)/$(Configuration)/Engine.lib;../../Libraries/SDL2-2.0.8/VisualC/lib/bin/$(Platform)/$(Configuration)/SDL2.lib;../../Libraries/SDL2-2.0.8/VisualC/lib/bin/$(Platform)/$(Configuration)/SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;../Engine/$(Platform)/$(Configuration)/Engine.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
