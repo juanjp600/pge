@@ -2,8 +2,12 @@
 
 using namespace PGE;
 
-Vertex::Vertex(const Vector3f& p,const Vector3f& n,const Vector2f& tc,const Color& c) {
+Vertex::Vertex(const Vector3f& p, const Vector3f& n, const std::vector<Vector2f>& tc, const Color& c) {
     pos = p; normal = n; uv = tc; color = c;
+}
+
+Vertex::Vertex(const Vector3f& p, const Vector3f& n, const Vector2f& tc, const Color& c) {
+    pos = p; normal = n; uv.push_back(tc); color = c;
 }
 
 Primitive::Primitive(long ia,long ib) {

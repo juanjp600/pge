@@ -138,9 +138,9 @@ TextureDX11::~TextureDX11() {
     dxTexture->Release();
 }
 
-void TextureDX11::useTexture() {
+void TextureDX11::useTexture(int index) {
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
-    dxContext->PSSetShaderResources(0,1,&dxShaderResourceView);
+    dxContext->PSSetShaderResources(index,1,&dxShaderResourceView);
 }
 
 bool TextureDX11::isRenderTarget() const {

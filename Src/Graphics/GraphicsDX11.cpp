@@ -1,8 +1,6 @@
 #include "GraphicsDX11.h"
 #include <Window/Window.h>
 #include "../Window/WindowDX11.h"
-#include <Shader/Shader.h>
-#include "../Shader/ShaderDX11.h"
 #include <stdlib.h>
 
 using namespace PGE;
@@ -14,43 +12,7 @@ Graphics* Graphics::create(int w,int h,bool fs) {
 GraphicsDX11::GraphicsDX11(int w,int h,bool fs) {
     window = new WindowDX11("PGE",w,h,fs);
 
-    defaultShader = new ShaderDX11(this,"default/");
-
     ID3D11Device* dxDevice = ((WindowDX11*)window)->getDxDevice();
-
-    dxVertexInputElemDesc[0].SemanticName = "POSITION";
-    dxVertexInputElemDesc[0].SemanticIndex = 0;
-    dxVertexInputElemDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-    dxVertexInputElemDesc[0].InputSlot = 0;
-    dxVertexInputElemDesc[0].AlignedByteOffset = 0;
-    dxVertexInputElemDesc[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-    dxVertexInputElemDesc[0].InstanceDataStepRate = 0;
-
-    dxVertexInputElemDesc[1].SemanticName = "NORMAL";
-    dxVertexInputElemDesc[1].SemanticIndex = 0;
-    dxVertexInputElemDesc[1].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-    dxVertexInputElemDesc[1].InputSlot = 0;
-    dxVertexInputElemDesc[1].AlignedByteOffset = sizeof(float)*3;
-    dxVertexInputElemDesc[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-    dxVertexInputElemDesc[1].InstanceDataStepRate = 0;
-
-    dxVertexInputElemDesc[2].SemanticName = "TEXCOORD";
-    dxVertexInputElemDesc[2].SemanticIndex = 0;
-    dxVertexInputElemDesc[2].Format = DXGI_FORMAT_R32G32_FLOAT;
-    dxVertexInputElemDesc[2].InputSlot = 0;
-    dxVertexInputElemDesc[2].AlignedByteOffset = sizeof(float)*6;
-    dxVertexInputElemDesc[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-    dxVertexInputElemDesc[2].InstanceDataStepRate = 0;
-
-    dxVertexInputElemDesc[3].SemanticName = "COLOR";
-    dxVertexInputElemDesc[3].SemanticIndex = 0;
-    dxVertexInputElemDesc[3].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-    dxVertexInputElemDesc[3].InputSlot = 0;
-    dxVertexInputElemDesc[3].AlignedByteOffset = sizeof(float)*8;
-    dxVertexInputElemDesc[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-    dxVertexInputElemDesc[3].InstanceDataStepRate = 0;
-
-    dxDevice->CreateInputLayout(dxVertexInputElemDesc,4,defaultShader->getDxVsCode(),defaultShader->getDxVsCodeLen()*sizeof(uint8_t),&dxVertexInputLayout);
 
     viewport = Rectanglei(0,0,w,h);
     updateViewport();
@@ -75,21 +37,6 @@ GraphicsDX11::GraphicsDX11(int w,int h,bool fs) {
     dxMatrixCBufferData.pSysMem = cbufferData;
 
     dxDevice->CreateBuffer(&dxMatrixCBufferDesc,&dxMatrixCBufferData,&dxMatrixCBuffer);
-
-    ZeroMemory( &dxSamplerDesc,sizeof(D3D11_SAMPLER_DESC) );
-    dxSamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    dxSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    dxSamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    dxSamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-    dxSamplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    dxSamplerDesc.MinLOD = 0;
-    dxSamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-    dxDevice->CreateSamplerState(&dxSamplerDesc,&dxSamplerState);
-}
-
-Shader* GraphicsDX11::getDefaultShader() {
-    return defaultShader;
 }
 
 void GraphicsDX11::updateDxCBuffer(Matrix4x4f worldMatrix) {
@@ -105,8 +52,6 @@ void GraphicsDX11::updateDxCBuffer(Matrix4x4f worldMatrix) {
 
 GraphicsDX11::~GraphicsDX11() {
     dxMatrixCBuffer->Release();
-    dxSamplerState->Release();
-    dxVertexInputLayout->Release();
     
     delete window;
 }
@@ -126,19 +71,9 @@ void GraphicsDX11::updateViewport() {
     }
 }
 
-void GraphicsDX11::useVertexInputLayout() {
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
-    dxContext->IASetInputLayout(dxVertexInputLayout);
-}
-
 void GraphicsDX11::useMatrixCBuffer() {
     ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
     dxContext->VSSetConstantBuffers(0,1,&dxMatrixCBuffer);
-}
-
-void GraphicsDX11::useSampler() {
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
-    dxContext->PSSetSamplers(0,1,&dxSamplerState);
 }
 
 void GraphicsDX11::clear(Color color) {

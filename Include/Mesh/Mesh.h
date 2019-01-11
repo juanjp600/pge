@@ -14,11 +14,12 @@
 namespace PGE {
 
 struct Vertex {
-    Vertex(const Vector3f& p,const Vector3f& n,const Vector2f& tc,const Color& c);
+    Vertex(const Vector3f& p, const Vector3f& n, const std::vector<Vector2f>& tc, const Color& c);
+    Vertex(const Vector3f& p, const Vector3f& n, const Vector2f& tc, const Color& c);
 
     Vector3f pos;
     Vector3f normal;
-    Vector2f uv; //maybe have a second set of uv coords?
+    std::vector<Vector2f> uv;
     Color color;
 };
 

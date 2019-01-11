@@ -25,15 +25,21 @@ int main(int argc, char** argv) {
     Graphics* graphics = Graphics::create(1280,720,false);
     IO* io = IO::create(graphics->getWindow());
 
-    Texture* texture = Texture::load(graphics,"poster.png");
+    Texture* texture0 = Texture::load(graphics, "poster.png");
+    Texture* texture1 = Texture::load(graphics, "poster2.png");
     Shader* shader = Shader::load(graphics,"default/");
-    Material* material = new Material(shader,texture);
+    std::vector<Texture*> textures; textures.push_back(texture0); textures.push_back(texture1);
+    Material* material = new Material(shader,textures);
 
     Mesh* mesh = Mesh::create(graphics, Primitive::TYPE::TRIANGLE);
-    mesh->addVertex(Vertex(Vector3f(-5.f, -5.f, 0.f), Vector3f(0.f, 0.f, -1.f), Vector2f(0.f, 0.f), Color(1.f, 1.f, 1.f, 0.f)));
-    mesh->addVertex(Vertex(Vector3f(-5.f, 5.f, 0.f), Vector3f(0.f, 0.f, -1.f), Vector2f(0.f, -1.f), Color(0.5f, 1.f, 1.f, 1.f)));
-    mesh->addVertex(Vertex(Vector3f(5.f, -5.f, 0.f), Vector3f(0.f, 0.f, -1.f), Vector2f(1.f, 0.f), Color(0.75f, 1.f, 1.f, 1.f)));
-    mesh->addVertex(Vertex(Vector3f(5.f, 5.f, 0.f), Vector3f(0.f, 0.f, -1.f), Vector2f(1.f, -1.f), Color(1.f, 1.f, 1.f, 1.f)));
+    std::vector<Vector2f> uvCoords; uvCoords.push_back(Vector2f(0.f, 0.f)); uvCoords.push_back(Vector2f(0.f, 1.f));
+    mesh->addVertex(Vertex(Vector3f(-5.f, -5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(1.f, 1.f, 1.f, 0.f)));
+    uvCoords.clear(); uvCoords.push_back(Vector2f(0.f, 1.f)); uvCoords.push_back(Vector2f(0.f, 0.f));
+    mesh->addVertex(Vertex(Vector3f(-5.f, 5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(0.5f, 1.f, 1.f, 1.f)));
+    uvCoords.clear(); uvCoords.push_back(Vector2f(1.f, 0.f)); uvCoords.push_back(Vector2f(1.f, 1.f));
+    mesh->addVertex(Vertex(Vector3f(5.f, -5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(0.75f, 1.f, 1.f, 1.f)));
+    uvCoords.clear(); uvCoords.push_back(Vector2f(1.f, 1.f)); uvCoords.push_back(Vector2f(1.f, 0.f));
+    mesh->addVertex(Vertex(Vector3f(5.f, 5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(1.f, 1.f, 1.f, 1.f)));
     mesh->addPrimitive(Primitive(0, 1, 2));
     mesh->addPrimitive(Primitive(2, 1, 3));
     mesh->addPrimitive(Primitive(1, 0, 2));
@@ -69,6 +75,8 @@ int main(int argc, char** argv) {
 
         tick++;
     }
+
+    delete io;
     delete graphics;
 
     QuitEnv();

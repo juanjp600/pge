@@ -9,13 +9,14 @@ namespace PGE {
 
 struct Material {
     public:
-        Material(Shader* sh,Texture* t);
+        Material(Shader* sh,const std::vector<Texture*> &t);
 
         Shader* getShader() const;
-        Texture* getTexture() const;
+        Texture* getTexture(int index) const;
+        int getTextureCount() const;
     protected:
         Material(){};
-        Shader* shader; Texture* texture;
+        Shader* shader; std::vector<Texture*> textures;
 };
 
 }

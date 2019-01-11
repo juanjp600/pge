@@ -17,7 +17,7 @@ class TextureDX11 : public Texture {
         TextureDX11(Graphics* gfx,const String& fn);
         ~TextureDX11();
 
-        void useTexture();
+        void useTexture(int index);
 
         virtual bool isRenderTarget() const;
     private:

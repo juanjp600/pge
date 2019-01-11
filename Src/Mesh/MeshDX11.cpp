@@ -37,22 +37,40 @@ void MeshDX11::updateInternalData() {
     dxVertexData.clear();
     dxIndexData.clear();
     
+    const std::vector<ShaderDX11::VERTEX_INPUT_ELEM>& vertexInputElems = ((ShaderDX11*)material->getShader())->getVertexInputElems();
     for (int i=0;i<vertices.size();i++) {
-        dxVertexData.push_back(vertices[i].pos.x);
-        dxVertexData.push_back(vertices[i].pos.y);
-        dxVertexData.push_back(vertices[i].pos.z);
-
-        dxVertexData.push_back(vertices[i].normal.x);
-        dxVertexData.push_back(vertices[i].normal.y);
-        dxVertexData.push_back(vertices[i].normal.z);
-
-        dxVertexData.push_back(vertices[i].uv.x);
-        dxVertexData.push_back(vertices[i].uv.y);
-
-        dxVertexData.push_back(vertices[i].color.red);
-        dxVertexData.push_back(vertices[i].color.green);
-        dxVertexData.push_back(vertices[i].color.blue);
-        dxVertexData.push_back(vertices[i].color.alpha);
+        SDL_Log("*****\n");
+        int uvIndex = 0;
+        for (int j=0;j<vertexInputElems.size();j++) {
+            switch (vertexInputElems[j]) {
+                case ShaderDX11::VERTEX_INPUT_ELEM::POSITION: {
+                    dxVertexData.push_back(vertices[i].pos.x);
+                    dxVertexData.push_back(vertices[i].pos.y);
+                    dxVertexData.push_back(vertices[i].pos.z);
+                    dxVertexData.push_back(1.f);
+                    SDL_Log("POSITION\n");
+                } break;
+                case ShaderDX11::VERTEX_INPUT_ELEM::NORMAL: {
+                    dxVertexData.push_back(vertices[i].normal.x);
+                    dxVertexData.push_back(vertices[i].normal.y);
+                    dxVertexData.push_back(vertices[i].normal.z);
+                    SDL_Log("NORMAL\n");
+                } break;
+                case ShaderDX11::VERTEX_INPUT_ELEM::TEXCOORD: {
+                    dxVertexData.push_back(vertices[i].uv[1-uvIndex].x);
+                    dxVertexData.push_back(vertices[i].uv[1-uvIndex].y);
+                    SDL_Log("TEXCOORD%d\n",uvIndex);
+                    uvIndex++;
+                } break;
+                case ShaderDX11::VERTEX_INPUT_ELEM::COLOR: {
+                    dxVertexData.push_back(vertices[i].color.red);
+                    dxVertexData.push_back(vertices[i].color.green);
+                    dxVertexData.push_back(vertices[i].color.blue);
+                    dxVertexData.push_back(vertices[i].color.alpha);
+                    SDL_Log("COLOR\n");
+                }
+            }
+        }
     }
 
     for (int i=0;i<primitives.size();i++) {
@@ -105,9 +123,27 @@ void MeshDX11::render() {
 
     ((GraphicsDX11*)graphics)->updateDxCBuffer(worldMatrix);
 
-    ((GraphicsDX11*)graphics)->useVertexInputLayout();
+    ((ShaderDX11*)material->getShader())->useVertexInputLayout();
 
-    UINT stride = sizeof(FLOAT)*12;
+    const std::vector<ShaderDX11::VERTEX_INPUT_ELEM>& vertexInputElems = ((ShaderDX11*)material->getShader())->getVertexInputElems();
+    UINT stride = 0;
+    //TODO: use dxgi format?
+    for (int j=0;j<vertexInputElems.size();j++) {
+        switch (vertexInputElems[j]) {
+            case ShaderDX11::VERTEX_INPUT_ELEM::POSITION: {
+                stride += sizeof(FLOAT) * 4;
+            } break;
+            case ShaderDX11::VERTEX_INPUT_ELEM::NORMAL: {
+                stride += sizeof(FLOAT) * 3;
+            } break;
+            case ShaderDX11::VERTEX_INPUT_ELEM::TEXCOORD: {
+                stride += sizeof(FLOAT) * 2;
+            } break;
+            case ShaderDX11::VERTEX_INPUT_ELEM::COLOR: {
+                stride += sizeof(FLOAT) * 4;
+            } break;
+        }
+    }
     UINT offset = 0;
     dxContext->IASetVertexBuffers(0,1,&dxVertexBuffer,&stride,&offset);
     dxContext->IASetIndexBuffer(dxIndexBuffer,DXGI_FORMAT_R16_UINT,0);
@@ -121,10 +157,14 @@ void MeshDX11::render() {
 
     dxContext->IASetPrimitiveTopology(dxPrimitiveTopology);
 
-    ((ShaderDX11*)material->getShader())->useShader();
+    ShaderDX11* shader = ((ShaderDX11*)material->getShader());
+
+    shader->useShader();
     ((GraphicsDX11*)graphics)->useMatrixCBuffer();
-    ((GraphicsDX11*)graphics)->useSampler();
-    ((TextureDX11*)material->getTexture())->useTexture();
+    shader->useSamplers();
+    for (int i=0;i<material->getTextureCount();i++) {
+        ((TextureDX11*)material->getTexture(i))->useTexture(i);
+    }
 
     dxContext->DrawIndexed(primitives.size()*dxIndexMultiplier,0,0);
 }
