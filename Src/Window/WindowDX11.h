@@ -24,21 +24,30 @@ class WindowDX11 : public Window {
         ID3D11DeviceContext* getDxContext() const;
         ID3D11RenderTargetView* getBackBufferRtv() const;
         ID3D11DepthStencilView* getZBufferView() const;
+
+        void setZBufferWriteState(bool enabled);
     private:
         WindowDX11(){};
 
         IDXGIFactory1* dxgiFactory;
+
         DXGI_SWAP_CHAIN_DESC dxSwapChainDesc;
         IDXGISwapChain* dxSwapChain;
+        
         ID3D11Device* dxDevice;
         ID3D11DeviceContext* dxContext;
+        
         ID3D11RenderTargetView* dxBackBufferRtv;
         ID3D11Texture2D* dxZBufferTexture;
         ID3D11DepthStencilView* dxZBufferView;
+        ID3D11DepthStencilState* dxDepthStencilState[2];
+        
         D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
         ID3D11RasterizerState* dxRasterizerState;
+        
         D3D11_BLEND_DESC dxBlendStateDesc;
         ID3D11BlendState* dxBlendState;
+        
         D3D11_VIEWPORT dxViewport;
 };
 

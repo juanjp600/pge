@@ -38,6 +38,7 @@ struct Primitive {
 class Mesh {
     public:
         static Mesh* create(Graphics* gfx, Primitive::TYPE pt);
+        Mesh* clone();
         virtual ~Mesh(){}
 
         int addVertex(const Vertex& v);
@@ -51,17 +52,20 @@ class Mesh {
 
         const std::vector<Vertex>& getVertices() const;
         const std::vector<Primitive>& getPrimitives() const;
+        bool isOpaque() const;
 
         virtual void render() =0;
     protected:
         Mesh(){};
 
+        bool opaque;
         bool isDirty = true;
 
         virtual void updateInternalData() =0;
 
         Material* material;
 
+        Graphics* graphics;
         Primitive::TYPE primitiveType;
 
         std::vector<Vertex> vertices;

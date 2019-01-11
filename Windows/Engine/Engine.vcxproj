@@ -54,6 +54,7 @@
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Texture\TextureDX11.h" />
+    <ClInclude Include="..\..\Src\Texture\TextureInternal.h" />
     <ClInclude Include="..\..\Src\Window\WindowDX11.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

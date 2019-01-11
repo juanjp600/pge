@@ -13,6 +13,7 @@ GraphicsDX11::GraphicsDX11(int w,int h,bool fs) {
     window = new WindowDX11("PGE",w,h,fs);
 
     ID3D11Device* dxDevice = ((WindowDX11*)window)->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
 
     viewport = Rectanglei(0,0,w,h);
     updateViewport();

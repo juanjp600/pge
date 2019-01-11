@@ -17,3 +17,14 @@ Texture* Material::getTexture(int index) const {
 int Material::getTextureCount() const {
     return textures.size();
 }
+
+bool Material::isOpaque() const {
+    bool isOpaque = true;
+    for (int i = 0; i < getTextureCount(); i++) {
+        isOpaque &= getTexture(i)->isOpaque();
+        if (!isOpaque) {
+            break;
+        }
+    }
+    return isOpaque;
+}

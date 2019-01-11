@@ -14,6 +14,7 @@ struct Material {
         Shader* getShader() const;
         Texture* getTexture(int index) const;
         int getTextureCount() const;
+        bool isOpaque() const;
     protected:
         Material(){};
         Shader* shader; std::vector<Texture*> textures;

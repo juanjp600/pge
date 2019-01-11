@@ -1,5 +1,4 @@
 #include <SDL.h>
-#include <FreeImage.h>
 
 #include <Init/Init.h>
 #include <Graphics/Graphics.h>
@@ -26,7 +25,8 @@ int main(int argc, char** argv) {
     IO* io = IO::create(graphics->getWindow());
 
     Texture* texture0 = Texture::load(graphics, "dirtymetal.jpg");
-    Texture* texture1 = Texture::load(graphics, "fog.jpg");
+    Texture* texture1 = Texture::load(graphics, "poster.png");
+    Texture* texture2 = Texture::load(graphics, "poster2.png");
     Shader* shader = Shader::load(graphics,"default/");
     std::vector<Texture*> textures; textures.push_back(texture0); textures.push_back(texture1);
     Material* material = new Material(shader,textures);
@@ -34,11 +34,11 @@ int main(int argc, char** argv) {
     Mesh* mesh = Mesh::create(graphics, Primitive::TYPE::TRIANGLE);
     std::vector<Vector2f> uvCoords;
     uvCoords.clear(); uvCoords.push_back(Vector2f(0.f, 0.f)); uvCoords.push_back(Vector2f(0.f, 1.f));
-    mesh->addVertex(Vertex(Vector3f(-5.f, -5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(1.f, 1.f, 1.f, 0.f)));
+    mesh->addVertex(Vertex(Vector3f(-5.f, -5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(1.f, 1.f, 1.f, 1.f)));
     uvCoords.clear(); uvCoords.push_back(Vector2f(0.f, 1.f)); uvCoords.push_back(Vector2f(0.f, 0.f));
     mesh->addVertex(Vertex(Vector3f(-5.f, 5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(0.5f, 1.f, 1.f, 1.f)));
     uvCoords.clear(); uvCoords.push_back(Vector2f(1.f, 0.f)); uvCoords.push_back(Vector2f(1.f, 1.f));
-    mesh->addVertex(Vertex(Vector3f(5.f, -5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(0.75f, 1.f, 1.f, 1.f)));
+    mesh->addVertex(Vertex(Vector3f(5.f, -5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(1.f, 1.f, 1.f, 1.f)));
     uvCoords.clear(); uvCoords.push_back(Vector2f(1.f, 1.f)); uvCoords.push_back(Vector2f(1.f, 0.f));
     mesh->addVertex(Vertex(Vector3f(5.f, 5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(1.f, 1.f, 1.f, 1.f)));
     mesh->addPrimitive(Primitive(0, 1, 2));
@@ -46,6 +46,11 @@ int main(int argc, char** argv) {
     mesh->addPrimitive(Primitive(1, 0, 2));
     mesh->addPrimitive(Primitive(1, 2, 3));
     mesh->setMaterial(material);
+
+    Mesh* mesh2 = mesh->clone();
+    textures.clear(); textures.push_back(texture0); textures.push_back(texture2);
+    Material* material2 = new Material(shader, textures);
+    mesh2->setMaterial(material2);
     
     float aspectRatio = static_cast<float>(graphics->viewport.width()) / static_cast<float>(graphics->viewport.height());
 
@@ -70,8 +75,8 @@ int main(int argc, char** argv) {
 
         graphics->clear(Color(testInput.isDown()*1.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),1.f));
         
-        mesh->worldMatrix = Matrix4x4f::constructWorldMat(Vector3f(0, 0, 8.5f), Vector3f(0.4f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f));
-        mesh->render();
+        mesh2->worldMatrix = Matrix4x4f::constructWorldMat(Vector3f(0, 0, 8.5f), Vector3f(0.4f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f));
+        mesh2->render();
 
         mesh->worldMatrix = Matrix4x4f::constructWorldMat(Vector3f(0, 0, 9.f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, -((float)tick) / 13.f, 0.f));
         mesh->render();

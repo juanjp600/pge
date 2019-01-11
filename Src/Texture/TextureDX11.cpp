@@ -1,4 +1,5 @@
 #include "TextureDX11.h"
+#include "TextureInternal.h"
 #include <Window/Window.h>
 #include "../Window/WindowDX11.h"
 
@@ -93,7 +94,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
     filename = fn;
     name = fn;
 
-    FIBITMAP* fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight);
+    FIBITMAP* fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight,opaque);
 
     ZeroMemory( &dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC) );
     dxTextureDesc.Width = (UINT)realWidth;

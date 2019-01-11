@@ -166,5 +166,7 @@ void MeshDX11::render() {
         ((TextureDX11*)material->getTexture(i))->useTexture(i);
     }
 
+    ((WindowDX11*)graphics->getWindow())->setZBufferWriteState(opaque);
+
     dxContext->DrawIndexed(primitives.size()*dxIndexMultiplier,0,0);
 }

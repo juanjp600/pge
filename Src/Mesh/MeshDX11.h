@@ -40,8 +40,6 @@ class MeshDX11 : public Mesh {
         ID3D11Buffer* dxIndexBuffer;
 
         virtual void updateInternalData();
-
-        Graphics* graphics;
 };
 
 }

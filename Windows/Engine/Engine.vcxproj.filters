@@ -212,5 +212,8 @@
     <ClInclude Include="..\..\Include\Init\Init.h">
       <Filter>Include\Init</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\Texture\TextureInternal.h">
+      <Filter>Src\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

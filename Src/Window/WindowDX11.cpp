@@ -116,6 +116,34 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
 
     dxContext->OMSetBlendState(dxBlendState,0,0xffffffff);
 
+    D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+    depthStencilDesc.DepthEnable = TRUE;
+    depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+    depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+    depthStencilDesc.StencilEnable = FALSE;
+    depthStencilDesc.StencilReadMask = 0xFF;
+    depthStencilDesc.StencilWriteMask = 0xFF;
+
+    // Stencil operations if pixel is front-facing
+    depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+    depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+    depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+    depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+    // Stencil operations if pixel is back-facing
+    depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+    depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+    depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+    depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+    dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[0]);
+    dxContext->OMSetDepthStencilState(dxDepthStencilState[0], 0);
+
+    depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+
+    dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[1]);
+    //dxContext->OMSetDepthStencilState(dxDepthStencilState[1], 0);
+
     dxViewport.Width = (FLOAT)width;
     dxViewport.Height = (FLOAT)height;
     dxViewport.MinDepth = 0.0f;
@@ -130,6 +158,8 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
 WindowDX11::~WindowDX11() {
     SysEvents::unsubscribe(eventSubscriber);
 
+    dxDepthStencilState[0]->Release();
+    dxDepthStencilState[1]->Release();
     dxRasterizerState->Release();
     dxBlendState->Release();
     dxContext->Release();
@@ -172,3 +202,6 @@ ID3D11DepthStencilView* WindowDX11::getZBufferView() const {
     return dxZBufferView;
 }
 
+void WindowDX11::setZBufferWriteState(bool enabled) {
+    dxContext->OMSetDepthStencilState(dxDepthStencilState[enabled ? 0 : 1], 0);
+}

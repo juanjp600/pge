@@ -1,5 +1,5 @@
 #include <Texture/Texture.h>
-#include <FreeImage.h>
+#include "TextureInternal.h"
 #include <inttypes.h>
 
 using namespace PGE;
@@ -12,7 +12,11 @@ int Texture::getHeight() const {
     return height;
 }
 
-FIBITMAP* Texture::loadFIBuffer(String filename,int& width,int& height,int& realWidth,int& realHeight) {
+bool Texture::isOpaque() const {
+    return opaque;
+}
+
+FIBITMAP* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,int& realHeight,bool& opaque) {
     FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename.cstr(),0);
 
     FIBITMAP* temp = FreeImage_Load(format, filename.cstr());
@@ -22,8 +26,16 @@ FIBITMAP* Texture::loadFIBuffer(String filename,int& width,int& height,int& real
     int w = FreeImage_GetWidth(image);
     int h = FreeImage_GetHeight(image);
 
+    BYTE* bits = FreeImage_GetBits(image);
+    int bpp = FreeImage_GetBPP(image)/8;
+
+    opaque = true;
     for (int x=0;x<w;x++) {
         for (int y=0;y<h;y++) {
+            if (opaque && bits[(x+(y*w))*bpp+3]<255) {
+                opaque = false;
+            }
+
             RGBQUAD rgba;
             FreeImage_GetPixelColor(image,x,y,&rgba);
             int red = rgba.rgbRed;
