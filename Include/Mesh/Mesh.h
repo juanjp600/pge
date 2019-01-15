@@ -48,8 +48,6 @@ class Mesh {
         void clear();
         void setMaterial(Material* m);
 
-        Matrix4x4f worldMatrix;
-
         const std::vector<Vertex>& getVertices() const;
         const std::vector<Primitive>& getPrimitives() const;
         bool isOpaque() const;

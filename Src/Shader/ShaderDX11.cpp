@@ -17,21 +17,24 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
 
     char* buf = new char[512];
 
-    std::ifstream vertexReflectionInfo; vertexReflectionInfo.open(String(path,"vertex.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
-    int inputParamCount = 0; vertexReflectionInfo.read((char*)(void*)&inputParamCount,1);
+    std::ifstream reflectionInfo; reflectionInfo.open(String(path,"reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
+    
+    readConstantBuffers(reflectionInfo,vertexConstantBuffers);
+
+    int inputParamCount = 0; reflectionInfo.read((char*)(void*)&inputParamCount,1);
     for (int i=0;i<inputParamCount;i++) {
         String name = "";
-        char chr; vertexReflectionInfo.read(&chr,1);
+        char chr; reflectionInfo.read(&chr,1);
         while (chr!=0) {
             name = String(name,chr);
-            vertexReflectionInfo.read(&chr, 1);
+            reflectionInfo.read(&chr, 1);
         }
         char* nameBuf = new char[name.size() + 1];
         memcpy(nameBuf,name.cstr(),(name.size()+1)*sizeof(char));
         int index = 0;
-        vertexReflectionInfo.read((char*)(void*)&index,1);
+        reflectionInfo.read((char*)(void*)&index,1);
         DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN;
-        vertexReflectionInfo.read((char*)(void*)&format,1);
+        reflectionInfo.read((char*)(void*)&format,1);
 
         D3D11_INPUT_ELEMENT_DESC vertexInputElemDesc;
 
@@ -55,7 +58,29 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
         
         dxVertexInputElemDesc.push_back(vertexInputElemDesc);
     }
-    vertexReflectionInfo.close();
+
+    readConstantBuffers(reflectionInfo, fragmentConstantBuffers);
+
+    int samplerCount = 0; reflectionInfo.read((char*)(void*)&samplerCount, 1);
+
+    D3D11_SAMPLER_DESC samplerDesc;
+    ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
+    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    samplerDesc.MinLOD = 0;
+    samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
+    for (int i = 0; i < samplerCount; i++) {
+        ID3D11SamplerState* samplerState = NULL;
+        dxDevice->CreateSamplerState(&samplerDesc, &samplerState);
+        dxSamplerState.push_back(samplerState);
+    }
+
+    reflectionInfo.close();
 
     vertexShaderBytecode.clear();
     std::ifstream vertexSourceFile; vertexSourceFile.open(String(path,"vertex.dxbc").cstr(), std::ios_base::in | std::ios_base::binary);
@@ -69,28 +94,6 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
     }
     SDL_Log("Shader code size: %d",vertexShaderBytecode.size());
     vertexSourceFile.close();
-
-    std::ifstream fragmentReflectionInfo; fragmentReflectionInfo.open(String(path, "fragment.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
-    int samplerCount = 0; fragmentReflectionInfo.read((char*)(void*)&samplerCount, 1);
-
-    D3D11_SAMPLER_DESC samplerDesc;
-    ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
-    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    samplerDesc.MinLOD = 0;
-    samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
-    for (int i=0;i<samplerCount;i++) {
-        ID3D11SamplerState* samplerState = NULL;
-        dxDevice->CreateSamplerState(&samplerDesc, &samplerState);
-        dxSamplerState.push_back(samplerState);
-    }
-
-    fragmentReflectionInfo.close();
 
     fragmentShaderBytecode.clear();
     std::ifstream fragmentSourceFile; fragmentSourceFile.open(String(path,"fragment.dxbc").cstr(), std::ios_base::in | std::ios_base::binary);
@@ -117,6 +120,17 @@ ShaderDX11::~ShaderDX11() {
     for (int i=0;i<dxVertexInputElemDesc.size();i++) {
         delete[] dxVertexInputElemDesc[i].SemanticName;
     }
+
+    for (int i = 0; i < vertexConstantBuffers.size(); i++) {
+        delete vertexConstantBuffers[i];
+    }
+    vertexConstantBuffers.clear();
+
+    for (int i = 0; i < fragmentConstantBuffers.size(); i++) {
+        delete fragmentConstantBuffers[i];
+    }
+    fragmentConstantBuffers.clear();
+
     dxVertexInputElemDesc.clear();
     for (int i=0;i<dxSamplerState.size();i++) {
         dxSamplerState[i]->Release();
@@ -126,6 +140,59 @@ ShaderDX11::~ShaderDX11() {
     dxVertexInputLayout->Release();
     dxVertexShader->Release();
     dxFragmentShader->Release();
+}
+
+void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, std::vector<CBufferInfo*>& constantBuffers) {
+    int cBufferCount = 0; reflectionInfo.read((char*)(void*)&cBufferCount, 1);
+    for (int i = 0; i < cBufferCount; i++) {
+        String cBufferName = "";
+        char chr; reflectionInfo.read(&chr, 1);
+        while (chr != 0) {
+            cBufferName = String(cBufferName, chr);
+            reflectionInfo.read(&chr, 1);
+        }
+        int cBufferSize = 0; reflectionInfo.read((char*)(void*)&cBufferSize, 1);
+        
+        CBufferInfo* constantBuffer = new CBufferInfo(graphics,cBufferName,cBufferSize);
+
+        int varCount = 0; reflectionInfo.read((char*)(void*)&varCount, 1);
+        for (int j = 0; j < varCount; j++) {
+            String varName = "";
+            reflectionInfo.read(&chr, 1);
+            while (chr != 0) {
+                varName = String(varName, chr);
+                reflectionInfo.read(&chr, 1);
+            }
+            int varOffset = 0; reflectionInfo.read((char*)(void*)&varOffset, 1);
+            int varSize = 0; reflectionInfo.read((char*)(void*)&varSize, 1);
+            constantBuffer->addConstant(ConstantDX11(constantBuffer,varName,varOffset,varSize));
+        }
+        constantBuffers.push_back(constantBuffer);
+    }
+}
+
+Shader::Constant* ShaderDX11::getVertexShaderConstant(String name) {
+    for (int i=0;i<vertexConstantBuffers.size();i++) {
+        std::vector<ConstantDX11>& vars = vertexConstantBuffers[i]->getConstants(); 
+        for (int j=0;j<vars.size();j++) {
+            if (name.equals(vars[j].getName())) {
+                return &vars[j];
+            }
+        }
+    }
+    return nullptr;
+}
+
+Shader::Constant* ShaderDX11::getFragmentShaderConstant(String name) {
+    for (int i=0;i<fragmentConstantBuffers.size();i++) {
+        std::vector<ConstantDX11>& vars = fragmentConstantBuffers[i]->getConstants(); 
+        for (int j=0;j<vars.size();j++) {
+            if (name.equals(vars[j].getName())) {
+                return &vars[j];
+            }
+        }
+    }
+    return nullptr;
 }
 
 uint8_t* ShaderDX11::getDxVsCode() {
@@ -150,6 +217,19 @@ const std::vector<ShaderDX11::VERTEX_INPUT_ELEM>& ShaderDX11::getVertexInputElem
 
 void ShaderDX11::useShader() {
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+
+    for (int i=0;i<vertexConstantBuffers.size();i++) {
+        vertexConstantBuffers[i]->update();
+        ID3D11Buffer* dxCBuffer = vertexConstantBuffers[i]->getDxCBuffer();
+        dxContext->VSSetConstantBuffers(i,1,&dxCBuffer);
+    }
+
+    for (int i=0;i<fragmentConstantBuffers.size();i++) {
+        fragmentConstantBuffers[i]->update();
+        ID3D11Buffer* dxCBuffer = fragmentConstantBuffers[i]->getDxCBuffer();
+        dxContext->PSSetConstantBuffers(i,1,&dxCBuffer);
+    }
+    
     dxContext->VSSetShader(dxVertexShader,NULL,0);
     dxContext->PSSetShader(dxFragmentShader,NULL,0);
 }
@@ -162,4 +242,101 @@ void ShaderDX11::useVertexInputLayout() {
 void ShaderDX11::useSamplers() {
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
     dxContext->PSSetSamplers(0, dxSamplerState.size(), dxSamplerState.data());
+}
+
+ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics,String nm,int sz) {
+    name = nm;
+    size = sz;
+    data = new uint8_t[size];
+
+    dxCBuffer = nullptr;
+
+    D3D11_BUFFER_DESC cBufferDesc;
+    D3D11_SUBRESOURCE_DATA cBufferSubresourceData;
+
+    ZeroMemory( &cBufferDesc, sizeof(D3D11_BUFFER_DESC) );
+    cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    cBufferDesc.ByteWidth = sizeof(FLOAT)*48;
+    cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cBufferDesc.CPUAccessFlags = 0;
+
+    ZeroMemory( &cBufferSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA) );
+    cBufferSubresourceData.pSysMem = data;
+
+    ((WindowDX11*)(graphics->getWindow()))->getDxDevice()->CreateBuffer(&cBufferDesc,&cBufferSubresourceData,&dxCBuffer);
+    dxContext = ((WindowDX11*)(graphics->getWindow()))->getDxContext();
+
+    dirty = true;
+}
+
+ShaderDX11::CBufferInfo::~CBufferInfo() {
+    delete[] data;
+    dxCBuffer->Release();
+}
+
+uint8_t* ShaderDX11::CBufferInfo::getData() {
+    return data;
+}
+
+std::vector<ShaderDX11::ConstantDX11>& ShaderDX11::CBufferInfo::getConstants() {
+    return constants;
+}
+
+void ShaderDX11::CBufferInfo::addConstant(ShaderDX11::ConstantDX11 constant) {
+    constants.push_back(constant);
+}
+
+bool ShaderDX11::CBufferInfo::isDirty() const {
+    return dirty;
+}
+
+void ShaderDX11::CBufferInfo::markAsDirty() {
+    dirty = true;
+}
+
+void ShaderDX11::CBufferInfo::update() {
+    if (!dirty) { return; }
+    dxContext->UpdateSubresource(dxCBuffer,0,NULL,data,0,0);
+    dirty = false;
+}
+
+ID3D11Buffer* ShaderDX11::CBufferInfo::getDxCBuffer() {
+    return dxCBuffer;
+}
+
+ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfo* cBuffer, String nm, int offst, int sz) {
+    constantBuffer = cBuffer;
+    name = nm;
+    offset = offst;
+    size = sz;
+}
+
+void ShaderDX11::ConstantDX11::setValue(Matrix4x4f value) {
+    memcpy(constantBuffer->getData()+offset,value.transpose().elements,16*sizeof(float));
+    constantBuffer->markAsDirty();
+}
+
+void ShaderDX11::ConstantDX11::setValue(Vector3f value) {
+    float arr[3]; arr[0] = value.x; arr[1] = value.y; arr[2] = value.z;
+    memcpy(constantBuffer->getData()+offset,arr,3*sizeof(float));
+    if (size == 4*sizeof(float)) {
+        float one = 1.f;
+        memcpy(constantBuffer->getData()+offset+(3*sizeof(float)),&one,sizeof(float));
+    }
+    constantBuffer->markAsDirty();
+}
+
+void ShaderDX11::ConstantDX11::setValue(float value) {
+    memcpy(constantBuffer->getData()+offset,&value,sizeof(float));
+    constantBuffer->markAsDirty();
+}
+
+void ShaderDX11::ConstantDX11::setValue(int value) {
+    uint32_t valUi32 = value;
+    memcpy(constantBuffer->getData()+offset,&valUi32,sizeof(uint32_t));
+    constantBuffer->markAsDirty();
+}
+
+String ShaderDX11::ConstantDX11::getName() const {
+    return name;
 }

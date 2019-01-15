@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
     mesh->setMaterial(material);
 
     Mesh* mesh2 = mesh->clone();
-    textures.clear(); textures.push_back(texture0); textures.push_back(texture2);
+    textures.clear(); textures.push_back(texture2); textures.push_back(texture2);
     Material* material2 = new Material(shader, textures);
     mesh2->setMaterial(material2);
     
@@ -59,12 +59,22 @@ int main(int argc, char** argv) {
     float farPlane = 10.f;
     float nearPlane = 0.01f;
 
-    graphics->projectionMatrix.elements[0][0] = 720.f / 1280.f;
-    graphics->projectionMatrix.elements[1][1] = 1.f;
-    graphics->projectionMatrix.elements[2][2] = farPlane / (nearPlane - farPlane);
-    graphics->projectionMatrix.elements[2][3] = -1.f;
-    graphics->projectionMatrix.elements[3][2] = (nearPlane*farPlane / (nearPlane - farPlane));
-    graphics->viewMatrix = Matrix4x4f::constructViewMat(Vector3f(0,0,-5),Vector3f(0,0,1),Vector3f(0,-1,0));
+    Matrix4x4f projectionMatrix = Matrix4x4f::identity;
+    projectionMatrix.elements[0][0] = 720.f / 1280.f;
+    projectionMatrix.elements[1][1] = 1.f;
+    projectionMatrix.elements[2][2] = farPlane / (nearPlane - farPlane);
+    projectionMatrix.elements[2][3] = -1.f;
+    projectionMatrix.elements[3][2] = (nearPlane*farPlane / (nearPlane - farPlane));
+    Matrix4x4f viewMatrix = Matrix4x4f::constructViewMat(Vector3f(0,-8,-3),Vector3f(0,1,1).normalize(),Vector3f(0,-1,0));
+
+    Shader::Constant* projMatrixConstant = shader->getVertexShaderConstant("projectionMatrix");
+    projMatrixConstant->setValue(projectionMatrix);
+    Shader::Constant* viewMatrixConstant = shader->getVertexShaderConstant("viewMatrix");
+    viewMatrixConstant->setValue(viewMatrix);
+    Shader::Constant* worldMatrixConstant = shader->getVertexShaderConstant("worldMatrix");
+
+    Shader::Constant* lightPosConstant = shader->getFragmentShaderConstant("lightPos");
+    lightPosConstant->setValue(Vector3f(0.f,1.f,0.f));
 
     KeyboardInput testInput = KeyboardInput(SDL_SCANCODE_SPACE);
     io->trackInput(&testInput);
@@ -74,14 +84,14 @@ int main(int argc, char** argv) {
         graphics->update();
 
         graphics->clear(Color(testInput.isDown()*1.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),1.f));
-        
-        mesh2->worldMatrix = Matrix4x4f::constructWorldMat(Vector3f(0, 0, 8.5f), Vector3f(0.4f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f));
+
+        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0, 9.f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.3f, -((float)tick) / 60.f, 0.f)));
         mesh2->render();
 
-        mesh->worldMatrix = Matrix4x4f::constructWorldMat(Vector3f(0, 0, 9.f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, -((float)tick) / 13.f, 0.f));
+        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0, 8.5f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f)));
         mesh->render();
 
-        graphics->swap(true);
+        graphics->swap(false);
 
         tick++;
     }

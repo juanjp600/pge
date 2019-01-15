@@ -18,9 +18,9 @@ class GraphicsDX11 : public Graphics {
 
         virtual void update();
         void updateViewport();
-        void updateDxCBuffer(Matrix4x4f worldMatrix);
+        //void updateDxCBuffer(Matrix4x4f worldMatrix);
         //void useVertexInputLayout();
-        void useMatrixCBuffer();
+        //void useMatrixCBuffer();
         //void useSampler();
 
         virtual void clear(Color color);
@@ -30,9 +30,9 @@ class GraphicsDX11 : public Graphics {
     private:
         Rectanglei currentViewport;
 
-        D3D11_BUFFER_DESC dxMatrixCBufferDesc;
+        /*D3D11_BUFFER_DESC dxMatrixCBufferDesc;
         D3D11_SUBRESOURCE_DATA dxMatrixCBufferData;
-        ID3D11Buffer* dxMatrixCBuffer;
+        ID3D11Buffer* dxMatrixCBuffer;*/
 };
 
 }

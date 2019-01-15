@@ -19,10 +19,6 @@ class Graphics {
 
         virtual void clear(Color color) =0;
 
-        //TODO: implement general matrix container
-        Matrix4x4f projectionMatrix;
-        Matrix4x4f viewMatrix;
-
         Rectanglei viewport;
 
         ~Graphics(){};

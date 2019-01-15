@@ -14,13 +14,6 @@
 
 namespace PGE {
 
-/*struct DxVertex {
-    DirectX::XMFLOAT3 pos;
-    DirectX::XMFLOAT3 normal;
-    DirectX::XMFLOAT2 uv;
-    DirectX::XMFLOAT4 color;
-};*/
-
 class MeshDX11 : public Mesh {
     public:
         MeshDX11(Graphics* gfx,Primitive::TYPE pt);

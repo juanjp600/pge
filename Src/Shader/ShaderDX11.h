@@ -19,6 +19,9 @@ class ShaderDX11 : public Shader {
         ShaderDX11(Graphics* gfx,const String& path);
         ~ShaderDX11();
 
+        Constant* getVertexShaderConstant(String name);
+        Constant* getFragmentShaderConstant(String name);
+
         void useShader();
         void useVertexInputLayout();
         void useSamplers();
@@ -43,6 +46,49 @@ class ShaderDX11 : public Shader {
         ID3D11InputLayout* dxVertexInputLayout;
 
         std::vector<VERTEX_INPUT_ELEM> vertexInputElems;
+
+        struct CBufferInfo;
+        class ConstantDX11 : public Constant {
+            public:
+                ConstantDX11(CBufferInfo* cBuffer, String nm, int offst, int sz);
+                ~ConstantDX11(){};
+
+                void setValue(Matrix4x4f value);
+                void setValue(Vector3f value);
+                void setValue(float value);
+                void setValue(int value);
+
+                String getName() const;
+            private:
+                CBufferInfo* constantBuffer;
+                String name;
+                int offset;
+                int size;
+        };
+        class CBufferInfo {
+            public: 
+                CBufferInfo(Graphics* graphics, String nm,int sz);
+                ~CBufferInfo();
+
+                uint8_t* getData();
+                std::vector<ConstantDX11>& getConstants();
+                void addConstant(ConstantDX11 constant);
+                bool isDirty() const;
+                void markAsDirty();
+                void update();
+                ID3D11Buffer* getDxCBuffer();
+            private:
+                String name;
+                uint8_t* data;
+                int size;
+                std::vector<ConstantDX11> constants;
+                ID3D11DeviceContext* dxContext;
+                ID3D11Buffer* dxCBuffer;
+                bool dirty;
+        };
+        std::vector<CBufferInfo*> vertexConstantBuffers;
+        std::vector<CBufferInfo*> fragmentConstantBuffers;
+        void readConstantBuffers(std::ifstream& reflectionInfo, std::vector<CBufferInfo*>& constantBuffers);
 
         std::vector<ID3D11SamplerState*> dxSamplerState;
 

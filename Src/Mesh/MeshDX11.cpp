@@ -121,8 +121,6 @@ void MeshDX11::render() {
 
     updateInternalData();
 
-    ((GraphicsDX11*)graphics)->updateDxCBuffer(worldMatrix);
-
     ((ShaderDX11*)material->getShader())->useVertexInputLayout();
 
     const std::vector<ShaderDX11::VERTEX_INPUT_ELEM>& vertexInputElems = ((ShaderDX11*)material->getShader())->getVertexInputElems();
@@ -160,7 +158,6 @@ void MeshDX11::render() {
     ShaderDX11* shader = ((ShaderDX11*)material->getShader());
 
     shader->useShader();
-    ((GraphicsDX11*)graphics)->useMatrixCBuffer();
     shader->useSamplers();
     for (int i=0;i<material->getTextureCount();i++) {
         ((TextureDX11*)material->getTexture(i))->useTexture(i);

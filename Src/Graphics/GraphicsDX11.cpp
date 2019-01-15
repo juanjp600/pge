@@ -19,42 +19,9 @@ GraphicsDX11::GraphicsDX11(int w,int h,bool fs) {
     updateViewport();
     currentRenderTargetView = ((WindowDX11*)window)->getBackBufferRtv();
     currentDepthStencilView = ((WindowDX11*)window)->getZBufferView();
-
-    projectionMatrix = Matrix4x4f::identity;
-    viewMatrix = Matrix4x4f::identity;
-    Matrix4x4f tempWorldMat = Matrix4x4f::identity;
-
-    FLOAT cbufferData[48];
-    memcpy(cbufferData,projectionMatrix.elements,sizeof(FLOAT)*16);
-    memcpy(cbufferData+16,viewMatrix.elements,sizeof(FLOAT)*16);
-    memcpy(cbufferData+32,tempWorldMat.elements,sizeof(FLOAT)*16);
-
-    ZeroMemory( &dxMatrixCBufferDesc, sizeof(D3D11_BUFFER_DESC) );
-    dxMatrixCBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    dxMatrixCBufferDesc.ByteWidth = sizeof(FLOAT)*48;
-    dxMatrixCBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    dxMatrixCBufferDesc.CPUAccessFlags = 0;
-
-    ZeroMemory( &dxMatrixCBufferData, sizeof(D3D11_SUBRESOURCE_DATA) );
-    dxMatrixCBufferData.pSysMem = cbufferData;
-
-    dxDevice->CreateBuffer(&dxMatrixCBufferDesc,&dxMatrixCBufferData,&dxMatrixCBuffer);
-}
-
-void GraphicsDX11::updateDxCBuffer(Matrix4x4f worldMatrix) {
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
-
-    FLOAT cbufferData[48];
-    memcpy(cbufferData,projectionMatrix.transpose().elements,sizeof(FLOAT)*16);
-    memcpy(cbufferData+16,viewMatrix.transpose().elements,sizeof(FLOAT)*16);
-    memcpy(cbufferData+32,worldMatrix.transpose().elements,sizeof(FLOAT)*16);
-
-    dxContext->UpdateSubresource(dxMatrixCBuffer,0,NULL,cbufferData,0,0);
 }
 
 GraphicsDX11::~GraphicsDX11() {
-    dxMatrixCBuffer->Release();
-    
     delete window;
 }
 
@@ -71,11 +38,6 @@ void GraphicsDX11::updateViewport() {
         currentViewport = viewport;
         //TODO: how do viewport
     }
-}
-
-void GraphicsDX11::useMatrixCBuffer() {
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
-    dxContext->VSSetConstantBuffers(0,1,&dxMatrixCBuffer);
 }
 
 void GraphicsDX11::clear(Color color) {

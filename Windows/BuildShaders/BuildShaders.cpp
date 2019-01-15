@@ -49,36 +49,133 @@ int main() {
         return hr;
     }
 
-    std::wstring vriOutFn = input;
-    vriOutFn = vriOutFn.replace(vriOutFn.find(L"shader.hlsl"), strlen("shader.hlsl"), L"vertex.dxri");
+    struct InputNameSemanticRelation {
+        std::string memberName;
+        std::string semanticName;
+        int semanticIndex;
+    };
+    std::vector<InputNameSemanticRelation> inputNameSemanticRelations;
 
-    FILE* vriOutFile = _wfopen(vriOutFn.c_str(), L"wb");
+    std::ifstream hlslFile; hlslFile.open(input,std::ios_base::in);
+    while (!hlslFile.eof()) {
+        InputNameSemanticRelation insr;
+
+        char line[256]; hlslFile.getline(line,256);
+        std::string lineStr = line;
+        if (lineStr.find("struct VS_INPUT")!=std::string::npos) {
+            while (true) {
+                hlslFile.getline(line,256);
+                lineStr = line;
+                size_t colonPos = lineStr.find(":");
+                if (colonPos != std::string::npos) {
+                    std::string memberName = "";
+                    std::string semanticName = "";
+                    bool capturingName = false;
+                    for (int i=colonPos-1;i>=0;i--) {
+                        if (lineStr[i]==' ' || lineStr[i]=='\t') {
+                            if (capturingName) {
+                                break;
+                            } else {
+                                continue;
+                            }
+                        }
+                        memberName = lineStr[i]+memberName;
+                        capturingName = true;
+                    }
+                    for (int i=colonPos+1;i<lineStr.size();i++) {
+                        if (lineStr[i]!=' ' && lineStr[i]!='\t') {
+                            if (lineStr[i]>='0' && lineStr[i]<='9') {
+                                insr.memberName = memberName;
+                                insr.semanticName = semanticName;
+                                insr.semanticIndex = lineStr[i]-'0';
+                                inputNameSemanticRelations.push_back(insr);
+                                printf("%s %s%d\n",memberName.c_str(),semanticName.c_str(),insr.semanticIndex);
+                                break;
+                            }
+                            semanticName = semanticName+lineStr[i];
+                            if (i>=lineStr.size()-1) {
+                                insr.memberName = memberName;
+                                insr.semanticName = semanticName;
+                                insr.semanticIndex = 0;
+                                inputNameSemanticRelations.push_back(insr);
+                                printf("%s %s%d\n",memberName.c_str(),semanticName.c_str(),insr.semanticIndex);
+                            }
+                        }
+                    }
+                }
+                size_t closingBracketPos = lineStr.find("}");
+                if (closingBracketPos != std::string::npos) {
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    hlslFile.close();
+
+    std::wstring riOutFn = input;
+    riOutFn = riOutFn.replace(riOutFn.find(L"shader.hlsl"), strlen("shader.hlsl"), L"reflection.dxri");
+
+    FILE* riOutFile = _wfopen(riOutFn.c_str(), L"wb");
 
     ID3D11ShaderReflection* vsReflectionInterface = NULL;
     D3DReflect(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&vsReflectionInterface);
 
     D3D11_SHADER_DESC vsShaderDesc;
     vsReflectionInterface->GetDesc(&vsShaderDesc);
+    
+    unsigned char vsCBufferCount = vsShaderDesc.ConstantBuffers;
+    fwrite(&vsCBufferCount,1,1,riOutFile);
+    for (int i=0;i<vsShaderDesc.ConstantBuffers;i++) {
+        ID3D11ShaderReflectionConstantBuffer* cBuffer = vsReflectionInterface->GetConstantBufferByIndex(i);
+        D3D11_SHADER_BUFFER_DESC cBufferDesc;
+        cBuffer->GetDesc(&cBufferDesc);
+        fwrite(cBufferDesc.Name,sizeof(char),strlen(cBufferDesc.Name)+1,riOutFile);
+        unsigned char cBufferSize = cBufferDesc.Size;
+        fwrite(&cBufferSize,1,1,riOutFile);
+        unsigned char cBufferVars = cBufferDesc.Variables;
+        fwrite(&cBufferVars,1,1,riOutFile);
+        for (int j=0;j<cBufferDesc.Variables;j++) {
+            ID3D11ShaderReflectionVariable* cBufferVar = cBuffer->GetVariableByIndex(j);
+            D3D11_SHADER_VARIABLE_DESC cBufferVarDesc;
+            cBufferVar->GetDesc(&cBufferVarDesc);
+            fwrite(cBufferVarDesc.Name,sizeof(char),strlen(cBufferVarDesc.Name)+1,riOutFile);
+            unsigned char cBufferVarOffset = cBufferVarDesc.StartOffset;
+            fwrite(&cBufferVarOffset,1,1,riOutFile);
+            unsigned char cBufferVarSize = cBufferVarDesc.Size;
+            fwrite(&cBufferVarSize,1,1,riOutFile);
+        }
+    }
 
     unsigned char inputParamCount = vsShaderDesc.InputParameters;
-    fwrite(&inputParamCount, 1, 1, vriOutFile);
+    fwrite(&inputParamCount, 1, 1, riOutFile);
 
     for (int i = 0; i < vsShaderDesc.InputParameters; i++) {
         D3D11_SIGNATURE_PARAMETER_DESC vsSignatureParameterDesc;
         vsReflectionInterface->GetInputParameterDesc(i, &vsSignatureParameterDesc);
+
+        std::string memberName = "unknown";
+        for (int j=0;j<inputNameSemanticRelations.size();j++) {
+            if (inputNameSemanticRelations[j].semanticName == vsSignatureParameterDesc.SemanticName &&
+                inputNameSemanticRelations[j].semanticIndex == vsSignatureParameterDesc.SemanticIndex) {
+                memberName = inputNameSemanticRelations[j].memberName;
+                break;
+            }
+        }
+
+        //fwrite(memberName.c_str(),sizeof(char),memberName.size()+1,riOutFile); //TODO: add this in, change vertices to accept arbitrary properties
+
         int strLen = strlen(vsSignatureParameterDesc.SemanticName);
-        fwrite(vsSignatureParameterDesc.SemanticName, sizeof(char), strLen + 1, vriOutFile);
+        fwrite(vsSignatureParameterDesc.SemanticName, sizeof(char), strLen + 1, riOutFile);
 
         unsigned char paramIndex = vsSignatureParameterDesc.SemanticIndex;
-        fwrite(&paramIndex, 1, 1, vriOutFile);
+        fwrite(&paramIndex, 1, 1, riOutFile);
 
         unsigned char paramFormat = (unsigned char)computeDxgiFormat(vsSignatureParameterDesc);
-        fwrite(&paramFormat, 1, 1, vriOutFile);
+        fwrite(&paramFormat, 1, 1, riOutFile);
     }
 
     vsReflectionInterface->Release();
-
-    fclose(vriOutFile);
 
     std::wstring vsOutFn = input;
     vsOutFn = vsOutFn.replace(vsOutFn.find(L"shader.hlsl"), strlen("shader.hlsl"), L"vertex.dxbc");
@@ -100,19 +197,37 @@ int main() {
         return hr;
     }
 
-    std::wstring priOutFn = input;
-    priOutFn = priOutFn.replace(priOutFn.find(L"shader.hlsl"), strlen("shader.hlsl"), L"fragment.dxri");
-
-    FILE* priOutFile = _wfopen(priOutFn.c_str(), L"wb");
-
     ID3D11ShaderReflection* psReflectionInterface = NULL;
     D3DReflect(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&psReflectionInterface);
 
     D3D11_SHADER_DESC psShaderDesc;
     psReflectionInterface->GetDesc(&psShaderDesc);
 
+    unsigned char psCBufferCount = psShaderDesc.ConstantBuffers;
+    fwrite(&psCBufferCount, 1, 1, riOutFile);
+    for (int i = 0; i < psShaderDesc.ConstantBuffers; i++) {
+        ID3D11ShaderReflectionConstantBuffer* cBuffer = psReflectionInterface->GetConstantBufferByIndex(i);
+        D3D11_SHADER_BUFFER_DESC cBufferDesc;
+        cBuffer->GetDesc(&cBufferDesc);
+        fwrite(cBufferDesc.Name, sizeof(char), strlen(cBufferDesc.Name) + 1, riOutFile);
+        unsigned char cBufferSize = cBufferDesc.Size;
+        fwrite(&cBufferSize, 1, 1, riOutFile);
+        unsigned char cBufferVars = cBufferDesc.Variables;
+        fwrite(&cBufferVars, 1, 1, riOutFile);
+        for (int j = 0; j < cBufferDesc.Variables; j++) {
+            ID3D11ShaderReflectionVariable* cBufferVar = cBuffer->GetVariableByIndex(j);
+            D3D11_SHADER_VARIABLE_DESC cBufferVarDesc;
+            cBufferVar->GetDesc(&cBufferVarDesc);
+            fwrite(cBufferVarDesc.Name, sizeof(char), strlen(cBufferVarDesc.Name) + 1, riOutFile);
+            unsigned char cBufferVarOffset = cBufferVarDesc.StartOffset;
+            fwrite(&cBufferVarOffset, 1, 1, riOutFile);
+            unsigned char cBufferVarSize = cBufferVarDesc.Size;
+            fwrite(&cBufferVarSize, 1, 1, riOutFile);
+        }
+    }
+
     unsigned char samplerCount = 0;
-    
+
     for (int i=0;i<psShaderDesc.BoundResources;i++) {
         D3D11_SHADER_INPUT_BIND_DESC psInputBindDesc;
         psReflectionInterface->GetResourceBindingDesc(i, &psInputBindDesc);
@@ -120,11 +235,11 @@ int main() {
             samplerCount++;
         }
     }
-    fwrite(&samplerCount, 1, 1, priOutFile);
+    fwrite(&samplerCount, 1, 1, riOutFile);
 
     psReflectionInterface->Release();
 
-    fclose(priOutFile);
+    fclose(riOutFile);
 
     std::wstring psOutFn = input;
     psOutFn = psOutFn.replace(psOutFn.find(L"shader.hlsl"),strlen("shader.hlsl"),L"fragment.dxbc");
