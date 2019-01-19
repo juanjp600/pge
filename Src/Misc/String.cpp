@@ -131,6 +131,7 @@ String& String::operator=(const String& other) {
     memcpy(cbuffer,other.cstr(),(other.size()+1)*sizeof(char));
     capacity = other.capacity;
     strSize = other.size();
+    hashCode = other.getHashCode();
     return *this;
 }
 
@@ -154,12 +155,13 @@ std::ostream& operator<<(std::ostream& os, const String& s) {
     return os << s.cstr();
 }
 
-bool String::equals(const String& other) const {
-    return strcmp(cbuffer,other.cstr())==0;
+long long String::getHashCode() const {
+    return hashCode;
 }
 
-bool String::equals(const char* other) const {
-    return strcmp(cbuffer,other) == 0;
+bool String::equals(const String& other) const {
+    if (other.size()!=size()) { return false; }
+    return other.getHashCode()==getHashCode();
 }
 
 bool String::isEmpty() const {
@@ -180,6 +182,11 @@ void String::syncBuffers() {
         for (int i=0;i<size()+1;i++) {
             cbuffer[i] = (char)wbuffer[i];
         }
+    }
+
+    hashCode = 5381;
+    for (int i=0;i<strSize;i++) {
+        hashCode = ((hashCode << 5) + hashCode) + cbuffer[i];
     }
 }
 

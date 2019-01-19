@@ -51,8 +51,8 @@ public:
 
     String& operator=(const String& other);
 
+    long long getHashCode() const;
     bool equals(const String& other) const;
-    bool equals(const char* other) const;
     bool isEmpty() const;
 protected:
     enum class DOMINANT_BUFFER {
@@ -61,6 +61,7 @@ protected:
 
     char* cbuffer = nullptr;
     wchar* wbuffer = nullptr;
+    long long hashCode;
     int capacity = 16;
     int strSize = 0;
 
