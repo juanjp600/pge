@@ -32,19 +32,41 @@ int main(int argc, char** argv) {
     Material* material = new Material(shader,textures);
 
     Mesh* mesh = Mesh::create(graphics, Primitive::TYPE::TRIANGLE);
-    std::vector<Vector2f> uvCoords;
-    uvCoords.clear(); uvCoords.push_back(Vector2f(0.f, 0.f)); uvCoords.push_back(Vector2f(0.f, 1.f));
-    mesh->addVertex(Vertex(Vector3f(-5.f, -5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(1.f, 1.f, 1.f, 1.f)));
-    uvCoords.clear(); uvCoords.push_back(Vector2f(0.f, 1.f)); uvCoords.push_back(Vector2f(0.f, 0.f));
-    mesh->addVertex(Vertex(Vector3f(-5.f, 5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(0.5f, 1.f, 1.f, 1.f)));
-    uvCoords.clear(); uvCoords.push_back(Vector2f(1.f, 0.f)); uvCoords.push_back(Vector2f(1.f, 1.f));
-    mesh->addVertex(Vertex(Vector3f(5.f, -5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(1.f, 1.f, 1.f, 1.f)));
-    uvCoords.clear(); uvCoords.push_back(Vector2f(1.f, 1.f)); uvCoords.push_back(Vector2f(1.f, 0.f));
-    mesh->addVertex(Vertex(Vector3f(5.f, 5.f, 0.f), Vector3f(0.f, 0.f, -1.f), uvCoords, Color(1.f, 1.f, 1.f, 1.f)));
-    mesh->addPrimitive(Primitive(0, 1, 2));
-    mesh->addPrimitive(Primitive(2, 1, 3));
-    mesh->addPrimitive(Primitive(1, 0, 2));
-    mesh->addPrimitive(Primitive(1, 2, 3));
+    std::vector<Vertex> vertices;
+    Vertex vert;
+    vert.setVector4f("position",Vector4f(-5.f,-5.f,0.f,1.f));
+    vert.setVector3f("normal",Vector3f(0.f,0.f,-1.f));
+    vert.setVector2f("uv0",Vector2f(0.f,0.f));
+    vert.setVector2f("uv1",Vector2f(0.f,1.f));
+    vert.setColor("color",Color(1.f,1.f,1.f,1.f));
+    vertices.push_back(vert);
+    vert.setVector4f("position",Vector4f(-5.f,5.f,0.f,1.f));
+    vert.setVector3f("normal",Vector3f(0.f,0.f,-1.f));
+    vert.setVector2f("uv0",Vector2f(0.f,1.f));
+    vert.setVector2f("uv1",Vector2f(0.f,0.f));
+    vert.setColor("color",Color(0.5f,1.f,1.f,1.f));
+    vertices.push_back(vert);
+    vert.setVector4f("position",Vector4f(5.f,-5.f,0.f,1.f));
+    vert.setVector3f("normal",Vector3f(0.f,0.f,-1.f));
+    vert.setVector2f("uv0",Vector2f(1.f,0.f));
+    vert.setVector2f("uv1",Vector2f(1.f,1.f));
+    vert.setColor("color",Color(1.f,1.f,1.f,1.f));
+    vertices.push_back(vert);
+    vert.setVector4f("position",Vector4f(5.f,5.f,0.f,1.f));
+    vert.setVector3f("normal",Vector3f(0.f,0.f,-1.f));
+    vert.setVector2f("uv0",Vector2f(1.f,1.f));
+    vert.setVector2f("uv1",Vector2f(1.f,0.f));
+    vert.setColor("color",Color(1.f,1.f,1.f,1.f));
+    vertices.push_back(vert);
+
+    std::vector<Primitive> primitives;
+    primitives.push_back(Primitive(0, 1, 2));
+    primitives.push_back(Primitive(2, 1, 3));
+    primitives.push_back(Primitive(1, 0, 2));
+    primitives.push_back(Primitive(1, 2, 3));
+
+    mesh->setGeometry(vertices,primitives);
+
     mesh->setMaterial(material);
 
     Mesh* mesh2 = mesh->clone();
@@ -91,7 +113,7 @@ int main(int argc, char** argv) {
         worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0, 8.5f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f)));
         mesh->render();
 
-        graphics->swap(false);
+        graphics->swap(true);
 
         tick++;
     }

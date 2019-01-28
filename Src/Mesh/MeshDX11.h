@@ -10,6 +10,8 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
+#include <inttypes.h>
+
 #include <vector>
 
 namespace PGE {
@@ -21,8 +23,9 @@ class MeshDX11 : public Mesh {
 
         virtual void render();
     private:
-        std::vector<FLOAT> dxVertexData;
+        std::vector<uint8_t> dxVertexData;
         std::vector<WORD> dxIndexData;
+        UINT stride = 0;
         
         D3D11_BUFFER_DESC dxVertexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxVertexBufferData;

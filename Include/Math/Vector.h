@@ -60,6 +60,17 @@ struct Vector3f {
     static const Vector3f one;
 };
 
+struct Vector4f {
+    float x; float y; float z; float w;
+
+    Vector4f();
+    Vector4f(float s);
+    Vector4f(float ix,float iy,float iz,float iw);
+
+    static const Vector4f zero;
+    static const Vector4f one;
+};
+
 struct Vector2i {
     int x; int y;
 

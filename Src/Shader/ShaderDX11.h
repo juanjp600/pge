@@ -29,13 +29,7 @@ class ShaderDX11 : public Shader {
         uint8_t* getDxVsCode(); int getDxVsCodeLen() const;
         uint8_t* getDxFsCode(); int getDxFsCodeLen() const;
 
-        enum class VERTEX_INPUT_ELEM {
-            POSITION,
-            NORMAL,
-            TEXCOORD,
-            COLOR
-        };
-        const std::vector<VERTEX_INPUT_ELEM>& getVertexInputElems() const;
+        const std::vector<String>& getVertexInputElems() const;
     private:
         ShaderDX11(){};
 
@@ -45,9 +39,9 @@ class ShaderDX11 : public Shader {
         std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc;
         ID3D11InputLayout* dxVertexInputLayout;
 
-        std::vector<VERTEX_INPUT_ELEM> vertexInputElems;
+        std::vector<String> vertexInputElems;
 
-        struct CBufferInfo;
+        class CBufferInfo;
         class ConstantDX11 : public Constant {
             public:
                 ConstantDX11(CBufferInfo* cBuffer, String nm, int offst, int sz);

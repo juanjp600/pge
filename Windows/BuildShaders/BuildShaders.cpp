@@ -163,7 +163,7 @@ int main() {
             }
         }
 
-        //fwrite(memberName.c_str(),sizeof(char),memberName.size()+1,riOutFile); //TODO: add this in, change vertices to accept arbitrary properties
+        fwrite(memberName.c_str(),sizeof(char),memberName.size()+1,riOutFile);
 
         int strLen = strlen(vsSignatureParameterDesc.SemanticName);
         fwrite(vsSignatureParameterDesc.SemanticName, sizeof(char), strLen + 1, riOutFile);

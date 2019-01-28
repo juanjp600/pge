@@ -37,40 +37,62 @@ void MeshDX11::updateInternalData() {
     dxVertexData.clear();
     dxIndexData.clear();
     
-    const std::vector<ShaderDX11::VERTEX_INPUT_ELEM>& vertexInputElems = ((ShaderDX11*)material->getShader())->getVertexInputElems();
+    bool recalculateStride = true;
+    stride = 0;
+    const std::vector<String>& vertexInputElems = ((ShaderDX11*)material->getShader())->getVertexInputElems();
     for (int i=0;i<vertices.size();i++) {
-        SDL_Log("*****\n");
-        int uvIndex = 0;
         for (int j=0;j<vertexInputElems.size();j++) {
-            switch (vertexInputElems[j]) {
-                case ShaderDX11::VERTEX_INPUT_ELEM::POSITION: {
-                    dxVertexData.push_back(vertices[i].pos.x);
-                    dxVertexData.push_back(vertices[i].pos.y);
-                    dxVertexData.push_back(vertices[i].pos.z);
-                    dxVertexData.push_back(1.f);
-                    SDL_Log("POSITION\n");
+            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j]);
+            switch (prop.type) {
+                case Vertex::PROPERTY_TYPE::FLOAT: {
+                    if (recalculateStride) { stride += sizeof(float); }
+                    int offset = dxVertexData.size();
+                    dxVertexData.resize(offset+sizeof(float));
+                    memcpy(&(dxVertexData[offset]),&(prop.value.floatVal),sizeof(float));
                 } break;
-                case ShaderDX11::VERTEX_INPUT_ELEM::NORMAL: {
-                    dxVertexData.push_back(vertices[i].normal.x);
-                    dxVertexData.push_back(vertices[i].normal.y);
-                    dxVertexData.push_back(vertices[i].normal.z);
-                    SDL_Log("NORMAL\n");
+                case Vertex::PROPERTY_TYPE::UINT: {
+                    if (recalculateStride) { stride += sizeof(uint32_t); }
+                    int offset = dxVertexData.size();
+                    dxVertexData.resize(offset+sizeof(uint32_t));
+                    uint32_t uint = prop.value.uintVal;
+                    memcpy(&(dxVertexData[offset]),&uint,sizeof(uint32_t));
                 } break;
-                case ShaderDX11::VERTEX_INPUT_ELEM::TEXCOORD: {
-                    dxVertexData.push_back(vertices[i].uv[1-uvIndex].x);
-                    dxVertexData.push_back(vertices[i].uv[1-uvIndex].y);
-                    SDL_Log("TEXCOORD%d\n",uvIndex);
-                    uvIndex++;
+                case Vertex::PROPERTY_TYPE::VECTOR2F: {
+                    if (recalculateStride) { stride += sizeof(float)*2; }
+                    int offset = dxVertexData.size();
+                    dxVertexData.resize(offset+(sizeof(float)*2));
+                    memcpy(&(dxVertexData[offset]),&(prop.value.vector2fVal.x),sizeof(float));
+                    memcpy(&(dxVertexData[offset])+sizeof(float),&(prop.value.vector2fVal.y),sizeof(float));
                 } break;
-                case ShaderDX11::VERTEX_INPUT_ELEM::COLOR: {
-                    dxVertexData.push_back(vertices[i].color.red);
-                    dxVertexData.push_back(vertices[i].color.green);
-                    dxVertexData.push_back(vertices[i].color.blue);
-                    dxVertexData.push_back(vertices[i].color.alpha);
-                    SDL_Log("COLOR\n");
-                }
+                case Vertex::PROPERTY_TYPE::VECTOR3F: {
+                    if (recalculateStride) { stride += sizeof(float)*3; }
+                    int offset = dxVertexData.size();
+                    dxVertexData.resize(offset+(sizeof(float)*3));
+                    memcpy(&(dxVertexData[offset]),&(prop.value.vector3fVal.x),sizeof(float));
+                    memcpy(&(dxVertexData[offset])+sizeof(float),&(prop.value.vector3fVal.y),sizeof(float));
+                    memcpy(&(dxVertexData[offset])+(sizeof(float)*2),&(prop.value.vector3fVal.z),sizeof(float));
+                } break;
+                case Vertex::PROPERTY_TYPE::VECTOR4F: {
+                    if (recalculateStride) { stride += sizeof(float)*4; }
+                    int offset = dxVertexData.size();
+                    dxVertexData.resize(offset+(sizeof(float)*4));
+                    memcpy(&(dxVertexData[offset]),&(prop.value.vector4fVal.x),sizeof(float));
+                    memcpy(&(dxVertexData[offset])+sizeof(float),&(prop.value.vector4fVal.y),sizeof(float));
+                    memcpy(&(dxVertexData[offset])+(sizeof(float)*2),&(prop.value.vector4fVal.z),sizeof(float));
+                    memcpy(&(dxVertexData[offset])+(sizeof(float)*3),&(prop.value.vector4fVal.w),sizeof(float));
+                } break;
+                case Vertex::PROPERTY_TYPE::COLOR: {
+                    if (recalculateStride) { stride += sizeof(float)*4; }
+                    int offset = dxVertexData.size();
+                    dxVertexData.resize(offset+(sizeof(float)*4));
+                    memcpy(&(dxVertexData[offset]),&(prop.value.colorVal.red),sizeof(float));
+                    memcpy(&(dxVertexData[offset])+sizeof(float),&(prop.value.colorVal.green),sizeof(float));
+                    memcpy(&(dxVertexData[offset])+(sizeof(float)*2),&(prop.value.colorVal.blue),sizeof(float));
+                    memcpy(&(dxVertexData[offset])+(sizeof(float)*3),&(prop.value.colorVal.alpha),sizeof(float));
+                } break;
             }
         }
+        recalculateStride = false;
     }
 
     for (int i=0;i<primitives.size();i++) {
@@ -93,7 +115,7 @@ void MeshDX11::updateInternalData() {
 
     ZeroMemory( &dxVertexBufferDesc, sizeof(D3D11_BUFFER_DESC) );
     dxVertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    dxVertexBufferDesc.ByteWidth = sizeof(FLOAT)*dxVertexData.size();
+    dxVertexBufferDesc.ByteWidth = dxVertexData.size();
     dxVertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     dxVertexBufferDesc.CPUAccessFlags = 0;
 
@@ -123,25 +145,6 @@ void MeshDX11::render() {
 
     ((ShaderDX11*)material->getShader())->useVertexInputLayout();
 
-    const std::vector<ShaderDX11::VERTEX_INPUT_ELEM>& vertexInputElems = ((ShaderDX11*)material->getShader())->getVertexInputElems();
-    UINT stride = 0;
-    //TODO: use dxgi format?
-    for (int j=0;j<vertexInputElems.size();j++) {
-        switch (vertexInputElems[j]) {
-            case ShaderDX11::VERTEX_INPUT_ELEM::POSITION: {
-                stride += sizeof(FLOAT) * 4;
-            } break;
-            case ShaderDX11::VERTEX_INPUT_ELEM::NORMAL: {
-                stride += sizeof(FLOAT) * 3;
-            } break;
-            case ShaderDX11::VERTEX_INPUT_ELEM::TEXCOORD: {
-                stride += sizeof(FLOAT) * 2;
-            } break;
-            case ShaderDX11::VERTEX_INPUT_ELEM::COLOR: {
-                stride += sizeof(FLOAT) * 4;
-            } break;
-        }
-    }
     UINT offset = 0;
     dxContext->IASetVertexBuffers(0,1,&dxVertexBuffer,&stride,&offset);
     dxContext->IASetIndexBuffer(dxIndexBuffer,DXGI_FORMAT_R16_UINT,0);

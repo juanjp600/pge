@@ -23,14 +23,22 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
 
     int inputParamCount = 0; reflectionInfo.read((char*)(void*)&inputParamCount,1);
     for (int i=0;i<inputParamCount;i++) {
-        String name = "";
+        String propertyName = "";
         char chr; reflectionInfo.read(&chr,1);
         while (chr!=0) {
-            name = String(name,chr);
+            propertyName = String(propertyName,chr);
             reflectionInfo.read(&chr, 1);
         }
-        char* nameBuf = new char[name.size() + 1];
-        memcpy(nameBuf,name.cstr(),(name.size()+1)*sizeof(char));
+        vertexInputElems.push_back(propertyName);
+
+        String semanticName = "";
+        reflectionInfo.read(&chr,1);
+        while (chr!=0) {
+            semanticName = String(semanticName,chr);
+            reflectionInfo.read(&chr, 1);
+        }
+        char* nameBuf = new char[semanticName.size() + 1];
+        memcpy(nameBuf,semanticName.cstr(),(semanticName.size()+1)*sizeof(char));
         int index = 0;
         reflectionInfo.read((char*)(void*)&index,1);
         DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN;
@@ -46,16 +54,6 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
         vertexInputElemDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
         vertexInputElemDesc.InstanceDataStepRate = 0;
 
-        if (name.equals("POSITION")) {
-            vertexInputElems.push_back(VERTEX_INPUT_ELEM::POSITION);
-        } else if (name.equals("NORMAL")) {
-            vertexInputElems.push_back(VERTEX_INPUT_ELEM::NORMAL);
-        } else if (name.equals("TEXCOORD")) {
-            vertexInputElems.push_back(VERTEX_INPUT_ELEM::TEXCOORD);
-        } else if (name.equals("COLOR")) {
-            vertexInputElems.push_back(VERTEX_INPUT_ELEM::COLOR);
-        }
-        
         dxVertexInputElemDesc.push_back(vertexInputElemDesc);
     }
 
@@ -117,10 +115,6 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
 }
 
 ShaderDX11::~ShaderDX11() {
-    for (int i=0;i<dxVertexInputElemDesc.size();i++) {
-        delete[] dxVertexInputElemDesc[i].SemanticName;
-    }
-
     for (int i = 0; i < vertexConstantBuffers.size(); i++) {
         delete vertexConstantBuffers[i];
     }
@@ -131,6 +125,9 @@ ShaderDX11::~ShaderDX11() {
     }
     fragmentConstantBuffers.clear();
 
+    for (int i=0;i<dxVertexInputElemDesc.size();i++) {
+        delete[] dxVertexInputElemDesc[i].SemanticName;
+    }
     dxVertexInputElemDesc.clear();
     for (int i=0;i<dxSamplerState.size();i++) {
         dxSamplerState[i]->Release();
@@ -211,7 +208,7 @@ int ShaderDX11::getDxFsCodeLen() const {
     return fragmentShaderBytecode.size();
 }
 
-const std::vector<ShaderDX11::VERTEX_INPUT_ELEM>& ShaderDX11::getVertexInputElems() const {
+const std::vector<String>& ShaderDX11::getVertexInputElems() const {
     return vertexInputElems;
 }
 

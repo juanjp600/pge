@@ -123,6 +123,21 @@ Vector3f Vector3f::crossProduct(const Vector3f& b) const {
     return Vector3f(y*b.z-z*b.y,z*b.x-x*b.z,x*b.y-y*b.x);
 }
 
+Vector4f::Vector4f() {
+    x = 0.f; y = 0.f; z = 0.f; w = 0.f;
+}
+
+Vector4f::Vector4f(float s) {
+    x = s; y = s; z = s; w = s;
+}
+
+Vector4f::Vector4f(float ix,float iy,float iz,float iw) {
+    x = ix; y = iy; z = iz; w = iw;
+}
+
+const Vector4f Vector4f::zero = Vector4f(0.f,0.f,0.f,0.f);
+const Vector4f Vector4f::one = Vector4f(1.f,1.f,1.f,1.f);
+
 const Vector2i Vector2i::zero = Vector2i(0,0);
 const Vector2i Vector2i::one = Vector2i(1,1);
 

@@ -13,14 +13,40 @@
 
 namespace PGE {
 
-struct Vertex {
-    Vertex(const Vector3f& p, const Vector3f& n, const std::vector<Vector2f>& tc, const Color& c);
-    Vertex(const Vector3f& p, const Vector3f& n, const Vector2f& tc, const Color& c);
+class Vertex {
+    public:
+        enum class PROPERTY_TYPE {
+            FLOAT,
+            UINT,
+            VECTOR2F,
+            VECTOR3F,
+            VECTOR4F,
+            COLOR
+        };
 
-    Vector3f pos;
-    Vector3f normal;
-    std::vector<Vector2f> uv;
-    Color color;
+        struct Property {
+            String name;
+            PROPERTY_TYPE type;
+            union Value {
+                Value();
+                float floatVal;
+                unsigned int uintVal;
+                Vector2f vector2fVal;
+                Vector3f vector3fVal;
+                Vector4f vector4fVal;
+                Color colorVal;
+            } value;
+            const static Property def;
+        };
+        const Property& getProperty(const String& name);
+        void setFloat(const String& name,float val);
+        void setUInt(const String& name,unsigned int val);
+        void setVector2f(const String& name,Vector2f val);
+        void setVector3f(const String& name,Vector3f val);
+        void setVector4f(const String& name,Vector4f val);
+        void setColor(const String& name,Color val);
+    private:
+        std::vector<Property> properties;
 };
 
 struct Primitive {
@@ -41,11 +67,8 @@ class Mesh {
         Mesh* clone();
         virtual ~Mesh(){}
 
-        int addVertex(const Vertex& v);
-        void removeVertex(int v);
-        int addPrimitive(const Primitive& t);
-        void removePrimitive(int t);
-        void clear();
+        void setGeometry(const std::vector<Vertex>& verts,const std::vector<Primitive>& prims);
+        void clearGeometry();
         void setMaterial(Material* m);
 
         const std::vector<Vertex>& getVertices() const;
