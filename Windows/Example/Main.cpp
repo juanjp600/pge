@@ -15,6 +15,8 @@
 #include <fstream>
 #include <math.h>
 
+#include <Windows.h>
+
 using namespace PGE;
 
 struct RM2 {
@@ -58,6 +60,12 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
             texName = path+name+".png";
         } else {
             texName = "GFX/Map/Textures/"+name+".jpg";
+            WIN32_FIND_DATA FindFileData;
+            HANDLE handle = FindFirstFile(texName.cstr(), &FindFileData) ;
+            int found = handle != INVALID_HANDLE_VALUE;
+            if (!found) {
+                texName = "GFX/Map/Textures/"+name+".png";
+            }
         }
         SDL_Log("%s\n",texName.cstr());
         retVal.textures.push_back(Texture::load(graphics,texName));
@@ -215,7 +223,7 @@ int main(int argc, char** argv) {
     projectionMatrix.elements[2][2] = farPlane / (nearPlane - farPlane);
     projectionMatrix.elements[2][3] = -1.f;
     projectionMatrix.elements[3][2] = (nearPlane*farPlane / (nearPlane - farPlane));
-    Matrix4x4f viewMatrix = Matrix4x4f::constructViewMat(Vector3f(0,8,-3),Vector3f(0,-1,1).normalize(),Vector3f(0,1,0));
+    Matrix4x4f viewMatrix = Matrix4x4f::constructViewMat(Vector3f(0,18,-30),Vector3f(0,-0.6,1).normalize(),Vector3f(0,1,0));
 
     Shader::Constant* projMatrixConstant = shader->getVertexShaderConstant("projectionMatrix");
     projMatrixConstant->setValue(projectionMatrix);
@@ -235,7 +243,7 @@ int main(int argc, char** argv) {
 
         graphics->clear(Color(testInput.isDown()*1.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),1.f));
 
-        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0, 9.f), Vector3f(0.02f, 0.02f, 0.02f), Vector3f(0.f, -((float)tick) / 60.f, 0.f)));
+        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0.f*((float)tick)/100.f, 9.f), Vector3f(0.02f, 0.02f, 0.02f), Vector3f(0.f, -((float)tick) / 800.f, 0.f)));
 
         for (int i=0;i<testRM2.meshes.size();i++) {
             testRM2.meshes[i]->render();

@@ -99,35 +99,40 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
     ZeroMemory( &dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC) );
     dxTextureDesc.Width = (UINT)realWidth;
     dxTextureDesc.Height = (UINT)realHeight;
-    dxTextureDesc.MipLevels = (UINT)1;
+    dxTextureDesc.MipLevels = 0;
     dxTextureDesc.ArraySize = 1;
     dxTextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     dxTextureDesc.SampleDesc.Count = 1;
     dxTextureDesc.SampleDesc.Quality = 0;
-    dxTextureDesc.Usage = D3D11_USAGE_IMMUTABLE;
-    dxTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+    dxTextureDesc.Usage = D3D11_USAGE_DEFAULT;
+    dxTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+    dxTextureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
     dxTextureDesc.CPUAccessFlags = 0;
 
-    ZeroMemory( &dxTextureData,sizeof(D3D11_SUBRESOURCE_DATA) );
+    /*ZeroMemory( &dxTextureData,sizeof(D3D11_SUBRESOURCE_DATA) );
     dxTextureData.pSysMem = FreeImage_GetBits(fiBuffer);
     dxTextureData.SysMemPitch = realWidth*4;
-    dxTextureData.SysMemSlicePitch = realWidth*realHeight*4;
+    dxTextureData.SysMemSlicePitch = realWidth*realHeight*4;*/
 
     HRESULT hr = 0;
 
-    hr = dxDevice->CreateTexture2D( &dxTextureDesc,&dxTextureData,&dxTexture );
+    hr = dxDevice->CreateTexture2D( &dxTextureDesc,NULL,&dxTexture );
     if (FAILED(hr)) {
         SDL_Log("1. %d %d %d\n",realWidth,realHeight,hr);
     }
+    dxContext->UpdateSubresource(dxTexture,0,NULL,FreeImage_GetBits(fiBuffer),realWidth*4,0);
 
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    dxShaderResourceViewDesc.Texture2D.MipLevels = 1;
+    dxShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
+    dxShaderResourceViewDesc.Texture2D.MipLevels = -1;
     hr = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
     if (FAILED(hr)) {
         SDL_Log("2. %d\n",hr);
     }
+
+    dxContext->GenerateMips(dxShaderResourceView);
 
     isRT = false;
 
