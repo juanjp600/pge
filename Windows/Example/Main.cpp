@@ -12,9 +12,133 @@
 #include <Math/Vector.h>
 #include <Color/Color.h>
 
+#include <fstream>
 #include <math.h>
 
 using namespace PGE;
+
+struct RM2 {
+    std::vector<Mesh*> meshes;
+    std::vector<Texture*> textures;
+    std::vector<Material*> materials;
+};
+
+RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
+    //NOTE: this is really hacky, DO NOT USE IN SCPCB
+    String path = "";
+    for (int i=name.size()-1;i>=0;i--) {
+        if (name.charAt(i)=='/' || name.charAt(i)=='\\') {
+            path = name.substr(0,i+1);
+            break;
+        }
+    }
+    SDL_Log("%s\n",path.cstr());
+
+    std::ifstream file; file.open(name.cstr(),std::ios::binary|std::ios::in);
+
+    RM2 retVal;
+
+    //skip header
+    int header;
+    file.read((char*)(void*)&header,4);
+
+    //assume textures come first
+    char texturePart; file.read(&texturePart,1);
+    char textureCount; file.read(&textureCount,1);
+    for (int i=0;i<textureCount;i++) {
+        char strLen; file.read(&strLen,1);
+        String name = "";
+        for (int j=0;j<strLen;j++) {
+            char chr; file.read(&chr,1);
+            name = String(name,chr);
+        }
+
+        String texName = "";
+        if (name.findFirst("_lm")>-1) {
+            texName = path+name+".png";
+        } else {
+            texName = "GFX/Map/Textures/"+name+".jpg";
+        }
+        SDL_Log("%s\n",texName.cstr());
+        retVal.textures.push_back(Texture::load(graphics,texName));
+        
+        char flagSkip; file.read(&flagSkip,1); file.read(&flagSkip,1);
+    }
+
+    char partHeader; file.read(&partHeader,1);
+    while ((partHeader==2) || (partHeader==3)) {
+        Mesh* mesh = Mesh::create(graphics,Primitive::TYPE::TRIANGLE);
+
+        char textureIndex0 = 0; file.read(&textureIndex0,1);
+        if (textureIndex0>0) { textureIndex0--; }
+        char textureIndex1 = 0; file.read(&textureIndex1,1);
+        if (textureIndex1>0) { textureIndex1--; }
+
+        std::vector<Texture*> textures;
+        textures.push_back(retVal.textures[textureIndex0]);
+        textures.push_back(retVal.textures[textureIndex1]);
+
+        Material* material = new Material(shader,textures);
+
+        mesh->setMaterial(material);
+
+        std::vector<Vertex> vertices;
+
+        unsigned short vertCount = 0; file.read((char*)(void*)&vertCount,2);
+        for (int i=0;i<vertCount;i++) {
+            Vertex vertex;
+            
+            Vector4f pos = Vector4f(0.f,0.f,0.f,1.f);
+            Color color = Color(1.f,1.f,1.f,1.f);
+            Vector2f uv0 = Vector2f(0.f,0.f);
+            Vector2f uv1 = Vector2f(0.f,0.f);
+
+            file.read((char*)(void*)&pos.x,4);
+            file.read((char*)(void*)&pos.y,4);
+            file.read((char*)(void*)&pos.z,4);
+
+            unsigned char r; unsigned char g; unsigned char b;
+            file.read((char*)(void*)&r,1); color.setRedInt(r);
+            file.read((char*)(void*)&g,1); color.setGreenInt(g);
+            file.read((char*)(void*)&b,1); color.setBlueInt(b);
+
+
+
+            file.read((char*)(void*)&uv0.x,4);
+            file.read((char*)(void*)&uv0.y,4);
+
+            file.read((char*)(void*)&uv1.x,4);
+            file.read((char*)(void*)&uv1.y,4);
+
+            vertex.setVector4f("position",pos);
+            vertex.setVector3f("normal",Vector3f::one.normalize());
+            vertex.setVector2f("uv0",uv1);
+            vertex.setVector2f("uv1",uv0);
+            vertex.setColor("color",color);
+
+            vertices.push_back(vertex);
+        }
+
+        std::vector<Primitive> tris;
+
+        unsigned short triCount = 0; file.read((char*)(void*)&triCount,2);
+        for (int i=0;i<triCount;i++) {
+            unsigned short i0 = 0; file.read((char*)(void*)&i0,2);
+            unsigned short i1 = 0; file.read((char*)(void*)&i1,2);
+            unsigned short i2 = 0; file.read((char*)(void*)&i2,2);
+            tris.push_back(Primitive(i0,i1,i2));
+        }
+
+        mesh->setGeometry(vertices,tris);
+
+        retVal.meshes.push_back(mesh);
+
+        file.read(&partHeader,1);
+    }
+
+    file.close();
+    return retVal;
+}
 
 int main(int argc, char** argv) {
     InitEnv();
@@ -24,10 +148,14 @@ int main(int argc, char** argv) {
     Graphics* graphics = Graphics::create(1280,720,false);
     IO* io = IO::create(graphics->getWindow());
 
-    Texture* texture0 = Texture::load(graphics, "dirtymetal.jpg");
+    Shader* shader = Shader::load(graphics,"default/");
+
+    RM2 testRM2 = loadRM2("GFX/Map/Rooms/cont_106_1/cont_106_1.rm2",graphics,shader);
+
+    /*Texture* texture0 = Texture::load(graphics, "dirtymetal.jpg");
     Texture* texture1 = Texture::load(graphics, "poster.png");
     Texture* texture2 = Texture::load(graphics, "poster2.png");
-    Shader* shader = Shader::load(graphics,"default/");
+    
     std::vector<Texture*> textures; textures.push_back(texture0); textures.push_back(texture1);
     Material* material = new Material(shader,textures);
 
@@ -72,7 +200,7 @@ int main(int argc, char** argv) {
     Mesh* mesh2 = mesh->clone();
     textures.clear(); textures.push_back(texture2); textures.push_back(texture2);
     Material* material2 = new Material(shader, textures);
-    mesh2->setMaterial(material2);
+    mesh2->setMaterial(material2);*/
     
     float aspectRatio = static_cast<float>(graphics->viewport.width()) / static_cast<float>(graphics->viewport.height());
 
@@ -87,7 +215,7 @@ int main(int argc, char** argv) {
     projectionMatrix.elements[2][2] = farPlane / (nearPlane - farPlane);
     projectionMatrix.elements[2][3] = -1.f;
     projectionMatrix.elements[3][2] = (nearPlane*farPlane / (nearPlane - farPlane));
-    Matrix4x4f viewMatrix = Matrix4x4f::constructViewMat(Vector3f(0,-8,-3),Vector3f(0,1,1).normalize(),Vector3f(0,-1,0));
+    Matrix4x4f viewMatrix = Matrix4x4f::constructViewMat(Vector3f(0,8,-3),Vector3f(0,-1,1).normalize(),Vector3f(0,1,0));
 
     Shader::Constant* projMatrixConstant = shader->getVertexShaderConstant("projectionMatrix");
     projMatrixConstant->setValue(projectionMatrix);
@@ -95,8 +223,8 @@ int main(int argc, char** argv) {
     viewMatrixConstant->setValue(viewMatrix);
     Shader::Constant* worldMatrixConstant = shader->getVertexShaderConstant("worldMatrix");
 
-    Shader::Constant* lightPosConstant = shader->getFragmentShaderConstant("lightPos");
-    lightPosConstant->setValue(Vector3f(0.f,1.f,0.f));
+    //Shader::Constant* lightPosConstant = shader->getFragmentShaderConstant("lightPos");
+    //lightPosConstant->setValue(Vector3f(0.f,1.f,0.f));
 
     KeyboardInput testInput = KeyboardInput(SDL_SCANCODE_SPACE);
     io->trackInput(&testInput);
@@ -107,13 +235,17 @@ int main(int argc, char** argv) {
 
         graphics->clear(Color(testInput.isDown()*1.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),1.f));
 
-        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0, 9.f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.3f, -((float)tick) / 60.f, 0.f)));
-        mesh2->render();
+        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0, 9.f), Vector3f(0.02f, 0.02f, 0.02f), Vector3f(0.f, -((float)tick) / 60.f, 0.f)));
 
-        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0, 8.5f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f)));
-        mesh->render();
+        for (int i=0;i<testRM2.meshes.size();i++) {
+            testRM2.meshes[i]->render();
+        }
+        //mesh2->render();
 
-        graphics->swap(true);
+        //worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0, 8.5f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f)));
+        //mesh->render();
+
+        graphics->swap(false);
 
         tick++;
     }

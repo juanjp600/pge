@@ -51,9 +51,11 @@ FIBITMAP* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidt
     while (po2w<w) { po2w*=2; }
     while (po2h<h) { po2h*=2; }
 
-    temp = image;
-    image = FreeImage_Rescale(temp,po2w,po2h,FILTER_BILINEAR);
-    FreeImage_Unload(temp);
+    if (w!=po2w || h!=po2h) {
+        temp = image;
+        image = FreeImage_Rescale(temp,po2w,po2h,FILTER_BILINEAR);
+        FreeImage_Unload(temp);
+    }
 
     realWidth = po2w; realHeight = po2h;
 

@@ -135,23 +135,23 @@ String& String::operator=(const String& other) {
     return *this;
 }
 
-const String operator+(const String& a, const String& b) {
+const String PGE::operator+(const String& a, const String& b) {
     return String(a, b);
 }
 
-const String operator+(const char* a, const String& b) {
+const String PGE::operator+(const char* a, const String& b) {
     return String(String(a), b);
 }
 
-bool operator<(const String& a, const String& b) {
+bool PGE::operator<(const String& a, const String& b) {
     return strcmp(a.cstr(), b.cstr()) < 0;
 }
 
-bool operator>(const String& a, const String& b) {
+bool PGE::operator>(const String& a, const String& b) {
     return strcmp(a.cstr(), b.cstr()) > 0;
 }
 
-std::ostream& operator<<(std::ostream& os, const String& s) {
+std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
     return os << s.cstr();
 }
 
