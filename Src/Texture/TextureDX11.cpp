@@ -113,7 +113,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
     filename = fn;
     name = fn;
 
-    FIBITMAP* fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight,opaque);
+    BYTE* fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight,opaque);
 
     ZeroMemory( &dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC) );
     dxTextureDesc.Width = (UINT)realWidth;
@@ -134,7 +134,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
     if (FAILED(hr)) {
         SDL_Log("1. %d %d %d\n",realWidth,realHeight,hr);
     }
-    dxContext->UpdateSubresource(dxTexture,0,NULL,FreeImage_GetBits(fiBuffer),realWidth*4,0);
+    dxContext->UpdateSubresource(dxTexture,0,NULL,fiBuffer,realWidth*4,0);
 
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -150,7 +150,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
 
     isRT = false;
 
-    FreeImage_Unload(fiBuffer);
+    delete[] fiBuffer;
 }
 
 TextureDX11::~TextureDX11() {

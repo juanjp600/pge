@@ -6,7 +6,7 @@
 
 namespace PGE {
 
-FIBITMAP* loadFIBuffer(String filename, int& width, int& height, int& realWidth, int& realHeight, bool& opaque);
+BYTE* loadFIBuffer(String filename, int& width, int& height, int& realWidth, int& realHeight, bool& opaque);
 
 }
 

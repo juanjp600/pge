@@ -231,9 +231,9 @@ int main(int argc, char** argv) {
 
         graphics->setRenderTarget(texture0);
         graphics->setViewport(Rectanglei(0,0,1280,720));
-        graphics->clear(Color(testInput.isDown() ? 1.f : 0.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),1.f));
+        graphics->clear(Color(testInput.isDown() ? 1.f : 0.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),0.1f));
 
-        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0.f*((float)tick)/100.f, 9.f), Vector3f(0.02f, 0.02f, 0.02f), Vector3f(0.f, -((float)tick) / 800.f, 0.f)));
+        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0.f*((float)tick)/100.f, 9.f), Vector3f(0.1f, 0.1f, 0.1f), Vector3f(0.f, -((float)tick) / 800.f, 0.f)));
 
         for (int i=0;i<testRM2.meshes.size();i++) {
             testRM2.meshes[i]->render();

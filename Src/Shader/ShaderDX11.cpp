@@ -71,7 +71,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
     samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
     samplerDesc.MinLOD = 0;
     samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-    samplerDesc.MipLODBias = -1.0f;
+    samplerDesc.MipLODBias = -0.1f;
 
     ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
     for (int i = 0; i < samplerCount; i++) {

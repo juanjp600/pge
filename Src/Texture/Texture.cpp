@@ -16,7 +16,7 @@ bool Texture::isOpaque() const {
     return opaque;
 }
 
-FIBITMAP* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,int& realHeight,bool& opaque) {
+BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,int& realHeight,bool& opaque) {
     FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename.cstr(),0);
 
     FIBITMAP* temp = FreeImage_Load(format, filename.cstr());
@@ -25,25 +25,6 @@ FIBITMAP* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidt
 
     int w = FreeImage_GetWidth(image);
     int h = FreeImage_GetHeight(image);
-
-    BYTE* bits = FreeImage_GetBits(image);
-    int bpp = FreeImage_GetBPP(image)/8;
-
-    opaque = true;
-    for (int x=0;x<w;x++) {
-        for (int y=0;y<h;y++) {
-            if (opaque && bits[(x+(y*w))*bpp+3]<255) {
-                opaque = false;
-            }
-
-            RGBQUAD rgba;
-            FreeImage_GetPixelColor(image,x,y,&rgba);
-            int red = rgba.rgbRed;
-            int blue = rgba.rgbBlue;
-            rgba.rgbRed = blue; rgba.rgbBlue = red;
-            FreeImage_SetPixelColor(image,x,y,&rgba);
-        }
-    }
 
     width = w; height = h;
 
@@ -59,5 +40,25 @@ FIBITMAP* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidt
 
     realWidth = po2w; realHeight = po2h;
 
-    return image;
+    BYTE* bits = FreeImage_GetBits(image);
+    int bpp = FreeImage_GetBPP(image)/8;
+    BYTE* newBits = new BYTE[w*h*bpp];
+
+    opaque = true;
+    for (int x=0;x<w;x++) {
+        for (int y=0;y<h;y++) {
+            if (opaque && bits[(x+(y*w))*bpp+3]<255) {
+                opaque = false;
+            }
+
+            newBits[(x+(y*w))*bpp+0] = bits[(x+(y*w))*bpp+2];
+            newBits[(x+(y*w))*bpp+1] = bits[(x+(y*w))*bpp+1];
+            newBits[(x+(y*w))*bpp+2] = bits[(x+(y*w))*bpp+0];
+            newBits[(x+(y*w))*bpp+3] = bits[(x+(y*w))*bpp+3];
+        }
+    }
+
+    FreeImage_Unload(image);
+
+    return newBits;
 }
