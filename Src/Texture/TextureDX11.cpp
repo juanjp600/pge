@@ -12,11 +12,11 @@ Texture* Texture::load(Graphics* gfx,String filename) {
     return new TextureDX11(gfx,filename);
 }
 
-Texture* Texture::create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer) {
-    return new TextureDX11(gfx,w,h,renderTarget,buffer);
+Texture* Texture::create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer,FORMAT fmt) {
+    return new TextureDX11(gfx,w,h,renderTarget,buffer,fmt);
 }
 
-TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer) {
+TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,FORMAT fmt) {
     graphics = gfx;
     ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
@@ -40,15 +40,27 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         }
     }
 
+    format = fmt;
+
     width = w; height = h;
     realWidth = width; realHeight = height;
+
+    DXGI_FORMAT dxFormat;
+    switch (format) {
+        case FORMAT::RGBA32: {
+            dxFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+        } break;
+        case FORMAT::R32F: {
+            dxFormat = DXGI_FORMAT_R32_FLOAT;
+        }
+    }
 
     ZeroMemory( &dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC) );
     dxTextureDesc.Width = (UINT)realWidth;
     dxTextureDesc.Height = (UINT)realHeight;
     dxTextureDesc.MipLevels = 0;
     dxTextureDesc.ArraySize = 1;
-    dxTextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    dxTextureDesc.Format = dxFormat;
     dxTextureDesc.SampleDesc.Count = 1;
     dxTextureDesc.SampleDesc.Quality = 0;
     dxTextureDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -64,7 +76,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     if (buffer != nullptr) { dxContext->UpdateSubresource(dxTexture,0,NULL,buffer,realWidth*4,0); }
 
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
-    dxShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    dxShaderResourceViewDesc.Format = dxFormat;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     dxShaderResourceViewDesc.Texture2D.MipLevels = 1;
     hr = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
@@ -112,6 +124,8 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
 
     filename = fn;
     name = fn;
+
+    format = FORMAT::RGBA32;
 
     BYTE* fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight,opaque);
 

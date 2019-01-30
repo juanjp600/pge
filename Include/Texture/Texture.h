@@ -8,13 +8,18 @@ namespace PGE {
 
 class Texture {
     public:
+        enum class FORMAT {
+            RGBA32,
+            R32F
+        };
+
         virtual bool isRenderTarget() const =0;
 
         int getWidth() const; int getHeight() const;
         bool isOpaque() const;
 
         static Texture* load(Graphics* gfx,String filename);
-        static Texture* create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer);
+        static Texture* create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer,FORMAT fmt);
         ~Texture() {};
     protected:
         int width; int height;
@@ -22,6 +27,7 @@ class Texture {
         bool opaque;
 
         String filename; String name;
+        FORMAT format;
 
         Texture(){};
 };

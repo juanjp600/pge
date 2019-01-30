@@ -167,9 +167,12 @@ int main(int argc, char** argv) {
 
     RM2 testRM2 = loadRM2("GFX/Map/Rooms/cont_106_1/cont_106_1.rm2",graphics,shader);
 
-    Texture* texture0 = Texture::create(graphics,2048,2048,true,nullptr);
+    Texture* texture0 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::RGBA32);
+    Texture* texture1 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::R32F);
 
-    std::vector<Texture*> textures; textures.push_back(texture0);
+    std::vector<Texture*> renderTargets; renderTargets.push_back(texture0); renderTargets.push_back(texture1);
+
+    std::vector<Texture*> textures; textures.push_back(texture0); textures.push_back(texture1);
     Material* quadMaterial = new Material(postprocessShader,textures);
 
     Mesh* quad = Mesh::create(graphics, Primitive::TYPE::TRIANGLE);
@@ -229,7 +232,7 @@ int main(int argc, char** argv) {
         io->update();
         graphics->update();
 
-        graphics->setRenderTarget(texture0);
+        graphics->setRenderTargets(renderTargets);
         graphics->setViewport(Rectanglei(0,0,1280,720));
         graphics->clear(Color(testInput.isDown() ? 1.f : 0.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),0.1f));
 

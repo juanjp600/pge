@@ -13,7 +13,7 @@ namespace PGE {
 
 class TextureDX11 : public Texture {
     public:
-        TextureDX11(Graphics* gfx,int width,int height,bool renderTarget=false,const void* buffer=nullptr);
+        TextureDX11(Graphics* gfx,int width,int height,bool renderTarget,const void* buffer,FORMAT fmt);
         TextureDX11(Graphics* gfx,const String& fn);
         ~TextureDX11();
 

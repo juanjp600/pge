@@ -21,11 +21,12 @@ class GraphicsDX11 : public Graphics {
         virtual void clear(Color color);
 
         virtual void setRenderTarget(Texture* renderTarget);
+        virtual void setRenderTargets(std::vector<Texture*> renderTargets);
         virtual void resetRenderTarget();
 
         virtual void setViewport(Rectanglei vp);
     private:
-        ID3D11RenderTargetView* currentRenderTargetView;
+        std::vector<ID3D11RenderTargetView*> currentRenderTargetViews;
         ID3D11DepthStencilView* currentDepthStencilView;
 
         D3D11_VIEWPORT dxViewport;

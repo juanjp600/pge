@@ -6,6 +6,10 @@ Material::Material(Shader* sh,const std::vector<Texture*> &t) {
     shader = sh; textures = t;
 }
 
+Material::Material(Shader* sh,Texture* t) {
+    shader = sh; textures.clear(); textures.push_back(t);
+}
+
 Shader* Material::getShader() const {
     return shader;
 }

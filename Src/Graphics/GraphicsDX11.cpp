@@ -17,7 +17,7 @@ GraphicsDX11::GraphicsDX11(int w,int h,bool fs) {
     ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
 
     setViewport(Rectanglei(0,0,w,h));
-    currentRenderTargetView = ((WindowDX11*)window)->getBackBufferRtv();
+    currentRenderTargetViews.push_back(((WindowDX11*)window)->getBackBufferRtv());
     currentDepthStencilView = ((WindowDX11*)window)->getZBufferView();
 }
 
@@ -31,20 +31,50 @@ void GraphicsDX11::update() {
 
 void GraphicsDX11::clear(Color color) {
     float clearColor[4] = {color.red,color.green,color.blue,color.alpha};
-    ((WindowDX11*)window)->getDxContext()->ClearRenderTargetView( currentRenderTargetView, clearColor );
+    for (int i=0;i<currentRenderTargetViews.size();i++) {
+        ((WindowDX11*)window)->getDxContext()->ClearRenderTargetView( currentRenderTargetViews[i], clearColor );
+    }
     ((WindowDX11*)window)->getDxContext()->ClearDepthStencilView( currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
 }
 
 void GraphicsDX11::setRenderTarget(Texture* renderTarget) {
-    currentRenderTargetView = ((TextureDX11*)renderTarget)->getRtv();
+    for (int i=0;i<currentRenderTargetViews.size();i++) {
+        currentRenderTargetViews[i] = nullptr;
+    }
+    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+
+    currentRenderTargetViews.clear(); currentRenderTargetViews.push_back(((TextureDX11*)renderTarget)->getRtv());
     currentDepthStencilView = ((TextureDX11*)renderTarget)->getZBufferView();
-    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( 1, &currentRenderTargetView, currentDepthStencilView );
+    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+}
+
+void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
+    for (int i=0;i<currentRenderTargetViews.size();i++) {
+        currentRenderTargetViews[i] = nullptr;
+    }
+    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+
+    currentRenderTargetViews.clear();
+    TextureDX11* maxSizeTexture = (TextureDX11*)renderTargets[0];
+    for (int i=0;i<renderTargets.size();i++) {
+        currentRenderTargetViews.push_back(((TextureDX11*)renderTargets[i])->getRtv());
+        if (renderTargets[i]->getWidth()+renderTargets[i]->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
+            maxSizeTexture = (TextureDX11*)renderTargets[i];
+        }
+    }
+    currentDepthStencilView = maxSizeTexture->getZBufferView();
+    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::resetRenderTarget() {
-    currentRenderTargetView = ((WindowDX11*)window)->getBackBufferRtv();
+    for (int i=0;i<currentRenderTargetViews.size();i++) {
+        currentRenderTargetViews[i] = nullptr;
+    }
+    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+
+    currentRenderTargetViews.clear(); currentRenderTargetViews.push_back(((WindowDX11*)window)->getBackBufferRtv());
     currentDepthStencilView = ((WindowDX11*)window)->getZBufferView();
-    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( 1, &currentRenderTargetView, currentDepthStencilView );
+    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::setViewport(Rectanglei vp) {

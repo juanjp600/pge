@@ -10,6 +10,7 @@ namespace PGE {
 struct Material {
     public:
         Material(Shader* sh,const std::vector<Texture*> &t);
+        Material(Shader* sh,Texture* t);
 
         Shader* getShader() const;
         Texture* getTexture(int index) const;

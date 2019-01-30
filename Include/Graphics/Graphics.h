@@ -6,6 +6,7 @@
 #include <Math/Matrix.h>
 #include <Color/Color.h>
 
+#include <vector>
 
 namespace PGE {
 
@@ -23,6 +24,7 @@ class Graphics {
         virtual void clear(Color color) =0;
 
         virtual void setRenderTarget(Texture* renderTarget) =0;
+        virtual void setRenderTargets(std::vector<Texture*> renderTargets) =0;
         virtual void resetRenderTarget() =0;
 
         virtual void setViewport(Rectanglei vp);

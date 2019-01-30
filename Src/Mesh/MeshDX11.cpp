@@ -169,4 +169,9 @@ void MeshDX11::render() {
     ((WindowDX11*)graphics->getWindow())->setZBufferWriteState(opaque);
 
     dxContext->DrawIndexed(primitives.size()*dxIndexMultiplier,0,0);
+
+    ID3D11ShaderResourceView* nullResource = nullptr;
+    for (int i=0;i<material->getTextureCount();i++) {
+        dxContext->PSSetShaderResources(i,1,&nullResource);
+    }
 }
