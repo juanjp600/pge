@@ -170,6 +170,11 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
 TextureDX11::~TextureDX11() {
     dxShaderResourceView->Release();
     dxTexture->Release();
+    if (isRT) {
+        dxRtv->Release();
+        dxZBufferView->Release();
+        dxZBufferTexture->Release();
+    }
 }
 
 void TextureDX11::useTexture(int index) {

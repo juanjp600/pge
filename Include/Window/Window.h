@@ -18,7 +18,7 @@ class Window {
 
         SDL_Window* getSdlWindow() const; //TODO: move to derived classes
 
-        ~Window(){};
+        virtual ~Window(){};
     protected:
         Window(){};
 

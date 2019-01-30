@@ -93,6 +93,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
         textures.push_back(retVal.textures[textureIndex1]);
 
         Material* material = new Material(shader,textures);
+        retVal.materials.push_back(material);
 
         mesh->setMaterial(material);
 
@@ -222,9 +223,6 @@ int main(int argc, char** argv) {
     viewMatrixConstant->setValue(viewMatrix);
     Shader::Constant* worldMatrixConstant = shader->getVertexShaderConstant("worldMatrix");
 
-    //Shader::Constant* lightPosConstant = shader->getFragmentShaderConstant("lightPos");
-    //lightPosConstant->setValue(Vector3f(0.f,1.f,0.f));
-
     KeyboardInput testInput = KeyboardInput(SDL_SCANCODE_SPACE);
     io->trackInput(&testInput);
     while (graphics->getWindow()->isOpen()) {
@@ -246,20 +244,35 @@ int main(int argc, char** argv) {
         graphics->clear(Color(0.f,0.f,0.f,1.f));
         graphics->setViewport(Rectanglei(0,0,1280,720));
         quad->render();
-        /*for (int i=0;i<testRM2.meshes.size();i++) {
-            testRM2.meshes[i]->render();
-        }*/
-
-        //mesh2->render();
-
-        //worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0, 8.5f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f)));
-        //mesh->render();
-
+        
         graphics->swap(false);
 
         tick++;
     }
     io->untrackInput(&testInput);
+
+    for (int i=0;i<testRM2.meshes.size();i++) {
+        delete testRM2.meshes[i];
+    }
+    testRM2.meshes.clear();
+
+    for (int i=0;i<testRM2.materials.size();i++) {
+        delete testRM2.materials[i];
+    }
+    testRM2.materials.clear();
+    
+    for (int i=0;i<testRM2.textures.size();i++) {
+        delete testRM2.textures[i];
+    }
+    testRM2.textures.clear();
+
+    delete quad;
+    delete quadMaterial;
+    delete texture0; delete texture1;
+
+    delete postprocessShader;
+    delete shader;
+
     delete io;
     delete graphics;
 

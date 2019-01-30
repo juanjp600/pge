@@ -20,7 +20,7 @@ class Texture {
 
         static Texture* load(Graphics* gfx,String filename);
         static Texture* create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer,FORMAT fmt);
-        ~Texture() {};
+        virtual ~Texture(){};
     protected:
         int width; int height;
         int realWidth; int realHeight;

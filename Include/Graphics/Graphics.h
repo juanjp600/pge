@@ -30,7 +30,7 @@ class Graphics {
         virtual void setViewport(Rectanglei vp);
         Rectanglei getViewport() const;
 
-        ~Graphics(){};
+        virtual ~Graphics(){};
     protected:
         Graphics();
 
