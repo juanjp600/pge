@@ -66,6 +66,12 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
             if (!found) {
                 texName = "GFX/Map/Textures/"+name+".png";
             }
+
+            handle = FindFirstFile(texName.cstr(), &FindFileData) ;
+            found = handle != INVALID_HANDLE_VALUE;
+            if (!found) {
+                texName = "GFX/Map/Textures/dirtymetal.jpg";
+            }
         }
         SDL_Log("%s\n",texName.cstr());
         retVal.textures.push_back(Texture::load(graphics,texName));
@@ -157,42 +163,29 @@ int main(int argc, char** argv) {
     IO* io = IO::create(graphics->getWindow());
 
     Shader* shader = Shader::load(graphics,"default/");
+    Shader* postprocessShader = Shader::load(graphics,"postprocess/");
 
     RM2 testRM2 = loadRM2("GFX/Map/Rooms/cont_106_1/cont_106_1.rm2",graphics,shader);
 
-    /*Texture* texture0 = Texture::load(graphics, "dirtymetal.jpg");
-    Texture* texture1 = Texture::load(graphics, "poster.png");
-    Texture* texture2 = Texture::load(graphics, "poster2.png");
-    
-    std::vector<Texture*> textures; textures.push_back(texture0); textures.push_back(texture1);
-    Material* material = new Material(shader,textures);
+    Texture* texture0 = Texture::create(graphics,2048,2048,true,nullptr);
 
-    Mesh* mesh = Mesh::create(graphics, Primitive::TYPE::TRIANGLE);
+    std::vector<Texture*> textures; textures.push_back(texture0);
+    Material* quadMaterial = new Material(postprocessShader,textures);
+
+    Mesh* quad = Mesh::create(graphics, Primitive::TYPE::TRIANGLE);
     std::vector<Vertex> vertices;
     Vertex vert;
-    vert.setVector4f("position",Vector4f(-5.f,-5.f,0.f,1.f));
-    vert.setVector3f("normal",Vector3f(0.f,0.f,-1.f));
+    vert.setVector4f("position",Vector4f(-1.f,-1.f,0.f,1.f));
+    vert.setVector2f("uv0",Vector2f(0.f,720.f/2048.f));
+    vertices.push_back(vert);
+    vert.setVector4f("position",Vector4f(-1.f,1.f,0.f,1.f));
     vert.setVector2f("uv0",Vector2f(0.f,0.f));
-    vert.setVector2f("uv1",Vector2f(0.f,1.f));
-    vert.setColor("color",Color(1.f,1.f,1.f,1.f));
     vertices.push_back(vert);
-    vert.setVector4f("position",Vector4f(-5.f,5.f,0.f,1.f));
-    vert.setVector3f("normal",Vector3f(0.f,0.f,-1.f));
-    vert.setVector2f("uv0",Vector2f(0.f,1.f));
-    vert.setVector2f("uv1",Vector2f(0.f,0.f));
-    vert.setColor("color",Color(0.5f,1.f,1.f,1.f));
+    vert.setVector4f("position",Vector4f(1.f,-1.f,0.f,1.f));
+    vert.setVector2f("uv0",Vector2f(1280.f/2048.f,720.f/2048.f));
     vertices.push_back(vert);
-    vert.setVector4f("position",Vector4f(5.f,-5.f,0.f,1.f));
-    vert.setVector3f("normal",Vector3f(0.f,0.f,-1.f));
-    vert.setVector2f("uv0",Vector2f(1.f,0.f));
-    vert.setVector2f("uv1",Vector2f(1.f,1.f));
-    vert.setColor("color",Color(1.f,1.f,1.f,1.f));
-    vertices.push_back(vert);
-    vert.setVector4f("position",Vector4f(5.f,5.f,0.f,1.f));
-    vert.setVector3f("normal",Vector3f(0.f,0.f,-1.f));
-    vert.setVector2f("uv0",Vector2f(1.f,1.f));
-    vert.setVector2f("uv1",Vector2f(1.f,0.f));
-    vert.setColor("color",Color(1.f,1.f,1.f,1.f));
+    vert.setVector4f("position",Vector4f(1.f,1.f,0.f,1.f));
+    vert.setVector2f("uv0",Vector2f(1280.f/2048.f,0.f));
     vertices.push_back(vert);
 
     std::vector<Primitive> primitives;
@@ -201,16 +194,11 @@ int main(int argc, char** argv) {
     primitives.push_back(Primitive(1, 0, 2));
     primitives.push_back(Primitive(1, 2, 3));
 
-    mesh->setGeometry(vertices,primitives);
+    quad->setGeometry(vertices,primitives);
 
-    mesh->setMaterial(material);
+    quad->setMaterial(quadMaterial);
 
-    Mesh* mesh2 = mesh->clone();
-    textures.clear(); textures.push_back(texture2); textures.push_back(texture2);
-    Material* material2 = new Material(shader, textures);
-    mesh2->setMaterial(material2);*/
-    
-    float aspectRatio = static_cast<float>(graphics->viewport.width()) / static_cast<float>(graphics->viewport.height());
+    float aspectRatio = static_cast<float>(graphics->getViewport().width()) / static_cast<float>(graphics->getViewport().height());
 
     float zoom = 1.f;
 
@@ -241,13 +229,24 @@ int main(int argc, char** argv) {
         io->update();
         graphics->update();
 
-        graphics->clear(Color(testInput.isDown()*1.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),1.f));
+        graphics->setRenderTarget(texture0);
+        graphics->setViewport(Rectanglei(0,0,1280,720));
+        graphics->clear(Color(testInput.isDown() ? 1.f : 0.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),1.f));
 
         worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0.f*((float)tick)/100.f, 9.f), Vector3f(0.02f, 0.02f, 0.02f), Vector3f(0.f, -((float)tick) / 800.f, 0.f)));
 
         for (int i=0;i<testRM2.meshes.size();i++) {
             testRM2.meshes[i]->render();
         }
+
+        graphics->resetRenderTarget();
+        graphics->clear(Color(0.f,0.f,0.f,1.f));
+        graphics->setViewport(Rectanglei(0,0,1280,720));
+        quad->render();
+        /*for (int i=0;i<testRM2.meshes.size();i++) {
+            testRM2.meshes[i]->render();
+        }*/
+
         //mesh2->render();
 
         //worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0, 8.5f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f)));

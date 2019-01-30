@@ -17,3 +17,11 @@ void Graphics::update() {
 void Graphics::swap(bool vsync) {
     window->swap(vsync);
 }
+
+void Graphics::setViewport(Rectanglei vp) {
+    viewport = vp;
+}
+
+Rectanglei Graphics::getViewport() const {
+    return viewport;
+}

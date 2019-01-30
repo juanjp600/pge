@@ -17,22 +17,18 @@ class GraphicsDX11 : public Graphics {
         ~GraphicsDX11();
 
         virtual void update();
-        void updateViewport();
-        //void updateDxCBuffer(Matrix4x4f worldMatrix);
-        //void useVertexInputLayout();
-        //void useMatrixCBuffer();
-        //void useSampler();
-
+        
         virtual void clear(Color color);
 
+        virtual void setRenderTarget(Texture* renderTarget);
+        virtual void resetRenderTarget();
+
+        virtual void setViewport(Rectanglei vp);
+    private:
         ID3D11RenderTargetView* currentRenderTargetView;
         ID3D11DepthStencilView* currentDepthStencilView;
-    private:
-        Rectanglei currentViewport;
 
-        /*D3D11_BUFFER_DESC dxMatrixCBufferDesc;
-        D3D11_SUBRESOURCE_DATA dxMatrixCBufferData;
-        ID3D11Buffer* dxMatrixCBuffer;*/
+        D3D11_VIEWPORT dxViewport;
 };
 
 }

@@ -144,14 +144,6 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
     dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[1]);
     //dxContext->OMSetDepthStencilState(dxDepthStencilState[1], 0);
 
-    dxViewport.Width = (FLOAT)width;
-    dxViewport.Height = (FLOAT)height;
-    dxViewport.MinDepth = 0.0f;
-    dxViewport.MaxDepth = 1.0f;
-    dxViewport.TopLeftX = 0;
-    dxViewport.TopLeftY = 0;
-    dxContext->RSSetViewports( 1, &dxViewport );
-
     open = true;
 }
 

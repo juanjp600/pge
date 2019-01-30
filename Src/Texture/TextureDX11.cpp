@@ -46,26 +46,22 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     ZeroMemory( &dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC) );
     dxTextureDesc.Width = (UINT)realWidth;
     dxTextureDesc.Height = (UINT)realHeight;
-    dxTextureDesc.MipLevels = (UINT)1;
+    dxTextureDesc.MipLevels = 0;
     dxTextureDesc.ArraySize = 1;
     dxTextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     dxTextureDesc.SampleDesc.Count = 1;
     dxTextureDesc.SampleDesc.Quality = 0;
-    dxTextureDesc.Usage = D3D11_USAGE_IMMUTABLE;
-    dxTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+    dxTextureDesc.Usage = D3D11_USAGE_DEFAULT;
+    dxTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
     dxTextureDesc.CPUAccessFlags = 0;
-
-    ZeroMemory( &dxTextureData,sizeof(D3D11_SUBRESOURCE_DATA) );
-    dxTextureData.pSysMem = buffer;
-    dxTextureData.SysMemPitch = realWidth*4;
-    dxTextureData.SysMemSlicePitch = realWidth*realHeight*4;
 
     HRESULT hr = 0;
 
-    hr = dxDevice->CreateTexture2D( &dxTextureDesc,&dxTextureData,&dxTexture );
+    hr = dxDevice->CreateTexture2D( &dxTextureDesc,NULL,&dxTexture );
     if (FAILED(hr)) {
         SDL_Log("1. %d %d %d\n",realWidth,realHeight,hr);
     }
+    if (buffer != nullptr) { dxContext->UpdateSubresource(dxTexture,0,NULL,buffer,realWidth*4,0); }
 
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -77,11 +73,34 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     }
 
     isRT = renderTarget;
-    /*if (isRT) {
-    glGenFramebuffers(1,&glFramebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);
-    TODO: FINISH THIS
-    }*/
+
+    if (isRT) {
+        dxDevice->CreateRenderTargetView( dxTexture, NULL, &dxRtv );
+
+        // Create depth stencil texture
+        D3D11_TEXTURE2D_DESC descDepth;
+        ZeroMemory(&descDepth, sizeof(descDepth));
+        descDepth.Width = realWidth;
+        descDepth.Height = realHeight;
+        descDepth.MipLevels = 1;
+        descDepth.ArraySize = 1;
+        descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+        descDepth.SampleDesc.Count = 1;
+        descDepth.SampleDesc.Quality = 0;
+        descDepth.Usage = D3D11_USAGE_DEFAULT;
+        descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+        descDepth.CPUAccessFlags = 0;
+        descDepth.MiscFlags = 0;
+        hr = dxDevice->CreateTexture2D(&descDepth, NULL, &dxZBufferTexture);
+
+        // Create the depth stencil view
+        D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+        ZeroMemory(&descDSV, sizeof(descDSV));
+        descDSV.Format = descDepth.Format;
+        descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+        descDSV.Texture2D.MipSlice = 0;
+        hr = dxDevice->CreateDepthStencilView(dxZBufferTexture, &descDSV, &dxZBufferView);
+    }
 
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 }
@@ -108,11 +127,6 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
     dxTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
     dxTextureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
     dxTextureDesc.CPUAccessFlags = 0;
-
-    /*ZeroMemory( &dxTextureData,sizeof(D3D11_SUBRESOURCE_DATA) );
-    dxTextureData.pSysMem = FreeImage_GetBits(fiBuffer);
-    dxTextureData.SysMemPitch = realWidth*4;
-    dxTextureData.SysMemSlicePitch = realWidth*realHeight*4;*/
 
     HRESULT hr = 0;
 
@@ -151,4 +165,12 @@ void TextureDX11::useTexture(int index) {
 
 bool TextureDX11::isRenderTarget() const {
     return isRT;
+}
+
+ID3D11RenderTargetView* TextureDX11::getRtv() const {
+    return dxRtv;
+}
+
+ID3D11DepthStencilView* TextureDX11::getZBufferView() const {
+    return dxZBufferView;
 }

@@ -47,8 +47,6 @@ class WindowDX11 : public Window {
         
         D3D11_BLEND_DESC dxBlendStateDesc;
         ID3D11BlendState* dxBlendState;
-        
-        D3D11_VIEWPORT dxViewport;
 };
 
 }

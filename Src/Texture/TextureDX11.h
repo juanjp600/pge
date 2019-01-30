@@ -20,6 +20,9 @@ class TextureDX11 : public Texture {
         void useTexture(int index);
 
         virtual bool isRenderTarget() const;
+
+        ID3D11RenderTargetView* getRtv() const;
+        ID3D11DepthStencilView* getZBufferView() const;
     private:
         TextureDX11(){};
 
@@ -32,6 +35,9 @@ class TextureDX11 : public Texture {
         ID3D11ShaderResourceView* dxShaderResourceView;
 
         bool isRT;
+        ID3D11RenderTargetView* dxRtv;
+        ID3D11Texture2D* dxZBufferTexture;
+        ID3D11DepthStencilView* dxZBufferView;
 };
 
 }

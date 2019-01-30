@@ -6,7 +6,10 @@
 #include <Math/Matrix.h>
 #include <Color/Color.h>
 
+
 namespace PGE {
+
+class Texture;
 
 class Graphics {
     public:
@@ -19,11 +22,17 @@ class Graphics {
 
         virtual void clear(Color color) =0;
 
-        Rectanglei viewport;
+        virtual void setRenderTarget(Texture* renderTarget) =0;
+        virtual void resetRenderTarget() =0;
+
+        virtual void setViewport(Rectanglei vp);
+        Rectanglei getViewport() const;
 
         ~Graphics(){};
     protected:
         Graphics();
+
+        Rectanglei viewport;
 
         Window* window;
 };
