@@ -158,15 +158,13 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
 int main(int argc, char** argv) {
     InitEnv();
 
-    int tick = 0;
-
     Graphics* graphics = Graphics::create(1280,720,false);
     IO* io = IO::create(graphics->getWindow());
 
     Shader* shader = Shader::load(graphics,"default/");
     Shader* postprocessShader = Shader::load(graphics,"postprocess/");
 
-    RM2 testRM2 = loadRM2("GFX/Map/Rooms/cont_106_1/cont_106_1.rm2",graphics,shader);
+    RM2 testRM2 = loadRM2("GFX/Map/Rooms/strg_939_3/strg_939_3.rm2",graphics,shader);
 
     Texture* texture0 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::RGBA32);
     Texture* texture1 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::R32F);
@@ -225,16 +223,56 @@ int main(int argc, char** argv) {
 
     KeyboardInput testInput = KeyboardInput(SDL_SCANCODE_SPACE);
     io->trackInput(&testInput);
+    KeyboardInput leftInput = KeyboardInput(SDL_SCANCODE_A);
+    io->trackInput(&leftInput);
+    KeyboardInput rightInput = KeyboardInput(SDL_SCANCODE_D);
+    io->trackInput(&rightInput);
+    KeyboardInput forwardInput = KeyboardInput(SDL_SCANCODE_W);
+    io->trackInput(&forwardInput);
+    KeyboardInput backwardInput = KeyboardInput(SDL_SCANCODE_S);
+    io->trackInput(&backwardInput);
+
+    float hAngle = 0;
+    float vAngle = 0;
+    Vector3f cameraPos = Vector3f(0,18,-30);
+
+    io->setMouseVisibility(false);
+    io->setMousePosition(Vector2i(640,360));
     while (graphics->getWindow()->isOpen()) {
         SysEvents::update();
         io->update();
         graphics->update();
 
+        hAngle -= (float)(io->getMousePosition().x-640)/300.f;
+        vAngle -= (float)(io->getMousePosition().y-360)/300.f;
+        if (vAngle<-3.14*0.5f) { vAngle = -3.14*0.5f; }
+        if (vAngle>3.14*0.5f) { vAngle = 3.14*0.5f; }
+        io->setMousePosition(Vector2i(640,360));
+
         graphics->setRenderTargets(renderTargets);
         graphics->setViewport(Rectanglei(0,0,1280,720));
-        graphics->clear(Color(testInput.isDown() ? 1.f : 0.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),0.1f));
+        graphics->clear(Color(1.f,0.f,1.f,0.1f));
 
-        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 0.f*((float)tick)/100.f, 9.f), Vector3f(0.1f, 0.1f, 0.1f), Vector3f(0.f, -((float)tick) / 800.f, 0.f)));
+        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0.f, 0.f, 0.f), Vector3f(0.07f, 0.07f, 0.07f), Vector3f(0.f, 0.f, 0.f)));
+
+        Vector3f lookDir = Vector3f(sin(hAngle)*cos(vAngle),sin(vAngle),cos(hAngle)*cos(vAngle));
+        Vector3f upDir = Vector3f(sin(hAngle)*sin(-vAngle),cos(-vAngle),cos(hAngle)*sin(-vAngle));
+        Vector3f sideDir = lookDir.crossProduct(upDir);
+        viewMatrix = Matrix4x4f::constructViewMat(cameraPos,lookDir,upDir);
+        viewMatrixConstant->setValue(viewMatrix);
+
+        if (forwardInput.isDown()) {
+            cameraPos = cameraPos.add(lookDir.multiply(0.05f));
+        }
+        if (backwardInput.isDown()) {
+            cameraPos = cameraPos.add(lookDir.multiply(-0.05f));
+        }
+        if (leftInput.isDown()) {
+            cameraPos = cameraPos.add(sideDir.multiply(-0.05f));
+        }
+        if (rightInput.isDown()) {
+            cameraPos = cameraPos.add(sideDir.multiply(0.05f));
+        }
 
         for (int i=0;i<testRM2.meshes.size();i++) {
             testRM2.meshes[i]->render();
@@ -246,8 +284,6 @@ int main(int argc, char** argv) {
         quad->render();
         
         graphics->swap(false);
-
-        tick++;
     }
     io->untrackInput(&testInput);
 

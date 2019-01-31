@@ -6,6 +6,10 @@ bool Window::isOpen() const {
     return open;
 }
 
+bool Window::isFocused() const {
+    return focused;
+}
+
 int Window::getWidth() const {
     return width;
 }

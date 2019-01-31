@@ -16,6 +16,8 @@ class Window {
         int getWidth() const;
         int getHeight() const;
 
+        virtual bool isFocused() const;
+
         SDL_Window* getSdlWindow() const; //TODO: move to derived classes
 
         virtual ~Window(){};
@@ -29,7 +31,7 @@ class Window {
         SysEvents::Subscriber eventSubscriber;
 
         bool open;
-        bool vsync;
+        bool focused;
 };
 
 }

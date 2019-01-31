@@ -13,6 +13,8 @@ namespace PGE {
 
 class IO {
     private:
+        Window* window;
+
         SysEvents::Subscriber keyboardSubscriber;
         SysEvents::Subscriber mouseSubscriber;
         SysEvents::Subscriber gamepadSubscriber;
@@ -20,7 +22,7 @@ class IO {
         std::set<UserInput*> inputs;
         Vector2i mousePos;
 
-        IO(Window* window);
+        IO(Window* win);
     public:
         static IO* create(Window* window);
         ~IO();
@@ -31,6 +33,8 @@ class IO {
         void untrackInput(UserInput* input);
 
         Vector2i getMousePosition() const;
+        void setMousePosition(Vector2i position);
+        void setMouseVisibility(bool visible);
 };
 
 }

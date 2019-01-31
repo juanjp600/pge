@@ -7,7 +7,9 @@ IO* IO::create(Window* window) {
     return new IO(window);
 }
 
-IO::IO(Window* window) {
+IO::IO(Window* win) {
+    window = win;
+
     keyboardSubscriber = SysEvents::Subscriber(window->getSdlWindow(),SysEvents::Subscriber::EventType::KEYBOARD);
     mouseSubscriber = SysEvents::Subscriber(window->getSdlWindow(),SysEvents::Subscriber::EventType::MOUSE);
     gamepadSubscriber = SysEvents::Subscriber(window->getSdlWindow(),SysEvents::Subscriber::EventType::GAMEPAD);
@@ -87,6 +89,16 @@ void IO::update() {
 
 Vector2i IO::getMousePosition() const {
     return mousePos;
+}
+
+void IO::setMousePosition(Vector2i position) {
+    if (!window->isFocused()) { return; }
+    SDL_WarpMouseInWindow(window->getSdlWindow(),position.x,position.y);
+    mousePos = position;
+}
+
+void IO::setMouseVisibility(bool visible) {
+    SDL_ShowCursor(visible ? 1 : 0);
 }
 
 void IO::trackInput(UserInput* input) {

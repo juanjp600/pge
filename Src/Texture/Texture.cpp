@@ -42,19 +42,22 @@ BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,in
 
     BYTE* bits = FreeImage_GetBits(image);
     int bpp = FreeImage_GetBPP(image)/8;
-    BYTE* newBits = new BYTE[w*h*bpp];
+    BYTE* newBits = new BYTE[realWidth*realHeight*bpp];
 
     opaque = true;
-    for (int x=0;x<w;x++) {
-        for (int y=0;y<h;y++) {
-            if (opaque && bits[(x+(y*w))*bpp+3]<255) {
+    for (int x=0;x<realWidth;x++) {
+        for (int y=0;y<realHeight;y++) {
+            if (opaque && bits[(x+(y*realWidth))*bpp+3]<255) {
                 opaque = false;
             }
 
-            newBits[(x+(y*w))*bpp+0] = bits[(x+(y*w))*bpp+2];
-            newBits[(x+(y*w))*bpp+1] = bits[(x+(y*w))*bpp+1];
-            newBits[(x+(y*w))*bpp+2] = bits[(x+(y*w))*bpp+0];
-            newBits[(x+(y*w))*bpp+3] = bits[(x+(y*w))*bpp+3];
+            int invY = realHeight-1-y;
+
+            //flip vertically and convert from bgra to rgba
+            newBits[(x+(y*realWidth))*bpp+0] = bits[(x+(invY*realWidth))*bpp+2];
+            newBits[(x+(y*realWidth))*bpp+1] = bits[(x+(invY*realWidth))*bpp+1];
+            newBits[(x+(y*realWidth))*bpp+2] = bits[(x+(invY*realWidth))*bpp+0];
+            newBits[(x+(y*realWidth))*bpp+3] = bits[(x+(invY*realWidth))*bpp+3];
         }
     }
 

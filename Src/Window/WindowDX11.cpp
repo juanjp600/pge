@@ -145,6 +145,7 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
     //dxContext->OMSetDepthStencilState(dxDepthStencilState[1], 0);
 
     open = true;
+    focused = true;
 }
 
 WindowDX11::~WindowDX11() {
@@ -170,6 +171,10 @@ void WindowDX11::update() {
     while (eventSubscriber.popEvent(event)) {
         if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
             open = false;
+        } else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
+            focused = true;
+        } else if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
+            focused = false;
         }
     }
 }
