@@ -158,7 +158,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
 int main(int argc, char** argv) {
     InitEnv();
 
-    Graphics* graphics = Graphics::create(1280,720,false);
+    Graphics* graphics = Graphics::create(1280,720,true);
     IO* io = IO::create(graphics->getWindow());
 
     Shader* shader = Shader::load(graphics,"default/");

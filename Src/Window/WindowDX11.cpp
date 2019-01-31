@@ -18,6 +18,15 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
     HRESULT hr;
 
     sdlWindow = SDL_CreateWindow(c.cstr(),SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,w,h,SDL_WINDOW_SHOWN);
+    
+    if (fullscreen) {
+        SDL_SetWindowBordered(sdlWindow,SDL_bool::SDL_FALSE);
+        SDL_Rect displayBounds;
+        int displayIndex = SDL_GetWindowDisplayIndex(sdlWindow);
+        SDL_GetDisplayBounds(displayIndex,&displayBounds);
+        SDL_SetWindowSize(sdlWindow,displayBounds.w,displayBounds.h);
+        SDL_SetWindowPosition(sdlWindow,0,0);
+    }
 
     eventSubscriber = SysEvents::Subscriber(sdlWindow,SysEvents::Subscriber::EventType::WINDOW);
     SysEvents::subscribe(eventSubscriber);
