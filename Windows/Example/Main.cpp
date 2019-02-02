@@ -158,13 +158,13 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
 int main(int argc, char** argv) {
     InitEnv();
 
-    Graphics* graphics = Graphics::create(1280,720,true);
+    Graphics* graphics = Graphics::create(1280,720,false);
     IO* io = IO::create(graphics->getWindow());
 
     Shader* shader = Shader::load(graphics,"default/");
     Shader* postprocessShader = Shader::load(graphics,"postprocess/");
 
-    RM2 testRM2 = loadRM2("GFX/Map/Rooms/strg_939_3/strg_939_3.rm2",graphics,shader);
+    RM2 testRM2 = loadRM2("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2",graphics,shader);
 
     Texture* texture0 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::RGBA32);
     Texture* texture1 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::R32F);

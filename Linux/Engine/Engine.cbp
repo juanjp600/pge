@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Engine" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Engine" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/Debug/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-std=c++11" />
+					<Add option="-m64" />
+					<Add option="-g" />
+					<Add option="-DLINUX" />
+					<Add directory="../../Include" />
+					<Add directory="../../Libraries/SDL2-2.0.9/include" />
+					<Add directory="../../Libraries/FreeImage3180/Source" />
+					<Add directory="../../Libraries/glew-2.1.0/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-m64" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Engine" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/Release/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-std=c++11" />
+					<Add option="-m64" />
+					<Add option="-DLINUX" />
+					<Add directory="../../Include" />
+					<Add directory="../../Libraries/SDL2-2.0.9/include" />
+					<Add directory="../../Libraries/FreeImage3180/Source" />
+					<Add directory="../../Libraries/glew-2.1.0/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-m64" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-m64" />
+		</Compiler>
+		<Linker>
+			<Add option="-m64" />
+		</Linker>
+		<Unit filename="../../Include/Color/Color.h" />
+		<Unit filename="../../Include/Graphics/Graphics.h" />
+		<Unit filename="../../Include/IO/IO.h" />
+		<Unit filename="../../Include/Init/Init.h" />
+		<Unit filename="../../Include/Material/Material.h" />
+		<Unit filename="../../Include/Math/AABBox.h" />
+		<Unit filename="../../Include/Math/Line.h" />
+		<Unit filename="../../Include/Math/Matrix.h" />
+		<Unit filename="../../Include/Math/Rectangle.h" />
+		<Unit filename="../../Include/Math/Vector.h" />
+		<Unit filename="../../Include/Mesh/Mesh.h" />
+		<Unit filename="../../Include/Misc/String.h" />
+		<Unit filename="../../Include/Shader/Shader.h" />
+		<Unit filename="../../Include/SysEvents/SysEvents.h" />
+		<Unit filename="../../Include/Texture/Texture.h" />
+		<Unit filename="../../Include/UserInput/UserInput.h" />
+		<Unit filename="../../Include/Window/Window.h" />
+		<Unit filename="../../Src/Color/Color.cpp" />
+		<Unit filename="../../Src/Graphics/Graphics.cpp" />
+		<Unit filename="../../Src/Graphics/GraphicsOGL3.cpp" />
+		<Unit filename="../../Src/Graphics/GraphicsOGL3.h" />
+		<Unit filename="../../Src/IO/IO.cpp" />
+		<Unit filename="../../Src/Init/InitLinux.cpp" />
+		<Unit filename="../../Src/Material/Material.cpp" />
+		<Unit filename="../../Src/Math/AABBox.cpp" />
+		<Unit filename="../../Src/Math/Line.cpp" />
+		<Unit filename="../../Src/Math/Matrix.cpp" />
+		<Unit filename="../../Src/Math/Rectangle.cpp" />
+		<Unit filename="../../Src/Math/Vector.cpp" />
+		<Unit filename="../../Src/Mesh/Mesh.cpp" />
+		<Unit filename="../../Src/Mesh/MeshOGL3.cpp" />
+		<Unit filename="../../Src/Mesh/MeshOGL3.h" />
+		<Unit filename="../../Src/Misc/String.cpp" />
+		<Unit filename="../../Src/Shader/ShaderOGL3.cpp" />
+		<Unit filename="../../Src/Shader/ShaderOGL3.h" />
+		<Unit filename="../../Src/SysEvents/SysEvents.cpp" />
+		<Unit filename="../../Src/Texture/Texture.cpp" />
+		<Unit filename="../../Src/Texture/TextureInternal.h" />
+		<Unit filename="../../Src/Texture/TextureOGL3.cpp" />
+		<Unit filename="../../Src/Texture/TextureOGL3.h" />
+		<Unit filename="../../Src/UserInput/UserInput.cpp" />
+		<Unit filename="../../Src/Window/Window.cpp" />
+		<Unit filename="../../Src/Window/WindowOGL3.cpp" />
+		<Unit filename="../../Src/Window/WindowOGL3.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,573 @@
+# depslib dependency file v1.0
+1548281981 source:/media/juan/HDD/Repos/pge/Src/Color/Color.cpp
+	<Color/Color.h>
+
+1548281980 /media/juan/HDD/Repos/pge/Include/Color/Color.h
+
+1548858863 source:/media/juan/HDD/Repos/pge/Src/Graphics/Graphics.cpp
+	<Graphics/Graphics.h>
+
+1548887567 /media/juan/HDD/Repos/pge/Include/Graphics/Graphics.h
+	<Window/Window.h>
+	<Math/Rectangle.h>
+	<Math/Matrix.h>
+	<Color/Color.h>
+	<vector>
+
+1548908387 /media/juan/HDD/Repos/pge/Include/Window/Window.h
+	<SDL.h>
+	<Misc/String.h>
+	<SysEvents/SysEvents.h>
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_assert.h"
+	"SDL_atomic.h"
+	"SDL_audio.h"
+	"SDL_clipboard.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_filesystem.h"
+	"SDL_gamecontroller.h"
+	"SDL_haptic.h"
+	"SDL_hints.h"
+	"SDL_joystick.h"
+	"SDL_loadso.h"
+	"SDL_log.h"
+	"SDL_messagebox.h"
+	"SDL_mutex.h"
+	"SDL_power.h"
+	"SDL_render.h"
+	"SDL_rwops.h"
+	"SDL_sensor.h"
+	"SDL_shape.h"
+	"SDL_system.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_version.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<wchar.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<math.h>
+	<float.h>
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	<sal.h>
+	"begin_code.h"
+	"close_code.h"
+
+1549129250 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config.h
+	"SDL_platform.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_platform.h
+	"AvailabilityMacros.h"
+	"TargetConditionals.h"
+	<winapifamily.h>
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/begin_code.h
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/close_code.h
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_assert.h
+	"SDL_config.h"
+	"begin_code.h"
+	<signal.h>
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_atomic.h
+	"SDL_stdinc.h"
+	"SDL_platform.h"
+	"begin_code.h"
+	<mbarrier.h>
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_endian.h
+	"SDL_stdinc.h"
+	<endian.h>
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_atomic.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	<process.h>
+	<stdlib.h>
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_clipboard.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_cpuinfo.h
+	"SDL_stdinc.h"
+	<intrin.h>
+	<intrin.h>
+	<altivec.h>
+	<arm_neon.h>
+	<mm3dnow.h>
+	<immintrin.h>
+	<mmintrin.h>
+	<xmmintrin.h>
+	<emmintrin.h>
+	<pmmintrin.h>
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_quit.h"
+	"SDL_gesture.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_video.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_surface.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_pixels.h
+	"SDL_stdinc.h"
+	"SDL_endian.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_rect.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_pixels.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_surface.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_blendmode.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_blendmode.h
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keycode.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_keycode.h
+	"SDL_stdinc.h"
+	"SDL_scancode.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_scancode.h
+	"SDL_stdinc.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_gamecontroller.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_gesture.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_touch.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_filesystem.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_haptic.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_hints.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_log.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_messagebox.h
+	"SDL_stdinc.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_power.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_render.h
+	"SDL_stdinc.h"
+	"SDL_rect.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_sensor.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_shape.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_surface.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_system.h
+	"SDL_stdinc.h"
+	"SDL_keyboard.h"
+	"SDL_render.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Include/Misc/String.h
+	<vector>
+	<string>
+	<Foundation/NSString.h>
+
+1548281980 /media/juan/HDD/Repos/pge/Include/SysEvents/SysEvents.h
+	<SDL.h>
+	<set>
+	<vector>
+
+1548281980 /media/juan/HDD/Repos/pge/Include/Math/Rectangle.h
+	"Vector.h"
+
+1548382267 /media/juan/HDD/Repos/pge/Include/Math/Vector.h
+
+1548281980 /media/juan/HDD/Repos/pge/Include/Math/Matrix.h
+	"Vector.h"
+
+1549128733 source:/media/juan/HDD/Repos/pge/Src/Graphics/GraphicsOGL3.cpp
+	<Graphics/Graphics.h>
+	"GraphicsOGL3.h"
+	<Window/Window.h>
+	"../Window/WindowOGL3.h"
+
+1549123651 /media/juan/HDD/Repos/pge/Src/Graphics/GraphicsOGL3.h
+	<Graphics/Graphics.h>
+	<Texture/Texture.h>
+	<GL/glew.h>
+	<GL/gl.h>
+	<OpenGL/GL.h>
+
+1548871785 /media/juan/HDD/Repos/pge/Include/Texture/Texture.h
+	<Misc/String.h>
+	<Graphics/Graphics.h>
+
+1501500339 /media/juan/HDD/Repos/pge/Libraries/glew-2.1.0/include/GL/glew.h
+	<stddef.h>
+	<inttypes.h>
+	<stdint.h>
+	<inttypes.h>
+	<Availability.h>
+	<OpenGL/glu.h>
+	<GL/glu.h>
+
+1549129396 /media/juan/HDD/Repos/pge/Src/Window/WindowOGL3.h
+	<SDL.h>
+	<Window/Window.h>
+	<Misc/String.h>
+	<Graphics/Graphics.h>
+	<SysEvents/SysEvents.h>
+
+1549132422 source:/media/juan/HDD/Repos/pge/Src/Init/InitLinux.cpp
+	<Init/Init.h>
+	<SDL.h>
+
+1548281980 /media/juan/HDD/Repos/pge/Include/Init/Init.h
+
+1548908922 source:/media/juan/HDD/Repos/pge/Src/IO/IO.cpp
+	<Window/Window.h>
+	<IO/IO.h>
+
+1548906692 /media/juan/HDD/Repos/pge/Include/IO/IO.h
+	<SysEvents/SysEvents.h>
+	<UserInput/UserInput.h>
+	<Window/Window.h>
+	<Math/Vector.h>
+	<set>
+
+1548281980 /media/juan/HDD/Repos/pge/Include/UserInput/UserInput.h
+	<SDL.h>
+
+1548867185 source:/media/juan/HDD/Repos/pge/Src/Material/Material.cpp
+	<Material/Material.h>
+
+1548867157 /media/juan/HDD/Repos/pge/Include/Material/Material.h
+	<Misc/String.h>
+	<Shader/Shader.h>
+	<Texture/Texture.h>
+
+1548281980 /media/juan/HDD/Repos/pge/Include/Shader/Shader.h
+	<Graphics/Graphics.h>
+	<Misc/String.h>
+	<Math/Matrix.h>
+	<Math/Vector.h>
+
+1548281981 source:/media/juan/HDD/Repos/pge/Src/Math/AABBox.cpp
+	<Math/AABBox.h>
+	<cmath>
+
+1548281980 /media/juan/HDD/Repos/pge/Include/Math/AABBox.h
+	"Vector.h"
+
+1548281981 source:/media/juan/HDD/Repos/pge/Src/Math/Line.cpp
+	<stdlib.h>
+	<math.h>
+	<Math/Line.h>
+
+1548281980 /media/juan/HDD/Repos/pge/Include/Math/Line.h
+	"Vector.h"
+	"Rectangle.h"
+
+1548281981 source:/media/juan/HDD/Repos/pge/Src/Math/Matrix.cpp
+	<Math/Matrix.h>
+	<math.h>
+
+1548281981 source:/media/juan/HDD/Repos/pge/Src/Math/Rectangle.cpp
+	<Math/Rectangle.h>
+
+1548625535 source:/media/juan/HDD/Repos/pge/Src/Math/Vector.cpp
+	<math.h>
+	<Math/Vector.h>
+
+1548716205 source:/media/juan/HDD/Repos/pge/Src/Mesh/Mesh.cpp
+	<Mesh/Mesh.h>
+
+1548716218 /media/juan/HDD/Repos/pge/Include/Mesh/Mesh.h
+	<Graphics/Graphics.h>
+	<Material/Material.h>
+	<Color/Color.h>
+	<Math/Vector.h>
+	<Math/Matrix.h>
+	<vector>
+
+1549126590 source:/media/juan/HDD/Repos/pge/Src/Mesh/MeshOGL3.cpp
+	<Mesh/Mesh.h>
+	"MeshOGL3.h"
+	<Window/Window.h>
+	"../Window/WindowOGL3.h"
+	<Graphics/Graphics.h>
+	"../Graphics/GraphicsOGL3.h"
+	<Shader/Shader.h>
+	"../Shader/ShaderOGL3.h"
+	<Texture/Texture.h>
+	"../Texture/TextureOGL3.h"
+
+1549125425 /media/juan/HDD/Repos/pge/Src/Mesh/MeshOGL3.h
+	<Graphics/Graphics.h>
+	<Mesh/Mesh.h>
+	<GL/glew.h>
+	<GL/gl.h>
+	<OpenGL/GL.h>
+	<vector>
+
+1549136614 /media/juan/HDD/Repos/pge/Src/Shader/ShaderOGL3.h
+	<Graphics/Graphics.h>
+	<Shader/Shader.h>
+	<Misc/String.h>
+	<Math/Matrix.h>
+	<GL/glew.h>
+	<GL/gl.h>
+	<OpenGL/GL.h>
+
+1549125899 /media/juan/HDD/Repos/pge/Src/Texture/TextureOGL3.h
+	<GL/glew.h>
+	<GL/gl.h>
+	<OpenGL/GL.h>
+
+1549132152 source:/media/juan/HDD/Repos/pge/Src/Misc/String.cpp
+	<Misc/String.h>
+	<cstring>
+	<cwchar>
+	<cstdlib>
+	<cwctype>
+
+1549132372 source:/media/juan/HDD/Repos/pge/Src/Shader/ShaderOGL3.cpp
+	<Graphics/Graphics.h>
+	"../Graphics/GraphicsOGL3.h"
+	"ShaderOGL3.h"
+	<GL/glew.h>
+	<GL/gl.h>
+	<OpenGL/GL.h>
+	<fstream>
+
+1548281981 source:/media/juan/HDD/Repos/pge/Src/SysEvents/SysEvents.cpp
+	<SysEvents/SysEvents.h>
+
+1548907989 source:/media/juan/HDD/Repos/pge/Src/Texture/Texture.cpp
+	<Texture/Texture.h>
+	"TextureInternal.h"
+	<inttypes.h>
+
+1548862191 /media/juan/HDD/Repos/pge/Src/Texture/TextureInternal.h
+	<Misc/String.h>
+	<FreeImage.h>
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/FreeImage3180/Source/FreeImage.h
+	<wchar.h>
+	<inttypes.h>
+
+1549126805 source:/media/juan/HDD/Repos/pge/Src/Texture/TextureOGL3.cpp
+	<Graphics/Graphics.h>
+	"../Graphics/GraphicsOGL3.h"
+	<Texture/Texture.h>
+	"TextureInternal.h"
+	"TextureOGL3.h"
+	<stdlib.h>
+	<inttypes.h>
+
+1548281981 source:/media/juan/HDD/Repos/pge/Src/UserInput/UserInput.cpp
+	<UserInput/UserInput.h>
+
+1548908401 source:/media/juan/HDD/Repos/pge/Src/Window/Window.cpp
+	<Window/Window.h>
+
+1549131900 source:/media/juan/HDD/Repos/pge/Src/Window/WindowOGL3.cpp
+	<Graphics/Graphics.h>
+	"../Graphics/GraphicsOGL3.h"
+	<Window/Window.h>
+	"WindowOGL3.h"
+

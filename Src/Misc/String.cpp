@@ -235,7 +235,7 @@ float String::toFloat() const {
 }
 
 String String::substr(int start,int cnt) const {
-    if (cnt<0) {
+    if ((cnt<0) || (cnt+start>=size())) {
         cnt = size()-start;
     }
 

@@ -50,3 +50,4 @@ Thumbs.db
 *.tlog
 *.db-shm
 *.db-wal
+*.so

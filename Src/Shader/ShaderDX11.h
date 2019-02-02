@@ -17,7 +17,7 @@ namespace PGE {
 class ShaderDX11 : public Shader {
     public:
         ShaderDX11(Graphics* gfx,const String& path);
-        ~ShaderDX11();
+        virtual ~ShaderDX11();
 
         Constant* getVertexShaderConstant(String name);
         Constant* getFragmentShaderConstant(String name);
