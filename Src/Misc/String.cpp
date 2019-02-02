@@ -4,8 +4,10 @@
 #include <cwchar>
 #include <cstdlib>
 #include <cwctype>
+#ifdef __APPLE__
 #ifdef __OBJC__
 #import <Foundation/Foundation.h>
+#endif
 #endif
 
 using namespace PGE;
@@ -345,7 +347,44 @@ String String::trim() const {
     return retVal;
 }
 
+std::vector<String> String::split(const String& needle, bool removeEmptyEntries) const {
+	std::vector<String> retVal;
+	String haystack = String(*this);
+	while (haystack.findFirst(needle) > -1) {
+		String adder = haystack.substr(0, haystack.findFirst(needle));
+		retVal.push_back(adder);
+		haystack = haystack.substr(adder.size()+needle.size());
+	}
+	// Add the rest of the string to the vector.
+	retVal.push_back(haystack);
+
+    if (removeEmptyEntries) {
+        for (int i = 0; i < retVal.size(); i++) {
+            if (retVal[i].isEmpty()) {
+                retVal.erase(retVal.begin() + i);
+                i--;
+            }
+        }
+    }
+
+	return retVal;
+}
+
+String String::join(const std::vector<String>& vect, const String& separator) {
+    if (vect.size() <= 0) {
+        return String("");
+    }
+
+    String retVal = vect[0];
+    for (int i = 1; i < vect.size(); i++) {
+        retVal = retVal + separator + vect[i];
+    }
+
+    return retVal;
+}
+
 String String::resourcePath() const {
+#ifdef __APPLE__
 #ifdef __OBJC__
     int period = findFirst(".");
     NSString* name = substr(0, period).nsstr();
@@ -359,9 +398,9 @@ String String::resourcePath() const {
     }
     const char* cPath = [path cStringUsingEncoding: NSUTF8StringEncoding];
     return String(cPath);
-#else
-    return *this;
 #endif
+#endif
+    return *this;
 }
 
 String String::unHex() const {
