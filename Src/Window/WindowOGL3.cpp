@@ -35,6 +35,8 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     SDL_GL_SwapWindow(sdlWindow);
 
     open = true;
+
+    focused = true;
 }
 
 WindowOGL3::~WindowOGL3() {
@@ -52,6 +54,10 @@ void WindowOGL3::update() {
     while (eventSubscriber.popEvent(event)) {
         if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
             open = false;
+        } else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
+            focused = true;
+        } else if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
+            focused = false;
         }
     }
 }

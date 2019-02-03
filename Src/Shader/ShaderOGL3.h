@@ -65,6 +65,7 @@ class ShaderOGL3 : public Shader {
 
         std::vector<ConstantOGL3> vertexShaderConstants;
         std::vector<ConstantOGL3> fragmentShaderConstants;
+        std::vector<ConstantOGL3> samplerConstants;
 
         struct VertexAttrib {
             String name;

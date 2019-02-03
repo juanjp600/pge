@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1549159614 source:/media/juan/HDD/Repos/pge/Linux/Example/Main.cpp
+1549160911 source:/media/juan/HDD/Repos/pge/Linux/Example/Main.cpp
 	<SDL.h>
 	<Init/Init.h>
 	<Graphics/Graphics.h>
@@ -12,7 +12,9 @@
 	<Math/Matrix.h>
 	<Math/Vector.h>
 	<Color/Color.h>
+	<fstream>
 	<math.h>
+	<sys/stat.h>
 
 1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL.h
 	"SDL_main.h"

@@ -79,16 +79,15 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
         vertexShaderConstants.push_back(ConstantOGL3(graphics,vertexUniforms[i].name,glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr())));
     }
 
-    int samplerCount = 0;
     for (int i=0;i<fragmentUniforms.size();i++) {
+        ConstantOGL3 constant = ConstantOGL3(graphics,fragmentUniforms[i].name,glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr()));
         if (fragmentUniforms[i].type.equals("sampler2D")) {
-            glUniform1i(glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr()), samplerCount);
-            samplerCount++;
+            constant.setValue((int)samplerConstants.size());
+            samplerConstants.push_back(constant);
         } else {
-            fragmentShaderConstants.push_back(ConstantOGL3(graphics,fragmentUniforms[i].name,glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr())));
+            fragmentShaderConstants.push_back(constant);
         }
     }
-    SDL_Log("Sampler count: %d\n",samplerCount);
 
     std::vector<ShaderVar> vertexInput;
     extractShaderVars(vertexSource,"in",vertexInput);
@@ -158,6 +157,9 @@ void ShaderOGL3::useShader() {
         vertexShaderConstants[i].setUniform();    }
     for (int i=0;i<fragmentShaderConstants.size();i++) {
         fragmentShaderConstants[i].setUniform();    }
+    for (int i=0;i<samplerConstants.size();i++) {
+        samplerConstants[i].setUniform();
+    }
 }
 
 void ShaderOGL3::unbindGLAttribs() {

@@ -89,7 +89,6 @@ void MeshOGL3::updateInternalData() {
                 } break;
             }
         }
-        SDL_Log("%d\n",glVertexData.size());
     }
 
     for (int i=0;i<primitives.size();i++) {
