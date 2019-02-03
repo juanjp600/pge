@@ -166,7 +166,7 @@ int main(int argc, char** argv) {
     Shader* shader = Shader::load(graphics,"default/");
     Shader* postprocessShader = Shader::load(graphics,"postprocess/");
 
-    RM2 testRM2 = loadRM2("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2",graphics,shader);
+    RM2 testRM2 = loadRM2("GFX/Map/Rooms/cont_106_1/cont_106_1.rm2",graphics,shader);
 
     Texture* texture0 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::RGBA32);
     Texture* texture1 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::R32F);
@@ -193,8 +193,8 @@ int main(int argc, char** argv) {
     vertices.push_back(vert);
 
     std::vector<Primitive> primitives;
-    primitives.push_back(Primitive(0, 1, 2));
-    primitives.push_back(Primitive(2, 1, 3));
+    /*primitives.push_back(Primitive(0, 1, 2));
+    primitives.push_back(Primitive(2, 1, 3));*/
     primitives.push_back(Primitive(1, 0, 2));
     primitives.push_back(Primitive(1, 2, 3));
 
@@ -285,7 +285,7 @@ int main(int argc, char** argv) {
         graphics->setViewport(Rectanglei(0,0,1280,720));
         quad->render();
 
-        graphics->swap(false);
+        graphics->swap(!testInput.isDown());
     }
     io->untrackInput(&testInput);
 
