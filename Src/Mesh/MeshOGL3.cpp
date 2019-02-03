@@ -20,6 +20,8 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
 
     primitiveType = pt;
 
+    material = nullptr;
+
     glVertexData.clear(); glIndexData.clear();
 
     glGenBuffers(1, &glVertexBufferObject);
@@ -40,8 +42,54 @@ MeshOGL3::~MeshOGL3() {
 void MeshOGL3::updateInternalData() {
     glVertexData.clear(); glIndexData.clear();
 
+    const std::vector<String>& vertexInputElems = ((ShaderOGL3*)material->getShader())->getVertexInputElems();
     for (int i=0;i<vertices.size();i++) {
-        //TODO: implement
+        for (int j=0;j<vertexInputElems.size();j++) {
+            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j]);
+            switch (prop.type) {
+                case Vertex::PROPERTY_TYPE::FLOAT: {
+                    int offset = glVertexData.size();
+                    glVertexData.resize(offset+sizeof(float));
+                    memcpy(&(glVertexData[offset]),&(prop.value.floatVal),sizeof(float));
+                } break;
+                case Vertex::PROPERTY_TYPE::UINT: {
+                    int offset = glVertexData.size();
+                    glVertexData.resize(offset+sizeof(uint32_t));
+                    uint32_t uint = prop.value.uintVal;
+                    memcpy(&(glVertexData[offset]),&uint,sizeof(uint32_t));
+                } break;
+                case Vertex::PROPERTY_TYPE::VECTOR2F: {
+                    int offset = glVertexData.size();
+                    glVertexData.resize(offset+(sizeof(float)*2));
+                    memcpy(&(glVertexData[offset]),&(prop.value.vector2fVal.x),sizeof(float));
+                    memcpy(&(glVertexData[offset])+sizeof(float),&(prop.value.vector2fVal.y),sizeof(float));
+                } break;
+                case Vertex::PROPERTY_TYPE::VECTOR3F: {
+                    int offset = glVertexData.size();
+                    glVertexData.resize(offset+(sizeof(float)*3));
+                    memcpy(&(glVertexData[offset]),&(prop.value.vector3fVal.x),sizeof(float));
+                    memcpy(&(glVertexData[offset])+sizeof(float),&(prop.value.vector3fVal.y),sizeof(float));
+                    memcpy(&(glVertexData[offset])+(sizeof(float)*2),&(prop.value.vector3fVal.z),sizeof(float));
+                } break;
+                case Vertex::PROPERTY_TYPE::VECTOR4F: {
+                    int offset = glVertexData.size();
+                    glVertexData.resize(offset+(sizeof(float)*4));
+                    memcpy(&(glVertexData[offset]),&(prop.value.vector4fVal.x),sizeof(float));
+                    memcpy(&(glVertexData[offset])+sizeof(float),&(prop.value.vector4fVal.y),sizeof(float));
+                    memcpy(&(glVertexData[offset])+(sizeof(float)*2),&(prop.value.vector4fVal.z),sizeof(float));
+                    memcpy(&(glVertexData[offset])+(sizeof(float)*3),&(prop.value.vector4fVal.w),sizeof(float));
+                } break;
+                case Vertex::PROPERTY_TYPE::COLOR: {
+                    int offset = glVertexData.size();
+                    glVertexData.resize(offset+(sizeof(float)*4));
+                    memcpy(&(glVertexData[offset]),&(prop.value.colorVal.red),sizeof(float));
+                    memcpy(&(glVertexData[offset])+sizeof(float),&(prop.value.colorVal.green),sizeof(float));
+                    memcpy(&(glVertexData[offset])+(sizeof(float)*2),&(prop.value.colorVal.blue),sizeof(float));
+                    memcpy(&(glVertexData[offset])+(sizeof(float)*3),&(prop.value.colorVal.alpha),sizeof(float));
+                } break;
+            }
+        }
+        SDL_Log("%d\n",glVertexData.size());
     }
 
     for (int i=0;i<primitives.size();i++) {
@@ -53,7 +101,7 @@ void MeshOGL3::updateInternalData() {
     }
 
     //TODO: determine when we should use GL_DYNAMIC_DRAW
-    glBufferData(GL_ARRAY_BUFFER, glVertexData.size()*sizeof(GLfloat),glVertexData.data(),GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, glVertexData.size(),glVertexData.data(),GL_STATIC_DRAW);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,glIndexData.size()*sizeof(GLuint),glIndexData.data(),GL_STATIC_DRAW);
 }
 
@@ -68,12 +116,23 @@ void MeshOGL3::render() {
         updateInternalData(); isDirty = false;
     }
 
-    glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D,material->getTexture()->glTexture); //TODO: fix
+    GLenum glTextureLayers[] = {
+        GL_TEXTURE0,
+        GL_TEXTURE1,
+        GL_TEXTURE2,
+        GL_TEXTURE3,
+        GL_TEXTURE4,
+        GL_TEXTURE5,
+        GL_TEXTURE6,
+        GL_TEXTURE7
+    };
 
-    //glUseProgram(material->getShader()->glShaderProgram); //TODO: fix
+    for (int i=0;i<material->getTextureCount();i++) {
+        glActiveTexture(glTextureLayers[i]);
+        glBindTexture(GL_TEXTURE_2D,((TextureOGL3*)material->getTexture(i))->getGlTexture());
+    }
 
-    //material->getShader()->bindGLAttribs(worldMatrix); //TODO: fix
+    ((ShaderOGL3*)material->getShader())->useShader();
 
     GLenum glPrimitiveType = GL_TRIANGLES;
     int glIndexMultiplier = 3;
@@ -82,8 +141,12 @@ void MeshOGL3::render() {
         glIndexMultiplier = 2;
     }
 
+    glDepthMask(isOpaque());
+    glColorMask(true,true,true,!isOpaque());
+
     glDrawElements(glPrimitiveType,primitives.size()*glIndexMultiplier,GL_UNSIGNED_INT,nullptr);
 
+    ((ShaderOGL3*)material->getShader())->unbindGLAttribs();
     glBindVertexArray(0);
 }
 

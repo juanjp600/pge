@@ -23,8 +23,8 @@
 				<Linker>
 					<Add option="-m64" />
 					<Add library="../Engine/bin/Debug/libEngine.a" />
+					<Add library="../../Libraries/FreeImage3180/Dist/libfreeimage.a" />
 					<Add library="../../Libraries/glew-2.1.0/lib/libGLEW.a" />
-					<Add library="../../Libraries/FreeImage3180/libfreeimage.a" />
 					<Add library="../../Libraries/SDL2-2.0.9/build/.libs/libSDL2main.a" />
 					<Add library="../../Libraries/SDL2-2.0.9/build/.libs/libSDL2.a" />
 					<Add library="GL" />
@@ -68,7 +68,9 @@
 		<Unit filename="Main.cpp" />
 		<Extensions>
 			<code_completion />
-			<debugger />
+			<debugger>
+				<search_path add="bin/Debug" />
+			</debugger>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

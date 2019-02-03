@@ -44,6 +44,8 @@ BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,in
     int bpp = FreeImage_GetBPP(image)/8;
     BYTE* newBits = new BYTE[realWidth*realHeight*bpp];
 
+    SDL_Log("%d %d %d\n",po2w,po2h,bpp);
+
     opaque = true;
     for (int x=0;x<realWidth;x++) {
         for (int y=0;y<realHeight;y++) {

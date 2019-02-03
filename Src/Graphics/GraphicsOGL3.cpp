@@ -37,6 +37,7 @@ void GraphicsOGL3::setViewport(Rectanglei vp) {
 void GraphicsOGL3::clear(Color color) {
     takeGlContext();
 
+    glDepthMask(GL_TRUE);
     glClearColor(color.red,color.green,color.blue,color.alpha);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

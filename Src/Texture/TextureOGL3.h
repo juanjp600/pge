@@ -17,6 +17,8 @@ class TextureOGL3 : public Texture {
         virtual ~TextureOGL3();
 
         virtual bool isRenderTarget() const;
+
+        GLuint getGlTexture() const;
     private:
         TextureOGL3(){};
 

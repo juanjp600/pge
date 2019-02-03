@@ -23,7 +23,9 @@ class ShaderOGL3 : public Shader {
         Constant* getVertexShaderConstant(String name);
         Constant* getFragmentShaderConstant(String name);
 
-        void bindGLAttribs();
+        const std::vector<String>& getVertexInputElems() const;
+
+        void useShader();
         void unbindGLAttribs();
     private:
         ShaderOGL3(){};
@@ -38,8 +40,24 @@ class ShaderOGL3 : public Shader {
                 void setValue(float value);
                 void setValue(int value);
 
+                void setUniform();
+
                 String getName() const;
             private:
+                enum class VALUE_TYPE {
+                    MATRIX,
+                    VECTOR3F,
+                    FLOAT,
+                    INT
+                };
+                union Value {
+                    Value();
+                    Matrix4x4f matrixVal;
+                    Vector3f vector3fVal;
+                    float floatVal;
+                    int intVal;
+                } val;
+                VALUE_TYPE valueType;
                 Graphics* graphics;
                 String name;
                 int location;
@@ -55,6 +73,8 @@ class ShaderOGL3 : public Shader {
             GLenum type;
         };
 
+        int stride;
+        std::vector<String> vertexInputElems;
         std::vector<VertexAttrib> vertexAttribs;
 
         struct ShaderVar {
@@ -62,8 +82,6 @@ class ShaderOGL3 : public Shader {
             String name;
         };
         void extractShaderVars(const String& src,String varKind,std::vector<ShaderVar>& varList);
-
-        std::vector<ShaderVar> vertexInputElems;
 
         GLuint glVertexShader;
         GLuint glFragmentShader;

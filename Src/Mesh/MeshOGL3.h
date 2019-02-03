@@ -24,14 +24,12 @@ struct MeshOGL3 : public Mesh {
     private:
         virtual void updateInternalData();
 
-        Graphics* graphics;
-
         GLuint glVertexBufferObject;
         GLuint glIndexBufferObject;
 
         GLuint glVertexArrayObject;
 
-        std::vector<GLfloat> glVertexData;
+        std::vector<uint8_t> glVertexData;
         std::vector<GLuint> glIndexData;
 };
 

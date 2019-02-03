@@ -37,10 +37,14 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
 
     const char* cstr = vertexSource.cstr();
 
-
     glVertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(glVertexShader,1,&cstr,nullptr);
     glCompileShader(glVertexShader);
+
+    char* errorStr = new char[512];
+    GLsizei len = 0;
+    glGetShaderInfoLog(glVertexShader, 512, &len, errorStr);
+    SDL_Log("%s\n",errorStr);
 
     String fragmentSource = "";
     std::ifstream fragmentSourceFile; fragmentSourceFile.open(String(path,"fragment.glsl").cstr());
@@ -60,6 +64,10 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     glFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(glFragmentShader,1,&cstr,nullptr);
     glCompileShader(glFragmentShader);
+
+    glGetShaderInfoLog(glFragmentShader, 512, &len, errorStr);
+    SDL_Log("%s\n",errorStr);
+    delete[] errorStr;
 
     glShaderProgram = glCreateProgram();
     glAttachShader(glShaderProgram,glVertexShader);
@@ -84,7 +92,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
 
     std::vector<ShaderVar> vertexInput;
     extractShaderVars(vertexSource,"in",vertexInput);
-    int offset = 0;
+    stride = 0;
     for (int i=0;i<vertexInput.size();i++) {
         VertexAttrib attrib;
         attrib.name = vertexInput[i].name;
@@ -92,20 +100,27 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
         if (vertexInput[i].type.equals("float")) {
             attrib.size = 1;
             attrib.type = GL_FLOAT;
+            stride += sizeof(GLfloat)*1;
         } else if (vertexInput[i].type.equals("vec2")) {
             attrib.size = 2;
             attrib.type = GL_FLOAT;
+            stride += sizeof(GLfloat)*2;
         } else if (vertexInput[i].type.equals("vec3")) {
             attrib.size = 3;
             attrib.type = GL_FLOAT;
+            stride += sizeof(GLfloat)*3;
         } else if (vertexInput[i].type.equals("vec4")) {
             attrib.size = 4;
             attrib.type = GL_FLOAT;
+            stride += sizeof(GLfloat)*4;
         } else if (vertexInput[i].type.equals("int")) {
             attrib.size = 1;
             attrib.type = GL_INT;
+            stride += sizeof(GLint)*1;
         }
+        SDL_Log("Vertex attribute: %s %s %d",attrib.name.cstr(),vertexInput[i].type.cstr(),attrib.size);
         vertexAttribs.push_back(attrib);
+        vertexInputElems.push_back(attrib.name);
     }
 
     std::vector<ShaderVar> fragmentOutputs;
@@ -115,23 +130,34 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     }
 }
 
-void ShaderOGL3::bindGLAttribs() {
+const std::vector<String>& ShaderOGL3::getVertexInputElems() const {
+    return vertexInputElems;
+}
+
+void ShaderOGL3::useShader() {
     ((GraphicsOGL3*)graphics)->takeGlContext();
+
+    glUseProgram(glShaderProgram);
 
     uint8_t* ptr = nullptr;
     for (int i=0;i<vertexAttribs.size();i++) {
         glEnableVertexAttribArray(vertexAttribs[i].location);
         switch (vertexAttribs[i].type) {
             case GL_FLOAT: {
-                glVertexAttribPointer(vertexAttribs[i].location,vertexAttribs[i].size,GL_FLOAT,GL_FALSE,0,(void*)ptr);
+                glVertexAttribPointer(vertexAttribs[i].location,vertexAttribs[i].size,GL_FLOAT,GL_FALSE,stride,(void*)ptr);
                 ptr+=sizeof(GLfloat)*vertexAttribs[i].size;
             } break;
             case GL_INT: {
-                glVertexAttribPointer(vertexAttribs[i].location,vertexAttribs[i].size,GL_INT,GL_FALSE,0,(void*)ptr);
+                glVertexAttribPointer(vertexAttribs[i].location,vertexAttribs[i].size,GL_INT,GL_FALSE,stride,(void*)ptr);
                 ptr+=sizeof(GLint)*vertexAttribs[i].size;
             } break;
         }
     }
+
+    for (int i=0;i<vertexShaderConstants.size();i++) {
+        vertexShaderConstants[i].setUniform();    }
+    for (int i=0;i<fragmentShaderConstants.size();i++) {
+        fragmentShaderConstants[i].setUniform();    }
 }
 
 void ShaderOGL3::unbindGLAttribs() {
@@ -212,22 +238,41 @@ ShaderOGL3::ConstantOGL3::ConstantOGL3(Graphics* gfx,String nm, int loc) {
     SDL_Log("Constant info: %s %d",name.cstr(),loc);
 }
 
-void ShaderOGL3::ConstantOGL3::setValue(Matrix4x4f value) {
-    ((GraphicsOGL3*)graphics)->takeGlContext();
+ShaderOGL3::ConstantOGL3::Value::Value() {
+    matrixVal = Matrix4x4f();}
 
-    glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)value.elements);
+void ShaderOGL3::ConstantOGL3::setValue(Matrix4x4f value) {
+    val.matrixVal = value; valueType = VALUE_TYPE::MATRIX;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(Vector3f value) {
-    glUniform3f(location,value.x,value.y,value.z);
+    val.vector3fVal = value; valueType = VALUE_TYPE::VECTOR3F;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(float value) {
-    glUniform1f(location,value);
+    val.floatVal = value; valueType = VALUE_TYPE::FLOAT;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(int value) {
-    glUniform1i(location,value);
+    val.intVal = value; valueType = VALUE_TYPE::INT;
+}
+
+void ShaderOGL3::ConstantOGL3::setUniform() {
+    ((GraphicsOGL3*)graphics)->takeGlContext();
+    switch (valueType) {
+        case VALUE_TYPE::MATRIX: {
+            glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)val.matrixVal.elements);
+        } break;
+        case VALUE_TYPE::VECTOR3F: {
+            glUniform3f(location,val.vector3fVal.x,val.vector3fVal.y,val.vector3fVal.z);
+        } break;
+        case VALUE_TYPE::FLOAT: {
+            glUniform1f(location,val.floatVal);
+        } break;
+        case VALUE_TYPE::INT: {
+            glUniform1i(location,val.intVal);
+        } break;
+    }
 }
 
 String ShaderOGL3::ConstantOGL3::getName() const {

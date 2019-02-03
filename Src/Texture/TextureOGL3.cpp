@@ -9,12 +9,16 @@
 
 using namespace PGE;
 
+Texture* Texture::load(Graphics* gfx,String fn) {
+    return new TextureOGL3(gfx,fn);
+}
+
 TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer) {
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     filename = "<n/a>";
 
-    void* newBuffer = nullptr;
+    uint8_t* newBuffer = nullptr;
 
     if (renderTarget) {
         name = "RenderTarget";
@@ -88,4 +92,8 @@ TextureOGL3::~TextureOGL3() {
 
 bool TextureOGL3::isRenderTarget() const {
     return isRT;
+}
+
+GLuint TextureOGL3::getGlTexture() const {
+    return glTexture;
 }

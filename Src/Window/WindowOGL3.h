@@ -1,9 +1,6 @@
 #ifndef PGEINTERNAL_WINDOWOGL3_H_INCLUDED
 #define PGEINTERNAL_WINDOWOGL3_H_INCLUDED
 
-#ifdef LINUX
-#define SDL_VIDEO_DRIVER_X11
-#endif
 #include <SDL.h>
 
 #include <Window/Window.h>

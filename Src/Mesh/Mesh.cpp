@@ -126,14 +126,14 @@ void Mesh::setGeometry(const std::vector<Vertex>& verts,const std::vector<Primit
     isDirty = true;
     vertices = verts; //TODO: check for property mismatches?
     primitives = prims;
-    opaque = true; //TODO: check for colors
+    opaque = material!=nullptr ? material->isOpaque() : true; //TODO: check for colors
 }
 
 void Mesh::clearGeometry() {
     isDirty = true;
     vertices.clear();
     primitives.clear();
-    opaque = true;
+    opaque = material!=nullptr ? material->isOpaque() : true;
 }
 
 void Mesh::setMaterial(Material* m) {
