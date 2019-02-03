@@ -4,8 +4,10 @@
 #include <vector>
 #include <string>
 
+#ifdef __APPLE__
 #ifdef __OBJC__
 #include <Foundation/NSString.h>
+#endif
 #endif
 
 namespace PGE {
@@ -29,8 +31,10 @@ public:
 
     const char* cstr() const;
     const wchar* wstr() const;
+#ifdef __APPLE__
 #ifdef __OBJC__
     NSString* nsstr() const;
+#endif
 #endif
     int toInt() const;
     float toFloat() const;
@@ -46,6 +50,9 @@ public:
     String toUpper() const;
     String toLower() const;
     String trim() const;
+    std::vector<String> String::split(const String& needle, bool removeEmptyEntries) const;
+    String String::join(const std::vector<String>& vect, const String& separator);
+
     String unHex() const;
     String resourcePath() const;
 
