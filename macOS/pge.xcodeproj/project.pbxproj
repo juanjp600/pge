@@ -1,0 +1,494 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		19E5BA59220696380084191B /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA27220696380084191B /* Mesh.cpp */; };
+		19E5BA5A220696380084191B /* MeshOGL3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA28220696380084191B /* MeshOGL3.cpp */; };
+		19E5BA5D220696380084191B /* MeshOGL3.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E5BA2B220696380084191B /* MeshOGL3.h */; };
+		19E5BA5E220696380084191B /* String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA2D220696380084191B /* String.cpp */; };
+		19E5BA5F220696380084191B /* InitLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA2F220696380084191B /* InitLinux.cpp */; };
+		19E5BA61220696380084191B /* UserInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA32220696380084191B /* UserInput.cpp */; };
+		19E5BA62220696380084191B /* SysEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA34220696380084191B /* SysEvents.cpp */; };
+		19E5BA63220696380084191B /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA36220696380084191B /* Color.cpp */; };
+		19E5BA64220696380084191B /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA38220696380084191B /* IO.cpp */; };
+		19E5BA65220696380084191B /* Line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA3A220696380084191B /* Line.cpp */; };
+		19E5BA66220696380084191B /* AABBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA3B220696380084191B /* AABBox.cpp */; };
+		19E5BA67220696380084191B /* Vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA3C220696380084191B /* Vector.cpp */; };
+		19E5BA68220696380084191B /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA3D220696380084191B /* Matrix.cpp */; };
+		19E5BA69220696380084191B /* Rectangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA3E220696380084191B /* Rectangle.cpp */; };
+		19E5BA6B220696380084191B /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA41220696380084191B /* Window.cpp */; };
+		19E5BA6C220696380084191B /* WindowOGL3.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E5BA42220696380084191B /* WindowOGL3.h */; };
+		19E5BA6E220696380084191B /* WindowOGL3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA44220696380084191B /* WindowOGL3.cpp */; };
+		19E5BA6F220696380084191B /* TextureOGL3.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E5BA46220696380084191B /* TextureOGL3.h */; };
+		19E5BA70220696380084191B /* TextureOGL3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA47220696380084191B /* TextureOGL3.cpp */; };
+		19E5BA72220696380084191B /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA49220696380084191B /* Texture.cpp */; };
+		19E5BA74220696380084191B /* TextureInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E5BA4B220696380084191B /* TextureInternal.h */; };
+		19E5BA76220696380084191B /* ShaderOGL3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA4E220696380084191B /* ShaderOGL3.cpp */; };
+		19E5BA77220696380084191B /* ShaderOGL3.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E5BA4F220696380084191B /* ShaderOGL3.h */; };
+		19E5BA79220696380084191B /* GraphicsOGL3.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E5BA52220696380084191B /* GraphicsOGL3.h */; };
+		19E5BA7C220696380084191B /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA55220696380084191B /* Graphics.cpp */; };
+		19E5BA7D220696380084191B /* GraphicsOGL3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA56220696380084191B /* GraphicsOGL3.cpp */; };
+		19E5BA7E220696380084191B /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19E5BA58220696380084191B /* Material.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		19E5BA27220696380084191B /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		19E5BA28220696380084191B /* MeshOGL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshOGL3.cpp; sourceTree = "<group>"; };
+		19E5BA2B220696380084191B /* MeshOGL3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshOGL3.h; sourceTree = "<group>"; };
+		19E5BA2D220696380084191B /* String.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = String.cpp; sourceTree = "<group>"; };
+		19E5BA2F220696380084191B /* InitLinux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InitLinux.cpp; sourceTree = "<group>"; };
+		19E5BA32220696380084191B /* UserInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserInput.cpp; sourceTree = "<group>"; };
+		19E5BA34220696380084191B /* SysEvents.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SysEvents.cpp; sourceTree = "<group>"; };
+		19E5BA36220696380084191B /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Color.cpp; sourceTree = "<group>"; };
+		19E5BA38220696380084191B /* IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IO.cpp; sourceTree = "<group>"; };
+		19E5BA3A220696380084191B /* Line.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Line.cpp; sourceTree = "<group>"; };
+		19E5BA3B220696380084191B /* AABBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AABBox.cpp; sourceTree = "<group>"; };
+		19E5BA3C220696380084191B /* Vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector.cpp; sourceTree = "<group>"; };
+		19E5BA3D220696380084191B /* Matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
+		19E5BA3E220696380084191B /* Rectangle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rectangle.cpp; sourceTree = "<group>"; };
+		19E5BA41220696380084191B /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
+		19E5BA42220696380084191B /* WindowOGL3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowOGL3.h; sourceTree = "<group>"; };
+		19E5BA44220696380084191B /* WindowOGL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WindowOGL3.cpp; sourceTree = "<group>"; };
+		19E5BA46220696380084191B /* TextureOGL3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureOGL3.h; sourceTree = "<group>"; };
+		19E5BA47220696380084191B /* TextureOGL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureOGL3.cpp; sourceTree = "<group>"; };
+		19E5BA49220696380084191B /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
+		19E5BA4B220696380084191B /* TextureInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureInternal.h; sourceTree = "<group>"; };
+		19E5BA4E220696380084191B /* ShaderOGL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderOGL3.cpp; sourceTree = "<group>"; };
+		19E5BA4F220696380084191B /* ShaderOGL3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderOGL3.h; sourceTree = "<group>"; };
+		19E5BA52220696380084191B /* GraphicsOGL3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicsOGL3.h; sourceTree = "<group>"; };
+		19E5BA55220696380084191B /* Graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Graphics.cpp; sourceTree = "<group>"; };
+		19E5BA56220696380084191B /* GraphicsOGL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphicsOGL3.cpp; sourceTree = "<group>"; };
+		19E5BA58220696380084191B /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
+		19F45273220696080063CAD2 /* libpge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libpge.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		19F45271220696080063CAD2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		19E5BA25220696380084191B /* Src */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA26220696380084191B /* Mesh */,
+				19E5BA2C220696380084191B /* Misc */,
+				19E5BA2E220696380084191B /* Init */,
+				19E5BA31220696380084191B /* UserInput */,
+				19E5BA33220696380084191B /* SysEvents */,
+				19E5BA35220696380084191B /* Color */,
+				19E5BA37220696380084191B /* IO */,
+				19E5BA39220696380084191B /* Math */,
+				19E5BA3F220696380084191B /* Window */,
+				19E5BA45220696380084191B /* Texture */,
+				19E5BA4C220696380084191B /* Shader */,
+				19E5BA51220696380084191B /* Graphics */,
+				19E5BA57220696380084191B /* Material */,
+			);
+			name = Src;
+			path = ../Src;
+			sourceTree = "<group>";
+		};
+		19E5BA26220696380084191B /* Mesh */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA27220696380084191B /* Mesh.cpp */,
+				19E5BA28220696380084191B /* MeshOGL3.cpp */,
+				19E5BA2B220696380084191B /* MeshOGL3.h */,
+			);
+			path = Mesh;
+			sourceTree = "<group>";
+		};
+		19E5BA2C220696380084191B /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA2D220696380084191B /* String.cpp */,
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		19E5BA2E220696380084191B /* Init */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA2F220696380084191B /* InitLinux.cpp */,
+			);
+			path = Init;
+			sourceTree = "<group>";
+		};
+		19E5BA31220696380084191B /* UserInput */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA32220696380084191B /* UserInput.cpp */,
+			);
+			path = UserInput;
+			sourceTree = "<group>";
+		};
+		19E5BA33220696380084191B /* SysEvents */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA34220696380084191B /* SysEvents.cpp */,
+			);
+			path = SysEvents;
+			sourceTree = "<group>";
+		};
+		19E5BA35220696380084191B /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA36220696380084191B /* Color.cpp */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		19E5BA37220696380084191B /* IO */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA38220696380084191B /* IO.cpp */,
+			);
+			path = IO;
+			sourceTree = "<group>";
+		};
+		19E5BA39220696380084191B /* Math */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA3A220696380084191B /* Line.cpp */,
+				19E5BA3B220696380084191B /* AABBox.cpp */,
+				19E5BA3C220696380084191B /* Vector.cpp */,
+				19E5BA3D220696380084191B /* Matrix.cpp */,
+				19E5BA3E220696380084191B /* Rectangle.cpp */,
+			);
+			path = Math;
+			sourceTree = "<group>";
+		};
+		19E5BA3F220696380084191B /* Window */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA41220696380084191B /* Window.cpp */,
+				19E5BA42220696380084191B /* WindowOGL3.h */,
+				19E5BA44220696380084191B /* WindowOGL3.cpp */,
+			);
+			path = Window;
+			sourceTree = "<group>";
+		};
+		19E5BA45220696380084191B /* Texture */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA46220696380084191B /* TextureOGL3.h */,
+				19E5BA47220696380084191B /* TextureOGL3.cpp */,
+				19E5BA49220696380084191B /* Texture.cpp */,
+				19E5BA4B220696380084191B /* TextureInternal.h */,
+			);
+			path = Texture;
+			sourceTree = "<group>";
+		};
+		19E5BA4C220696380084191B /* Shader */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA4E220696380084191B /* ShaderOGL3.cpp */,
+				19E5BA4F220696380084191B /* ShaderOGL3.h */,
+			);
+			path = Shader;
+			sourceTree = "<group>";
+		};
+		19E5BA51220696380084191B /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA52220696380084191B /* GraphicsOGL3.h */,
+				19E5BA55220696380084191B /* Graphics.cpp */,
+				19E5BA56220696380084191B /* GraphicsOGL3.cpp */,
+			);
+			path = Graphics;
+			sourceTree = "<group>";
+		};
+		19E5BA57220696380084191B /* Material */ = {
+			isa = PBXGroup;
+			children = (
+				19E5BA58220696380084191B /* Material.cpp */,
+			);
+			path = Material;
+			sourceTree = "<group>";
+		};
+		19F4526A220696080063CAD2 = {
+			isa = PBXGroup;
+			children = (
+				19E5BA25220696380084191B /* Src */,
+				19F45274220696080063CAD2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		19F45274220696080063CAD2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				19F45273220696080063CAD2 /* libpge.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		19F4526F220696080063CAD2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				19E5BA5D220696380084191B /* MeshOGL3.h in Headers */,
+				19E5BA77220696380084191B /* ShaderOGL3.h in Headers */,
+				19E5BA6F220696380084191B /* TextureOGL3.h in Headers */,
+				19E5BA79220696380084191B /* GraphicsOGL3.h in Headers */,
+				19E5BA74220696380084191B /* TextureInternal.h in Headers */,
+				19E5BA6C220696380084191B /* WindowOGL3.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		19F45272220696080063CAD2 /* pge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 19F45277220696080063CAD2 /* Build configuration list for PBXNativeTarget "pge" */;
+			buildPhases = (
+				19F4526F220696080063CAD2 /* Headers */,
+				19F45270220696080063CAD2 /* Sources */,
+				19F45271220696080063CAD2 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = pge;
+			productName = pge;
+			productReference = 19F45273220696080063CAD2 /* libpge.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		19F4526B220696080063CAD2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = BigOof;
+				TargetAttributes = {
+					19F45272220696080063CAD2 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 19F4526E220696080063CAD2 /* Build configuration list for PBXProject "pge" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 19F4526A220696080063CAD2;
+			productRefGroup = 19F45274220696080063CAD2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				19F45272220696080063CAD2 /* pge */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		19F45270220696080063CAD2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				19E5BA7D220696380084191B /* GraphicsOGL3.cpp in Sources */,
+				19E5BA68220696380084191B /* Matrix.cpp in Sources */,
+				19E5BA61220696380084191B /* UserInput.cpp in Sources */,
+				19E5BA59220696380084191B /* Mesh.cpp in Sources */,
+				19E5BA6B220696380084191B /* Window.cpp in Sources */,
+				19E5BA76220696380084191B /* ShaderOGL3.cpp in Sources */,
+				19E5BA7E220696380084191B /* Material.cpp in Sources */,
+				19E5BA72220696380084191B /* Texture.cpp in Sources */,
+				19E5BA62220696380084191B /* SysEvents.cpp in Sources */,
+				19E5BA6E220696380084191B /* WindowOGL3.cpp in Sources */,
+				19E5BA65220696380084191B /* Line.cpp in Sources */,
+				19E5BA70220696380084191B /* TextureOGL3.cpp in Sources */,
+				19E5BA64220696380084191B /* IO.cpp in Sources */,
+				19E5BA69220696380084191B /* Rectangle.cpp in Sources */,
+				19E5BA5F220696380084191B /* InitLinux.cpp in Sources */,
+				19E5BA7C220696380084191B /* Graphics.cpp in Sources */,
+				19E5BA67220696380084191B /* Vector.cpp in Sources */,
+				19E5BA66220696380084191B /* AABBox.cpp in Sources */,
+				19E5BA5E220696380084191B /* String.cpp in Sources */,
+				19E5BA63220696380084191B /* Color.cpp in Sources */,
+				19E5BA5A220696380084191B /* MeshOGL3.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		19F45275220696080063CAD2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		19F45276220696080063CAD2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		19F45278220696080063CAD2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = ../Include;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		19F45279220696080063CAD2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = ../Include;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		19F4526E220696080063CAD2 /* Build configuration list for PBXProject "pge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19F45275220696080063CAD2 /* Debug */,
+				19F45276220696080063CAD2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		19F45277220696080063CAD2 /* Build configuration list for PBXNativeTarget "pge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19F45278220696080063CAD2 /* Debug */,
+				19F45279220696080063CAD2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 19F4526B220696080063CAD2 /* Project object */;
+}
