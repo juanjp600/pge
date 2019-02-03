@@ -22,14 +22,16 @@ class GraphicsOGL3 : public Graphics {
 
         virtual void clear(Color color);
 
-        virtual void setRenderTarget(Texture* renderTarget){}
-        virtual void setRenderTargets(std::vector<Texture*> renderTargets){}
-        virtual void resetRenderTarget(){}
+        virtual void setRenderTarget(Texture* renderTarget);
+        virtual void setRenderTargets(std::vector<Texture*> renderTargets);
+        virtual void resetRenderTarget();
 
         virtual void setViewport(Rectanglei vp);
 
         void takeGlContext();
     private:
+        GLuint glFramebuffer;
+
         Rectanglei currentViewport;
 };
 

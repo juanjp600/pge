@@ -50,8 +50,8 @@ public:
     String toUpper() const;
     String toLower() const;
     String trim() const;
-    std::vector<String> String::split(const String& needle, bool removeEmptyEntries) const;
-    String String::join(const std::vector<String>& vect, const String& separator);
+    std::vector<String> split(const String& needle, bool removeEmptyEntries) const;
+    String join(const std::vector<String>& vect, const String& separator);
 
     String unHex() const;
     String resourcePath() const;

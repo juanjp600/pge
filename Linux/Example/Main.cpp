@@ -26,7 +26,8 @@ int main(int argc, char** argv) {
 
     Texture* texture0 = Texture::load(graphics, "dirtymetal.jpg");
     Texture* texture1 = Texture::load(graphics, "poster.png");
-    Texture* texture2 = Texture::load(graphics, "poster2.png");
+    Texture* texture2 = Texture::create(graphics,256,256,true,nullptr,Texture::FORMAT::RGBA32);//Texture::load(graphics, "poster2.png");
+    Texture* texture3 = Texture::create(graphics,256,256,true,nullptr,Texture::FORMAT::RGBA32);
     Shader* shader = Shader::load(graphics,"default/");
     std::vector<Texture*> textures; textures.push_back(texture1);// textures.push_back(texture1);
     Material* material = new Material(shader,textures);
@@ -97,10 +98,26 @@ int main(int argc, char** argv) {
 
     KeyboardInput testInput = KeyboardInput(SDL_SCANCODE_SPACE);
     io->trackInput(&testInput);
+
+    std::vector<Texture*> renderTargets;
+    renderTargets.push_back(texture3); renderTargets.push_back(texture2);
+
     while (graphics->getWindow()->isOpen()) {
         SysEvents::update();
         io->update();
         graphics->update();
+
+        graphics->setRenderTargets(renderTargets);
+
+        graphics->clear(Color(0.f,0.f,0.f,1.f));
+        graphics->setViewport(Rectanglei(0,0,256,256));
+        for (int i=0;i<1000;i++) {
+            worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0, 100-i*2.f, 9.f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.3f, -((float)tick) / 60.f, 0.f)));
+            mesh->render();
+        }
+
+        graphics->resetRenderTarget();
+        graphics->setViewport(Rectanglei(0,0,1280,720));
 
         graphics->clear(Color(testInput.isDown()*1.f,0.5f+0.5f*sin(((float)(tick+220))/100.f),0.5f+0.5f*sin(((float)tick)/100.f),1.f));
 

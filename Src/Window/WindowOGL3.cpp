@@ -22,7 +22,8 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE); glCullFace(GL_BACK);
-    glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
     glClearDepth(1.0);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

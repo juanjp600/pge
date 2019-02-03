@@ -12,13 +12,15 @@ namespace PGE {
 
 class TextureOGL3 : public Texture {
     public:
-        TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget=false,const void* buffer=nullptr);
+        TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget=false,const void* buffer=nullptr,FORMAT fmt=FORMAT::RGBA32);
         TextureOGL3(Graphics* gfx,const String& fn);
         virtual ~TextureOGL3();
 
         virtual bool isRenderTarget() const;
 
         GLuint getGlTexture() const;
+        //GLuint getGlFramebuffer() const;
+        GLuint getGlDepthbuffer() const;
     private:
         TextureOGL3(){};
 
@@ -27,7 +29,8 @@ class TextureOGL3 : public Texture {
         Graphics* graphics;
 
         GLuint glTexture;
-        GLuint glFramebuffer;
+        //GLuint glFramebuffer;
+        GLuint glDepthbuffer;
 };
 
 }
