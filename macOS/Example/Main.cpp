@@ -66,18 +66,18 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
         if (name.findFirst("_lm")>-1) {
             texName = path+name+".png";
         } else {
-            texName = "GFX/Map/Textures/"+name+".jpg";
+            texName = String("GFX/Map/Textures/"+name+".jpg").resourcePath();
             bool found = fileExists(texName.cstr());
             if (!found) {
-                texName = "GFX/Map/Textures/"+name+".png";
+                texName = String("GFX/Map/Textures/"+name+".png").resourcePath();
             }
 
             found = fileExists(texName.cstr());
             if (!found) {
-                texName = "GFX/Map/Textures/dirtymetal.jpg";
+                texName = String("GFX/Map/Textures/dirtymetal.jpg").resourcePath();
             }
         }
-        retVal.textures.push_back(Texture::load(graphics,texName));
+        retVal.textures.push_back(Texture::load(graphics, texName));
 
         char flagSkip; file.read(&flagSkip,1); file.read(&flagSkip,1);
     }
@@ -158,6 +158,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
     return retVal;
 }
 
+#if 0
 int main(int argc, char** argv) {
     InitEnv();
 
@@ -354,18 +355,19 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+#endif
 
-#if 0
+#if 1
 int main(int argc, char** argv) {
     InitEnv();
 
     Graphics* graphics = Graphics::create(1280,720,false);
     IO* io = IO::create(graphics->getWindow());
 
-    Shader* shader = Shader::load(graphics,"default/");
-    Shader* postprocessShader = Shader::load(graphics,"postprocess/");
+    Shader* shader = Shader::load(graphics, String("default/").resourcePath());
+    Shader* postprocessShader = Shader::load(graphics, String("postprocess/").resourcePath());
 
-    RM2 testRM2 = loadRM2("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2",graphics,shader);
+    RM2 testRM2 = loadRM2(String("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2").resourcePath(), graphics, shader);
 
     Texture* texture0 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::RGBA32);
     Texture* texture1 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::R32F);
@@ -432,6 +434,8 @@ int main(int argc, char** argv) {
     io->trackInput(&forwardInput);
     KeyboardInput backwardInput = KeyboardInput(SDL_SCANCODE_S);
     io->trackInput(&backwardInput);
+    KeyboardInput escInput = KeyboardInput(SDL_SCANCODE_ESCAPE);
+    io->trackInput(&escInput);
 
     float hAngle = 0;
     float vAngle = 0;
@@ -463,16 +467,19 @@ int main(int argc, char** argv) {
         viewMatrixConstant->setValue(viewMatrix);
 
         if (forwardInput.isDown()) {
-            cameraPos = cameraPos.add(lookDir.multiply(0.05f));
+            cameraPos = cameraPos.add(lookDir.multiply(0.2f));
         }
         if (backwardInput.isDown()) {
-            cameraPos = cameraPos.add(lookDir.multiply(-0.05f));
+            cameraPos = cameraPos.add(lookDir.multiply(-0.2f));
         }
         if (leftInput.isDown()) {
-            cameraPos = cameraPos.add(sideDir.multiply(-0.05f));
+            cameraPos = cameraPos.add(sideDir.multiply(-0.2f));
         }
         if (rightInput.isDown()) {
-            cameraPos = cameraPos.add(sideDir.multiply(0.05f));
+            cameraPos = cameraPos.add(sideDir.multiply(0.2f));
+        }
+        if (escInput.isDown()) {
+            break;
         }
 
         for (int i=0;i<testRM2.meshes.size();i++) {
