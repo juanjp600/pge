@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:pge.xcodeproj">
+      location = "self:Zlib.xcodeproj">
    </FileRef>
 </Workspace>

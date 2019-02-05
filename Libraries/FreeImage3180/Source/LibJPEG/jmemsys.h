@@ -130,7 +130,9 @@ typedef union {
 #endif /* USE_MSDOS_MEMMGR */
 
 #ifdef USE_MAC_MEMMGR		/* Mac-specific junk */
-#include <Files.h>
+// Files.h stuff has been moved into the Carbon Framework.
+#include <Carbon/Carbon.h>
+//#include <Files.h>
 #endif /* USE_MAC_MEMMGR */
 
 

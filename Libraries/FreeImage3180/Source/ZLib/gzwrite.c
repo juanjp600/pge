@@ -3,6 +3,10 @@
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
+// Adding this to compile on macOS.
+#if !defined(_WIN32)
+#include <unistd.h>
+#endif
 #include "gzguts.h"
 
 /* Local functions */
