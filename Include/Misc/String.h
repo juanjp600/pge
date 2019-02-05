@@ -14,7 +14,7 @@ namespace PGE {
 
 typedef wchar_t wchar;
 
-struct String {
+class String {
 public:
     ~String();
     String();

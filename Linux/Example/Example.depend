@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1549193702 source:/media/juan/HDD/Repos/pge/Linux/Example/Main.cpp
+1549332740 source:/media/juan/HDD/Repos/pge/Linux/Example/Main.cpp
 	<SDL.h>
 	<Init/Init.h>
 	<Graphics/Graphics.h>
@@ -11,10 +11,12 @@
 	<SysEvents/SysEvents.h>
 	<Math/Matrix.h>
 	<Math/Vector.h>
+	<Math/Line.h>
 	<Color/Color.h>
 	<fstream>
 	<math.h>
 	<sys/stat.h>
+	"Collision/Collision.h"
 
 1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL.h
 	"SDL_main.h"
@@ -372,27 +374,27 @@
 	<Misc/String.h>
 	<SysEvents/SysEvents.h>
 
-1549155874 /media/juan/HDD/Repos/pge/Include/Misc/String.h
+1549221873 /media/juan/HDD/Repos/pge/Include/Misc/String.h
 	<vector>
 	<string>
 	<Foundation/NSString.h>
 
-1548281980 /media/juan/HDD/Repos/pge/Include/SysEvents/SysEvents.h
+1549221894 /media/juan/HDD/Repos/pge/Include/SysEvents/SysEvents.h
 	<SDL.h>
 	<set>
 	<vector>
 
-1548281980 /media/juan/HDD/Repos/pge/Include/Math/Rectangle.h
+1549221705 /media/juan/HDD/Repos/pge/Include/Math/Rectangle.h
 	"Vector.h"
 
-1548382267 /media/juan/HDD/Repos/pge/Include/Math/Vector.h
+1549221856 /media/juan/HDD/Repos/pge/Include/Math/Vector.h
 
-1548281980 /media/juan/HDD/Repos/pge/Include/Math/Matrix.h
+1549221819 /media/juan/HDD/Repos/pge/Include/Math/Matrix.h
 	"Vector.h"
 
-1548281980 /media/juan/HDD/Repos/pge/Include/Color/Color.h
+1549221805 /media/juan/HDD/Repos/pge/Include/Color/Color.h
 
-1548716218 /media/juan/HDD/Repos/pge/Include/Mesh/Mesh.h
+1549221930 /media/juan/HDD/Repos/pge/Include/Mesh/Mesh.h
 	<Graphics/Graphics.h>
 	<Material/Material.h>
 	<Color/Color.h>
@@ -400,7 +402,7 @@
 	<Math/Matrix.h>
 	<vector>
 
-1548867157 /media/juan/HDD/Repos/pge/Include/Material/Material.h
+1549244724 /media/juan/HDD/Repos/pge/Include/Material/Material.h
 	<Misc/String.h>
 	<Shader/Shader.h>
 	<Texture/Texture.h>
@@ -424,4 +426,29 @@
 
 1548281980 /media/juan/HDD/Repos/pge/Include/UserInput/UserInput.h
 	<SDL.h>
+
+1549319975 source:/media/juan/HDD/Repos/pge/Linux/Example/Collision/Collision.cpp
+	"Collision.h"
+	<Math/Plane.h>
+	<math.h>
+	<SDL.h>
+
+1549332706 /media/juan/HDD/Repos/pge/Linux/Example/Collision/Collision.h
+	<Math/AABBox.h>
+	<Math/Line.h>
+	<Math/Matrix.h>
+	<Math/Rectangle.h>
+	<Math/Vector.h>
+
+1549248019 /media/juan/HDD/Repos/pge/Include/Math/AABBox.h
+	"Vector.h"
+
+1549288964 /media/juan/HDD/Repos/pge/Include/Math/Line.h
+	"Vector.h"
+	"Rectangle.h"
+	"AABBox.h"
+
+1549306766 /media/juan/HDD/Repos/pge/Include/Math/Plane.h
+	"Vector.h"
+	"Line.h"
 

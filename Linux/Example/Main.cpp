@@ -10,12 +10,15 @@
 #include <SysEvents/SysEvents.h>
 #include <Math/Matrix.h>
 #include <Math/Vector.h>
+#include <Math/Line.h>
 #include <Color/Color.h>
 
 #include <fstream>
 #include <math.h>
 
 #include <sys/stat.h>
+
+#include "Collision/Collision.h"
 
 using namespace PGE;
 
@@ -39,7 +42,6 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
             break;
         }
     }
-    SDL_Log("%s\n",path.cstr());
 
     std::ifstream file; file.open(name.cstr(),std::ios::binary|std::ios::in);
 
@@ -75,7 +77,6 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
                 texName = "GFX/Map/Textures/dirtymetal.jpg";
             }
         }
-        SDL_Log("%s\n",texName.cstr());
         retVal.textures.push_back(Texture::load(graphics,texName));
 
         char flagSkip; file.read(&flagSkip,1); file.read(&flagSkip,1);
@@ -163,10 +164,207 @@ int main(int argc, char** argv) {
     Graphics* graphics = Graphics::create(1280,720,false);
     IO* io = IO::create(graphics->getWindow());
 
+    Shader* shader = Shader::load(graphics,"ball/");
+
+    Material* ballMaterial = new Material(shader);
+
+    Mesh* ball = Mesh::create(graphics, Primitive::TYPE::TRIANGLE);
+    std::vector<Vertex> vertices;
+    std::vector<Primitive> primitives;
+    Vertex vert;
+    vert.setVector4f("position",Vector4f(0.f,-1.f,0.f,1.f));
+    vertices.push_back(vert);
+
+    int sphereComplexity = 17;
+    for (int i=0;i<sphereComplexity-2;i++) {
+        float radius = sin(((float)(i+1))*(1.f/(float)(sphereComplexity-1))*3.141592f);
+        float y = -cos(((float)(i+1))*(1.f/(float)(sphereComplexity-1))*3.141592f);
+
+        for (int j=0;j<sphereComplexity;j++) {
+            float x = cos((float)j/(float)sphereComplexity*2.f*3.141592f)*radius;
+            float z = sin((float)j/(float)sphereComplexity*2.f*3.141592f)*radius;
+            vert.setVector4f("position",Vector4f(x,y,z,1.f));
+            vertices.push_back(vert);
+
+            int v0 = 0;
+            if (i>0) {
+                v0 = 1+(i-1)*sphereComplexity+j;
+            }
+            int v1 = 1+i*sphereComplexity+j;
+            int v2 = 1+i*sphereComplexity+(j+1)%sphereComplexity;
+
+            primitives.push_back(Primitive(v1,v0,v2));
+
+            if (i>0) {
+                v1 = 1+(i-1)*sphereComplexity+(j+1)%sphereComplexity;
+                primitives.push_back(Primitive(v0,v1,v2));
+            }
+
+            if (i==sphereComplexity-3) {
+                v0 = 1+(i+1)*sphereComplexity;
+                v1 = 1+i*sphereComplexity+j;
+                v2 = 1+i*sphereComplexity+(j+1)%sphereComplexity;
+                primitives.push_back(Primitive(v0,v1,v2));
+            }
+        }
+    }
+
+    vert.setVector4f("position",Vector4f(0.f,1.f,0.f,1.f));
+    vertices.push_back(vert);
+
+    ball->setGeometry(vertices,primitives);
+
+    ball->setMaterial(ballMaterial);
+
+    Mesh* triangleMesh = Mesh::create(graphics, Primitive::TYPE::TRIANGLE);
+    vertices.clear(); primitives.clear();
+    vert.setVector4f("position",Vector4f(10.0f,7.f,10.f,1.f));
+    vertices.push_back(vert);
+    vert.setVector4f("position",Vector4f(-10.0f,3.f,10.f,1.f));
+    vertices.push_back(vert);
+    vert.setVector4f("position",Vector4f(7.0f,0.f,-10.f,1.f));
+    vertices.push_back(vert);
+
+    primitives.push_back(Primitive(0,2,1));
+    primitives.push_back(Primitive(0,1,2));
+
+    triangleMesh->setGeometry(vertices,primitives);
+    triangleMesh->setMaterial(ballMaterial);
+
+    float aspectRatio = static_cast<float>(graphics->getViewport().width()) / static_cast<float>(graphics->getViewport().height());
+
+    float zoom = 1.f;
+
+    float farPlane = 10.f;
+    float nearPlane = 0.01f;
+
+    Matrix4x4f projectionMatrix = Matrix4x4f::identity;
+    projectionMatrix.elements[0][0] = 720.f / 1280.f;
+    projectionMatrix.elements[1][1] = 1.f;
+    projectionMatrix.elements[2][2] = farPlane / (nearPlane - farPlane);
+    projectionMatrix.elements[2][3] = -1.f;
+    projectionMatrix.elements[3][2] = (nearPlane*farPlane / (nearPlane - farPlane));
+    Matrix4x4f viewMatrix = Matrix4x4f::constructViewMat(Vector3f(0,18,-30),Vector3f(0,-0.6,1).normalize(),Vector3f(0,1,0));
+
+    Shader::Constant* projMatrixConstant = shader->getVertexShaderConstant("projectionMatrix");
+    projMatrixConstant->setValue(projectionMatrix);
+    Shader::Constant* viewMatrixConstant = shader->getVertexShaderConstant("viewMatrix");
+    viewMatrixConstant->setValue(viewMatrix);
+    Shader::Constant* worldMatrixConstant = shader->getVertexShaderConstant("worldMatrix");
+
+    KeyboardInput testInput = KeyboardInput(SDL_SCANCODE_SPACE);
+    io->trackInput(&testInput);
+    KeyboardInput leftInput = KeyboardInput(SDL_SCANCODE_A);
+    io->trackInput(&leftInput);
+    KeyboardInput rightInput = KeyboardInput(SDL_SCANCODE_D);
+    io->trackInput(&rightInput);
+    KeyboardInput forwardInput = KeyboardInput(SDL_SCANCODE_W);
+    io->trackInput(&forwardInput);
+    KeyboardInput backwardInput = KeyboardInput(SDL_SCANCODE_S);
+    io->trackInput(&backwardInput);
+
+    KeyboardInput incInput = KeyboardInput(SDL_SCANCODE_E);
+    io->trackInput(&incInput);
+    KeyboardInput decInput = KeyboardInput(SDL_SCANCODE_Q);
+    io->trackInput(&decInput);
+
+    float hAngle = 0;
+    float vAngle = 0;
+    Vector3f cameraPos = Vector3f(0,18,-30);
+
+    io->setMouseVisibility(false);
+    io->setMousePosition(Vector2i(640,360));
+
+    float lineLength = 0.1f;
+
+    while (graphics->getWindow()->isOpen()) {
+        SysEvents::update();
+        io->update();
+        graphics->update();
+
+        hAngle -= (float)(io->getMousePosition().x-640)/300.f;
+        vAngle -= (float)(io->getMousePosition().y-360)/300.f;
+        if (vAngle<-3.14*0.5f) { vAngle = -3.14*0.5f; }
+        if (vAngle>3.14*0.5f) { vAngle = 3.14*0.5f; }
+        io->setMousePosition(Vector2i(640,360));
+
+        lineLength -= decInput.isDown() ? 0.05f : 0.0f;
+        lineLength += incInput.isDown() ? 0.05f : 0.0f;
+
+        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0.f, 0.f, 0.f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f)));
+
+        Vector3f lookDir = Vector3f(sin(hAngle)*cos(vAngle),sin(vAngle),cos(hAngle)*cos(vAngle));
+        Vector3f upDir = Vector3f(sin(hAngle)*sin(-vAngle),cos(-vAngle),cos(hAngle)*sin(-vAngle));
+        Vector3f sideDir = lookDir.crossProduct(upDir);
+        viewMatrix = Matrix4x4f::constructViewMat(cameraPos,lookDir,upDir);
+        viewMatrixConstant->setValue(viewMatrix);
+
+        if (forwardInput.isDown()) {
+            cameraPos = cameraPos.add(lookDir.multiply(0.05f));
+        }
+        if (backwardInput.isDown()) {
+            cameraPos = cameraPos.add(lookDir.multiply(-0.05f));
+        }
+        if (leftInput.isDown()) {
+            cameraPos = cameraPos.add(sideDir.multiply(-0.05f));
+        }
+        if (rightInput.isDown()) {
+            cameraPos = cameraPos.add(sideDir.multiply(0.05f));
+        }
+
+        graphics->clear(Color(0.f,0.f,0.f,1.f));
+        graphics->setViewport(Rectanglei(0,0,1280,720));
+
+        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0.f, 0.f, 0.f), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f)));
+        triangleMesh->render();
+
+        Vector3f ballPos = cameraPos;
+        Vector3f ballDir = lookDir;
+        Line3f line = Line3f(ballPos,ballPos.add(ballDir.multiply(lineLength)));
+        Vector3f ballDiff = line.pointB.subtract(line.pointA);
+
+
+        Vector4f v0 = vertices[0].getProperty("position").value.vector4fVal;
+        Vector4f v1 = vertices[1].getProperty("position").value.vector4fVal;
+        Vector4f v2 = vertices[2].getProperty("position").value.vector4fVal;
+
+        Collision coll = Collision::triangleCollide(line,1.f,Vector3f(v0.x,v0.y,v0.z),Vector3f(v1.x,v1.y,v1.z),Vector3f(v2.x,v2.y,v2.z));
+        if (coll.hit) {
+            ballDiff = ballDiff.multiply(coll.coveredAmount);
+        }
+
+        worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(ballPos.add(ballDiff), Vector3f(1.f, 1.f, 1.f), Vector3f(0.f, 0.f, 0.f)));
+        ball->render();
+
+        graphics->swap(!testInput.isDown());
+    }
+    io->untrackInput(&testInput);
+
+    delete triangleMesh;
+    delete ball;
+    delete ballMaterial;
+
+    delete shader;
+
+    delete io;
+    delete graphics;
+
+    QuitEnv();
+
+    return 0;
+}
+
+#if 0
+int main(int argc, char** argv) {
+    InitEnv();
+
+    Graphics* graphics = Graphics::create(1280,720,false);
+    IO* io = IO::create(graphics->getWindow());
+
     Shader* shader = Shader::load(graphics,"default/");
     Shader* postprocessShader = Shader::load(graphics,"postprocess/");
 
-    RM2 testRM2 = loadRM2("GFX/Map/Rooms/cont_106_1/cont_106_1.rm2",graphics,shader);
+    RM2 testRM2 = loadRM2("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2",graphics,shader);
 
     Texture* texture0 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::RGBA32);
     Texture* texture1 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::R32F);
@@ -253,7 +451,7 @@ int main(int argc, char** argv) {
 
         graphics->setRenderTargets(renderTargets);
         graphics->setViewport(Rectanglei(0,0,1280,720));
-        graphics->clear(Color(1.f,0.f,1.f,1.f));
+        graphics->clear(Color(0.f,0.f,0.f,1.f));
 
         worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0.f, 0.f, 0.f), Vector3f(0.07f, 0.07f, 0.07f), Vector3f(0.f, 0.f, 0.f)));
 
@@ -318,3 +516,4 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+#endif

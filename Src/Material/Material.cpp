@@ -10,6 +10,10 @@ Material::Material(Shader* sh,Texture* t) {
     shader = sh; textures.clear(); textures.push_back(t);
 }
 
+Material::Material(Shader* sh) {
+    shader = sh; textures.clear();
+}
+
 Shader* Material::getShader() const {
     return shader;
 }

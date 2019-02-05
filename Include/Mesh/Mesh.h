@@ -49,16 +49,17 @@ class Vertex {
         std::vector<Property> properties;
 };
 
-struct Primitive {
-    enum class TYPE {
-        TRIANGLE,
-        LINE,
-    };
+class Primitive {
+    public:
+        enum class TYPE {
+            TRIANGLE,
+            LINE,
+        };
 
-    Primitive(long ia,long ib);
-    Primitive(long ia,long ib,long ic);
+        Primitive(long ia,long ib);
+        Primitive(long ia,long ib,long ic);
 
-    long a; long b; long c;
+        long a; long b; long c;
 };
 
 class Mesh {

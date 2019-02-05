@@ -67,6 +67,7 @@
 		<Unit filename="../../Include/Math/AABBox.h" />
 		<Unit filename="../../Include/Math/Line.h" />
 		<Unit filename="../../Include/Math/Matrix.h" />
+		<Unit filename="../../Include/Math/Plane.h" />
 		<Unit filename="../../Include/Math/Rectangle.h" />
 		<Unit filename="../../Include/Math/Vector.h" />
 		<Unit filename="../../Include/Mesh/Mesh.h" />
@@ -86,6 +87,7 @@
 		<Unit filename="../../Src/Math/AABBox.cpp" />
 		<Unit filename="../../Src/Math/Line.cpp" />
 		<Unit filename="../../Src/Math/Matrix.cpp" />
+		<Unit filename="../../Src/Math/Plane.cpp" />
 		<Unit filename="../../Src/Math/Rectangle.cpp" />
 		<Unit filename="../../Src/Math/Vector.cpp" />
 		<Unit filename="../../Src/Mesh/Mesh.cpp" />

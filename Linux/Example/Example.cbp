@@ -65,6 +65,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Collision/Collision.cpp" />
+		<Unit filename="Collision/Collision.h" />
 		<Unit filename="Main.cpp" />
 		<Extensions>
 			<code_completion />
