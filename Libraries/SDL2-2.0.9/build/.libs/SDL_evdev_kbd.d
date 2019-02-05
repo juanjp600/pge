@@ -4,7 +4,7 @@ build/SDL_evdev_kbd.lo: \
  /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/core/linux/../../dynapi/SDL_dynapi.h \
  /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/core/linux/../../dynapi/SDL_dynapi_overrides.h \
  include/SDL_config.h include/SDL_platform.h include/begin_code.h \
- include/close_code.h \
+ include/close_code.h include/SDL_config_linux.h \
  /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/core/linux/SDL_evdev_kbd.h \
  include/SDL_hints.h include/SDL_stdinc.h include/SDL_config.h \
  /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/core/linux/../../events/SDL_events_c.h \

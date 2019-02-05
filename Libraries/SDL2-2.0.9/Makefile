@@ -20,7 +20,7 @@ distfile = $(distdir).tar.gz
 SHELL	= /bin/bash
 CC      = gcc
 INCLUDE = -Iinclude -I/media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include -idirafter /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/video/khronos
-CFLAGS  = -g -O3 -DUSING_GENERATED_CONFIG_H
+CFLAGS  = -g -O3 -D__LINUX__
 EXTRA_CFLAGS = -Iinclude -I/media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include -idirafter /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/video/khronos  -mmmx -m3dnow -msse -msse2 -msse3 -Wall -fvisibility=hidden -Wdeclaration-after-statement -Werror=declaration-after-statement  -D_REENTRANT -DHAVE_LINUX_VERSION_H
 LDFLAGS = 
 EXTRA_LDFLAGS =  -Wl,--no-undefined -lm -ldl -lpthread -lrt

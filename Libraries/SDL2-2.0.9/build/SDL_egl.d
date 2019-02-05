@@ -4,7 +4,7 @@ build/SDL_egl.lo: \
  /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/video/../dynapi/SDL_dynapi.h \
  /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/video/../dynapi/SDL_dynapi_overrides.h \
  include/SDL_config.h include/SDL_platform.h include/begin_code.h \
- include/close_code.h \
+ include/close_code.h include/SDL_config_linux.h \
  /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/video/SDL_sysvideo.h \
  include/SDL_messagebox.h include/SDL_stdinc.h include/SDL_config.h \
  include/SDL_video.h include/SDL_pixels.h include/SDL_endian.h \

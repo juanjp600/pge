@@ -86,8 +86,17 @@
 	"begin_code.h"
 	"close_code.h"
 
-1549129250 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config.h
+1549378488 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config.h
 	"SDL_platform.h"
+	"SDL_config_windows.h"
+	"SDL_config_winrt.h"
+	"SDL_config_linux.h"
+	"SDL_config_macosx.h"
+	"SDL_config_iphoneos.h"
+	"SDL_config_android.h"
+	"SDL_config_psp.h"
+	"SDL_config_os2.h"
+	"SDL_config_minimal.h"
 
 1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_platform.h
 	"AvailabilityMacros.h"
@@ -574,12 +583,42 @@
 	<Window/Window.h>
 	"WindowOGL3.h"
 
-1549253124 source:/media/juan/HDD/Repos/pge/Src/Math/Plane.cpp
+1549332952 source:/media/juan/HDD/Repos/pge/Src/Math/Plane.cpp
 	<Math/Plane.h>
 	<stdlib.h>
 	<math.h>
 
-1549253141 /media/juan/HDD/Repos/pge/Include/Math/Plane.h
+1549332948 /media/juan/HDD/Repos/pge/Include/Math/Plane.h
 	"Vector.h"
 	"Line.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config_windows.h
+	"SDL_platform.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config_winrt.h
+	"SDL_platform.h"
+	<sdkddkver.h>
+
+1549378570 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config_linux.h
+	"SDL_platform.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config_macosx.h
+	"SDL_platform.h"
+	<AvailabilityMacros.h>
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config_iphoneos.h
+	"SDL_platform.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config_android.h
+	"SDL_platform.h"
+	<stdarg.h>
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config_psp.h
+	"SDL_platform.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config_os2.h
+	"SDL_platform.h"
+
+1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config_minimal.h
+	"SDL_platform.h"
 

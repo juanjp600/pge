@@ -4,8 +4,9 @@ build/SDL_render_gles2.lo: \
  /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/render/opengles2/../../dynapi/SDL_dynapi.h \
  /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/render/opengles2/../../dynapi/SDL_dynapi_overrides.h \
  include/SDL_config.h include/SDL_platform.h include/begin_code.h \
- include/close_code.h include/SDL_assert.h include/SDL_config.h \
- include/SDL_hints.h include/SDL_stdinc.h include/SDL_opengles2.h \
+ include/close_code.h include/SDL_config_linux.h include/SDL_assert.h \
+ include/SDL_config.h include/SDL_hints.h include/SDL_stdinc.h \
+ include/SDL_opengles2.h \
  /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/render/opengles2/../SDL_sysrender.h \
  /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/src/render/opengles2/../../SDL_internal.h \
  include/SDL_render.h include/SDL_rect.h include/SDL_error.h \
