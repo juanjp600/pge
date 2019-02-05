@@ -4,9 +4,12 @@
  */
 
 // Adding this to compile on macOS.
+#ifdef __APPLE__
 #if !defined(_WIN32)
 #include <unistd.h>
 #endif
+#endif
+
 #include "gzguts.h"
 
 /* Local functions */

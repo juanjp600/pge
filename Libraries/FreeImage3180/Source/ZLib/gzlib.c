@@ -4,10 +4,12 @@
  */
 
 // Adding this to compile on macOS.
+#ifdef __APPLE__
 #if !defined(_WIN32)
 #include <unistd.h>
 #endif
 #include <sys/types.h>
+#endif
 
 #include "gzguts.h"
 

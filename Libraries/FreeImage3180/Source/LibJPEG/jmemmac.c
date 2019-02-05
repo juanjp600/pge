@@ -60,7 +60,7 @@
 
 #include <Memory.h>     /* we use the MacOS memory manager */
 
-// Every below has been moved into the Carbon Framework apparently.
+// All the includes below have been moved into the Carbon Framework.
 #include <Carbon/Carbon.h>
 //#include <Files.h>      /* we use the MacOS File stuff */
 //#include <Folders.h>    /* we use the MacOS HFS stuff */
