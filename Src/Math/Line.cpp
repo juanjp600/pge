@@ -92,3 +92,31 @@ bool Line2i::intersects(const Line2i& other,Vector2f& point,bool segmentOnly) co
     return boundingBox().isPointInside(point) && other.boundingBox().isPointInside(point);
 }
 
+Line3f::Line3f() {
+    pointA = Vector3f::zero; pointB = Vector3f::zero;
+}
+
+Line3f::Line3f(const Vector3f& a,const Vector3f& b) {
+    pointA = a; pointB = b;
+}
+
+Line3f::Line3f(float ax,float ay,float az,float bx,float by,float bz) {
+    pointA = Vector3f(ax,ay,az); pointB = Vector3f(bx,by,bz);
+}
+
+AABBox Line3f::boundingBox() const {
+    return AABBox(pointA,pointB);
+}
+
+Vector3f Line3f::closestPoint(const Vector3f& point,bool segmentOnly) const {
+    Vector3f aToP = point.subtract(pointA);
+    Vector3f aToB = pointB.subtract(pointA);
+
+    float t = aToP.dotProduct(aToB)/aToB.lengthSquared();
+
+    if (segmentOnly) {
+        if (t<0) { return pointA; }
+        if (t>1) { return pointB; }
+    }
+    return pointA.add(aToB.multiply(t));
+}

@@ -7,6 +7,11 @@ AABBox::AABBox(const Vector3f& inPoint) {
     min = inPoint; max = inPoint;
 }
 
+AABBox::AABBox(const Vector3f& firstPoint,const Vector3f& secondPoint) {
+    min = firstPoint; max = firstPoint;
+    addPoint(secondPoint);
+}
+
 Vector3f AABBox::getMin() {
     return min;
 }

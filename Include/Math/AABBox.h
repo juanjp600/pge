@@ -5,9 +5,10 @@
 
 namespace PGE {
 
-struct AABBox {
+class AABBox {
     public:
-        AABBox(const Vector3f& firstPoint);
+        AABBox(const Vector3f& inPoint);
+        AABBox(const Vector3f& firstPoint,const Vector3f& secondPoint);
 
         Vector3f getMin();
         Vector3f getMax();

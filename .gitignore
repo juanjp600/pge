@@ -54,3 +54,4 @@ Thumbs.db
 *.db-shm
 *.db-wal
 *.so
+build/*

@@ -5,9 +5,9 @@
 
 namespace PGE {
 
-struct Rectanglef; struct Rectanglei;
+class Rectanglef; class Rectanglei;
 
-struct Rectanglef {
+class Rectanglef {
     public:
         Rectanglef();
         Rectanglef(const Vector2f& itl,const Vector2f& ibr);
@@ -29,7 +29,7 @@ struct Rectanglef {
         void repair();
 };
 
-struct Rectanglei {
+class Rectanglei {
     public:
         Rectanglei();
         Rectanglei(const Vector2i& itl,const Vector2i& ibr);

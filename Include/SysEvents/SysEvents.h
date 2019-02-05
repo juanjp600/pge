@@ -9,7 +9,7 @@ namespace PGE {
 
 class SysEvents {
     public:
-        struct Subscriber;
+        class Subscriber;
     private:
         static std::set<Subscriber*> subscribers;
         SysEvents(){};
@@ -18,7 +18,7 @@ class SysEvents {
         static void unsubscribe(Subscriber& sub);
         static void update();
 
-        struct Subscriber {
+        class Subscriber {
             public:
                 enum class EventType {
                     WINDOW,

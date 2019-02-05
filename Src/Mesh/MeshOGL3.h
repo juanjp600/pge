@@ -15,7 +15,7 @@
 
 namespace PGE {
 
-struct MeshOGL3 : public Mesh {
+class MeshOGL3 : public Mesh {
     public:
         MeshOGL3(Graphics* gfx,Primitive::TYPE pt);
         virtual ~MeshOGL3();
