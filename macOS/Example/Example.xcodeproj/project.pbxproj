@@ -18,6 +18,7 @@
 		194AA17F220A09AD00837F38 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 194AA179220A09AC00837F38 /* AppDelegate.m */; };
 		194AA19F220A0AC500837F38 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 194AA19E220A0AC500837F38 /* Info.plist */; };
 		194AA1A1220A0C2500837F38 /* ball in Resources */ = {isa = PBXBuildFile; fileRef = 194AA1A0220A0C2400837F38 /* ball */; };
+		194AA1A3220A11A300837F38 /* Dummy.txt in Resources */ = {isa = PBXBuildFile; fileRef = 194AA1A2220A11A300837F38 /* Dummy.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		194AA17B220A09AC00837F38 /* Example.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Example.entitlements; sourceTree = "<group>"; };
 		194AA19E220A0AC500837F38 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		194AA1A0220A0C2400837F38 /* ball */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ball; path = DerivedData/Example/Build/Products/Debug/ball; sourceTree = "<group>"; };
+		194AA1A2220A11A300837F38 /* Dummy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = Dummy.txt; path = ../Dummy.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 		194AA12A220A04B000837F38 = {
 			isa = PBXGroup;
 			children = (
+				194AA1A2220A11A300837F38 /* Dummy.txt */,
 				194AA1A0220A0C2400837F38 /* ball */,
 				194AA173220A09AC00837F38 /* Example */,
 				194AA153220A05C100837F38 /* Engine.xcodeproj */,
@@ -196,6 +199,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				194AA1A3220A11A300837F38 /* Dummy.txt in Resources */,
 				194AA1A1220A0C2500837F38 /* ball in Resources */,
 				194AA17C220A09AD00837F38 /* Assets.xcassets in Resources */,
 				194AA17D220A09AD00837F38 /* MainMenu.xib in Resources */,
