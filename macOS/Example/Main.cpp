@@ -361,16 +361,20 @@ int main(int argc, char** argv) {
 int main(int argc, char** argv) {
     InitEnv();
 
-    Graphics* graphics = Graphics::create(1280,720,false);
+    Graphics* graphics = Graphics::create(1280,720,true);
     IO* io = IO::create(graphics->getWindow());
 
     Shader* shader = Shader::load(graphics, String("default/").resourcePath());
     Shader* postprocessShader = Shader::load(graphics, String("postprocess/").resourcePath());
 
     RM2 testRM2 = loadRM2(String("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2").resourcePath(), graphics, shader);
+    
+    float retWidth = 1280.f * 2;
+    float retHeight = 720.f * 2;
+    float something = 2048.f * 2;
 
-    Texture* texture0 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::RGBA32);
-    Texture* texture1 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::R32F);
+    Texture* texture0 = Texture::create(graphics,something,something,true,nullptr,Texture::FORMAT::RGBA32);
+    Texture* texture1 = Texture::create(graphics,something,something,true,nullptr,Texture::FORMAT::R32F);
 
     std::vector<Texture*> renderTargets; renderTargets.push_back(texture0); renderTargets.push_back(texture1);
 
@@ -381,16 +385,16 @@ int main(int argc, char** argv) {
     std::vector<Vertex> vertices;
     Vertex vert;
     vert.setVector4f("position",Vector4f(-1.f,-1.f,0.f,1.f));
-    vert.setVector2f("uv0",Vector2f(0.f,720.f/2048.f));
+    vert.setVector2f("uv0",Vector2f(0.f,retHeight/something));
     vertices.push_back(vert);
     vert.setVector4f("position",Vector4f(-1.f,1.f,0.f,1.f));
     vert.setVector2f("uv0",Vector2f(0.f,0.f));
     vertices.push_back(vert);
     vert.setVector4f("position",Vector4f(1.f,-1.f,0.f,1.f));
-    vert.setVector2f("uv0",Vector2f(1280.f/2048.f,720.f/2048.f));
+    vert.setVector2f("uv0",Vector2f(retWidth/something,retHeight/something));
     vertices.push_back(vert);
     vert.setVector4f("position",Vector4f(1.f,1.f,0.f,1.f));
-    vert.setVector2f("uv0",Vector2f(1280.f/2048.f,0.f));
+    vert.setVector2f("uv0",Vector2f(retWidth/something,0.f));
     vertices.push_back(vert);
 
     std::vector<Primitive> primitives;
@@ -436,6 +440,8 @@ int main(int argc, char** argv) {
     io->trackInput(&backwardInput);
     KeyboardInput escInput = KeyboardInput(SDL_SCANCODE_ESCAPE);
     io->trackInput(&escInput);
+    KeyboardInput spaceInput = KeyboardInput(SDL_SCANCODE_SPACE);
+    io->trackInput(&spaceInput);
 
     float hAngle = 0;
     float vAngle = 0;
@@ -443,19 +449,23 @@ int main(int argc, char** argv) {
 
     io->setMouseVisibility(false);
     io->setMousePosition(Vector2i(640,360));
+    bool lockMouse = true;
     while (graphics->getWindow()->isOpen()) {
         SysEvents::update();
         io->update();
         graphics->update();
 
-        hAngle -= (float)(io->getMousePosition().x-640)/300.f;
-        vAngle -= (float)(io->getMousePosition().y-360)/300.f;
-        if (vAngle<-3.14*0.5f) { vAngle = -3.14*0.5f; }
-        if (vAngle>3.14*0.5f) { vAngle = 3.14*0.5f; }
-        io->setMousePosition(Vector2i(640,360));
+        if (lockMouse) {
+            hAngle -= (float)(io->getMousePosition().x-640)/300.f;
+            vAngle -= (float)(io->getMousePosition().y-360)/300.f;
+            if (vAngle<-3.14*0.5f) { vAngle = -3.14*0.5f; }
+            if (vAngle>3.14*0.5f) { vAngle = 3.14*0.5f; }
+
+            io->setMousePosition(Vector2i(640,360));
+        }
 
         graphics->setRenderTargets(renderTargets);
-        graphics->setViewport(Rectanglei(0,0,1280,720));
+        graphics->setViewport(Rectanglei(0,0,retWidth,retHeight));
         graphics->clear(Color(0.f,0.f,0.f,1.f));
 
         worldMatrixConstant->setValue(Matrix4x4f::constructWorldMat(Vector3f(0.f, 0.f, 0.f), Vector3f(0.07f, 0.07f, 0.07f), Vector3f(0.f, 0.f, 0.f)));
@@ -481,6 +491,9 @@ int main(int argc, char** argv) {
         if (escInput.isDown()) {
             break;
         }
+        
+        lockMouse = !spaceInput.isDown();
+        io->setMouseVisibility(spaceInput.isDown());
 
         for (int i=0;i<testRM2.meshes.size();i++) {
             testRM2.meshes[i]->render();
@@ -488,7 +501,7 @@ int main(int argc, char** argv) {
 
         graphics->resetRenderTarget();
         graphics->clear(Color(0.f,0.f,0.f,1.f));
-        graphics->setViewport(Rectanglei(0,0,1280,720));
+        graphics->setViewport(Rectanglei(0,0,retWidth,retHeight));
         quad->render();
 
         graphics->swap(!testInput.isDown());
