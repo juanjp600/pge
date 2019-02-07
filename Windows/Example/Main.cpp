@@ -11,6 +11,7 @@
 #include <Math/Matrix.h>
 #include <Math/Vector.h>
 #include <Color/Color.h>
+#include <Threading/ThreadManager.h>
 
 #include <fstream>
 #include <math.h>
@@ -20,12 +21,12 @@
 using namespace PGE;
 
 struct RM2 {
-    std::vector<Mesh*> meshes;
-    std::vector<Texture*> textures;
-    std::vector<Material*> materials;
+    std::vector<Mesh*>* meshes;
+    std::vector<Texture*>* textures;
+    std::vector<Material*>* materials;
 };
 
-RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
+RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadManager) {
     //NOTE: this is really hacky, DO NOT USE IN SCPCB
     String path = "";
     for (int i=name.size()-1;i>=0;i--) {
@@ -36,22 +37,26 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
     }
     SDL_Log("%s\n",path.cstr());
 
-    std::ifstream file; file.open(name.cstr(),std::ios::binary|std::ios::in);
+    std::ifstream* file = new std::ifstream(); file->open(name.cstr(),std::ios::binary|std::ios::in);
 
     RM2 retVal;
 
+    retVal.meshes = new std::vector<Mesh*>();
+    retVal.textures = new std::vector<Texture*>();
+    retVal.materials = new std::vector<Material*>();
+
     //skip header
     int header;
-    file.read((char*)(void*)&header,4);
+    file->read((char*)(void*)&header,4);
 
     //assume textures come first
-    char texturePart; file.read(&texturePart,1);
-    char textureCount; file.read(&textureCount,1);
+    char texturePart; file->read(&texturePart,1);
+    char textureCount; file->read(&textureCount,1);
     for (int i=0;i<textureCount;i++) {
-        char strLen; file.read(&strLen,1);
+        char strLen; file->read(&strLen,1);
         String name = "";
         for (int j=0;j<strLen;j++) {
-            char chr; file.read(&chr,1);
+            char chr; file->read(&chr,1);
             name = String(name,chr);
         }
 
@@ -74,84 +79,118 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
             }
         }
         SDL_Log("%s\n",texName.cstr());
-        retVal.textures.push_back(Texture::load(graphics,texName));
+        retVal.textures->push_back(Texture::load(graphics,texName,threadManager));
         
-        char flagSkip; file.read(&flagSkip,1); file.read(&flagSkip,1);
+        char flagSkip; file->read(&flagSkip,1); file->read(&flagSkip,1);
     }
 
-    char partHeader; file.read(&partHeader,1);
-    while ((partHeader==2) || (partHeader==3)) {
-        Mesh* mesh = Mesh::create(graphics,Primitive::TYPE::TRIANGLE);
+    class MainThreadRequest : public ThreadManager::MainThreadRequest {
+        public:
+            Graphics* graphics;
+            Shader* shader;
+            std::vector<Vertex>* vertices;
+            std::vector<Primitive>* tris;
+            std::vector<Texture*>* textures;
+            std::vector<Mesh*>* meshes;
+            std::vector<Material*>* materials;
+            void execute() {
+                Material* material = new Material(shader,*textures);
+                materials->push_back(material);
 
-        char textureIndex0 = 0; file.read(&textureIndex0,1);
-        if (textureIndex0>0) { textureIndex0--; }
-        char textureIndex1 = 0; file.read(&textureIndex1,1);
-        if (textureIndex1>0) { textureIndex1--; }
+                Mesh* mesh = Mesh::create(graphics,Primitive::TYPE::TRIANGLE);
+                mesh->setGeometry(*vertices,*tris);
 
-        std::vector<Texture*> textures;
-        textures.push_back(retVal.textures[textureIndex0]);
-        textures.push_back(retVal.textures[textureIndex1]);
+                mesh->setMaterial(material);
 
-        Material* material = new Material(shader,textures);
-        retVal.materials.push_back(material);
+                meshes->push_back(mesh);
+            }
+    } mainThreadRequest;
+    mainThreadRequest.graphics = graphics;
+    mainThreadRequest.shader = shader;
+    mainThreadRequest.meshes = retVal.meshes;
+    mainThreadRequest.materials = retVal.materials;
 
-        mesh->setMaterial(material);
+    class MeshLoadRequest : public ThreadManager::NewThreadRequest {
+        public:
+            MainThreadRequest mainThreadRequest;
+            std::ifstream* file;
+            std::vector<Texture*> loadedTextures;
+            void execute() {
+                char partHeader; file->read(&partHeader,1);
+                while ((partHeader==2) || (partHeader==3)) {
+        
+                    char textureIndex0 = 0; file->read(&textureIndex0,1);
+                    if (textureIndex0>0) { textureIndex0--; }
+                    char textureIndex1 = 0; file->read(&textureIndex1,1);
+                    if (textureIndex1>0) { textureIndex1--; }
 
-        std::vector<Vertex> vertices;
+                    std::vector<Texture*> textures;
+                    textures.push_back(loadedTextures[textureIndex0]);
+                    textures.push_back(loadedTextures[textureIndex1]);
 
-        unsigned short vertCount = 0; file.read((char*)(void*)&vertCount,2);
-        for (int i=0;i<vertCount;i++) {
-            Vertex vertex;
+                    std::vector<Vertex> vertices;
+
+                    unsigned short vertCount = 0; file->read((char*)(void*)&vertCount,2);
+                    for (int i=0;i<vertCount;i++) {
+                        Vertex vertex;
             
-            Vector4f pos = Vector4f(0.f,0.f,0.f,1.f);
-            Color color = Color(1.f,1.f,1.f,1.f);
-            Vector2f uv0 = Vector2f(0.f,0.f);
-            Vector2f uv1 = Vector2f(0.f,0.f);
+                        Vector4f pos = Vector4f(0.f,0.f,0.f,1.f);
+                        Color color = Color(1.f,1.f,1.f,1.f);
+                        Vector2f uv0 = Vector2f(0.f,0.f);
+                        Vector2f uv1 = Vector2f(0.f,0.f);
 
-            file.read((char*)(void*)&pos.x,4);
-            file.read((char*)(void*)&pos.y,4);
-            file.read((char*)(void*)&pos.z,4);
+                        file->read((char*)(void*)&pos.x,4);
+                        file->read((char*)(void*)&pos.y,4);
+                        file->read((char*)(void*)&pos.z,4);
 
-            unsigned char r; unsigned char g; unsigned char b;
-            file.read((char*)(void*)&r,1); color.setRedInt(r);
-            file.read((char*)(void*)&g,1); color.setGreenInt(g);
-            file.read((char*)(void*)&b,1); color.setBlueInt(b);
+                        unsigned char r; unsigned char g; unsigned char b;
+                        file->read((char*)(void*)&r,1); color.setRedInt(r);
+                        file->read((char*)(void*)&g,1); color.setGreenInt(g);
+                        file->read((char*)(void*)&b,1); color.setBlueInt(b);
 
+                        file->read((char*)(void*)&uv0.x,4);
+                        file->read((char*)(void*)&uv0.y,4);
 
+                        file->read((char*)(void*)&uv1.x,4);
+                        file->read((char*)(void*)&uv1.y,4);
 
-            file.read((char*)(void*)&uv0.x,4);
-            file.read((char*)(void*)&uv0.y,4);
+                        vertex.setVector4f("position",pos);
+                        vertex.setVector3f("normal",Vector3f::one.normalize());
+                        vertex.setVector2f("uv0",uv1);
+                        vertex.setVector2f("uv1",uv0);
+                        vertex.setColor("color",color);
 
-            file.read((char*)(void*)&uv1.x,4);
-            file.read((char*)(void*)&uv1.y,4);
+                        vertices.push_back(vertex);
+                    }
 
-            vertex.setVector4f("position",pos);
-            vertex.setVector3f("normal",Vector3f::one.normalize());
-            vertex.setVector2f("uv0",uv1);
-            vertex.setVector2f("uv1",uv0);
-            vertex.setColor("color",color);
+                    std::vector<Primitive> tris;
 
-            vertices.push_back(vertex);
-        }
+                    unsigned short triCount = 0; file->read((char*)(void*)&triCount,2);
+                    for (int i=0;i<triCount;i++) {
+                        unsigned short i0 = 0; file->read((char*)(void*)&i0,2);
+                        unsigned short i1 = 0; file->read((char*)(void*)&i1,2);
+                        unsigned short i2 = 0; file->read((char*)(void*)&i2,2);
+                        tris.push_back(Primitive(i0,i1,i2));
+                    }
 
-        std::vector<Primitive> tris;
+                    mainThreadRequest.vertices = &vertices;
+                    mainThreadRequest.tris = &tris;
+                    mainThreadRequest.textures = &textures;
+                    requestExecutionOnMainThread(&mainThreadRequest);
 
-        unsigned short triCount = 0; file.read((char*)(void*)&triCount,2);
-        for (int i=0;i<triCount;i++) {
-            unsigned short i0 = 0; file.read((char*)(void*)&i0,2);
-            unsigned short i1 = 0; file.read((char*)(void*)&i1,2);
-            unsigned short i2 = 0; file.read((char*)(void*)&i2,2);
-            tris.push_back(Primitive(i0,i1,i2));
-        }
+                    file->read(&partHeader,1);
+                }
+                file->close(); delete file;
 
-        mesh->setGeometry(vertices,tris);
+                done = true;
+            }
+    };
+    MeshLoadRequest* meshLoadRequest = new MeshLoadRequest();
+    meshLoadRequest->mainThreadRequest = mainThreadRequest;
+    meshLoadRequest->loadedTextures = *retVal.textures;
+    meshLoadRequest->file = file;
+    threadManager->requestExecutionOnNewThread(meshLoadRequest);
 
-        retVal.meshes.push_back(mesh);
-
-        file.read(&partHeader,1);
-    }
-
-    file.close();
     return retVal;
 }
 
@@ -160,11 +199,12 @@ int main(int argc, char** argv) {
 
     Graphics* graphics = Graphics::create(1280,720,false);
     IO* io = IO::create(graphics->getWindow());
+    ThreadManager* threadManager = new ThreadManager();
 
     Shader* shader = Shader::load(graphics,"default/");
     Shader* postprocessShader = Shader::load(graphics,"postprocess/");
 
-    RM2 testRM2 = loadRM2("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2",graphics,shader);
+    RM2 testRM2 = loadRM2("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2",graphics,shader,threadManager);
 
     Texture* texture0 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::RGBA32);
     Texture* texture1 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::R32F);
@@ -242,6 +282,7 @@ int main(int argc, char** argv) {
         SysEvents::update();
         io->update();
         graphics->update();
+        threadManager->update();
 
         hAngle -= (float)(io->getMousePosition().x-640)/300.f;
         vAngle -= (float)(io->getMousePosition().y-360)/300.f;
@@ -274,8 +315,8 @@ int main(int argc, char** argv) {
             cameraPos = cameraPos.add(sideDir.multiply(0.05f));
         }
 
-        for (int i=0;i<testRM2.meshes.size();i++) {
-            testRM2.meshes[i]->render();
+        for (int i=0;i<testRM2.meshes->size();i++) {
+            (*testRM2.meshes)[i]->render();
         }
 
         graphics->resetRenderTarget();
@@ -287,20 +328,20 @@ int main(int argc, char** argv) {
     }
     io->untrackInput(&testInput);
 
-    for (int i=0;i<testRM2.meshes.size();i++) {
-        delete testRM2.meshes[i];
+    for (int i=0;i<testRM2.meshes->size();i++) {
+        delete (*testRM2.meshes)[i];
     }
-    testRM2.meshes.clear();
+    delete testRM2.meshes;
 
-    for (int i=0;i<testRM2.materials.size();i++) {
-        delete testRM2.materials[i];
+    for (int i=0;i<testRM2.materials->size();i++) {
+        delete (*testRM2.materials)[i];
     }
-    testRM2.materials.clear();
+    delete testRM2.materials;
     
-    for (int i=0;i<testRM2.textures.size();i++) {
-        delete testRM2.textures[i];
+    for (int i=0;i<testRM2.textures->size();i++) {
+        delete (*testRM2.textures)[i];
     }
-    testRM2.textures.clear();
+    delete testRM2.textures;
 
     delete quad;
     delete quadMaterial;
@@ -309,6 +350,7 @@ int main(int argc, char** argv) {
     delete postprocessShader;
     delete shader;
 
+    delete threadManager;
     delete io;
     delete graphics;
 

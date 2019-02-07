@@ -82,6 +82,12 @@
     <Filter Include="Src\Init">
       <UniqueIdentifier>{c64f3e6b-c791-45aa-92d1-fa77d74543de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Threading">
+      <UniqueIdentifier>{645f0c42-1599-4e18-a10a-1007c22a9bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Threading">
+      <UniqueIdentifier>{922f5910-100f-4ac1-b3f5-37b9dbc452f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -146,6 +152,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Init\InitWindows.cpp">
       <Filter>Src\Init</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp">
+      <Filter>Src\Threading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Texture\TextureInternal.h">
       <Filter>Src\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Threading\ThreadManager.h">
+      <Filter>Include\Threading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
