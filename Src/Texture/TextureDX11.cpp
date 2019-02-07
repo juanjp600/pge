@@ -292,7 +292,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
 
                 delete[] fiBuffer;
 
-                done = true;
+                markAsDone();
             }
     };
 

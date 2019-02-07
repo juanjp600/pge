@@ -182,7 +182,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
                 }
                 file->close(); delete file;
 
-                done = true;
+                markAsDone();
             }
     };
     MeshLoadRequest* meshLoadRequest = new MeshLoadRequest();
@@ -328,6 +328,8 @@ int main(int argc, char** argv) {
     }
     io->untrackInput(&testInput);
 
+    delete threadManager;
+
     for (int i=0;i<testRM2.meshes->size();i++) {
         delete (*testRM2.meshes)[i];
     }
@@ -350,7 +352,6 @@ int main(int argc, char** argv) {
     delete postprocessShader;
     delete shader;
 
-    delete threadManager;
     delete io;
     delete graphics;
 
