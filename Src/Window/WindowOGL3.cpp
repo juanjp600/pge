@@ -9,7 +9,16 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     caption = c;
     width = w; height = h; fullscreen = fs;
 
-    sdlWindow = SDL_CreateWindow(caption.cstr(),SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,w,h,SDL_WINDOW_OPENGL);
+    sdlWindow = SDL_CreateWindow(caption.cstr(),SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,w,h,SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_FULLSCREEN_DESKTOP);
+    
+//    if (fullscreen) {
+//        SDL_SetWindowBordered(sdlWindow,SDL_bool::SDL_FALSE);
+//        SDL_Rect displayBounds;
+//        int displayIndex = SDL_GetWindowDisplayIndex(sdlWindow);
+//        SDL_GetDisplayBounds(displayIndex,&displayBounds);
+//        SDL_SetWindowSize(sdlWindow,displayBounds.w,displayBounds.h);
+//        SDL_SetWindowPosition(sdlWindow,0,0);
+//    }
 
     eventSubscriber = SysEvents::Subscriber(sdlWindow,SysEvents::Subscriber::EventType::WINDOW);
     SysEvents::subscribe(eventSubscriber);
