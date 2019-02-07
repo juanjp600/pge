@@ -14,6 +14,9 @@ Windows/Engine/.vs/
 *.opendb
 *.vcxproj.user
 
+# Visual Studio Code
+.vscode
+
 # Xcode
 DerivedData/
 xcuserdata

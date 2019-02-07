@@ -386,9 +386,10 @@ String String::join(const std::vector<String>& vect, const String& separator) {
 String String::resourcePath() const {
 #ifdef __APPLE__
 #ifdef __OBJC__
-    int period = findFirst(".");
-    NSString* name = substr(0, period).nsstr();
-    NSString* ext = substr(period+1).nsstr();
+    String dummyName = "Dummy.txt";
+    int period = dummyName.findFirst(".");
+    NSString* name = dummyName.substr(0, period).nsstr();
+    NSString* ext = dummyName.substr(period+1).nsstr();
 
     NSBundle* bundle = [NSBundle mainBundle];
     NSString* path = [bundle pathForResource: name ofType: ext];
@@ -396,8 +397,14 @@ String String::resourcePath() const {
     if (path == nullptr) {
         return String("");
     }
+    
+    // Manipulate the resulting cString.
     const char* cPath = [path cStringUsingEncoding: NSUTF8StringEncoding];
-    return String(cPath);
+    String strPath = String(cPath);
+    strPath = strPath.substr(0, strPath.size() - dummyName.size());
+    strPath = strPath + (*this);
+    
+    return strPath;
 #endif
 #endif
     return *this;

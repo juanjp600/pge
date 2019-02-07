@@ -24,6 +24,10 @@
  * #define the symbol if yes, #undef it if no.
  */
 
+#ifdef __APPLE__
+#define USE_MAC_MEMMGR
+#endif
+
 /* Does your compiler support function prototypes?
  * (If not, you also need to use ansi2knr, see install.txt)
  */
