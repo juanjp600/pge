@@ -29,6 +29,7 @@
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
     <ClCompile Include="..\..\Src\Texture\Texture.cpp" />
     <ClCompile Include="..\..\Src\Texture\TextureDX11.cpp" />
+    <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp" />
     <ClCompile Include="..\..\Src\UserInput\UserInput.cpp" />
     <ClCompile Include="..\..\Src\Window\Window.cpp" />
     <ClCompile Include="..\..\Src\Window\WindowDX11.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="..\..\Include\Misc\String.h" />
     <ClInclude Include="..\..\Include\Shader\Shader.h" />
     <ClInclude Include="..\..\Include\Texture\Texture.h" />
+    <ClInclude Include="..\..\Include\Threading\ThreadManager.h" />
     <ClInclude Include="..\..\Include\UserInput\UserInput.h" />
     <ClInclude Include="..\..\Include\Window\Window.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />

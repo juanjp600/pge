@@ -3,6 +3,7 @@
 
 #include <Misc/String.h>
 #include <Graphics/Graphics.h>
+#include <Threading/ThreadManager.h>
 
 namespace PGE {
 
@@ -19,6 +20,7 @@ class Texture {
         bool isOpaque() const;
 
         static Texture* load(Graphics* gfx,String filename);
+        static Texture* load(Graphics* gfx,String filename,ThreadManager* threadManager);
         static Texture* create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer,FORMAT fmt);
         virtual ~Texture(){};
     protected:

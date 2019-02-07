@@ -17,6 +17,10 @@ Texture* Texture::load(Graphics* gfx,String fn) {
     return new TextureOGL3(gfx,fn);
 }
 
+Texture* Texture::load(Graphics* gfx,String fn,ThreadManager* threadManager) {
+    return new TextureOGL3(gfx,fn,threadManager);
+}
+
 TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,Texture::FORMAT fmt) {
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
@@ -112,6 +116,76 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn) {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
 
     isRT = false;
+}
+
+TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadManager) {
+    graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
+
+    filename = fn;
+    name = fn;
+
+    glGenTextures(1,&glTexture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D,glTexture);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,nullptr);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
+    
+    isRT = false;
+    opaque = true;
+
+    class TextureReassignRequest : public ThreadManager::MainThreadRequest {
+        public:
+            GraphicsOGL3* graphics;
+
+            int realWidth; int realHeight;
+            BYTE* buffer;
+
+            void execute() {
+                graphics->takeGLContext();
+
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D,glTexture);
+                glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,buffer);
+                
+                glGenerateMipmap(GL_TEXTURE_2D);
+            }
+    } mainThreadRequest;
+    mainThreadRequest.graphics = (GraphicsOGL3*)graphics;
+
+    class TextureLoadRequest : public ThreadManager::NewThreadRequest {
+        public:
+            TextureReassignRequest mainThreadRequest;
+            String filename;
+            int* width; int* height; int* realWidth; int* realHeight; bool* opaque;
+            void execute() {
+                BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight,*opaque);
+
+                mainThreadRequest.realWidth = *realWidth;
+                mainThreadRequest.realHeight = *realHeight;
+                mainThreadRequest.buffer = fiBuffer;
+                requestExecutionOnMainThread(&mainThreadRequest);
+
+                delete[] fiBuffer;
+
+                done = true;
+            }
+    };
+
+    TextureLoadRequest* textureLoadRequest = new TextureLoadRequest();
+    textureLoadRequest->mainThreadRequest = mainThreadRequest;
+    textureLoadRequest->filename = filename;
+    textureLoadRequest->width = &width;
+    textureLoadRequest->height = &height;
+    textureLoadRequest->realWidth = &realWidth;
+    textureLoadRequest->realHeight = &realHeight;
+    textureLoadRequest->opaque = &opaque;
+
+    threadManager->requestExecutionOnNewThread(textureLoadRequest);
 }
 
 TextureOGL3::~TextureOGL3() {

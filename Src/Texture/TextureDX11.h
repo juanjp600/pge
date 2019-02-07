@@ -4,6 +4,7 @@
 #include <Windows.h>
 
 #include <Texture/Texture.h>
+#include <Threading/ThreadManager.h>
 
 #include <dxgi.h>
 #include <d3dcommon.h>
@@ -15,6 +16,7 @@ class TextureDX11 : public Texture {
     public:
         TextureDX11(Graphics* gfx,int width,int height,bool renderTarget,const void* buffer,FORMAT fmt);
         TextureDX11(Graphics* gfx,const String& fn);
+        TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadManager);
         ~TextureDX11();
 
         void useTexture(int index);
