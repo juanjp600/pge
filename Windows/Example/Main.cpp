@@ -84,35 +84,40 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
         char flagSkip; file->read(&flagSkip,1); file->read(&flagSkip,1);
     }
 
-    class MainThreadRequest : public ThreadManager::MainThreadRequest {
-        public:
-            Graphics* graphics;
-            Shader* shader;
-            std::vector<Vertex>* vertices;
-            std::vector<Primitive>* tris;
-            std::vector<Texture*>* textures;
-            std::vector<Mesh*>* meshes;
-            std::vector<Material*>* materials;
-            void execute() {
-                Material* material = new Material(shader,*textures);
-                materials->push_back(material);
+    class MainThreadRequest0 : public ThreadManager::MainThreadRequest {
+    public:
+        Graphics* graphics;
+        Mesh* mesh;
+        Shader* shader;
+        std::vector<Texture*>* textures;
+        std::vector<Material*>* materials;
+        void execute() {
+            mesh = Mesh::create(graphics,Primitive::TYPE::TRIANGLE);
 
-                Mesh* mesh = Mesh::create(graphics,Primitive::TYPE::TRIANGLE);
-                mesh->setGeometry(*vertices,*tris);
+            Material* material = new Material(shader,*textures);
+            materials->push_back(material);
 
-                mesh->setMaterial(material);
+            mesh->setMaterial(material);
+        }
+    } mainThreadRequest0;
+    mainThreadRequest0.graphics = graphics;
+    mainThreadRequest0.shader = shader;
+    mainThreadRequest0.materials = retVal.materials;
 
-                meshes->push_back(mesh);
-            }
-    } mainThreadRequest;
-    mainThreadRequest.graphics = graphics;
-    mainThreadRequest.shader = shader;
-    mainThreadRequest.meshes = retVal.meshes;
-    mainThreadRequest.materials = retVal.materials;
+    class MainThreadRequest1 : public ThreadManager::MainThreadRequest {
+    public:
+        std::vector<Mesh*>* meshes;
+        Mesh* mesh;
+        void execute() {
+            meshes->push_back(mesh);
+        }
+    } mainThreadRequest1;
+    mainThreadRequest1.meshes = retVal.meshes;
 
     class MeshLoadRequest : public ThreadManager::NewThreadRequest {
         public:
-            MainThreadRequest mainThreadRequest;
+            MainThreadRequest0 mainThreadRequest0;
+            MainThreadRequest1 mainThreadRequest1;
             std::ifstream* file;
             std::vector<Texture*> loadedTextures;
             void execute() {
@@ -173,10 +178,12 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
                         tris.push_back(Primitive(i0,i1,i2));
                     }
 
-                    mainThreadRequest.vertices = &vertices;
-                    mainThreadRequest.tris = &tris;
-                    mainThreadRequest.textures = &textures;
-                    requestExecutionOnMainThread(&mainThreadRequest);
+                    mainThreadRequest0.textures = &textures;
+                    requestExecutionOnMainThread(&mainThreadRequest0);
+                    mainThreadRequest0.mesh->setGeometry(vertices,tris);
+                    mainThreadRequest0.mesh->updateInternalData();
+                    mainThreadRequest1.mesh = mainThreadRequest0.mesh;
+                    requestExecutionOnMainThread(&mainThreadRequest1);
 
                     file->read(&partHeader,1);
                 }
@@ -186,7 +193,8 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
             }
     };
     MeshLoadRequest* meshLoadRequest = new MeshLoadRequest();
-    meshLoadRequest->mainThreadRequest = mainThreadRequest;
+    meshLoadRequest->mainThreadRequest0 = mainThreadRequest0;
+    meshLoadRequest->mainThreadRequest1 = mainThreadRequest1;
     meshLoadRequest->loadedTextures = *retVal.textures;
     meshLoadRequest->file = file;
     threadManager->requestExecutionOnNewThread(meshLoadRequest);
@@ -315,9 +323,17 @@ int main(int argc, char** argv) {
             cameraPos = cameraPos.add(sideDir.multiply(0.05f));
         }
 
-        for (int i=0;i<testRM2.meshes->size();i++) {
-            (*testRM2.meshes)[i]->render();
+        if (testInput.isDown()) {
+            for (int i=0;i<testRM2.meshes->size();i++) {
+                (*testRM2.meshes)[i]->render();
+            }
+        } else {
+            for (int i=0;i<min(testRM2.meshes->size(),5);i++) {
+                (*testRM2.meshes)[i]->render();
+            }
         }
+
+        
 
         graphics->resetRenderTarget();
         graphics->clear(Color(0.f,0.f,0.f,1.f));

@@ -21,6 +21,8 @@ class MeshDX11 : public Mesh {
         MeshDX11(Graphics* gfx,Primitive::TYPE pt);
         ~MeshDX11();
 
+        virtual void updateInternalData();
+
         virtual void render();
     private:
         std::vector<uint8_t> dxVertexData;
@@ -35,7 +37,7 @@ class MeshDX11 : public Mesh {
         D3D11_SUBRESOURCE_DATA dxIndexBufferData;
         ID3D11Buffer* dxIndexBuffer;
 
-        virtual void updateInternalData();
+        virtual void uploadInternalData();
 };
 
 }

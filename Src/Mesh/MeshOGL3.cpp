@@ -40,12 +40,19 @@ MeshOGL3::~MeshOGL3() {
 }
 
 void MeshOGL3::updateInternalData() {
-    glVertexData.clear(); glIndexData.clear();
+    if (!mustUpdateInternalData) { return; }
 
+    glVertexData.clear(); glIndexData.clear();
+    
     const std::vector<String>& vertexInputElems = ((ShaderOGL3*)material->getShader())->getVertexInputElems();
+    int* indexHints = new int[vertexInputElems.size()];
+    for (int j=0;j<vertexInputElems.size();j++) {
+        indexHints[j] = 0;
+    }
     for (int i=0;i<vertices.size();i++) {
         for (int j=0;j<vertexInputElems.size();j++) {
-            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j]);
+            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j],indexHints[j]);
+            indexHints[j] = prop.index;
             switch (prop.type) {
                 case Vertex::PROPERTY_TYPE::FLOAT: {
                     int offset = glVertexData.size();
@@ -90,6 +97,7 @@ void MeshOGL3::updateInternalData() {
             }
         }
     }
+    delete[] indexHints;
 
     for (int i=0;i<primitives.size();i++) {
         glIndexData.push_back(primitives[i].a);
@@ -98,6 +106,11 @@ void MeshOGL3::updateInternalData() {
             glIndexData.push_back(primitives[i].c);
         }
     }
+}
+
+void MeshOGL3::uploadInternalData() {
+    if (mustUpdateInternalData) { updateInternalData(); }
+    if (!mustReuploadInternalData) { return; }
 
     //TODO: determine when we should use GL_DYNAMIC_DRAW
     glBufferData(GL_ARRAY_BUFFER, glVertexData.size(),glVertexData.data(),GL_STATIC_DRAW);
@@ -111,9 +124,8 @@ void MeshOGL3::render() {
     glBindBuffer(GL_ARRAY_BUFFER,glVertexBufferObject);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,glIndexBufferObject);
 
-    if (isDirty) {
-        updateInternalData(); isDirty = false;
-    }
+    updateInternalData();
+    uploadInternalData();
 
     GLenum glTextureLayers[] = {
         GL_TEXTURE0,

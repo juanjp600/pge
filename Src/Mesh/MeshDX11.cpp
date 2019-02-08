@@ -32,17 +32,22 @@ MeshDX11::~MeshDX11() {
 }
 
 void MeshDX11::updateInternalData() {
-    if (!isDirty) { return; }
-
+    if (!mustUpdateInternalData) { return; }
+    
     dxVertexData.clear();
     dxIndexData.clear();
-    
+
     bool recalculateStride = true;
     stride = 0;
     const std::vector<String>& vertexInputElems = ((ShaderDX11*)material->getShader())->getVertexInputElems();
+    int* indexHints = new int[vertexInputElems.size()];
+    for (int j=0;j<vertexInputElems.size();j++) {
+        indexHints[j] = 0;
+    }
     for (int i=0;i<vertices.size();i++) {
         for (int j=0;j<vertexInputElems.size();j++) {
-            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j]);
+            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j],indexHints[j]);
+            indexHints[j] = prop.index;
             switch (prop.type) {
                 case Vertex::PROPERTY_TYPE::FLOAT: {
                     if (recalculateStride) { stride += sizeof(float); }
@@ -94,6 +99,7 @@ void MeshDX11::updateInternalData() {
         }
         recalculateStride = false;
     }
+    delete[] indexHints;
 
     for (int i=0;i<primitives.size();i++) {
         dxIndexData.push_back(primitives[i].a);
@@ -102,6 +108,13 @@ void MeshDX11::updateInternalData() {
             dxIndexData.push_back(primitives[i].c);
         }
     }
+
+    mustUpdateInternalData = false;
+}
+
+void MeshDX11::uploadInternalData() {
+    if (mustUpdateInternalData) { updateInternalData(); }
+    if (!mustReuploadInternalData) { return; }
 
     ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
@@ -135,13 +148,14 @@ void MeshDX11::updateInternalData() {
 
     dxDevice->CreateBuffer(&dxIndexBufferDesc,&dxIndexBufferData,&dxIndexBuffer);
 
-    isDirty = false;
+    mustReuploadInternalData = false;
 }
 
 void MeshDX11::render() {
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
 
     updateInternalData();
+    uploadInternalData();
 
     ((ShaderDX11*)material->getShader())->useVertexInputLayout();
 
