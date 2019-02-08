@@ -3,8 +3,7 @@
 
 namespace PGE {
 
-void InitEnv();
-void QuitEnv();
+int Main();
 
 }
 

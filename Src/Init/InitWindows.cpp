@@ -2,14 +2,17 @@
 
 #include <SDL.h>
 
-namespace PGE {
-
-void InitEnv() {
+static void InitEnv() {
     SDL_Init(SDL_INIT_VIDEO);
 }
 
-void QuitEnv() {
+static void QuitEnv() {
     SDL_Quit();
 }
 
+int main(int argc, char** argv) {
+    InitEnv();
+    int retVal = PGE::Main();
+    QuitEnv();
+    return retVal;
 }

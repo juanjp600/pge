@@ -14,7 +14,7 @@ void UserInput::setDown(bool down) {
     inputDown = down;
 }
 
-KeyboardInput::KeyboardInput(SDL_Scancode inKeyCode) {
+KeyboardInput::KeyboardInput(KeyboardInput::SCANCODE inKeyCode) {
     keyCode = inKeyCode;
 }
 
@@ -22,7 +22,7 @@ UserInput::DEVICE KeyboardInput::getDevice() const {
     return UserInput::DEVICE::KEYBOARD;
 }
 
-SDL_Scancode KeyboardInput::getButton() const {
+KeyboardInput::SCANCODE KeyboardInput::getButton() const {
     return keyCode;
 }
 
@@ -38,7 +38,7 @@ MouseInput::BUTTON MouseInput::getButton() const {
     return mouseButton;
 }
 
-GamepadInput::GamepadInput(SDL_GameControllerButton inGamepadButton) {
+GamepadInput::GamepadInput(GamepadInput::CONTROLLER_BUTTON inGamepadButton) {
     gamepadButton = inGamepadButton;
 }
 
@@ -46,6 +46,6 @@ UserInput::DEVICE GamepadInput::getDevice() const {
     return UserInput::DEVICE::GAMEPAD;
 }
 
-SDL_GameControllerButton GamepadInput::getButton() const {
+GamepadInput::CONTROLLER_BUTTON GamepadInput::getButton() const {
     return gamepadButton;
 }

@@ -2,9 +2,7 @@
 
 #include <SDL.h>
 
-namespace PGE {
-
-void InitEnv() {
+static void InitEnv() {
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -13,8 +11,13 @@ void InitEnv() {
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 }
 
-void QuitEnv() {
+static void QuitEnv() {
     SDL_Quit();
 }
 
+int main(int argc, char** argv) {
+    InitEnv();
+    int retVal = PGE::Main();
+    QuitEnv();
+    return retVal;
 }

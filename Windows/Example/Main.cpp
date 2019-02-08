@@ -202,9 +202,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
     return retVal;
 }
 
-int main(int argc, char** argv) {
-    InitEnv();
-
+int PGE::Main() {
     Graphics* graphics = Graphics::create(1280,720,false);
     IO* io = IO::create(graphics->getWindow());
     ThreadManager* threadManager = new ThreadManager();
@@ -269,15 +267,15 @@ int main(int argc, char** argv) {
     viewMatrixConstant->setValue(viewMatrix);
     Shader::Constant* worldMatrixConstant = shader->getVertexShaderConstant("worldMatrix");
 
-    KeyboardInput testInput = KeyboardInput(SDL_SCANCODE_SPACE);
+    KeyboardInput testInput = KeyboardInput(KeyboardInput::SCANCODE::SPACE);
     io->trackInput(&testInput);
-    KeyboardInput leftInput = KeyboardInput(SDL_SCANCODE_A);
+    KeyboardInput leftInput = KeyboardInput(KeyboardInput::SCANCODE::A);
     io->trackInput(&leftInput);
-    KeyboardInput rightInput = KeyboardInput(SDL_SCANCODE_D);
+    KeyboardInput rightInput = KeyboardInput(KeyboardInput::SCANCODE::D);
     io->trackInput(&rightInput);
-    KeyboardInput forwardInput = KeyboardInput(SDL_SCANCODE_W);
+    KeyboardInput forwardInput = KeyboardInput(KeyboardInput::SCANCODE::W);
     io->trackInput(&forwardInput);
-    KeyboardInput backwardInput = KeyboardInput(SDL_SCANCODE_S);
+    KeyboardInput backwardInput = KeyboardInput(KeyboardInput::SCANCODE::S);
     io->trackInput(&backwardInput);
 
     float hAngle = 0;
@@ -362,8 +360,6 @@ int main(int argc, char** argv) {
 
     delete io;
     delete graphics;
-
-    QuitEnv();
 
     return 0;
 }
