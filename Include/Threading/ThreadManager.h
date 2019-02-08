@@ -35,6 +35,8 @@ class ThreadManager {
             private:
                 MainThreadRequest* mainThreadRequest;
                 std::thread* thread;
+                std::mutex mutex;
+                std::condition_variable conditionVariable;
                 std::atomic<bool> waitingForMainThread;
                 ThreadManager* threadManager;
                 std::atomic<bool> done;

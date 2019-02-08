@@ -323,17 +323,9 @@ int main(int argc, char** argv) {
             cameraPos = cameraPos.add(sideDir.multiply(0.05f));
         }
 
-        if (testInput.isDown()) {
-            for (int i=0;i<testRM2.meshes->size();i++) {
-                (*testRM2.meshes)[i]->render();
-            }
-        } else {
-            for (int i=0;i<min(testRM2.meshes->size(),5);i++) {
-                (*testRM2.meshes)[i]->render();
-            }
+        for (int i=0;i<testRM2.meshes->size();i++) {
+            (*testRM2.meshes)[i]->render();
         }
-
-        
 
         graphics->resetRenderTarget();
         graphics->clear(Color(0.f,0.f,0.f,1.f));

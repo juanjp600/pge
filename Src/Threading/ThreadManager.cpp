@@ -26,9 +26,9 @@ bool ThreadManager::NewThreadRequest::isDone() const {
 
 void ThreadManager::NewThreadRequest::requestExecutionOnMainThread(MainThreadRequest* request) {
     mainThreadRequest = request;
+    std::unique_lock<std::mutex> lock(mutex);
     waitingForMainThread = true;
-
-    while (waitingForMainThread) { std::this_thread::yield(); }
+    conditionVariable.wait(lock);
 }
 
 void ThreadManager::NewThreadRequest::setThreadManager(ThreadManager* mgr) {
@@ -52,6 +52,7 @@ bool ThreadManager::NewThreadRequest::isWaitingForMainThread() {
 void ThreadManager::NewThreadRequest::executeMainThreadRequest() {
     mainThreadRequest->execute();
     waitingForMainThread = false;
+    conditionVariable.notify_all();
 }
 
 void ThreadManager::NewThreadRequest::markAsDone() {
