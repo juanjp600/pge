@@ -84,35 +84,40 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
         char flagSkip; file->read(&flagSkip,1); file->read(&flagSkip,1);
     }
 
-    class MainThreadRequest : public ThreadManager::MainThreadRequest {
-        public:
-            Graphics* graphics;
-            Shader* shader;
-            std::vector<Vertex>* vertices;
-            std::vector<Primitive>* tris;
-            std::vector<Texture*>* textures;
-            std::vector<Mesh*>* meshes;
-            std::vector<Material*>* materials;
-            void execute() {
-                Material* material = new Material(shader,*textures);
-                materials->push_back(material);
+    class MainThreadRequest0 : public ThreadManager::MainThreadRequest {
+    public:
+        Graphics* graphics;
+        Mesh* mesh;
+        Shader* shader;
+        std::vector<Texture*>* textures;
+        std::vector<Material*>* materials;
+        void execute() {
+            mesh = Mesh::create(graphics,Primitive::TYPE::TRIANGLE);
 
-                Mesh* mesh = Mesh::create(graphics,Primitive::TYPE::TRIANGLE);
-                mesh->setGeometry(*vertices,*tris);
+            Material* material = new Material(shader,*textures);
+            materials->push_back(material);
 
-                mesh->setMaterial(material);
+            mesh->setMaterial(material);
+        }
+    } mainThreadRequest0;
+    mainThreadRequest0.graphics = graphics;
+    mainThreadRequest0.shader = shader;
+    mainThreadRequest0.materials = retVal.materials;
 
-                meshes->push_back(mesh);
-            }
-    } mainThreadRequest;
-    mainThreadRequest.graphics = graphics;
-    mainThreadRequest.shader = shader;
-    mainThreadRequest.meshes = retVal.meshes;
-    mainThreadRequest.materials = retVal.materials;
+    class MainThreadRequest1 : public ThreadManager::MainThreadRequest {
+    public:
+        std::vector<Mesh*>* meshes;
+        Mesh* mesh;
+        void execute() {
+            meshes->push_back(mesh);
+        }
+    } mainThreadRequest1;
+    mainThreadRequest1.meshes = retVal.meshes;
 
     class MeshLoadRequest : public ThreadManager::NewThreadRequest {
         public:
-            MainThreadRequest mainThreadRequest;
+            MainThreadRequest0 mainThreadRequest0;
+            MainThreadRequest1 mainThreadRequest1;
             std::ifstream* file;
             std::vector<Texture*> loadedTextures;
             void execute() {
@@ -173,20 +178,23 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
                         tris.push_back(Primitive(i0,i1,i2));
                     }
 
-                    mainThreadRequest.vertices = &vertices;
-                    mainThreadRequest.tris = &tris;
-                    mainThreadRequest.textures = &textures;
-                    requestExecutionOnMainThread(&mainThreadRequest);
+                    mainThreadRequest0.textures = &textures;
+                    requestExecutionOnMainThread(&mainThreadRequest0);
+                    mainThreadRequest0.mesh->setGeometry(vertices,tris);
+                    mainThreadRequest0.mesh->updateInternalData();
+                    mainThreadRequest1.mesh = mainThreadRequest0.mesh;
+                    requestExecutionOnMainThread(&mainThreadRequest1);
 
                     file->read(&partHeader,1);
                 }
                 file->close(); delete file;
 
-                done = true;
+                markAsDone();
             }
     };
     MeshLoadRequest* meshLoadRequest = new MeshLoadRequest();
-    meshLoadRequest->mainThreadRequest = mainThreadRequest;
+    meshLoadRequest->mainThreadRequest0 = mainThreadRequest0;
+    meshLoadRequest->mainThreadRequest1 = mainThreadRequest1;
     meshLoadRequest->loadedTextures = *retVal.textures;
     meshLoadRequest->file = file;
     threadManager->requestExecutionOnNewThread(meshLoadRequest);
@@ -194,9 +202,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
     return retVal;
 }
 
-int main(int argc, char** argv) {
-    InitEnv();
-
+int PGE::Main() {
     Graphics* graphics = Graphics::create(1280,720,false);
     IO* io = IO::create(graphics->getWindow());
     ThreadManager* threadManager = new ThreadManager();
@@ -261,15 +267,15 @@ int main(int argc, char** argv) {
     viewMatrixConstant->setValue(viewMatrix);
     Shader::Constant* worldMatrixConstant = shader->getVertexShaderConstant("worldMatrix");
 
-    KeyboardInput testInput = KeyboardInput(SDL_SCANCODE_SPACE);
+    KeyboardInput testInput = KeyboardInput(KeyboardInput::SCANCODE::SPACE);
     io->trackInput(&testInput);
-    KeyboardInput leftInput = KeyboardInput(SDL_SCANCODE_A);
+    KeyboardInput leftInput = KeyboardInput(KeyboardInput::SCANCODE::A);
     io->trackInput(&leftInput);
-    KeyboardInput rightInput = KeyboardInput(SDL_SCANCODE_D);
+    KeyboardInput rightInput = KeyboardInput(KeyboardInput::SCANCODE::D);
     io->trackInput(&rightInput);
-    KeyboardInput forwardInput = KeyboardInput(SDL_SCANCODE_W);
+    KeyboardInput forwardInput = KeyboardInput(KeyboardInput::SCANCODE::W);
     io->trackInput(&forwardInput);
-    KeyboardInput backwardInput = KeyboardInput(SDL_SCANCODE_S);
+    KeyboardInput backwardInput = KeyboardInput(KeyboardInput::SCANCODE::S);
     io->trackInput(&backwardInput);
 
     float hAngle = 0;
@@ -328,6 +334,8 @@ int main(int argc, char** argv) {
     }
     io->untrackInput(&testInput);
 
+    delete threadManager;
+
     for (int i=0;i<testRM2.meshes->size();i++) {
         delete (*testRM2.meshes)[i];
     }
@@ -350,11 +358,8 @@ int main(int argc, char** argv) {
     delete postprocessShader;
     delete shader;
 
-    delete threadManager;
     delete io;
     delete graphics;
-
-    QuitEnv();
 
     return 0;
 }

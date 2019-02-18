@@ -20,9 +20,11 @@ class MeshOGL3 : public Mesh {
         MeshOGL3(Graphics* gfx,Primitive::TYPE pt);
         virtual ~MeshOGL3();
 
+        virtual void updateInternalData();
+
         virtual void render();
     private:
-        virtual void updateInternalData();
+        virtual void uploadInternalData();
 
         GLuint glVertexBufferObject;
         GLuint glIndexBufferObject;

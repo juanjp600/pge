@@ -27,6 +27,7 @@ class Vertex {
         struct Property {
             String name;
             PROPERTY_TYPE type;
+            int index;
             union Value {
                 Value();
                 float floatVal;
@@ -38,7 +39,7 @@ class Vertex {
             } value;
             const static Property def;
         };
-        const Property& getProperty(const String& name);
+        const Property& getProperty(const String& name,int indexHint);
         void setFloat(const String& name,float val);
         void setUInt(const String& name,unsigned int val);
         void setVector2f(const String& name,Vector2f val);
@@ -76,14 +77,17 @@ class Mesh {
         const std::vector<Primitive>& getPrimitives() const;
         bool isOpaque() const;
 
+        virtual void updateInternalData() =0;
+
         virtual void render() =0;
     protected:
         Mesh(){};
 
         bool opaque;
-        bool isDirty = true;
+        bool mustUpdateInternalData = true;
+        bool mustReuploadInternalData = true;
 
-        virtual void updateInternalData() =0;
+        virtual void uploadInternalData() =0;
 
         Material* material;
 

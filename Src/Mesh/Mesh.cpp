@@ -8,8 +8,12 @@ Vertex::Property::Value::Value() {
     vector4fVal = Vector4f::zero;
 }
 
-const Vertex::Property& Vertex::getProperty(const String& name) {
+const Vertex::Property& Vertex::getProperty(const String& name,int indexHint) {
+    if (properties[indexHint].name.equals(name)) {
+        return properties[indexHint];
+    }
     for (int i=0;i<properties.size();i++) {
+        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
         if (properties[i].name.equals(name)) {
             return properties[i];
         }
@@ -18,93 +22,117 @@ const Vertex::Property& Vertex::getProperty(const String& name) {
 }
 
 void Vertex::setFloat(const String& name,float val) {
+    int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
+        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
         if (properties[i].name.equals(name)) {
             properties[i].value.floatVal = val;
             properties[i].type = PROPERTY_TYPE::FLOAT;
             return;
         }
+        insertPos = i+1;
     }
     Property prop;
     prop.name = name;
     prop.value.floatVal = val;
     prop.type = PROPERTY_TYPE::FLOAT;
-    properties.push_back(prop);
+    prop.index = insertPos;
+    properties.insert(properties.begin()+insertPos,prop);
 }
 
 void Vertex::setUInt(const String& name,unsigned int val) {
+    int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
+        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
         if (properties[i].name.equals(name)) {
             properties[i].value.uintVal = val;
             properties[i].type = PROPERTY_TYPE::UINT;
             return;
         }
+        insertPos = i+1;
     }
     Property prop;
     prop.name = name;
     prop.value.uintVal = val;
     prop.type = PROPERTY_TYPE::UINT;
-    properties.push_back(prop);
+    prop.index = insertPos;
+    properties.insert(properties.begin()+insertPos,prop);
 }
 
 void Vertex::setVector2f(const String& name,Vector2f val) {
+    int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
+        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
         if (properties[i].name.equals(name)) {
             properties[i].value.vector2fVal = val;
             properties[i].type = PROPERTY_TYPE::VECTOR2F;
             return;
         }
+        insertPos = i+1;
     }
     Property prop;
     prop.name = name;
     prop.value.vector2fVal = val;
     prop.type = PROPERTY_TYPE::VECTOR2F;
-    properties.push_back(prop);
+    prop.index = insertPos;
+    properties.insert(properties.begin()+insertPos,prop);
 }
 
 void Vertex::setVector3f(const String& name,Vector3f val) {
+    int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
+        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
         if (properties[i].name.equals(name)) {
             properties[i].value.vector3fVal = val;
             properties[i].type = PROPERTY_TYPE::VECTOR3F;
             return;
         }
+        insertPos = i+1;
     }
     Property prop;
     prop.name = name;
     prop.value.vector3fVal = val;
     prop.type = PROPERTY_TYPE::VECTOR3F;
-    properties.push_back(prop);
+    prop.index = insertPos;
+    properties.insert(properties.begin()+insertPos,prop);
 }
 
 void Vertex::setVector4f(const String& name,Vector4f val) {
+    int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
+        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
         if (properties[i].name.equals(name)) {
             properties[i].value.vector4fVal = val;
             properties[i].type = PROPERTY_TYPE::VECTOR4F;
             return;
         }
+        insertPos = i+1;
     }
     Property prop;
     prop.name = name;
     prop.value.vector4fVal = val;
     prop.type = PROPERTY_TYPE::VECTOR4F;
-    properties.push_back(prop);
+    prop.index = insertPos;
+    properties.insert(properties.begin()+insertPos,prop);
 }
 
 void Vertex::setColor(const String& name,Color val) {
+    int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
+        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
         if (properties[i].name.equals(name)) {
             properties[i].value.colorVal = val;
             properties[i].type = PROPERTY_TYPE::COLOR;
             return;
         }
+        insertPos = i+1;
     }
     Property prop;
     prop.name = name;
     prop.value.colorVal = val;
     prop.type = PROPERTY_TYPE::COLOR;
-    properties.push_back(prop);
+    prop.index = insertPos;
+    properties.insert(properties.begin()+insertPos,prop);
 }
 
 Primitive::Primitive(long ia,long ib) {
@@ -123,21 +151,21 @@ Mesh* Mesh::clone() {
 }
 
 void Mesh::setGeometry(const std::vector<Vertex>& verts,const std::vector<Primitive>& prims) {
-    isDirty = true;
+    mustUpdateInternalData = true; mustReuploadInternalData = true;
     vertices = verts; //TODO: check for property mismatches?
     primitives = prims;
     opaque = material!=nullptr ? material->isOpaque() : true; //TODO: check for colors
 }
 
 void Mesh::clearGeometry() {
-    isDirty = true;
+    mustUpdateInternalData = true; mustReuploadInternalData = true;
     vertices.clear();
     primitives.clear();
     opaque = material!=nullptr ? material->isOpaque() : true;
 }
 
 void Mesh::setMaterial(Material* m) {
-    isDirty = true;
+    //mustUpdateInternalData = true; mustReuploadInternalData = true;
     material = m;
     opaque = m->isOpaque();
     //TODO: check for vertex colors

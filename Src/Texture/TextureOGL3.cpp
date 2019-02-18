@@ -172,7 +172,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
 
                 delete[] fiBuffer;
 
-                done = true;
+                markAsDone();
             }
     };
 

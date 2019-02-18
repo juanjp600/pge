@@ -35,7 +35,7 @@ void IO::update() {
             UserInput* input = (*it);
             if (input->getDevice()==UserInput::DEVICE::KEYBOARD) {
                 KeyboardInput* keyboardInput = (KeyboardInput*)input;
-                if (keyEvent.keysym.scancode==keyboardInput->getButton()) {
+                if ((int)keyEvent.keysym.scancode==(int)keyboardInput->getButton()) {
                     if (event.type == SDL_KEYDOWN) {
                         input->setDown(true);
                     } else if (event.type == SDL_KEYUP) {

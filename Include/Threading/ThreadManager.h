@@ -22,27 +22,28 @@ class ThreadManager {
         
         class NewThreadRequest {
             public:
+                ~NewThreadRequest();
                 virtual void execute() =0;
                 bool isDone() const;
                 void requestExecutionOnMainThread(MainThreadRequest* request);
                 void setThreadManager(ThreadManager* mgr);
-                std::atomic<bool> mainThreadRequestDone;
-                std::mutex mutex0;
-                std::mutex mutex1;
+                void startThread();
+                bool isWaitingForMainThread();
+                void executeMainThreadRequest();
             protected:
-                std::atomic<bool> done;
+                void markAsDone();
             private:
+                MainThreadRequest* mainThreadRequest;
+                std::thread* thread;
+                std::mutex mutex;
+                std::condition_variable conditionVariable;
+                std::atomic<bool> waitingForMainThread;
                 ThreadManager* threadManager;
+                std::atomic<bool> done;
         };
-        void requestExecutionOnMainThread(NewThreadRequest* newThread, MainThreadRequest* request);
         void requestExecutionOnNewThread(NewThreadRequest* request);
     private:
-        struct NewThreadRequestData {
-            NewThreadRequest* request;
-            std::thread* thread;
-            MainThreadRequest* mainThreadRequest;
-        };
-        std::vector<NewThreadRequestData> newThreadRequests;
+        std::vector<NewThreadRequest*> newThreadRequests;
 
         std::mutex requestMutex;
 
