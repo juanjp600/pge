@@ -5,6 +5,7 @@
 # Visual Studio
 Windows/Engine/.vs/
 */.vs/
+*.vs/
 *.VC.db
 *.VC.VC.db
 *.VC.VC.opendb

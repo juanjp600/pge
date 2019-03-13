@@ -12,6 +12,7 @@
 #include <Math/Vector.h>
 #include <Color/Color.h>
 #include <Threading/ThreadManager.h>
+#include <Audio/Audio.h>
 
 #include <fstream>
 #include <math.h>
@@ -23,6 +24,7 @@ using namespace PGE;
 struct RM2 {
     std::vector<Mesh*>* meshes;
     std::vector<Texture*>* textures;
+    std::vector<Texture*>* lmTextures;
     std::vector<Material*>* materials;
 };
 
@@ -45,6 +47,8 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
     retVal.textures = new std::vector<Texture*>();
     retVal.materials = new std::vector<Material*>();
 
+    retVal.lmTextures = new std::vector<Texture*>();
+    
     //skip header
     int header;
     file->read((char*)(void*)&header,4);
@@ -62,24 +66,39 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
 
         String texName = "";
         if (name.findFirst("_lm")>-1) {
-            texName = path+name+".png";
+            texName = path+name+"0.png";
+            retVal.lmTextures->push_back(Texture::load(graphics,texName,threadManager));
+            texName = path+name+"1.png";
+            retVal.lmTextures->push_back(Texture::load(graphics,texName,threadManager));
+            texName = path+name+"2.png";
+            retVal.lmTextures->push_back(Texture::load(graphics,texName,threadManager));
         } else {
             texName = "GFX/Map/Textures/"+name+".jpg";
             WIN32_FIND_DATA FindFileData;
-            HANDLE handle = FindFirstFile(texName.cstr(), &FindFileData) ;
+            HANDLE handle = FindFirstFile(texName.cstr(), &FindFileData);
             int found = handle != INVALID_HANDLE_VALUE;
             if (!found) {
                 texName = "GFX/Map/Textures/"+name+".png";
-            }
 
-            handle = FindFirstFile(texName.cstr(), &FindFileData) ;
+                handle = FindFirstFile(texName.cstr(), &FindFileData);
+                found = handle != INVALID_HANDLE_VALUE;
+                if (!found) {
+                    texName = "GFX/Map/Textures/dirtymetal.jpg";
+                }
+            }
+            
+            String bumpName = "GFX/Map/Textures/"+name+"_n.jpg";
+            handle = FindFirstFile(bumpName.cstr(), &FindFileData);
             found = handle != INVALID_HANDLE_VALUE;
             if (!found) {
-                texName = "GFX/Map/Textures/dirtymetal.jpg";
+                bumpName = "GFX/Map/Textures/blankbump.jpg";
             }
+
+            retVal.textures->push_back(Texture::load(graphics,bumpName,threadManager));
+
+            retVal.textures->push_back(Texture::load(graphics,texName,threadManager));
         }
         SDL_Log("%s\n",texName.cstr());
-        retVal.textures->push_back(Texture::load(graphics,texName,threadManager));
         
         char flagSkip; file->read(&flagSkip,1); file->read(&flagSkip,1);
     }
@@ -120,6 +139,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
             MainThreadRequest1 mainThreadRequest1;
             std::ifstream* file;
             std::vector<Texture*> loadedTextures;
+            std::vector<Texture*> lmTextures;
             void execute() {
                 char partHeader; file->read(&partHeader,1);
                 while ((partHeader==2) || (partHeader==3)) {
@@ -130,8 +150,12 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
                     if (textureIndex1>0) { textureIndex1--; }
 
                     std::vector<Texture*> textures;
-                    textures.push_back(loadedTextures[textureIndex0]);
-                    textures.push_back(loadedTextures[textureIndex1]);
+                    //textures.push_back(loadedTextures[textureIndex0]);
+                    textures.push_back(loadedTextures[textureIndex1*2+1]);
+                    textures.push_back(lmTextures[0]);
+                    textures.push_back(lmTextures[1]);
+                    textures.push_back(lmTextures[2]);
+                    textures.push_back(loadedTextures[textureIndex1*2]);
 
                     std::vector<Vertex> vertices;
 
@@ -161,8 +185,8 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
 
                         vertex.setVector4f("position",pos);
                         vertex.setVector3f("normal",Vector3f::one.normalize());
-                        vertex.setVector2f("uv0",uv1);
-                        vertex.setVector2f("uv1",uv0);
+                        vertex.setVector2f("diffUv",uv0);
+                        vertex.setVector2f("lmUv",uv1);
                         vertex.setColor("color",color);
 
                         vertices.push_back(vertex);
@@ -196,6 +220,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
     meshLoadRequest->mainThreadRequest0 = mainThreadRequest0;
     meshLoadRequest->mainThreadRequest1 = mainThreadRequest1;
     meshLoadRequest->loadedTextures = *retVal.textures;
+    meshLoadRequest->lmTextures = *retVal.lmTextures;
     meshLoadRequest->file = file;
     threadManager->requestExecutionOnNewThread(meshLoadRequest);
 
@@ -206,11 +231,15 @@ int PGE::Main() {
     Graphics* graphics = Graphics::create(1280,720,false);
     IO* io = IO::create(graphics->getWindow());
     ThreadManager* threadManager = new ThreadManager();
+    Audio* audio = new Audio(threadManager);
+
+    Sound* sound = new Sound(audio,"SFX/Music/The Dread.ogg");
+    Sound::Channel* channel = sound->play();
 
     Shader* shader = Shader::load(graphics,"default/");
     Shader* postprocessShader = Shader::load(graphics,"postprocess/");
 
-    RM2 testRM2 = loadRM2("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2",graphics,shader,threadManager);
+    RM2 testRM2 = loadRM2("GFX/Map/Rooms/173new2/173new2.rm2",graphics,shader,threadManager);
 
     Texture* texture0 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::RGBA32);
     Texture* texture1 = Texture::create(graphics,2048,2048,true,nullptr,Texture::FORMAT::R32F);
@@ -309,16 +338,16 @@ int PGE::Main() {
         viewMatrixConstant->setValue(viewMatrix);
 
         if (forwardInput.isDown()) {
-            cameraPos = cameraPos.add(lookDir.multiply(0.05f));
+            cameraPos = cameraPos.add(lookDir.multiply(0.25f));
         }
         if (backwardInput.isDown()) {
-            cameraPos = cameraPos.add(lookDir.multiply(-0.05f));
+            cameraPos = cameraPos.add(lookDir.multiply(-0.25f));
         }
         if (leftInput.isDown()) {
-            cameraPos = cameraPos.add(sideDir.multiply(-0.05f));
+            cameraPos = cameraPos.add(sideDir.multiply(-0.25f));
         }
         if (rightInput.isDown()) {
-            cameraPos = cameraPos.add(sideDir.multiply(0.05f));
+            cameraPos = cameraPos.add(sideDir.multiply(0.25f));
         }
 
         for (int i=0;i<testRM2.meshes->size();i++) {
@@ -358,6 +387,9 @@ int PGE::Main() {
     delete postprocessShader;
     delete shader;
 
+    delete channel;
+
+    delete audio;
     delete io;
     delete graphics;
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\Audio\Audio.cpp" />
     <ClCompile Include="..\..\Src\Color\Color.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Graphics.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp" />
@@ -26,6 +27,7 @@
     <ClCompile Include="..\..\Src\Mesh\MeshDX11.cpp" />
     <ClCompile Include="..\..\Src\Misc\String.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp" />
+    <ClCompile Include="..\..\Src\Sound\Sound.cpp" />
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
     <ClCompile Include="..\..\Src\Texture\Texture.cpp" />
     <ClCompile Include="..\..\Src\Texture\TextureDX11.cpp" />
@@ -35,6 +37,7 @@
     <ClCompile Include="..\..\Src\Window\WindowDX11.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Include\Audio\Audio.h" />
     <ClInclude Include="..\..\Include\Color\Color.h" />
     <ClInclude Include="..\..\Include\Graphics\Graphics.h" />
     <ClInclude Include="..\..\Include\Init\Init.h" />
@@ -48,6 +51,7 @@
     <ClInclude Include="..\..\Include\Mesh\Mesh.h" />
     <ClInclude Include="..\..\Include\Misc\String.h" />
     <ClInclude Include="..\..\Include\Shader\Shader.h" />
+    <ClInclude Include="..\..\Include\Sound\Sound.h" />
     <ClInclude Include="..\..\Include\Texture\Texture.h" />
     <ClInclude Include="..\..\Include\Threading\ThreadManager.h" />
     <ClInclude Include="..\..\Include\UserInput\UserInput.h" />
@@ -92,10 +96,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

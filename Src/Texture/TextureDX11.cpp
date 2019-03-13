@@ -283,7 +283,8 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
             String filename;
             int* width; int* height; int* realWidth; int* realHeight; bool* opaque;
             void execute() {
-                BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight,*opaque);
+                bool removeMeOpaque;
+                BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight,removeMeOpaque);
 
                 mainThreadRequest.realWidth = *realWidth;
                 mainThreadRequest.realHeight = *realHeight;
