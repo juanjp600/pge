@@ -14,7 +14,7 @@ class Texture;
 
 class Graphics {
     public:
-        static Graphics* create(int w, int h, bool fs);
+        static Graphics* create(String name,int w, int h, bool fs);
 
         Window* getWindow() const;
         

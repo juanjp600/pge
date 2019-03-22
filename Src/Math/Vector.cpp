@@ -115,6 +115,12 @@ Vector3f Vector3f::normalize() const {
     return multiply(1.f/length());
 }
 
+Vector3f Vector3f::reflect(const Vector3f& n) const {
+    Vector3f reflectedVector = normalize();
+    reflectedVector = n.multiply(2.f*reflectedVector.dotProduct(n)).subtract(reflectedVector);
+    return reflectedVector.normalize();
+}
+
 float Vector3f::dotProduct(const Vector3f& b) const {
     return x*b.x+y*b.y+z*b.z;
 }

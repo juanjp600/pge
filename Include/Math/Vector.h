@@ -55,6 +55,7 @@ class Vector3f {
         Vector3f multiply(float s) const;
         Vector3f normalize() const;
 
+        Vector3f reflect(const Vector3f& n) const;
         float dotProduct(const Vector3f& b) const;
         Vector3f crossProduct(const Vector3f& b) const;
 

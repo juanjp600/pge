@@ -10,10 +10,12 @@ class AABBox {
         AABBox(const Vector3f& inPoint);
         AABBox(const Vector3f& firstPoint,const Vector3f& secondPoint);
 
-        Vector3f getMin();
-        Vector3f getMax();
-        Vector3f getCenter();
-        Vector3f getDims();
+        Vector3f getMin() const;
+        Vector3f getMax() const;
+        Vector3f getCenter() const;
+        Vector3f getDims() const;
+
+        bool intersects(const AABBox& other) const;
 
         void reset(const Vector3f& point);
         void addPoint(const Vector3f& point);

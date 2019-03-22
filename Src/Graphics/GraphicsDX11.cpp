@@ -6,12 +6,12 @@
 
 using namespace PGE;
 
-Graphics* Graphics::create(int w,int h,bool fs) {
-    return new GraphicsDX11(w,h,fs);
+Graphics* Graphics::create(String name,int w,int h,bool fs) {
+    return new GraphicsDX11(name,w,h,fs);
 }
 
-GraphicsDX11::GraphicsDX11(int w,int h,bool fs) {
-    window = new WindowDX11("PGE",w,h,fs);
+GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) {
+    window = new WindowDX11(name,w,h,fs);
 
     ID3D11Device* dxDevice = ((WindowDX11*)window)->getDxDevice();
     ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();

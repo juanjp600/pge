@@ -7,12 +7,12 @@
 
 using namespace PGE;
 
-Graphics* Graphics::create(int w,int h,bool fs) {
-    return new GraphicsOGL3(w,h,fs);
+Graphics* Graphics::create(String name,int w,int h,bool fs) {
+    return new GraphicsOGL3(name,w,h,fs);
 }
 
-GraphicsOGL3::GraphicsOGL3(int w,int h,bool fs) {
-    window = new WindowOGL3("PGE",w,h,fs);
+GraphicsOGL3::GraphicsOGL3(String name,int w,int h,bool fs) {
+    window = new WindowOGL3(name,w,h,fs);
 
     setViewport(Rectanglei(0,0,w,h));
 
@@ -87,7 +87,8 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
     glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, largestTarget->getGlDepthbuffer());
     for (int i=0;i<renderTargets.size();i++) {
-        glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3*)renderTargets[i])->getGlTexture(), 0);    }
+        glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3*)renderTargets[i])->getGlTexture(), 0);
+    }
     glDrawBuffers(renderTargets.size(), glAttachments);
 }
 

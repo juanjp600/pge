@@ -15,7 +15,7 @@ namespace PGE {
 
 class GraphicsOGL3 : public Graphics {
     public:
-        GraphicsOGL3(int w=1280,int h=720,bool fs=false);
+        GraphicsOGL3(String name,int w=1280,int h=720,bool fs=false);
         ~GraphicsOGL3();
 
         virtual void update();

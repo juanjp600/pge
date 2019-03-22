@@ -44,7 +44,8 @@ using namespace PGE;
 
 Plane::Plane() {
     normal = Vector3f(0.f,1.f,0.f);
-    distanceFromOrigin = 0.f;}
+    distanceFromOrigin = 0.f;
+}
 
 Plane::Plane(Vector3f p1, Vector3f p2, Vector3f p3) {
     Vector3f ab = p2.add(p1.multiply(-1.f));

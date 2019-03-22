@@ -13,7 +13,7 @@ namespace PGE {
 class ShaderDX11;
 class GraphicsDX11 : public Graphics {
     public:
-        GraphicsDX11(int w=1280,int h=720,bool fs=false);
+        GraphicsDX11(String name,int w=1280,int h=720,bool fs=false);
         ~GraphicsDX11();
 
         virtual void update();

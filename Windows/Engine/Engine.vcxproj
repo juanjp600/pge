@@ -21,6 +21,7 @@
     <ClCompile Include="..\..\Src\Math\AABBox.cpp" />
     <ClCompile Include="..\..\Src\Math\Line.cpp" />
     <ClCompile Include="..\..\Src\Math\Matrix.cpp" />
+    <ClCompile Include="..\..\Src\Math\Plane.cpp" />
     <ClCompile Include="..\..\Src\Math\Rectangle.cpp" />
     <ClCompile Include="..\..\Src\Math\Vector.cpp" />
     <ClCompile Include="..\..\Src\Mesh\Mesh.cpp" />
@@ -46,6 +47,7 @@
     <ClInclude Include="..\..\Include\Math\AABBox.h" />
     <ClInclude Include="..\..\Include\Math\Line.h" />
     <ClInclude Include="..\..\Include\Math\Matrix.h" />
+    <ClInclude Include="..\..\Include\Math\Plane.h" />
     <ClInclude Include="..\..\Include\Math\Rectangle.h" />
     <ClInclude Include="..\..\Include\Math\Vector.h" />
     <ClInclude Include="..\..\Include\Mesh\Mesh.h" />
