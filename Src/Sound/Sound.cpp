@@ -77,7 +77,7 @@ Sound::Sound(Audio* a,const String& fn,bool forcePanning,bool strm) {
 
 Sound::~Sound() {
     audio->unregisterSound(this);
-    for (int i=0;i<channels.size();i++) {
+    for (int i=channels.size()-1;i>=0;i--) {
         delete channels[i];
     }
     if (alBuffer != 0) {
@@ -104,8 +104,21 @@ ALuint Sound::getALBuffer() const {
 
 Sound::Channel* Sound::play() {
     Channel* newChannel = new Channel(audio,this);
+    for (int i=channels.size()-1;i>=0;i--) {
+        if (!channels[i]->isPlaying()) {
+            delete channels[i];
+        }
+    }
     channels.push_back(newChannel);
     return newChannel;
+}
+
+void Sound::removeChannel(Sound::Channel* chn) {
+    for (int i=channels.size()-1;i>=0;i--) {
+        if (channels[i]==chn) {
+            channels.erase(channels.begin()+i);
+        }
+    }
 }
 
 Sound::Channel::Channel(Audio* a,Sound* snd) {
@@ -130,7 +143,7 @@ Sound::Channel::Channel(Audio* a,Sound* snd) {
 Sound::Channel::~Channel() {
     playing = false;
     alSourceStop(alSource);
-    audio->unregisterSoundChannel(this);
+    sound->removeChannel(this);
 }
 
 bool Sound::Channel::isPlaying() const {

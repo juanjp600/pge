@@ -35,6 +35,7 @@ class Sound {
         };
 
         Channel* play();
+        void removeChannel(Channel* channel);
     private:
         std::vector<Channel*> channels;
         int frequency;

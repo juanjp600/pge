@@ -18,6 +18,8 @@ class Matrix4x4f {
         Matrix4x4f transpose() const;
 
         Matrix4x4f product(const Matrix4x4f& other) const;
+        Vector4f transform(const Vector4f& other) const;
+        Vector3f transform(const Vector3f& other) const;
 
         static Matrix4x4f constructWorldMat(const Vector3f& position,const Vector3f& scale,const Vector3f& rotation);
         static Matrix4x4f constructViewMat(const Vector3f& position,const Vector3f& target,const Vector3f& upVector);
