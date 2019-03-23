@@ -49,6 +49,8 @@ class ShaderDX11 : public Shader {
 
                 void setValue(Matrix4x4f value);
                 void setValue(Vector3f value);
+                void setValue(Vector4f value);
+                void setValue(Color value);
                 void setValue(float value);
                 void setValue(int value);
 

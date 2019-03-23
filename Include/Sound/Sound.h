@@ -20,7 +20,7 @@ class Sound {
 
         class Channel {
             public:
-                Channel(Audio* a,Sound* snd);
+                Channel(Audio* a,Sound* snd,bool loop);
                 ~Channel();
 
                 bool isPlaying() const;
@@ -34,7 +34,7 @@ class Sound {
                 std::atomic<bool> playing;
         };
 
-        Channel* play();
+        Channel* play(bool loop=false);
         void removeChannel(Channel* channel);
     private:
         std::vector<Channel*> channels;

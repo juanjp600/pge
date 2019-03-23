@@ -325,6 +325,18 @@ void ShaderDX11::ConstantDX11::setValue(Vector3f value) {
     constantBuffer->markAsDirty();
 }
 
+void ShaderDX11::ConstantDX11::setValue(Vector4f value) {
+    float arr[4]; arr[0] = value.x; arr[1] = value.y; arr[2] = value.z; arr[3] = value.w;
+    memcpy(constantBuffer->getData()+offset,arr,4*sizeof(float));
+    constantBuffer->markAsDirty();
+}
+
+void ShaderDX11::ConstantDX11::setValue(Color value) {
+    float arr[4]; arr[0] = value.red; arr[1] = value.green; arr[2] = value.blue; arr[3] = value.alpha;
+    memcpy(constantBuffer->getData()+offset,arr,4*sizeof(float));
+    constantBuffer->markAsDirty();
+}
+
 void ShaderDX11::ConstantDX11::setValue(float value) {
     memcpy(constantBuffer->getData()+offset,&value,sizeof(float));
     constantBuffer->markAsDirty();

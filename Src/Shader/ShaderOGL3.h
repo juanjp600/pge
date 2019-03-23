@@ -37,6 +37,8 @@ class ShaderOGL3 : public Shader {
 
                 void setValue(Matrix4x4f value);
                 void setValue(Vector3f value);
+                void setValue(Vector4f value);
+                void setValue(Color value);
                 void setValue(float value);
                 void setValue(int value);
 
@@ -47,6 +49,8 @@ class ShaderOGL3 : public Shader {
                 enum class VALUE_TYPE {
                     MATRIX,
                     VECTOR3F,
+                    VECTOR4F,
+                    COLOR,
                     FLOAT,
                     INT
                 };
@@ -54,6 +58,8 @@ class ShaderOGL3 : public Shader {
                     Value();
                     Matrix4x4f matrixVal;
                     Vector3f vector3fVal;
+                    Vector4f vector4fVal;
+                    Color colorVal;
                     float floatVal;
                     int intVal;
                 } val;

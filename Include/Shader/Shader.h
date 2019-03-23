@@ -18,6 +18,8 @@ class Shader {
             public:
                 virtual void setValue(Matrix4x4f value) =0;
                 virtual void setValue(Vector3f value) =0;
+                virtual void setValue(Vector4f value) =0;
+                virtual void setValue(Color value) =0;
                 virtual void setValue(float value) =0;
                 virtual void setValue(int value) =0;
             protected:

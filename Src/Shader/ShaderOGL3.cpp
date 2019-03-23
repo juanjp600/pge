@@ -154,9 +154,11 @@ void ShaderOGL3::useShader() {
     }
 
     for (int i=0;i<vertexShaderConstants.size();i++) {
-        vertexShaderConstants[i].setUniform();    }
+        vertexShaderConstants[i].setUniform();
+    }
     for (int i=0;i<fragmentShaderConstants.size();i++) {
-        fragmentShaderConstants[i].setUniform();    }
+        fragmentShaderConstants[i].setUniform();
+    }
     for (int i=0;i<samplerConstants.size();i++) {
         samplerConstants[i].setUniform();
     }
@@ -167,7 +169,8 @@ void ShaderOGL3::unbindGLAttribs() {
 
     for (int i=0;i<vertexAttribs.size();i++) {
         glDisableVertexAttribArray(vertexAttribs[i].location);
-    }}
+    }
+}
 
 ShaderOGL3::~ShaderOGL3() {
     ((GraphicsOGL3*)graphics)->takeGlContext();
@@ -181,7 +184,8 @@ Shader::Constant* ShaderOGL3::getVertexShaderConstant(String name) {
     for (int i=0;i<vertexShaderConstants.size();i++) {
         if (vertexShaderConstants[i].getName().equals(name)) {
             return &vertexShaderConstants[i];
-        }    }
+        }
+    }
     return nullptr;
 }
 
@@ -189,7 +193,8 @@ Shader::Constant* ShaderOGL3::getFragmentShaderConstant(String name) {
     for (int i=0;i<fragmentShaderConstants.size();i++) {
         if (fragmentShaderConstants[i].getName().equals(name)) {
             return &fragmentShaderConstants[i];
-        }    }
+        }
+    }
     return nullptr;
 }
 
@@ -241,7 +246,8 @@ ShaderOGL3::ConstantOGL3::ConstantOGL3(Graphics* gfx,String nm, int loc) {
 }
 
 ShaderOGL3::ConstantOGL3::Value::Value() {
-    matrixVal = Matrix4x4f();}
+    matrixVal = Matrix4x4f();
+}
 
 void ShaderOGL3::ConstantOGL3::setValue(Matrix4x4f value) {
     val.matrixVal = value; valueType = VALUE_TYPE::MATRIX;
@@ -249,6 +255,14 @@ void ShaderOGL3::ConstantOGL3::setValue(Matrix4x4f value) {
 
 void ShaderOGL3::ConstantOGL3::setValue(Vector3f value) {
     val.vector3fVal = value; valueType = VALUE_TYPE::VECTOR3F;
+}
+
+void ShaderOGL3::ConstantOGL3::setValue(Vector4f value) {
+    val.vector4fVal = value; valueType = VALUE_TYPE::VECTOR4F;
+}
+
+void ShaderOGL3::ConstantOGL3::setValue(Color value) {
+    val.colorVal = value; valueType = VALUE_TYPE::COLOR;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(float value) {
@@ -267,6 +281,12 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
         } break;
         case VALUE_TYPE::VECTOR3F: {
             glUniform3f(location,val.vector3fVal.x,val.vector3fVal.y,val.vector3fVal.z);
+        } break;
+        case VALUE_TYPE::VECTOR4F: {
+            glUniform4f(location,val.vector4fVal.x,val.vector4fVal.y,val.vector4fVal.z,val.vector4fVal.w);
+        } break;
+        case VALUE_TYPE::COLOR: {
+            glUniform4f(location,val.colorVal.red,val.colorVal.green,val.colorVal.blue,val.colorVal.alpha);
         } break;
         case VALUE_TYPE::FLOAT: {
             glUniform1f(location,val.floatVal);

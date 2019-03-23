@@ -102,8 +102,8 @@ ALuint Sound::getALBuffer() const {
     return alBuffer;
 }
 
-Sound::Channel* Sound::play() {
-    Channel* newChannel = new Channel(audio,this);
+Sound::Channel* Sound::play(bool loop) {
+    Channel* newChannel = new Channel(audio,this,loop);
     for (int i=channels.size()-1;i>=0;i--) {
         if (!channels[i]->isPlaying()) {
             delete channels[i];
@@ -117,11 +117,13 @@ void Sound::removeChannel(Sound::Channel* chn) {
     for (int i=channels.size()-1;i>=0;i--) {
         if (channels[i]==chn) {
             channels.erase(channels.begin()+i);
+            audio->unregisterSoundChannel(chn);
+            break;
         }
     }
 }
 
-Sound::Channel::Channel(Audio* a,Sound* snd) {
+Sound::Channel::Channel(Audio* a,Sound* snd,bool loop) {
     audio = a; sound = snd;
     audio->registerSoundChannel(this,alSource);
     if (alSource == 0) {
@@ -133,7 +135,7 @@ Sound::Channel::Channel(Audio* a,Sound* snd) {
         alSourcef(alSource, AL_REFERENCE_DISTANCE, 100.f);
         alSourcef(alSource, AL_MAX_DISTANCE, 200.f);
         alSource3f(alSource,AL_POSITION,0.f,0.f,0.f);
-        alSourcei(alSource,AL_LOOPING,false);
+        alSourcei(alSource,AL_LOOPING,loop);
         alSourcef(alSource,AL_GAIN,1.f);
         alSourceRewind(alSource);
         alSourcePlay(alSource);
@@ -148,7 +150,7 @@ Sound::Channel::~Channel() {
 
 bool Sound::Channel::isPlaying() const {
     bool retVal = playing;
-    if (isStream() && alSource!=0) {
+    if (!isStream() && alSource!=0) {
         ALint alSourceState = 0; alGetSourcei(alSource,AL_SOURCE_STATE,&alSourceState);
         retVal &= alSourceState==AL_PLAYING;
     }
