@@ -426,8 +426,6 @@ int PGE::Main() {
     viewMatrixConstant->setValue(viewMatrix);
     Shader::Constant* worldMatrixConstant = shader->getVertexShaderConstant("worldMatrix");
 
-    KeyboardInput testInput = KeyboardInput(KeyboardInput::SCANCODE::SPACE);
-    io->trackInput(&testInput);
     KeyboardInput leftInput = KeyboardInput(KeyboardInput::SCANCODE::A);
     io->trackInput(&leftInput);
     KeyboardInput rightInput = KeyboardInput(KeyboardInput::SCANCODE::D);
@@ -438,7 +436,7 @@ int PGE::Main() {
     io->trackInput(&backwardInput);
     KeyboardInput escInput = KeyboardInput(KeyboardInput::SCANCODE::ESCAPE);
     io->trackInput(&escInput);
-    KeyboardInput spaceInput = KeyboardInput(KeyboardInput::SCANCODE::SPACE);
+    KeyboardInput spaceInput = KeyboardInput(KeyboardInput::SCANCODE::F);
     io->trackInput(&spaceInput);
 
     float hAngle = 0;
@@ -502,9 +500,8 @@ int PGE::Main() {
         graphics->setViewport(Rectanglei(0,0,retWidth,retHeight));
         quad->render();
 
-        graphics->swap(!testInput.isDown());
+        graphics->swap(false);
     }
-    io->untrackInput(&testInput);
 
     for (int i=0;i<testRM2.meshes.size();i++) {
         delete testRM2.meshes[i];
