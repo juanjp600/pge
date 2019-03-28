@@ -39,6 +39,7 @@
 		194AA113220A02FA00837F38 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA112220A02FA00837F38 /* OpenGL.framework */; };
 		194AA11D220A035800837F38 /* libFreeImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA11C220A034600837F38 /* libFreeImage.a */; };
 		194AA16D220A069B00837F38 /* libglew.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA168220A068300837F38 /* libglew.a */; };
+		1958F23B224D493F002B3F60 /* ThreadManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1958F23A224D493F002B3F60 /* ThreadManager.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +121,7 @@
 		194AA112220A02FA00837F38 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		194AA114220A034600837F38 /* FreeImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FreeImage.xcodeproj; path = ../FreeImage/FreeImage.xcodeproj; sourceTree = "<group>"; };
 		194AA162220A068200837F38 /* glew.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = glew.xcodeproj; path = ../glew/glew.xcodeproj; sourceTree = "<group>"; };
+		1958F23A224D493F002B3F60 /* ThreadManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadManager.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,19 +162,20 @@
 		194AA0252209FF4D00837F38 /* Src */ = {
 			isa = PBXGroup;
 			children = (
+				194AA02E2209FF4D00837F38 /* Init */,
+				194AA0352209FF4D00837F38 /* Color */,
+				194AA0522209FF4D00837F38 /* Graphics */,
+				194AA0372209FF4D00837F38 /* IO */,
+				194AA0582209FF4D00837F38 /* Material */,
+				194AA0392209FF4D00837F38 /* Math */,
 				194AA0262209FF4D00837F38 /* Mesh */,
 				194AA02C2209FF4D00837F38 /* Misc */,
-				194AA02E2209FF4D00837F38 /* Init */,
-				194AA0312209FF4D00837F38 /* UserInput */,
-				194AA0332209FF4D00837F38 /* SysEvents */,
-				194AA0352209FF4D00837F38 /* Color */,
-				194AA0372209FF4D00837F38 /* IO */,
-				194AA0392209FF4D00837F38 /* Math */,
-				194AA0402209FF4D00837F38 /* Window */,
-				194AA0462209FF4D00837F38 /* Texture */,
 				194AA04D2209FF4D00837F38 /* Shader */,
-				194AA0522209FF4D00837F38 /* Graphics */,
-				194AA0582209FF4D00837F38 /* Material */,
+				194AA0332209FF4D00837F38 /* SysEvents */,
+				194AA0462209FF4D00837F38 /* Texture */,
+				1958F239224D493F002B3F60 /* Threading */,
+				194AA0312209FF4D00837F38 /* UserInput */,
+				194AA0402209FF4D00837F38 /* Window */,
 			);
 			name = Src;
 			path = ../../Src;
@@ -332,6 +335,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		1958F239224D493F002B3F60 /* Threading */ = {
+			isa = PBXGroup;
+			children = (
+				1958F23A224D493F002B3F60 /* ThreadManager.cpp */,
+			);
+			path = Threading;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -483,6 +494,7 @@
 				194AA0742209FF4D00837F38 /* Texture.cpp in Sources */,
 				194AA0672209FF4D00837F38 /* AABBox.cpp in Sources */,
 				194AA05F2209FF4D00837F38 /* String.cpp in Sources */,
+				1958F23B224D493F002B3F60 /* ThreadManager.cpp in Sources */,
 				194AA06D2209FF4D00837F38 /* Window.cpp in Sources */,
 				194AA0642209FF4D00837F38 /* Color.cpp in Sources */,
 				194AA05B2209FF4D00837F38 /* MeshOGL3.cpp in Sources */,

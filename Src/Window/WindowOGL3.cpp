@@ -9,7 +9,7 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     caption = c;
     width = w; height = h; fullscreen = fs;
 
-    sdlWindow = SDL_CreateWindow(caption.cstr(),SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,w,h,SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_FULLSCREEN_DESKTOP);
+    sdlWindow = SDL_CreateWindow(caption.cstr(),SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,w,h,SDL_WINDOW_OPENGL /*| SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_FULLSCREEN_DESKTOP*/);
     
 //    if (fullscreen) {
 //        SDL_SetWindowBordered(sdlWindow,SDL_bool::SDL_FALSE);

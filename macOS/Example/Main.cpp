@@ -358,20 +358,18 @@ int main(int argc, char** argv) {
 #endif
 
 #if 1
-int main(int argc, char** argv) {
-    InitEnv();
-
-    Graphics* graphics = Graphics::create(1280,720,true);
+int PGE::Main() {
+    Graphics* graphics = Graphics::create("Mac PGE Test", 1280,720, false);
     IO* io = IO::create(graphics->getWindow());
 
     Shader* shader = Shader::load(graphics, String("default/").resourcePath());
     Shader* postprocessShader = Shader::load(graphics, String("postprocess/").resourcePath());
 
     RM2 testRM2 = loadRM2(String("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2").resourcePath(), graphics, shader);
-    
-    float retWidth = 1280.f * 2;
-    float retHeight = 720.f * 2;
-    float something = 2048.f * 2;
+
+    float retWidth = 1280.f;// * 2;
+    float retHeight = 720.f;// * 2;
+    float something = 2048.f;// * 2;
 
     Texture* texture0 = Texture::create(graphics,something,something,true,nullptr,Texture::FORMAT::RGBA32);
     Texture* texture1 = Texture::create(graphics,something,something,true,nullptr,Texture::FORMAT::R32F);
@@ -428,19 +426,19 @@ int main(int argc, char** argv) {
     viewMatrixConstant->setValue(viewMatrix);
     Shader::Constant* worldMatrixConstant = shader->getVertexShaderConstant("worldMatrix");
 
-    KeyboardInput testInput = KeyboardInput(SDL_SCANCODE_SPACE);
+    KeyboardInput testInput = KeyboardInput(KeyboardInput::SCANCODE::SPACE);
     io->trackInput(&testInput);
-    KeyboardInput leftInput = KeyboardInput(SDL_SCANCODE_A);
+    KeyboardInput leftInput = KeyboardInput(KeyboardInput::SCANCODE::A);
     io->trackInput(&leftInput);
-    KeyboardInput rightInput = KeyboardInput(SDL_SCANCODE_D);
+    KeyboardInput rightInput = KeyboardInput(KeyboardInput::SCANCODE::D);
     io->trackInput(&rightInput);
-    KeyboardInput forwardInput = KeyboardInput(SDL_SCANCODE_W);
+    KeyboardInput forwardInput = KeyboardInput(KeyboardInput::SCANCODE::W);
     io->trackInput(&forwardInput);
-    KeyboardInput backwardInput = KeyboardInput(SDL_SCANCODE_S);
+    KeyboardInput backwardInput = KeyboardInput(KeyboardInput::SCANCODE::S);
     io->trackInput(&backwardInput);
-    KeyboardInput escInput = KeyboardInput(SDL_SCANCODE_ESCAPE);
+    KeyboardInput escInput = KeyboardInput(KeyboardInput::SCANCODE::ESCAPE);
     io->trackInput(&escInput);
-    KeyboardInput spaceInput = KeyboardInput(SDL_SCANCODE_SPACE);
+    KeyboardInput spaceInput = KeyboardInput(KeyboardInput::SCANCODE::SPACE);
     io->trackInput(&spaceInput);
 
     float hAngle = 0;
@@ -491,7 +489,7 @@ int main(int argc, char** argv) {
         if (escInput.isDown()) {
             break;
         }
-        
+
         lockMouse = !spaceInput.isDown();
         io->setMouseVisibility(spaceInput.isDown());
 
@@ -532,8 +530,6 @@ int main(int argc, char** argv) {
 
     delete io;
     delete graphics;
-
-    QuitEnv();
 
     return 0;
 }

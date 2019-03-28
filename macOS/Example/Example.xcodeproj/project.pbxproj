@@ -16,7 +16,6 @@
 		194AA17D220A09AD00837F38 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 194AA176220A09AC00837F38 /* MainMenu.xib */; };
 		194AA17E220A09AD00837F38 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 194AA178220A09AC00837F38 /* main.m */; };
 		194AA17F220A09AD00837F38 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 194AA179220A09AC00837F38 /* AppDelegate.m */; };
-		194AA19F220A0AC500837F38 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 194AA19E220A0AC500837F38 /* Info.plist */; };
 		194AA1A1220A0C2500837F38 /* ball in Resources */ = {isa = PBXBuildFile; fileRef = 194AA1A0220A0C2400837F38 /* ball */; };
 		194AA1A3220A11A300837F38 /* Dummy.txt in Resources */ = {isa = PBXBuildFile; fileRef = 194AA1A2220A11A300837F38 /* Dummy.txt */; };
 		194AA1C8220A1DD900837F38 /* default in Resources */ = {isa = PBXBuildFile; fileRef = 194AA1C6220A1DD900837F38 /* default */; };
@@ -81,9 +80,9 @@
 				194AA1A2220A11A300837F38 /* Dummy.txt */,
 				194AA1A0220A0C2400837F38 /* ball */,
 				194AA173220A09AC00837F38 /* Example */,
-				194AA153220A05C100837F38 /* Engine.xcodeproj */,
 				194AA147220A04E100837F38 /* Collision */,
 				194AA14A220A04E100837F38 /* Main.cpp */,
+				194AA153220A05C100837F38 /* Engine.xcodeproj */,
 				194AA134220A04B000837F38 /* Products */,
 				194AA15E220A05C600837F38 /* Frameworks */,
 			);
@@ -163,7 +162,7 @@
 		194AA12B220A04B000837F38 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = BigOof;
 				TargetAttributes = {
 					194AA132220A04B000837F38 = {
@@ -217,7 +216,6 @@
 				194AA1A1220A0C2500837F38 /* ball in Resources */,
 				194AA17C220A09AD00837F38 /* Assets.xcassets in Resources */,
 				194AA17D220A09AD00837F38 /* MainMenu.xib in Resources */,
-				194AA19F220A0AC500837F38 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
