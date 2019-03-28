@@ -40,6 +40,11 @@
 		194AA11D220A035800837F38 /* libFreeImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA11C220A034600837F38 /* libFreeImage.a */; };
 		194AA16D220A069B00837F38 /* libglew.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA168220A068300837F38 /* libglew.a */; };
 		1958F23B224D493F002B3F60 /* ThreadManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1958F23A224D493F002B3F60 /* ThreadManager.cpp */; };
+		1958F23E224D54C8002B3F60 /* Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1958F23D224D54C8002B3F60 /* Audio.cpp */; };
+		1958F241224D54DE002B3F60 /* Sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1958F240224D54DE002B3F60 /* Sound.cpp */; };
+		1958F27F224D56E7002B3F60 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1958F252224D552F002B3F60 /* libogg.a */; };
+		1958F280224D56EB002B3F60 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1958F262224D5560002B3F60 /* libvorbis.a */; };
+		1958F282224D570F002B3F60 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1958F281224D570F002B3F60 /* OpenAL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +90,48 @@
 			remoteGlobalIDString = 19BBC2C22209EDAB0084956D;
 			remoteInfo = glew;
 		};
+		1958F24F224D552F002B3F60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1958F248224D552F002B3F60 /* Ogg.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D07F2C80486CC7A007CD1D0;
+			remoteInfo = Ogg;
+		};
+		1958F251224D552F002B3F60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1958F248224D552F002B3F60 /* Ogg.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 734FB2E50B18B33E00D561D7;
+			remoteInfo = "libogg (static)";
+		};
+		1958F25F224D5560002B3F60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1958F258224D5560002B3F60 /* Vorbis.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 730F23F1091827B100AB638C;
+			remoteInfo = Vorbis;
+		};
+		1958F261224D5560002B3F60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1958F258224D5560002B3F60 /* Vorbis.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 738835E40B18F870005C7A69;
+			remoteInfo = "libvorbis (static)";
+		};
+		1958F263224D5560002B3F60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1958F258224D5560002B3F60 /* Vorbis.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 738836130B190488005C7A69;
+			remoteInfo = "libvorbisenc (static)";
+		};
+		1958F265224D5560002B3F60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1958F258224D5560002B3F60 /* Vorbis.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 738836220B1905E5005C7A69;
+			remoteInfo = "libvorbisfile (static)";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -122,6 +169,11 @@
 		194AA114220A034600837F38 /* FreeImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FreeImage.xcodeproj; path = ../FreeImage/FreeImage.xcodeproj; sourceTree = "<group>"; };
 		194AA162220A068200837F38 /* glew.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = glew.xcodeproj; path = ../glew/glew.xcodeproj; sourceTree = "<group>"; };
 		1958F23A224D493F002B3F60 /* ThreadManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadManager.cpp; sourceTree = "<group>"; };
+		1958F23D224D54C8002B3F60 /* Audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Audio.cpp; sourceTree = "<group>"; };
+		1958F240224D54DE002B3F60 /* Sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sound.cpp; sourceTree = "<group>"; };
+		1958F248224D552F002B3F60 /* Ogg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Ogg.xcodeproj; path = "../../Libraries/libogg-1.3.3/macosx/Ogg.xcodeproj"; sourceTree = "<group>"; };
+		1958F258224D5560002B3F60 /* Vorbis.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Vorbis.xcodeproj; path = "../../Libraries/libvorbis-1.3.6/macosx/Vorbis.xcodeproj"; sourceTree = "<group>"; };
+		1958F281224D570F002B3F60 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,9 +182,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				194AA113220A02FA00837F38 /* OpenGL.framework in Frameworks */,
+				1958F282224D570F002B3F60 /* OpenAL.framework in Frameworks */,
 				194AA0AD2209FFC400837F38 /* SDL2.framework in Frameworks */,
 				194AA16D220A069B00837F38 /* libglew.a in Frameworks */,
 				194AA11D220A035800837F38 /* libFreeImage.a in Frameworks */,
+				1958F27F224D56E7002B3F60 /* libogg.a in Frameworks */,
+				1958F280224D56EB002B3F60 /* libvorbis.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +201,8 @@
 				194AA0812209FFB400837F38 /* SDL.xcodeproj */,
 				194AA162220A068200837F38 /* glew.xcodeproj */,
 				194AA114220A034600837F38 /* FreeImage.xcodeproj */,
+				1958F248224D552F002B3F60 /* Ogg.xcodeproj */,
+				1958F258224D5560002B3F60 /* Vorbis.xcodeproj */,
 				194AA01F2209FF3800837F38 /* Products */,
 				194AA0AC2209FFC400837F38 /* Frameworks */,
 			);
@@ -163,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				194AA02E2209FF4D00837F38 /* Init */,
+				1958F23C224D54C8002B3F60 /* Audio */,
 				194AA0352209FF4D00837F38 /* Color */,
 				194AA0522209FF4D00837F38 /* Graphics */,
 				194AA0372209FF4D00837F38 /* IO */,
@@ -171,6 +229,7 @@
 				194AA0262209FF4D00837F38 /* Mesh */,
 				194AA02C2209FF4D00837F38 /* Misc */,
 				194AA04D2209FF4D00837F38 /* Shader */,
+				1958F23F224D54DE002B3F60 /* Sound */,
 				194AA0332209FF4D00837F38 /* SysEvents */,
 				194AA0462209FF4D00837F38 /* Texture */,
 				1958F239224D493F002B3F60 /* Threading */,
@@ -314,6 +373,7 @@
 		194AA0AC2209FFC400837F38 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1958F281224D570F002B3F60 /* OpenAL.framework */,
 				194AA112220A02FA00837F38 /* OpenGL.framework */,
 			);
 			name = Frameworks;
@@ -341,6 +401,42 @@
 				1958F23A224D493F002B3F60 /* ThreadManager.cpp */,
 			);
 			path = Threading;
+			sourceTree = "<group>";
+		};
+		1958F23C224D54C8002B3F60 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				1958F23D224D54C8002B3F60 /* Audio.cpp */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		1958F23F224D54DE002B3F60 /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				1958F240224D54DE002B3F60 /* Sound.cpp */,
+			);
+			path = Sound;
+			sourceTree = "<group>";
+		};
+		1958F249224D552F002B3F60 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1958F250224D552F002B3F60 /* Ogg.framework */,
+				1958F252224D552F002B3F60 /* libogg.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1958F259224D5560002B3F60 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1958F260224D5560002B3F60 /* Vorbis.framework */,
+				1958F262224D5560002B3F60 /* libvorbis.a */,
+				1958F264224D5560002B3F60 /* libvorbisenc.a */,
+				1958F266224D5560002B3F60 /* libvorbisfile.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -414,8 +510,16 @@
 					ProjectRef = 194AA162220A068200837F38 /* glew.xcodeproj */;
 				},
 				{
+					ProductGroup = 1958F249224D552F002B3F60 /* Products */;
+					ProjectRef = 1958F248224D552F002B3F60 /* Ogg.xcodeproj */;
+				},
+				{
 					ProductGroup = 194AA09E2209FFBC00837F38 /* Products */;
 					ProjectRef = 194AA0812209FFB400837F38 /* SDL.xcodeproj */;
+				},
+				{
+					ProductGroup = 1958F259224D5560002B3F60 /* Products */;
+					ProjectRef = 1958F258224D5560002B3F60 /* Vorbis.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -468,6 +572,48 @@
 			remoteRef = 194AA167220A068300837F38 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		1958F250224D552F002B3F60 /* Ogg.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Ogg.framework;
+			remoteRef = 1958F24F224D552F002B3F60 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1958F252224D552F002B3F60 /* libogg.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libogg.a;
+			remoteRef = 1958F251224D552F002B3F60 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1958F260224D5560002B3F60 /* Vorbis.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Vorbis.framework;
+			remoteRef = 1958F25F224D5560002B3F60 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1958F262224D5560002B3F60 /* libvorbis.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libvorbis.a;
+			remoteRef = 1958F261224D5560002B3F60 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1958F264224D5560002B3F60 /* libvorbisenc.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libvorbisenc.a;
+			remoteRef = 1958F263224D5560002B3F60 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1958F266224D5560002B3F60 /* libvorbisfile.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libvorbisfile.a;
+			remoteRef = 1958F265224D5560002B3F60 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -494,7 +640,9 @@
 				194AA0742209FF4D00837F38 /* Texture.cpp in Sources */,
 				194AA0672209FF4D00837F38 /* AABBox.cpp in Sources */,
 				194AA05F2209FF4D00837F38 /* String.cpp in Sources */,
+				1958F241224D54DE002B3F60 /* Sound.cpp in Sources */,
 				1958F23B224D493F002B3F60 /* ThreadManager.cpp in Sources */,
+				1958F23E224D54C8002B3F60 /* Audio.cpp in Sources */,
 				194AA06D2209FF4D00837F38 /* Window.cpp in Sources */,
 				194AA0642209FF4D00837F38 /* Color.cpp in Sources */,
 				194AA05B2209FF4D00837F38 /* MeshOGL3.cpp in Sources */,
@@ -625,6 +773,8 @@
 					"../../Libraries/SDL2-2.0.9/include/",
 					"../../Libraries/glew-2.1.0/include/",
 					../../Libraries/FreeImage3180/Source/,
+					"../../Libraries/libogg-1.3.3/include/",
+					"../../Libraries/libvorbis-1.3.6/include/",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -641,6 +791,8 @@
 					"../../Libraries/SDL2-2.0.9/include/",
 					"../../Libraries/glew-2.1.0/include/",
 					../../Libraries/FreeImage3180/Source/,
+					"../../Libraries/libogg-1.3.3/include/",
+					"../../Libraries/libvorbis-1.3.6/include/",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

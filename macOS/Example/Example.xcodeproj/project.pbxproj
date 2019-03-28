@@ -16,11 +16,11 @@
 		194AA17D220A09AD00837F38 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 194AA176220A09AC00837F38 /* MainMenu.xib */; };
 		194AA17E220A09AD00837F38 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 194AA178220A09AC00837F38 /* main.m */; };
 		194AA17F220A09AD00837F38 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 194AA179220A09AC00837F38 /* AppDelegate.m */; };
-		194AA1A1220A0C2500837F38 /* ball in Resources */ = {isa = PBXBuildFile; fileRef = 194AA1A0220A0C2400837F38 /* ball */; };
 		194AA1A3220A11A300837F38 /* Dummy.txt in Resources */ = {isa = PBXBuildFile; fileRef = 194AA1A2220A11A300837F38 /* Dummy.txt */; };
 		194AA1C8220A1DD900837F38 /* default in Resources */ = {isa = PBXBuildFile; fileRef = 194AA1C6220A1DD900837F38 /* default */; };
 		194AA1C9220A1DD900837F38 /* postprocess in Resources */ = {isa = PBXBuildFile; fileRef = 194AA1C7220A1DD900837F38 /* postprocess */; };
 		194AA1CB220A1DEE00837F38 /* GFX in Resources */ = {isa = PBXBuildFile; fileRef = 194AA1CA220A1DEE00837F38 /* GFX */; };
+		195B12A0224D641B002F9C90 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 195B129F224D641B002F9C90 /* OpenAL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,12 +48,14 @@
 		194AA179220A09AC00837F38 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		194AA17B220A09AC00837F38 /* Example.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Example.entitlements; sourceTree = "<group>"; };
 		194AA19E220A0AC500837F38 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		194AA1A0220A0C2400837F38 /* ball */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ball; path = DerivedData/Example/Build/Products/Debug/ball; sourceTree = "<group>"; };
 		194AA1A2220A11A300837F38 /* Dummy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = Dummy.txt; path = ../Dummy.txt; sourceTree = "<group>"; };
 		194AA1C3220A1DB800837F38 /* ball */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ball; path = DerivedData/Example/Build/Products/Debug/ball; sourceTree = "<group>"; };
 		194AA1C6220A1DD900837F38 /* default */ = {isa = PBXFileReference; lastKnownFileType = folder; name = default; path = DerivedData/Example/Build/Products/Debug/shaders/default; sourceTree = "<group>"; };
 		194AA1C7220A1DD900837F38 /* postprocess */ = {isa = PBXFileReference; lastKnownFileType = folder; name = postprocess; path = DerivedData/Example/Build/Products/Debug/shaders/postprocess; sourceTree = "<group>"; };
 		194AA1CA220A1DEE00837F38 /* GFX */ = {isa = PBXFileReference; lastKnownFileType = folder; name = GFX; path = "../../../../../SCP ~ CB/scpcb/Content/GFX"; sourceTree = "<group>"; };
+		195B129F224D641B002F9C90 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		195B12A1224D6593002F9C90 /* libvorbis.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libvorbis.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		195B12A3224D6597002F9C90 /* libogg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libogg.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				194AA170220A08DD00837F38 /* OpenGL.framework in Frameworks */,
+				195B12A0224D641B002F9C90 /* OpenAL.framework in Frameworks */,
 				194AA16E220A06BF00837F38 /* SDL2.framework in Frameworks */,
 				194AA15F220A05C600837F38 /* libEngine.a in Frameworks */,
 			);
@@ -78,7 +81,6 @@
 				194AA1C7220A1DD900837F38 /* postprocess */,
 				194AA1C3220A1DB800837F38 /* ball */,
 				194AA1A2220A11A300837F38 /* Dummy.txt */,
-				194AA1A0220A0C2400837F38 /* ball */,
 				194AA173220A09AC00837F38 /* Example */,
 				194AA147220A04E100837F38 /* Collision */,
 				194AA14A220A04E100837F38 /* Main.cpp */,
@@ -116,6 +118,9 @@
 		194AA15E220A05C600837F38 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				195B12A3224D6597002F9C90 /* libogg.a */,
+				195B12A1224D6593002F9C90 /* libvorbis.a */,
+				195B129F224D641B002F9C90 /* OpenAL.framework */,
 				194AA16F220A08DD00837F38 /* OpenGL.framework */,
 				194AA160220A060000837F38 /* SDL2.framework */,
 			);
@@ -213,7 +218,6 @@
 				194AA1C8220A1DD900837F38 /* default in Resources */,
 				194AA1A3220A11A300837F38 /* Dummy.txt in Resources */,
 				194AA1C9220A1DD900837F38 /* postprocess in Resources */,
-				194AA1A1220A0C2500837F38 /* ball in Resources */,
 				194AA17C220A09AD00837F38 /* Assets.xcassets in Resources */,
 				194AA17D220A09AD00837F38 /* MainMenu.xib in Resources */,
 			);
@@ -298,6 +302,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../../Include/,
+					"../../Libraries/SDL2-2.0.9/include/",
+					"../../Libraries/libvorbis-1.3.6/include",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -351,6 +360,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../../Include/,
+					"../../Libraries/SDL2-2.0.9/include/",
+					"../../Libraries/libvorbis-1.3.6/include",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -368,6 +382,7 @@
 				HEADER_SEARCH_PATHS = (
 					../../Include/,
 					"../../Libraries/SDL2-2.0.9/include/",
+					"../../Libraries/libvorbis-1.3.6/include",
 				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -389,6 +404,7 @@
 				HEADER_SEARCH_PATHS = (
 					../../Include/,
 					"../../Libraries/SDL2-2.0.9/include/",
+					"../../Libraries/libvorbis-1.3.6/include",
 				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
