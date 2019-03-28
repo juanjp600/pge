@@ -5,12 +5,15 @@
 #include <Threading/ThreadManager.h>
 #include <vector>
 #include <atomic>
-#ifndef __APPLE__
-#include <al.h>
-#include <alc.h>
-#else
+#ifdef LINUX
+#include <AL/al.h>
+#include <AL/alc.h>
+#elif defined __APPLE__
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
+#elif defined WINDOWS
+#include <al.h>
+#include <alc.h>
 #endif
 
 namespace PGE {
@@ -55,7 +58,7 @@ class Audio {
         AudioThreadRequest* audioThreadRequest;
         std::mutex audioThreadMutex;
         void initStreamThread();
-        
+
         ALCdevice* alcDevice;
         ALCcontext* alcContext;
 

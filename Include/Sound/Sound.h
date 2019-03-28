@@ -4,13 +4,13 @@
 #include <atomic>
 #include <mutex>
 
-#include <Misc/String.h>
-#ifndef __APPLE__
-#include <al.h>
-#else
+#ifdef LINUX
+#include <AL/al.h>
+#elif defined __APPLE__
 #include <OpenAL/al.h>
+#elif defined WINDOWS
+#include <al.h>
 #endif
-
 #include <vorbis/vorbisfile.h>
 #include <ogg/ogg.h>
 

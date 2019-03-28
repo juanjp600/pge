@@ -59,6 +59,7 @@
 		<Linker>
 			<Add option="-m64" />
 		</Linker>
+		<Unit filename="../../Include/Audio/Audio.h" />
 		<Unit filename="../../Include/Color/Color.h" />
 		<Unit filename="../../Include/Graphics/Graphics.h" />
 		<Unit filename="../../Include/IO/IO.h" />
@@ -73,10 +74,14 @@
 		<Unit filename="../../Include/Mesh/Mesh.h" />
 		<Unit filename="../../Include/Misc/String.h" />
 		<Unit filename="../../Include/Shader/Shader.h" />
+		<Unit filename="../../Include/Sound/Sound.h" />
+		<Unit filename="../../Include/Sound/SoundChannel.h" />
 		<Unit filename="../../Include/SysEvents/SysEvents.h" />
 		<Unit filename="../../Include/Texture/Texture.h" />
+		<Unit filename="../../Include/Threading/ThreadManager.h" />
 		<Unit filename="../../Include/UserInput/UserInput.h" />
 		<Unit filename="../../Include/Window/Window.h" />
+		<Unit filename="../../Src/Audio/Audio.cpp" />
 		<Unit filename="../../Src/Color/Color.cpp" />
 		<Unit filename="../../Src/Graphics/Graphics.cpp" />
 		<Unit filename="../../Src/Graphics/GraphicsOGL3.cpp" />
@@ -96,11 +101,13 @@
 		<Unit filename="../../Src/Misc/String.cpp" />
 		<Unit filename="../../Src/Shader/ShaderOGL3.cpp" />
 		<Unit filename="../../Src/Shader/ShaderOGL3.h" />
+		<Unit filename="../../Src/Sound/Sound.cpp" />
 		<Unit filename="../../Src/SysEvents/SysEvents.cpp" />
 		<Unit filename="../../Src/Texture/Texture.cpp" />
 		<Unit filename="../../Src/Texture/TextureInternal.h" />
 		<Unit filename="../../Src/Texture/TextureOGL3.cpp" />
 		<Unit filename="../../Src/Texture/TextureOGL3.h" />
+		<Unit filename="../../Src/Threading/ThreadManager.cpp" />
 		<Unit filename="../../Src/UserInput/UserInput.cpp" />
 		<Unit filename="../../Src/Window/Window.cpp" />
 		<Unit filename="../../Src/Window/WindowOGL3.cpp" />
