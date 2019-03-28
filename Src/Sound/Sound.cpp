@@ -2,7 +2,11 @@
 #include <Sound/Sound.h>
 
 #include <SDL.h>
+#ifndef __APPLE__
 #include <al.h>
+#else
+#include <OpenAL/al.h>
+#endif
 #include <vorbis/vorbisfile.h>
 #include <ogg/ogg.h>
 
@@ -23,8 +27,7 @@ Sound::Sound(Audio* a,const String& fn,bool forcePan,bool strm) {
             return;
         }
         
-        FILE* f = nullptr;
-        fopen_s(&f,fn.cstr(),"rb");
+        FILE* f = fopen(fn.cstr(),"rb");
         vorbis_info *vorbisInfo;
 
         ov_open(f,&oggFile,"",0);
@@ -71,8 +74,7 @@ Sound::Sound(Audio* a,const String& fn,bool forcePan,bool strm) {
 
         alBufferData(alBuffer,stereo ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16,allPcm.data(),allPcm.size(),frequency);
     } else {
-        FILE* f = nullptr;
-        fopen_s(&f,fn.cstr(),"rb");
+        FILE* f = fopen(fn.cstr(),"rb");
         vorbis_info *vorbisInfo;
 
         ov_open(f,&oggFile,"",0);

@@ -5,8 +5,13 @@
 #include <Threading/ThreadManager.h>
 #include <vector>
 #include <atomic>
+#ifndef __APPLE__
 #include <al.h>
 #include <alc.h>
+#else
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#endif
 
 namespace PGE {
 

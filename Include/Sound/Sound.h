@@ -5,7 +5,12 @@
 #include <mutex>
 
 #include <Misc/String.h>
+#ifndef __APPLE__
 #include <al.h>
+#else
+#include <OpenAL/al.h>
+#endif
+
 #include <vorbis/vorbisfile.h>
 #include <ogg/ogg.h>
 
