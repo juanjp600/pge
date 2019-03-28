@@ -106,6 +106,8 @@ void MeshOGL3::updateInternalData() {
             glIndexData.push_back(primitives[i].c);
         }
     }
+
+    mustUpdateInternalData = false;
 }
 
 void MeshOGL3::uploadInternalData() {
@@ -115,6 +117,8 @@ void MeshOGL3::uploadInternalData() {
     //TODO: determine when we should use GL_DYNAMIC_DRAW
     glBufferData(GL_ARRAY_BUFFER, glVertexData.size(),glVertexData.data(),GL_STATIC_DRAW);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,glIndexData.size()*sizeof(GLuint),glIndexData.data(),GL_STATIC_DRAW);
+
+    mustReuploadInternalData = false;
 }
 
 void MeshOGL3::render() {
