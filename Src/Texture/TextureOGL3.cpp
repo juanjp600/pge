@@ -134,28 +134,30 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
-    
+
     isRT = false;
     opaque = true;
 
     class TextureReassignRequest : public ThreadManager::MainThreadRequest {
         public:
             GraphicsOGL3* graphics;
+            GLuint glTexture;
 
             int realWidth; int realHeight;
             BYTE* buffer;
 
-            void execute() {
-                graphics->takeGLContext();
+            void execute() override {
+                graphics->takeGlContext();
 
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D,glTexture);
                 glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,buffer);
-                
+
                 glGenerateMipmap(GL_TEXTURE_2D);
             }
     } mainThreadRequest;
     mainThreadRequest.graphics = (GraphicsOGL3*)graphics;
+    mainThreadRequest.glTexture = glTexture;
 
     class TextureLoadRequest : public ThreadManager::NewThreadRequest {
         public:

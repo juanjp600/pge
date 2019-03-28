@@ -116,7 +116,7 @@ String::String(int i) {
 
 String::String(float f) {
     cbuffer = new char[32];
-    capacity = 32;
+    capacity = 32;
     snprintf(cbuffer,32,"%f",f);
     strSize = strlen(cbuffer);
     dominantBuffer = DOMINANT_BUFFER::C;

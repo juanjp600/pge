@@ -1,7 +1,7 @@
 #ifndef PGEINTERNAL_TEXTUREOGL3_H_INCLUDED
 #define PGEINTERNAL_TEXTUREOGL3_H_INCLUDED
 
-#include <Texture.h>
+#include <Texture/Texture.h>
 #include <Threading/ThreadManager.h>
 
 #include <GL/glew.h>
