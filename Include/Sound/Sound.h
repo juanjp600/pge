@@ -2,9 +2,12 @@
 #define PGE_SOUND_H_INCLUDED
 
 #include <atomic>
+#include <mutex>
 
 #include <Misc/String.h>
 #include <al.h>
+#include <vorbis/vorbisfile.h>
+#include <ogg/ogg.h>
 
 namespace PGE {
 
@@ -15,23 +18,34 @@ class Sound {
         ~Sound();
 
         bool isStream() const;
-        int fillStreamBuffer(int seekPos,uint8_t* buf,int maxSize);
+        bool isStereo() const;
+        int getFrequency() const;
+        void fillStreamBuffer(int seekPos,uint8_t* buf,int maxSize,int& outSamples,bool& outEof);
         ALuint getALBuffer() const;
 
         class Channel {
             public:
-                Channel(Audio* a,Sound* snd,bool loop);
+                Channel(Audio* a,Sound* snd,bool lp);
                 ~Channel();
 
                 bool isPlaying() const;
                 bool isStream() const;
+                bool isStreamReady() const;
                 void updateStream();
             private:
                 Audio* audio;
                 Sound* sound;
                 ALuint alSource;
-
+                bool loop;
                 std::atomic<bool> playing;
+
+                ALuint* streamAlBuffers;
+                std::mutex* streamMutex;
+                const int streamSampleCount = 8192;
+                uint8_t* streamByteBuf;
+                int streamSeekPos;
+                bool streamReachedEof;
+                std::atomic<bool> streamReady;
         };
 
         Channel* play(bool loop=false);
@@ -40,8 +54,10 @@ class Sound {
         std::vector<Channel*> channels;
         int frequency;
         Audio* audio;
+        bool forcePanning;
         bool stereo;
         bool stream;
+        OggVorbis_File oggFile;
         ALuint alBuffer;
 };
 

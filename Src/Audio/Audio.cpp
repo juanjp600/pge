@@ -122,7 +122,6 @@ void Audio::unregisterSoundChannel(Sound::Channel* chn) {
 
 void Audio::initStreamThread() {
     if (getErrorState() != ERROR_STATE::NONE) { return; }
-    std::lock_guard<std::mutex> lockGuard(audioThreadMutex);
     if (audioThreadRequest == nullptr) {
         audioThreadRequest = new AudioThreadRequest(this);
         threadManager->requestExecutionOnNewThread(audioThreadRequest);
@@ -142,6 +141,8 @@ bool Audio::updateStreamThread() {
                 if (playingChannels[i]->isPlaying()) {
                     retVal = true;
                     playingChannels[i]->updateStream();
+                } else if (!playingChannels[i]->isStreamReady()) {
+                    retVal = true;
                 } else {
                     playingChannels[i] = nullptr;
                 }
