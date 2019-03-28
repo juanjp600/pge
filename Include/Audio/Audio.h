@@ -52,7 +52,7 @@ class Audio {
                 void abort();
             private:
                 Audio* audio;
-                const int SLEEP_MS = 100;
+                static const int SLEEP_MS = 100;
                 std::atomic<bool> abortRequested;
         };
         AudioThreadRequest* audioThreadRequest;
