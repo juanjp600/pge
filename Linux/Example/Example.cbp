@@ -15,6 +15,7 @@
 					<Add option="-std=c++11" />
 					<Add option="-m64" />
 					<Add option="-g" />
+					<Add option="-DLINUX" />
 					<Add directory="../../Include" />
 					<Add directory="../../Libraries/SDL2-2.0.9/include" />
 					<Add directory="../../Libraries/glew-2.1.0/include" />
@@ -31,6 +32,10 @@
 					<Add library="X11" />
 					<Add library="dl" />
 					<Add library="pthread" />
+					<Add library="ogg" />
+					<Add library="vorbis" />
+					<Add library="vorbisfile" />
+					<Add library="openal" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -42,6 +47,7 @@
 					<Add option="-O2" />
 					<Add option="-std=c++11" />
 					<Add option="-m64" />
+					<Add option="-DLINUX" />
 					<Add directory="../../Include" />
 					<Add directory="../../Libraries/SDL2-2.0.9/include" />
 					<Add directory="../../Libraries/glew-2.1.0/include" />
@@ -59,6 +65,10 @@
 					<Add library="X11" />
 					<Add library="dl" />
 					<Add library="pthread" />
+					<Add library="ogg" />
+					<Add library="vorbis" />
+					<Add library="vorbisfile" />
+					<Add library="openal" />
 				</Linker>
 			</Target>
 		</Build>

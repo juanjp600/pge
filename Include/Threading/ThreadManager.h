@@ -3,6 +3,7 @@
 
 #include <thread>
 #include <mutex>
+#include <condition_variable>
 #include <atomic>
 #include <vector>
 
@@ -19,7 +20,7 @@ class ThreadManager {
             public:
                 virtual void execute() =0;
         };
-        
+
         class NewThreadRequest {
             public:
                 ~NewThreadRequest();

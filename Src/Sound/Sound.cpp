@@ -2,7 +2,6 @@
 #include <Sound/Sound.h>
 
 #include <SDL.h>
-#include <al.h>
 #include <vorbis/vorbisfile.h>
 #include <ogg/ogg.h>
 
@@ -22,9 +21,9 @@ Sound::Sound(Audio* a,const String& fn,bool forcePan,bool strm) {
             alBuffer = 0;
             return;
         }
-        
+
         FILE* f = nullptr;
-        fopen_s(&f,fn.cstr(),"rb");
+        f = fopen(fn.cstr(),"rb");
         vorbis_info *vorbisInfo;
 
         ov_open(f,&oggFile,"",0);
@@ -41,7 +40,7 @@ Sound::Sound(Audio* a,const String& fn,bool forcePan,bool strm) {
             stereo = false;
             forcePanning = true;
         }
-        
+
         const int bufferSamples = 32768;
         union PCMBuffer {
             int16_t shortBuf[bufferSamples];
@@ -72,7 +71,7 @@ Sound::Sound(Audio* a,const String& fn,bool forcePan,bool strm) {
         alBufferData(alBuffer,stereo ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16,allPcm.data(),allPcm.size(),frequency);
     } else {
         FILE* f = nullptr;
-        fopen_s(&f,fn.cstr(),"rb");
+        f = fopen(fn.cstr(),"rb");
         vorbis_info *vorbisInfo;
 
         ov_open(f,&oggFile,"",0);
@@ -266,7 +265,7 @@ bool Sound::Channel::isStreamReady() const {
 void Sound::Channel::updateStream() {
     if (!playing) { return; }
     std::lock_guard<std::mutex> lockGuard(*streamMutex);
-    
+
     ALint alSourceState = 0; alGetSourcei(alSource,AL_SOURCE_STATE,&alSourceState);
     if (streamReachedEof) {
         if (alSourceState != AL_PLAYING) {

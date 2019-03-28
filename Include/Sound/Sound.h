@@ -5,7 +5,11 @@
 #include <mutex>
 
 #include <Misc/String.h>
+#ifdef LINUX
+#include <AL/al.h>
+#elif defined WINDOWS
 #include <al.h>
+#endif
 #include <vorbis/vorbisfile.h>
 #include <ogg/ogg.h>
 

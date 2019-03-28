@@ -160,6 +160,8 @@ Audio::AudioThreadRequest::AudioThreadRequest(Audio* a) {
     abortRequested = false;
 }
 
+const int Audio::AudioThreadRequest::SLEEP_MS;
+
 void Audio::AudioThreadRequest::execute() {
     while (!abortRequested) {
         if (!audio->updateStreamThread()) {

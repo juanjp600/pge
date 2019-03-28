@@ -12,6 +12,9 @@
 #include <Math/Vector.h>
 #include <Math/Line.h>
 #include <Color/Color.h>
+#include <Threading/ThreadManager.h>
+#include <Audio/Audio.h>
+#include <Sound/Sound.h>
 
 #include <fstream>
 #include <math.h>
@@ -158,11 +161,13 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
     return retVal;
 }
 
-int main(int argc, char** argv) {
-    InitEnv();
-
-    Graphics* graphics = Graphics::create(1280,720,false);
+int PGE::Main() {
+    Graphics* graphics = Graphics::create("Linux PGE Example",1280,720,false);
     IO* io = IO::create(graphics->getWindow());
+    ThreadManager* threadManager = new ThreadManager();
+    Audio* audio = new Audio(threadManager);
+    Sound* snd = new Sound(audio,"The Dread.ogg");
+    snd->play();
 
     Shader* shader = Shader::load(graphics,"ball/");
 
@@ -252,20 +257,20 @@ int main(int argc, char** argv) {
     viewMatrixConstant->setValue(viewMatrix);
     Shader::Constant* worldMatrixConstant = shader->getVertexShaderConstant("worldMatrix");
 
-    KeyboardInput testInput = KeyboardInput(SDL_SCANCODE_SPACE);
+    KeyboardInput testInput = KeyboardInput(KeyboardInput::SCANCODE::SPACE);
     io->trackInput(&testInput);
-    KeyboardInput leftInput = KeyboardInput(SDL_SCANCODE_A);
+    KeyboardInput leftInput = KeyboardInput(KeyboardInput::SCANCODE::A);
     io->trackInput(&leftInput);
-    KeyboardInput rightInput = KeyboardInput(SDL_SCANCODE_D);
+    KeyboardInput rightInput = KeyboardInput(KeyboardInput::SCANCODE::D);
     io->trackInput(&rightInput);
-    KeyboardInput forwardInput = KeyboardInput(SDL_SCANCODE_W);
+    KeyboardInput forwardInput = KeyboardInput(KeyboardInput::SCANCODE::W);
     io->trackInput(&forwardInput);
-    KeyboardInput backwardInput = KeyboardInput(SDL_SCANCODE_S);
+    KeyboardInput backwardInput = KeyboardInput(KeyboardInput::SCANCODE::S);
     io->trackInput(&backwardInput);
 
-    KeyboardInput incInput = KeyboardInput(SDL_SCANCODE_E);
+    KeyboardInput incInput = KeyboardInput(KeyboardInput::SCANCODE::E);
     io->trackInput(&incInput);
-    KeyboardInput decInput = KeyboardInput(SDL_SCANCODE_Q);
+    KeyboardInput decInput = KeyboardInput(KeyboardInput::SCANCODE::Q);
     io->trackInput(&decInput);
 
     float hAngle = 0;
@@ -324,9 +329,9 @@ int main(int argc, char** argv) {
         Vector3f ballDiff = line.pointB.subtract(line.pointA);
 
 
-        Vector4f v0 = vertices[0].getProperty("position").value.vector4fVal;
-        Vector4f v1 = vertices[1].getProperty("position").value.vector4fVal;
-        Vector4f v2 = vertices[2].getProperty("position").value.vector4fVal;
+        Vector4f v0 = vertices[0].getProperty("position",0).value.vector4fVal;
+        Vector4f v1 = vertices[1].getProperty("position",0).value.vector4fVal;
+        Vector4f v2 = vertices[2].getProperty("position",0).value.vector4fVal;
 
         Collision coll = Collision::triangleCollide(line,1.f,Vector3f(v0.x,v0.y,v0.z),Vector3f(v1.x,v1.y,v1.z),Vector3f(v2.x,v2.y,v2.z));
         if (coll.hit) {
@@ -348,8 +353,6 @@ int main(int argc, char** argv) {
 
     delete io;
     delete graphics;
-
-    QuitEnv();
 
     return 0;
 }
