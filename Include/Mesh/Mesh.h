@@ -15,6 +15,7 @@ namespace PGE {
 
 class Vertex {
     public:
+        Vertex();
         Vertex(const Vertex& other);
         enum class PROPERTY_TYPE {
             FLOAT,

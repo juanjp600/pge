@@ -4,6 +4,8 @@ using namespace PGE;
 
 const Vertex::Property Vertex::Property::def = Vertex::Property();
 
+Vertex::Vertex() { }
+
 Vertex::Vertex(const Vertex& other) {
     for (int i=0;i<other.properties.size();i++) {
         properties.push_back(Property(other.properties[i]));
