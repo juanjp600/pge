@@ -15,6 +15,7 @@ namespace PGE {
 
 class Vertex {
     public:
+        Vertex(const Vertex& other);
         enum class PROPERTY_TYPE {
             FLOAT,
             UINT,
@@ -25,11 +26,14 @@ class Vertex {
         };
 
         struct Property {
+            Property();
+            Property(const Property& other);
             String name;
             PROPERTY_TYPE type;
             int index;
             union Value {
                 Value();
+                Value(const Value& other) =delete;
                 float floatVal;
                 unsigned int uintVal;
                 Vector2f vector2fVal;

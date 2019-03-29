@@ -2,10 +2,49 @@
 
 using namespace PGE;
 
-const Vertex::Property Vertex::Property::def = Property();
+const Vertex::Property Vertex::Property::def = Vertex::Property();
+
+Vertex::Vertex(const Vertex& other) {
+    for (int i=0;i<other.properties.size();i++) {
+        properties.push_back(Property(other.properties[i]));
+    }
+}
 
 Vertex::Property::Value::Value() {
     vector4fVal = Vector4f::zero;
+}
+
+Vertex::Property::Property() {
+    name = "";
+    index = 0;
+    type = PROPERTY_TYPE::VECTOR2F;
+    value.vector2fVal = Vector2f::zero;
+}
+
+Vertex::Property::Property(const Vertex::Property& other) {
+    name = other.name;
+    index = other.index;
+    type = other.type;
+    switch (type) {
+        case PROPERTY_TYPE::VECTOR2F: {
+            value.vector2fVal = other.value.vector2fVal;
+        } break;
+        case PROPERTY_TYPE::VECTOR3F: {
+            value.vector3fVal = other.value.vector3fVal;
+        } break;
+        case PROPERTY_TYPE::VECTOR4F: {
+            value.vector4fVal = other.value.vector4fVal;
+        } break;
+        case PROPERTY_TYPE::COLOR: {
+            value.colorVal = other.value.colorVal;
+        } break;
+        case PROPERTY_TYPE::FLOAT: {
+            value.floatVal = other.value.floatVal;
+        } break;
+        case PROPERTY_TYPE::UINT: {
+            value.uintVal = other.value.uintVal;
+        } break;
+    }
 }
 
 const Vertex::Property& Vertex::getProperty(const String& name,int indexHint) {
