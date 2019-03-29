@@ -164,7 +164,7 @@ int PGE::Main() {
     ThreadManager* threadManager = new ThreadManager();
     Audio* audio = new Audio(threadManager);
 
-    Sound* sound = new Sound(audio,"SFX/Music/The Dread.ogg");
+    Sound* sound = new Sound(audio,String("SFX/Music/The Dread.ogg").resourcePath());
     Sound::Channel* channel = sound->play();
     
     Graphics* graphics = Graphics::create("Mac PGE Test", 1280,720, false);

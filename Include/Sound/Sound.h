@@ -7,6 +7,7 @@
 
 #include <Misc/String.h>
 
+#include <Misc/String.h>
 #ifdef LINUX
 #include <AL/al.h>
 #elif defined __APPLE__

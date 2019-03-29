@@ -822,7 +822,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					../../ogg/include,
+					../include/,
 				);
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
@@ -839,7 +839,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					../../ogg/include,
+					../include/,
 				);
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
