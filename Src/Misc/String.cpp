@@ -19,6 +19,7 @@ String::~String() {
 
 String::String() {
     cbuffer = new char[24];
+    wbuffer = nullptr;
     capacity = 24;
     cbuffer[0]='\0';
     strSize = 0;
@@ -29,6 +30,7 @@ String::String() {
 String::String(const String& a) {
     int len = a.size();
     wbuffer = new wchar[len+1];
+    cbuffer = nullptr;
     capacity = len+1;
     memcpy(wbuffer,a.wstr(),(a.size()+1)*sizeof(wchar));
     strSize = len;
@@ -39,6 +41,7 @@ String::String(const String& a) {
 String::String(const char* cstr) {
     int len = strlen(cstr);
     cbuffer = new char[len+1];
+    wbuffer = nullptr;
     capacity = len+1;
     memcpy(cbuffer, cstr, (len+1)*sizeof(char));
     strSize = len;
@@ -49,6 +52,7 @@ String::String(const char* cstr) {
 String::String(const std::string& cppstr) {
     int len = cppstr.size();
     cbuffer = new char[len+1];
+    wbuffer = nullptr;
     capacity = len+1;
     memcpy(cbuffer, cppstr.c_str(), (len+1)*sizeof(char));
     strSize = len;
@@ -59,6 +63,7 @@ String::String(const std::string& cppstr) {
 String::String(const wchar* wstr) {
     int len = wcslen(wstr);
     wbuffer = new wchar[len+1];
+    cbuffer = nullptr;
     capacity = len+1;
     memcpy(wbuffer, wstr, (len+1)*sizeof(wchar));
     strSize = len;
@@ -69,6 +74,7 @@ String::String(const wchar* wstr) {
 String::String(const std::wstring& cppwstr) {
     int len = cppwstr.size();
     wbuffer = new wchar[len+1];
+    cbuffer = nullptr;
     capacity = len+1;
     memcpy(wbuffer, cppwstr.c_str(), (len+1)*sizeof(wchar));
     strSize = len;
@@ -79,6 +85,7 @@ String::String(const std::wstring& cppwstr) {
 String::String(const String& a,const String& b) {
     int len = a.size()+b.size();
     wbuffer = new wchar[len+1];
+    cbuffer = nullptr;
     capacity = len+1;
     memcpy(wbuffer, a.wstr(), a.size() * sizeof(wchar));
     memcpy(wbuffer+a.size(), b.wstr(), (b.size()+1) * sizeof(wchar));
@@ -89,6 +96,7 @@ String::String(const String& a,const String& b) {
 
 String::String(char c) {
     cbuffer = new char[2];
+    wbuffer = nullptr;
     capacity = 2;
     cbuffer[0] = c; cbuffer[1]='\0';
     strSize = 1;
@@ -98,6 +106,7 @@ String::String(char c) {
 
 String::String(wchar w) {
     wbuffer = new wchar[2];
+    cbuffer = nullptr;
     capacity = 2;
     wbuffer[0] = w; wbuffer[1]=L'\0';
     strSize = 1;
@@ -107,6 +116,7 @@ String::String(wchar w) {
 
 String::String(int i) {
     cbuffer = new char[32];
+    wbuffer = nullptr;
     capacity = 32;
     snprintf(cbuffer,32,"%d",i);
     strSize = strlen(cbuffer);
@@ -116,6 +126,7 @@ String::String(int i) {
 
 String::String(float f) {
     cbuffer = new char[32];
+    wbuffer = nullptr;
     capacity = 32;
     snprintf(cbuffer,32,"%f",f);
     strSize = strlen(cbuffer);

@@ -75,7 +75,6 @@
 		<Unit filename="../../Include/Misc/String.h" />
 		<Unit filename="../../Include/Shader/Shader.h" />
 		<Unit filename="../../Include/Sound/Sound.h" />
-		<Unit filename="../../Include/Sound/SoundChannel.h" />
 		<Unit filename="../../Include/SysEvents/SysEvents.h" />
 		<Unit filename="../../Include/Texture/Texture.h" />
 		<Unit filename="../../Include/Threading/ThreadManager.h" />

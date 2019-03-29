@@ -120,6 +120,8 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     }
 
     if (newBuffer!=nullptr) { delete[] newBuffer; }
+
+    opaque = false;
 }
 
 TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {

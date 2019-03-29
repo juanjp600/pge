@@ -11,8 +11,14 @@ ThreadManager::ThreadManager() {
 }
 
 ThreadManager::~ThreadManager() {
-    while (newThreadRequests.size()>0) {
+    requestMutex.lock();
+    int reqSize = newThreadRequests.size();
+    requestMutex.unlock();
+    while (reqSize>0) {
         update();
+        requestMutex.lock();
+        reqSize = newThreadRequests.size();
+        requestMutex.unlock();
     }
 }
 
@@ -68,7 +74,9 @@ void ThreadManager::requestExecutionOnNewThread(NewThreadRequest* request) {
     request->setThreadManager(this);
     request->startThread();
 
+    requestMutex.lock();
     newThreadRequests.push_back(request);
+    requestMutex.unlock();
 }
 
 void ThreadManager::update() {

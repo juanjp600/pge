@@ -56,8 +56,8 @@ Audio::Audio(ThreadManager* threadMgr) {
 
 Audio::~Audio() {
     if (audioThreadRequest != nullptr) {
-        audioThreadRequest->abort();
         std::lock_guard<std::mutex> lockGuard(audioThreadMutex);
+        audioThreadRequest->abort();
     }
     //TODO: cleanup buffers and sources
     alcMakeContextCurrent(nullptr);
