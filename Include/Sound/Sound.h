@@ -3,6 +3,9 @@
 
 #include <atomic>
 #include <mutex>
+#include <vector>
+
+#include <Misc/String.h>
 
 #ifdef LINUX
 #include <AL/al.h>

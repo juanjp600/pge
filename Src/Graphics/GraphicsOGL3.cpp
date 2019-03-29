@@ -96,4 +96,6 @@ void GraphicsOGL3::resetRenderTarget() {
     takeGlContext();
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDepthMask(GL_TRUE);
+    glColorMask(true,true,true,true);
 }

@@ -16,6 +16,11 @@ ThreadManager::~ThreadManager() {
     }
 }
 
+ThreadManager::NewThreadRequest::NewThreadRequest() {
+    waitingForMainThread = false;
+    done = false;
+}
+
 ThreadManager::NewThreadRequest::~NewThreadRequest() {
     thread->join(); delete thread;
 }

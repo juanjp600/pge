@@ -1,6 +1,7 @@
 #include <Audio/Audio.h>
 #include <Sound/Sound.h>
-#include <Sound/SoundChannel.h>
+
+#include <SDL.h>
 
 using namespace PGE;
 
@@ -51,6 +52,8 @@ Audio::Audio(ThreadManager* threadMgr) {
         alcCloseDevice(alcDevice); alcDevice = nullptr;
         return;
     }
+
+    audioThreadRequest = nullptr;
 }
 
 Audio::~Audio() {
@@ -122,6 +125,7 @@ void Audio::unregisterSoundChannel(Sound::Channel* chn) {
 
 void Audio::initStreamThread() {
     if (getErrorState() != ERROR_STATE::NONE) { return; }
+    SDL_Log("OOOOO\n");
     if (audioThreadRequest == nullptr) {
         audioThreadRequest = new AudioThreadRequest(this);
         threadManager->requestExecutionOnNewThread(audioThreadRequest);
@@ -136,6 +140,7 @@ bool Audio::updateStreamThread() {
     }
     bool retVal = false;
     for (int i=0;i<CHANNEL_COUNT;i++) {
+        SDL_Log("%d ...\n",i);
         if (playingChannels[i] != nullptr) {
             if (playingChannels[i]->isStream()) {
                 if (playingChannels[i]->isPlaying()) {
@@ -163,11 +168,15 @@ Audio::AudioThreadRequest::AudioThreadRequest(Audio* a) {
 const int Audio::AudioThreadRequest::SLEEP_MS;
 
 void Audio::AudioThreadRequest::execute() {
+    SDL_Log("fsfhksf\n");
     while (!abortRequested) {
+        SDL_Log("bean1\n");
         if (!audio->updateStreamThread()) {
             break;
         }
+        SDL_Log("bean2\n");
         std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_MS));
+        SDL_Log("bean3\n");
     }
 
     markAsDone();

@@ -89,7 +89,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
 
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 
-    opaque = true;
+    opaque = false;
 }
 
 TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn) {

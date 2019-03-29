@@ -388,7 +388,7 @@
 1553252029 /media/juan/HDD/Repos/pge/Include/Math/Matrix.h
 	"Vector.h"
 
-1553221185 source:/media/juan/HDD/Repos/pge/Src/Graphics/GraphicsOGL3.cpp
+1553822328 source:/media/juan/HDD/Repos/pge/Src/Graphics/GraphicsOGL3.cpp
 	<Graphics/Graphics.h>
 	"GraphicsOGL3.h"
 	<Window/Window.h>
@@ -526,7 +526,7 @@
 	<GL/gl.h>
 	<OpenGL/GL.h>
 
-1553799736 /media/juan/HDD/Repos/pge/Src/Texture/TextureOGL3.h
+1553813413 /media/juan/HDD/Repos/pge/Src/Texture/TextureOGL3.h
 	<Texture/Texture.h>
 	<Threading/ThreadManager.h>
 	<GL/glew.h>
@@ -565,7 +565,7 @@
 	<wchar.h>
 	<inttypes.h>
 
-1553799736 source:/media/juan/HDD/Repos/pge/Src/Texture/TextureOGL3.cpp
+1553822306 source:/media/juan/HDD/Repos/pge/Src/Texture/TextureOGL3.cpp
 	<Graphics/Graphics.h>
 	"../Graphics/GraphicsOGL3.h"
 	<Texture/Texture.h>
@@ -625,33 +625,37 @@
 1548281980 /media/juan/HDD/Repos/pge/Libraries/SDL2-2.0.9/include/SDL_config_minimal.h
 	"SDL_platform.h"
 
-1553809610 /media/juan/HDD/Repos/pge/Include/Threading/ThreadManager.h
+1553823886 /media/juan/HDD/Repos/pge/Include/Threading/ThreadManager.h
 	<thread>
 	<mutex>
 	<condition_variable>
 	<atomic>
 	<vector>
 
-1553730978 source:/media/juan/HDD/Repos/pge/Src/Audio/Audio.cpp
+1553823569 source:/media/juan/HDD/Repos/pge/Src/Audio/Audio.cpp
 	<Audio/Audio.h>
 	<Sound/Sound.h>
-	<Sound/SoundChannel.h>
+	<SDL.h>
 
-1553812148 /media/juan/HDD/Repos/pge/Include/Audio/Audio.h
+1553813487 /media/juan/HDD/Repos/pge/Include/Audio/Audio.h
 	<Sound/Sound.h>
 	<Threading/ThreadManager.h>
 	<vector>
 	<atomic>
 	<AL/al.h>
 	<AL/alc.h>
+	<OpenAL/al.h>
+	<OpenAL/alc.h>
 	<al.h>
 	<alc.h>
 
-1553810179 /media/juan/HDD/Repos/pge/Include/Sound/Sound.h
+1553820985 /media/juan/HDD/Repos/pge/Include/Sound/Sound.h
 	<atomic>
 	<mutex>
+	<vector>
 	<Misc/String.h>
 	<AL/al.h>
+	<OpenAL/al.h>
 	<al.h>
 	<vorbis/vorbisfile.h>
 	<ogg/ogg.h>
@@ -661,7 +665,7 @@
 	<Sound/Sound.h>
 	<inttypes.h>
 
-1553812218 source:/media/juan/HDD/Repos/pge/Src/Sound/Sound.cpp
+1553813495 source:/media/juan/HDD/Repos/pge/Src/Sound/Sound.cpp
 	<Audio/Audio.h>
 	<Sound/Sound.h>
 	<SDL.h>

@@ -23,6 +23,7 @@ class ThreadManager {
 
         class NewThreadRequest {
             public:
+                NewThreadRequest();
                 ~NewThreadRequest();
                 virtual void execute() =0;
                 bool isDone() const;
