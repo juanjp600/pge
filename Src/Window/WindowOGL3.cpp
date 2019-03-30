@@ -24,6 +24,9 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     SysEvents::subscribe(eventSubscriber);
 
     glContext = SDL_GL_CreateContext(sdlWindow);
+    // And make it later in the day.
+    SDL_GL_MakeCurrent(sdlWindow,glContext);
+    SysEvents::update();
 
     glewExperimental = true;
     glewInit();
