@@ -38,12 +38,12 @@ String::String(const String& a) {
     syncBuffers();
 }
 
-String::String(const char* cstr) {
-    int len = strlen(cstr);
+String::String(const char* cstri) {
+    int len = strlen(cstri);
     cbuffer = new char[len+1];
     wbuffer = nullptr;
     capacity = len+1;
-    memcpy(cbuffer, cstr, (len+1)*sizeof(char));
+    memcpy(cbuffer, cstri, (len+1)*sizeof(char));
     strSize = len;
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
@@ -60,12 +60,12 @@ String::String(const std::string& cppstr) {
     syncBuffers();
 }
 
-String::String(const wchar* wstr) {
-    int len = wcslen(wstr);
+String::String(const wchar* wstri) {
+    int len = wcslen(wstri);
     wbuffer = new wchar[len+1];
     cbuffer = nullptr;
     capacity = len+1;
-    memcpy(wbuffer, wstr, (len+1)*sizeof(wchar));
+    memcpy(wbuffer, wstri, (len+1)*sizeof(wchar));
     strSize = len;
     dominantBuffer = DOMINANT_BUFFER::W;
     syncBuffers();
