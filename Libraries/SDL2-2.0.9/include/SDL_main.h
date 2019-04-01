@@ -107,7 +107,7 @@
  *  \endcode
  */
 
-#if defined(SDL_MAIN_NEEDED) || defined(SDL_MAIN_AVAILABLE)
+#if defined(SDL_MAIN_NEEDED)// || defined(SDL_MAIN_AVAILABLE)
 #define main    SDL_main
 #endif
 

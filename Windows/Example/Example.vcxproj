@@ -43,11 +43,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source</IncludePath>
+    <IncludePath>../../Libraries/libvorbis-1.3.6/include;C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source</IncludePath>
     <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source</IncludePath>
+    <IncludePath>../../Libraries/libvorbis-1.3.6/include;C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source</IncludePath>
     <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -56,9 +56,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>WINDOWS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;../Engine/$(Platform)/$(Configuration)/Engine.lib;C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win64/OpenAL32.lib;../../Libraries/libogg-1.3.3/win32/VS2015/$(Platform)/$(Configuration)/libogg_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbis_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbisfile_static.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2main.lib;../../Libraries/FreeImage3180/x64/Debug/FreeImaged.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;../Engine/$(Platform)/$(Configuration)/Engine.lib;C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win64/OpenAL32.lib;../../Libraries/libogg-1.3.3/win32/VS2015/$(Platform)/$(Configuration)/libogg_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbis_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbisfile_static.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2.lib;../../Libraries/FreeImage3180/x64/Debug/FreeImaged.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -70,11 +71,12 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>WINDOWS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;../Engine/$(Platform)/$(Configuration)/Engine.lib;C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win64/OpenAL32.lib;../../Libraries/libogg-1.3.3/win32/VS2015/$(Platform)/$(Configuration)/libogg_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbis_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbisfile_static.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;../Engine/$(Platform)/$(Configuration)/Engine.lib;C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win64/OpenAL32.lib;../../Libraries/libogg-1.3.3/win32/VS2015/$(Platform)/$(Configuration)/libogg_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbis_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbisfile_static.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>

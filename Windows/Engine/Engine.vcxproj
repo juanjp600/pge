@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Src\Audio\Audio.cpp" />
     <ClCompile Include="..\..\Src\Color\Color.cpp" />
+    <ClCompile Include="..\..\Src\Exception\Exception.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Graphics.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp" />
     <ClCompile Include="..\..\Src\Init\InitWindows.cpp" />
@@ -58,6 +59,7 @@
     <ClInclude Include="..\..\Include\Threading\ThreadManager.h" />
     <ClInclude Include="..\..\Include\UserInput\UserInput.h" />
     <ClInclude Include="..\..\Include\Window\Window.h" />
+    <ClInclude Include="..\..\Src\Exception\Exception.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />

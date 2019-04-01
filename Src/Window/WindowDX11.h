@@ -29,6 +29,9 @@ class WindowDX11 : public Window {
     private:
         WindowDX11(){};
 
+        void throwException(String func,String details);
+        void cleanup();
+
         IDXGIFactory1* dxgiFactory;
 
         DXGI_SWAP_CHAIN_DESC dxSwapChainDesc;

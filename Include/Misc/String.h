@@ -26,7 +26,7 @@ public:
     String(const String& a,const String& b);
     String(char c);
     String(wchar w);
-    String(int i);
+    String(int i,bool hex=false);
     String(float f);
 
     const char* cstr() const;

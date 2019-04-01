@@ -100,6 +100,9 @@
     <Filter Include="Src\Sound">
       <UniqueIdentifier>{c36bb0fd-d167-45bf-a770-810b7f283d30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Exception">
+      <UniqueIdentifier>{ae97ce05-f017-4a7d-86b2-af0796ef45d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -176,6 +179,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Math\Plane.cpp">
       <Filter>Src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Exception\Exception.cpp">
+      <Filter>Src\Exception</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Math\Plane.h">
       <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Exception\Exception.h">
+      <Filter>Src\Exception</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

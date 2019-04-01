@@ -114,11 +114,15 @@ String::String(wchar w) {
     syncBuffers();
 }
 
-String::String(int i) {
+String::String(int i,bool hex) {
     cbuffer = new char[32];
     wbuffer = nullptr;
     capacity = 32;
-    snprintf(cbuffer,32,"%d",i);
+    if (hex) {
+        snprintf(cbuffer,32,"%#010x",i);
+    } else {
+        snprintf(cbuffer,32,"%d",i);
+    }
     strSize = strlen(cbuffer);
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();

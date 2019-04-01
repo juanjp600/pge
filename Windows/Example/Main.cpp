@@ -169,6 +169,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
                         Vector2f uv1 = Vector2f(0.f,0.f);
 
                         file->read((char*)(void*)&pos.x,4);
+                        pos.x = -pos.x;
                         file->read((char*)(void*)&pos.y,4);
                         file->read((char*)(void*)&pos.z,4);
 
@@ -199,7 +200,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
                         unsigned short i0 = 0; file->read((char*)(void*)&i0,2);
                         unsigned short i1 = 0; file->read((char*)(void*)&i1,2);
                         unsigned short i2 = 0; file->read((char*)(void*)&i2,2);
-                        tris.push_back(Primitive(i0,i1,i2));
+                        tris.push_back(Primitive(i0,i2,i1));
                     }
 
                     mainThreadRequest0.textures = &textures;
@@ -228,7 +229,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
 }
 
 int PGE::Main() {
-    Graphics* graphics = Graphics::create(1280,720,false);
+    Graphics* graphics = Graphics::create("PGE",1280,720,false);
     IO* io = IO::create(graphics->getWindow());
     ThreadManager* threadManager = new ThreadManager();
     Audio* audio = new Audio(threadManager);
