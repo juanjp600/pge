@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		193A5B74224D805C000C5AC9 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 195B129F224D641B002F9C90 /* OpenAL.framework */; };
 		193A5B7C224D81D5000C5AC9 /* SFX in Resources */ = {isa = PBXBuildFile; fileRef = 193A5B7B224D81D5000C5AC9 /* SFX */; };
+		193C903722519C7C00827E92 /* SDL2.framework in Copy Bundle Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA160220A060000837F38 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		194AA14B220A04E200837F38 /* Collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194AA149220A04E100837F38 /* Collision.cpp */; };
 		194AA14C220A04E200837F38 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194AA14A220A04E100837F38 /* Main.cpp */; };
 		194AA15F220A05C600837F38 /* libEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA15D220A05C100837F38 /* libEngine.a */; };
@@ -33,6 +34,20 @@
 			remoteInfo = Engine;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		193C902122519BFB00827E92 /* Copy Bundle Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				193C903722519C7C00827E92 /* SDL2.framework in Copy Bundle Frameworks */,
+			);
+			name = "Copy Bundle Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		193A5B7B224D81D5000C5AC9 /* SFX */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SFX; path = "../../../../../SCP ~ CB/scpcb/Content/SFX"; sourceTree = "<group>"; };
@@ -150,6 +165,7 @@
 				194AA12F220A04B000837F38 /* Sources */,
 				194AA130220A04B000837F38 /* Frameworks */,
 				194AA131220A04B000837F38 /* Resources */,
+				193C902122519BFB00827E92 /* Copy Bundle Frameworks */,
 			);
 			buildRules = (
 			);

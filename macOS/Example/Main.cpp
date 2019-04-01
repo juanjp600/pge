@@ -175,9 +175,9 @@ int PGE::Main() {
 
     RM2 testRM2 = loadRM2(String("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2").resourcePath(), graphics, shader);
 
-    float retWidth = 1280.f;// * 2;
-    float retHeight = 720.f;// * 2;
-    float something = 2048.f;// * 2;
+    float retWidth = 1280.f * 2;
+    float retHeight = 720.f * 2;
+    float something = 2048.f * 2;
 
     Texture* texture0 = Texture::create(graphics,something,something,true,nullptr,Texture::FORMAT::RGBA32);
     Texture* texture1 = Texture::create(graphics,something,something,true,nullptr,Texture::FORMAT::R32F);
