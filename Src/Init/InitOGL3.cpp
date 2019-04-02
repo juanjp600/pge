@@ -5,6 +5,7 @@
 #include "InitInternal.h"
 
 void PGE::InitEnv() {
+    SDL_SetMainReady();
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
