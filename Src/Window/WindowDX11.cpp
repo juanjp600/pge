@@ -90,7 +90,7 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
 
     D3D_FEATURE_LEVEL dxFeatureLevel[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_9_3 };
 
-    hResult = D3D11CreateDevice(NULL,D3D_DRIVER_TYPE_HARDWARE,NULL,D3D11_CREATE_DEVICE_DEBUG,dxFeatureLevel,2,D3D11_SDK_VERSION,
+    hResult = D3D11CreateDevice(NULL,D3D_DRIVER_TYPE_HARDWARE,NULL,0,dxFeatureLevel,2,D3D11_SDK_VERSION,
                       &dxDevice,NULL,&dxContext);
 
     if (FAILED(hResult)) {
