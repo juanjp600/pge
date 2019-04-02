@@ -16,7 +16,8 @@
     <ClCompile Include="..\..\Src\Exception\Exception.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Graphics.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp" />
-    <ClCompile Include="..\..\Src\Init\InitWindows.cpp" />
+    <ClCompile Include="..\..\Src\Init\Init.cpp" />
+    <ClCompile Include="..\..\Src\Init\InitDX11.cpp" />
     <ClCompile Include="..\..\Src\IO\IO.cpp" />
     <ClCompile Include="..\..\Src\Material\Material.cpp" />
     <ClCompile Include="..\..\Src\Math\AABBox.cpp" />
@@ -63,6 +64,7 @@
     <ClInclude Include="..\..\Src\Audio\AudioInternal.h" />
     <ClInclude Include="..\..\Src\Exception\Exception.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
+    <ClInclude Include="..\..\Src\Init\InitInternal.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Sound\SoundInternal.h" />

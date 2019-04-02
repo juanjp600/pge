@@ -16,10 +16,10 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) {
     try {
         window = nullptr;
         window = new WindowDX11(name,w,h,fs);
-    } catch (Exception e) {
+    } catch (Exception& e) {
         cleanup();
         throw e;
-    } catch (std::exception e) {
+    } catch (std::exception& e) {
         cleanup();
         throw e;
     }

@@ -168,9 +168,6 @@
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp">
       <Filter>Src\SysEvents</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Init\InitWindows.cpp">
-      <Filter>Src\Init</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp">
       <Filter>Src\Threading</Filter>
     </ClCompile>
@@ -185,6 +182,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Exception\Exception.cpp">
       <Filter>Src\Exception</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Init\Init.cpp">
+      <Filter>Src\Init</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Init\InitDX11.cpp">
+      <Filter>Src\Init</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\SysEvents\SysEvents.h">
       <Filter>Include\SysEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Init\InitInternal.h">
+      <Filter>Src\Init</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
