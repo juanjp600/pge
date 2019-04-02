@@ -1,9 +1,15 @@
 #include <Audio/Audio.h>
+#include "AudioInternal.h"
 #include <Sound/Sound.h>
+#include "../Sound/SoundInternal.h"
 
 using namespace PGE;
 
-Audio::Audio(ThreadManager* threadMgr) {
+Audio* Audio::create(ThreadManager* threadMgr) {
+    return new AudioInternal(threadMgr);
+}
+
+AudioInternal::AudioInternal(ThreadManager* threadMgr) {
     threadManager = threadMgr;
 
     errorState = ERROR_STATE::NONE;
@@ -54,7 +60,7 @@ Audio::Audio(ThreadManager* threadMgr) {
     audioThreadRequest = nullptr;
 }
 
-Audio::~Audio() {
+AudioInternal::~AudioInternal() {
     if (audioThreadRequest != nullptr) {
         audioThreadRequest->abort();
         std::lock_guard<std::mutex> lockGuard(audioThreadMutex);
@@ -69,7 +75,7 @@ Audio::ERROR_STATE Audio::getErrorState() const {
     return errorState;
 }
 
-void Audio::registerSound(Sound* snd) {
+void AudioInternal::registerSound(SoundInternal* snd) {
     if (getErrorState() != ERROR_STATE::NONE) { return; }
     for (int i=0;i<loadedSounds.size();i++) {
         if (loadedSounds[i] == snd) {
@@ -79,7 +85,7 @@ void Audio::registerSound(Sound* snd) {
     loadedSounds.push_back(snd);
 }
 
-void Audio::unregisterSound(Sound* snd) {
+void AudioInternal::unregisterSound(SoundInternal* snd) {
     if (getErrorState() != ERROR_STATE::NONE) { return; }
     for (int i=0;i<loadedSounds.size();i++) {
         if (loadedSounds[i] == snd) {
@@ -89,7 +95,7 @@ void Audio::unregisterSound(Sound* snd) {
     }
 }
 
-bool Audio::registerSoundChannel(Sound::Channel* chn,ALuint& alSource) {
+bool AudioInternal::registerSoundChannel(SoundInternal::ChannelInternal* chn,ALuint& alSource) {
     if (getErrorState() != ERROR_STATE::NONE) { return false; }
     std::lock_guard<std::mutex> lockGuard(audioThreadMutex);
     alSource = 0;
@@ -110,7 +116,7 @@ bool Audio::registerSoundChannel(Sound::Channel* chn,ALuint& alSource) {
     return false;
 }
 
-void Audio::unregisterSoundChannel(Sound::Channel* chn) {
+void AudioInternal::unregisterSoundChannel(SoundInternal::ChannelInternal* chn) {
     if (getErrorState() != ERROR_STATE::NONE) { return; }
     std::lock_guard<std::mutex> lockGuard(audioThreadMutex);
     for (int i=0;i<CHANNEL_COUNT;i++) {
@@ -121,7 +127,7 @@ void Audio::unregisterSoundChannel(Sound::Channel* chn) {
     }
 }
 
-void Audio::initStreamThread() {
+void AudioInternal::initStreamThread() {
     if (getErrorState() != ERROR_STATE::NONE) { return; }
     if (audioThreadRequest == nullptr) {
         audioThreadRequest = new AudioThreadRequest(this);
@@ -129,7 +135,7 @@ void Audio::initStreamThread() {
     }
 }
 
-bool Audio::updateStreamThread() {
+bool AudioInternal::updateStreamThread() {
     if (getErrorState() != ERROR_STATE::NONE) { return false; }
     std::lock_guard<std::mutex> lockGuard(audioThreadMutex);
     if (audioThreadRequest == nullptr) {
@@ -156,14 +162,14 @@ bool Audio::updateStreamThread() {
     return retVal;
 }
 
-Audio::AudioThreadRequest::AudioThreadRequest(Audio* a) {
+AudioInternal::AudioThreadRequest::AudioThreadRequest(AudioInternal* a) {
     audio = a;
     abortRequested = false;
 }
 
-const int Audio::AudioThreadRequest::SLEEP_MS;
+const int AudioInternal::AudioThreadRequest::SLEEP_MS;
 
-void Audio::AudioThreadRequest::execute() {
+void AudioInternal::AudioThreadRequest::execute() {
     while (!abortRequested) {
         if (!audio->updateStreamThread()) {
             break;
@@ -174,6 +180,6 @@ void Audio::AudioThreadRequest::execute() {
     markAsDone();
 }
 
-void Audio::AudioThreadRequest::abort() {
+void AudioInternal::AudioThreadRequest::abort() {
     abortRequested = true;
 }

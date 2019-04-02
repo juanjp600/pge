@@ -1,7 +1,6 @@
 #ifndef PGE_WINDOW_H_INCLUDED
 #define PGE_WINDOW_H_INCLUDED
 
-#include <SDL.h>
 #include <Misc/String.h>
 #include <SysEvents/SysEvents.h>
 
@@ -18,17 +17,16 @@ class Window {
 
         virtual bool isFocused() const;
 
-        SDL_Window* getSdlWindow() const; //TODO: move to derived classes
-
         virtual ~Window(){};
     protected:
         Window(){};
+        virtual void cleanup() =0;
+        virtual void throwException(String func,String details) =0;
 
         String caption;
         int width; int height; bool fullscreen;
 
-        SDL_Window* sdlWindow;
-        SysEvents::Subscriber eventSubscriber;
+        SysEvents::Subscriber* eventSubscriber;
 
         bool open;
         bool focused;

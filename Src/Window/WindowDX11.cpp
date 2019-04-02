@@ -8,6 +8,7 @@
 #include <Mesh/Mesh.h>
 
 #include "../Exception/Exception.h"
+#include "../SysEvents/SysEventsInternal.h"
 
 using namespace PGE;
 
@@ -60,8 +61,8 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
         SDL_SetWindowPosition(sdlWindow,0,0);
     }
 
-    eventSubscriber = SysEvents::Subscriber(sdlWindow,SysEvents::Subscriber::EventType::WINDOW);
-    SysEvents::subscribe(eventSubscriber);
+    eventSubscriber = new SysEventsInternal::SubscriberInternal(this,SysEventsInternal::SubscriberInternal::EventType::WINDOW);
+    SysEventsInternal::subscribe(eventSubscriber);
 
     hResult = CreateDXGIFactory1(__uuidof(IDXGIFactory1),(LPVOID*)(&dxgiFactory));
     if (FAILED(hResult)) {
@@ -229,7 +230,7 @@ WindowDX11::~WindowDX11() {
 }
 
 void WindowDX11::cleanup() {
-    SysEvents::unsubscribe(eventSubscriber);
+    SysEventsInternal::unsubscribe(eventSubscriber);
     if (dxDepthStencilState[0]!=nullptr) { dxDepthStencilState[0]->Release(); }
     if (dxDepthStencilState[1]!=nullptr) { dxDepthStencilState[1]->Release(); }
     if (dxRasterizerState!=nullptr) { dxRasterizerState->Release(); }
@@ -257,12 +258,12 @@ void WindowDX11::cleanup() {
 
 void WindowDX11::throwException(String func,String details) {
     cleanup();
-    throw Exception("WindowDX11::"+func+" Error",details);
+    throw Exception("WindowDX11::"+func,details);
 }
 
 void WindowDX11::update() {
     SDL_Event event;
-    while (eventSubscriber.popEvent(event)) {
+    while (((SysEventsInternal::SubscriberInternal*)eventSubscriber)->popEvent(event)) {
         if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
             open = false;
         } else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
@@ -274,7 +275,7 @@ void WindowDX11::update() {
 }
 
 void WindowDX11::swap(bool vsyncEnabled) {
-    HRESULT hResult = dxSwapChain->Present( vsyncEnabled ? 1 : 0, 0 );
+    HRESULT hResult = dxSwapChain->Present(vsyncEnabled ? 1 : 0, 0);
     if (FAILED(hResult)) {
         throwException("swap","Failed to present (HRESULT "+String(hResult)+")");
     }

@@ -1,6 +1,7 @@
 #ifndef PGEINTERNAL_EXCEPTION_H_INCLUDED
 #define PGEINTERNAL_EXCEPTION_H_INCLUDED
 
+#include <exception>
 #include <Misc/String.h>
 
 namespace PGE {

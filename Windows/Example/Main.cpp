@@ -1,5 +1,3 @@
-#include <SDL.h>
-
 #include <Init/Init.h>
 #include <Graphics/Graphics.h>
 #include <Mesh/Mesh.h>
@@ -19,6 +17,8 @@
 
 #include <Windows.h>
 
+#include <iostream>
+
 using namespace PGE;
 
 struct RM2 {
@@ -37,7 +37,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
             break;
         }
     }
-    SDL_Log("%s\n",path.cstr());
+    std::cout<<path.cstr()<<"\n";
 
     std::ifstream* file = new std::ifstream(); file->open(name.cstr(),std::ios::binary|std::ios::in);
 
@@ -98,7 +98,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
 
             retVal.textures->push_back(Texture::load(graphics,texName,threadManager));
         }
-        SDL_Log("%s\n",texName.cstr());
+        std::cout<<texName<<"\n";
         
         char flagSkip; file->read(&flagSkip,1); file->read(&flagSkip,1);
     }
@@ -232,9 +232,9 @@ int PGE::Main() {
     Graphics* graphics = Graphics::create("PGE",1280,720,false);
     IO* io = IO::create(graphics->getWindow());
     ThreadManager* threadManager = new ThreadManager();
-    Audio* audio = new Audio(threadManager);
+    Audio* audio = Audio::create(threadManager);
 
-    Sound* sound = new Sound(audio,"SFX/Music/The Dread.ogg");
+    Sound* sound = Sound::load(audio,"SFX/Music/The Dread.ogg");
     Sound::Channel* channel = sound->play();
 
     Shader* shader = Shader::load(graphics,"default/");

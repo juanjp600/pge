@@ -15,9 +15,9 @@ class IO {
     private:
         Window* window;
 
-        SysEvents::Subscriber keyboardSubscriber;
-        SysEvents::Subscriber mouseSubscriber;
-        SysEvents::Subscriber gamepadSubscriber;
+        SysEvents::Subscriber* keyboardSubscriber;
+        SysEvents::Subscriber* mouseSubscriber;
+        SysEvents::Subscriber* gamepadSubscriber;
 
         std::set<UserInput*> inputs;
         Vector2i mousePos;

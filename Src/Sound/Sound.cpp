@@ -1,13 +1,15 @@
 #include <Audio/Audio.h>
 #include <Sound/Sound.h>
-
-#include <SDL.h>
-#include <vorbis/vorbisfile.h>
-#include <ogg/ogg.h>
+#include "../Audio/AudioInternal.h"
+#include "SoundInternal.h"
 
 using namespace PGE;
 
-Sound::Sound(Audio* a,const String& fn,bool forcePan,bool strm) {
+Sound* Sound::load(Audio* a,const String& fn,bool forcePan,bool strm) {
+    return new SoundInternal(a,fn,forcePan,strm);
+}
+
+SoundInternal::SoundInternal(Audio* a,const String& fn,bool forcePan,bool strm) {
     audio = a;
     stream = strm;
     alBuffer = 0;
@@ -91,11 +93,11 @@ Sound::Sound(Audio* a,const String& fn,bool forcePan,bool strm) {
         }
     }
 
-    audio->registerSound(this);
+    ((AudioInternal*)audio)->registerSound(this);
 }
 
-Sound::~Sound() {
-    audio->unregisterSound(this);
+SoundInternal::~SoundInternal() {
+    ((AudioInternal*)audio)->unregisterSound(this);
     for (int i=channels.size()-1;i>=0;i--) {
         delete channels[i];
     }
@@ -111,19 +113,19 @@ Sound::~Sound() {
     }
 }
 
-bool Sound::isStream() const {
+bool SoundInternal::isStream() const {
     return stream;
 }
 
-bool Sound::isStereo() const {
+bool SoundInternal::isStereo() const {
     return stereo;
 }
 
-int Sound::getFrequency() const {
+int SoundInternal::getFrequency() const {
     return frequency;
 }
 
-void Sound::fillStreamBuffer(int seekPos,uint8_t* buf,int maxSize,int& outSamples,bool& outEof) {
+void SoundInternal::fillStreamBuffer(int seekPos,uint8_t* buf,int maxSize,int& outSamples,bool& outEof) {
     if (!stream) {
         outSamples = 0;
         outEof = true;
@@ -168,12 +170,12 @@ void Sound::fillStreamBuffer(int seekPos,uint8_t* buf,int maxSize,int& outSample
     delete tempBuf;
 }
 
-ALuint Sound::getALBuffer() const {
+ALuint SoundInternal::getALBuffer() const {
     return alBuffer;
 }
 
-Sound::Channel* Sound::play(bool loop) {
-    Channel* newChannel = new Channel(audio,this,loop);
+Sound::Channel* SoundInternal::play(bool loop) {
+    ChannelInternal* newChannel = new ChannelInternal(audio,this,loop);
     for (int i=channels.size()-1;i>=0;i--) {
         if (!channels[i]->isPlaying()) {
             delete channels[i];
@@ -183,22 +185,22 @@ Sound::Channel* Sound::play(bool loop) {
     return newChannel;
 }
 
-void Sound::removeChannel(Sound::Channel* chn) {
+void SoundInternal::removeChannel(SoundInternal::ChannelInternal* chn) {
     for (int i=channels.size()-1;i>=0;i--) {
         if (channels[i]==chn) {
             channels.erase(channels.begin()+i);
-            audio->unregisterSoundChannel(chn);
+            ((AudioInternal*)audio)->unregisterSoundChannel(chn);
             break;
         }
     }
 }
 
-Sound::Channel::Channel(Audio* a,Sound* snd,bool lp) {
+SoundInternal::ChannelInternal::ChannelInternal(Audio* a,SoundInternal* snd,bool lp) {
     audio = a; sound = snd;
     loop = lp;
     playing = false;
     streamReady = false;
-    audio->registerSoundChannel(this,alSource);
+    ((AudioInternal*)audio)->registerSoundChannel(this,alSource);
     if (alSource != 0) {
         alSourcei(alSource, AL_SOURCE_RELATIVE, AL_TRUE);
         alSourcef(alSource, AL_REFERENCE_DISTANCE, 100.f);
@@ -224,7 +226,7 @@ Sound::Channel::Channel(Audio* a,Sound* snd,bool lp) {
     streamReady = true;
 }
 
-Sound::Channel::~Channel() {
+SoundInternal::ChannelInternal::~ChannelInternal() {
     playing = false;
     alSourceStop(alSource);
     if (isStream()) {
@@ -245,7 +247,7 @@ Sound::Channel::~Channel() {
     sound->removeChannel(this);
 }
 
-bool Sound::Channel::isPlaying() const {
+bool SoundInternal::ChannelInternal::isPlaying() const {
     bool retVal = playing;
     if (!isStream() && alSource!=0) {
         ALint alSourceState = 0; alGetSourcei(alSource,AL_SOURCE_STATE,&alSourceState);
@@ -254,15 +256,15 @@ bool Sound::Channel::isPlaying() const {
     return retVal;
 }
 
-bool Sound::Channel::isStream() const {
+bool SoundInternal::ChannelInternal::isStream() const {
     return sound->isStream();
 }
 
-bool Sound::Channel::isStreamReady() const {
+bool SoundInternal::ChannelInternal::isStreamReady() const {
     return streamReady;
 }
 
-void Sound::Channel::updateStream() {
+void SoundInternal::ChannelInternal::updateStream() {
     if (!playing) { return; }
     std::lock_guard<std::mutex> lockGuard(*streamMutex);
 

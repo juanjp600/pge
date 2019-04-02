@@ -1,38 +1,45 @@
 #include <SysEvents/SysEvents.h>
+#include "SysEventsInternal.h"
+#include "../Window/WindowInternal.h"
 
 using namespace PGE;
 
-std::set<SysEvents::Subscriber*> SysEvents::subscribers;
+std::set<SysEvents::Subscriber*> SysEventsInternal::subscribers;
 
-void SysEvents::subscribe(SysEvents::Subscriber& subscriber) {
-    subscribers.emplace(&subscriber);
+void SysEventsInternal::subscribe(SysEvents::Subscriber* subscriber) {
+    subscribers.emplace(subscriber);
 }
 
-void SysEvents::unsubscribe(SysEvents::Subscriber& subscriber) {
-    std::set<Subscriber*>::iterator it = subscribers.find(&subscriber);
+void SysEventsInternal::unsubscribe(SysEvents::Subscriber* subscriber) {
+    std::set<Subscriber*>::iterator it = subscribers.find(subscriber);
     if (it != subscribers.end()) {
         subscribers.erase(it);
     }
 }
 
 void SysEvents::update() {
+    SysEventsInternal::update();
+}
+
+void SysEventsInternal::update() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         for (std::set<Subscriber*>::iterator it=subscribers.begin();it!=subscribers.end();it++) {
-            Subscriber* subscriber = *it;
+            SubscriberInternal* subscriber = (SubscriberInternal*)(*it);
+            SDL_Window* sdlWindow = ((WindowInternal*)subscriber->getWindow())->getSdlWindow();
             bool takeEvent = false;
-            if (subscriber->getEventType()==Subscriber::EventType::WINDOW) {
+            if (subscriber->getEventType()==SubscriberInternal::EventType::WINDOW) {
                 if (event.type == SDL_WINDOWEVENT) {
-                    takeEvent = event.window.windowID == SDL_GetWindowID(subscriber->getWindow());
+                    takeEvent = event.window.windowID == SDL_GetWindowID(sdlWindow);
                 }
-            } else if (subscriber->getEventType()==Subscriber::EventType::KEYBOARD) {
+            } else if (subscriber->getEventType()==SubscriberInternal::EventType::KEYBOARD) {
                 if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
-                    takeEvent = SDL_GetKeyboardFocus()==subscriber->getWindow();
+                    takeEvent = SDL_GetKeyboardFocus()==sdlWindow;
                 }
-            } else if (subscriber->getEventType()==Subscriber::EventType::MOUSE) {
+            } else if (subscriber->getEventType()==SubscriberInternal::EventType::MOUSE) {
                 if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP ||
                     event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEWHEEL) {
-                    takeEvent = SDL_GetMouseFocus()==subscriber->getWindow();
+                    takeEvent = SDL_GetMouseFocus()==sdlWindow;
                 }
             }
             //TODO: capture gamepad events
@@ -43,27 +50,27 @@ void SysEvents::update() {
     }
 }
 
-SysEvents::Subscriber::Subscriber() {}
+SysEventsInternal::SubscriberInternal::SubscriberInternal() {}
 
-SysEvents::Subscriber::Subscriber(SDL_Window* w,EventType et) {
+SysEventsInternal::SubscriberInternal::SubscriberInternal(Window* w,EventType et) {
     window = w; eventType = et;
     events.clear();
 }
 
-SDL_Window* SysEvents::Subscriber::getWindow() const {
+Window* SysEventsInternal::SubscriberInternal::getWindow() const {
     return window;
 }
 
-SysEvents::Subscriber::EventType SysEvents::Subscriber::getEventType() const {
+SysEventsInternal::SubscriberInternal::EventType SysEventsInternal::SubscriberInternal::getEventType() const {
     return eventType;
 }
 
-bool SysEvents::Subscriber::popEvent(SDL_Event& e) {
+bool SysEventsInternal::SubscriberInternal::popEvent(SDL_Event& e) {
     if (events.size()==0) { return false; }
     e = events[0]; events.erase(events.begin());
     return true;
 }
 
-void SysEvents::Subscriber::pushEvent(SDL_Event e) {
+void SysEventsInternal::SubscriberInternal::pushEvent(SDL_Event e) {
     events.push_back(e);
 }

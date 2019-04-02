@@ -1,4 +1,6 @@
+#include "../SysEvents/SysEventsInternal.h"
 #include <Window/Window.h>
+#include "../Window/WindowInternal.h"
 #include <IO/IO.h>
 
 using namespace PGE;
@@ -10,26 +12,26 @@ IO* IO::create(Window* window) {
 IO::IO(Window* win) {
     window = win;
 
-    keyboardSubscriber = SysEvents::Subscriber(window->getSdlWindow(),SysEvents::Subscriber::EventType::KEYBOARD);
-    mouseSubscriber = SysEvents::Subscriber(window->getSdlWindow(),SysEvents::Subscriber::EventType::MOUSE);
-    gamepadSubscriber = SysEvents::Subscriber(window->getSdlWindow(),SysEvents::Subscriber::EventType::GAMEPAD);
+    keyboardSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::KEYBOARD);
+    mouseSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::MOUSE);
+    gamepadSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::GAMEPAD);
 
-    SysEvents::subscribe(keyboardSubscriber);
-    SysEvents::subscribe(mouseSubscriber);
-    SysEvents::subscribe(gamepadSubscriber);
+    SysEventsInternal::subscribe(keyboardSubscriber);
+    SysEventsInternal::subscribe(mouseSubscriber);
+    SysEventsInternal::subscribe(gamepadSubscriber);
 
     inputs.clear();
 }
 
 IO::~IO() {
-    SysEvents::unsubscribe(keyboardSubscriber);
-    SysEvents::unsubscribe(mouseSubscriber);
-    SysEvents::unsubscribe(gamepadSubscriber);
+    SysEventsInternal::unsubscribe(keyboardSubscriber);
+    SysEventsInternal::unsubscribe(mouseSubscriber);
+    SysEventsInternal::unsubscribe(gamepadSubscriber);
 }
 
 void IO::update() {
     SDL_Event event;
-    while (keyboardSubscriber.popEvent(event)) {
+    while (((SysEventsInternal::SubscriberInternal*)keyboardSubscriber)->popEvent(event)) {
         SDL_KeyboardEvent keyEvent = event.key;
         for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
             UserInput* input = (*it);
@@ -46,7 +48,7 @@ void IO::update() {
         }
     }
 
-    while (mouseSubscriber.popEvent(event)) {
+    while (((SysEventsInternal::SubscriberInternal*)mouseSubscriber)->popEvent(event)) {
         if (event.type==SDL_MOUSEMOTION) {
             mousePos.x = event.motion.x;
             mousePos.y = event.motion.y;
@@ -93,7 +95,7 @@ Vector2i IO::getMousePosition() const {
 
 void IO::setMousePosition(Vector2i position) {
     if (!window->isFocused()) { return; }
-    SDL_WarpMouseInWindow(window->getSdlWindow(),position.x,position.y);
+    SDL_WarpMouseInWindow(((WindowInternal*)window)->getSdlWindow(),position.x,position.y);
     mousePos = position;
 }
 

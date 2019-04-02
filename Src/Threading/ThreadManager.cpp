@@ -1,7 +1,5 @@
 #include <Threading/ThreadManager.h>
 
-#include <SDL.h>
-
 #include <chrono>
 
 using namespace PGE;

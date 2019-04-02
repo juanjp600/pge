@@ -2,6 +2,8 @@
 #include <Window/Window.h>
 #include "../Window/WindowDX11.h"
 #include "../Texture/TextureDX11.h"
+#include "../Exception/Exception.h"
+
 #include <stdlib.h>
 
 using namespace PGE;
@@ -11,7 +13,16 @@ Graphics* Graphics::create(String name,int w,int h,bool fs) {
 }
 
 GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) {
-    window = new WindowDX11(name,w,h,fs);
+    try {
+        window = nullptr;
+        window = new WindowDX11(name,w,h,fs);
+    } catch (Exception e) {
+        cleanup();
+        throw e;
+    } catch (std::exception e) {
+        cleanup();
+        throw e;
+    }
 
     ID3D11Device* dxDevice = ((WindowDX11*)window)->getDxDevice();
     ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
@@ -22,7 +33,17 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) {
 }
 
 GraphicsDX11::~GraphicsDX11() {
-    delete window;
+    cleanup();
+}
+
+void GraphicsDX11::cleanup() {
+    if (window != nullptr) { delete window; }
+    window = nullptr;
+}
+
+void GraphicsDX11::throwException(String func,String details) {
+    cleanup();
+    throw Exception("GraphicsDX11::"+func,details);
 }
 
 void GraphicsDX11::update() {
@@ -57,9 +78,19 @@ void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
     currentRenderTargetViews.clear();
     TextureDX11* maxSizeTexture = (TextureDX11*)renderTargets[0];
     for (int i=0;i<renderTargets.size();i++) {
+        if (!renderTargets[i]->isRenderTarget()) {
+            throwException("setRenderTargets","renderTargets["+String(i)+"] is not a valid render target");
+        }
         currentRenderTargetViews.push_back(((TextureDX11*)renderTargets[i])->getRtv());
         if (renderTargets[i]->getWidth()+renderTargets[i]->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
             maxSizeTexture = (TextureDX11*)renderTargets[i];
+        }
+    }
+    for (int i=0;i<renderTargets.size();i++) {
+        if (renderTargets[i]->getWidth()>maxSizeTexture->getWidth() || renderTargets[i]->getHeight()>maxSizeTexture->getHeight()) {
+            throwException("setRenderTargets",
+                "Render target sizes are incompatible ("+String(maxSizeTexture->getWidth())+","+String(maxSizeTexture->getHeight())+" vs "+
+                                                         String(renderTargets[i]->getWidth())+","+String(renderTargets[i]->getHeight())+")");
         }
     }
     currentDepthStencilView = maxSizeTexture->getZBufferView();

@@ -2,6 +2,7 @@
 #define PGEINTERNAL_WINDOW_DX11_H_INCLUDED
 
 #include <Window/Window.h>
+#include "WindowInternal.h"
 #include <Misc/String.h>
 
 #include <SDL_syswm.h>
@@ -12,7 +13,7 @@
 
 namespace PGE {
 
-class WindowDX11 : public Window {
+class WindowDX11 : public WindowInternal {
     public:
         WindowDX11(String c,int w,int h,bool fs);
         ~WindowDX11();

@@ -1,4 +1,5 @@
 #include <Window/Window.h>
+#include "WindowInternal.h"
 
 using namespace PGE;
 
@@ -18,6 +19,6 @@ int Window::getHeight() const {
     return height;
 }
 
-SDL_Window* Window::getSdlWindow() const {
+SDL_Window* WindowInternal::getSdlWindow() const {
     return sdlWindow;
 }

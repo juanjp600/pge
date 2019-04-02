@@ -1,6 +1,7 @@
 #include <Texture/Texture.h>
 #include "TextureInternal.h"
 #include <inttypes.h>
+#include "../Exception/Exception.h"
 
 using namespace PGE;
 
@@ -20,6 +21,9 @@ BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,in
     FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename.cstr(),0);
 
     FIBITMAP* temp = FreeImage_Load(format, filename.cstr());
+    if (temp==nullptr) {
+        throw Exception("loadFIBuffer","Failed to load "+filename);
+    }
     FIBITMAP* image = FreeImage_ConvertTo32Bits(temp);
     FreeImage_Unload(temp);
 
@@ -43,8 +47,6 @@ BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,in
     BYTE* bits = FreeImage_GetBits(image);
     int bpp = FreeImage_GetBPP(image)/8;
     BYTE* newBits = new BYTE[realWidth*realHeight*bpp];
-
-    SDL_Log("%d %d %d\n",po2w,po2h,bpp);
 
     opaque = true;
     for (int x=0;x<realWidth;x++) {
