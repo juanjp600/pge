@@ -76,7 +76,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;../Engine/$(Platform)/$(Configuration)/Engine.lib;C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win64/OpenAL32.lib;../../Libraries/libogg-1.3.3/win32/VS2015/$(Platform)/$(Configuration)/libogg_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbis_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbisfile_static.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;../Engine/$(Platform)/$(Configuration)/Engine.lib;C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win64/OpenAL32.lib;../../Libraries/libogg-1.3.3/win32/VS2015/$(Platform)/$(Configuration)/libogg_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbis_static.lib;../../Libraries/libvorbis-1.3.6/win32/VS2010/$(Platform)/$(Configuration)/libvorbisfile_static.lib;../../Libraries/SDL2-2.0.9/VisualC/$(Platform)/$(Configuration)/SDL2.lib;../../Libraries/FreeImage3180/x64/Release/FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
