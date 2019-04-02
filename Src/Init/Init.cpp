@@ -11,7 +11,7 @@ int PGE::InitMain() {
         int retVal = PGE::Main();
         QuitEnv();
         return retVal;
-    } catch (PGE::Exception e) {
+    } catch (PGE::Exception& e) {
         std::ofstream exceptionLog;
         exceptionLog.open("exception.txt",std::ofstream::out | std::ofstream::trunc);
         PGE::String exceptionType = "PGE::Exception";
@@ -25,7 +25,7 @@ int PGE::InitMain() {
         SDL_ShowSimpleMessageBox(0,"Fatal Error",
                 (PGE::String("An exception has been thrown, please send \"exception.txt\" to a developer.\nException source: ")+e.getSource()).cstr(),nullptr);
         return -1;
-    } catch (std::exception e) {
+    } catch (std::exception& e) {
         std::ofstream exceptionLog;
         exceptionLog.open("exception.txt",std::ofstream::out | std::ofstream::trunc);
         PGE::String exceptionType = "std::exception";
