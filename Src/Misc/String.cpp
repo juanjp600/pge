@@ -168,6 +168,10 @@ bool PGE::operator>(const String& a, const String& b) {
     return strcmp(a.cstr(), b.cstr()) > 0;
 }
 
+std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
+	return os.write(s.cstr(),s.size());
+}
+
 long long String::getHashCode() const {
     return hashCode;
 }
