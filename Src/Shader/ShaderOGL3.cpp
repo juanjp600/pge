@@ -9,6 +9,7 @@
 #include <OpenGL/GL.h>
 #endif
 #include <fstream>
+#include <iostream>
 
 using namespace PGE;
 
@@ -44,7 +45,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     char* errorStr = new char[512];
     GLsizei len = 0;
     glGetShaderInfoLog(glVertexShader, 512, &len, errorStr);
-    SDL_Log("%s\n",errorStr);
+    std::cout << errorStr << std::endl;
 
     String fragmentSource = "";
     std::ifstream fragmentSourceFile; fragmentSourceFile.open(String(path,"fragment.glsl").cstr());
@@ -66,7 +67,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     glCompileShader(glFragmentShader);
 
     glGetShaderInfoLog(glFragmentShader, 512, &len, errorStr);
-    SDL_Log("%s\n",errorStr);
+    std::cout << errorStr << std::endl;
     delete[] errorStr;
 
     glShaderProgram = glCreateProgram();
@@ -117,7 +118,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
             attrib.type = GL_INT;
             stride += sizeof(GLint)*1;
         }
-        SDL_Log("Vertex attribute: %s %s %d",attrib.name.cstr(),vertexInput[i].type.cstr(),attrib.size);
+        std::cout << "Vertex attribute: " << attrib.name.cstr() << " " << vertexInput[i].type.cstr() << " " << String(attrib.size).cstr() << std::endl;
         vertexAttribs.push_back(attrib);
         vertexInputElems.push_back(attrib.name);
     }
@@ -230,7 +231,7 @@ void ShaderOGL3::extractShaderVars(const String& src,String varKind,std::vector<
                         }
                     }
                 }
-                SDL_Log("Var name: %s\n",var.name.cstr());
+                std::cout << "Var name: " << var.name.cstr() << std::endl;
                 varList.push_back(var);
             }
             line = "";
@@ -242,7 +243,7 @@ ShaderOGL3::ConstantOGL3::ConstantOGL3(Graphics* gfx,String nm, int loc) {
     graphics = gfx;
     name = nm;
     location = loc;
-    SDL_Log("Constant info: %s %d",name.cstr(),loc);
+    std::cout << "Constant info: " << name.cstr() << " " << String(loc).cstr() << std::endl;
 }
 
 ShaderOGL3::ConstantOGL3::Value::Value() {

@@ -1,5 +1,3 @@
-#include <SDL.h>
-
 #include <Init/Init.h>
 #include <Graphics/Graphics.h>
 #include <Mesh/Mesh.h>
@@ -162,9 +160,9 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
 #if 1
 int PGE::Main() {
     ThreadManager* threadManager = new ThreadManager();
-    Audio* audio = new Audio(threadManager);
+    Audio* audio = Audio::create(threadManager);
 
-    Sound* sound = new Sound(audio,String("SFX/Music/The Dread.ogg").resourcePath());
+    Sound* sound = Sound::load(audio, String("SFX/Music/The Dread.ogg").resourcePath());
     Sound::Channel* channel = sound->play();
     
     Graphics* graphics = Graphics::create("Mac PGE Test", 1280,720, false);

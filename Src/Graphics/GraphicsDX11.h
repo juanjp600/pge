@@ -17,7 +17,7 @@ class GraphicsDX11 : public Graphics {
         ~GraphicsDX11();
 
         virtual void update();
-        
+
         virtual void clear(Color color);
 
         virtual void setRenderTarget(Texture* renderTarget);
@@ -27,7 +27,7 @@ class GraphicsDX11 : public Graphics {
         virtual void setViewport(Rectanglei vp);
     private:
         void throwException(String func,String details);
-        void cleanup();
+        void cleanup() override;
 
         std::vector<ID3D11RenderTargetView*> currentRenderTargetViews;
         ID3D11DepthStencilView* currentDepthStencilView;

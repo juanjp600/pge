@@ -18,7 +18,7 @@ void Graphics::update() {
 void Graphics::swap(bool vsync) {
     try {
         window->swap(vsync);
-    }  catch (Exception e) {
+    }  catch (Exception& e) {
         cleanup();
         throw e;
     } catch (std::exception e) {

@@ -12,7 +12,6 @@
 		194AA05B2209FF4D00837F38 /* MeshOGL3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194AA0282209FF4D00837F38 /* MeshOGL3.cpp */; };
 		194AA05E2209FF4D00837F38 /* MeshOGL3.h in Headers */ = {isa = PBXBuildFile; fileRef = 194AA02B2209FF4D00837F38 /* MeshOGL3.h */; };
 		194AA05F2209FF4D00837F38 /* String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194AA02D2209FF4D00837F38 /* String.cpp */; };
-		194AA0602209FF4D00837F38 /* InitLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194AA02F2209FF4D00837F38 /* InitLinux.cpp */; };
 		194AA0622209FF4D00837F38 /* UserInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194AA0322209FF4D00837F38 /* UserInput.cpp */; };
 		194AA0632209FF4D00837F38 /* SysEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194AA0342209FF4D00837F38 /* SysEvents.cpp */; };
 		194AA0642209FF4D00837F38 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194AA0362209FF4D00837F38 /* Color.cpp */; };
@@ -38,6 +37,11 @@
 		194AA0802209FF4D00837F38 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194AA0592209FF4D00837F38 /* Material.cpp */; };
 		194AA11D220A035800837F38 /* libFreeImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA11C220A034600837F38 /* libFreeImage.a */; };
 		194AA16D220A069B00837F38 /* libglew.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA168220A068300837F38 /* libglew.a */; };
+		194EF5B62253C82F0015CBBD /* InitOGL3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194EF5B32253C82F0015CBBD /* InitOGL3.cpp */; };
+		194EF5B72253C82F0015CBBD /* Init.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194EF5B42253C82F0015CBBD /* Init.cpp */; };
+		194EF5B82253C82F0015CBBD /* InitInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 194EF5B52253C82F0015CBBD /* InitInternal.h */; };
+		194EF5D32253D5700015CBBD /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194EF5D12253D5700015CBBD /* Exception.cpp */; };
+		194EF5D42253D5700015CBBD /* Exception.h in Headers */ = {isa = PBXBuildFile; fileRef = 194EF5D22253D5700015CBBD /* Exception.h */; };
 		1958F23B224D493F002B3F60 /* ThreadManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1958F23A224D493F002B3F60 /* ThreadManager.cpp */; };
 		1958F23E224D54C8002B3F60 /* Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1958F23D224D54C8002B3F60 /* Audio.cpp */; };
 		1958F241224D54DE002B3F60 /* Sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1958F240224D54DE002B3F60 /* Sound.cpp */; };
@@ -138,7 +142,6 @@
 		194AA0282209FF4D00837F38 /* MeshOGL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshOGL3.cpp; sourceTree = "<group>"; };
 		194AA02B2209FF4D00837F38 /* MeshOGL3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshOGL3.h; sourceTree = "<group>"; };
 		194AA02D2209FF4D00837F38 /* String.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = String.cpp; sourceTree = "<group>"; };
-		194AA02F2209FF4D00837F38 /* InitLinux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InitLinux.cpp; sourceTree = "<group>"; };
 		194AA0322209FF4D00837F38 /* UserInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserInput.cpp; sourceTree = "<group>"; };
 		194AA0342209FF4D00837F38 /* SysEvents.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SysEvents.cpp; sourceTree = "<group>"; };
 		194AA0362209FF4D00837F38 /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Color.cpp; sourceTree = "<group>"; };
@@ -165,6 +168,11 @@
 		194AA0812209FFB400837F38 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../Libraries/SDL2-2.0.9/Xcode/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 		194AA114220A034600837F38 /* FreeImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FreeImage.xcodeproj; path = ../FreeImage/FreeImage.xcodeproj; sourceTree = "<group>"; };
 		194AA162220A068200837F38 /* glew.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = glew.xcodeproj; path = ../glew/glew.xcodeproj; sourceTree = "<group>"; };
+		194EF5B32253C82F0015CBBD /* InitOGL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InitOGL3.cpp; sourceTree = "<group>"; };
+		194EF5B42253C82F0015CBBD /* Init.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Init.cpp; sourceTree = "<group>"; };
+		194EF5B52253C82F0015CBBD /* InitInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InitInternal.h; sourceTree = "<group>"; };
+		194EF5D12253D5700015CBBD /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Exception.cpp; sourceTree = "<group>"; };
+		194EF5D22253D5700015CBBD /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		1958F23A224D493F002B3F60 /* ThreadManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadManager.cpp; sourceTree = "<group>"; };
 		1958F23D224D54C8002B3F60 /* Audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Audio.cpp; sourceTree = "<group>"; };
 		1958F240224D54DE002B3F60 /* Sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sound.cpp; sourceTree = "<group>"; };
@@ -216,6 +224,7 @@
 				194AA02E2209FF4D00837F38 /* Init */,
 				1958F23C224D54C8002B3F60 /* Audio */,
 				194AA0352209FF4D00837F38 /* Color */,
+				194EF5D02253D5700015CBBD /* Exception */,
 				194AA0522209FF4D00837F38 /* Graphics */,
 				194AA0372209FF4D00837F38 /* IO */,
 				194AA0582209FF4D00837F38 /* Material */,
@@ -255,7 +264,9 @@
 		194AA02E2209FF4D00837F38 /* Init */ = {
 			isa = PBXGroup;
 			children = (
-				194AA02F2209FF4D00837F38 /* InitLinux.cpp */,
+				194EF5B42253C82F0015CBBD /* Init.cpp */,
+				194EF5B52253C82F0015CBBD /* InitInternal.h */,
+				194EF5B32253C82F0015CBBD /* InitOGL3.cpp */,
 			);
 			path = Init;
 			sourceTree = "<group>";
@@ -387,6 +398,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		194EF5D02253D5700015CBBD /* Exception */ = {
+			isa = PBXGroup;
+			children = (
+				194EF5D12253D5700015CBBD /* Exception.cpp */,
+				194EF5D22253D5700015CBBD /* Exception.h */,
+			);
+			path = Exception;
+			sourceTree = "<group>";
+		};
 		1958F239224D493F002B3F60 /* Threading */ = {
 			isa = PBXGroup;
 			children = (
@@ -438,8 +458,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				194EF5D42253D5700015CBBD /* Exception.h in Headers */,
 				194AA05E2209FF4D00837F38 /* MeshOGL3.h in Headers */,
 				194AA0792209FF4D00837F38 /* ShaderOGL3.h in Headers */,
+				194EF5B82253C82F0015CBBD /* InitInternal.h in Headers */,
 				194AA0712209FF4D00837F38 /* TextureOGL3.h in Headers */,
 				194AA07B2209FF4D00837F38 /* GraphicsOGL3.h in Headers */,
 				194AA0762209FF4D00837F38 /* TextureInternal.h in Headers */,
@@ -614,6 +636,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				194AA07F2209FF4D00837F38 /* GraphicsOGL3.cpp in Sources */,
+				194EF5B62253C82F0015CBBD /* InitOGL3.cpp in Sources */,
 				194AA0692209FF4D00837F38 /* Matrix.cpp in Sources */,
 				194AA0622209FF4D00837F38 /* UserInput.cpp in Sources */,
 				194AA05A2209FF4D00837F38 /* Mesh.cpp in Sources */,
@@ -625,9 +648,10 @@
 				194AA0782209FF4D00837F38 /* ShaderOGL3.cpp in Sources */,
 				194AA0652209FF4D00837F38 /* IO.cpp in Sources */,
 				194AA06A2209FF4D00837F38 /* Rectangle.cpp in Sources */,
-				194AA0602209FF4D00837F38 /* InitLinux.cpp in Sources */,
+				194EF5D32253D5700015CBBD /* Exception.cpp in Sources */,
 				194AA0702209FF4D00837F38 /* WindowOGL3.cpp in Sources */,
 				194AA06B2209FF4D00837F38 /* Plane.cpp in Sources */,
+				194EF5B72253C82F0015CBBD /* Init.cpp in Sources */,
 				194AA0682209FF4D00837F38 /* Vector.cpp in Sources */,
 				194AA0742209FF4D00837F38 /* Texture.cpp in Sources */,
 				194AA0672209FF4D00837F38 /* AABBox.cpp in Sources */,

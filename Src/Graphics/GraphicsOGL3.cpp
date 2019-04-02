@@ -4,6 +4,7 @@
 #include "../Window/WindowOGL3.h"
 #include <Texture/Texture.h>
 #include "../Texture/TextureOGL3.h"
+#include "../Exception/Exception.h"
 
 using namespace PGE;
 
@@ -12,20 +13,40 @@ Graphics* Graphics::create(String name,int w,int h,bool fs) {
 }
 
 GraphicsOGL3::GraphicsOGL3(String name,int w,int h,bool fs) {
-    window = new WindowOGL3(name,w,h,fs);
+    try {
+        window  = nullptr;
+        window = new WindowOGL3(name,w,h,fs);
 
-    setViewport(Rectanglei(0,0,w,h));
+        setViewport(Rectanglei(0,0,w,h));
 
-    glGenFramebuffers(1,&glFramebuffer);
+        glGenFramebuffers(1,&glFramebuffer);
+        
+    } catch (Exception& e) {
+        cleanup();
+        throw e;
+    } catch (std::exception e) {
+        cleanup();
+        throw e;
+    }
 }
 
 GraphicsOGL3::~GraphicsOGL3() {
-    takeGlContext();
+    cleanup();
+}
 
+void GraphicsOGL3::cleanup() {
+    takeGlContext();
+    
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDeleteFramebuffers(1,&glFramebuffer);
+    
+    if (window != nullptr) { delete window; }
+    window = nullptr;
+}
 
-    delete window;
+void GraphicsOGL3::throwException(String func, String details) {
+    cleanup();
+    throw Exception("GraphicsOGL3::" + func, details);
 }
 
 void GraphicsOGL3::update() {
@@ -35,7 +56,7 @@ void GraphicsOGL3::update() {
 
 void GraphicsOGL3::takeGlContext() {
     if (SDL_GL_GetCurrentContext()!=((WindowOGL3*)window)->getGlContext()) {
-        SDL_GL_MakeCurrent(window->getSdlWindow(),((WindowOGL3*)window)->getGlContext());
+        SDL_GL_MakeCurrent(((WindowInternal*)window)->getSdlWindow(),((WindowOGL3*)window)->getGlContext());
     }
 }
 

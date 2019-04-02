@@ -6,7 +6,7 @@ Mostly writing this as instructions for myself later. ~Mark
 
 2. Add `Engine.xcodeproj` as a project item.
 
-3. Project Settings -> Build Settings -> Search Paths -> Header Search Paths. Add `../../Include/` and `../../Libraries/SDL2-2.0.9/include/`. Make sure it's both on the bundle and Xcode project.
+3. Project Settings -> Build Settings -> Search Paths -> Header Search Paths. Add `../../Include/`. Make sure it's both on the bundle and Xcode project.
 
 4. Build Phases -> Link Binary With Libraries. Add `libEngine.a`, `SDL2.framework`, `OpenAL.framework` and `OpenGL.framework`.
 

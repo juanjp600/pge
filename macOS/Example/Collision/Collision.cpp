@@ -25,8 +25,6 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include <math.h>
 
-#include <SDL.h>
-
 using namespace PGE;
 
 const float COLLISION_EPSILON = 0.001f;

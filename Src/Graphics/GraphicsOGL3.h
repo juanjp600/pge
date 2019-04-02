@@ -18,21 +18,24 @@ class GraphicsOGL3 : public Graphics {
         GraphicsOGL3(String name,int w=1280,int h=720,bool fs=false);
         ~GraphicsOGL3();
 
-        virtual void update();
+        virtual void update() override;
 
-        virtual void clear(Color color);
+        virtual void clear(Color color) override;
 
-        virtual void setRenderTarget(Texture* renderTarget);
-        virtual void setRenderTargets(std::vector<Texture*> renderTargets);
-        virtual void resetRenderTarget();
+        virtual void setRenderTarget(Texture* renderTarget) override;
+        virtual void setRenderTargets(std::vector<Texture*> renderTargets) override;
+        virtual void resetRenderTarget() override;
 
-        virtual void setViewport(Rectanglei vp);
+        virtual void setViewport(Rectanglei vp) override;
 
         void takeGlContext();
     private:
         GLuint glFramebuffer;
 
         Rectanglei currentViewport;
+    
+        void throwException(String func,String details) override;
+        void cleanup() override;
 };
 
 }

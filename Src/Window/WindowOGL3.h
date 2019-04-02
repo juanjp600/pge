@@ -4,6 +4,7 @@
 #include <SDL.h>
 
 #include <Window/Window.h>
+#include "WindowInternal.h"
 #include <Misc/String.h>
 #include <Graphics/Graphics.h>
 
@@ -11,7 +12,7 @@
 
 namespace PGE {
 
-class WindowOGL3 : public Window {
+class WindowOGL3 : public WindowInternal {
     public:
         WindowOGL3(String c,int w,int h,bool fs);
         ~WindowOGL3();
@@ -24,6 +25,9 @@ class WindowOGL3 : public Window {
         bool vsync;
 
         WindowOGL3(){};
+
+        void throwException(String func,String details) override;
+        void cleanup() override;
 
         SDL_GLContext glContext;
 };

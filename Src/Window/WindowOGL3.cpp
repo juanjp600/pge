@@ -1,5 +1,7 @@
 #include <Graphics/Graphics.h>
 #include "../Graphics/GraphicsOGL3.h"
+#include "../SysEvents/SysEventsInternal.h"
+#include "../Exception/Exception.h"
 #include <Window/Window.h>
 #include "WindowOGL3.h"
 
@@ -10,7 +12,11 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     width = w; height = h; fullscreen = fs;
 
     sdlWindow = SDL_CreateWindow(caption.cstr(),SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,w,h,SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/);
-    
+
+    if (sdlWindow == nullptr) {
+        throwException("WindowOGL3","Failed to create SDL window: "+String(SDL_GetError()));
+    }
+
 //    if (fullscreen) {
 //        SDL_SetWindowBordered(sdlWindow,SDL_bool::SDL_FALSE);
 //        SDL_Rect displayBounds;
@@ -20,13 +26,13 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
 //        SDL_SetWindowPosition(sdlWindow,0,0);
 //    }
 
-    eventSubscriber = SysEvents::Subscriber(sdlWindow,SysEvents::Subscriber::EventType::WINDOW);
-    SysEvents::subscribe(eventSubscriber);
+    eventSubscriber = new SysEventsInternal::SubscriberInternal(this,SysEventsInternal::SubscriberInternal::EventType::WINDOW);
+    SysEventsInternal::subscribe(eventSubscriber);
 
     glContext = SDL_GL_CreateContext(sdlWindow);
     // And make it later in the day.
     SDL_GL_MakeCurrent(sdlWindow,glContext);
-    SysEvents::update();
+    SysEventsInternal::update();
 
     glewExperimental = true;
     glewInit();
@@ -52,9 +58,18 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
 }
 
 WindowOGL3::~WindowOGL3() {
-    SysEvents::unsubscribe(eventSubscriber);
-    SDL_GL_DeleteContext(glContext);
+    cleanup();
     SDL_DestroyWindow(sdlWindow);
+}
+
+void WindowOGL3::cleanup() {
+    SysEventsInternal::unsubscribe(eventSubscriber);
+    SDL_GL_DeleteContext(glContext);
+}
+
+void WindowOGL3::throwException(String func, String details) {
+    cleanup();
+    throw Exception("WindowOGL3::" + func, details);
 }
 
 SDL_GLContext WindowOGL3::getGlContext() const {
@@ -63,7 +78,7 @@ SDL_GLContext WindowOGL3::getGlContext() const {
 
 void WindowOGL3::update() {
     SDL_Event event;
-    while (eventSubscriber.popEvent(event)) {
+    while (((SysEventsInternal::SubscriberInternal*)eventSubscriber)->popEvent(event)) {
         if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
             open = false;
         } else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
