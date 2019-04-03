@@ -381,6 +381,11 @@ int PGE::Main() {
     }
     delete testRM2.textures;
 
+    for (int i=0;i<testRM2.lmTextures->size();i++) {
+        delete (*testRM2.lmTextures)[i];
+    }
+    delete testRM2.lmTextures;
+
     delete quad;
     delete quadMaterial;
     delete texture0; delete texture1;

@@ -169,7 +169,7 @@ bool PGE::operator>(const String& a, const String& b) {
 }
 
 std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
-	return os.write(s.cstr(),s.size());
+    return os.write(s.cstr(),s.size());
 }
 
 long long String::getHashCode() const {
@@ -363,15 +363,15 @@ String String::trim() const {
 }
 
 std::vector<String> String::split(const String& needle, bool removeEmptyEntries) const {
-	std::vector<String> retVal;
-	String haystack = String(*this);
-	while (haystack.findFirst(needle) > -1) {
-		String adder = haystack.substr(0, haystack.findFirst(needle));
-		retVal.push_back(adder);
-		haystack = haystack.substr(adder.size()+needle.size());
-	}
-	// Add the rest of the string to the vector.
-	retVal.push_back(haystack);
+    std::vector<String> retVal;
+    String haystack = String(*this);
+    while (haystack.findFirst(needle) > -1) {
+        String adder = haystack.substr(0, haystack.findFirst(needle));
+        retVal.push_back(adder);
+        haystack = haystack.substr(adder.size()+needle.size());
+    }
+    // Add the rest of the string to the vector.
+    retVal.push_back(haystack);
 
     if (removeEmptyEntries) {
         for (int i = 0; i < retVal.size(); i++) {
@@ -382,7 +382,7 @@ std::vector<String> String::split(const String& needle, bool removeEmptyEntries)
         }
     }
 
-	return retVal;
+    return retVal;
 }
 
 String String::join(const std::vector<String>& vect, const String& separator) {

@@ -225,8 +225,6 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
 
 WindowDX11::~WindowDX11() {
     cleanup();
-
-    SDL_DestroyWindow(sdlWindow);
 }
 
 void WindowDX11::cleanup() {
@@ -242,6 +240,7 @@ void WindowDX11::cleanup() {
     if (dxSwapChain!=nullptr) { dxSwapChain->Release(); }
     if (dxgiFactory!=nullptr) { dxgiFactory->Release(); }
     if (dxDevice!=nullptr) { dxDevice->Release(); }
+    if (sdlWindow!=nullptr) { SDL_DestroyWindow(sdlWindow); }
 
     dxgiFactory = nullptr;
     dxSwapChain = nullptr;
@@ -254,6 +253,7 @@ void WindowDX11::cleanup() {
     dxDepthStencilState[1] = nullptr;
     dxRasterizerState = nullptr;
     dxBlendState = nullptr;
+    sdlWindow = nullptr;
 }
 
 void WindowDX11::throwException(String func,String details) {
