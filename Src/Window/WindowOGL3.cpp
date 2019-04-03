@@ -11,6 +11,7 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     caption = c;
     width = w; height = h; fullscreen = fs;
 
+    sdlWindow = nullptr;
     sdlWindow = SDL_CreateWindow(caption.cstr(),SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,w,h,SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/);
 
     if (sdlWindow == nullptr) {
@@ -59,12 +60,12 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
 
 WindowOGL3::~WindowOGL3() {
     cleanup();
-    SDL_DestroyWindow(sdlWindow);
 }
 
 void WindowOGL3::cleanup() {
     SysEventsInternal::unsubscribe(eventSubscriber);
     SDL_GL_DeleteContext(glContext);
+    if (sdlWindow!=nullptr) { SDL_DestroyWindow(sdlWindow); }
 }
 
 void WindowOGL3::throwException(String func, String details) {
