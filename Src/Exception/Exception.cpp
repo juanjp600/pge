@@ -2,6 +2,16 @@
 
 using namespace PGE;
 
+Exception::Exception() {
+    source = "N/A";
+    details = "Improperly constructed exception";
+}
+
+Exception::Exception(const Exception& ex) {
+    source = ex.getSource();
+    details = ex.getDetails();
+}
+
 Exception::Exception(String src,String detail) {
     source = src;
     details = detail;

@@ -1,8 +1,16 @@
 #include <Threading/ThreadManager.h>
+#include "../Exception/Exception.h"
 
 #include <chrono>
 
 using namespace PGE;
+
+struct ExceptionData {
+    ThreadManager::NewThreadRequest* request;
+    Exception exception;
+};
+static std::vector<ExceptionData> thrownExceptions;
+static std::mutex exceptionMutex;
 
 ThreadManager::ThreadManager() {
     mainThreadId = std::this_thread::get_id();
@@ -33,6 +41,14 @@ bool ThreadManager::NewThreadRequest::isDone() const {
     return done;
 }
 
+bool ThreadManager::NewThreadRequest::wasExceptionThrown() const {
+    return exceptionThrown;
+}
+
+void ThreadManager::NewThreadRequest::notifyException() {
+    exceptionThrown = true;
+}
+
 void ThreadManager::NewThreadRequest::requestExecutionOnMainThread(MainThreadRequest* request) {
     mainThreadRequest = request;
     std::unique_lock<std::mutex> lock(mutex);
@@ -46,7 +62,17 @@ void ThreadManager::NewThreadRequest::setThreadManager(ThreadManager* mgr) {
 }
 
 static void _startThread(ThreadManager::NewThreadRequest* request) {
-    request->execute();
+    try {
+        request->execute();
+    } catch (Exception& e) {
+        exceptionMutex.lock();
+        ExceptionData exceptionData;
+        exceptionData.request = request;
+        exceptionData.exception = e;
+        thrownExceptions.push_back(exceptionData);
+        request->notifyException();
+        exceptionMutex.unlock();
+    }
 }
 
 void ThreadManager::NewThreadRequest::startThread() {
@@ -83,11 +109,23 @@ void ThreadManager::update() {
         if (newThreadRequests[i]->isWaitingForMainThread()) {
             newThreadRequests[i]->executeMainThreadRequest();
         }
-        if (newThreadRequests[i]->isDone()) {
+        if (newThreadRequests[i]->wasExceptionThrown()) {
+            exceptionMutex.lock();
+            for (int j = 0; j < thrownExceptions.size(); j++) {
+                if (thrownExceptions[j].request == newThreadRequests[i]) {
+                    delete newThreadRequests[i];
+                    newThreadRequests.erase(newThreadRequests.begin() + i);
+                    i--;
+                    throw thrownExceptions[j].exception;
+                }
+            }
+            exceptionMutex.unlock();
+        } else if (newThreadRequests[i]->isDone()) {
             delete newThreadRequests[i];
             newThreadRequests.erase(newThreadRequests.begin()+i);
             i--;
         }
+        
     }
     requestMutex.unlock();
 }

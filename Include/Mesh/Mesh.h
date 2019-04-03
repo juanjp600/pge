@@ -86,7 +86,10 @@ class Mesh {
 
         virtual void render() =0;
     protected:
-        Mesh(){};
+        Mesh(){}
+        
+        virtual void cleanup() =0;
+        virtual void throwException(String func, String details) =0;
 
         bool opaque;
         bool mustUpdateInternalData = true;

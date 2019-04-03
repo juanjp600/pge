@@ -28,6 +28,9 @@ class TextureDX11 : public Texture {
     private:
         TextureDX11(){};
 
+        void cleanup();
+        void throwException(String func, String details);
+
         Graphics* graphics;
 
         D3D11_TEXTURE2D_DESC dxTextureDesc;

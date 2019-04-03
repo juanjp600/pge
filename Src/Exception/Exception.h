@@ -8,6 +8,8 @@ namespace PGE {
 
 class Exception {
     public:
+        Exception();
+        Exception(const Exception& ex);
         Exception(String src,String detail);
         String getSource() const;
         String getDetails() const;

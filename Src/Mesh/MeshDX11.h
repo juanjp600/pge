@@ -25,6 +25,9 @@ class MeshDX11 : public Mesh {
 
         virtual void render();
     private:
+        void cleanup();
+        void throwException(String func, String details);
+
         std::vector<uint8_t> dxVertexData;
         std::vector<WORD> dxIndexData;
         UINT stride = 0;

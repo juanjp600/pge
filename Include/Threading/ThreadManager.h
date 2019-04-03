@@ -1,6 +1,8 @@
 #ifndef PGE_THREADMANAGER_H_INCLUDED
 #define PGE_THREADMANAGER_H_INCLUDED
 
+#include <Misc/String.h>
+
 #include <thread>
 #include <mutex>
 #include <condition_variable>
@@ -27,6 +29,8 @@ class ThreadManager {
                 virtual ~NewThreadRequest();
                 virtual void execute() =0;
                 bool isDone() const;
+                bool wasExceptionThrown() const;
+                void notifyException();
                 void requestExecutionOnMainThread(MainThreadRequest* request);
                 void setThreadManager(ThreadManager* mgr);
                 void startThread();
@@ -42,6 +46,7 @@ class ThreadManager {
                 std::atomic<bool> waitingForMainThread;
                 ThreadManager* threadManager;
                 std::atomic<bool> done;
+                std::atomic<bool> exceptionThrown;
         };
         void requestExecutionOnNewThread(NewThreadRequest* request);
     private:

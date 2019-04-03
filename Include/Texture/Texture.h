@@ -24,6 +24,9 @@ class Texture {
         static Texture* create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer,FORMAT fmt);
         virtual ~Texture(){};
     protected:
+        virtual void cleanup() =0;
+        virtual void throwException(String func, String details) =0;
+
         int width; int height;
         int realWidth; int realHeight;
         bool opaque;

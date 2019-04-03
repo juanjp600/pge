@@ -2,6 +2,7 @@
 #include "TextureInternal.h"
 #include <Window/Window.h>
 #include "../Window/WindowDX11.h"
+#include "../Exception/Exception.h"
 #include <Threading/ThreadManager.h>
 
 #include <stdlib.h>
@@ -22,6 +23,13 @@ Texture* Texture::create(Graphics* gfx, int w, int h, bool renderTarget, const v
 }
 
 TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,FORMAT fmt) {
+    dxShaderResourceView = nullptr;
+    dxTexture = nullptr;
+    dxRtv = nullptr;
+    dxZBufferView = nullptr;
+    dxZBufferTexture = nullptr;
+    isRT = false;
+
     graphics = gfx;
     ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
@@ -60,7 +68,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         }
     }
 
-    ZeroMemory( &dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC) );
+    ZeroMemory(&dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC));
     dxTextureDesc.Width = (UINT)realWidth;
     dxTextureDesc.Height = (UINT)realHeight;
     dxTextureDesc.MipLevels = 0;
@@ -72,11 +80,11 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     dxTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
     dxTextureDesc.CPUAccessFlags = 0;
 
-    HRESULT hr = 0;
+    HRESULT hResult = 0;
 
-    hr = dxDevice->CreateTexture2D( &dxTextureDesc,NULL,&dxTexture );
-    if (FAILED(hr)) {
-        SDL_Log("1. %d %d %d\n",realWidth,realHeight,hr);
+    hResult = dxDevice->CreateTexture2D(&dxTextureDesc,NULL,&dxTexture);
+    if (FAILED(hResult)) {
+        throwException("TextureDX11(w,h,rt)","Failed to create D3D11 texture ("+String(realWidth)+","+String(realHeight)+"; HRESULT "+String(hResult,true)+")");
     }
     if (buffer != nullptr) { dxContext->UpdateSubresource(dxTexture,0,NULL,buffer,realWidth*4,0); }
 
@@ -84,15 +92,15 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     dxShaderResourceViewDesc.Format = dxFormat;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     dxShaderResourceViewDesc.Texture2D.MipLevels = 1;
-    hr = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
-    if (FAILED(hr)) {
-        SDL_Log("2. %d\n",hr);
+    hResult = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
+    if (FAILED(hResult)) {
+        throwException("TextureDX11(w,h,rt)", "Failed to create shader resource view (" + String(realWidth) + "," + String(realHeight) + "; HRESULT " + String(hResult, true) + ")");
     }
 
     isRT = renderTarget;
 
     if (isRT) {
-        dxDevice->CreateRenderTargetView( dxTexture, NULL, &dxRtv );
+        dxDevice->CreateRenderTargetView(dxTexture, NULL, &dxRtv);
 
         // Create depth stencil texture
         D3D11_TEXTURE2D_DESC descDepth;
@@ -108,7 +116,10 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
         descDepth.CPUAccessFlags = 0;
         descDepth.MiscFlags = 0;
-        hr = dxDevice->CreateTexture2D(&descDepth, NULL, &dxZBufferTexture);
+        hResult = dxDevice->CreateTexture2D(&descDepth, NULL, &dxZBufferTexture);
+        if (FAILED(hResult)) {
+            throwException("TextureDX11(w,h,rt)", "Failed to create ZBuffer texture (" + String(realWidth) + "," + String(realHeight) + "; HRESULT " + String(hResult, true) + ")");
+        }
 
         // Create the depth stencil view
         D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
@@ -116,7 +127,10 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         descDSV.Format = descDepth.Format;
         descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
         descDSV.Texture2D.MipSlice = 0;
-        hr = dxDevice->CreateDepthStencilView(dxZBufferTexture, &descDSV, &dxZBufferView);
+        hResult = dxDevice->CreateDepthStencilView(dxZBufferTexture, &descDSV, &dxZBufferView);
+        if (FAILED(hResult)) {
+            throwException("TextureDX11(w,h,rt)", "Failed to create depth stencil view (" + String(realWidth) + "," + String(realHeight) + "; HRESULT " + String(hResult, true) + ")");
+        }
     }
 
     if (newBuffer!=nullptr) { delete[] newBuffer; }
@@ -125,6 +139,13 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
 }
 
 TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
+    dxShaderResourceView = nullptr;
+    dxTexture = nullptr;
+    dxRtv = nullptr;
+    dxZBufferView = nullptr;
+    dxZBufferTexture = nullptr;
+    isRT = false;
+
     graphics = gfx;
     ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
@@ -134,9 +155,18 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
 
     format = FORMAT::RGBA32;
 
-    BYTE* fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight,opaque);
+    BYTE* fiBuffer = nullptr;
+    try {
+        fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight,opaque);
+    } catch (Exception& e) {
+        cleanup();
+        throw e;
+    } catch (std::exception& e) {
+        cleanup();
+        throw e;
+    }
 
-    ZeroMemory( &dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC) );
+    ZeroMemory(&dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC));
     dxTextureDesc.Width = (UINT)realWidth;
     dxTextureDesc.Height = (UINT)realHeight;
     dxTextureDesc.MipLevels = 0;
@@ -149,11 +179,11 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
     dxTextureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
     dxTextureDesc.CPUAccessFlags = 0;
 
-    HRESULT hr = 0;
+    HRESULT hResult = 0;
 
-    hr = dxDevice->CreateTexture2D( &dxTextureDesc,NULL,&dxTexture );
-    if (FAILED(hr)) {
-        SDL_Log("1. %d %d %d\n",realWidth,realHeight,hr);
+    hResult = dxDevice->CreateTexture2D(&dxTextureDesc,NULL,&dxTexture);
+    if (FAILED(hResult)) {
+        throwException("TextureDX11(fn)", "Failed to create D3D11 texture (filename: "+filename+", HRESULT "+String(hResult,true)+")");
     }
     dxContext->UpdateSubresource(dxTexture,0,NULL,fiBuffer,realWidth*4,0);
 
@@ -162,9 +192,9 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     dxShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
     dxShaderResourceViewDesc.Texture2D.MipLevels = -1;
-    hr = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
-    if (FAILED(hr)) {
-        SDL_Log("2. %d\n",hr);
+    hResult = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
+    if (FAILED(hResult)) {
+        throwException("TextureDX11(fn)","Failed to create shader resource view (filename: "+filename+", HRESULT "+String(hResult,true)+")");
     }
 
     dxContext->GenerateMips(dxShaderResourceView);
@@ -175,6 +205,13 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
 }
 
 TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadManager) {
+    dxShaderResourceView = nullptr;
+    dxTexture = nullptr;
+    dxRtv = nullptr;
+    dxZBufferView = nullptr;
+    dxZBufferTexture = nullptr;
+    isRT = false;
+
     graphics = gfx;
     ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
@@ -189,7 +226,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
     realWidth = 512;
     realHeight = 512;
 
-    ZeroMemory( &dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC) );
+    ZeroMemory(&dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC));
     dxTextureDesc.Width = (UINT)realWidth;
     dxTextureDesc.Height = (UINT)realHeight;
     dxTextureDesc.MipLevels = 0;
@@ -201,21 +238,20 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
     dxTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
     dxTextureDesc.CPUAccessFlags = 0;
 
-    HRESULT hr = 0;
+    HRESULT hResult = 0;
 
-    hr = dxDevice->CreateTexture2D( &dxTextureDesc,NULL,&dxTexture );
-    if (FAILED(hr)) {
-        SDL_Log("1. %d %d %d\n",realWidth,realHeight,hr);
+    hResult = dxDevice->CreateTexture2D(&dxTextureDesc,NULL,&dxTexture);
+    if (FAILED(hResult)) {
+        throwException("TextureDX11(fn,threadMgr)", "Failed to create D3D11 texture (filename: "+filename+", HRESULT "+String(hResult,true)+")");
     }
-    //if (buffer != nullptr) { dxContext->UpdateSubresource(dxTexture,0,NULL,buffer,realWidth*4,0); }
-
+    
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     dxShaderResourceViewDesc.Texture2D.MipLevels = 1;
-    hr = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
-    if (FAILED(hr)) {
-        SDL_Log("2. %d\n",hr);
+    hResult = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
+    if (FAILED(hResult)) {
+        throwException("TextureDX11(fn,threadMgr)", "Failed to create shader resource view (filename: "+filename+", HRESULT " + String(hResult, true) + ")");
     }
 
     opaque = true;
@@ -223,6 +259,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
 
     class TextureReassignRequest : public ThreadManager::MainThreadRequest {
         public:
+            String filename;
             D3D11_TEXTURE2D_DESC* dxTextureDesc;
             ID3D11Texture2D** dxTexture;
             D3D11_SHADER_RESOURCE_VIEW_DESC* dxShaderResourceViewDesc;
@@ -234,44 +271,55 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
             BYTE* buffer;
 
             void execute() {
+                ID3D11Texture2D* tempTex = nullptr;
+                ID3D11ShaderResourceView* tempResView = nullptr;
+                D3D11_TEXTURE2D_DESC tempTexDesc;
+                D3D11_SHADER_RESOURCE_VIEW_DESC tempResViewDesc;
+
+                ZeroMemory(&tempTexDesc,sizeof(D3D11_TEXTURE2D_DESC));
+                tempTexDesc.Width = (UINT)realWidth;
+                tempTexDesc.Height = (UINT)realHeight;
+                tempTexDesc.MipLevels = 0;
+                tempTexDesc.ArraySize = 1;
+                tempTexDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+                tempTexDesc.SampleDesc.Count = 1;
+                tempTexDesc.SampleDesc.Quality = 0;
+                tempTexDesc.Usage = D3D11_USAGE_DEFAULT;
+                tempTexDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+                tempTexDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+                tempTexDesc.CPUAccessFlags = 0;
+
+                HRESULT hResult = 0;
+
+                hResult = dxDevice->CreateTexture2D(&tempTexDesc,NULL,&tempTex);
+                if (FAILED(hResult)) {
+                    throw Exception("TextureReassignRequest (DX11)","Failed to create D3D11Texture (filename: "+filename+", HRESULT "+String(hResult,true)+")");
+                }
+                if (buffer != nullptr) { dxContext->UpdateSubresource(tempTex,0,NULL,buffer,realWidth*4,0); }
+
+                ZeroMemory(&tempResViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+                tempResViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+                tempResViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+                tempResViewDesc.Texture2D.MostDetailedMip = 0;
+                tempResViewDesc.Texture2D.MipLevels = -1;
+                hResult = dxDevice->CreateShaderResourceView(tempTex,&tempResViewDesc,&tempResView);
+                if (FAILED(hResult)) {
+                    tempTex->Release();
+                    throw Exception("TextureReassignRequest (DX11)", "Failed to create shader resource view (filename: "+filename+", HRESULT "+String(hResult, true)+")");
+                }
+
+                dxContext->GenerateMips(tempResView);
+
                 (*dxShaderResourceView)->Release();
                 (*dxTexture)->Release();
-
-                ZeroMemory( dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC) );
-                dxTextureDesc->Width = (UINT)realWidth;
-                dxTextureDesc->Height = (UINT)realHeight;
-                dxTextureDesc->MipLevels = 0;
-                dxTextureDesc->ArraySize = 1;
-                dxTextureDesc->Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-                dxTextureDesc->SampleDesc.Count = 1;
-                dxTextureDesc->SampleDesc.Quality = 0;
-                dxTextureDesc->Usage = D3D11_USAGE_DEFAULT;
-                dxTextureDesc->BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
-                dxTextureDesc->MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
-                dxTextureDesc->CPUAccessFlags = 0;
-
-                HRESULT hr = 0;
-
-                hr = dxDevice->CreateTexture2D( dxTextureDesc,NULL,dxTexture );
-                if (FAILED(hr)) {
-                    SDL_Log("1. %d %d %d\n",realWidth,realHeight,hr);
-                }
-                if (buffer != nullptr) { dxContext->UpdateSubresource(*dxTexture,0,NULL,buffer,realWidth*4,0); }
-
-                ZeroMemory( dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
-                dxShaderResourceViewDesc->Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-                dxShaderResourceViewDesc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-                dxShaderResourceViewDesc->Texture2D.MostDetailedMip = 0;
-                dxShaderResourceViewDesc->Texture2D.MipLevels = -1;
-                hr = dxDevice->CreateShaderResourceView(*dxTexture,dxShaderResourceViewDesc,dxShaderResourceView);
-                if (FAILED(hr)) {
-                    SDL_Log("2. %d\n",hr);
-                }
-
-                dxContext->GenerateMips(*dxShaderResourceView);
+                *dxShaderResourceView = tempResView;
+                *dxTexture = tempTex;
+                memcpy(dxShaderResourceViewDesc, &tempResViewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+                memcpy(dxTextureDesc, &tempTexDesc, sizeof(D3D11_TEXTURE2D_DESC));
             }
     } mainThreadRequest;
 
+    mainThreadRequest.filename = filename;
     mainThreadRequest.dxTextureDesc = &dxTextureDesc;
     mainThreadRequest.dxTexture = &dxTexture;
     mainThreadRequest.dxShaderResourceViewDesc = &dxShaderResourceViewDesc;
@@ -312,13 +360,29 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
 }
 
 TextureDX11::~TextureDX11() {
-    dxShaderResourceView->Release();
-    dxTexture->Release();
+    cleanup();
+}
+
+void TextureDX11::throwException(String func, String details) {
+    cleanup();
+    throw Exception("TextureDX11::"+func,details);
+}
+
+void TextureDX11::cleanup() {
+    if (dxShaderResourceView != nullptr) { dxShaderResourceView->Release(); }
+    if (dxTexture != nullptr) { dxTexture->Release(); }
     if (isRT) {
-        dxRtv->Release();
-        dxZBufferView->Release();
-        dxZBufferTexture->Release();
+        if (dxRtv != nullptr) { dxRtv->Release(); }
+        if (dxZBufferView != nullptr) { dxZBufferView->Release(); }
+        if (dxZBufferTexture != nullptr) { dxZBufferTexture->Release(); }
     }
+
+    dxShaderResourceView = nullptr;
+    dxTexture = nullptr;
+    dxRtv = nullptr;
+    dxZBufferView = nullptr;
+    dxZBufferTexture = nullptr;
+    isRT = false;
 }
 
 void TextureDX11::useTexture(int index) {

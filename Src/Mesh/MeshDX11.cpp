@@ -7,6 +7,7 @@
 #include "../Shader/ShaderDX11.h"
 #include <Texture/Texture.h>
 #include "../Texture/TextureDX11.h"
+#include "../Exception/Exception.h"
 
 #include <inttypes.h>
 
@@ -22,13 +23,31 @@ MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) {
     primitiveType = pt;
 
     dxVertexData.clear();
+    dxIndexData.clear();
+    vertices.clear();
+    primitives.clear();
     dxVertexBuffer = nullptr;
     dxIndexBuffer = nullptr;
 }
 
 MeshDX11::~MeshDX11() {
-    if (dxVertexBuffer!=nullptr) { dxVertexBuffer->Release(); }
-    if (dxIndexBuffer!=nullptr) { dxIndexBuffer->Release(); }
+    cleanup();
+}
+
+void MeshDX11::throwException(String func, String details) {
+    cleanup();
+    throw Exception("MeshDX11::" + func, details);
+}
+
+void MeshDX11::cleanup() {
+    dxVertexData.clear();
+    dxIndexData.clear();
+    if (dxVertexBuffer != nullptr) { dxVertexBuffer->Release(); }
+    if (dxIndexBuffer != nullptr) { dxIndexBuffer->Release(); }
+    vertices.clear();
+    primitives.clear();
+    dxVertexBuffer = nullptr;
+    dxIndexBuffer = nullptr;
 }
 
 void MeshDX11::updateInternalData() {
@@ -126,27 +145,35 @@ void MeshDX11::uploadInternalData() {
         dxIndexBuffer->Release(); dxIndexBuffer=nullptr;
     }
 
-    ZeroMemory( &dxVertexBufferDesc, sizeof(D3D11_BUFFER_DESC) );
+    ZeroMemory(&dxVertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
     dxVertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
     dxVertexBufferDesc.ByteWidth = dxVertexData.size();
     dxVertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     dxVertexBufferDesc.CPUAccessFlags = 0;
 
-    ZeroMemory( &dxVertexBufferData, sizeof(D3D11_SUBRESOURCE_DATA) );
+    ZeroMemory(&dxVertexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
     dxVertexBufferData.pSysMem = dxVertexData.data();
 
-    dxDevice->CreateBuffer(&dxVertexBufferDesc,&dxVertexBufferData,&dxVertexBuffer);
+    HRESULT hResult = 0;
 
-    ZeroMemory( &dxIndexBufferDesc, sizeof(D3D11_BUFFER_DESC) );
+    hResult = dxDevice->CreateBuffer(&dxVertexBufferDesc,&dxVertexBufferData,&dxVertexBuffer);
+    if (FAILED(hResult)) {
+        throwException("uploadInternalData","Failed to create vertex buffer (vertex count: "+String(vertices.size(),false)+"; vertex data size: "+String(dxVertexData.size(),false)+"; HRESULT "+String(hResult,true)+")");
+    }
+
+    ZeroMemory(&dxIndexBufferDesc, sizeof(D3D11_BUFFER_DESC));
     dxIndexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
     dxIndexBufferDesc.ByteWidth = sizeof(WORD)*dxIndexData.size();
     dxIndexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
     dxIndexBufferDesc.CPUAccessFlags = 0;
 
-    ZeroMemory( &dxIndexBufferData, sizeof(D3D11_SUBRESOURCE_DATA) );
+    ZeroMemory(&dxIndexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
     dxIndexBufferData.pSysMem = dxIndexData.data();
 
-    dxDevice->CreateBuffer(&dxIndexBufferDesc,&dxIndexBufferData,&dxIndexBuffer);
+    hResult = dxDevice->CreateBuffer(&dxIndexBufferDesc,&dxIndexBufferData,&dxIndexBuffer);
+    if (FAILED(hResult)) {
+        throwException("uploadInternalData", "Failed to create index buffer (index count: "+String(dxIndexData.size(),false)+"; HRESULT "+String(hResult,true)+")");
+    }
 
     mustReuploadInternalData = false;
 }

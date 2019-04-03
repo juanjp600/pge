@@ -30,6 +30,10 @@ class Shader {
         virtual Constant* getFragmentShaderConstant(String constName) =0;
     protected:
         Shader(){};
+
+        virtual void cleanup() =0;
+        virtual void throwException(String func, String details) =0;
+
         String filepath;
 };
 

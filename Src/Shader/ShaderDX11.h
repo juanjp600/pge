@@ -33,6 +33,9 @@ class ShaderDX11 : public Shader {
     private:
         ShaderDX11(){};
 
+        void cleanup();
+        void throwException(String func, String details);
+
         std::vector<uint8_t> vertexShaderBytecode;
         std::vector<uint8_t> fragmentShaderBytecode;
 

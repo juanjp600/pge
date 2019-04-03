@@ -25,6 +25,9 @@ BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,in
         throw Exception("loadFIBuffer","Failed to load "+filename);
     }
     FIBITMAP* image = FreeImage_ConvertTo32Bits(temp);
+    if (image==nullptr) {
+        throw Exception("loadFIBuffer","Failed to convert "+filename+" to 32-bit RGBA");
+    }
     FreeImage_Unload(temp);
 
     int w = FreeImage_GetWidth(image);
@@ -39,12 +42,18 @@ BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,in
     if (w!=po2w || h!=po2h) {
         temp = image;
         image = FreeImage_Rescale(temp,po2w,po2h,FILTER_BILINEAR);
+        if (image==nullptr) {
+            throw Exception("loadFIBuffer","Failed to rescale "+filename+" ("+String(w)+","+String(h)+" to "+String(po2w)+","+String(po2h)+")");
+        }
         FreeImage_Unload(temp);
     }
 
     realWidth = po2w; realHeight = po2h;
 
     BYTE* bits = FreeImage_GetBits(image);
+    if (bits==nullptr) {
+        throw Exception("loadFIBuffer","Failed to retrieve data from "+filename);
+    }
     int bpp = FreeImage_GetBPP(image)/8;
     BYTE* newBits = new BYTE[realWidth*realHeight*bpp];
 

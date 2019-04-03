@@ -2,6 +2,7 @@
 #include "ShaderDX11.h"
 #include <Window/Window.h>
 #include "../Window/WindowDX11.h"
+#include "../Exception/Exception.h"
 #include <fstream>
 
 using namespace PGE;
@@ -10,7 +11,11 @@ Shader* Shader::load(Graphics* gfx, const String& path) {
     return new ShaderDX11(gfx,path);
 }
 
-ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {    
+ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
+    dxVertexInputLayout = nullptr;
+    dxVertexShader = nullptr;
+    dxFragmentShader = nullptr;
+
     graphics = gfx;
 
     filepath = path;
@@ -84,7 +89,6 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
 
     vertexShaderBytecode.clear();
     std::ifstream vertexSourceFile; vertexSourceFile.open(String(path,"vertex.dxbc").cstr(), std::ios_base::in | std::ios_base::binary);
-    SDL_Log("Shader file: %s %s",path.cstr(),String(path,"vertex.dxbc").cstr());
     while (!vertexSourceFile.eof()) {
         int writeInd = vertexShaderBytecode.size();
         vertexSourceFile.read(buf,512); int bytesRead = vertexSourceFile.gcount();
@@ -92,12 +96,13 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
         vertexShaderBytecode.resize(vertexShaderBytecode.size()+bytesRead);
         memcpy(&(vertexShaderBytecode[writeInd]),buf,bytesRead);
     }
-    SDL_Log("Shader code size: %d",vertexShaderBytecode.size());
+    if (vertexShaderBytecode.size() <= 0) {
+        throwException("ShaderDX11","Vertex shader is empty (filename: "+path+")");
+    }
     vertexSourceFile.close();
 
     fragmentShaderBytecode.clear();
     std::ifstream fragmentSourceFile; fragmentSourceFile.open(String(path,"fragment.dxbc").cstr(), std::ios_base::in | std::ios_base::binary);
-    SDL_Log("Shader file: %s %s", path.cstr(), String(path, "fragment.dxbc").cstr());
     while (!fragmentSourceFile.eof()) {
         int writeInd = fragmentShaderBytecode.size();
         fragmentSourceFile.read(buf,512); int bytesRead = fragmentSourceFile.gcount();
@@ -105,18 +110,42 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
         fragmentShaderBytecode.resize(fragmentShaderBytecode.size()+bytesRead);
         memcpy(&(fragmentShaderBytecode[writeInd]),buf,bytesRead);
     }
-    SDL_Log("Shader code size: %d", fragmentShaderBytecode.size());
+    if (fragmentShaderBytecode.size() <= 0) {
+        throwException("ShaderDX11","Fragment shader is empty (filename: "+path+")");
+    }
     fragmentSourceFile.close();
 
-    dxDevice->CreateVertexShader(vertexShaderBytecode.data(),sizeof(uint8_t)*vertexShaderBytecode.size(),NULL,&dxVertexShader);
-    dxDevice->CreatePixelShader(fragmentShaderBytecode.data(),sizeof(uint8_t)*fragmentShaderBytecode.size(),NULL,&dxFragmentShader);
+    HRESULT hResult = 0;
 
-    dxDevice->CreateInputLayout(dxVertexInputElemDesc.data(), dxVertexInputElemDesc.size(), getDxVsCode(), getDxVsCodeLen() * sizeof(uint8_t), &dxVertexInputLayout);
+    hResult = dxDevice->CreateVertexShader(vertexShaderBytecode.data(),sizeof(uint8_t)*vertexShaderBytecode.size(),NULL,&dxVertexShader);
+    if (FAILED(hResult)) {
+        throwException("ShaderDX11","Failed to create vertex shader (filename: "+path+"; HRESULT "+String(hResult,true)+")");
+    }
+
+    hResult = dxDevice->CreatePixelShader(fragmentShaderBytecode.data(),sizeof(uint8_t)*fragmentShaderBytecode.size(),NULL,&dxFragmentShader);
+    if (FAILED(hResult)) {
+        throwException("ShaderDX11", "Failed to create fragment shader (filename: "+path+"; HRESULT "+String(hResult,true)+")");
+    }
+
+    hResult = dxDevice->CreateInputLayout(dxVertexInputElemDesc.data(), dxVertexInputElemDesc.size(), getDxVsCode(), getDxVsCodeLen() * sizeof(uint8_t), &dxVertexInputLayout);
+    if (FAILED(hResult)) {
+        throwException("ShaderDX11", "Failed to create input layout (filename: "+path+"; HRESULT "+String(hResult,true)+")");
+    }
 
     delete[] buf;
 }
 
 ShaderDX11::~ShaderDX11() {
+    cleanup();
+}
+
+
+void ShaderDX11::throwException(String func, String details) {
+    cleanup();
+    throw Exception("ShaderDX11::" + func, details);
+}
+
+void ShaderDX11::cleanup() {
     for (int i = 0; i < vertexConstantBuffers.size(); i++) {
         delete vertexConstantBuffers[i];
     }
@@ -127,18 +156,21 @@ ShaderDX11::~ShaderDX11() {
     }
     fragmentConstantBuffers.clear();
 
-    for (int i=0;i<dxVertexInputElemDesc.size();i++) {
+    for (int i = 0; i < dxVertexInputElemDesc.size(); i++) {
         delete[] dxVertexInputElemDesc[i].SemanticName;
     }
     dxVertexInputElemDesc.clear();
-    for (int i=0;i<dxSamplerState.size();i++) {
+    for (int i = 0; i < dxSamplerState.size(); i++) {
         dxSamplerState[i]->Release();
     }
     dxSamplerState.clear();
 
-    dxVertexInputLayout->Release();
-    dxVertexShader->Release();
-    dxFragmentShader->Release();
+    if (dxVertexInputLayout != nullptr) { dxVertexInputLayout->Release(); }
+    if (dxVertexShader != nullptr) { dxVertexShader->Release(); }
+    if (dxFragmentShader != nullptr) { dxFragmentShader->Release(); }
+    dxVertexInputLayout = nullptr;
+    dxVertexShader = nullptr;
+    dxFragmentShader = nullptr;
 }
 
 void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, std::vector<CBufferInfo*>& constantBuffers) {
@@ -262,7 +294,13 @@ ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics,String nm,int sz) {
     ZeroMemory( &cBufferSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA) );
     cBufferSubresourceData.pSysMem = data;
 
-    ((WindowDX11*)(graphics->getWindow()))->getDxDevice()->CreateBuffer(&cBufferDesc,&cBufferSubresourceData,&dxCBuffer);
+    HRESULT hResult = 0;
+
+    hResult = ((WindowDX11*)(graphics->getWindow()))->getDxDevice()->CreateBuffer(&cBufferDesc,&cBufferSubresourceData,&dxCBuffer);
+    if (FAILED(hResult)) {
+        throw Exception("ShaderDX11::ShaderDX11","Failed to create CBuffer (name: "+nm+", size: "+String(sz,false)+")");
+    }
+
     dxContext = ((WindowDX11*)(graphics->getWindow()))->getDxContext();
 
     dirty = true;
