@@ -4,6 +4,7 @@
 #include <cwchar>
 #include <cstdlib>
 #include <cwctype>
+#include <iostream>
 #ifdef __APPLE__
 #ifdef __OBJC__
 #import <Foundation/Foundation.h>
