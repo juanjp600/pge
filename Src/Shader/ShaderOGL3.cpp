@@ -47,15 +47,18 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     glVertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(glVertexShader,1,&cstr,nullptr);
     glCompileShader(glVertexShader);
-    glGetShaderiv(glVertexShader, GL_COMPILE_STATUS, &errorCode);
-    if (errorCode != GL_TRUE) {
-        throwException("ShaderOGL3", "Failed to create vertex shader. (filepath: " + path + ")");
-    }
 
-    char* errorStr = new char[512];
+    String errorStr;
+    char* errorCStr = new char[512];
     GLsizei len = 0;
-    glGetShaderInfoLog(glVertexShader, 512, &len, errorStr);
-    std::cout << errorStr << std::endl;
+    glGetShaderInfoLog(glVertexShader, 512, &len, errorCStr);
+    errorStr = String(errorCStr);
+    
+    glGetShaderiv(glVertexShader, GL_COMPILE_STATUS, &errorCode);
+    if (errorCode != GL_TRUE || errorStr.size() > 0) {
+        delete[] errorCStr;
+        throwException("ShaderOGL3", "Failed to create vertex shader. (filepath: " + path + ")\n" + errorStr);
+    }
 
     String fragmentSource = "";
     std::ifstream fragmentSourceFile; fragmentSourceFile.open(String(path,"fragment.glsl").cstr());
@@ -79,15 +82,15 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     glFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(glFragmentShader,1,&cstr,nullptr);
     glCompileShader(glFragmentShader);
-
-    glGetShaderInfoLog(glFragmentShader, 512, &len, errorStr);
-    std::cout << errorStr << std::endl;
-    delete[] errorStr;
+    glGetShaderInfoLog(glFragmentShader, 512, &len, errorCStr);
+    errorStr = String(errorCStr);
     
     glGetShaderiv(glFragmentShader, GL_COMPILE_STATUS, &errorCode);
-    if (errorCode != GL_TRUE) {
-        throwException("ShaderOGL3", "Failed to create fragment shader. (filepath: " + path + ")");
+    if (errorCode != GL_TRUE || errorStr.size() > 0) {
+        delete[] errorCStr;
+        throwException("ShaderOGL3", "Failed to create fragment shader. (filepath: " + path + ")\n" + errorStr);
     }
+    delete[] errorCStr;
 
     glShaderProgram = glCreateProgram();
     glAttachShader(glShaderProgram,glVertexShader);
