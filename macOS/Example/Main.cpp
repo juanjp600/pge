@@ -157,13 +157,12 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
     return retVal;
 }
 
-#if 1
 int PGE::Main() {
-    ThreadManager* threadManager = new ThreadManager();
-    Audio* audio = Audio::create(threadManager);
+//    ThreadManager* threadManager = new ThreadManager();
+//    Audio* audio = Audio::create(threadManager);
 
-    Sound* sound = Sound::load(audio, String("SFX/Music/The Dread.ogg").resourcePath());
-    Sound::Channel* channel = sound->play();
+//    Sound* sound = Sound::load(audio, String("SFX/Music/The Dread.ogg").resourcePath());
+//    Sound::Channel* channel = sound->play();
     
     Graphics* graphics = Graphics::create("Mac PGE Test", 1280,720, false);
     IO* io = IO::create(graphics->getWindow());
@@ -171,7 +170,7 @@ int PGE::Main() {
     Shader* shader = Shader::load(graphics, String("default/").resourcePath());
     Shader* postprocessShader = Shader::load(graphics, String("postprocess/").resourcePath());
 
-    RM2 testRM2 = loadRM2(String("GFX/Map/Rooms/extend_gateb/extend_gateb.rm2").resourcePath(), graphics, shader);
+    RM2 testRM2 = loadRM2(String("GFX/Map/Rooms/hll_bean/hll_bean.rm2").resourcePath(), graphics, shader);
 
     float retWidth = 1280.f * 2;
     float retHeight = 720.f * 2;
@@ -219,7 +218,7 @@ int PGE::Main() {
     float nearPlane = 0.01f;
 
     Matrix4x4f projectionMatrix = Matrix4x4f::identity;
-    projectionMatrix.elements[0][0] = 720.f / 1280.f;
+    projectionMatrix.elements[0][0] = retHeight / retWidth;
     projectionMatrix.elements[1][1] = 1.f;
     projectionMatrix.elements[2][2] = farPlane / (nearPlane - farPlane);
     projectionMatrix.elements[2][3] = -1.f;
@@ -334,10 +333,9 @@ int PGE::Main() {
     delete io;
     delete graphics;
     
-    delete threadManager;
-    delete channel;
-    delete audio;
+//    delete threadManager;
+//    delete channel;
+//    delete audio;
 
     return 0;
 }
-#endif

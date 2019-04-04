@@ -26,7 +26,7 @@ class GraphicsDX11 : public Graphics {
 
         virtual void setViewport(Rectanglei vp);
     private:
-        void throwException(String func,String details);
+        void throwException(String func,String details) override;
         void cleanup() override;
 
         std::vector<ID3D11RenderTargetView*> currentRenderTargetViews;

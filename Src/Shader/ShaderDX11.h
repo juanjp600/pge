@@ -33,8 +33,8 @@ class ShaderDX11 : public Shader {
     private:
         ShaderDX11(){};
 
-        void cleanup();
-        void throwException(String func, String details);
+        void cleanup() override;
+        void throwException(String func, String details) override;
 
         std::vector<uint8_t> vertexShaderBytecode;
         std::vector<uint8_t> fragmentShaderBytecode;
@@ -65,7 +65,7 @@ class ShaderDX11 : public Shader {
                 int size;
         };
         class CBufferInfo {
-            public: 
+            public:
                 CBufferInfo(Graphics* graphics, String nm,int sz);
                 ~CBufferInfo();
 

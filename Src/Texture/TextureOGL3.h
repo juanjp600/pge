@@ -20,13 +20,16 @@ class TextureOGL3 : public Texture {
         TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadManager);
         virtual ~TextureOGL3();
 
-        virtual bool isRenderTarget() const;
+        virtual bool isRenderTarget() const override;
 
         GLuint getGlTexture() const;
         //GLuint getGlFramebuffer() const;
         GLuint getGlDepthbuffer() const;
     private:
         TextureOGL3(){};
+    
+        void cleanup() override;
+        void throwException(String func, String details) override;
 
         bool isRT;
 

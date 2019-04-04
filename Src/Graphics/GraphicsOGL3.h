@@ -33,7 +33,7 @@ class GraphicsOGL3 : public Graphics {
         GLuint glFramebuffer;
 
         Rectanglei currentViewport;
-    
+
         void throwException(String func,String details) override;
         void cleanup() override;
 };
