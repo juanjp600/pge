@@ -20,11 +20,11 @@ class MeshOGL3 : public Mesh {
         MeshOGL3(Graphics* gfx,Primitive::TYPE pt);
         virtual ~MeshOGL3();
 
-        virtual void updateInternalData();
+        virtual void updateInternalData() override;
 
-        virtual void render();
+        virtual void render() override;
     private:
-        virtual void uploadInternalData();
+        virtual void uploadInternalData() override;
 
         GLuint glVertexBufferObject;
         GLuint glIndexBufferObject;
@@ -33,6 +33,9 @@ class MeshOGL3 : public Mesh {
 
         std::vector<uint8_t> glVertexData;
         std::vector<GLuint> glIndexData;
+
+        void cleanup() override;
+        void throwException(String func, String details) override;
 };
 
 }

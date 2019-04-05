@@ -8,6 +8,7 @@
 #include "../Shader/ShaderOGL3.h"
 #include <Texture/Texture.h>
 #include "../Texture/TextureOGL3.h"
+#include "../Exception/Exception.h"
 
 using namespace PGE;
 
@@ -31,6 +32,15 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
 }
 
 MeshOGL3::~MeshOGL3() {
+    cleanup();
+}
+
+void MeshOGL3::throwException(String func, String details) {
+    cleanup();
+    throw Exception("MeshOGL3::" + func, details);
+}
+
+void MeshOGL3::cleanup() {
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
     glDeleteBuffers(1, &glVertexBufferObject);
@@ -43,7 +53,7 @@ void MeshOGL3::updateInternalData() {
     if (!mustUpdateInternalData) { return; }
 
     glVertexData.clear(); glIndexData.clear();
-    
+
     const std::vector<String>& vertexInputElems = ((ShaderOGL3*)material->getShader())->getVertexInputElems();
     int* indexHints = new int[vertexInputElems.size()];
     for (int j=0;j<vertexInputElems.size();j++) {
@@ -114,9 +124,19 @@ void MeshOGL3::uploadInternalData() {
     if (mustUpdateInternalData) { updateInternalData(); }
     if (!mustReuploadInternalData) { return; }
 
+    GLuint glError = GL_NO_ERROR;
+
     //TODO: determine when we should use GL_DYNAMIC_DRAW
     glBufferData(GL_ARRAY_BUFFER, glVertexData.size(),glVertexData.data(),GL_STATIC_DRAW);
+    glError = glGetError();
+    if (glError != GL_NO_ERROR) {
+        throwException("uploadInternalData", "Failed to create data store for vertex buffer. (GL_ERROR: " + String(glError, true) + ")");
+    }
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,glIndexData.size()*sizeof(GLuint),glIndexData.data(),GL_STATIC_DRAW);
+    glError = glGetError();
+    if (glError != GL_NO_ERROR) {
+        throwException("uploadInternalData", "Failed to create data store for index buffer. (GL_ERROR: " + String(glError, true) + ")");
+    }
 
     mustReuploadInternalData = false;
 }

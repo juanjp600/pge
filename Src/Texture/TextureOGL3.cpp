@@ -3,6 +3,7 @@
 #include <Texture/Texture.h>
 #include "TextureInternal.h"
 #include "TextureOGL3.h"
+#include "../Exception/Exception.h"
 
 #include <stdlib.h>
 #include <inttypes.h>
@@ -22,6 +23,8 @@ Texture* Texture::load(Graphics* gfx,String fn,ThreadManager* threadManager) {
 }
 
 TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,Texture::FORMAT fmt) {
+    GLuint glError = GL_NO_ERROR;
+    
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     format = fmt;
@@ -69,6 +72,10 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
     }
 
     glTexImage2D(GL_TEXTURE_2D,0,glInternalFormat,realWidth,realHeight,0,glFormat,glPixelType,buffer);
+    glError = glGetError();
+    if (glError != GL_NO_ERROR) {
+        throwException("TextureOGL3(w,h,rt)", "Failed to create texture ("+String(realWidth)+","+String(realHeight)+"; GLERROR "+String(glError, true)+")");
+    }
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -93,6 +100,8 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
 }
 
 TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn) {
+    GLuint glError = GL_NO_ERROR;
+    
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     filename = fn;
@@ -104,6 +113,10 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn) {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,glTexture);
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,fiBuffer);
+    glError = glGetError();
+    if (glError != GL_NO_ERROR) {
+        throwException("TextureOGL3(fn)", "Failed to create texture (filename: "+filename+"; GLERROR "+String(glError, true)+")");
+    }
 
     glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -119,6 +132,8 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn) {
 }
 
 TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadManager) {
+    GLuint glError = GL_NO_ERROR;
+    
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     filename = fn;
@@ -128,6 +143,10 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,glTexture);
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,nullptr);
+    glError = glGetError();
+    if (glError != GL_NO_ERROR) {
+        throwException("TextureOGL3(fn,threadMgr)", "Failed to create texture (filename: "+filename+"; GLERROR "+String(glError, true)+")");
+    }
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -140,6 +159,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
 
     class TextureReassignRequest : public ThreadManager::MainThreadRequest {
         public:
+            String filename;
             GraphicsOGL3* graphics;
             GLuint glTexture;
 
@@ -147,15 +167,22 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
             BYTE* buffer;
 
             void execute() override {
+                GLuint glError = GL_NO_ERROR;
+                
                 graphics->takeGlContext();
 
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D,glTexture);
                 glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,buffer);
+                glError = glGetError();
+                if (glError != GL_NO_ERROR) {
+                    throw Exception("TextureReassignRequest (OGL3)", "Failed to create texture (filename: "+filename+"; GLERROR "+String(glError, true)+")");
+                }
 
                 glGenerateMipmap(GL_TEXTURE_2D);
             }
     } mainThreadRequest;
+    mainThreadRequest.filename = filename;
     mainThreadRequest.graphics = (GraphicsOGL3*)graphics;
     mainThreadRequest.glTexture = glTexture;
 
@@ -191,8 +218,17 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
 }
 
 TextureOGL3::~TextureOGL3() {
-    ((GraphicsOGL3*)graphics)->takeGlContext();
+    cleanup();
+}
 
+void TextureOGL3::throwException(String func, String details) {
+    cleanup();
+    throw Exception("TextureOGL3::" + func, details);
+}
+
+void TextureOGL3::cleanup() {
+    ((GraphicsOGL3*)graphics)->takeGlContext();
+    
     if (isRT) {
         //glDeleteFramebuffers(1,&glFramebuffer);
         glDeleteRenderbuffers(1,&glDepthbuffer);

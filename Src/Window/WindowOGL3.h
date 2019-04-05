@@ -17,8 +17,8 @@ class WindowOGL3 : public WindowInternal {
         WindowOGL3(String c,int w,int h,bool fs);
         ~WindowOGL3();
 
-        virtual void update();
-        virtual void swap(bool vsyncEnabled=true);
+        virtual void update() override;
+        virtual void swap(bool vsyncEnabled=true) override;
 
         SDL_GLContext getGlContext() const;
     private:

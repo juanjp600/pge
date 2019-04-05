@@ -8,6 +8,8 @@
 using namespace PGE;
 
 WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
+    GLuint glError = GL_NO_ERROR;
+    
     caption = c;
     width = w; height = h; fullscreen = fs;
 
@@ -36,10 +38,12 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     SysEventsInternal::update();
 
     glewExperimental = true;
-    glewInit();
+    glError = glewInit();
+    if (glError != GL_NO_ERROR) {
+        throwException("WindowOGL3", "Failed to initialize GLEW (GLERROR: " + String(glError, true) + ")");
+    }
 
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE); glCullFace(GL_BACK);
     glEnable(GL_BLEND);
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
@@ -47,6 +51,11 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glError = glGetError();
+    if (glError != GL_NO_ERROR) {
+        throwException("WindowOGL3", "Failed to initialize window data post-GLEW initialization. (GL_ERROR: " + String(glError, true) + ")");
+    }
 
     vsync = true;
     SDL_GL_SetSwapInterval(1);

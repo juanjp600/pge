@@ -28,8 +28,8 @@ class TextureDX11 : public Texture {
     private:
         TextureDX11(){};
 
-        void cleanup();
-        void throwException(String func, String details);
+        void cleanup() override;
+        void throwException(String func, String details) override;
 
         Graphics* graphics;
 

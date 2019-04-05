@@ -138,9 +138,9 @@
 
 /* Begin PBXFileReference section */
 		194AA01E2209FF3800837F38 /* libEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		194AA0272209FF4D00837F38 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
-		194AA0282209FF4D00837F38 /* MeshOGL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshOGL3.cpp; sourceTree = "<group>"; };
-		194AA02B2209FF4D00837F38 /* MeshOGL3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshOGL3.h; sourceTree = "<group>"; };
+		194AA0272209FF4D00837F38 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = Mesh.cpp; sourceTree = "<group>"; };
+		194AA0282209FF4D00837F38 /* MeshOGL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = MeshOGL3.cpp; sourceTree = "<group>"; };
+		194AA02B2209FF4D00837F38 /* MeshOGL3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MeshOGL3.h; sourceTree = "<group>"; };
 		194AA02D2209FF4D00837F38 /* String.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = String.cpp; sourceTree = "<group>"; };
 		194AA0322209FF4D00837F38 /* UserInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserInput.cpp; sourceTree = "<group>"; };
 		194AA0342209FF4D00837F38 /* SysEvents.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SysEvents.cpp; sourceTree = "<group>"; };

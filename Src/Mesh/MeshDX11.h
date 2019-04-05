@@ -25,16 +25,16 @@ class MeshDX11 : public Mesh {
 
         virtual void render();
     private:
-        void cleanup();
-        void throwException(String func, String details);
+        void cleanup() override;
+        void throwException(String func, String details) override;
 
         std::vector<uint8_t> dxVertexData;
         std::vector<WORD> dxIndexData;
         UINT stride = 0;
-        
+
         D3D11_BUFFER_DESC dxVertexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxVertexBufferData;
-        ID3D11Buffer* dxVertexBuffer; 
+        ID3D11Buffer* dxVertexBuffer;
 
         D3D11_BUFFER_DESC dxIndexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxIndexBufferData;

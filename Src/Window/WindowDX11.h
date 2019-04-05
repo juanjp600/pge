@@ -30,25 +30,25 @@ class WindowDX11 : public WindowInternal {
     private:
         WindowDX11(){};
 
-        void throwException(String func,String details);
-        void cleanup();
+        void throwException(String func,String details) override;
+        void cleanup() override;
 
         IDXGIFactory1* dxgiFactory;
 
         DXGI_SWAP_CHAIN_DESC dxSwapChainDesc;
         IDXGISwapChain* dxSwapChain;
-        
+
         ID3D11Device* dxDevice;
         ID3D11DeviceContext* dxContext;
-        
+
         ID3D11RenderTargetView* dxBackBufferRtv;
         ID3D11Texture2D* dxZBufferTexture;
         ID3D11DepthStencilView* dxZBufferView;
         ID3D11DepthStencilState* dxDepthStencilState[2];
-        
+
         D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
         ID3D11RasterizerState* dxRasterizerState;
-        
+
         D3D11_BLEND_DESC dxBlendStateDesc;
         ID3D11BlendState* dxBlendState;
 };

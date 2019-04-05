@@ -20,8 +20,8 @@ class ShaderOGL3 : public Shader {
         ShaderOGL3(Graphics* gfx,const String& path);
         virtual ~ShaderOGL3();
 
-        Constant* getVertexShaderConstant(String name);
-        Constant* getFragmentShaderConstant(String name);
+        Constant* getVertexShaderConstant(String name) override;
+        Constant* getFragmentShaderConstant(String name) override;
 
         const std::vector<String>& getVertexInputElems() const;
 
@@ -29,6 +29,9 @@ class ShaderOGL3 : public Shader {
         void unbindGLAttribs();
     private:
         ShaderOGL3(){};
+
+        void cleanup() override;
+        void throwException(String func, String details) override;
 
         class ConstantOGL3 : public Constant {
             public:
