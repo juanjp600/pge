@@ -51,7 +51,7 @@ public:
     String toLower() const;
     String trim() const;
     std::vector<String> split(const String& needle, bool removeEmptyEntries) const;
-    String join(const std::vector<String>& vect, const String& separator);
+    static String join(const std::vector<String>& vect, const String& separator);
 
     String unHex() const;
     String resourcePath() const;
