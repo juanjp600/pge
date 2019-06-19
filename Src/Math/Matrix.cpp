@@ -131,3 +131,17 @@ Matrix4x4f Matrix4x4f::constructViewMat(const Vector3f& position,const Vector3f&
 
     return newMat;
 }
+
+Matrix4x4f Matrix4x4f::constructProjectionMat(float horizontalfov, float aspectRatio, float nearZ, float farZ) {
+    Matrix4x4f retval = PGE::Matrix4x4f::identity;
+    float rad = horizontalfov * 0.5f;
+    float nad = cos(rad) / sin(rad);
+    
+    retval.elements[0][0] = nad * (-1.0f / aspectRatio);
+    retval.elements[1][1] = nad;
+    retval.elements[2][2] = farZ / (nearZ - farZ);
+    retval.elements[2][3] = -1.f;
+    retval.elements[3][2] = (nearZ * farZ / (nearZ - farZ));
+    
+    return retval;
+}
