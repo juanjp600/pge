@@ -87,7 +87,7 @@ Matrix4x4f Matrix4x4f::constructWorldMat(const Vector3f& position,const Vector3f
                                    0.f,1.f,0.f,0.f,
                                    -sinYaw,0.f,cosYaw,0.f,
                                    0.f,0.f,0.f,1.f);
-    
+
     Matrix4x4f rollMat = Matrix4x4f(cosRoll,-sinRoll,0.f,0.f,
                                     sinRoll,cosRoll,0.f,0.f,
                                     0.f,0.f,1.f,0.f,
@@ -136,12 +136,24 @@ Matrix4x4f Matrix4x4f::constructProjectionMat(float horizontalfov, float aspectR
     Matrix4x4f retval = PGE::Matrix4x4f::identity;
     float rad = horizontalfov * 0.5f;
     float nad = cos(rad) / sin(rad);
-    
+
     retval.elements[0][0] = nad * (-1.0f / aspectRatio);
     retval.elements[1][1] = nad;
     retval.elements[2][2] = farZ / (nearZ - farZ);
     retval.elements[2][3] = -1.f;
     retval.elements[3][2] = (nearZ * farZ / (nearZ - farZ));
-    
+
+    return retval;
+}
+
+Matrix4x4f Matrix4x4f::constructOrtho2DMat(float left, float right, float bottom, float top) {
+    Matrix4x4f retval = PGE::Matrix4x4f::identity;
+
+    retval.elements[0][0] = 2 / (right - left);
+    retval.elements[1][1] = 2 / (top - bottom);
+    retval.elements[2][2] = -1;
+    retval.elements[3][0] = - (right + left) / (right - left);
+    retval.elements[3][1] = - (top + bottom) / (top - bottom);
+
     return retval;
 }
