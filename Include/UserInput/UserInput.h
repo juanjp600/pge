@@ -11,6 +11,8 @@ class UserInput {
             GAMEPAD
         };
 
+        virtual ~UserInput()=default;
+
         virtual DEVICE getDevice() const = 0;
 
         bool isDown() const;
