@@ -5,10 +5,29 @@
 #include <Window/Window.h>
 #include "WindowOGL3.h"
 
+#ifdef __APPLE__
+#ifdef __OBJC__
+#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
+#endif
+#endif
+
 using namespace PGE;
 
 WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     GLuint glError = GL_NO_ERROR;
+    
+#ifdef __APPLE__
+#ifdef __OBJC__
+    // Figure out the de-scaled window size.
+    NSRect rect = NSMakeRect(0, 0, w, h);
+    NSScreen* screen = [NSScreen mainScreen];
+    rect = [screen convertRectFromBacking: rect];
+    
+    w = NSWidth(rect);
+    h = NSHeight(rect);
+#endif
+#endif
     
     caption = c;
     width = w; height = h; fullscreen = fs;

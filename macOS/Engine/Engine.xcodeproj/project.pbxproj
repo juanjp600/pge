@@ -154,7 +154,7 @@
 		194AA03F2209FF4D00837F38 /* Plane.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Plane.cpp; sourceTree = "<group>"; };
 		194AA0422209FF4D00837F38 /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
 		194AA0432209FF4D00837F38 /* WindowOGL3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowOGL3.h; sourceTree = "<group>"; };
-		194AA0452209FF4D00837F38 /* WindowOGL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WindowOGL3.cpp; sourceTree = "<group>"; };
+		194AA0452209FF4D00837F38 /* WindowOGL3.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = WindowOGL3.cpp; sourceTree = "<group>"; };
 		194AA0472209FF4D00837F38 /* TextureOGL3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureOGL3.h; sourceTree = "<group>"; };
 		194AA0482209FF4D00837F38 /* TextureOGL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureOGL3.cpp; sourceTree = "<group>"; };
 		194AA04A2209FF4D00837F38 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
