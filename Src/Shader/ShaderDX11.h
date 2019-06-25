@@ -50,12 +50,12 @@ class ShaderDX11 : public Shader {
                 ConstantDX11(CBufferInfo* cBuffer, String nm, int offst, int sz);
                 ~ConstantDX11(){};
 
-                void setValue(Matrix4x4f value);
-                void setValue(Vector3f value);
-                void setValue(Vector4f value);
-                void setValue(Color value);
-                void setValue(float value);
-                void setValue(int value);
+                void setValue(Matrix4x4f value) override;
+                void setValue(Vector3f value) override;
+                void setValue(Vector4f value) override;
+                void setValue(Color value) override;
+                void setValue(float value) override;
+                void setValue(int value) override;
 
                 String getName() const;
             private:

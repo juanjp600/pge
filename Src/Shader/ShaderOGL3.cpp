@@ -29,7 +29,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     if (!vertexSourceFile.good()) {
         throwException("ShaderOGL3", "Failed to find vertex.glsl. (filepath: " + path + ")");
     }
-    
+
     char* buf = new char[512];
     while (!vertexSourceFile.eof()) {
         vertexSourceFile.read(buf,511);
@@ -53,7 +53,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     GLsizei len = 0;
     glGetShaderInfoLog(glVertexShader, 512, &len, errorCStr);
     errorStr = String(errorCStr);
-    
+
     glGetShaderiv(glVertexShader, GL_COMPILE_STATUS, &errorCode);
     if (errorCode != GL_TRUE || errorStr.size() > 0) {
         delete[] errorCStr;
@@ -65,7 +65,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     if (!fragmentSourceFile.good()) {
         throwException("ShaderOGL3", "Failed to find fragment.glsl. (filepath: " + path + ")");
     }
-    
+
     buf = new char[512];
     while (!fragmentSourceFile.eof()) {
         fragmentSourceFile.read(buf,511);
@@ -84,7 +84,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     glCompileShader(glFragmentShader);
     glGetShaderInfoLog(glFragmentShader, 512, &len, errorCStr);
     errorStr = String(errorCStr);
-    
+
     glGetShaderiv(glFragmentShader, GL_COMPILE_STATUS, &errorCode);
     if (errorCode != GL_TRUE || errorStr.size() > 0) {
         delete[] errorCStr;
@@ -285,6 +285,10 @@ void ShaderOGL3::ConstantOGL3::setValue(Matrix4x4f value) {
     val.matrixVal = value; valueType = VALUE_TYPE::MATRIX;
 }
 
+void ShaderOGL3::ConstantOGL3::setValue(Vector2f value) {
+    val.vector2fVal = value; valueType = VALUE_TYPE::VECTOR2F;
+}
+
 void ShaderOGL3::ConstantOGL3::setValue(Vector3f value) {
     val.vector3fVal = value; valueType = VALUE_TYPE::VECTOR3F;
 }
@@ -310,6 +314,9 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
     switch (valueType) {
         case VALUE_TYPE::MATRIX: {
             glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)val.matrixVal.elements);
+        } break;
+        case VALUE_TYPE::VECTOR2F: {
+            glUniform2f(location,val.vector2fVal.x,val.vector2fVal.y);
         } break;
         case VALUE_TYPE::VECTOR3F: {
             glUniform3f(location,val.vector3fVal.x,val.vector3fVal.y,val.vector3fVal.z);

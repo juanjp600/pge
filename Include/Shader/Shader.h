@@ -17,6 +17,7 @@ class Shader {
         class Constant {
             public:
                 virtual void setValue(Matrix4x4f value) =0;
+                virtual void setValue(Vector2f value) =0;
                 virtual void setValue(Vector3f value) =0;
                 virtual void setValue(Vector4f value) =0;
                 virtual void setValue(Color value) =0;

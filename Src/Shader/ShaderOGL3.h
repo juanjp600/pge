@@ -38,12 +38,13 @@ class ShaderOGL3 : public Shader {
                 ConstantOGL3(Graphics* gfx,String nm, int loc);
                 ~ConstantOGL3(){};
 
-                void setValue(Matrix4x4f value);
-                void setValue(Vector3f value);
-                void setValue(Vector4f value);
-                void setValue(Color value);
-                void setValue(float value);
-                void setValue(int value);
+                void setValue(Matrix4x4f value) override;
+                void setValue(Vector2f value) override;
+                void setValue(Vector3f value) override;
+                void setValue(Vector4f value) override;
+                void setValue(Color value) override;
+                void setValue(float value) override;
+                void setValue(int value) override;
 
                 void setUniform();
 
@@ -51,6 +52,7 @@ class ShaderOGL3 : public Shader {
             private:
                 enum class VALUE_TYPE {
                     MATRIX,
+                    VECTOR2F,
                     VECTOR3F,
                     VECTOR4F,
                     COLOR,
@@ -60,6 +62,7 @@ class ShaderOGL3 : public Shader {
                 union Value {
                     Value();
                     Matrix4x4f matrixVal;
+                    Vector2f vector2fVal;
                     Vector3f vector3fVal;
                     Vector4f vector4fVal;
                     Color colorVal;
