@@ -238,10 +238,12 @@ const wchar* String::wstr() const {
     return wbuffer;
 }
 
+#ifdef __APPLE__
 #ifdef __OBJC__
 NSString* String::nsstr() const {
     return [NSString stringWithUTF8String: cbuffer];
 }
+#endif
 #endif
 
 int String::toInt() const {
