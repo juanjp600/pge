@@ -134,8 +134,6 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     }
 
     if (newBuffer!=nullptr) { delete[] newBuffer; }
-
-    opaque = false;
 }
 
 TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
@@ -157,7 +155,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
 
     BYTE* fiBuffer = nullptr;
     try {
-        fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight,opaque);
+        fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight);
     } catch (Exception& e) {
         cleanup();
         throw e;
@@ -254,7 +252,6 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
         throwException("TextureDX11(fn,threadMgr)", "Failed to create shader resource view (filename: "+filename+", HRESULT " + String(hResult, true) + ")");
     }
 
-    opaque = true;
     isRT = false;
 
     class TextureReassignRequest : public ThreadManager::MainThreadRequest {
@@ -331,10 +328,9 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
         public:
             TextureReassignRequest mainThreadRequest;
             String filename;
-            int* width; int* height; int* realWidth; int* realHeight; bool* opaque;
+            int* width; int* height; int* realWidth; int* realHeight;
             void execute() {
-                bool removeMeOpaque;
-                BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight,removeMeOpaque);
+                BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight);
 
                 mainThreadRequest.realWidth = *realWidth;
                 mainThreadRequest.realHeight = *realHeight;
@@ -354,7 +350,6 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
     textureLoadRequest->height = &height;
     textureLoadRequest->realWidth = &realWidth;
     textureLoadRequest->realHeight = &realHeight;
-    textureLoadRequest->opaque = &opaque;
 
     threadManager->requestExecutionOnNewThread(textureLoadRequest);
 }

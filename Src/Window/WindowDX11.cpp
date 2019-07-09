@@ -28,8 +28,9 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
     dxBackBufferRtv = nullptr;
     dxZBufferTexture = nullptr;
     dxZBufferView = nullptr;
-    dxDepthStencilState[0] = nullptr;
-    dxDepthStencilState[1] = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE] = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] = nullptr;
 
     dxRasterizerState = nullptr;
 
@@ -206,17 +207,24 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[0]);
+    hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE]);
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create opaque depth stencil state (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create ENABLED_WRITE depth stencil state (HRESULT "+String(hResult,true)+")");
     }
-    dxContext->OMSetDepthStencilState(dxDepthStencilState[0], 0);
+    dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE], 0);
 
     depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 
-    hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[1]);
+    hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE]);
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create alpha depth stencil state (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create ENABLED_NOWRITE depth stencil state (HRESULT "+String(hResult,true)+")");
+    }
+
+    depthStencilDesc.DepthEnable = FALSE;
+
+    hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED]);
+    if (FAILED(hResult)) {
+        throwException("WindowDX11", "Failed to create DISABLED depth stencil state (HRESULT " + String(hResult, true) + ")");
     }
 
     open = true;
@@ -229,8 +237,15 @@ WindowDX11::~WindowDX11() {
 
 void WindowDX11::cleanup() {
     SysEventsInternal::unsubscribe(eventSubscriber);
-    if (dxDepthStencilState[0]!=nullptr) { dxDepthStencilState[0]->Release(); }
-    if (dxDepthStencilState[1]!=nullptr) { dxDepthStencilState[1]->Release(); }
+    if (dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE]!=nullptr) {
+        dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE]->Release();
+    }
+    if (dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] != nullptr) {
+        dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE]->Release();
+    }
+    if (dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] != nullptr) {
+        dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED]->Release();
+    }
     if (dxRasterizerState!=nullptr) { dxRasterizerState->Release(); }
     if (dxBlendState!=nullptr) { dxBlendState->Release(); }
     if (dxContext!=nullptr) { dxContext->Release(); }
@@ -249,8 +264,9 @@ void WindowDX11::cleanup() {
     dxBackBufferRtv = nullptr;
     dxZBufferTexture = nullptr;
     dxZBufferView = nullptr;
-    dxDepthStencilState[0] = nullptr;
-    dxDepthStencilState[1] = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE] = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] = nullptr;
     dxRasterizerState = nullptr;
     dxBlendState = nullptr;
     sdlWindow = nullptr;
@@ -297,6 +313,6 @@ ID3D11DepthStencilView* WindowDX11::getZBufferView() const {
     return dxZBufferView;
 }
 
-void WindowDX11::setZBufferWriteState(bool enabled) {
-    dxContext->OMSetDepthStencilState(dxDepthStencilState[enabled ? 0 : 1], 0);
+void WindowDX11::setZBufferState(WindowDX11::ZBUFFER_STATE_INDEX index) {
+    dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)index], 0);
 }

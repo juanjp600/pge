@@ -195,7 +195,7 @@ void Mesh::setGeometry(const std::vector<Vertex>& verts,const std::vector<Primit
     mustUpdateInternalData = true; mustReuploadInternalData = true;
     vertices = verts; //TODO: check for property mismatches?
     primitives = prims;
-    opaque = material!=nullptr ? material->isOpaque() : true; //TODO: check for colors
+    opaque = material!=nullptr ? material->isOpaque() : true;
 }
 
 void Mesh::clearGeometry() {
@@ -208,8 +208,7 @@ void Mesh::clearGeometry() {
 void Mesh::setMaterial(Material* m) {
     //mustUpdateInternalData = true; mustReuploadInternalData = true;
     material = m;
-    opaque = m->isOpaque();
-    //TODO: check for vertex colors
+    opaque = material != nullptr ? material->isOpaque() : true;
 }
 
 const std::vector<Vertex>& Mesh::getVertices() const {

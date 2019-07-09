@@ -17,7 +17,6 @@ class Texture {
         virtual bool isRenderTarget() const =0;
 
         int getWidth() const; int getHeight() const;
-        bool isOpaque() const;
 
         static Texture* load(Graphics* gfx,String filename);
         static Texture* load(Graphics* gfx,String filename,ThreadManager* threadManager);
@@ -29,7 +28,6 @@ class Texture {
 
         int width; int height;
         int realWidth; int realHeight;
-        bool opaque;
 
         String filename; String name;
         FORMAT format;

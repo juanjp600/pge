@@ -2,16 +2,16 @@
 
 using namespace PGE;
 
-Material::Material(Shader* sh,const std::vector<Texture*> &t) {
-    shader = sh; textures = t;
+Material::Material(Shader* sh,const std::vector<Texture*> &t,bool opaq) {
+    shader = sh; textures = t; opaque = opaq;
 }
 
-Material::Material(Shader* sh,Texture* t) {
-    shader = sh; textures.clear(); textures.push_back(t);
+Material::Material(Shader* sh,Texture* t,bool opaq) {
+    shader = sh; textures.clear(); textures.push_back(t); opaque = opaq;
 }
 
-Material::Material(Shader* sh) {
-    shader = sh; textures.clear();
+Material::Material(Shader* sh,bool opaq) {
+    shader = sh; textures.clear(); opaque = opaq;
 }
 
 Shader* Material::getShader() const {
@@ -27,12 +27,5 @@ int Material::getTextureCount() const {
 }
 
 bool Material::isOpaque() const {
-    bool isOpaque = true;
-    for (int i = 0; i < getTextureCount(); i++) {
-        isOpaque &= getTexture(i)->isOpaque();
-        if (!isOpaque) {
-            break;
-        }
-    }
-    return isOpaque;
+    return opaque;
 }

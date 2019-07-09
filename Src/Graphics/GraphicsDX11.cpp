@@ -30,6 +30,8 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) {
     setViewport(Rectanglei(0,0,w,h));
     currentRenderTargetViews.push_back(((WindowDX11*)window)->getBackBufferRtv());
     currentDepthStencilView = ((WindowDX11*)window)->getZBufferView();
+
+    depthTestEnabled = true;
 }
 
 GraphicsDX11::~GraphicsDX11() {
@@ -56,6 +58,14 @@ void GraphicsDX11::clear(Color color) {
         ((WindowDX11*)window)->getDxContext()->ClearRenderTargetView( currentRenderTargetViews[i], clearColor );
     }
     ((WindowDX11*)window)->getDxContext()->ClearDepthStencilView( currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
+}
+
+void GraphicsDX11::setDepthTest(bool enabled) {
+    depthTestEnabled = enabled;
+}
+
+bool GraphicsDX11::getDepthTest() const {
+    return depthTestEnabled;
 }
 
 void GraphicsDX11::setRenderTarget(Texture* renderTarget) {

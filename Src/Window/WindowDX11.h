@@ -26,7 +26,14 @@ class WindowDX11 : public WindowInternal {
         ID3D11RenderTargetView* getBackBufferRtv() const;
         ID3D11DepthStencilView* getZBufferView() const;
 
-        void setZBufferWriteState(bool enabled);
+        enum class ZBUFFER_STATE_INDEX
+        {
+            ENABLED_WRITE = 0,
+            ENABLED_NOWRITE = 1,
+            DISABLED = 2
+        };
+
+        void setZBufferState(ZBUFFER_STATE_INDEX index);
     private:
         WindowDX11(){};
 
@@ -44,7 +51,7 @@ class WindowDX11 : public WindowInternal {
         ID3D11RenderTargetView* dxBackBufferRtv;
         ID3D11Texture2D* dxZBufferTexture;
         ID3D11DepthStencilView* dxZBufferView;
-        ID3D11DepthStencilState* dxDepthStencilState[2];
+        ID3D11DepthStencilState* dxDepthStencilState[3];
 
         D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
         ID3D11RasterizerState* dxRasterizerState;

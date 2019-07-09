@@ -20,6 +20,9 @@ class GraphicsDX11 : public Graphics {
 
         virtual void clear(Color color);
 
+        virtual void setDepthTest(bool enabled);
+        virtual bool getDepthTest() const;
+
         virtual void setRenderTarget(Texture* renderTarget);
         virtual void setRenderTargets(std::vector<Texture*> renderTargets);
         virtual void resetRenderTarget();
@@ -33,6 +36,8 @@ class GraphicsDX11 : public Graphics {
         ID3D11DepthStencilView* currentDepthStencilView;
 
         D3D11_VIEWPORT dxViewport;
+
+        bool depthTestEnabled;
 };
 
 }

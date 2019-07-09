@@ -23,6 +23,9 @@ class Graphics {
 
         virtual void clear(Color color) =0;
 
+        virtual void setDepthTest(bool enabled) =0;
+        virtual bool getDepthTest() const =0;
+
         virtual void setRenderTarget(Texture* renderTarget) =0;
         virtual void setRenderTargets(std::vector<Texture*> renderTargets) =0;
         virtual void resetRenderTarget() =0;

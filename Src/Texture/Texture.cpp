@@ -13,11 +13,7 @@ int Texture::getHeight() const {
     return height;
 }
 
-bool Texture::isOpaque() const {
-    return opaque;
-}
-
-BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,int& realHeight,bool& opaque) {
+BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,int& realHeight) {
     FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename.cstr(),0);
 
     FIBITMAP* temp = FreeImage_Load(format, filename.cstr());
@@ -57,13 +53,8 @@ BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,in
     int bpp = FreeImage_GetBPP(image)/8;
     BYTE* newBits = new BYTE[realWidth*realHeight*bpp];
 
-    opaque = true;
     for (int x=0;x<realWidth;x++) {
         for (int y=0;y<realHeight;y++) {
-            if (opaque && bits[(x+(y*realWidth))*bpp+3]<255) {
-                opaque = false;
-            }
-
             int invY = realHeight-1-y;
 
             //flip vertically and convert from bgra to rgba

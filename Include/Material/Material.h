@@ -9,9 +9,9 @@ namespace PGE {
 
 class Material {
     public:
-        Material(Shader* sh,const std::vector<Texture*> &t);
-        Material(Shader* sh,Texture* t);
-        Material(Shader* sh);
+        Material(Shader* sh,const std::vector<Texture*> &t,bool opaq = true);
+        Material(Shader* sh,Texture* t,bool opaq=true);
+        Material(Shader* sh,bool opaq=true);
 
         Shader* getShader() const;
         Texture* getTexture(int index) const;
@@ -20,6 +20,7 @@ class Material {
     protected:
         Material(){};
         Shader* shader; std::vector<Texture*> textures;
+        bool opaque;
 };
 
 }
