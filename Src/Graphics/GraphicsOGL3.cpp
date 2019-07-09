@@ -80,6 +80,20 @@ void GraphicsOGL3::clear(Color color) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void GraphicsOGL3::setDepthTest(bool enabled) {
+    depthTestEnabled = enabled;
+    
+    if (depthTestEnabled) {
+        glEnable(GL_DEPTH_TEST);
+    } else {
+        glDisable(GL_DEPTH_TEST);
+    }
+}
+
+bool GraphicsOGL3::getDepthTest() const {
+    return depthTestEnabled;
+}
+
 void GraphicsOGL3::setRenderTarget(Texture* renderTarget) {
     takeGlContext();
 

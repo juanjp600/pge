@@ -21,6 +21,9 @@ class GraphicsOGL3 : public Graphics {
         virtual void update() override;
 
         virtual void clear(Color color) override;
+    
+        virtual void setDepthTest(bool enabled) override;
+        virtual bool getDepthTest() const override;
 
         virtual void setRenderTarget(Texture* renderTarget) override;
         virtual void setRenderTargets(std::vector<Texture*> renderTargets) override;
@@ -29,10 +32,13 @@ class GraphicsOGL3 : public Graphics {
         virtual void setViewport(Rectanglei vp) override;
 
         void takeGlContext();
+    
     private:
         GLuint glFramebuffer;
 
         Rectanglei currentViewport;
+    
+        bool depthTestEnabled;
 
         void throwException(String func,String details) override;
         void cleanup() override;

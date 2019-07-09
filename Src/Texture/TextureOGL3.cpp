@@ -95,8 +95,6 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
     }
 
     if (newBuffer!=nullptr) { delete[] newBuffer; }
-
-    opaque = false;
 }
 
 TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn) {
@@ -107,7 +105,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn) {
     filename = fn;
     name = fn;
 
-    BYTE* fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight,opaque);
+    BYTE* fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight);
 
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
@@ -155,7 +153,6 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
 
     isRT = false;
-    opaque = true;
 
     class TextureReassignRequest : public ThreadManager::MainThreadRequest {
         public:
@@ -190,9 +187,9 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
         public:
             TextureReassignRequest mainThreadRequest;
             String filename;
-            int* width; int* height; int* realWidth; int* realHeight; bool* opaque;
+            int* width; int* height; int* realWidth; int* realHeight;
             void execute() {
-                BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight,*opaque);
+                BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight);
 
                 mainThreadRequest.realWidth = *realWidth;
                 mainThreadRequest.realHeight = *realHeight;
@@ -212,7 +209,6 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
     textureLoadRequest->height = &height;
     textureLoadRequest->realWidth = &realWidth;
     textureLoadRequest->realHeight = &realHeight;
-    textureLoadRequest->opaque = &opaque;
 
     threadManager->requestExecutionOnNewThread(textureLoadRequest);
 }

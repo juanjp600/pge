@@ -16,18 +16,18 @@ class GraphicsDX11 : public Graphics {
         GraphicsDX11(String name,int w=1280,int h=720,bool fs=false);
         ~GraphicsDX11();
 
-        virtual void update();
+        virtual void update() override;
 
-        virtual void clear(Color color);
+        virtual void clear(Color color) override;
 
-        virtual void setDepthTest(bool enabled);
-        virtual bool getDepthTest() const;
+        virtual void setDepthTest(bool enabled) override;
+        virtual bool getDepthTest() const override;
 
-        virtual void setRenderTarget(Texture* renderTarget);
-        virtual void setRenderTargets(std::vector<Texture*> renderTargets);
-        virtual void resetRenderTarget();
+        virtual void setRenderTarget(Texture* renderTarget) override;
+        virtual void setRenderTargets(std::vector<Texture*> renderTargets) override;
+        virtual void resetRenderTarget() override;
 
-        virtual void setViewport(Rectanglei vp);
+        virtual void setViewport(Rectanglei vp) override;
     private:
         void throwException(String func,String details) override;
         void cleanup() override;
