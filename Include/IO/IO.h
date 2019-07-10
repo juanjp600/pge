@@ -20,7 +20,7 @@ class IO {
         SysEvents::Subscriber* gamepadSubscriber;
 
         std::set<UserInput*> inputs;
-        Vector2i mousePos;
+        Vector2f mousePos;
 
         IO(Window* win);
     public:
@@ -32,8 +32,8 @@ class IO {
         void trackInput(UserInput* input);
         void untrackInput(UserInput* input);
 
-        Vector2i getMousePosition() const;
-        void setMousePosition(Vector2i position);
+        Vector2f getMousePosition() const;
+        void setMousePosition(Vector2f position);
         void setMouseVisibility(bool visible);
 };
 
