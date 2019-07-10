@@ -1,3 +1,10 @@
+#ifdef __APPLE__
+#ifdef __OBJC__
+#import <AppKit/AppKit.h>
+#include <SDL_syswm.h>
+#endif
+#endif
+
 #include "../SysEvents/SysEventsInternal.h"
 #include <Window/Window.h>
 #include "../Window/WindowInternal.h"
@@ -50,8 +57,20 @@ void IO::update() {
 
     while (((SysEventsInternal::SubscriberInternal*)mouseSubscriber)->popEvent(event)) {
         if (event.type==SDL_MOUSEMOTION) {
-            mousePos.x = event.motion.x;
-            mousePos.y = event.motion.y;
+ #ifdef __APPLE__
+ #ifdef __OBJC__
+            // Get the mouse position from NSWindow on macOS.
+            NSWindow* nsWin = ((WindowInternal*) window)->getCocoaWindow();
+            NSPoint pos = nsWin.mouseLocationOutsideOfEventStream;
+            pos = [nsWin convertPointToBacking: pos];
+            
+            mousePos.x = (float)pos.x;
+            mousePos.y = (float)pos.y;
+ #endif
+ #else
+            mousePos.x = (float)event.motion.x;
+            mousePos.y = (float)event.motion.y;
+ #endif
         } else if (event.type==SDL_MOUSEBUTTONDOWN || event.type==SDL_MOUSEBUTTONUP) {
             SDL_MouseButtonEvent mouseButtonEvent = event.button;
             for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
@@ -75,6 +94,9 @@ void IO::update() {
                         case SDL_BUTTON_X2: {
                             button = MouseInput::BUTTON::SIDE2;
                         } break;
+                        default: {
+                            continue;
+                        } break;
                     }
                     if (button==mouseInput->getButton()) {
                         if (event.type==SDL_MOUSEBUTTONDOWN) {
@@ -89,13 +111,27 @@ void IO::update() {
     }
 }
 
-Vector2i IO::getMousePosition() const {
+Vector2f IO::getMousePosition() const {
     return mousePos;
 }
 
-void IO::setMousePosition(Vector2i position) {
+void IO::setMousePosition(Vector2f position) {
     if (!window->isFocused()) { return; }
-    SDL_WarpMouseInWindow(((WindowInternal*)window)->getSdlWindow(),position.x,position.y);
+    
+    Vector2f truePosition = position;
+#ifdef __APPLE__
+#ifdef __OBJC__
+    // Get the mouse position from NSWindow on macOS.
+    NSWindow* nsWin = ((WindowInternal*) window)->getCocoaWindow();
+    NSPoint pos = NSMakePoint(truePosition.x, truePosition.y);
+    pos = [nsWin convertPointFromBacking: pos];
+    
+    truePosition.x = (float)pos.x;
+    truePosition.y = (float)pos.y;
+#endif
+#endif
+    
+    SDL_WarpMouseInWindow(((WindowInternal*)window)->getSdlWindow(),truePosition.x,truePosition.y);
     mousePos = position;
 }
 
