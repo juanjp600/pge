@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		193A5B74224D805C000C5AC9 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 195B129F224D641B002F9C90 /* OpenAL.framework */; };
 		193C903722519C7C00827E92 /* SDL2.framework in Copy Bundle Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA160220A060000837F38 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		1949994E2256B892003FFC10 /* default in Resources */ = {isa = PBXBuildFile; fileRef = 1949994B2256B892003FFC10 /* default */; };
-		1949994F2256B892003FFC10 /* ball in Resources */ = {isa = PBXBuildFile; fileRef = 1949994C2256B892003FFC10 /* ball */; };
-		194999502256B892003FFC10 /* postprocess in Resources */ = {isa = PBXBuildFile; fileRef = 1949994D2256B892003FFC10 /* postprocess */; };
 		194AA14B220A04E200837F38 /* Collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194AA149220A04E100837F38 /* Collision.cpp */; };
 		194AA14C220A04E200837F38 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194AA14A220A04E100837F38 /* Main.cpp */; };
 		194AA15F220A05C600837F38 /* libEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA15D220A05C100837F38 /* libEngine.a */; };
@@ -21,8 +18,11 @@
 		194AA17D220A09AD00837F38 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 194AA176220A09AC00837F38 /* MainMenu.xib */; };
 		194AA17F220A09AD00837F38 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 194AA179220A09AC00837F38 /* AppDelegate.m */; };
 		194AA1A3220A11A300837F38 /* Dummy.txt in Resources */ = {isa = PBXBuildFile; fileRef = 194AA1A2220A11A300837F38 /* Dummy.txt */; };
-		1951049B225456D600B82F82 /* SFX in Resources */ = {isa = PBXBuildFile; fileRef = 19510499225456D600B82F82 /* SFX */; };
-		195104A0225458F000B82F82 /* GFX in Resources */ = {isa = PBXBuildFile; fileRef = 1951049F225458F000B82F82 /* GFX */; };
+		196E259A22D7767A00E9B97B /* default in Resources */ = {isa = PBXBuildFile; fileRef = 196E259722D7767A00E9B97B /* default */; };
+		196E259B22D7767A00E9B97B /* postprocess in Resources */ = {isa = PBXBuildFile; fileRef = 196E259822D7767A00E9B97B /* postprocess */; };
+		196E259C22D7767A00E9B97B /* ball in Resources */ = {isa = PBXBuildFile; fileRef = 196E259922D7767A00E9B97B /* ball */; };
+		196E25AD22D779F600E9B97B /* GFX in Resources */ = {isa = PBXBuildFile; fileRef = 196E25AB22D779F600E9B97B /* GFX */; };
+		196E25AE22D779F600E9B97B /* SFX in Resources */ = {isa = PBXBuildFile; fileRef = 196E25AC22D779F600E9B97B /* SFX */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,9 +50,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1949994B2256B892003FFC10 /* default */ = {isa = PBXFileReference; lastKnownFileType = folder; name = default; path = "../../../pge shaders/default"; sourceTree = "<group>"; };
-		1949994C2256B892003FFC10 /* ball */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ball; path = "../../../pge shaders/ball"; sourceTree = "<group>"; };
-		1949994D2256B892003FFC10 /* postprocess */ = {isa = PBXFileReference; lastKnownFileType = folder; name = postprocess; path = "../../../pge shaders/postprocess"; sourceTree = "<group>"; };
 		194AA133220A04B000837F38 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		194AA148220A04E100837F38 /* Collision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Collision.h; sourceTree = "<group>"; };
 		194AA149220A04E100837F38 /* Collision.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Collision.cpp; sourceTree = "<group>"; };
@@ -67,9 +64,12 @@
 		194AA17B220A09AC00837F38 /* Example.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Example.entitlements; sourceTree = "<group>"; };
 		194AA19E220A0AC500837F38 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		194AA1A2220A11A300837F38 /* Dummy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = Dummy.txt; path = ../Dummy.txt; sourceTree = "<group>"; };
-		19510499225456D600B82F82 /* SFX */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SFX; path = "../../../SCP-087-Bean/CBN/SFX"; sourceTree = "<group>"; };
-		1951049F225458F000B82F82 /* GFX */ = {isa = PBXFileReference; lastKnownFileType = folder; name = GFX; path = "../../../SCP-087-Bean/CBN/GFX"; sourceTree = "<group>"; };
 		195B129F224D641B002F9C90 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		196E259722D7767A00E9B97B /* default */ = {isa = PBXFileReference; lastKnownFileType = folder; name = default; path = "../../../../../pge shaders/default"; sourceTree = "<group>"; };
+		196E259822D7767A00E9B97B /* postprocess */ = {isa = PBXFileReference; lastKnownFileType = folder; name = postprocess; path = "../../../../../pge shaders/postprocess"; sourceTree = "<group>"; };
+		196E259922D7767A00E9B97B /* ball */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ball; path = "../../../../../pge shaders/ball"; sourceTree = "<group>"; };
+		196E25AB22D779F600E9B97B /* GFX */ = {isa = PBXFileReference; lastKnownFileType = folder; name = GFX; path = ../../../../Content/GFX; sourceTree = "<group>"; };
+		196E25AC22D779F600E9B97B /* SFX */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SFX; path = ../../../../Content/SFX; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,11 +90,7 @@
 		194AA12A220A04B000837F38 = {
 			isa = PBXGroup;
 			children = (
-				1949994C2256B892003FFC10 /* ball */,
-				1949994B2256B892003FFC10 /* default */,
-				1949994D2256B892003FFC10 /* postprocess */,
-				1951049F225458F000B82F82 /* GFX */,
-				19510499225456D600B82F82 /* SFX */,
+				196E257322D7761300E9B97B /* Resources */,
 				194AA1A2220A11A300837F38 /* Dummy.txt */,
 				194AA173220A09AC00837F38 /* Example */,
 				194AA147220A04E100837F38 /* Collision */,
@@ -151,6 +147,18 @@
 				194AA17B220A09AC00837F38 /* Example.entitlements */,
 			);
 			path = Example;
+			sourceTree = "<group>";
+		};
+		196E257322D7761300E9B97B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				196E25AB22D779F600E9B97B /* GFX */,
+				196E25AC22D779F600E9B97B /* SFX */,
+				196E259922D7767A00E9B97B /* ball */,
+				196E259722D7767A00E9B97B /* default */,
+				196E259822D7767A00E9B97B /* postprocess */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -227,13 +235,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				194999502256B892003FFC10 /* postprocess in Resources */,
-				1949994E2256B892003FFC10 /* default in Resources */,
-				1951049B225456D600B82F82 /* SFX in Resources */,
+				196E259A22D7767A00E9B97B /* default in Resources */,
+				196E259C22D7767A00E9B97B /* ball in Resources */,
 				194AA1A3220A11A300837F38 /* Dummy.txt in Resources */,
-				195104A0225458F000B82F82 /* GFX in Resources */,
-				1949994F2256B892003FFC10 /* ball in Resources */,
+				196E25AD22D779F600E9B97B /* GFX in Resources */,
+				196E25AE22D779F600E9B97B /* SFX in Resources */,
 				194AA17C220A09AD00837F38 /* Assets.xcassets in Resources */,
+				196E259B22D7767A00E9B97B /* postprocess in Resources */,
 				194AA17D220A09AD00837F38 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

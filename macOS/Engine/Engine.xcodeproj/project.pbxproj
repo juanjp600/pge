@@ -47,6 +47,7 @@
 		1958F241224D54DE002B3F60 /* Sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1958F240224D54DE002B3F60 /* Sound.cpp */; };
 		1958F27F224D56E7002B3F60 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1958F252224D552F002B3F60 /* libogg.a */; };
 		1958F280224D56EB002B3F60 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1958F262224D5560002B3F60 /* libvorbis.a */; };
+		196E25AA22D7781100E9B97B /* FileName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 196E259D22D7781100E9B97B /* FileName.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -178,6 +179,7 @@
 		1958F240224D54DE002B3F60 /* Sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sound.cpp; sourceTree = "<group>"; };
 		1958F248224D552F002B3F60 /* Ogg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Ogg.xcodeproj; path = "../../Libraries/libogg-1.3.3/macosx/Ogg.xcodeproj"; sourceTree = "<group>"; };
 		1958F258224D5560002B3F60 /* Vorbis.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Vorbis.xcodeproj; path = "../../Libraries/libvorbis-1.3.6/macosx/Vorbis.xcodeproj"; sourceTree = "<group>"; };
+		196E259D22D7781100E9B97B /* FileName.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileName.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -256,6 +258,7 @@
 		194AA02C2209FF4D00837F38 /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				196E259D22D7781100E9B97B /* FileName.cpp */,
 				194AA02D2209FF4D00837F38 /* String.cpp */,
 			);
 			path = Misc;
@@ -649,6 +652,7 @@
 				194AA0652209FF4D00837F38 /* IO.cpp in Sources */,
 				194AA06A2209FF4D00837F38 /* Rectangle.cpp in Sources */,
 				194EF5D32253D5700015CBBD /* Exception.cpp in Sources */,
+				196E25AA22D7781100E9B97B /* FileName.cpp in Sources */,
 				194AA0702209FF4D00837F38 /* WindowOGL3.cpp in Sources */,
 				194AA06B2209FF4D00837F38 /* Plane.cpp in Sources */,
 				194EF5B72253C82F0015CBBD /* Init.cpp in Sources */,

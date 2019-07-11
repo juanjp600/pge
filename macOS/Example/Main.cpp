@@ -11,6 +11,7 @@
 #include <Math/Line.h>
 #include <Color/Color.h>
 #include <Audio/Audio.h>
+#include <Misc/FileName.h>
 
 #include <fstream>
 #include <math.h>
@@ -65,15 +66,15 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
         if (name.findFirst("_lm")>-1) {
             texName = path+name+".png";
         } else {
-            texName = String("GFX/Map/Textures/"+name+".jpg").resourcePath();
+            texName = FileName("GFX/Map/Textures/"+name+".jpg").str();
             bool found = fileExists(texName.cstr());
             if (!found) {
-                texName = String("GFX/Map/Textures/"+name+".png").resourcePath();
+                texName = FileName("GFX/Map/Textures/"+name+".png").str();
             }
 
             found = fileExists(texName.cstr());
             if (!found) {
-                texName = String("GFX/Map/Textures/dirtymetal.jpg").resourcePath();
+                texName = FileName("GFX/Map/Textures/dirtymetal.jpg").str();
             }
         }
         retVal.textures.push_back(Texture::load(graphics, texName));
@@ -161,20 +162,20 @@ int PGE::Main() {
 //    ThreadManager* threadManager = new ThreadManager();
 //    Audio* audio = Audio::create(threadManager);
 
-//    Sound* sound = Sound::load(audio, String("SFX/Music/The Dread.ogg").resourcePath());
+//    Sound* sound = Sound::load(audio, FileName("SFX/Music/The Dread.ogg").str());
 //    Sound::Channel* channel = sound->play();
     
-    Graphics* graphics = Graphics::create("Mac PGE Test", 1280,720, false);
-    IO* io = IO::create(graphics->getWindow());
-
-    Shader* shader = Shader::load(graphics, String("default/").resourcePath());
-    Shader* postprocessShader = Shader::load(graphics, String("postprocess/").resourcePath());
-
-    RM2 testRM2 = loadRM2(String("GFX/Map/Rooms/hll_bean/hll_bean.rm2").resourcePath(), graphics, shader);
-
     float retWidth = 1280.f * 2;
     float retHeight = 720.f * 2;
     float something = 2048.f * 2;
+    
+    Graphics* graphics = Graphics::create("Mac PGE Test", retWidth, retHeight, false);
+    IO* io = IO::create(graphics->getWindow());
+
+    Shader* shader = Shader::load(graphics, FileName("default/").str());
+    Shader* postprocessShader = Shader::load(graphics, FileName("postprocess/").str());
+
+    RM2 testRM2 = loadRM2(FileName("GFX/Map/Rooms/cont_173_1/cont_173_1.rm2").str(), graphics, shader);
 
     Texture* texture0 = Texture::create(graphics,something,something,true,nullptr,Texture::FORMAT::RGBA32);
     Texture* texture1 = Texture::create(graphics,something,something,true,nullptr,Texture::FORMAT::R32F);
@@ -249,7 +250,7 @@ int PGE::Main() {
     Vector3f cameraPos = Vector3f(0,18,-30);
 
     io->setMouseVisibility(false);
-    io->setMousePosition(Vector2i(640,360));
+    io->setMousePosition(Vector2f(retWidth / 2, retHeight / 2));
     bool lockMouse = true;
     while (graphics->getWindow()->isOpen()) {
         SysEvents::update();
@@ -257,12 +258,12 @@ int PGE::Main() {
         graphics->update();
 
         if (lockMouse) {
-            hAngle -= (float)(io->getMousePosition().x-640)/300.f;
-            vAngle -= (float)(io->getMousePosition().y-360)/300.f;
+            hAngle -= (float)(io->getMousePosition().x - (retWidth / 2))/300.f;
+            vAngle -= (float)(io->getMousePosition().y - (retHeight / 2))/300.f;
             if (vAngle<-3.14*0.5f) { vAngle = -3.14*0.5f; }
             if (vAngle>3.14*0.5f) { vAngle = 3.14*0.5f; }
 
-            io->setMousePosition(Vector2i(640,360));
+            io->setMousePosition(Vector2f(retWidth / 2, retHeight / 2));
         }
 
         graphics->setRenderTargets(renderTargets);

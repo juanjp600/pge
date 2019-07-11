@@ -46,7 +46,7 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
-      useCustomWorkingDirectory = "YES"
+      useCustomWorkingDirectory = "NO"
       customWorkingDirectory = "/Users/markjarjour/Documents/Coding Projects/C++/pge/macOS"
       ignoresPersistentStateOnLaunch = "YES"
       debugDocumentVersioning = "YES"
