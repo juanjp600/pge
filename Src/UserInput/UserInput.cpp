@@ -15,8 +15,11 @@ bool UserInput::isHit() const {
 }
 
 void UserInput::setDown(bool down) {
-    inputHit = down && !inputDown;
     inputDown = down;
+}
+
+void UserInput::setHit(bool hit) {
+    inputHit = hit;
 }
 
 KeyboardInput::KeyboardInput(KeyboardInput::SCANCODE inKeyCode) {

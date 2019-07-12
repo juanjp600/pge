@@ -18,6 +18,7 @@ class UserInput {
         bool isDown() const;
         bool isHit() const;
         void setDown(bool down);
+        void setHit(bool hit);
     protected:
         UserInput();
 
