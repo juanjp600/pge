@@ -16,11 +16,13 @@ class UserInput {
         virtual DEVICE getDevice() const = 0;
 
         bool isDown() const;
+        bool isHit() const;
         void setDown(bool down);
     protected:
         UserInput();
 
         bool inputDown;
+        bool inputHit;
 };
 
 class KeyboardInput : public UserInput {

@@ -10,7 +10,12 @@ bool UserInput::isDown() const {
     return inputDown;
 }
 
+bool UserInput::isHit() const {
+    return inputHit;
+}
+
 void UserInput::setDown(bool down) {
+    inputHit = down && !inputDown;
     inputDown = down;
 }
 
