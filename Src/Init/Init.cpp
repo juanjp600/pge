@@ -8,7 +8,7 @@
 int PGE::InitMain() {
     try {
         InitEnv();
-        int retVal = PGE::Main();
+        int retVal = PGEMain::Main();
         QuitEnv();
         return retVal;
     } catch (PGE::Exception& e) {
