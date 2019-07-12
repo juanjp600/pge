@@ -37,6 +37,11 @@ IO::~IO() {
 }
 
 void IO::update() {
+    for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
+        UserInput* input = (*it);
+        input->setHit(false);
+    }
+
     SDL_Event event;
     while (((SysEventsInternal::SubscriberInternal*)keyboardSubscriber)->popEvent(event)) {
         SDL_KeyboardEvent keyEvent = event.key;
@@ -46,6 +51,7 @@ void IO::update() {
                 KeyboardInput* keyboardInput = (KeyboardInput*)input;
                 if ((int)keyEvent.keysym.scancode==(int)keyboardInput->getButton()) {
                     if (event.type == SDL_KEYDOWN) {
+                        if (!input->isDown()) { input->setHit(true); }
                         input->setDown(true);
                     } else if (event.type == SDL_KEYUP) {
                         input->setDown(false);
