@@ -17,6 +17,9 @@ using namespace PGE;
 WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     GLuint glError = GL_NO_ERROR;
     
+    caption = c;
+    width = w; height = h; fullscreen = fs;
+    
 #ifdef __APPLE__
 #ifdef __OBJC__
     // Figure out the de-scaled window size.
@@ -28,9 +31,6 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     h = NSHeight(rect);
 #endif
 #endif
-    
-    caption = c;
-    width = w; height = h; fullscreen = fs;
 
     sdlWindow = nullptr;
     sdlWindow = SDL_CreateWindow(caption.cstr(),SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,w,h,SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/);

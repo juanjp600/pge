@@ -65,7 +65,8 @@ void IO::update() {
             pos = [nsWin convertPointToBacking: pos];
 
             mousePos.x = (float)pos.x;
-            mousePos.y = (float)pos.y;
+            // Cocoa's origin is bottom-left, convert to top-left.
+            mousePos.y = (float)window->getHeight() - pos.y;
  #endif
  #else
             mousePos.x = (float)event.motion.x;
@@ -117,22 +118,27 @@ Vector2f IO::getMousePosition() const {
 
 void IO::setMousePosition(Vector2f position) {
     if (!window->isFocused()) { return; }
+    
+    mousePos = position;
 
-    Vector2f sdlPosition = position;
 #ifdef __APPLE__
 #ifdef __OBJC__
-    // Get the mouse position from NSWindow on macOS.
+    // Convert the mouse position from the retina coordinates to screen coordinates on macOS.
     NSWindow* nsWin = ((WindowInternal*) window)->getCocoaWindow();
-    NSPoint pos = NSMakePoint(sdlPosition.x, sdlPosition.y);
-    pos = [nsWin convertPointFromBacking: pos];
+    NSPoint mousePosition = [nsWin convertPointFromBacking: NSMakePoint(position.x, position.y)];
 
-    sdlPosition.x = (float)pos.x;
-    sdlPosition.y = (float)pos.y;
-#endif
-#endif
+    // Mouse can only be set using display coordinates, so offset with the window position to get window coordinates.
+    Vector2i windowPosition;
+    SDL_GetWindowPosition(((WindowInternal*) window)->getSdlWindow(), &windowPosition.x, &windowPosition.y);
 
-    SDL_WarpMouseInWindow(((WindowInternal*)window)->getSdlWindow(),sdlPosition.x,sdlPosition.y);
-    mousePos = position;
+    mousePosition = NSMakePoint(mousePosition.x + windowPosition.x, mousePosition.y + windowPosition.y);
+    CGWarpMouseCursorPosition(mousePosition);
+    // For some reason updating the mouse position this way doesn't update the cursor position, so we need to tell Cocoa to sync that.
+    CGAssociateMouseAndMouseCursorPosition(true);
+#endif
+#else
+    SDL_WarpMouseInWindow(((WindowInternal*)window)->getSdlWindow(), position.x, position.y);
+#endif
 }
 
 void IO::setMouseVisibility(bool visible) {
