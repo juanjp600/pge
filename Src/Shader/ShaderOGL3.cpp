@@ -157,6 +157,8 @@ const std::vector<String>& ShaderOGL3::getVertexInputElems() const {
 }
 
 void ShaderOGL3::useShader() {
+    GLuint glError = GL_NO_ERROR;
+    
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
     glUseProgram(glShaderProgram);
@@ -174,14 +176,20 @@ void ShaderOGL3::useShader() {
                 ptr+=sizeof(GLint)*vertexAttribs[i].size;
             } break;
         }
+        glError = glGetError();
+        if (glError != GL_NO_ERROR) {
+            throwException("useShader", "Failed to set vertex attribute. (Attrib: " + vertexAttribs[i].name + ", filepath: " + filepath + ")");
+        }
     }
 
     for (int i=0;i<vertexShaderConstants.size();i++) {
         vertexShaderConstants[i].setUniform();
     }
+    
     for (int i=0;i<fragmentShaderConstants.size();i++) {
         fragmentShaderConstants[i].setUniform();
     }
+    
     for (int i=0;i<samplerConstants.size();i++) {
         samplerConstants[i].setUniform();
     }
@@ -310,6 +318,8 @@ void ShaderOGL3::ConstantOGL3::setValue(int value) {
 }
 
 void ShaderOGL3::ConstantOGL3::setUniform() {
+    GLuint glError = GL_NO_ERROR;
+    
     ((GraphicsOGL3*)graphics)->takeGlContext();
     switch (valueType) {
         case VALUE_TYPE::MATRIX: {
@@ -334,8 +344,17 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
             glUniform1i(location,val.intVal);
         } break;
     }
+    
+    glError = glGetError();
+    if (glError != GL_NO_ERROR) {
+        throwException("setUniform", "Failed to set uniform value. (Constant Name: " + getName() + ")");
+    }
 }
 
 String ShaderOGL3::ConstantOGL3::getName() const {
     return name;
+}
+
+void ShaderOGL3::ConstantOGL3::throwException(String func, String details) {
+    throw Exception("ConstantOGL3::" + func, details);
 }

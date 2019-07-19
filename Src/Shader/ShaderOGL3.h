@@ -49,6 +49,10 @@ class ShaderOGL3 : public Shader {
                 void setUniform();
 
                 String getName() const;
+            
+            protected:
+                void throwException(String func, String details) override;
+            
             private:
                 enum class VALUE_TYPE {
                     MATRIX,

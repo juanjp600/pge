@@ -332,8 +332,8 @@
 		194AA0462209FF4D00837F38 /* Texture */ = {
 			isa = PBXGroup;
 			children = (
-				194AA0472209FF4D00837F38 /* TextureOGL3.h */,
 				194AA0482209FF4D00837F38 /* TextureOGL3.cpp */,
+				194AA0472209FF4D00837F38 /* TextureOGL3.h */,
 				194AA04A2209FF4D00837F38 /* Texture.cpp */,
 				194AA04C2209FF4D00837F38 /* TextureInternal.h */,
 			);
