@@ -17,7 +17,7 @@ namespace PGE {
 
 class ShaderOGL3 : public Shader {
     public:
-        ShaderOGL3(Graphics* gfx,const String& path);
+        ShaderOGL3(Graphics* gfx,const FileName& path);
         virtual ~ShaderOGL3();
 
         Constant* getVertexShaderConstant(String name) override;

@@ -14,20 +14,20 @@
 
 using namespace PGE;
 
-Shader* Shader::load(Graphics* gfx,const String& path) {
+Shader* Shader::load(Graphics* gfx,const FileName& path) {
     return new ShaderOGL3(gfx,path);
 }
 
-ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
+ShaderOGL3::ShaderOGL3(Graphics* gfx,const FileName& path) {
     graphics = gfx;
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
     filepath = path;
 
     String vertexSource = "";
-    std::ifstream vertexSourceFile; vertexSourceFile.open(String(path,"vertex.glsl").cstr());
+    std::ifstream vertexSourceFile; vertexSourceFile.open(String(path.str(),"vertex.glsl").cstr());
     if (!vertexSourceFile.good()) {
-        throwException("ShaderOGL3", "Failed to find vertex.glsl. (filepath: " + path + ")");
+        throwException("ShaderOGL3", "Failed to find vertex.glsl. (filepath: " + path.str() + ")");
     }
 
     char* buf = new char[512];
@@ -57,13 +57,13 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     glGetShaderiv(glVertexShader, GL_COMPILE_STATUS, &errorCode);
     if (errorCode != GL_TRUE || errorStr.size() > 0) {
         delete[] errorCStr;
-        throwException("ShaderOGL3", "Failed to create vertex shader. (filepath: " + path + ")\n" + errorStr);
+        throwException("ShaderOGL3", "Failed to create vertex shader. (filepath: " + path.str() + ")\n" + errorStr);
     }
 
     String fragmentSource = "";
-    std::ifstream fragmentSourceFile; fragmentSourceFile.open(String(path,"fragment.glsl").cstr());
+    std::ifstream fragmentSourceFile; fragmentSourceFile.open(String(path.str(),"fragment.glsl").cstr());
     if (!fragmentSourceFile.good()) {
-        throwException("ShaderOGL3", "Failed to find fragment.glsl. (filepath: " + path + ")");
+        throwException("ShaderOGL3", "Failed to find fragment.glsl. (filepath: " + path.str() + ")");
     }
 
     buf = new char[512];
@@ -88,7 +88,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const String& path) {
     glGetShaderiv(glFragmentShader, GL_COMPILE_STATUS, &errorCode);
     if (errorCode != GL_TRUE || errorStr.size() > 0) {
         delete[] errorCStr;
-        throwException("ShaderOGL3", "Failed to create fragment shader. (filepath: " + path + ")\n" + errorStr);
+        throwException("ShaderOGL3", "Failed to create fragment shader. (filepath: " + path.str() + ")\n" + errorStr);
     }
     delete[] errorCStr;
 
@@ -178,7 +178,7 @@ void ShaderOGL3::useShader() {
         }
         glError = glGetError();
         if (glError != GL_NO_ERROR) {
-            throwException("useShader", "Failed to set vertex attribute. (Attrib: " + vertexAttribs[i].name + ", filepath: " + filepath + ")");
+            throwException("useShader", "Failed to set vertex attribute. (Attrib: " + vertexAttribs[i].name + ", filepath: " + filepath.str() + ")");
         }
     }
 

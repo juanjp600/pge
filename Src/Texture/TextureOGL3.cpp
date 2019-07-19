@@ -14,11 +14,11 @@ Texture* Texture::create(Graphics* gfx,int w,int h,bool renderTarget,const void*
     return new TextureOGL3(gfx,w,h,renderTarget,buffer,fmt);
 }
 
-Texture* Texture::load(Graphics* gfx,String fn) {
+Texture* Texture::load(Graphics* gfx,FileName fn) {
     return new TextureOGL3(gfx,fn);
 }
 
-Texture* Texture::load(Graphics* gfx,String fn,ThreadManager* threadManager) {
+Texture* Texture::load(Graphics* gfx,FileName fn,ThreadManager* threadManager) {
     return new TextureOGL3(gfx,fn,threadManager);
 }
 
@@ -97,13 +97,13 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn) {
+TextureOGL3::TextureOGL3(Graphics* gfx,const FileName& fn) {
     GLuint glError = GL_NO_ERROR;
     
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     filename = fn;
-    name = fn;
+    name = fn.str();
 
     BYTE* fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight);
 
@@ -113,7 +113,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn) {
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,fiBuffer);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("TextureOGL3(fn)", "Failed to create texture (filename: "+filename+"; GLERROR "+String(glError, true)+")");
+        throwException("TextureOGL3(fn)", "Failed to create texture (filename: "+filename.str()+"; GLERROR "+String(glError, true)+")");
     }
 
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -129,13 +129,13 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn) {
     isRT = false;
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadManager) {
+TextureOGL3::TextureOGL3(Graphics* gfx,const FileName& fn,ThreadManager* threadManager) {
     GLuint glError = GL_NO_ERROR;
     
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     filename = fn;
-    name = fn;
+    name = fn.str();
 
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
@@ -143,7 +143,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,nullptr);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("TextureOGL3(fn,threadMgr)", "Failed to create texture (filename: "+filename+"; GLERROR "+String(glError, true)+")");
+        throwException("TextureOGL3(fn,threadMgr)", "Failed to create texture (filename: "+filename.str()+"; GLERROR "+String(glError, true)+")");
     }
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -156,7 +156,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
 
     class TextureReassignRequest : public ThreadManager::MainThreadRequest {
         public:
-            String filename;
+            FileName filename;
             GraphicsOGL3* graphics;
             GLuint glTexture;
 
@@ -173,7 +173,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
                 glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,buffer);
                 glError = glGetError();
                 if (glError != GL_NO_ERROR) {
-                    throw Exception("TextureReassignRequest (OGL3)", "Failed to create texture (filename: "+filename+"; GLERROR "+String(glError, true)+")");
+                    throw Exception("TextureReassignRequest (OGL3)", "Failed to create texture (filename: "+filename.str()+"; GLERROR "+String(glError, true)+")");
                 }
 
                 glGenerateMipmap(GL_TEXTURE_2D);
@@ -186,7 +186,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadMan
     class TextureLoadRequest : public ThreadManager::NewThreadRequest {
         public:
             TextureReassignRequest mainThreadRequest;
-            String filename;
+            FileName filename;
             int* width; int* height; int* realWidth; int* realHeight;
             void execute() {
                 BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight);

@@ -13,16 +13,16 @@ int Texture::getHeight() const {
     return height;
 }
 
-BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,int& realHeight) {
+BYTE* PGE::loadFIBuffer(FileName filename,int& width,int& height,int& realWidth,int& realHeight) {
     FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename.cstr(),0);
 
     FIBITMAP* temp = FreeImage_Load(format, filename.cstr());
     if (temp==nullptr) {
-        throw Exception("loadFIBuffer","Failed to load "+filename);
+        throw Exception("loadFIBuffer","Failed to load "+filename.str());
     }
     FIBITMAP* image = FreeImage_ConvertTo32Bits(temp);
     if (image==nullptr) {
-        throw Exception("loadFIBuffer","Failed to convert "+filename+" to 32-bit RGBA");
+        throw Exception("loadFIBuffer","Failed to convert "+filename.str()+" to 32-bit RGBA");
     }
     FreeImage_Unload(temp);
 
@@ -39,7 +39,7 @@ BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,in
         temp = image;
         image = FreeImage_Rescale(temp,po2w,po2h,FILTER_BILINEAR);
         if (image==nullptr) {
-            throw Exception("loadFIBuffer","Failed to rescale "+filename+" ("+String(w)+","+String(h)+" to "+String(po2w)+","+String(po2h)+")");
+            throw Exception("loadFIBuffer","Failed to rescale "+filename.str()+" ("+String(w)+","+String(h)+" to "+String(po2w)+","+String(po2h)+")");
         }
         FreeImage_Unload(temp);
     }
@@ -48,7 +48,7 @@ BYTE* PGE::loadFIBuffer(String filename,int& width,int& height,int& realWidth,in
 
     BYTE* bits = FreeImage_GetBits(image);
     if (bits==nullptr) {
-        throw Exception("loadFIBuffer","Failed to retrieve data from "+filename);
+        throw Exception("loadFIBuffer","Failed to retrieve data from "+filename.str());
     }
     int bpp = FreeImage_GetBPP(image)/8;
     BYTE* newBits = new BYTE[realWidth*realHeight*bpp];

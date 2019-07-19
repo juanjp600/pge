@@ -11,7 +11,7 @@ class FileName {
 
     public:
         FileName();
-        FileName(const String& str);
+        static FileName create(const String& str);
         FileName(const FileName& a, const String& b);
 
         const String str() const;
@@ -20,10 +20,10 @@ class FileName {
 
         int size() const;
 
-        FileName& operator=(const String& other);
+        FileName& operator=(const FileName& other);
+        FileName& operator=(const String& str);
 
         long long getHashCode() const;
-        bool equals(const String& other) const;
         bool equals(const FileName& other) const;
         bool isEmpty() const;
 };

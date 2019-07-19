@@ -150,7 +150,7 @@ Matrix4x4f Matrix4x4f::constructOrthographicMat(float width, float height, float
     Matrix4x4f retval = PGE::Matrix4x4f::identity;
 
     retval.elements[0][0] = 2.f / width;
-    retval.elements[1][1] = 2.f / height;
+    retval.elements[1][1] = -2.f / height;
     retval.elements[2][2] = 1.f / (farZ - nearZ);
 
     return retval;

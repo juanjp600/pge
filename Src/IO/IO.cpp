@@ -107,6 +107,7 @@ void IO::update() {
                     }
                     if (button==mouseInput->getButton()) {
                         if (event.type==SDL_MOUSEBUTTONDOWN) {
+                            if (!input->isDown()) { input->setHit(true); }
                             input->setDown(true);
                         } else if (event.type==SDL_MOUSEBUTTONUP) {
                             input->setDown(false);

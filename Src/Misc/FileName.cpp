@@ -8,8 +8,11 @@ FileName::FileName() {
     name = String("");
 }
 
-FileName::FileName(const String& str) {
-    name = str.resourcePath();
+FileName FileName::create(const String& str) {
+    FileName fn;
+    fn.name = str.resourcePath();
+    
+    return fn;
 }
 
 FileName::FileName(const FileName& a, const String& b) {
@@ -32,20 +35,24 @@ int FileName::size() const {
     return name.size();
 }
 
-FileName& FileName::operator=(const String& other) {
-    if (!name.equals(other)) {
-        name = other.resourcePath();
+FileName& FileName::operator=(const FileName& other) {
+    if (!equals(other)) {
+        name = other.name;
     }
+    
+    return *this;
+}
 
+FileName& FileName::operator=(const String& str) {
+    if (!name.equals(str)) {
+        name = str.resourcePath();
+    }
+    
     return *this;
 }
 
 long long FileName::getHashCode() const {
     return name.getHashCode();
-}
-
-bool FileName::equals(const String& other) const {
-    return name.equals(other);
 }
 
 bool FileName::equals(const FileName& other) const {

@@ -1,14 +1,14 @@
 #ifndef PGE_SOUND_H_INCLUDED
 #define PGE_SOUND_H_INCLUDED
 
-#include <Misc/String.h>
+#include <Misc/FileName.h>
 
 namespace PGE {
 
 class Audio;
 class Sound {
     public:
-        static Sound* load(Audio* a,const String& fn,bool forcePan=false,bool strm=false);
+        static Sound* load(Audio* a,const FileName& fn,bool forcePan=false,bool strm=false);
         virtual ~Sound(){}
 
         virtual bool isStream() const =0;

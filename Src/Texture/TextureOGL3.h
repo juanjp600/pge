@@ -16,8 +16,8 @@ namespace PGE {
 class TextureOGL3 : public Texture {
     public:
         TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget=false,const void* buffer=nullptr,FORMAT fmt=FORMAT::RGBA32);
-        TextureOGL3(Graphics* gfx,const String& fn);
-        TextureOGL3(Graphics* gfx,const String& fn,ThreadManager* threadManager);
+        TextureOGL3(Graphics* gfx,const FileName& fn);
+        TextureOGL3(Graphics* gfx,const FileName& fn,ThreadManager* threadManager);
         virtual ~TextureOGL3();
 
         virtual bool isRenderTarget() const override;
