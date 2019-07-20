@@ -395,3 +395,8 @@ void ShaderDX11::ConstantDX11::setValue(int value) {
 String ShaderDX11::ConstantDX11::getName() const {
     return name;
 }
+
+void ShaderDX11::ConstantDX11::throwException(String func, String details) {
+    throw Exception("ConstantDX11::" + func, details);
+}
+
