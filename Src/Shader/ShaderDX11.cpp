@@ -7,11 +7,11 @@
 
 using namespace PGE;
 
-Shader* Shader::load(Graphics* gfx, const String& path) {
+Shader* Shader::load(Graphics* gfx, const FileName& path) {
     return new ShaderDX11(gfx,path);
 }
 
-ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
+ShaderDX11::ShaderDX11(Graphics* gfx,const FileName& path) {
     dxVertexInputLayout = nullptr;
     dxVertexShader = nullptr;
     dxFragmentShader = nullptr;
@@ -22,7 +22,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
 
     char* buf = new char[512];
 
-    std::ifstream reflectionInfo; reflectionInfo.open(String(path,"reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
+    std::ifstream reflectionInfo; reflectionInfo.open(String(path.str(),"reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
     
     readConstantBuffers(reflectionInfo,vertexConstantBuffers);
 
@@ -88,7 +88,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
     reflectionInfo.close();
 
     vertexShaderBytecode.clear();
-    std::ifstream vertexSourceFile; vertexSourceFile.open(String(path,"vertex.dxbc").cstr(), std::ios_base::in | std::ios_base::binary);
+    std::ifstream vertexSourceFile; vertexSourceFile.open(String(path.str(),"vertex.dxbc").cstr(), std::ios_base::in | std::ios_base::binary);
     while (!vertexSourceFile.eof()) {
         int writeInd = vertexShaderBytecode.size();
         vertexSourceFile.read(buf,512); int bytesRead = vertexSourceFile.gcount();
@@ -97,12 +97,12 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
         memcpy(&(vertexShaderBytecode[writeInd]),buf,bytesRead);
     }
     if (vertexShaderBytecode.size() <= 0) {
-        throwException("ShaderDX11","Vertex shader is empty (filename: "+path+")");
+        throwException("ShaderDX11","Vertex shader is empty (filename: "+path.str() +")");
     }
     vertexSourceFile.close();
 
     fragmentShaderBytecode.clear();
-    std::ifstream fragmentSourceFile; fragmentSourceFile.open(String(path,"fragment.dxbc").cstr(), std::ios_base::in | std::ios_base::binary);
+    std::ifstream fragmentSourceFile; fragmentSourceFile.open(String(path.str(),"fragment.dxbc").cstr(), std::ios_base::in | std::ios_base::binary);
     while (!fragmentSourceFile.eof()) {
         int writeInd = fragmentShaderBytecode.size();
         fragmentSourceFile.read(buf,512); int bytesRead = fragmentSourceFile.gcount();
@@ -111,7 +111,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
         memcpy(&(fragmentShaderBytecode[writeInd]),buf,bytesRead);
     }
     if (fragmentShaderBytecode.size() <= 0) {
-        throwException("ShaderDX11","Fragment shader is empty (filename: "+path+")");
+        throwException("ShaderDX11","Fragment shader is empty (filename: "+path.str()+")");
     }
     fragmentSourceFile.close();
 
@@ -119,17 +119,17 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const String& path) {
 
     hResult = dxDevice->CreateVertexShader(vertexShaderBytecode.data(),sizeof(uint8_t)*vertexShaderBytecode.size(),NULL,&dxVertexShader);
     if (FAILED(hResult)) {
-        throwException("ShaderDX11","Failed to create vertex shader (filename: "+path+"; HRESULT "+String(hResult,true)+")");
+        throwException("ShaderDX11","Failed to create vertex shader (filename: "+path.str()+"; HRESULT "+String(hResult,true)+")");
     }
 
     hResult = dxDevice->CreatePixelShader(fragmentShaderBytecode.data(),sizeof(uint8_t)*fragmentShaderBytecode.size(),NULL,&dxFragmentShader);
     if (FAILED(hResult)) {
-        throwException("ShaderDX11", "Failed to create fragment shader (filename: "+path+"; HRESULT "+String(hResult,true)+")");
+        throwException("ShaderDX11", "Failed to create fragment shader (filename: "+path.str()+"; HRESULT "+String(hResult,true)+")");
     }
 
     hResult = dxDevice->CreateInputLayout(dxVertexInputElemDesc.data(), dxVertexInputElemDesc.size(), getDxVsCode(), getDxVsCodeLen() * sizeof(uint8_t), &dxVertexInputLayout);
     if (FAILED(hResult)) {
-        throwException("ShaderDX11", "Failed to create input layout (filename: "+path+"; HRESULT "+String(hResult,true)+")");
+        throwException("ShaderDX11", "Failed to create input layout (filename: "+path.str()+"; HRESULT "+String(hResult,true)+")");
     }
 
     delete[] buf;
