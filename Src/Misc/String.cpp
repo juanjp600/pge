@@ -40,7 +40,7 @@ String::String(const String& a) {
 }
 
 String::String(const char* cstri) {
-    int len = strlen(cstri);
+    int len = (int)strlen(cstri);
     cbuffer = new char[len+1];
     wbuffer = nullptr;
     capacity = len+1;
@@ -51,7 +51,7 @@ String::String(const char* cstri) {
 }
 
 String::String(const std::string& cppstr) {
-    int len = cppstr.size();
+    int len = (int)cppstr.size();
     cbuffer = new char[len+1];
     wbuffer = nullptr;
     capacity = len+1;
@@ -62,7 +62,7 @@ String::String(const std::string& cppstr) {
 }
 
 String::String(const wchar* wstri) {
-    int len = wcslen(wstri);
+    int len = (int)wcslen(wstri);
     wbuffer = new wchar[len+1];
     cbuffer = nullptr;
     capacity = len+1;
@@ -73,7 +73,7 @@ String::String(const wchar* wstri) {
 }
 
 String::String(const std::wstring& cppwstr) {
-    int len = cppwstr.size();
+    int len = (int)cppwstr.size();
     wbuffer = new wchar[len+1];
     cbuffer = nullptr;
     capacity = len+1;
@@ -124,7 +124,7 @@ String::String(int i,bool hex) {
     } else {
         snprintf(cbuffer,32,"%d",i);
     }
-    strSize = strlen(cbuffer);
+    strSize = (int)strlen(cbuffer);
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
 }
@@ -134,7 +134,7 @@ String::String(float f) {
     wbuffer = nullptr;
     capacity = 32;
     snprintf(cbuffer,32,"%f",f);
-    strSize = strlen(cbuffer);
+    strSize = (int)strlen(cbuffer);
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
 }
