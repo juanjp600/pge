@@ -10,11 +10,11 @@
 
 using namespace PGE;
 
-Texture* Texture::load(Graphics* gfx,String filename) {
+Texture* Texture::load(Graphics* gfx,FileName filename) {
     return new TextureDX11(gfx,filename);
 }
 
-Texture* Texture::load(Graphics* gfx,String filename,ThreadManager* threadManager) {
+Texture* Texture::load(Graphics* gfx, FileName filename,ThreadManager* threadManager) {
     return new TextureDX11(gfx,filename,threadManager);
 }
 
@@ -136,7 +136,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 }
 
-TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
+TextureDX11::TextureDX11(Graphics* gfx,const FileName& fn) {
     dxShaderResourceView = nullptr;
     dxTexture = nullptr;
     dxRtv = nullptr;
@@ -149,7 +149,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
 
     filename = fn;
-    name = fn;
+    name = fn.str();
 
     format = FORMAT::RGBA32;
 
@@ -181,7 +181,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
 
     hResult = dxDevice->CreateTexture2D(&dxTextureDesc,NULL,&dxTexture);
     if (FAILED(hResult)) {
-        throwException("TextureDX11(fn)", "Failed to create D3D11 texture (filename: "+filename+", HRESULT "+String(hResult,true)+")");
+        throwException("TextureDX11(fn)", "Failed to create D3D11 texture (filename: "+filename.str()+", HRESULT "+String(hResult,true)+")");
     }
     dxContext->UpdateSubresource(dxTexture,0,NULL,fiBuffer,realWidth*4,0);
 
@@ -192,7 +192,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
     dxShaderResourceViewDesc.Texture2D.MipLevels = -1;
     hResult = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
     if (FAILED(hResult)) {
-        throwException("TextureDX11(fn)","Failed to create shader resource view (filename: "+filename+", HRESULT "+String(hResult,true)+")");
+        throwException("TextureDX11(fn)","Failed to create shader resource view (filename: "+filename.str()+", HRESULT "+String(hResult,true)+")");
     }
 
     dxContext->GenerateMips(dxShaderResourceView);
@@ -202,7 +202,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn) {
     delete[] fiBuffer;
 }
 
-TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadManager) {
+TextureDX11::TextureDX11(Graphics* gfx,const FileName& fn,ThreadManager* threadManager) {
     dxShaderResourceView = nullptr;
     dxTexture = nullptr;
     dxRtv = nullptr;
@@ -215,7 +215,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
 
     filename = fn;
-    name = fn;
+    name = fn.str();
 
     format = FORMAT::RGBA32;
 
@@ -240,7 +240,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
 
     hResult = dxDevice->CreateTexture2D(&dxTextureDesc,NULL,&dxTexture);
     if (FAILED(hResult)) {
-        throwException("TextureDX11(fn,threadMgr)", "Failed to create D3D11 texture (filename: "+filename+", HRESULT "+String(hResult,true)+")");
+        throwException("TextureDX11(fn,threadMgr)", "Failed to create D3D11 texture (filename: "+filename.str()+", HRESULT "+String(hResult,true)+")");
     }
     
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
@@ -249,14 +249,14 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
     dxShaderResourceViewDesc.Texture2D.MipLevels = 1;
     hResult = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
     if (FAILED(hResult)) {
-        throwException("TextureDX11(fn,threadMgr)", "Failed to create shader resource view (filename: "+filename+", HRESULT " + String(hResult, true) + ")");
+        throwException("TextureDX11(fn,threadMgr)", "Failed to create shader resource view (filename: "+filename.str()+", HRESULT " + String(hResult, true) + ")");
     }
 
     isRT = false;
 
     class TextureReassignRequest : public ThreadManager::MainThreadRequest {
         public:
-            String filename;
+            FileName filename;
             D3D11_TEXTURE2D_DESC* dxTextureDesc;
             ID3D11Texture2D** dxTexture;
             D3D11_SHADER_RESOURCE_VIEW_DESC* dxShaderResourceViewDesc;
@@ -290,7 +290,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
 
                 hResult = dxDevice->CreateTexture2D(&tempTexDesc,NULL,&tempTex);
                 if (FAILED(hResult)) {
-                    throw Exception("TextureReassignRequest (DX11)","Failed to create D3D11Texture (filename: "+filename+", HRESULT "+String(hResult,true)+")");
+                    throw Exception("TextureReassignRequest (DX11)","Failed to create D3D11Texture (filename: "+filename.str()+", HRESULT "+String(hResult,true)+")");
                 }
                 if (buffer != nullptr) { dxContext->UpdateSubresource(tempTex,0,NULL,buffer,realWidth*4,0); }
 
@@ -302,7 +302,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
                 hResult = dxDevice->CreateShaderResourceView(tempTex,&tempResViewDesc,&tempResView);
                 if (FAILED(hResult)) {
                     tempTex->Release();
-                    throw Exception("TextureReassignRequest (DX11)", "Failed to create shader resource view (filename: "+filename+", HRESULT "+String(hResult, true)+")");
+                    throw Exception("TextureReassignRequest (DX11)", "Failed to create shader resource view (filename: "+filename.str()+", HRESULT "+String(hResult, true)+")");
                 }
 
                 dxContext->GenerateMips(tempResView);
@@ -327,7 +327,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const String& fn,ThreadManager* threadMan
     class TextureLoadRequest : public ThreadManager::NewThreadRequest {
         public:
             TextureReassignRequest mainThreadRequest;
-            String filename;
+            FileName filename;
             int* width; int* height; int* realWidth; int* realHeight;
             void execute() {
                 BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight);

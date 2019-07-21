@@ -16,7 +16,7 @@ namespace PGE {
 
 class ShaderDX11 : public Shader {
     public:
-        ShaderDX11(Graphics* gfx,const String& path);
+        ShaderDX11(Graphics* gfx,const FileName& path);
         virtual ~ShaderDX11();
 
         Constant* getVertexShaderConstant(String name);
@@ -60,6 +60,8 @@ class ShaderDX11 : public Shader {
 
                 String getName() const;
             private:
+                virtual void throwException(String func, String details);
+
                 CBufferInfo* constantBuffer;
                 String name;
                 int offset;
