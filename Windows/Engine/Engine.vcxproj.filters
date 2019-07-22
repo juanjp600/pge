@@ -192,6 +192,9 @@
     <ClCompile Include="..\..\Src\Misc\FileName.cpp">
       <Filter>Src\Misc</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Misc\FileUtil.cpp">
+      <Filter>Src\Misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -294,6 +297,9 @@
       <Filter>Src\Init</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Misc\FileName.h">
+      <Filter>Include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Misc\FileUtil.h">
       <Filter>Include\Misc</Filter>
     </ClInclude>
   </ItemGroup>
