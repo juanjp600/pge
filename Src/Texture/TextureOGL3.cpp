@@ -29,7 +29,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
 
     format = fmt;
 
-    filename = "<n/a>";
+//    filename = "<n/a>";
 
     uint8_t* newBuffer = nullptr;
 

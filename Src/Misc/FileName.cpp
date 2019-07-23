@@ -43,14 +43,6 @@ FileName& FileName::operator=(const FileName& other) {
     return *this;
 }
 
-FileName& FileName::operator=(const String& str) {
-    if (!name.equals(str)) {
-        name = str.resourcePath();
-    }
-    
-    return *this;
-}
-
 long long FileName::getHashCode() const {
     return name.getHashCode();
 }

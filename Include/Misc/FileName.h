@@ -21,7 +21,6 @@ class FileName {
         int size() const;
 
         FileName& operator=(const FileName& other);
-        FileName& operator=(const String& str);
 
         long long getHashCode() const;
         bool equals(const FileName& other) const;
