@@ -6,11 +6,14 @@
 #include "InitInternal.h"
 
 int PGE::InitMain() {
+#ifndef DEBUG
     try {
+#endif
         InitEnv();
         int retVal = PGEMain::Main();
         QuitEnv();
         return retVal;
+#ifndef DEBUG
     } catch (PGE::Exception& e) {
         std::ofstream exceptionLog;
         exceptionLog.open("exception.txt",std::ofstream::out | std::ofstream::trunc);
@@ -39,4 +42,5 @@ int PGE::InitMain() {
             "An exception has been thrown, please send \"exception.txt\" to a developer.\nException was std::exception",nullptr);
         return -1;
     }
+#endif
 }
