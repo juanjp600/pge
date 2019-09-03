@@ -8,7 +8,7 @@ class UserInput {
         enum class DEVICE {
             KEYBOARD,
             MOUSE,
-            GAMEPAD
+            CONTROLLER
         };
 
         virtual ~UserInput()=default;
@@ -320,15 +320,20 @@ class MouseInput : public UserInput {
         virtual DEVICE getDevice() const;
 
         BUTTON getButton() const;
+    
+        void setDoubleClick(bool bruh);
+        bool doubleClicked() const;
 
         MouseInput(BUTTON inMouseButton);
     private:
         BUTTON mouseButton;
+    
+        bool doubleClick;
 };
 
-class GamepadInput : public UserInput {
+class ControllerInput : public UserInput {
     public:
-        enum class CONTROLLER_BUTTON {
+        enum class BUTTON {
             INVALID = -1,
             A,
             B,
@@ -350,11 +355,11 @@ class GamepadInput : public UserInput {
 
         virtual DEVICE getDevice() const;
 
-        CONTROLLER_BUTTON getButton() const;
+        BUTTON getButton() const;
 
-        GamepadInput(CONTROLLER_BUTTON inGamepadButton);
+        ControllerInput(BUTTON inControllerButton);
     private:
-        CONTROLLER_BUTTON gamepadButton;
+        BUTTON controllerButton;
 };
 
 }

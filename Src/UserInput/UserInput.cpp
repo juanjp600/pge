@@ -46,14 +46,22 @@ MouseInput::BUTTON MouseInput::getButton() const {
     return mouseButton;
 }
 
-GamepadInput::GamepadInput(GamepadInput::CONTROLLER_BUTTON inGamepadButton) {
-    gamepadButton = inGamepadButton;
+void MouseInput::setDoubleClick(bool bruh) {
+    doubleClick = bruh;
 }
 
-UserInput::DEVICE GamepadInput::getDevice() const {
-    return UserInput::DEVICE::GAMEPAD;
+bool MouseInput::doubleClicked() const {
+    return doubleClick;
 }
 
-GamepadInput::CONTROLLER_BUTTON GamepadInput::getButton() const {
-    return gamepadButton;
+ControllerInput::ControllerInput(ControllerInput::BUTTON inControllerButton) {
+    controllerButton = inControllerButton;
+}
+
+UserInput::DEVICE ControllerInput::getDevice() const {
+    return UserInput::DEVICE::CONTROLLER;
+}
+
+ControllerInput::BUTTON ControllerInput::getButton() const {
+    return controllerButton;
 }

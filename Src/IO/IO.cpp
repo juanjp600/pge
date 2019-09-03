@@ -40,6 +40,10 @@ void IO::update() {
     for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
         UserInput* input = (*it);
         input->setHit(false);
+        
+        if (input->getDevice() == UserInput::DEVICE::MOUSE) {
+            ((MouseInput*)input)->setDoubleClick(false);
+        }
     }
 
     SDL_Event event;
@@ -111,6 +115,11 @@ void IO::update() {
                             input->setDown(true);
                         } else if (event.type==SDL_MOUSEBUTTONUP) {
                             input->setDown(false);
+                        }
+                        
+                        // Double click?
+                        if (mouseButtonEvent.clicks == 2) {
+                            mouseInput->setDoubleClick(true);
                         }
                     }
                 }
