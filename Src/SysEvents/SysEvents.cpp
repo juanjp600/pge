@@ -41,6 +41,10 @@ void SysEventsInternal::update() {
                     event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEWHEEL) {
                     takeEvent = SDL_GetMouseFocus()==sdlWindow;
                 }
+            } else if (subscriber->getEventType()==SubscriberInternal::EventType::TEXTINPUT) {
+                if (event.type == SDL_TEXTINPUT) {
+                    takeEvent = SDL_GetKeyboardFocus()==sdlWindow;
+                }
             }
             //TODO: capture gamepad events
             if (takeEvent) {

@@ -21,22 +21,40 @@ IO::IO(Window* win) {
 
     keyboardSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::KEYBOARD);
     mouseSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::MOUSE);
-    gamepadSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::GAMEPAD);
+    controllerSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::GAMEPAD);
+    textSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::TEXTINPUT);
 
     SysEventsInternal::subscribe(keyboardSubscriber);
     SysEventsInternal::subscribe(mouseSubscriber);
-    SysEventsInternal::subscribe(gamepadSubscriber);
+    SysEventsInternal::subscribe(controllerSubscriber);
+    SysEventsInternal::subscribe(textSubscriber);
 
     inputs.clear();
+    
+    textInput = "";
 }
 
 IO::~IO() {
     SysEventsInternal::unsubscribe(keyboardSubscriber);
     SysEventsInternal::unsubscribe(mouseSubscriber);
-    SysEventsInternal::unsubscribe(gamepadSubscriber);
+    SysEventsInternal::unsubscribe(controllerSubscriber);
+    SysEventsInternal::unsubscribe(textSubscriber);
+}
+
+void IO::startTextInputCapture() const {
+    SDL_StartTextInput();
+}
+
+void IO::stopTextInputCapture() const {
+    SDL_StopTextInput();
+}
+
+String IO::getTextInput() const {
+    return textInput;
 }
 
 void IO::update() {
+    textInput = "";
     for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
         UserInput* input = (*it);
         input->setHit(false);
@@ -125,6 +143,11 @@ void IO::update() {
                 }
             }
         }
+    }
+    
+    while (((SysEventsInternal::SubscriberInternal*)textSubscriber)->popEvent(event)) {
+        SDL_TextInputEvent txtEvent = event.text;
+        textInput = textInput + txtEvent.text;
     }
 }
 

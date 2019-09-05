@@ -17,10 +17,14 @@ class IO {
 
         SysEvents::Subscriber* keyboardSubscriber;
         SysEvents::Subscriber* mouseSubscriber;
-        SysEvents::Subscriber* gamepadSubscriber;
+        SysEvents::Subscriber* controllerSubscriber;
+        SysEvents::Subscriber* textSubscriber;
 
         std::set<UserInput*> inputs;
         Vector2f mousePos;
+    
+        // The last received string from SDL_TEXTINPUT events.
+        String textInput;
 
         IO(Window* win);
     public:
@@ -35,6 +39,10 @@ class IO {
         Vector2f getMousePosition() const;
         void setMousePosition(Vector2f position);
         void setMouseVisibility(bool visible);
+    
+        void startTextInputCapture() const;
+        void stopTextInputCapture() const;
+        String getTextInput() const;
 };
 
 }
