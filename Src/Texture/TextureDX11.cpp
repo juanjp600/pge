@@ -34,7 +34,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
 
-    filename = "<n/a>";
+    // filename = "<n/a>";
 
     void* newBuffer = nullptr;
 
@@ -242,7 +242,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const FileName& fn,ThreadManager* threadM
     if (FAILED(hResult)) {
         throwException("TextureDX11(fn,threadMgr)", "Failed to create D3D11 texture (filename: "+filename.str()+", HRESULT "+String(hResult,true)+")");
     }
-    
+
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;

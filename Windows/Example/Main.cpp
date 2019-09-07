@@ -67,11 +67,11 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
         String texName = "";
         if (name.findFirst("_lm")>-1) {
             texName = path+name+"0.png";
-            retVal.lmTextures->push_back(Texture::load(graphics,texName,threadManager));
+            retVal.lmTextures->push_back(Texture::load(graphics,PGE::FileName::create(texName),threadManager));
             texName = path+name+"1.png";
-            retVal.lmTextures->push_back(Texture::load(graphics,texName,threadManager));
+            retVal.lmTextures->push_back(Texture::load(graphics,PGE::FileName::create(texName),threadManager));
             texName = path+name+"2.png";
-            retVal.lmTextures->push_back(Texture::load(graphics,texName,threadManager));
+            retVal.lmTextures->push_back(Texture::load(graphics,PGE::FileName::create(texName),threadManager));
         } else {
             texName = "GFX/Map/Textures/"+name+".jpg";
             WIN32_FIND_DATA FindFileData;
@@ -94,9 +94,9 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
                 bumpName = "GFX/Map/Textures/blankbump.jpg";
             }
 
-            retVal.textures->push_back(Texture::load(graphics,bumpName,threadManager));
+            retVal.textures->push_back(Texture::load(graphics,PGE::FileName::create(bumpName),threadManager));
 
-            retVal.textures->push_back(Texture::load(graphics,texName,threadManager));
+            retVal.textures->push_back(Texture::load(graphics,PGE::FileName::create(texName),threadManager));
         }
         std::cout<<texName<<"\n";
         
@@ -228,17 +228,17 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
     return retVal;
 }
 
-int PGE::Main() {
+int PGEMain::Main() {
     Graphics* graphics = Graphics::create("PGE",1280,720,false);
     IO* io = IO::create(graphics->getWindow());
     ThreadManager* threadManager = new ThreadManager();
     Audio* audio = Audio::create(threadManager);
 
-    Sound* sound = Sound::load(audio,"SFX/Music/The Dread.ogg");
+    Sound* sound = Sound::load(audio, PGE::FileName::create("SFX/Music/The Dread.ogg"));
     Sound::Channel* channel = sound->play();
 
-    Shader* shader = Shader::load(graphics,"default/");
-    Shader* postprocessShader = Shader::load(graphics,"postprocess/");
+    Shader* shader = Shader::load(graphics, PGE::FileName::create("default/"));
+    Shader* postprocessShader = Shader::load(graphics, PGE::FileName::create("postprocess/"));
 
     RM2 testRM2 = loadRM2("GFX/Map/Rooms/173new2/173new2.rm2",graphics,shader,threadManager);
 
