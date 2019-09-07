@@ -46,20 +46,12 @@ MouseInput::BUTTON MouseInput::getButton() const {
     return mouseButton;
 }
 
-void MouseInput::setDoubleClick(bool bruh) {
-    doubleClick = bruh;
+void MouseInput::setClickCount(int bruh) {
+    clicks = bruh;
 }
 
-bool MouseInput::doubleClicked() const {
-    return doubleClick;
-}
-
-void MouseInput::setTripleClick(bool bruh) {
-    tripleClick = bruh;
-}
-
-bool MouseInput::tripleClicked() const {
-    return tripleClick;
+int MouseInput::getClickCount() const {
+    return clicks;
 }
 
 ControllerInput::ControllerInput(ControllerInput::BUTTON inControllerButton) {

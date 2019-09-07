@@ -321,17 +321,15 @@ class MouseInput : public UserInput {
 
         BUTTON getButton() const;
     
-        void setDoubleClick(bool bruh);
-        bool doubleClicked() const;
-        void setTripleClick(bool bruh);
-        bool tripleClicked() const;
+        void setClickCount(int bruh);
+        int getClickCount() const;
 
         MouseInput(BUTTON inMouseButton);
     private:
         BUTTON mouseButton;
     
-        bool doubleClick;
-        bool tripleClick;
+        // The amount of clicks done in rapid succession. 1 for single-clicks, 2 for double-clicks, ect.
+        int clicks;
 };
 
 class ControllerInput : public UserInput {

@@ -61,8 +61,7 @@ void IO::update() {
         
         if (input->getDevice() == UserInput::DEVICE::MOUSE) {
             MouseInput* mouse = (MouseInput*)input;
-            mouse->setDoubleClick(false);
-            mouse->setTripleClick(false);
+            mouse->setClickCount(0);
         }
     }
 
@@ -137,12 +136,7 @@ void IO::update() {
                             input->setDown(false);
                         }
                         
-                        // Double/triple click?
-                        if (mouseButtonEvent.clicks == 2) {
-                            mouseInput->setDoubleClick(true);
-                        } else if (mouseButtonEvent.clicks == 3) {
-                            mouseInput->setTripleClick(true);
-                        }
+                        mouseInput->setClickCount(mouseButtonEvent.clicks);
                     }
                 }
             }
