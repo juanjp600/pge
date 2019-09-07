@@ -54,6 +54,14 @@ bool MouseInput::doubleClicked() const {
     return doubleClick;
 }
 
+void MouseInput::setTripleClick(bool bruh) {
+    tripleClick = bruh;
+}
+
+bool MouseInput::tripleClicked() const {
+    return tripleClick;
+}
+
 ControllerInput::ControllerInput(ControllerInput::BUTTON inControllerButton) {
     controllerButton = inControllerButton;
 }

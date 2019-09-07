@@ -60,7 +60,9 @@ void IO::update() {
         input->setHit(false);
         
         if (input->getDevice() == UserInput::DEVICE::MOUSE) {
-            ((MouseInput*)input)->setDoubleClick(false);
+            MouseInput* mouse = (MouseInput*)input;
+            mouse->setDoubleClick(false);
+            mouse->setTripleClick(false);
         }
     }
 
@@ -135,9 +137,11 @@ void IO::update() {
                             input->setDown(false);
                         }
                         
-                        // Double click?
+                        // Double/triple click?
                         if (mouseButtonEvent.clicks == 2) {
                             mouseInput->setDoubleClick(true);
+                        } else if (mouseButtonEvent.clicks == 3) {
+                            mouseInput->setTripleClick(true);
                         }
                     }
                 }

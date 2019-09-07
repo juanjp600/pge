@@ -323,12 +323,15 @@ class MouseInput : public UserInput {
     
         void setDoubleClick(bool bruh);
         bool doubleClicked() const;
+        void setTripleClick(bool bruh);
+        bool tripleClicked() const;
 
         MouseInput(BUTTON inMouseButton);
     private:
         BUTTON mouseButton;
     
         bool doubleClick;
+        bool tripleClick;
 };
 
 class ControllerInput : public UserInput {
