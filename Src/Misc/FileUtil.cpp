@@ -1,8 +1,6 @@
 #include <fstream>
-#ifdef __APPLE__
-#ifdef __OBJC__
+#if defined(__APPLE__) && defined(__OBJC__)
     #import <Foundation/Foundation.h>
-#endif
 #endif
 
 #ifdef WINDOWS
@@ -25,7 +23,7 @@ bool FileUtil::createDirectory(String path) {
     if (exists(path)) {
         return false;
     }
-    
+
 #ifdef WINDOWS
     // TODO:
     return false;
@@ -36,14 +34,12 @@ bool FileUtil::createDirectory(String path) {
 
 String FileUtil::getDataFolder() {
     // TODO: Windows and Linux.
-#ifdef __APPLE__
-#ifdef __OBJC__
+#if defined(__APPLE__) && defined(__OBJC__)
     // Volumes/User/*user*/Library/Application Support/
     NSArray* filePaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString* appSupportDir = [filePaths firstObject];
 
     return String([appSupportDir cStringUsingEncoding: NSUTF8StringEncoding]) + "/";
-#endif
 #endif
 
     return PGE::String();

@@ -4,10 +4,8 @@
 #include <vector>
 #include <string>
 
-#ifdef __APPLE__
-#ifdef __OBJC__
+#if defined(__APPLE__) && defined(__OBJC__)
 #include <Foundation/NSString.h>
-#endif
 #endif
 
 namespace PGE {
@@ -31,10 +29,8 @@ public:
 
     const char* cstr() const;
     const wchar* wstr() const;
-#ifdef __APPLE__
-#ifdef __OBJC__
+#if defined(__APPLE__) && defined(__OBJC__)
     NSString* nsstr() const;
-#endif
 #endif
     int toInt() const;
     float toFloat() const;

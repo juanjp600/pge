@@ -1,8 +1,6 @@
-#ifdef __APPLE__
-#ifdef __OBJC__
+#if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
 #include <SDL_syswm.h>
-#endif
 #endif
 
 #include <Window/Window.h>
@@ -30,14 +28,12 @@ SDL_Window* WindowInternal::getSdlWindow() const {
     return sdlWindow;
 }
 
-#ifdef __APPLE__
-#ifdef __OBJC__
+#if defined(__APPLE__) && defined(__OBJC__)
 NSWindow* WindowInternal::getCocoaWindow() const {
     SDL_SysWMinfo info;
     SDL_VERSION(&info.version);
     SDL_GetWindowWMInfo(getSdlWindow(), &info);
-    
+
     return info.info.cocoa.window;
 }
-#endif
 #endif

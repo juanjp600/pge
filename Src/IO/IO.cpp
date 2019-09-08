@@ -1,8 +1,6 @@
-#ifdef __APPLE__
-#ifdef __OBJC__
+#if defined(__APPLE__) && defined(__OBJC__)
 #import <AppKit/AppKit.h>
 #include <SDL_syswm.h>
-#endif
 #endif
 
 #include "../SysEvents/SysEventsInternal.h"
@@ -30,7 +28,7 @@ IO::IO(Window* win) {
     SysEventsInternal::subscribe(textSubscriber);
 
     inputs.clear();
-    
+
     textInput = "";
 }
 
@@ -58,7 +56,7 @@ void IO::update() {
     for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
         UserInput* input = (*it);
         input->setHit(false);
-        
+
         if (input->getDevice() == UserInput::DEVICE::MOUSE) {
             MouseInput* mouse = (MouseInput*)input;
             mouse->setClickCount(0);
@@ -86,8 +84,7 @@ void IO::update() {
 
     while (((SysEventsInternal::SubscriberInternal*)mouseSubscriber)->popEvent(event)) {
         if (event.type==SDL_MOUSEMOTION) {
- #ifdef __APPLE__
- #ifdef __OBJC__
+#if defined(__APPLE__) && defined(__OBJC__)
             // Get the mouse position from NSWindow on macOS.
             NSWindow* nsWin = ((WindowInternal*) window)->getCocoaWindow();
             NSPoint pos = nsWin.mouseLocationOutsideOfEventStream;
@@ -96,7 +93,6 @@ void IO::update() {
             mousePos.x = (float)pos.x;
             // Cocoa's origin is bottom-left, convert to top-left.
             mousePos.y = (float)window->getHeight() - pos.y;
- #endif
  #else
             mousePos.x = (float)event.motion.x;
             mousePos.y = (float)event.motion.y;
@@ -135,14 +131,14 @@ void IO::update() {
                         } else if (event.type==SDL_MOUSEBUTTONUP) {
                             input->setDown(false);
                         }
-                        
+
                         mouseInput->setClickCount(mouseButtonEvent.clicks);
                     }
                 }
             }
         }
     }
-    
+
     while (((SysEventsInternal::SubscriberInternal*)textSubscriber)->popEvent(event)) {
         SDL_TextInputEvent txtEvent = event.text;
         textInput = textInput + txtEvent.text;
@@ -155,11 +151,10 @@ Vector2f IO::getMousePosition() const {
 
 void IO::setMousePosition(Vector2f position) {
     if (!window->isFocused()) { return; }
-    
+
     mousePos = position;
 
-#ifdef __APPLE__
-#ifdef __OBJC__
+#if defined(__APPLE__) && defined(__OBJC__)
     // Convert the mouse position from the retina coordinates to screen coordinates on macOS.
     NSWindow* nsWin = ((WindowInternal*) window)->getCocoaWindow();
     NSPoint mousePosition = [nsWin convertPointFromBacking: NSMakePoint(position.x, position.y)];
@@ -172,7 +167,6 @@ void IO::setMousePosition(Vector2f position) {
     CGWarpMouseCursorPosition(mousePosition);
     // For some reason updating the mouse position this way doesn't update the cursor position, so we need to tell Cocoa to sync that.
     CGAssociateMouseAndMouseCursorPosition(true);
-#endif
 #else
     SDL_WarpMouseInWindow(((WindowInternal*)window)->getSdlWindow(), position.x, position.y);
 #endif

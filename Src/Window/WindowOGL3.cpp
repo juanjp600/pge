@@ -5,31 +5,27 @@
 #include <Window/Window.h>
 #include "WindowOGL3.h"
 
-#ifdef __APPLE__
-#ifdef __OBJC__
+#if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
-#endif
 #endif
 
 using namespace PGE;
 
 WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     GLuint glError = GL_NO_ERROR;
-    
+
     caption = c;
     width = w; height = h; fullscreen = fs;
-    
-#ifdef __APPLE__
-#ifdef __OBJC__
+
+#if defined(__APPLE__) && defined(__OBJC__)
     // Figure out the de-scaled window size.
     NSRect rect = NSMakeRect(0, 0, w, h);
     NSScreen* screen = [NSScreen mainScreen];
     rect = [screen convertRectFromBacking: rect];
-    
+
     w = NSWidth(rect);
     h = NSHeight(rect);
-#endif
 #endif
 
     sdlWindow = nullptr;
@@ -70,7 +66,7 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
         throwException("WindowOGL3", "Failed to initialize window data post-GLEW initialization. (GL_ERROR: " + String(glError, true) + ")");
