@@ -43,6 +43,9 @@ class IO {
         void startTextInputCapture() const;
         void stopTextInputCapture() const;
         String getTextInput() const;
+    
+        void setClipboardText(String str) const;
+        String getClipboardText() const;
 };
 
 }

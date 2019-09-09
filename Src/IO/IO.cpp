@@ -51,6 +51,14 @@ String IO::getTextInput() const {
     return textInput;
 }
 
+void IO::setClipboardText(String str) const {
+    SDL_SetClipboardText(str.cstr());
+}
+
+String IO::getClipboardText() const {
+    return String(SDL_GetClipboardText());
+}
+
 void IO::update() {
     textInput = "";
     for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
