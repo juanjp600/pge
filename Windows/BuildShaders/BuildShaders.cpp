@@ -244,11 +244,21 @@ HRESULT compileShader(const wchar_t* input) {
 	return S_OK;
 }
 
-int main() {
-    wchar_t folderName[512];
-    printf("Folder containing the shaders: ");
-    fgetws(folderName,511,stdin);
-    folderName[lstrlenW(folderName)-1]='\0';
+int main(int argc, char* argv[]) {
+	wchar_t folderName[512];
+	if (argc < 2) {
+		printf("Folder containing the shaders: ");
+		fgetws(folderName, 511, stdin);
+		folderName[lstrlenW(folderName) - 1] = '\0';
+	}
+	else {
+		for (int i = 0; i < 512; i++) {
+			folderName[i] = argv[1][i];
+			if (folderName[i] == '\0') {
+				break;
+			}
+		}
+	}
 
 	WIN32_FIND_DATA findData;
 	ZeroMemory(&findData, sizeof(WIN32_FIND_DATA));
