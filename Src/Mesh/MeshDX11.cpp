@@ -24,8 +24,8 @@ MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) {
 
     dxVertexData.clear();
     dxIndexData.clear();
-    vertices.clear();
-    primitives.clear();
+    vertices.clear(); vertexCount = 0;
+    primitives.clear(); primitiveCount = 0;
     dxVertexBuffer = nullptr;
     dxIndexBuffer = nullptr;
 }
@@ -63,9 +63,9 @@ void MeshDX11::updateInternalData() {
     for (int j=0;j<vertexInputElems.size();j++) {
         indexHints[j] = 0;
     }
-    for (int i=0;i<vertices.size();i++) {
+    for (int i=0;i<vertexCount;i++) {
         for (int j=0;j<vertexInputElems.size();j++) {
-            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j],indexHints[j]);
+            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j], indexHints[j]);
             indexHints[j] = prop.index;
             switch (prop.type) {
                 case Vertex::PROPERTY_TYPE::FLOAT: {
@@ -120,7 +120,7 @@ void MeshDX11::updateInternalData() {
     }
     delete[] indexHints;
 
-    for (int i=0;i<primitives.size();i++) {
+    for (int i=0;i<primitiveCount;i++) {
         dxIndexData.push_back(primitives[i].a);
         dxIndexData.push_back(primitives[i].b);
         if (primitiveType==Primitive::TYPE::TRIANGLE) {
@@ -218,7 +218,7 @@ void MeshDX11::render() {
                 ? (opaque ? WindowDX11::ZBUFFER_STATE_INDEX::ENABLED_WRITE : WindowDX11::ZBUFFER_STATE_INDEX::ENABLED_NOWRITE)
                 : WindowDX11::ZBUFFER_STATE_INDEX::DISABLED);
     
-    dxContext->DrawIndexed(primitives.size()*dxIndexMultiplier,0,0);
+    dxContext->DrawIndexed(primitiveCount*dxIndexMultiplier,0,0);
 
     ID3D11ShaderResourceView* nullResource = nullptr;
     for (int i=0;i<material->getTextureCount();i++) {

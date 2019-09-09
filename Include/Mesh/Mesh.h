@@ -17,6 +17,7 @@ class Vertex {
     public:
         Vertex();
         Vertex(const Vertex& other);
+        Vertex& operator=(const Vertex& other);
         enum class PROPERTY_TYPE {
             FLOAT,
             UINT,
@@ -29,6 +30,7 @@ class Vertex {
         struct Property {
             Property();
             Property(const Property& other);
+            void copyOtherValue(const Property& other);
             String name;
             PROPERTY_TYPE type;
             int index;
@@ -74,12 +76,13 @@ class Mesh {
         Mesh* clone();
         virtual ~Mesh(){}
 
-        void setGeometry(const std::vector<Vertex>& verts,const std::vector<Primitive>& prims);
+        void setGeometry(int vertexCount, const std::vector<Vertex>& verts, int primCount, const std::vector<Primitive>& prims);
         void clearGeometry();
         void setMaterial(Material* m);
 
-        const std::vector<Vertex>& getVertices() const;
-        const std::vector<Primitive>& getPrimitives() const;
+        int getVertexCount() const;
+        const std::vector<Vertex>& getVertices(int& vertCount) const;
+        const std::vector<Primitive>& getPrimitives(int& primCount) const;
         bool isOpaque() const;
 
         virtual void updateInternalData() =0;
@@ -102,6 +105,7 @@ class Mesh {
         Graphics* graphics;
         Primitive::TYPE primitiveType;
 
+        int vertexCount; int primitiveCount;
         std::vector<Vertex> vertices;
         std::vector<Primitive> primitives;
 };

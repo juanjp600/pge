@@ -25,6 +25,9 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
 
     glVertexData.clear(); glIndexData.clear();
 
+    vertices.clear(); vertexCount = 0;
+	primitives.clear(); primitiveCount = 0;
+
     glGenBuffers(1, &glVertexBufferObject);
     glGenBuffers(1, &glIndexBufferObject);
 
@@ -59,7 +62,7 @@ void MeshOGL3::updateInternalData() {
     for (int j=0;j<vertexInputElems.size();j++) {
         indexHints[j] = 0;
     }
-    for (int i=0;i<vertices.size();i++) {
+    for (int i=0;i<vertexCount;i++) {
         for (int j=0;j<vertexInputElems.size();j++) {
             const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j],indexHints[j]);
             indexHints[j] = prop.index;
@@ -109,7 +112,7 @@ void MeshOGL3::updateInternalData() {
     }
     delete[] indexHints;
 
-    for (int i=0;i<primitives.size();i++) {
+    for (int i=0;i<primitiveCount;i++) {
         glIndexData.push_back(primitives[i].a);
         glIndexData.push_back(primitives[i].b);
         if (primitiveType==Primitive::TYPE::TRIANGLE) {
@@ -179,7 +182,7 @@ void MeshOGL3::render() {
     glDepthMask(isOpaque());
     glColorMask(true,true,true,!isOpaque());
 
-    glDrawElements(glPrimitiveType,primitives.size()*glIndexMultiplier,GL_UNSIGNED_INT,nullptr);
+    glDrawElements(glPrimitiveType,primitiveCount*glIndexMultiplier,GL_UNSIGNED_INT,nullptr);
 
     ((ShaderOGL3*)material->getShader())->unbindGLAttribs();
     glBindVertexArray(0);
