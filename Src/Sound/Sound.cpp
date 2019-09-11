@@ -35,7 +35,7 @@ SoundInternal::SoundInternal(Audio* a,const FileName& fn,bool forcePan,bool strm
         } else {
             stereo = true;
         }
-        frequency = vorbisInfo->rate;
+        frequency = (int)vorbisInfo->rate;
         forcePanning = false;
         if (forcePan && stereo) {
             //OpenAL does not perform automatic panning or attenuation with stereo tracks
@@ -54,7 +54,7 @@ SoundInternal::SoundInternal(Audio* a,const FileName& fn,bool forcePan,bool strm
         int bitStream;
         int readBytes = 0;
         do {
-            readBytes = ov_read(&oggFile,buf->charBuf,bufferSamples*2,endian,2,1,&bitStream);
+            readBytes = (int)ov_read(&oggFile,buf->charBuf,bufferSamples*2,endian,2,1,&bitStream);
             if (forcePanning) {
                 for (int i=0;i<bufferSamples/2;i++) {
                     int32_t sample0 = buf->shortBuf[i*2];
@@ -70,7 +70,7 @@ SoundInternal::SoundInternal(Audio* a,const FileName& fn,bool forcePan,bool strm
         delete buf;
         ov_clear(&oggFile);
 
-        alBufferData(alBuffer,stereo ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16,allPcm.data(),allPcm.size(),frequency);
+        alBufferData(alBuffer,stereo ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16,allPcm.data(),(int)allPcm.size(),frequency);
     } else {
         FILE* f = nullptr;
         f = fopen(fn.cstr(),"rb");
@@ -83,7 +83,7 @@ SoundInternal::SoundInternal(Audio* a,const FileName& fn,bool forcePan,bool strm
         } else {
             stereo = true;
         }
-        frequency = vorbisInfo->rate;
+        frequency = (int)vorbisInfo->rate;
         bool mergeChannels = false;
         forcePanning = false;
         if (forcePan && stereo) {
@@ -98,7 +98,7 @@ SoundInternal::SoundInternal(Audio* a,const FileName& fn,bool forcePan,bool strm
 
 SoundInternal::~SoundInternal() {
     ((AudioInternal*)audio)->unregisterSound(this);
-    for (int i=channels.size()-1;i>=0;i--) {
+    for (int i=(int)channels.size()-1;i>=0;i--) {
         delete channels[i];
     }
     if (alBuffer != 0) {
@@ -148,7 +148,7 @@ void SoundInternal::fillStreamBuffer(int seekPos,uint8_t* buf,int maxSize,int& o
     ov_pcm_seek(&oggFile,seekPos);
     int accumSamples = 0;
     while (accumSamples<maxSize*2) {
-        readBytes = ov_read(&oggFile,tempBuf->charBuf,maxSize*2,endian,2,1,&bitStream);
+        readBytes = (int)ov_read(&oggFile,tempBuf->charBuf,maxSize*2,endian,2,1,&bitStream);
         int readSamples = readBytes/2;
         if (maxSize-accumSamples < readSamples) { break; }
         outEof = readBytes==0;
@@ -176,7 +176,7 @@ ALuint SoundInternal::getALBuffer() const {
 
 Sound::Channel* SoundInternal::play(bool loop) {
     ChannelInternal* newChannel = new ChannelInternal(audio,this,loop);
-    for (int i=channels.size()-1;i>=0;i--) {
+    for (int i=(int)channels.size()-1;i>=0;i--) {
         if (!channels[i]->isPlaying()) {
             delete channels[i];
         }
@@ -186,7 +186,7 @@ Sound::Channel* SoundInternal::play(bool loop) {
 }
 
 void SoundInternal::removeChannel(SoundInternal::ChannelInternal* chn) {
-    for (int i=channels.size()-1;i>=0;i--) {
+    for (int i=(int)channels.size()-1;i>=0;i--) {
         if (channels[i]==chn) {
             channels.erase(channels.begin()+i);
             ((AudioInternal*)audio)->unregisterSoundChannel(chn);

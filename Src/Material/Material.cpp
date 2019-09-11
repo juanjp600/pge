@@ -23,7 +23,7 @@ Texture* Material::getTexture(int index) const {
 }
 
 int Material::getTextureCount() const {
-    return textures.size();
+    return (int)textures.size();
 }
 
 bool Material::isOpaque() const {

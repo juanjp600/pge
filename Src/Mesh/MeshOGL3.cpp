@@ -68,31 +68,31 @@ void MeshOGL3::updateInternalData() {
             indexHints[j] = prop.index;
             switch (prop.type) {
                 case Vertex::PROPERTY_TYPE::FLOAT: {
-                    int offset = glVertexData.size();
+                    int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+sizeof(float));
                     memcpy(&(glVertexData[offset]),&(prop.value.floatVal),sizeof(float));
                 } break;
                 case Vertex::PROPERTY_TYPE::UINT: {
-                    int offset = glVertexData.size();
+                    int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+sizeof(uint32_t));
                     uint32_t uint = prop.value.uintVal;
                     memcpy(&(glVertexData[offset]),&uint,sizeof(uint32_t));
                 } break;
                 case Vertex::PROPERTY_TYPE::VECTOR2F: {
-                    int offset = glVertexData.size();
+                    int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+(sizeof(float)*2));
                     memcpy(&(glVertexData[offset]),&(prop.value.vector2fVal.x),sizeof(float));
                     memcpy(&(glVertexData[offset])+sizeof(float),&(prop.value.vector2fVal.y),sizeof(float));
                 } break;
                 case Vertex::PROPERTY_TYPE::VECTOR3F: {
-                    int offset = glVertexData.size();
+                    int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+(sizeof(float)*3));
                     memcpy(&(glVertexData[offset]),&(prop.value.vector3fVal.x),sizeof(float));
                     memcpy(&(glVertexData[offset])+sizeof(float),&(prop.value.vector3fVal.y),sizeof(float));
                     memcpy(&(glVertexData[offset])+(sizeof(float)*2),&(prop.value.vector3fVal.z),sizeof(float));
                 } break;
                 case Vertex::PROPERTY_TYPE::VECTOR4F: {
-                    int offset = glVertexData.size();
+                    int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+(sizeof(float)*4));
                     memcpy(&(glVertexData[offset]),&(prop.value.vector4fVal.x),sizeof(float));
                     memcpy(&(glVertexData[offset])+sizeof(float),&(prop.value.vector4fVal.y),sizeof(float));
@@ -100,7 +100,7 @@ void MeshOGL3::updateInternalData() {
                     memcpy(&(glVertexData[offset])+(sizeof(float)*3),&(prop.value.vector4fVal.w),sizeof(float));
                 } break;
                 case Vertex::PROPERTY_TYPE::COLOR: {
-                    int offset = glVertexData.size();
+                    int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+(sizeof(float)*4));
                     memcpy(&(glVertexData[offset]),&(prop.value.colorVal.red),sizeof(float));
                     memcpy(&(glVertexData[offset])+sizeof(float),&(prop.value.colorVal.green),sizeof(float));
@@ -113,10 +113,10 @@ void MeshOGL3::updateInternalData() {
     delete[] indexHints;
 
     for (int i=0;i<primitiveCount;i++) {
-        glIndexData.push_back(primitives[i].a);
-        glIndexData.push_back(primitives[i].b);
+        glIndexData.push_back((GLuint)primitives[i].a);
+        glIndexData.push_back((GLuint)primitives[i].b);
         if (primitiveType==Primitive::TYPE::TRIANGLE) {
-            glIndexData.push_back(primitives[i].c);
+            glIndexData.push_back((GLuint)primitives[i].c);
         }
     }
 

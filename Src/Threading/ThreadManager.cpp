@@ -18,12 +18,12 @@ ThreadManager::ThreadManager() {
 
 ThreadManager::~ThreadManager() {
     requestMutex.lock();
-    int reqSize = newThreadRequests.size();
+    int reqSize = (int)newThreadRequests.size();
     requestMutex.unlock();
     while (reqSize>0) {
         update();
         requestMutex.lock();
-        reqSize = newThreadRequests.size();
+        reqSize = (int)newThreadRequests.size();
         requestMutex.unlock();
     }
 }

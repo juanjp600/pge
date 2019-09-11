@@ -135,7 +135,7 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
     for (int i=0;i<renderTargets.size();i++) {
         glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3*)renderTargets[i])->getGlTexture(), 0);
     }
-    glDrawBuffers(renderTargets.size(), glAttachments);
+    glDrawBuffers((GLsizei)renderTargets.size(), glAttachments);
 }
 
 void GraphicsOGL3::resetRenderTarget() {
