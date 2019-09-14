@@ -60,41 +60,51 @@ Vector3f Matrix4x4f::transform(const Vector3f& other) const {
     return Vector3f(retVal.x,retVal.y,retVal.z);
 }
 
-Matrix4x4f Matrix4x4f::constructWorldMat(const Vector3f& position,const Vector3f& scale,const Vector3f& rotation) {
-    Matrix4x4f translationMat = Matrix4x4f(1.f,0.f,0.f,0.f,
-                                           0.f,1.f,0.f,0.f,
-                                           0.f,0.f,1.f,0.f,
-                                           position.x,position.y,position.z,1.f);
+Matrix4x4f Matrix4x4f::translate(const Vector3f& position) {
+    return Matrix4x4f(1.f,0.f,0.f,0.f,
+                      0.f,1.f,0.f,0.f,
+                      0.f,0.f,1.f,0.f,
+                      position.x,position.y,position.z,1.f);
+}
 
-    Matrix4x4f scaleMat = Matrix4x4f(scale.x,0.f,0.f,0.f,
-                                     0.f,scale.y,0.f,0.f,
-                                     0.f,0.f,scale.z,0.f,
-                                     0.f,0.f,0.f,1.f);
+Matrix4x4f Matrix4x4f::scale(const Vector3f& scale) {
+    return Matrix4x4f(scale.x,0.f,0.f,0.f,
+                      0.f,scale.y,0.f,0.f,
+                      0.f,0.f,scale.z,0.f,
+                      0.f,0.f,0.f,1.f);
+}
 
+Matrix4x4f Matrix4x4f::rotate(const Vector3f& rotation) {
     float sinPitch = sin(rotation.x);
     float sinYaw = sin(rotation.y);
     float sinRoll = sin(rotation.z);
     float cosPitch = cos(rotation.x);
     float cosYaw = cos(rotation.y);
     float cosRoll = cos(rotation.z);
-
+    
     Matrix4x4f pitchMat = Matrix4x4f(1.f,0.f,0.f,0.f,
                                      0.f,cosPitch,-sinPitch,0.f,
                                      0.f,sinPitch,cosPitch,0.f,
                                      0.f,0.f,0.f,1.f);
-
+    
     Matrix4x4f yawMat = Matrix4x4f(cosYaw,0.f,sinYaw,0.f,
                                    0.f,1.f,0.f,0.f,
                                    -sinYaw,0.f,cosYaw,0.f,
                                    0.f,0.f,0.f,1.f);
-
+    
     Matrix4x4f rollMat = Matrix4x4f(cosRoll,-sinRoll,0.f,0.f,
                                     sinRoll,cosRoll,0.f,0.f,
                                     0.f,0.f,1.f,0.f,
                                     0.f,0.f,0.f,1.f);
+    
+    return yawMat.product(pitchMat.product(rollMat));
+}
 
-    Matrix4x4f rotationMat = yawMat.product(pitchMat.product(rollMat));
-
+Matrix4x4f Matrix4x4f::constructWorldMat(const Vector3f& position,const Vector3f& scale,const Vector3f& rotation) {
+    Matrix4x4f translationMat = translate(position);
+    Matrix4x4f scaleMat = Matrix4x4f::scale(scale);
+    Matrix4x4f rotationMat = rotate(rotation);
+    
     return scaleMat.product(rotationMat.product(translationMat));
 }
 
