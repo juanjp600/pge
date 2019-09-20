@@ -10,7 +10,6 @@
 #include <OpenGL/GL.h>
 #endif
 #include <fstream>
-#include <iostream>
 
 using namespace PGE;
 
@@ -140,7 +139,6 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FileName& path) {
             attrib.type = GL_INT;
             stride += sizeof(GLint)*1;
         }
-        std::cout << "Vertex attribute: " << attrib.name.cstr() << " " << vertexInput[i].type.cstr() << " " << String(attrib.size).cstr() << std::endl;
         vertexAttribs.push_back(attrib);
         vertexInputElems.push_back(attrib.name);
     }
@@ -270,7 +268,6 @@ void ShaderOGL3::extractShaderVars(const String& src,String varKind,std::vector<
                         }
                     }
                 }
-                std::cout << "Var name: " << var.name.cstr() << std::endl;
                 varList.push_back(var);
             }
             line = "";
@@ -282,7 +279,6 @@ ShaderOGL3::ConstantOGL3::ConstantOGL3(Graphics* gfx,String nm, int loc) {
     graphics = gfx;
     name = nm;
     location = loc;
-    std::cout << "Constant info: " << name.cstr() << " " << String(loc).cstr() << std::endl;
 }
 
 ShaderOGL3::ConstantOGL3::Value::Value() {
