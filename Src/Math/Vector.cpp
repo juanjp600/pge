@@ -56,7 +56,7 @@ Vector2f Vector2f::multiply(float s) const {
 
 Vector2f Vector2f::normalize() const {
     float len = length();
-    if (abs(len - 0.f) < 0.001f) { return Vector2f::zero; }
+    if (len < 0.001f) { return Vector2f::zero; }
     return multiply(1.f/len);
 }
 
@@ -115,7 +115,7 @@ Vector3f Vector3f::multiply(float s) const {
 
 Vector3f Vector3f::normalize() const {
     float len = length();
-    if (abs(len - 0.f) < 0.001f) { return Vector3f::zero; }
+    if (len < 0.001f) { return Vector3f::zero; }
     return multiply(1.f/len);
 }
 
