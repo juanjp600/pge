@@ -2612,7 +2612,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1100;
 			};
 			buildConfigurationList = 0073178E0858DB0500B2BC32 /* Build configuration list for PBXProject "SDL" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -3201,6 +3201,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "-";
 				PRODUCT_NAME = "Standard DMG";
 				PROVISIONING_PROFILE = "";
 			};
@@ -3304,6 +3305,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "-";
 				PRODUCT_NAME = "Standard DMG";
 				PROVISIONING_PROFILE = "";
 			};

@@ -126,6 +126,7 @@ int SoundInternal::getFrequency() const {
 }
 
 void SoundInternal::fillStreamBuffer(int seekPos,uint8_t* buf,int maxSize,int& outSamples,bool& outEof) {
+    outEof = false;
     if (!stream) {
         outSamples = 0;
         outEof = true;

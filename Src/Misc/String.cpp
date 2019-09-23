@@ -335,6 +335,7 @@ String String::trim() const {
     while (charAt(leadingPos) == ' ' || charAt(leadingPos) == '\t') {
         leadingPos++;
         if (leadingPos>=size()) {
+            delete[] newBuf;
             return *this;
         }
     }
@@ -342,6 +343,7 @@ String String::trim() const {
     while (charAt(trailingPos) == ' ' || charAt(trailingPos) == '\t') {
         trailingPos--;
         if (trailingPos<0) {
+            delete[] newBuf;
             return *this;
         }
     }
