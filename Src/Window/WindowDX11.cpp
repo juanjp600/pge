@@ -99,8 +99,8 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
         throwException("WindowDX11","Failed to create D3D11 device (HRESULT "+String(hResult,true)+")");
     }
 
-    IDXGIDevice* dxgiDevice = nullptr;
-    hResult = dxDevice->QueryInterface(__uuidof(IDXGIDevice),(LPVOID*)(&dxgiDevice));
+    IDXGIDevice1* dxgiDevice = nullptr;
+    hResult = dxDevice->QueryInterface(__uuidof(IDXGIDevice1),(LPVOID*)(&dxgiDevice));
     if (FAILED(hResult)) {
         throwException("WindowDX11","Failed to initialize DXGI device (HRESULT "+String(hResult,true)+")");
     }
