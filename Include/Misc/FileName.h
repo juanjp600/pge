@@ -20,6 +20,8 @@ class FileName {
 
         int size() const;
 
+        bool exists() const;
+
         FileName& operator=(const FileName& other);
 
         long long getHashCode() const;
