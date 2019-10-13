@@ -38,27 +38,28 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
 
     void* newBuffer = nullptr;
 
+    format = fmt;
+
+    width = w; height = h;
+    realWidth = width; realHeight = height;
+
     if (renderTarget) {
         name = "RenderTarget";
         buffer = nullptr;
     } else {
         name = "Static";
         if (buffer==nullptr) {
-            name = String(name,"_Blank");
-            newBuffer = new uint8_t[width*height*4];
-            memset(newBuffer,0,width*height*4*sizeof(uint8_t));
+            name = String(name, "_Blank");
+            newBuffer = new uint8_t[(size_t)realWidth*(size_t)realHeight*4];
+            memset(newBuffer, 0, (size_t)realWidth*(size_t)realHeight*4*sizeof(uint8_t));
             buffer = newBuffer;
-        } else {
-            name = String(name,"_Buffer");
+        }
+        else {
+            name = String(name, "_Buffer");
         }
     }
 
-    format = fmt;
-
-    width = w; height = h;
-    realWidth = width; realHeight = height;
-
-    DXGI_FORMAT dxFormat;
+    DXGI_FORMAT dxFormat = DXGI_FORMAT_UNKNOWN;
     switch (format) {
         case FORMAT::RGBA32: {
             dxFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
