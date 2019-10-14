@@ -33,6 +33,9 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
 
     uint8_t* newBuffer = nullptr;
 
+    width = w; height = h;
+    realWidth = width; realHeight = height;
+    
     if (renderTarget) {
         name = "RenderTarget";
         buffer = nullptr;
@@ -40,16 +43,13 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
         name = "Static";
         if (buffer==nullptr) {
             name = String(name,"_Blank");
-            newBuffer = new uint8_t[width*height*4];
-            memset(newBuffer,0,width*height*4*sizeof(uint8_t));
+            newBuffer = new uint8_t[(size_t)realWidth*(size_t)realHeight*4];
+            memset(newBuffer,0,(size_t)realWidth*(size_t)realHeight*4*sizeof(uint8_t));
             buffer = newBuffer;
         } else {
             name = String(name,"_Buffer");
         }
     }
-
-    width = w; height = h;
-    realWidth = width; realHeight = height;
 
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 
 #include <Misc/FileName.h>
 
@@ -33,6 +34,10 @@ const wchar* FileName::wstr() const {
 
 int FileName::size() const {
     return name.size();
+}
+
+bool FileName::exists() const {
+    return std::filesystem::exists(name.cstr());
 }
 
 FileName& FileName::operator=(const FileName& other) {
