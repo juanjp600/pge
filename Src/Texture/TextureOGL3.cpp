@@ -188,7 +188,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FileName& fn,ThreadManager* threadM
             TextureReassignRequest mainThreadRequest;
             FileName filename;
             int* width; int* height; int* realWidth; int* realHeight;
-            void execute() {
+            void execute() override {
                 BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight);
 
                 mainThreadRequest.realWidth = *realWidth;
