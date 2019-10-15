@@ -101,9 +101,9 @@ Matrix4x4f Matrix4x4f::rotate(const Vector3f& rotation) {
 }
 
 Matrix4x4f Matrix4x4f::constructWorldMat(const Vector3f& position,const Vector3f& scale,const Vector3f& rotation) {
-    Matrix4x4f translationMat = translate(position);
+    Matrix4x4f translationMat = Matrix4x4f::translate(position);
     Matrix4x4f scaleMat = Matrix4x4f::scale(scale);
-    Matrix4x4f rotationMat = rotate(rotation);
+    Matrix4x4f rotationMat = Matrix4x4f::rotate(rotation);
     
     return scaleMat.product(rotationMat.product(translationMat));
 }
