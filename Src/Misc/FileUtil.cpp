@@ -1,6 +1,9 @@
 #include <fstream>
+
 #if defined(__APPLE__) && defined(__OBJC__)
     #import <Foundation/Foundation.h>
+#else
+    #include <filesystem>
 #endif
 
 #ifdef WINDOWS
@@ -15,8 +18,12 @@
 using namespace PGE;
 
 bool FileUtil::exists(String path) {
+#ifdef __APPLE__
     struct stat buf;
     return (stat(path.cstr(), &buf) == 0);
+#else
+    return std::filesystem::exists(path.cstr());
+#endif
 }
 
 bool FileUtil::createDirectory(String path) {

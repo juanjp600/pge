@@ -1,7 +1,7 @@
 #include <iostream>
-#include <filesystem>
 
 #include <Misc/FileName.h>
+#include <Misc/FileUtil.h>
 
 using namespace PGE;
 
@@ -37,7 +37,7 @@ int FileName::size() const {
 }
 
 bool FileName::exists() const {
-    return std::filesystem::exists(name.cstr());
+    return FileUtil::exists(str());
 }
 
 FileName& FileName::operator=(const FileName& other) {
