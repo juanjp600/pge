@@ -59,13 +59,14 @@ void MeshDX11::updateInternalData() {
     bool recalculateStride = true;
     stride = 0;
     const std::vector<String>& vertexInputElems = ((ShaderDX11*)material->getShader())->getVertexInputElems();
-    int* indexHints = new int[vertexInputElems.size()];
-    for (int j=0;j<vertexInputElems.size();j++) {
+    int vertexInputElemCount = vertexInputElems.size();
+    int* indexHints = new int[vertexInputElemCount];
+    for (int j=0;j<vertexInputElemCount;j++) {
         indexHints[j] = 0;
     }
     for (int i=0;i<vertexCount;i++) {
-        for (int j=0;j<vertexInputElems.size();j++) {
-            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j], indexHints[j]);
+        for (int j=0;j<vertexInputElemCount;j++) {
+            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j],indexHints[j]);
             indexHints[j] = prop.index;
             switch (prop.type) {
                 case Vertex::PROPERTY_TYPE::FLOAT: {

@@ -58,12 +58,13 @@ void MeshOGL3::updateInternalData() {
     glVertexData.clear(); glIndexData.clear();
 
     const std::vector<String>& vertexInputElems = ((ShaderOGL3*)material->getShader())->getVertexInputElems();
-    int* indexHints = new int[vertexInputElems.size()];
-    for (int j=0;j<vertexInputElems.size();j++) {
+    int vertexInputElemCount = vertexInputElems.size();
+    int* indexHints = new int[vertexInputElemCount];
+    for (int j=0;j<vertexInputElemCount;j++) {
         indexHints[j] = 0;
     }
     for (int i=0;i<vertexCount;i++) {
-        for (int j=0;j<vertexInputElems.size();j++) {
+        for (int j=0;j<vertexInputElemCount;j++) {
             const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j],indexHints[j]);
             indexHints[j] = prop.index;
             switch (prop.type) {

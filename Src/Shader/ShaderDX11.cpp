@@ -42,8 +42,8 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FileName& path) {
             semanticName = String(semanticName,chr);
             reflectionInfo.read(&chr, 1);
         }
-        char* nameBuf = new char[semanticName.size() + 1];
-        memcpy(nameBuf,semanticName.cstr(),(semanticName.size()+1)*sizeof(char));
+        char* nameBuf = new char[semanticName.size() + (size_t)1];
+        memcpy(nameBuf,semanticName.cstr(),(semanticName.size()+(size_t)1)*sizeof(char));
         int index = 0;
         reflectionInfo.read((char*)(void*)&index,1);
         DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN;

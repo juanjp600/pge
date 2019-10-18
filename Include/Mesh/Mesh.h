@@ -31,7 +31,7 @@ class Vertex {
             Property();
             Property(const Property& other);
             void copyOtherValue(const Property& other);
-            String name;
+            long long hashCode;
             PROPERTY_TYPE type;
             int index;
             union Value {

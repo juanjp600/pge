@@ -16,7 +16,7 @@ Vertex& Vertex::operator=(const Vertex& other) {
     for (int i = 0; i < other.properties.size(); i++) {
         bool found = false;
         for (int j = 0; j < properties.size(); j++) {
-            if (properties[j].name.equals(other.properties[i].name)) {
+            if (properties[j].hashCode == other.properties[i].hashCode) {
                 properties[j].copyOtherValue(other.properties[i]);
                 found = true;
             }
@@ -32,14 +32,14 @@ Vertex::Property::Value::Value() {
 }
 
 Vertex::Property::Property() {
-    name = "";
+    hashCode = 0;
     index = 0;
     type = PROPERTY_TYPE::VECTOR2F;
     value.vector2fVal = Vector2f::zero;
 }
 
 Vertex::Property::Property(const Vertex::Property& other) {
-    name = other.name;
+    hashCode = other.hashCode;
     copyOtherValue(other);
 }
 
@@ -69,12 +69,12 @@ void Vertex::Property::copyOtherValue(const Vertex::Property& other) {
 }
 
 const Vertex::Property& Vertex::getProperty(const String& name,int indexHint) {
-    if (properties[indexHint].name.equals(name)) {
+    if (properties[indexHint].hashCode == name.getHashCode()) {
         return properties[indexHint];
     }
     for (int i=0;i<properties.size();i++) {
-        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
-        if (properties[i].name.equals(name)) {
+        if (properties[i].hashCode>name.getHashCode()) { break; }
+        if (properties[i].hashCode == name.getHashCode()) {
             return properties[i];
         }
     }
@@ -84,8 +84,8 @@ const Vertex::Property& Vertex::getProperty(const String& name,int indexHint) {
 void Vertex::setFloat(const String& name,float val) {
     int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
-        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
-        if (properties[i].name.equals(name)) {
+        if (properties[i].hashCode>name.getHashCode()) { break; }
+        if (properties[i].hashCode == name.getHashCode()) {
             properties[i].value.floatVal = val;
             properties[i].type = PROPERTY_TYPE::FLOAT;
             return;
@@ -93,7 +93,7 @@ void Vertex::setFloat(const String& name,float val) {
         insertPos = i+1;
     }
     Property prop;
-    prop.name = name;
+    prop.hashCode = name.getHashCode();
     prop.value.floatVal = val;
     prop.type = PROPERTY_TYPE::FLOAT;
     prop.index = insertPos;
@@ -103,8 +103,8 @@ void Vertex::setFloat(const String& name,float val) {
 void Vertex::setUInt(const String& name,unsigned int val) {
     int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
-        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
-        if (properties[i].name.equals(name)) {
+        if (properties[i].hashCode>name.getHashCode()) { break; }
+        if (properties[i].hashCode == name.getHashCode()) {
             properties[i].value.uintVal = val;
             properties[i].type = PROPERTY_TYPE::UINT;
             return;
@@ -112,7 +112,7 @@ void Vertex::setUInt(const String& name,unsigned int val) {
         insertPos = i+1;
     }
     Property prop;
-    prop.name = name;
+    prop.hashCode = name.getHashCode();
     prop.value.uintVal = val;
     prop.type = PROPERTY_TYPE::UINT;
     prop.index = insertPos;
@@ -122,8 +122,8 @@ void Vertex::setUInt(const String& name,unsigned int val) {
 void Vertex::setVector2f(const String& name,Vector2f val) {
     int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
-        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
-        if (properties[i].name.equals(name)) {
+        if (properties[i].hashCode>name.getHashCode()) { break; }
+        if (properties[i].hashCode == name.getHashCode()) {
             properties[i].value.vector2fVal = val;
             properties[i].type = PROPERTY_TYPE::VECTOR2F;
             return;
@@ -131,7 +131,7 @@ void Vertex::setVector2f(const String& name,Vector2f val) {
         insertPos = i+1;
     }
     Property prop;
-    prop.name = name;
+    prop.hashCode = name.getHashCode();
     prop.value.vector2fVal = val;
     prop.type = PROPERTY_TYPE::VECTOR2F;
     prop.index = insertPos;
@@ -141,8 +141,8 @@ void Vertex::setVector2f(const String& name,Vector2f val) {
 void Vertex::setVector3f(const String& name,Vector3f val) {
     int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
-        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
-        if (properties[i].name.equals(name)) {
+        if (properties[i].hashCode>name.getHashCode()) { break; }
+        if (properties[i].hashCode == name.getHashCode()) {
             properties[i].value.vector3fVal = val;
             properties[i].type = PROPERTY_TYPE::VECTOR3F;
             return;
@@ -150,7 +150,7 @@ void Vertex::setVector3f(const String& name,Vector3f val) {
         insertPos = i+1;
     }
     Property prop;
-    prop.name = name;
+    prop.hashCode = name.getHashCode();
     prop.value.vector3fVal = val;
     prop.type = PROPERTY_TYPE::VECTOR3F;
     prop.index = insertPos;
@@ -160,8 +160,8 @@ void Vertex::setVector3f(const String& name,Vector3f val) {
 void Vertex::setVector4f(const String& name,Vector4f val) {
     int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
-        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
-        if (properties[i].name.equals(name)) {
+        if (properties[i].hashCode>name.getHashCode()) { break; }
+        if (properties[i].hashCode == name.getHashCode()) {
             properties[i].value.vector4fVal = val;
             properties[i].type = PROPERTY_TYPE::VECTOR4F;
             return;
@@ -169,7 +169,7 @@ void Vertex::setVector4f(const String& name,Vector4f val) {
         insertPos = i+1;
     }
     Property prop;
-    prop.name = name;
+    prop.hashCode = name.getHashCode();
     prop.value.vector4fVal = val;
     prop.type = PROPERTY_TYPE::VECTOR4F;
     prop.index = insertPos;
@@ -179,8 +179,8 @@ void Vertex::setVector4f(const String& name,Vector4f val) {
 void Vertex::setColor(const String& name,Color val) {
     int insertPos = 0;
     for (int i=0;i<properties.size();i++) {
-        if (properties[i].name.getHashCode()>name.getHashCode()) { break; }
-        if (properties[i].name.equals(name)) {
+        if (properties[i].hashCode>name.getHashCode()) { break; }
+        if (properties[i].hashCode == name.getHashCode()) {
             properties[i].value.colorVal = val;
             properties[i].type = PROPERTY_TYPE::COLOR;
             return;
@@ -188,7 +188,7 @@ void Vertex::setColor(const String& name,Color val) {
         insertPos = i+1;
     }
     Property prop;
-    prop.name = name;
+    prop.hashCode = name.getHashCode();
     prop.value.colorVal = val;
     prop.type = PROPERTY_TYPE::COLOR;
     prop.index = insertPos;
