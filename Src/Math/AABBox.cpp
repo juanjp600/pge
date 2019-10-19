@@ -37,13 +37,13 @@ bool AABBox::intersects(const AABBox& other) const {
 }
 
 void AABBox::addPoint(const Vector3f& point) {
-    min.x = fmin(min.x, point.x);
-    min.y = fmin(min.y, point.y);
-    min.z = fmin(min.z, point.z);
+    min.x = min.x < point.x ? min.x : point.x;
+    min.y = min.y < point.y ? min.y : point.y;
+    min.z = min.z < point.z ? min.z : point.z;
 
-    max.x = fmax(max.x, point.x);
-    max.y = fmax(max.y, point.y);
-    max.z = fmax(max.z, point.z);
+    max.x = max.x > point.x ? max.x : point.x;
+    max.y = max.y > point.y ? max.y : point.y;
+    max.z = max.z > point.z ? max.z : point.z;
 }
 
 void AABBox::reset(const Vector3f& point) {
