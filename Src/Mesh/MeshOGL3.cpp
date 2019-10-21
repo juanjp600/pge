@@ -58,7 +58,7 @@ void MeshOGL3::updateInternalData() {
     glVertexData.clear(); glIndexData.clear();
 
     const std::vector<String>& vertexInputElems = ((ShaderOGL3*)material->getShader())->getVertexInputElems();
-    int vertexInputElemCount = vertexInputElems.size();
+    int vertexInputElemCount = (int)vertexInputElems.size();
     int* indexHints = new int[vertexInputElemCount];
     for (int j=0;j<vertexInputElemCount;j++) {
         indexHints[j] = 0;
