@@ -55,9 +55,10 @@ Vector2f Vector2f::multiply(float s) const {
 }
 
 Vector2f Vector2f::normalize() const {
-    float len = length();
-    if (len < 0.001f) { return Vector2f::zero; }
-    return multiply(1.f/len);
+    float lenSqr = lengthSquared();
+    if (lenSqr < 0.0001f) { return Vector2f::zero; }
+    if (lenSqr > 0.9999f && lenSqr < 1.0001f) { return *this; }
+    return multiply(1.f/sqrt(lenSqr));
 }
 
 Vector2f Vector2f::reflect(const Vector2f& n) const {
@@ -114,9 +115,10 @@ Vector3f Vector3f::multiply(float s) const {
 }
 
 Vector3f Vector3f::normalize() const {
-    float len = length();
-    if (len < 0.001f) { return Vector3f::zero; }
-    return multiply(1.f/len);
+    float lenSqr = lengthSquared();
+    if (lenSqr < 0.0001f) { return Vector3f::zero; }
+    if (lenSqr > 0.9999f && lenSqr < 1.0001f) { return *this; }
+    return multiply(1.f/sqrt(lenSqr));
 }
 
 Vector3f Vector3f::reflect(const Vector3f& n) const {
