@@ -43,7 +43,9 @@ void SysEventsInternal::update() {
                 }
             } else if (subscriber->getEventType()==SubscriberInternal::EventType::CONTROLLER) {
                 if (event.type == SDL_CONTROLLERBUTTONDOWN || event.type == SDL_CONTROLLERBUTTONUP ||
-                    event.type == SDL_CONTROLLERAXISMOTION || event.type == SDL_CONTROLLERDEVICEREMOVED) {
+                    event.type == SDL_CONTROLLERAXISMOTION ||
+                    event.type == SDL_CONTROLLERDEVICEADDED || event.type == SDL_CONTROLLERDEVICEREMOVED ||
+                    event.type == SDL_CONTROLLERDEVICEREMAPPED) {
                     takeEvent = true;
                 }
             } else if (subscriber->getEventType()==SubscriberInternal::EventType::TEXTINPUT) {

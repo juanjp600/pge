@@ -22,8 +22,7 @@ class IO {
         virtual void untrackInput(UserInput* input) =0;
 
         virtual int getControllerCount() const =0;
-        virtual Controller* openController(int index) =0;
-        virtual void closeController(Controller* controller) =0;
+        virtual Controller* getController(int index) =0;
 
         virtual Vector2f getMousePosition() const =0;
         virtual void setMousePosition(Vector2f position) =0;

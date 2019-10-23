@@ -2,6 +2,7 @@
 #define PGE_INPUT_H_INCLUDED
 
 #include <Math/Vector.h>
+#include <Misc/String.h>
 
 namespace PGE {
 
@@ -335,12 +336,9 @@ class MouseInput : public UserInput {
 };
 
 class Controller {
-    private:
-        bool removed;
     public:
-        Controller();
-        bool wasRemoved() const;
-        void remove();
+        virtual ~Controller() {}
+        virtual String getName() const =0;
 };
 
 class ControllerInput : public UserInput {
@@ -374,6 +372,7 @@ class ControllerInput : public UserInput {
         float getPressDepth() const;
         float getDownThreshold() const;
         Controller* getController() const;
+        void removeController();
 
         void setStickPosition(Vector2f pos);
         void setPressDepth(float depth);

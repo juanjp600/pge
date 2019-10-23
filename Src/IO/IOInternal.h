@@ -3,7 +3,7 @@
 
 #include <IO/IO.h>
 
-#include <map>
+#include <vector>
 #include <SDL.h>
 
 namespace PGE {
@@ -20,7 +20,7 @@ class IOInternal : public IO {
         std::set<UserInput*> inputs;
         Vector2f mousePos;
 
-        std::map<Controller*, SDL_GameController*> openControllers;
+        std::vector<class ControllerInternal*> openControllers;
 
         // The last received string from SDL_TEXTINPUT events.
         String textInput;
@@ -35,8 +35,7 @@ class IOInternal : public IO {
         void untrackInput(UserInput* input) override;
 
         int getControllerCount() const override;
-        Controller* openController(int index) override;
-        void closeController(Controller* controller) override;
+        Controller* getController(int index) override;
 
         Vector2f getMousePosition() const override;
         void setMousePosition(Vector2f position) override;
@@ -48,6 +47,22 @@ class IOInternal : public IO {
 
         void setClipboardText(String str) const override;
         String getClipboardText() const override;
+
+        int getControllerIndex(const Controller* controller) const;
+};
+
+class ControllerInternal : public Controller {
+    private:
+        bool removed;
+        const IOInternal* io;
+        SDL_GameController* sdlController;
+        String name;
+    public:
+        ~ControllerInternal() override;
+        ControllerInternal(const IOInternal* inIo, SDL_GameController* inSdlController);
+        String getName() const override;
+        SDL_GameController* getSdlController() const;
+        void setName(const String& inName);
 };
 
 }

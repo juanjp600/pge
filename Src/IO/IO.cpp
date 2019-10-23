@@ -29,6 +29,7 @@ IOInternal::IOInternal(Window* win) {
     SysEventsInternal::subscribe(controllerSubscriber);
     SysEventsInternal::subscribe(textSubscriber);
 
+    openControllers.clear();
     inputs.clear();
 
     textInput = "";
@@ -61,16 +62,27 @@ String IOInternal::getClipboardText() const {
     return String(SDL_GetClipboardText());
 }
 
-Controller::Controller() {
+ControllerInternal::ControllerInternal(const IOInternal* inIo, SDL_GameController* inSdlController) {
     removed = false;
+    io = inIo;
+    sdlController = inSdlController;
+    name = SDL_GameControllerName(inSdlController);
 }
 
-bool Controller::wasRemoved() const {
-    return removed;
+ControllerInternal::~ControllerInternal() {
+    SDL_GameControllerClose(sdlController);
 }
 
-void Controller::remove() {
-    removed = true;
+String ControllerInternal::getName() const {
+    return name;
+}
+
+SDL_GameController* ControllerInternal::getSdlController() const {
+    return sdlController;
+}
+
+void ControllerInternal::setName(const String& inName) {
+    name = inName;
 }
 
 void IOInternal::update() {
@@ -162,32 +174,48 @@ void IOInternal::update() {
     }
 
     while (((SysEventsInternal::SubscriberInternal*)controllerSubscriber)->popEvent(event)) {
-        if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
+        if (event.type == SDL_CONTROLLERDEVICEADDED) {
+            SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
+            SDL_GameController* sdlController = SDL_GameControllerOpen(deviceEvent.which);
+            openControllers.push_back(new ControllerInternal(this, sdlController));
+        } else if (event.type == SDL_CONTROLLERDEVICEREMAPPED) {
+            SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
+            SDL_GameController* sdlController = SDL_GameControllerOpen(deviceEvent.which);
+            for (int i=0; i<openControllers.size(); i++) {
+                if (openControllers[i]->getSdlController() == sdlController) {
+                    openControllers[i]->setName(SDL_GameControllerName(sdlController));
+                    break;
+                }
+            }
+        } else if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(deviceEvent.which);
-            for (std::map<Controller*,SDL_GameController*>::iterator iter=openControllers.begin(); iter!=openControllers.end(); iter++) {
-                if (iter->second == sdlController) {
-                    iter->first->remove();
+            for (int i=0; i<openControllers.size(); i++) {
+                if (openControllers[i]->getSdlController() == sdlController) {
+                    for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
+                        UserInput* input = (*it);
+                        if (input->getDevice()==UserInput::DEVICE::CONTROLLER) {
+                            ControllerInput* controllerInput = (ControllerInput*)input;
+                            if (controllerInput->getController() == openControllers[i]) {
+                                controllerInput->removeController();
+                            }
+                        }
+                    }
+                    delete openControllers[i];
+                    openControllers.erase(openControllers.begin()+i);
                     break;
                 }
             }
         } else if (event.type == SDL_CONTROLLERAXISMOTION) {
             SDL_ControllerAxisEvent axisEvent = event.caxis;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(axisEvent.which);
-            Controller* controller = nullptr;
-            for (std::map<Controller*,SDL_GameController*>::iterator iter=openControllers.begin(); iter!=openControllers.end(); iter++) {
-                if (iter->second == sdlController) {
-                    controller = iter->first;
-                    break;
-                }
-            }
-            if (controller == nullptr) { continue; }
             for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
                 UserInput* input = (*it);
                 if (input->getDevice()==UserInput::DEVICE::CONTROLLER) {
                     ControllerInput* controllerInput = (ControllerInput*)input;
+                    if (controllerInput->getController() == nullptr) { continue; }
+                    if (((ControllerInternal*)controllerInput->getController())->getSdlController() != sdlController) { continue; }
                     ControllerInput::BUTTON button = ControllerInput::BUTTON::INVALID;
-                    if (controller != controllerInput->getController()) { continue; }
                     switch (axisEvent.axis) {
                         case SDL_CONTROLLER_AXIS_LEFTX:
                         case SDL_CONTROLLER_AXIS_LEFTY: {
@@ -221,7 +249,9 @@ void IOInternal::update() {
                             } break;
                             case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
                             case SDL_CONTROLLER_AXIS_TRIGGERRIGHT: {
+                                bool prevDown = controllerInput->isDown();
                                 controllerInput->setPressDepth((((float)axisEvent.value)+0.5f)/32767.5f);
+                                if (!prevDown && controllerInput->isDown()) { input->setHit(true); }
                             } break;
                         }
                     }
@@ -230,19 +260,12 @@ void IOInternal::update() {
         } else if (event.type == SDL_CONTROLLERBUTTONDOWN || event.type == SDL_CONTROLLERBUTTONUP) {
             SDL_ControllerButtonEvent buttonEvent = event.cbutton;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(buttonEvent.which);
-            Controller* controller = nullptr;
-            for (std::map<Controller*,SDL_GameController*>::iterator iter=openControllers.begin(); iter!=openControllers.end(); iter++) {
-                if (iter->second == sdlController) {
-                    controller = iter->first;
-                    break;
-                }
-            }
-            if (controller == nullptr) { continue; }
             for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
                 UserInput* input = (*it);
                 if (input->getDevice()==UserInput::DEVICE::CONTROLLER) {
                     ControllerInput* controllerInput = (ControllerInput*)input;
-                    if (controller != controllerInput->getController()) { continue; }
+                    if (controllerInput->getController() == nullptr) { continue; }
+                    if (((ControllerInternal*)controllerInput->getController())->getSdlController() != sdlController) { continue; }
                     ControllerInput::BUTTON button = ControllerInput::BUTTON::INVALID;
                     switch (buttonEvent.button) {
                         case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: {
@@ -294,6 +317,7 @@ void IOInternal::update() {
 
                     if (button == controllerInput->getButton()) {
                         if (event.type==SDL_CONTROLLERBUTTONDOWN) {
+                            if (!input->isDown()) { input->setHit(true); }
                             input->setDown(true);
                         } else if (event.type==SDL_CONTROLLERBUTTONUP) {
                             input->setDown(false);
@@ -353,31 +377,9 @@ void IOInternal::untrackInput(UserInput* input) {
 }
 
 int IOInternal::getControllerCount() const {
-    return SDL_NumJoysticks();
+    return openControllers.size();
 }
 
-Controller* IOInternal::openController(int index) {
-    if (!SDL_IsGameController(index)) { return nullptr; }
-
-    SDL_GameController* sdlController = SDL_GameControllerOpen(index);
-
-    if (sdlController == nullptr) {
-        throw Exception("IOInternal::openController", "Could not open controller "+String(index)+": "+SDL_GetError());
-    }
-
-#if DEBUG
-    SDL_GameControllerRumble(sdlController, 0x5555, 0x5555, 1000);
-#endif
-    
-    Controller* controller = new Controller();
-
-    openControllers.emplace(controller, sdlController);
-
-    return controller;
-}
-
-void IOInternal::closeController(Controller* controller) {
-    if (openControllers.find(controller) == openControllers.end()) { return; }
-    SDL_GameControllerClose(openControllers[controller]);
-    openControllers.erase(controller);
+Controller* IOInternal::getController(int index) {
+    return index >=0 && index<openControllers.size() ? openControllers[index] : nullptr;
 }

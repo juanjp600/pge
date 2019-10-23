@@ -4,6 +4,7 @@ using namespace PGE;
 
 UserInput::UserInput() {
     inputDown = false;
+    inputHit = false;
 }
 
 bool UserInput::isDown() const {
@@ -85,6 +86,13 @@ float ControllerInput::getDownThreshold() const {
 
 Controller* ControllerInput::getController() const {
     return controller;
+}
+
+void ControllerInput::removeController() {
+    controller = nullptr;
+    stickPosition = Vector2f::zero;
+    inputHit = false; inputDown = false;
+    pressDepth = 0.f;
 }
 
 void ControllerInput::setStickPosition(Vector2f pos) {
