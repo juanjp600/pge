@@ -40,6 +40,11 @@ IOInternal::~IOInternal() {
     SysEventsInternal::unsubscribe(mouseSubscriber);
     SysEventsInternal::unsubscribe(controllerSubscriber);
     SysEventsInternal::unsubscribe(textSubscriber);
+
+    delete keyboardSubscriber;
+    delete mouseSubscriber;
+    delete controllerSubscriber;
+    delete textSubscriber;
 }
 
 void IOInternal::startTextInputCapture() const {
