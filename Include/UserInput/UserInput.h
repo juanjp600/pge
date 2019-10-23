@@ -1,6 +1,8 @@
 #ifndef PGE_INPUT_H_INCLUDED
 #define PGE_INPUT_H_INCLUDED
 
+#include <Math/Vector.h>
+
 namespace PGE {
 
 class UserInput {
@@ -332,6 +334,15 @@ class MouseInput : public UserInput {
         int clicks;
 };
 
+class Controller {
+    private:
+        bool removed;
+    public:
+        Controller();
+        bool wasRemoved() const;
+        void remove();
+};
+
 class ControllerInput : public UserInput {
     public:
         enum class BUTTON {
@@ -345,8 +356,10 @@ class ControllerInput : public UserInput {
             START,
             LEFTSTICK,
             RIGHTSTICK,
-            LEFTSHOULDER,
-            RIGHTSHOULDER,
+            LEFTBUMPER,
+            RIGHTBUMPER,
+            LEFTTRIGGER,
+            RIGHTTRIGGER,
             DPAD_UP,
             DPAD_DOWN,
             DPAD_LEFT,
@@ -357,10 +370,22 @@ class ControllerInput : public UserInput {
         virtual DEVICE getDevice() const;
 
         BUTTON getButton() const;
+        Vector2f getStickPosition() const;
+        float getPressDepth() const;
+        float getDownThreshold() const;
+        Controller* getController() const;
 
-        ControllerInput(BUTTON inControllerButton);
+        void setStickPosition(Vector2f pos);
+        void setPressDepth(float depth);
+        void setDownThreshold(float threshold);
+
+        ControllerInput(Controller* ctrlr, BUTTON inControllerButton, float threshold=0.5f);
     private:
+        Controller* controller;
         BUTTON controllerButton;
+        Vector2f stickPosition;
+        float pressDepth;
+        float downThreshold;
 };
 
 }

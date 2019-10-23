@@ -19,6 +19,7 @@
     <ClCompile Include="..\..\Src\Init\Init.cpp" />
     <ClCompile Include="..\..\Src\Init\InitDX11.cpp" />
     <ClCompile Include="..\..\Src\IO\IO.cpp" />
+    <ClCompile Include="..\..\Src\IO\IOInternal.h" />
     <ClCompile Include="..\..\Src\Material\Material.cpp" />
     <ClCompile Include="..\..\Src\Math\AABBox.cpp" />
     <ClCompile Include="..\..\Src\Math\Line.cpp" />

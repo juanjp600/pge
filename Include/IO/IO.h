@@ -12,40 +12,29 @@
 namespace PGE {
 
 class IO {
-    private:
-        Window* window;
-
-        SysEvents::Subscriber* keyboardSubscriber;
-        SysEvents::Subscriber* mouseSubscriber;
-        SysEvents::Subscriber* controllerSubscriber;
-        SysEvents::Subscriber* textSubscriber;
-
-        std::set<UserInput*> inputs;
-        Vector2f mousePos;
-    
-        // The last received string from SDL_TEXTINPUT events.
-        String textInput;
-
-        IO(Window* win);
     public:
         static IO* create(Window* window);
-        ~IO();
+        virtual ~IO() {}
 
-        void update();
+        virtual void update() =0;
 
-        void trackInput(UserInput* input);
-        void untrackInput(UserInput* input);
+        virtual void trackInput(UserInput* input) =0;
+        virtual void untrackInput(UserInput* input) =0;
 
-        Vector2f getMousePosition() const;
-        void setMousePosition(Vector2f position);
-        void setMouseVisibility(bool visible);
+        virtual int getControllerCount() const =0;
+        virtual Controller* openController(int index) =0;
+        virtual void closeController(Controller* controller) =0;
+
+        virtual Vector2f getMousePosition() const =0;
+        virtual void setMousePosition(Vector2f position) =0;
+        virtual void setMouseVisibility(bool visible) =0;
     
-        void startTextInputCapture() const;
-        void stopTextInputCapture() const;
-        String getTextInput() const;
+        virtual void startTextInputCapture() const =0;
+        virtual void stopTextInputCapture() const =0;
+        virtual String getTextInput() const =0;
     
-        void setClipboardText(String str) const;
-        String getClipboardText() const;
+        virtual void setClipboardText(String str) const =0;
+        virtual String getClipboardText() const =0;
 };
 
 }

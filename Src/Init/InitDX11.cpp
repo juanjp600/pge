@@ -9,7 +9,10 @@
 
 void PGE::InitEnv() {
     SDL_SetMainReady();
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC);
+
+    SDL_GameControllerEventState(SDL_ENABLE);
+    SDL_JoystickEventState(SDL_ENABLE);
 }
 
 void PGE::QuitEnv() {

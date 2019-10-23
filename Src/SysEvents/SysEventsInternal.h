@@ -27,7 +27,7 @@ class SysEventsInternal : public SysEvents {
                     WINDOW,
                     KEYBOARD,
                     MOUSE,
-                    GAMEPAD,
+                    CONTROLLER,
                     TEXTINPUT
                 };
             private:

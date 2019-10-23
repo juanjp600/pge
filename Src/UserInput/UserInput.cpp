@@ -36,6 +36,7 @@ KeyboardInput::SCANCODE KeyboardInput::getButton() const {
 
 MouseInput::MouseInput(MouseInput::BUTTON inMouseButton) {
     mouseButton = inMouseButton;
+    clicks = 0;
 }
 
 UserInput::DEVICE MouseInput::getDevice() const {
@@ -54,8 +55,12 @@ int MouseInput::getClickCount() const {
     return clicks;
 }
 
-ControllerInput::ControllerInput(ControllerInput::BUTTON inControllerButton) {
+ControllerInput::ControllerInput(Controller* ctrlr, ControllerInput::BUTTON inControllerButton, float threshold) {
+    controller = ctrlr;
     controllerButton = inControllerButton;
+    stickPosition = Vector2f::zero;
+    pressDepth = 0.f;
+    downThreshold = threshold;
 }
 
 UserInput::DEVICE ControllerInput::getDevice() const {
@@ -65,3 +70,35 @@ UserInput::DEVICE ControllerInput::getDevice() const {
 ControllerInput::BUTTON ControllerInput::getButton() const {
     return controllerButton;
 }
+
+Vector2f ControllerInput::getStickPosition() const {
+    return stickPosition;
+}
+
+float ControllerInput::getPressDepth() const {
+    return pressDepth;
+}
+
+float ControllerInput::getDownThreshold() const {
+    return downThreshold;
+}
+
+Controller* ControllerInput::getController() const {
+    return controller;
+}
+
+void ControllerInput::setStickPosition(Vector2f pos) {
+    stickPosition = pos;
+}
+
+void ControllerInput::setPressDepth(float depth) {
+    pressDepth = depth;
+    inputDown = pressDepth > downThreshold;
+}
+
+void ControllerInput::setDownThreshold(float threshold) {
+    downThreshold = threshold;
+    inputDown = pressDepth > downThreshold;
+}
+
+

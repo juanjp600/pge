@@ -7,19 +7,21 @@
 #include <Window/Window.h>
 #include "../Window/WindowInternal.h"
 #include <IO/IO.h>
+#include "IOInternal.h"
+#include "../Exception/Exception.h"
 
 using namespace PGE;
 
 IO* IO::create(Window* window) {
-    return new IO(window);
+    return new IOInternal(window);
 }
 
-IO::IO(Window* win) {
+IOInternal::IOInternal(Window* win) {
     window = win;
 
     keyboardSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::KEYBOARD);
     mouseSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::MOUSE);
-    controllerSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::GAMEPAD);
+    controllerSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::CONTROLLER);
     textSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::TEXTINPUT);
 
     SysEventsInternal::subscribe(keyboardSubscriber);
@@ -32,34 +34,46 @@ IO::IO(Window* win) {
     textInput = "";
 }
 
-IO::~IO() {
+IOInternal::~IOInternal() {
     SysEventsInternal::unsubscribe(keyboardSubscriber);
     SysEventsInternal::unsubscribe(mouseSubscriber);
     SysEventsInternal::unsubscribe(controllerSubscriber);
     SysEventsInternal::unsubscribe(textSubscriber);
 }
 
-void IO::startTextInputCapture() const {
+void IOInternal::startTextInputCapture() const {
     SDL_StartTextInput();
 }
 
-void IO::stopTextInputCapture() const {
+void IOInternal::stopTextInputCapture() const {
     SDL_StopTextInput();
 }
 
-String IO::getTextInput() const {
+String IOInternal::getTextInput() const {
     return textInput;
 }
 
-void IO::setClipboardText(String str) const {
+void IOInternal::setClipboardText(String str) const {
     SDL_SetClipboardText(str.cstr());
 }
 
-String IO::getClipboardText() const {
+String IOInternal::getClipboardText() const {
     return String(SDL_GetClipboardText());
 }
 
-void IO::update() {
+Controller::Controller() {
+    removed = false;
+}
+
+bool Controller::wasRemoved() const {
+    return removed;
+}
+
+void Controller::remove() {
+    removed = true;
+}
+
+void IOInternal::update() {
     textInput = "";
     for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
         UserInput* input = (*it);
@@ -147,17 +161,160 @@ void IO::update() {
         }
     }
 
+    while (((SysEventsInternal::SubscriberInternal*)controllerSubscriber)->popEvent(event)) {
+        if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
+            SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
+            SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(deviceEvent.which);
+            for (std::map<Controller*,SDL_GameController*>::iterator iter=openControllers.begin(); iter!=openControllers.end(); iter++) {
+                if (iter->second == sdlController) {
+                    iter->first->remove();
+                    break;
+                }
+            }
+        } else if (event.type == SDL_CONTROLLERAXISMOTION) {
+            SDL_ControllerAxisEvent axisEvent = event.caxis;
+            SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(axisEvent.which);
+            Controller* controller = nullptr;
+            for (std::map<Controller*,SDL_GameController*>::iterator iter=openControllers.begin(); iter!=openControllers.end(); iter++) {
+                if (iter->second == sdlController) {
+                    controller = iter->first;
+                    break;
+                }
+            }
+            if (controller == nullptr) { continue; }
+            for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
+                UserInput* input = (*it);
+                if (input->getDevice()==UserInput::DEVICE::CONTROLLER) {
+                    ControllerInput* controllerInput = (ControllerInput*)input;
+                    ControllerInput::BUTTON button = ControllerInput::BUTTON::INVALID;
+                    if (controller != controllerInput->getController()) { continue; }
+                    switch (axisEvent.axis) {
+                        case SDL_CONTROLLER_AXIS_LEFTX:
+                        case SDL_CONTROLLER_AXIS_LEFTY: {
+                            button = ControllerInput::BUTTON::LEFTSTICK;
+                        } break;
+                        case SDL_CONTROLLER_AXIS_RIGHTX:
+                        case SDL_CONTROLLER_AXIS_RIGHTY: {
+                            button = ControllerInput::BUTTON::RIGHTSTICK;
+                        } break;
+                        case SDL_CONTROLLER_AXIS_TRIGGERLEFT: {
+                            button = ControllerInput::BUTTON::LEFTTRIGGER;
+                        } break;
+                        case SDL_CONTROLLER_AXIS_TRIGGERRIGHT: {
+                            button = ControllerInput::BUTTON::RIGHTTRIGGER;
+                        } break;
+                    }
+
+                    if (button == controllerInput->getButton()) {
+                        switch (axisEvent.axis) {
+                            case SDL_CONTROLLER_AXIS_LEFTX:
+                            case SDL_CONTROLLER_AXIS_RIGHTX: {
+                                Vector2f newStickPosition = controllerInput->getStickPosition();
+                                newStickPosition.x = (((float)axisEvent.value)+0.5f)/32767.5f;
+                                controllerInput->setStickPosition(newStickPosition);
+                            } break;
+                            case SDL_CONTROLLER_AXIS_LEFTY:
+                            case SDL_CONTROLLER_AXIS_RIGHTY: {
+                                Vector2f newStickPosition = controllerInput->getStickPosition();
+                                newStickPosition.y = (((float)axisEvent.value)+0.5f)/32767.5f;
+                                controllerInput->setStickPosition(newStickPosition);
+                            } break;
+                            case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
+                            case SDL_CONTROLLER_AXIS_TRIGGERRIGHT: {
+                                controllerInput->setPressDepth((((float)axisEvent.value)+0.5f)/32767.5f);
+                            } break;
+                        }
+                    }
+                }
+            }
+        } else if (event.type == SDL_CONTROLLERBUTTONDOWN || event.type == SDL_CONTROLLERBUTTONUP) {
+            SDL_ControllerButtonEvent buttonEvent = event.cbutton;
+            SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(buttonEvent.which);
+            Controller* controller = nullptr;
+            for (std::map<Controller*,SDL_GameController*>::iterator iter=openControllers.begin(); iter!=openControllers.end(); iter++) {
+                if (iter->second == sdlController) {
+                    controller = iter->first;
+                    break;
+                }
+            }
+            if (controller == nullptr) { continue; }
+            for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
+                UserInput* input = (*it);
+                if (input->getDevice()==UserInput::DEVICE::CONTROLLER) {
+                    ControllerInput* controllerInput = (ControllerInput*)input;
+                    if (controller != controllerInput->getController()) { continue; }
+                    ControllerInput::BUTTON button = ControllerInput::BUTTON::INVALID;
+                    switch (buttonEvent.button) {
+                        case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: {
+                            button = ControllerInput::BUTTON::LEFTBUMPER;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: {
+                            button = ControllerInput::BUTTON::RIGHTBUMPER;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_A: {
+                            button = ControllerInput::BUTTON::A;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_B: {
+                            button = ControllerInput::BUTTON::B;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_X: {
+                            button = ControllerInput::BUTTON::X;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_Y: {
+                            button = ControllerInput::BUTTON::Y;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_BACK: {
+                            button = ControllerInput::BUTTON::BACK;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_GUIDE: {
+                            button = ControllerInput::BUTTON::GUIDE;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_START: {
+                            button = ControllerInput::BUTTON::START;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_LEFTSTICK: {
+                            button = ControllerInput::BUTTON::LEFTSTICK;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_RIGHTSTICK: {
+                            button = ControllerInput::BUTTON::RIGHTSTICK;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_DPAD_UP: {
+                            button = ControllerInput::BUTTON::DPAD_UP;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_DPAD_LEFT: {
+                            button = ControllerInput::BUTTON::DPAD_LEFT;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_DPAD_DOWN: {
+                            button = ControllerInput::BUTTON::DPAD_DOWN;
+                        } break;
+                        case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: {
+                            button = ControllerInput::BUTTON::DPAD_RIGHT;
+                        } break;
+                    }
+
+                    if (button == controllerInput->getButton()) {
+                        if (event.type==SDL_CONTROLLERBUTTONDOWN) {
+                            input->setDown(true);
+                        } else if (event.type==SDL_CONTROLLERBUTTONUP) {
+                            input->setDown(false);
+                        }
+                    }
+                } 
+            }
+        }
+    }
+
     while (((SysEventsInternal::SubscriberInternal*)textSubscriber)->popEvent(event)) {
         SDL_TextInputEvent txtEvent = event.text;
         textInput = textInput + txtEvent.text;
     }
 }
 
-Vector2f IO::getMousePosition() const {
+Vector2f IOInternal::getMousePosition() const {
     return mousePos;
 }
 
-void IO::setMousePosition(Vector2f position) {
+void IOInternal::setMousePosition(Vector2f position) {
     if (!window->isFocused()) { return; }
 
     mousePos = position;
@@ -180,17 +337,47 @@ void IO::setMousePosition(Vector2f position) {
 #endif
 }
 
-void IO::setMouseVisibility(bool visible) {
+void IOInternal::setMouseVisibility(bool visible) {
     SDL_ShowCursor(visible ? 1 : 0);
 }
 
-void IO::trackInput(UserInput* input) {
+void IOInternal::trackInput(UserInput* input) {
     inputs.emplace(input);
 }
 
-void IO::untrackInput(UserInput* input) {
+void IOInternal::untrackInput(UserInput* input) {
     std::set<UserInput*>::iterator it = inputs.find(input);
     if (it != inputs.end()) {
         inputs.erase(it);
     }
+}
+
+int IOInternal::getControllerCount() const {
+    return SDL_NumJoysticks();
+}
+
+Controller* IOInternal::openController(int index) {
+    if (!SDL_IsGameController(index)) { return nullptr; }
+
+    SDL_GameController* sdlController = SDL_GameControllerOpen(index);
+
+    if (sdlController == nullptr) {
+        throw Exception("IOInternal::openController", "Could not open controller "+String(index)+": "+SDL_GetError());
+    }
+
+#if DEBUG
+    SDL_GameControllerRumble(sdlController, 0x5555, 0x5555, 1000);
+#endif
+    
+    Controller* controller = new Controller();
+
+    openControllers.emplace(controller, sdlController);
+
+    return controller;
+}
+
+void IOInternal::closeController(Controller* controller) {
+    if (openControllers.find(controller) == openControllers.end()) { return; }
+    SDL_GameControllerClose(openControllers[controller]);
+    openControllers.erase(controller);
 }

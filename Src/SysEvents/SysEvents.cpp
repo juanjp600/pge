@@ -41,12 +41,16 @@ void SysEventsInternal::update() {
                     event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEWHEEL) {
                     takeEvent = SDL_GetMouseFocus()==sdlWindow;
                 }
+            } else if (subscriber->getEventType()==SubscriberInternal::EventType::CONTROLLER) {
+                if (event.type == SDL_CONTROLLERBUTTONDOWN || event.type == SDL_CONTROLLERBUTTONUP ||
+                    event.type == SDL_CONTROLLERAXISMOTION || event.type == SDL_CONTROLLERDEVICEREMOVED) {
+                    takeEvent = true;
+                }
             } else if (subscriber->getEventType()==SubscriberInternal::EventType::TEXTINPUT) {
                 if (event.type == SDL_TEXTINPUT) {
                     takeEvent = SDL_GetKeyboardFocus()==sdlWindow;
                 }
             }
-            //TODO: capture gamepad events
             if (takeEvent) {
                 subscriber->pushEvent(event);
             }
@@ -58,6 +62,7 @@ SysEventsInternal::SubscriberInternal::SubscriberInternal() {}
 
 SysEventsInternal::SubscriberInternal::SubscriberInternal(Window* w,EventType et) {
     window = w; eventType = et;
+    receivedEvent = false;
     events.clear();
 }
 
