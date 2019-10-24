@@ -35,7 +35,8 @@ class IOInternal : public IO {
         void untrackInput(UserInput* input) override;
 
         int getControllerCount() const override;
-        Controller* getController(int index) override;
+        Controller* getController(int index) const override;
+        bool isControllerValid(Controller* controller) const override;
 
         Vector2f getMousePosition() const override;
         void setMousePosition(Vector2f position) override;
@@ -47,8 +48,6 @@ class IOInternal : public IO {
 
         void setClipboardText(String str) const override;
         String getClipboardText() const override;
-
-        int getControllerIndex(const Controller* controller) const;
 };
 
 class ControllerInternal : public Controller {
@@ -61,6 +60,7 @@ class ControllerInternal : public Controller {
         ~ControllerInternal() override;
         ControllerInternal(const IOInternal* inIo, SDL_GameController* inSdlController);
         String getName() const override;
+        void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) override;
         SDL_GameController* getSdlController() const;
         void setName(const String& inName);
 };

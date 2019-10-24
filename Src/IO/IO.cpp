@@ -36,6 +36,11 @@ IOInternal::IOInternal(Window* win) {
 }
 
 IOInternal::~IOInternal() {
+    for (int i=0;i<openControllers.size();i++) {
+        delete openControllers[i];
+    }
+    openControllers.clear();
+
     SysEventsInternal::unsubscribe(keyboardSubscriber);
     SysEventsInternal::unsubscribe(mouseSubscriber);
     SysEventsInternal::unsubscribe(controllerSubscriber);
@@ -80,6 +85,12 @@ ControllerInternal::~ControllerInternal() {
 
 String ControllerInternal::getName() const {
     return name;
+}
+
+void ControllerInternal::rumble(float lowFreqIntensity,float highFreqIntensity,int durationMs) {
+    int lfiUshort = (lowFreqIntensity*((float)0xffff));
+    int hfiUshort = (highFreqIntensity*((float)0xffff));
+    SDL_GameControllerRumble(sdlController, lfiUshort>0xffff ? 0xffff : lfiUshort, hfiUshort>0xffff ? 0xffff : hfiUshort, durationMs);
 }
 
 SDL_GameController* ControllerInternal::getSdlController() const {
@@ -385,6 +396,13 @@ int IOInternal::getControllerCount() const {
     return openControllers.size();
 }
 
-Controller* IOInternal::getController(int index) {
+Controller* IOInternal::getController(int index) const {
     return index >=0 && index<openControllers.size() ? openControllers[index] : nullptr;
+}
+
+bool IOInternal::isControllerValid(Controller* controller) const {
+    for (int i=0; i<openControllers.size(); i++) {
+        if (openControllers[i]==controller) { return true; }
+    }
+    return false;
 }

@@ -339,6 +339,7 @@ class Controller {
     public:
         virtual ~Controller() {}
         virtual String getName() const =0;
+        virtual void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) =0;
 };
 
 class ControllerInput : public UserInput {
