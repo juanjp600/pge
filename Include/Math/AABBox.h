@@ -7,6 +7,7 @@ namespace PGE {
 
 class AABBox {
     public:
+        AABBox() {};
         AABBox(const Vector3f& inPoint);
         AABBox(const Vector3f& firstPoint,const Vector3f& secondPoint);
 
