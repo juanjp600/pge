@@ -277,7 +277,7 @@ static int convertWCharToUtf8(wchar chr, char* result) {
     } else {
         //it doesn't fit: add another byte
         if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
-        chr >>= 5;
+        chr >>= 6;
         firstByte = (firstByte | (0x1 << (7 - len))) | chr;
         len++;
         if (result != nullptr) { result[len - 1] = firstByte; }
