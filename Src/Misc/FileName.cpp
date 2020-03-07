@@ -11,7 +11,7 @@ FileName::FileName() {
 
 FileName FileName::fromStr(const String& str) {
     FileName fn;
-    fn.name = str.resourcePath();
+    fn.name = str.resourcePath().replace("\\", "/");
     
     return fn;
 }
