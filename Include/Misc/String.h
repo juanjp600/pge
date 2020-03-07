@@ -65,10 +65,13 @@ protected:
     char* cbuffer = nullptr;
     wchar* wbuffer = nullptr;
     long long hashCode;
-    int capacity = 16;
+    int cCapacity = 16;
+    int wCapacity = 16;
     int strSize = 0;
 
     void syncBuffers();
+    void utf8ToWChar();
+    void wCharToUtf8();
 };
 
 const String operator+(const String& a, const String& b);

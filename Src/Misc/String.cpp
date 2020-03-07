@@ -19,9 +19,8 @@ String::~String() {
 String::String() {
     cbuffer = new char[24];
     wbuffer = nullptr;
-    capacity = 24;
+    cCapacity = 24;
     cbuffer[0]='\0';
-    strSize = 0;
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
 }
@@ -30,9 +29,8 @@ String::String(const String& a) {
     int len = a.size();
     wbuffer = new wchar[len+1];
     cbuffer = nullptr;
-    capacity = len+1;
+    wCapacity = len+1;
     memcpy(wbuffer,a.wstr(),(a.size()+1)*sizeof(wchar));
-    strSize = len;
     dominantBuffer = DOMINANT_BUFFER::W;
     syncBuffers();
 }
@@ -41,9 +39,8 @@ String::String(const char* cstri) {
     int len = (int)strlen(cstri);
     cbuffer = new char[len+1];
     wbuffer = nullptr;
-    capacity = len+1;
+    cCapacity = len+1;
     memcpy(cbuffer, cstri, (len+1)*sizeof(char));
-    strSize = len;
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
 }
@@ -52,9 +49,8 @@ String::String(const std::string& cppstr) {
     int len = (int)cppstr.size();
     cbuffer = new char[len+1];
     wbuffer = nullptr;
-    capacity = len+1;
+    cCapacity = len+1;
     memcpy(cbuffer, cppstr.c_str(), (len+1)*sizeof(char));
-    strSize = len;
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
 }
@@ -63,9 +59,8 @@ String::String(const wchar* wstri) {
     int len = (int)wcslen(wstri);
     wbuffer = new wchar[len+1];
     cbuffer = nullptr;
-    capacity = len+1;
+    wCapacity = len+1;
     memcpy(wbuffer, wstri, (len+1)*sizeof(wchar));
-    strSize = len;
     dominantBuffer = DOMINANT_BUFFER::W;
     syncBuffers();
 }
@@ -74,9 +69,8 @@ String::String(const std::wstring& cppwstr) {
     int len = (int)cppwstr.size();
     wbuffer = new wchar[len+1];
     cbuffer = nullptr;
-    capacity = len+1;
+    wCapacity = len+1;
     memcpy(wbuffer, cppwstr.c_str(), (len+1)*sizeof(wchar));
-    strSize = len;
     dominantBuffer = DOMINANT_BUFFER::W;
     syncBuffers();
 }
@@ -85,10 +79,9 @@ String::String(const String& a,const String& b) {
     int len = a.size()+b.size();
     wbuffer = new wchar[len+1];
     cbuffer = nullptr;
-    capacity = len+1;
+    wCapacity = len+1;
     memcpy(wbuffer, a.wstr(), a.size() * sizeof(wchar));
     memcpy(wbuffer+a.size(), b.wstr(), (b.size()+1) * sizeof(wchar));
-    strSize = len;
     dominantBuffer = DOMINANT_BUFFER::W;
     syncBuffers();
 }
@@ -96,9 +89,8 @@ String::String(const String& a,const String& b) {
 String::String(char c) {
     cbuffer = new char[2];
     wbuffer = nullptr;
-    capacity = 2;
+    cCapacity = 2;
     cbuffer[0] = c; cbuffer[1]='\0';
-    strSize = 1;
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
 }
@@ -106,9 +98,8 @@ String::String(char c) {
 String::String(wchar w) {
     wbuffer = new wchar[2];
     cbuffer = nullptr;
-    capacity = 2;
+    wCapacity = 2;
     wbuffer[0] = w; wbuffer[1]=L'\0';
-    strSize = 1;
     dominantBuffer = DOMINANT_BUFFER::W;
     syncBuffers();
 }
@@ -116,13 +107,12 @@ String::String(wchar w) {
 String::String(int i,bool hex) {
     cbuffer = new char[32];
     wbuffer = nullptr;
-    capacity = 32;
+    cCapacity = 32;
     if (hex) {
         snprintf(cbuffer,32,"%#010x",i);
     } else {
         snprintf(cbuffer,32,"%d",i);
     }
-    strSize = (int)strlen(cbuffer);
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
 }
@@ -130,9 +120,8 @@ String::String(int i,bool hex) {
 String::String(float f) {
     cbuffer = new char[32];
     wbuffer = nullptr;
-    capacity = 32;
+    cCapacity = 32;
     snprintf(cbuffer,32,"%f",f);
-    strSize = (int)strlen(cbuffer);
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
 }
@@ -141,11 +130,12 @@ String& String::operator=(const String& other) {
     if (&other == this) return *this;
     if (wbuffer!=nullptr) { delete[] wbuffer; }
     if (cbuffer!=nullptr) { delete[] cbuffer; }
-    wbuffer = new wchar[other.capacity];
-    cbuffer = new char[other.capacity];
+    wbuffer = new wchar[other.wCapacity];
+    cbuffer = new char[other.cCapacity];
     memcpy(wbuffer,other.wstr(),(other.size()+1)*sizeof(wchar));
     memcpy(cbuffer,other.cstr(),(other.size()+1)*sizeof(char));
-    capacity = other.capacity;
+    wCapacity = other.wCapacity;
+    cCapacity = other.cCapacity;
     strSize = other.size();
     hashCode = other.getHashCode();
     return *this;
@@ -185,24 +175,156 @@ bool String::isEmpty() const {
 }
 
 void String::syncBuffers() {
-    //TODO: do UTF-8<->WCHAR conversion
     if (dominantBuffer == DOMINANT_BUFFER::C) {
-        if (wbuffer!=nullptr) { delete[] wbuffer; }
-        wbuffer = new wchar[capacity];
-        for (int i=0;i<size()+1;i++) {
-            wbuffer[i] = cbuffer[i];
-        }
+        utf8ToWChar();
     } else if (dominantBuffer == DOMINANT_BUFFER::W) {
-        if (cbuffer!=nullptr) { delete[] cbuffer; }
-        cbuffer = new char[capacity];
-        for (int i=0;i<size()+1;i++) {
-            cbuffer[i] = (char)wbuffer[i];
-        }
+        wCharToUtf8();
     }
 
     hashCode = 5381;
     for (int i=0;i<strSize;i++) {
         hashCode = ((hashCode << 5) + hashCode) + cbuffer[i];
+    }
+}
+
+static int measureCodepoint(char chr) {
+    if ((chr & 0x80) == 0x00) {
+        //first bit is 0: treat as ASCII
+        return 1;
+    }
+
+    //first bit is 1, number of consecutive 1 bits at the start is length of codepoint
+    int len = 0;
+    while (((chr >> (7 - len)) & 0x01) == 0x01) {
+        len++;
+    }
+    return len;
+}
+
+void String::utf8ToWChar() {
+    if (wbuffer != nullptr) { delete[] wbuffer; }
+
+    //determine length of the string by measuring all of the codepoints
+    strSize = 0;
+    for (int i = 0; i < cCapacity;) {
+        if (cbuffer[i] == '\0') {
+            break;
+        } else {
+            int codepointLen = measureCodepoint(cbuffer[i]);
+            i += codepointLen;
+            strSize++;
+        }
+    }
+
+    wCapacity = strSize + 1;
+    wbuffer = new wchar[wCapacity];
+
+    //convert all the codepoints to wchars
+    int wIndex = 0;
+    for (int i = 0; i < cCapacity;) {
+        if (cbuffer[i] == '\0') {
+            wbuffer[wIndex] = L'\0';
+            break;
+        } else {
+            int codepointLen = measureCodepoint(cbuffer[i]);
+
+            if (codepointLen == 1) {
+                wbuffer[wIndex] = cbuffer[i];
+            } else {
+                //decode first byte by skipping all bits that indicate the length of the codepoint
+                wchar newChar = cbuffer[i] & (0x7f >> codepointLen);
+                for (int j = 1; j < codepointLen; j++) {
+                    //decode all of the following bytes, fixed 6 bits per byte
+                    newChar = (newChar << 6) | (cbuffer[i + j] & 0x3f);
+                }
+                wbuffer[wIndex] = newChar;
+            }
+
+            i += codepointLen;
+            wIndex++;
+        }
+    }
+}
+
+static int convertWCharToUtf8(wchar chr, char* result) {
+    //fits in standard ASCII, just return the char as-is
+    if ((chr & 0x7f) == chr) {
+        if (result != nullptr) { result[0] = chr; }
+        return 1;
+    }
+
+    int len = 1;
+
+    //determine most of the bytes after the first one
+    while ((chr & (~0x3f)) != 0x00) {
+        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
+        chr >>= 6;
+        len++;
+    }
+
+    //determine the remaining byte(s): if the number of free bits in
+    //the first byte isn't enough to fit the remaining bits,
+    //add another byte
+    char firstByte = 0x00;
+    for (int i = 0; i < len; i++) {
+        firstByte |= (0x1 << (7-i));
+    }
+
+    if (((firstByte | (0x1 << (7-len))) & chr) == 0x00) {
+        //it fits!
+        firstByte = firstByte | chr;
+        if (result != nullptr) { result[len - 1] = firstByte; }
+    } else {
+        //it doesn't fit: add another byte
+        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
+        chr >>= 5;
+        firstByte = (firstByte | (0x1 << (7 - len))) | chr;
+        len++;
+        if (result != nullptr) { result[len - 1] = firstByte; }
+    }
+
+    if (result != nullptr) {
+        //flip the result
+        for (int i = 0; i < len/2; i++) {
+            char b = result[i];
+            result[i] = result[len - 1 - i];
+            result[len - 1 - i] = b;
+        }
+    }
+
+    return len;
+}
+
+void String::wCharToUtf8() {
+    if (cbuffer != nullptr) { delete[] cbuffer; }
+
+    //determine the capacity of the cbuffer by measuring the number of bytes required for each codepoint
+    strSize = 0;
+    cCapacity = 1;
+    for (int i = 0; i < wCapacity;i++) {
+        if (wbuffer[i] == L'\0') {
+            break;
+        } else {
+            strSize++;
+            cCapacity += convertWCharToUtf8(wbuffer[i], nullptr);
+        }
+    }
+
+    //convert all the wchars to codepoints
+    cbuffer = new char[cCapacity];
+    char tempBuf[8];
+    int cIndex = 0;
+    for (int i = 0; i < wCapacity;i++) {
+        if (wbuffer[i] == L'\0') {
+            cbuffer[cIndex] = '\0';
+            break;
+        } else {
+            int increment = convertWCharToUtf8(wbuffer[i], tempBuf);
+            for (int j = 0; j < increment; j++) {
+                cbuffer[cIndex] = tempBuf[j];
+                cIndex++;
+            }
+        }
     }
 }
 
@@ -304,7 +426,7 @@ String String::replace(const String& fnd,const String& rplace) const {
 }
 
 String String::toUpper() const {
-    wchar* newBuf = new wchar[capacity];
+    wchar* newBuf = new wchar[wCapacity];
     for (int i = 0; i<strSize; i++) {
         newBuf[i] = towupper(wbuffer[i]);
     }
@@ -316,7 +438,7 @@ String String::toUpper() const {
 }
 
 String String::toLower() const {
-    wchar* newBuf = new wchar[capacity];
+    wchar* newBuf = new wchar[wCapacity];
     for (int i = 0; i<strSize; i++) {
         newBuf[i] = towlower(wbuffer[i]);
     }
@@ -330,7 +452,7 @@ String String::toLower() const {
 String String::trim() const {
     if (size()==0) { return ""; }
 
-    wchar* newBuf = new wchar[capacity];
+    wchar* newBuf = new wchar[wCapacity];
     int leadingPos = 0;
     while (charAt(leadingPos) == ' ' || charAt(leadingPos) == '\t') {
         leadingPos++;
