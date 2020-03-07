@@ -11,7 +11,7 @@ class FileName {
 
     public:
         FileName();
-        static FileName create(const String& str);
+        static FileName fromStr(const String& str);
         FileName(const FileName& a, const String& b);
 
         const String str() const;

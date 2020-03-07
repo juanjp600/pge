@@ -9,7 +9,7 @@ FileName::FileName() {
     name = String("");
 }
 
-FileName FileName::create(const String& str) {
+FileName FileName::fromStr(const String& str) {
     FileName fn;
     fn.name = str.resourcePath();
     
