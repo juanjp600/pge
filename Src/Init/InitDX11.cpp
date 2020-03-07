@@ -19,6 +19,10 @@ void PGE::QuitEnv() {
     SDL_Quit();
 }
 
+#ifdef DEBUG
+int main() {
+#else
 int WinMain() {
+#endif
     return PGE::InitMain();
 }
