@@ -29,7 +29,7 @@
     <ClCompile Include="..\..\Src\Math\Vector.cpp" />
     <ClCompile Include="..\..\Src\Mesh\Mesh.cpp" />
     <ClCompile Include="..\..\Src\Mesh\MeshDX11.cpp" />
-    <ClCompile Include="..\..\Src\Misc\FileName.cpp" />
+    <ClCompile Include="..\..\Src\Misc\FilePath.cpp" />
     <ClCompile Include="..\..\Src\Misc\FileUtil.cpp" />
     <ClCompile Include="..\..\Src\Misc\String.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp" />
@@ -56,7 +56,7 @@
     <ClInclude Include="..\..\Include\Math\Rectangle.h" />
     <ClInclude Include="..\..\Include\Math\Vector.h" />
     <ClInclude Include="..\..\Include\Mesh\Mesh.h" />
-    <ClInclude Include="..\..\Include\Misc\FileName.h" />
+    <ClInclude Include="..\..\Include\Misc\FilePath.h" />
     <ClInclude Include="..\..\Include\Misc\FileUtil.h" />
     <ClInclude Include="..\..\Include\Misc\String.h" />
     <ClInclude Include="..\..\Include\Shader\Shader.h" />

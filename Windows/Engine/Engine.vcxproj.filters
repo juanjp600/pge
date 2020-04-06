@@ -189,14 +189,14 @@
     <ClCompile Include="..\..\Src\Init\InitDX11.cpp">
       <Filter>Src\Init</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Misc\FileName.cpp">
-      <Filter>Src\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Misc\FileUtil.cpp">
       <Filter>Src\Misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\IO\IOInternal.h">
       <Filter>Src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Misc\FilePath.cpp">
+      <Filter>Src\Misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,10 +299,10 @@
     <ClInclude Include="..\..\Src\Init\InitInternal.h">
       <Filter>Src\Init</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\FileName.h">
+    <ClInclude Include="..\..\Include\Misc\FileUtil.h">
       <Filter>Include\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\FileUtil.h">
+    <ClInclude Include="..\..\Include\Misc\FilePath.h">
       <Filter>Include\Misc</Filter>
     </ClInclude>
   </ItemGroup>

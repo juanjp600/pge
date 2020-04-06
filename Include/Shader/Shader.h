@@ -3,7 +3,7 @@
 
 #include <Graphics/Graphics.h>
 #include <Misc/String.h>
-#include <Misc/FileName.h>
+#include <Misc/FilePath.h>
 
 #include <Math/Matrix.h>
 #include <Math/Vector.h>
@@ -12,7 +12,7 @@ namespace PGE {
 
 class Shader {
     public:
-        static Shader* load(Graphics* gfx, const FileName& path);
+        static Shader* load(Graphics* gfx, const FilePath& path);
         virtual ~Shader(){};
 
         class Constant {
@@ -38,7 +38,7 @@ class Shader {
         virtual void cleanup() =0;
         virtual void throwException(String func, String details) =0;
 
-        FileName filepath;
+        FilePath filepath;
 };
 
 }

@@ -5,14 +5,14 @@
 
 namespace PGE {
 
-class FileName {
+class FilePath {
     private:
         String name;
 
     public:
-        FileName();
-        static FileName fromStr(const String& str);
-        FileName(const FileName& a, const String& b);
+        FilePath();
+        static FilePath fromStr(const String& str);
+        FilePath(const FilePath& a, const String& b);
 
         const String str() const;
         const char* cstr() const;
@@ -22,15 +22,15 @@ class FileName {
 
         bool exists() const;
 
-        FileName& operator=(const FileName& other);
+        FilePath& operator=(const FilePath& other);
 
         long long getHashCode() const;
-        bool equals(const FileName& other) const;
+        bool equals(const FilePath& other) const;
         bool isEmpty() const;
 };
 
-const FileName operator+(const FileName& a, const String& b);
-std::ostream& operator<<(std::ostream& os, const FileName& fn);
+const FilePath operator+(const FilePath& a, const String& b);
+std::ostream& operator<<(std::ostream& os, const FilePath& fn);
 
 }
 

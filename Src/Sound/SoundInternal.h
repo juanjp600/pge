@@ -18,7 +18,7 @@ namespace PGE {
 class Audio;
 class SoundInternal : public Sound {
     public:
-        SoundInternal(Audio* a,const FileName& fn,bool forcePanning=false,bool strm=false);
+        SoundInternal(Audio* a,const FilePath& fn,bool forcePanning=false,bool strm=false);
         ~SoundInternal();
 
         bool isStream() const;

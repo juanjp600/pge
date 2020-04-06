@@ -10,11 +10,11 @@
 
 using namespace PGE;
 
-Texture* Texture::load(Graphics* gfx,FileName filename) {
+Texture* Texture::load(Graphics* gfx, const FilePath& filename) {
     return new TextureDX11(gfx,filename);
 }
 
-Texture* Texture::load(Graphics* gfx, FileName filename,ThreadManager* threadManager) {
+Texture* Texture::load(Graphics* gfx, const FilePath& filename,ThreadManager* threadManager) {
     return new TextureDX11(gfx,filename,threadManager);
 }
 
@@ -137,7 +137,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 }
 
-TextureDX11::TextureDX11(Graphics* gfx,const FileName& fn) {
+TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn) {
     dxShaderResourceView = nullptr;
     dxTexture = nullptr;
     dxRtv = nullptr;
@@ -203,7 +203,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const FileName& fn) {
     delete[] fiBuffer;
 }
 
-TextureDX11::TextureDX11(Graphics* gfx,const FileName& fn,ThreadManager* threadManager) {
+TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager) {
     dxShaderResourceView = nullptr;
     dxTexture = nullptr;
     dxRtv = nullptr;
@@ -257,7 +257,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const FileName& fn,ThreadManager* threadM
 
     class TextureReassignRequest : public ThreadManager::MainThreadRequest {
         public:
-            FileName filename;
+            FilePath filename;
             D3D11_TEXTURE2D_DESC* dxTextureDesc;
             ID3D11Texture2D** dxTexture;
             D3D11_SHADER_RESOURCE_VIEW_DESC* dxShaderResourceViewDesc;
@@ -328,7 +328,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const FileName& fn,ThreadManager* threadM
     class TextureLoadRequest : public ThreadManager::NewThreadRequest {
         public:
             TextureReassignRequest mainThreadRequest;
-            FileName filename;
+            FilePath filename;
             int* width; int* height; int* realWidth; int* realHeight;
             void execute() {
                 BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight);

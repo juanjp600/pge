@@ -13,7 +13,7 @@ int Texture::getHeight() const {
     return height;
 }
 
-BYTE* PGE::loadFIBuffer(FileName filename,int& width,int& height,int& realWidth,int& realHeight) {
+BYTE* PGE::loadFIBuffer(const FilePath& filename,int& width,int& height,int& realWidth,int& realHeight) {
     FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename.cstr(),0);
 
     FIBITMAP* temp = FreeImage_Load(format, filename.cstr());

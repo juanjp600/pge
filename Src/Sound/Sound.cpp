@@ -5,11 +5,11 @@
 
 using namespace PGE;
 
-Sound* Sound::load(Audio* a,const FileName& fn,bool forcePan,bool strm) {
+Sound* Sound::load(Audio* a,const FilePath& fn,bool forcePan,bool strm) {
     return new SoundInternal(a,fn,forcePan,strm);
 }
 
-SoundInternal::SoundInternal(Audio* a,const FileName& fn,bool forcePan,bool strm) {
+SoundInternal::SoundInternal(Audio* a,const FilePath& fn,bool forcePan,bool strm) {
     audio = a;
     stream = strm;
     alBuffer = 0;

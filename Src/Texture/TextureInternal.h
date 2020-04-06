@@ -6,7 +6,7 @@
 
 namespace PGE {
 
-BYTE* loadFIBuffer(FileName filename, int& width, int& height, int& realWidth, int& realHeight);
+BYTE* loadFIBuffer(const FilePath& filename, int& width, int& height, int& realWidth, int& realHeight);
 
 }
 
