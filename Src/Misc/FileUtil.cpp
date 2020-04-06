@@ -100,6 +100,8 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
         }
     }
 
+    FindClose(hFind);
+
     return files;
 #else
 
