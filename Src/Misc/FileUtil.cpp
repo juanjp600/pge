@@ -73,7 +73,7 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
         filePath = FilePath(path, "/");
     }
 
-    FilePath searchQuery = FilePath(path, "*");
+    FilePath searchQuery = FilePath(filePath, "*");
 
     hFind = FindFirstFileW(searchQuery.wstr(), &ffd);
 
@@ -82,10 +82,19 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
     }
 
     while (true) {
-        FilePath newPath = FilePath(searchQuery, ffd.cFileName);
+        String fileName = ffd.cFileName;
+        if (fileName.equals(".") || fileName.equals(".."))
+        {
+            if (!FindNextFileW(hFind, &ffd)) {
+                break;
+            }
+            continue;
+        }
+
+        FilePath newPath = FilePath(filePath, fileName);
         if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
             if (newPath.str().charAt(newPath.size() - 1) != '/') {
-                newPath = FilePath(path, "/");
+                newPath = FilePath(newPath, "/");
             }
             std::vector<FilePath> nestedFiles = enumerateFiles(newPath);
             for (int i = 0; i < nestedFiles.size(); i++) {
