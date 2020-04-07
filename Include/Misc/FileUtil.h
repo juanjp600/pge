@@ -19,6 +19,9 @@ class FileUtil {
 
         // Enumerates subdirectories.
         static std::vector<FilePath> enumerateFiles(const FilePath& path);
+
+        // Returns all lines from a file.
+        static std::vector<String> readLines(const FilePath& path, bool includeEmptyLines=false);
 };
     
 }

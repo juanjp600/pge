@@ -116,3 +116,25 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
 
 #endif
 }
+
+std::vector<String> FileUtil::readLines(const FilePath& path, bool includeEmptyLines) {
+    std::vector<String> retVal;
+
+    std::ifstream file; file.open(path.cstr(), std::ios_base::in);
+
+    char* tempBuf = new char[1024];
+
+    file.getline(tempBuf, sizeof(char) * 1024);
+    while (true) {
+        if (file.eof()) { break; }
+        String str = tempBuf;
+        str = str.replace("\n", "").replace("\r", "");
+        if ((!includeEmptyLines) && (str.size() <= 0)) { continue; }
+        retVal.push_back(str);
+    }
+
+    delete[] tempBuf;
+
+    file.close();
+}
+
