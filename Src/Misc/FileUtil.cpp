@@ -129,6 +129,7 @@ std::vector<String> FileUtil::readLines(const FilePath& path, bool includeEmptyL
         if (file.eof()) { break; }
         String str = tempBuf;
         str = str.replace("\n", "").replace("\r", "");
+        file.getline(tempBuf, sizeof(char) * 1024);
         if ((!includeEmptyLines) && (str.size() <= 0)) { continue; }
         retVal.push_back(str);
     }
