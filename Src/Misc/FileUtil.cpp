@@ -137,5 +137,7 @@ std::vector<String> FileUtil::readLines(const FilePath& path, bool includeEmptyL
     delete[] tempBuf;
 
     file.close();
+
+    return retVal;
 }
 

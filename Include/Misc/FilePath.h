@@ -1,5 +1,5 @@
-#ifndef PGE_FILENAME_H_INCLUDED
-#define PGE_FILENAME_H_INCLUDED
+#ifndef PGE_FILEPATH_H_INCLUDED
+#define PGE_FILEPATH_H_INCLUDED
 
 #include "String.h"
 
@@ -14,9 +14,11 @@ class FilePath {
         static FilePath fromStr(const String& str);
         FilePath(const FilePath& a, const String& b);
 
-        const String str() const;
+        const String& str() const;
         const char* cstr() const;
         const wchar* wstr() const;
+
+        String getExtension() const;
 
         int size() const;
 

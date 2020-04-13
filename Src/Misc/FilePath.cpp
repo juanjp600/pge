@@ -20,7 +20,7 @@ FilePath::FilePath(const FilePath& a, const String& b) {
     name = a.str() + b;
 }
 
-const String FilePath::str() const {
+const String& FilePath::str() const {
     return name;
 }
 
@@ -30,6 +30,12 @@ const char* FilePath::cstr() const {
 
 const wchar* FilePath::wstr() const {
     return name.wstr();
+}
+
+String FilePath::getExtension() const {
+    int startIndex = name.findLast(".");
+    if (startIndex < 0) { return ""; }
+    return name.substr(startIndex+1);
 }
 
 int FilePath::size() const {
