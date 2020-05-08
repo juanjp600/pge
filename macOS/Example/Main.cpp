@@ -11,7 +11,7 @@
 #include <Math/Line.h>
 #include <Color/Color.h>
 #include <Audio/Audio.h>
-#include <Misc/FileName.h>
+#include <Misc/FilePath.h>
 
 #include <fstream>
 #include <math.h>
@@ -66,15 +66,15 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader) {
         if (name.findFirst("_lm")>-1) {
             texName = path+name+".png";
         } else {
-            texName = FileName("GFX/Map/Textures/"+name+".jpg").str();
+            texName = FilePath("GFX/Map/Textures/"+name+".jpg").str();
             bool found = fileExists(texName.cstr());
             if (!found) {
-                texName = FileName("GFX/Map/Textures/"+name+".png").str();
+                texName = FilePath("GFX/Map/Textures/"+name+".png").str();
             }
 
             found = fileExists(texName.cstr());
             if (!found) {
-                texName = FileName("GFX/Map/Textures/dirtymetal.jpg").str();
+                texName = FilePath("GFX/Map/Textures/dirtymetal.jpg").str();
             }
         }
         retVal.textures.push_back(Texture::load(graphics, texName));
@@ -162,20 +162,20 @@ int PGE::Main() {
 //    ThreadManager* threadManager = new ThreadManager();
 //    Audio* audio = Audio::create(threadManager);
 
-//    Sound* sound = Sound::load(audio, FileName("SFX/Music/The Dread.ogg").str());
+//    Sound* sound = Sound::load(audio, FilePath("SFX/Music/The Dread.ogg").str());
 //    Sound::Channel* channel = sound->play();
-    
+
     float retWidth = 1280.f * 2;
     float retHeight = 720.f * 2;
     float something = 2048.f * 2;
-    
+
     Graphics* graphics = Graphics::create("Mac PGE Test", retWidth, retHeight, false);
     IO* io = IO::create(graphics->getWindow());
 
-    Shader* shader = Shader::load(graphics, FileName("default/").str());
-    Shader* postprocessShader = Shader::load(graphics, FileName("postprocess/").str());
+    Shader* shader = Shader::load(graphics, FilePath("default/").str());
+    Shader* postprocessShader = Shader::load(graphics, FilePath("postprocess/").str());
 
-    RM2 testRM2 = loadRM2(FileName("GFX/Map/Rooms/cont_173_1/cont_173_1.rm2").str(), graphics, shader);
+    RM2 testRM2 = loadRM2(FilePath("GFX/Map/Rooms/cont_173_1/cont_173_1.rm2").str(), graphics, shader);
 
     Texture* texture0 = Texture::create(graphics,something,something,true,nullptr,Texture::FORMAT::RGBA32);
     Texture* texture1 = Texture::create(graphics,something,something,true,nullptr,Texture::FORMAT::R32F);
@@ -333,7 +333,7 @@ int PGE::Main() {
 
     delete io;
     delete graphics;
-    
+
 //    delete threadManager;
 //    delete channel;
 //    delete audio;

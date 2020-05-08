@@ -13,11 +13,11 @@
 
 using namespace PGE;
 
-Shader* Shader::load(Graphics* gfx,const FileName& path) {
+Shader* Shader::load(Graphics* gfx,const FilePath& path) {
     return new ShaderOGL3(gfx,path);
 }
 
-ShaderOGL3::ShaderOGL3(Graphics* gfx,const FileName& path) {
+ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     graphics = gfx;
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
@@ -156,7 +156,7 @@ const std::vector<String>& ShaderOGL3::getVertexInputElems() const {
 
 void ShaderOGL3::useShader() {
     GLuint glError = GL_NO_ERROR;
-    
+
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
     glUseProgram(glShaderProgram);
@@ -183,11 +183,11 @@ void ShaderOGL3::useShader() {
     for (int i=0;i<vertexShaderConstants.size();i++) {
         vertexShaderConstants[i].setUniform();
     }
-    
+
     for (int i=0;i<fragmentShaderConstants.size();i++) {
         fragmentShaderConstants[i].setUniform();
     }
-    
+
     for (int i=0;i<samplerConstants.size();i++) {
         samplerConstants[i].setUniform();
     }
@@ -315,7 +315,7 @@ void ShaderOGL3::ConstantOGL3::setValue(int value) {
 
 void ShaderOGL3::ConstantOGL3::setUniform() {
     GLuint glError = GL_NO_ERROR;
-    
+
     ((GraphicsOGL3*)graphics)->takeGlContext();
     switch (valueType) {
         case VALUE_TYPE::MATRIX: {
@@ -340,7 +340,7 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
             glUniform1i(location,val.intVal);
         } break;
     }
-    
+
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
         throwException("setUniform", "Failed to set uniform value. (Constant Name: " + getName() + ")");

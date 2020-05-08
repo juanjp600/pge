@@ -10,6 +10,7 @@
 #include <Windows.h>
 #else
 #include <sys/stat.h>
+#include <dirent.h>
 #endif
 
 #include <Misc/FileUtil.h>
@@ -59,9 +60,9 @@ String FileUtil::getDataFolder() {
 }
 
 std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
-#if WINDOWS
     std::vector<FilePath> files;
-
+    
+#if WINDOWS
     WIN32_FIND_DATAW ffd;
     LARGE_INTEGER filesize;
     size_t length_of_arg;
@@ -110,11 +111,43 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
     }
 
     FindClose(hFind);
-
-    return files;
 #else
+    DIR *dir;
+    struct dirent* currentEntry;
+
+    dir = opendir(path.cstr());
+    
+    if (dir == NULL) {
+        return files;
+    }
+    
+    while ((currentEntry = readdir(dir)) != NULL) {
+        if (currentEntry->d_type == DT_DIR){ //if item is a directory, print its contents
+//            char path[1024];
+            //skip '.' and '..'
+            if ((strcmp(currentEntry->d_name, ".")) != 0 && strcmp(currentEntry->d_name, "..") != 0) {
+//                printf("[%s]\n","", currentEntry->d_name);
+                FilePath newPath = FilePath(path);
+                newPath = FilePath(newPath, currentEntry->d_name);
+                if (newPath.str().charAt(newPath.size() - 1) != '/') {
+                    newPath = FilePath(newPath, "/");
+                }
+                std::vector<FilePath> nestedFiles = enumerateFiles(newPath);
+                for (int i = 0; i < nestedFiles.size(); i++) {
+                    files.push_back(nestedFiles[i]);
+                }
+            } else {
+                continue;
+            }
+        } else {
+            files.push_back(FilePath(path, currentEntry->d_name));
+        }
+    }
+    closedir(dir);
 
 #endif
+
+    return files;
 }
 
 std::vector<String> FileUtil::readLines(const FilePath& path, bool includeEmptyLines) {

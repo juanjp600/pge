@@ -16,8 +16,8 @@ namespace PGE {
 class TextureOGL3 : public Texture {
     public:
         TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget=false,const void* buffer=nullptr,FORMAT fmt=FORMAT::RGBA32);
-        TextureOGL3(Graphics* gfx,const FileName& fn);
-        TextureOGL3(Graphics* gfx,const FileName& fn,ThreadManager* threadManager);
+        TextureOGL3(Graphics* gfx,const FilePath& fn);
+        TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager);
         virtual ~TextureOGL3();
 
         virtual bool isRenderTarget() const override;
@@ -27,7 +27,7 @@ class TextureOGL3 : public Texture {
         GLuint getGlDepthbuffer() const;
     private:
         TextureOGL3(){};
-    
+
         void cleanup() override;
         void throwException(String func, String details) override;
 

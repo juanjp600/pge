@@ -14,17 +14,17 @@ Texture* Texture::create(Graphics* gfx,int w,int h,bool renderTarget,const void*
     return new TextureOGL3(gfx,w,h,renderTarget,buffer,fmt);
 }
 
-Texture* Texture::load(Graphics* gfx,FileName fn) {
+Texture* Texture::load(Graphics* gfx, const FilePath& fn) {
     return new TextureOGL3(gfx,fn);
 }
 
-Texture* Texture::load(Graphics* gfx,FileName fn,ThreadManager* threadManager) {
+Texture* Texture::load(Graphics* gfx, const FilePath& fn,ThreadManager* threadManager) {
     return new TextureOGL3(gfx,fn,threadManager);
 }
 
 TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,Texture::FORMAT fmt) {
     GLuint glError = GL_NO_ERROR;
-    
+
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     format = fmt;
@@ -35,7 +35,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
 
     width = w; height = h;
     realWidth = width; realHeight = height;
-    
+
     if (renderTarget) {
         name = "RenderTarget";
         buffer = nullptr;
@@ -97,9 +97,9 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx,const FileName& fn) {
+TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn) {
     GLuint glError = GL_NO_ERROR;
-    
+
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     filename = fn;
@@ -129,9 +129,9 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FileName& fn) {
     isRT = false;
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx,const FileName& fn,ThreadManager* threadManager) {
+TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager) {
     GLuint glError = GL_NO_ERROR;
-    
+
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     filename = fn;
@@ -156,7 +156,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FileName& fn,ThreadManager* threadM
 
     class TextureReassignRequest : public ThreadManager::MainThreadRequest {
         public:
-            FileName filename;
+            FilePath filename;
             GraphicsOGL3* graphics;
             GLuint glTexture;
 
@@ -165,7 +165,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FileName& fn,ThreadManager* threadM
 
             void execute() override {
                 GLuint glError = GL_NO_ERROR;
-                
+
                 graphics->takeGlContext();
 
                 glActiveTexture(GL_TEXTURE0);
@@ -186,7 +186,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FileName& fn,ThreadManager* threadM
     class TextureLoadRequest : public ThreadManager::NewThreadRequest {
         public:
             TextureReassignRequest mainThreadRequest;
-            FileName filename;
+            FilePath filename;
             int* width; int* height; int* realWidth; int* realHeight;
             void execute() override {
                 BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight);
@@ -224,7 +224,7 @@ void TextureOGL3::throwException(String func, String details) {
 
 void TextureOGL3::cleanup() {
     ((GraphicsOGL3*)graphics)->takeGlContext();
-    
+
     if (isRT) {
         //glDeleteFramebuffers(1,&glFramebuffer);
         glDeleteRenderbuffers(1,&glDepthbuffer);

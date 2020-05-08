@@ -17,7 +17,7 @@ namespace PGE {
 
 class ShaderOGL3 : public Shader {
     public:
-        ShaderOGL3(Graphics* gfx,const FileName& path);
+        ShaderOGL3(Graphics* gfx,const FilePath& path);
         virtual ~ShaderOGL3();
 
         Constant* getVertexShaderConstant(String name) override;
@@ -49,10 +49,10 @@ class ShaderOGL3 : public Shader {
                 void setUniform();
 
                 String getName() const;
-            
+
             protected:
                 void throwException(String func, String details) override;
-            
+
             private:
                 enum class VALUE_TYPE {
                     MATRIX,

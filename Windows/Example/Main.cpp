@@ -48,7 +48,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
     retVal.materials = new std::vector<Material*>();
 
     retVal.lmTextures = new std::vector<Texture*>();
-    
+
     //skip header
     int header;
     file->read((char*)(void*)&header,4);
@@ -67,11 +67,11 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
         String texName = "";
         if (name.findFirst("_lm")>-1) {
             texName = path+name+"0.png";
-            retVal.lmTextures->push_back(Texture::load(graphics,PGE::FileName::create(texName),threadManager));
+            retVal.lmTextures->push_back(Texture::load(graphics,PGE::FilePath::fromStr(texName),threadManager));
             texName = path+name+"1.png";
-            retVal.lmTextures->push_back(Texture::load(graphics,PGE::FileName::create(texName),threadManager));
+            retVal.lmTextures->push_back(Texture::load(graphics,PGE::FilePath::fromStr(texName),threadManager));
             texName = path+name+"2.png";
-            retVal.lmTextures->push_back(Texture::load(graphics,PGE::FileName::create(texName),threadManager));
+            retVal.lmTextures->push_back(Texture::load(graphics,PGE::FilePath::fromStr(texName),threadManager));
         } else {
             texName = "GFX/Map/Textures/"+name+".jpg";
             WIN32_FIND_DATA FindFileData;
@@ -86,7 +86,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
                     texName = "GFX/Map/Textures/dirtymetal.jpg";
                 }
             }
-            
+
             String bumpName = "GFX/Map/Textures/"+name+"_n.jpg";
             handle = FindFirstFile(bumpName.cstr(), &FindFileData);
             found = handle != INVALID_HANDLE_VALUE;
@@ -94,12 +94,12 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
                 bumpName = "GFX/Map/Textures/blankbump.jpg";
             }
 
-            retVal.textures->push_back(Texture::load(graphics,PGE::FileName::create(bumpName),threadManager));
+            retVal.textures->push_back(Texture::load(graphics,PGE::FilePath::fromStr(bumpName),threadManager));
 
-            retVal.textures->push_back(Texture::load(graphics,PGE::FileName::create(texName),threadManager));
+            retVal.textures->push_back(Texture::load(graphics,PGE::FilePath::fromStr(texName),threadManager));
         }
         std::cout<<texName<<"\n";
-        
+
         char flagSkip; file->read(&flagSkip,1); file->read(&flagSkip,1);
     }
 
@@ -143,7 +143,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
             void execute() {
                 char partHeader; file->read(&partHeader,1);
                 while ((partHeader==2) || (partHeader==3)) {
-        
+
                     char textureIndex0 = 0; file->read(&textureIndex0,1);
                     if (textureIndex0>0) { textureIndex0--; }
                     char textureIndex1 = 0; file->read(&textureIndex1,1);
@@ -162,7 +162,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
                     unsigned short vertCount = 0; file->read((char*)(void*)&vertCount,2);
                     for (int i=0;i<vertCount;i++) {
                         Vertex vertex;
-            
+
                         Vector4f pos = Vector4f(0.f,0.f,0.f,1.f);
                         Color color = Color(1.f,1.f,1.f,1.f);
                         Vector2f uv0 = Vector2f(0.f,0.f);
@@ -234,11 +234,11 @@ int PGEMain::Main() {
     ThreadManager* threadManager = new ThreadManager();
     Audio* audio = Audio::create(threadManager);
 
-    Sound* sound = Sound::load(audio, PGE::FileName::create("SFX/Music/The Dread.ogg"));
+    Sound* sound = Sound::load(audio, PGE::FilePath::fromStr("SFX/Music/The Dread.ogg"));
     Sound::Channel* channel = sound->play();
 
-    Shader* shader = Shader::load(graphics, PGE::FileName::create("default/"));
-    Shader* postprocessShader = Shader::load(graphics, PGE::FileName::create("postprocess/"));
+    Shader* shader = Shader::load(graphics, PGE::FilePath::fromStr("default/"));
+    Shader* postprocessShader = Shader::load(graphics, PGE::FilePath::fromStr("postprocess/"));
 
     RM2 testRM2 = loadRM2("GFX/Map/Rooms/173new2/173new2.rm2",graphics,shader,threadManager);
 
@@ -359,7 +359,7 @@ int PGEMain::Main() {
         graphics->clear(Color(0.f,0.f,0.f,1.f));
         graphics->setViewport(Rectanglei(0,0,1280,720));
         quad->render();
-        
+
         graphics->swap(false);
     }
     io->untrackInput(&testInput);
@@ -375,7 +375,7 @@ int PGEMain::Main() {
         delete (*testRM2.materials)[i];
     }
     delete testRM2.materials;
-    
+
     for (int i=0;i<testRM2.textures->size();i++) {
         delete (*testRM2.textures)[i];
     }
