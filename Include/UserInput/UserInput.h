@@ -324,7 +324,7 @@ class MouseInput : public UserInput {
 
         BUTTON getButton() const;
     
-        void setClickCount(int bruh);
+        void setClickCount(int count);
         int getClickCount() const;
 
         MouseInput(BUTTON inMouseButton);

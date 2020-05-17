@@ -48,8 +48,8 @@ MouseInput::BUTTON MouseInput::getButton() const {
     return mouseButton;
 }
 
-void MouseInput::setClickCount(int bruh) {
-    clicks = bruh;
+void MouseInput::setClickCount(int count) {
+    clicks = count;
 }
 
 int MouseInput::getClickCount() const {
