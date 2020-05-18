@@ -21,6 +21,9 @@ public:
     String(const std::string& cppstr);
     String(const wchar* wstr);
     String(const std::wstring& cppwstr);
+    #if defined(__APPLE__) && defined(__OBJC__)
+    String(const NSString* nsstr);
+    #endif
     String(const String& a,const String& b);
     String(char c);
     String(wchar w);
@@ -30,9 +33,6 @@ public:
 
     const char* cstr() const;
     const wchar* wstr() const;
-#if defined(__APPLE__) && defined(__OBJC__)
-    NSString* nsstr() const;
-#endif
     int toInt() const;
     float toFloat() const;
 
@@ -51,7 +51,6 @@ public:
     static String join(const std::vector<String>& vect, const String& separator);
 
     String unHex() const;
-    String resourcePath() const;
 
     String& operator=(const String& other);
 

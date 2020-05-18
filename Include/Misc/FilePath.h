@@ -8,6 +8,8 @@ namespace PGE {
 class FilePath {
     private:
         String name;
+    
+        static String getResourcePath();
 
     public:
         FilePath();

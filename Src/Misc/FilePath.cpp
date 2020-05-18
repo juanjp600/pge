@@ -1,4 +1,7 @@
 #include <iostream>
+#if defined(__APPLE__) && defined(__OBJC__)
+#import <Foundation/Foundation.h>
+#endif
 
 #include <Misc/FilePath.h>
 #include <Misc/FileUtil.h>
@@ -9,9 +12,17 @@ FilePath::FilePath() {
     name = String("");
 }
 
+String FilePath::getResourcePath() {
+#if defined(__APPLE__) && defined(__OBJC__)
+    NSBundle* bundle = [NSBundle mainBundle];
+    return String(bundle.resourcePath, "/");
+#endif
+    return String();
+}
+
 FilePath FilePath::fromStr(const String& str) {
     FilePath fn;
-    fn.name = str.resourcePath().replace("\\", "/");
+    fn.name = getResourcePath().replace("\\", "/") + str;
     
     return fn;
 }
