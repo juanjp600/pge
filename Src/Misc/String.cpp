@@ -75,6 +75,19 @@ String::String(const std::wstring& cppwstr) {
     syncBuffers();
 }
 
+#if defined(__APPLE__) && defined(__OBJC__)
+String::String(const NSString* nsstr) {
+    const char* cPath = [nsstr cStringUsingEncoding: NSUTF8StringEncoding];
+    int len = (int)strlen(cPath);
+    cbuffer = new char[len+1];
+    wbuffer = nullptr;
+    cCapacity = len+1;
+    memcpy(cbuffer, cPath, (len+1)*sizeof(char));
+    dominantBuffer = DOMINANT_BUFFER::C;
+    syncBuffers();
+}
+#endif
+
 String::String(const String& a,const String& b) {
     int len = a.size()+b.size();
     wbuffer = new wchar[len+1];
@@ -367,12 +380,6 @@ const wchar* String::wstr() const {
     return wbuffer;
 }
 
-#if defined(__APPLE__) && defined(__OBJC__)
-NSString* String::nsstr() const {
-    return [NSString stringWithUTF8String: cbuffer];
-}
-#endif
-
 int String::toInt() const {
     return atoi(cbuffer);
 }
@@ -528,31 +535,6 @@ String String::join(const std::vector<String>& vect, const String& separator) {
     }
 
     return retVal;
-}
-
-String String::resourcePath() const {
-#if defined(__APPLE__) && defined(__OBJC__)
-    String dummyName = "Dummy.txt";
-    int period = dummyName.findFirst(".");
-    NSString* name = dummyName.substr(0, period).nsstr();
-    NSString* ext = dummyName.substr(period+1).nsstr();
-
-    NSBundle* bundle = [NSBundle mainBundle];
-    NSString* path = [bundle pathForResource: name ofType: ext];
-
-    if (path == nullptr) {
-        return String("");
-    }
-
-    // Manipulate the resulting cString.
-    const char* cPath = [path cStringUsingEncoding: NSUTF8StringEncoding];
-    String strPath = String(cPath);
-    strPath = strPath.substr(0, strPath.size() - dummyName.size());
-    strPath = strPath + (*this);
-
-    return strPath;
-#endif
-    return *this;
 }
 
 String String::unHex() const {

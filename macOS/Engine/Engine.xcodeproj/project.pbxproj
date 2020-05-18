@@ -181,7 +181,7 @@
 		1958F248224D552F002B3F60 /* Ogg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Ogg.xcodeproj; path = "../../Libraries/libogg-1.3.3/macosx/Ogg.xcodeproj"; sourceTree = "<group>"; };
 		1958F258224D5560002B3F60 /* Vorbis.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Vorbis.xcodeproj; path = "../../Libraries/libvorbis-1.3.6/macosx/Vorbis.xcodeproj"; sourceTree = "<group>"; };
 		19AD174822E49B6E001F357A /* FileUtil.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = FileUtil.cpp; sourceTree = "<group>"; };
-		19AD2CB52464B747006CBD3A /* FilePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FilePath.cpp; sourceTree = "<group>"; };
+		19AD2CB52464B747006CBD3A /* FilePath.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = FilePath.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
