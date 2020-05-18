@@ -121,7 +121,16 @@ String::String(float f) {
     cbuffer = new char[32];
     wbuffer = nullptr;
     cCapacity = 32;
-    snprintf(cbuffer,32,"%f",f);
+    snprintf(cbuffer, 32, "%f", f);
+    dominantBuffer = DOMINANT_BUFFER::C;
+    syncBuffers();
+}
+
+String::String(double d) {
+    cbuffer = new char[64];
+    wbuffer = nullptr;
+    cCapacity = 64;
+    snprintf(cbuffer, 64, "%lf", d);
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();
 }

@@ -26,6 +26,7 @@ public:
     String(wchar w);
     String(int i,bool hex=false);
     String(float f);
+    String(double d);
 
     const char* cstr() const;
     const wchar* wstr() const;
