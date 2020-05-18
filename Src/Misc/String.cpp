@@ -126,6 +126,15 @@ String::String(float f) {
     syncBuffers();
 }
 
+String::String(double d) {
+    cbuffer = new char[32];
+    wbuffer = nullptr;
+    cCapacity = 32;
+    snprintf(cbuffer,32,"%f",d);
+    dominantBuffer = DOMINANT_BUFFER::C;
+    syncBuffers();
+}
+
 String& String::operator=(const String& other) {
     if (&other == this) return *this;
     if (wbuffer!=nullptr) { delete[] wbuffer; }
