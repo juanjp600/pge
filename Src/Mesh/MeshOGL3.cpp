@@ -66,7 +66,6 @@ void MeshOGL3::updateInternalData() {
     for (int i=0;i<vertexCount;i++) {
         for (int j=0;j<vertexInputElemCount;j++) {
             const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j],indexHints[j]);
-            indexHints[j] = prop.index;
             switch (prop.type) {
                 case Vertex::PROPERTY_TYPE::FLOAT: {
                     int offset = (int)glVertexData.size();

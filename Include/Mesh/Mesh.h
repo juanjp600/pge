@@ -33,7 +33,6 @@ class Vertex {
             void copyOtherValue(const Property& other);
             long long hashCode;
             PROPERTY_TYPE type;
-            int index;
             union Value {
                 Value();
                 Value(const Value& other) =delete;
@@ -46,7 +45,7 @@ class Vertex {
             } value;
             const static Property def;
         };
-        const Property& getProperty(const String& name,int indexHint);
+        const Property& getProperty(const String& name,int& indexHint);
         void setFloat(const String& name,float val);
         void setUInt(const String& name,unsigned int val);
         void setVector2f(const String& name,Vector2f val);
@@ -55,6 +54,7 @@ class Vertex {
         void setColor(const String& name,Color val);
     private:
         std::vector<Property> properties;
+        Property& insertProperty(long long hashCode);
 };
 
 class Primitive {
