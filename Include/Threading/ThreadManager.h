@@ -2,6 +2,7 @@
 #define PGE_THREADMANAGER_H_INCLUDED
 
 #include <Misc/String.h>
+#include <Exception/Exception.h>
 
 #include <thread>
 #include <mutex>
@@ -27,32 +28,52 @@ class ThreadManager {
             public:
                 NewThreadRequest();
                 virtual ~NewThreadRequest();
+
+                //execution
                 virtual void execute() =0;
                 bool isDone() const;
+
+                //exception handling
                 bool wasExceptionThrown() const;
                 void notifyException();
-                void requestExecutionOnMainThread(MainThreadRequest* request);
+
+                //methods called by threadmanager
                 void setThreadManager(ThreadManager* mgr);
                 void startThread();
+
+                //requests for main thread
+                void requestExecutionOnMainThread(MainThreadRequest* request);
                 bool isWaitingForMainThread();
                 void executeMainThreadRequest();
             protected:
                 void markAsDone();
             private:
+                ThreadManager* threadManager;
+
                 MainThreadRequest* mainThreadRequest;
                 std::thread* thread;
-                std::mutex mutex;
+
+                std::mutex condVarMutex;
                 std::condition_variable conditionVariable;
+
                 std::atomic<bool> waitingForMainThread;
-                ThreadManager* threadManager;
                 std::atomic<bool> done;
                 std::atomic<bool> exceptionThrown;
         };
+
         void requestExecutionOnNewThread(NewThreadRequest* request);
+        void handleException(NewThreadRequest* request, Exception& e);
     private:
         std::vector<NewThreadRequest*> newThreadRequests;
 
         std::mutex requestMutex;
+
+        std::mutex exceptionMutex;
+        struct ExceptionData {
+            ThreadManager::NewThreadRequest* request;
+            Exception exception;
+        };
+        std::vector<ExceptionData> thrownExceptions;
 
         std::thread::id mainThreadId;
 };

@@ -1,5 +1,5 @@
 #include <Graphics/Graphics.h>
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 
 using namespace PGE;
 

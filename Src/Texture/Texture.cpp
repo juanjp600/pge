@@ -1,7 +1,7 @@
 #include <Texture/Texture.h>
 #include "TextureInternal.h"
 #include <inttypes.h>
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 
 using namespace PGE;
 

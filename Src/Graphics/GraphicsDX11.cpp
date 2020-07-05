@@ -1,8 +1,8 @@
 #include "GraphicsDX11.h"
 #include <Window/Window.h>
+#include <Exception/Exception.h>
 #include "../Window/WindowDX11.h"
 #include "../Texture/TextureDX11.h"
-#include "../Exception/Exception.h"
 
 #include <stdlib.h>
 

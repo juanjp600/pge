@@ -8,7 +8,7 @@
 #include "../Window/WindowInternal.h"
 #include <IO/IO.h>
 #include "IOInternal.h"
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 
 using namespace PGE;
 

@@ -45,6 +45,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Include\Audio\Audio.h" />
     <ClInclude Include="..\..\Include\Color\Color.h" />
+    <ClInclude Include="..\..\Include\Exception\Exception.h" />
     <ClInclude Include="..\..\Include\Graphics\Graphics.h" />
     <ClInclude Include="..\..\Include\Init\Init.h" />
     <ClInclude Include="..\..\Include\IO\IO.h" />
@@ -67,7 +68,6 @@
     <ClInclude Include="..\..\Include\UserInput\UserInput.h" />
     <ClInclude Include="..\..\Include\Window\Window.h" />
     <ClInclude Include="..\..\Src\Audio\AudioInternal.h" />
-    <ClInclude Include="..\..\Src\Exception\Exception.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
     <ClInclude Include="..\..\Src\Init\InitInternal.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />

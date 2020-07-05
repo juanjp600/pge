@@ -2,7 +2,7 @@
 #include "TextureInternal.h"
 #include <Window/Window.h>
 #include "../Window/WindowDX11.h"
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 #include <Threading/ThreadManager.h>
 
 #include <stdlib.h>

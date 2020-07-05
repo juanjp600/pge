@@ -106,6 +106,9 @@
     <Filter Include="Include\SysEvents">
       <UniqueIdentifier>{87d4c54a-0431-4315-8576-ecf560027dcc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Exception">
+      <UniqueIdentifier>{8c846813-6460-4d7e-a17f-74257cca942a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -278,9 +281,6 @@
     <ClInclude Include="..\..\Include\Math\Plane.h">
       <Filter>Include\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Exception\Exception.h">
-      <Filter>Src\Exception</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\Window\WindowInternal.h">
       <Filter>Src\Window</Filter>
     </ClInclude>
@@ -304,6 +304,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Misc\FilePath.h">
       <Filter>Include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Exception\Exception.h">
+      <Filter>Include\Exception</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

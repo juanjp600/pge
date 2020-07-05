@@ -1,16 +1,8 @@
 #include <Threading/ThreadManager.h>
-#include "../Exception/Exception.h"
 
 #include <chrono>
 
 using namespace PGE;
-
-struct ExceptionData {
-    ThreadManager::NewThreadRequest* request;
-    Exception exception;
-};
-static std::vector<ExceptionData> thrownExceptions;
-static std::mutex exceptionMutex;
 
 ThreadManager::ThreadManager() {
     mainThreadId = std::this_thread::get_id();
@@ -51,7 +43,7 @@ void ThreadManager::NewThreadRequest::notifyException() {
 
 void ThreadManager::NewThreadRequest::requestExecutionOnMainThread(MainThreadRequest* request) {
     mainThreadRequest = request;
-    std::unique_lock<std::mutex> lock(mutex);
+    std::unique_lock<std::mutex> lock(condVarMutex);
     waitingForMainThread = true;
     conditionVariable.wait(lock);
 }
@@ -61,23 +53,27 @@ void ThreadManager::NewThreadRequest::setThreadManager(ThreadManager* mgr) {
     threadManager = mgr;
 }
 
-static void _startThread(ThreadManager::NewThreadRequest* request) {
+static void _startThread(ThreadManager::NewThreadRequest* request, ThreadManager* threadManager) {
     try {
         request->execute();
     } catch (Exception& e) {
-        exceptionMutex.lock();
-        ExceptionData exceptionData;
-        exceptionData.request = request;
-        exceptionData.exception = e;
-        thrownExceptions.push_back(exceptionData);
-        request->notifyException();
-        exceptionMutex.unlock();
+        threadManager->handleException(request, e);
     }
 }
 
 void ThreadManager::NewThreadRequest::startThread() {
     mainThreadRequest = nullptr;
-    thread = new std::thread(_startThread, this);
+    thread = new std::thread(_startThread, this, threadManager);
+}
+
+void ThreadManager::handleException(ThreadManager::NewThreadRequest* request, Exception& e) {
+    exceptionMutex.lock();
+    ExceptionData data;
+    data.request = request;
+    data.exception = e;
+    thrownExceptions.push_back(data);
+    request->notifyException();
+    exceptionMutex.unlock();
 }
 
 bool ThreadManager::NewThreadRequest::isWaitingForMainThread() {

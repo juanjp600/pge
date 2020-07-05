@@ -2,7 +2,7 @@
 #include "ShaderDX11.h"
 #include <Window/Window.h>
 #include "../Window/WindowDX11.h"
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 #include <fstream>
 
 using namespace PGE;

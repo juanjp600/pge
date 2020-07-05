@@ -7,7 +7,7 @@
 #include <Material/Material.h>
 #include <Mesh/Mesh.h>
 
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 #include "../SysEvents/SysEventsInternal.h"
 
 using namespace PGE;

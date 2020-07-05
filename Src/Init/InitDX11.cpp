@@ -1,4 +1,4 @@
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 #include <Misc/String.h>
 #include <Init/Init.h>
 

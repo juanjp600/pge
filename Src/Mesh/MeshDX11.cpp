@@ -7,7 +7,7 @@
 #include "../Shader/ShaderDX11.h"
 #include <Texture/Texture.h>
 #include "../Texture/TextureDX11.h"
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 
 #include <inttypes.h>
 

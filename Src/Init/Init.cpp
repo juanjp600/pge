@@ -1,6 +1,6 @@
 #include <SDL.h>
 #include <Init/Init.h>
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 #include <fstream>
 
 #include "InitInternal.h"
