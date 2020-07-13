@@ -45,3 +45,9 @@ void Color::setBlueInt(int b) {
 void Color::setAlphaInt(int a) {
     alpha = ((float)a)/255.f;
 }
+
+const Color Color::Red = Color(1.f, 0.f, 0.f, 1.f);
+const Color Color::Green = Color(0.f, 1.f, 0.f, 1.f);
+const Color Color::Blue = Color(0.f, 0.f, 1.f, 1.f);
+const Color Color::White = Color(1.f, 1.f, 1.f, 1.f);
+const Color Color::Black = Color(0.f, 0.f, 0.f, 1.f);

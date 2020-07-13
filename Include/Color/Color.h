@@ -13,6 +13,12 @@ class Color {
         void setRedInt(int r); void setGreenInt(int g); void setBlueInt(int b); void setAlphaInt(int a);
 
         float red; float green; float blue; float alpha;
+
+        static const Color Red;
+        static const Color Green;
+        static const Color Blue;
+        static const Color White;
+        static const Color Black;
 };
 
 }
