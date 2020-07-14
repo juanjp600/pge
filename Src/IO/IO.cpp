@@ -147,6 +147,13 @@ void IOInternal::update() {
             mousePos.x = (float)event.motion.x;
             mousePos.y = (float)event.motion.y;
  #endif
+        } else if (event.type == SDL_MOUSEWHEEL) {
+            mouseWheelPos.x -= event.wheel.x;
+            mouseWheelPos.y -= event.wheel.y;
+            // If the direction is flipped multiply by -1.
+            if (event.wheel.direction == SDL_MOUSEWHEEL_FLIPPED) {
+                mouseWheelPos.multiply(-1);
+            }
         } else if (event.type==SDL_MOUSEBUTTONDOWN || event.type==SDL_MOUSEBUTTONUP) {
             SDL_MouseButtonEvent mouseButtonEvent = event.button;
             for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
@@ -379,6 +386,12 @@ void IOInternal::setMousePosition(Vector2f position) {
 
 void IOInternal::setMouseVisibility(bool visible) {
     SDL_ShowCursor(visible ? 1 : 0);
+}
+
+Vector2i IOInternal::getMouseWheelDelta() {
+    Vector2i mwp = mouseWheelPos;
+    mouseWheelPos = Vector2i::zero;
+    return mwp;
 }
 
 void IOInternal::trackInput(UserInput* input) {

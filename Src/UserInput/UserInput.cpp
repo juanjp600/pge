@@ -108,5 +108,3 @@ void ControllerInput::setDownThreshold(float threshold) {
     downThreshold = threshold;
     inputDown = pressDepth > downThreshold;
 }
-
-

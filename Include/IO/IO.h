@@ -28,6 +28,7 @@ class IO {
         virtual Vector2f getMousePosition() const =0;
         virtual void setMousePosition(Vector2f position) =0;
         virtual void setMouseVisibility(bool visible) =0;
+        virtual Vector2i getMouseWheelDelta() =0;
     
         virtual void startTextInputCapture() const =0;
         virtual void stopTextInputCapture() const =0;

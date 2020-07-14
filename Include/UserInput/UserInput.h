@@ -391,4 +391,3 @@ class ControllerInput : public UserInput {
 }
 
 #endif
-
