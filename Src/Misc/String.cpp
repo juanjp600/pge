@@ -537,6 +537,14 @@ String String::join(const std::vector<String>& vect, const String& separator) {
     return retVal;
 }
 
+std::cmatch String::regexMatch(const std::regex& pattern) const {
+    const char* s = cstr();
+    std::cmatch m;
+    std::regex_search(s, m, pattern);
+
+    return m;
+}
+
 String String::unHex() const {
     int isUnhexing = 0;
 

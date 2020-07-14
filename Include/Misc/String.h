@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <regex>
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #include <Foundation/NSString.h>
@@ -49,6 +50,8 @@ public:
     String trim() const;
     std::vector<String> split(const String& needle, bool removeEmptyEntries) const;
     static String join(const std::vector<String>& vect, const String& separator);
+
+    std::cmatch regexMatch(const std::regex& pattern) const;
 
     String unHex() const;
 
