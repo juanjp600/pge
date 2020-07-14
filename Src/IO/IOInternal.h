@@ -19,6 +19,7 @@ class IOInternal : public IO {
 
         std::set<UserInput*> inputs;
         Vector2f mousePos;
+        Vector2i mouseWheelPos;
 
         std::vector<class ControllerInternal*> openControllers;
 
@@ -41,6 +42,7 @@ class IOInternal : public IO {
         Vector2f getMousePosition() const override;
         void setMousePosition(Vector2f position) override;
         void setMouseVisibility(bool visible) override;
+        Vector2i getMouseWheelDelta() override;
 
         void startTextInputCapture() const override;
         void stopTextInputCapture() const override;
