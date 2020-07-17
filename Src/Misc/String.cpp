@@ -192,6 +192,10 @@ bool String::equals(const String& other) const {
     return other.getHashCode()==getHashCode();
 }
 
+bool String::equalsIgnoreCase(const String& other) const {
+    return toLower().equals(other.toLower());
+}
+
 bool String::isEmpty() const {
     return strSize == 0;
 }
