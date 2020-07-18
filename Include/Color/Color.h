@@ -17,6 +17,7 @@ class Color {
         static const Color Red;
         static const Color Green;
         static const Color Blue;
+        static const Color Orange;
         static const Color Yellow;
         static const Color Cyan;
         static const Color Magenta;
