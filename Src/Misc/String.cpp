@@ -193,7 +193,14 @@ bool String::equals(const String& other) const {
 }
 
 bool String::equalsIgnoreCase(const String& other) const {
-    return toLower().equals(other.toLower());
+    if (size() != other.size()) { return false; }
+    if (equals(other)) { return true; }
+    for (int i = 0; i<strSize; i++) {
+        wchar w1 = towlower(wbuffer[i]);
+        wchar w2 = towlower(other.wbuffer[i]);
+        if (w1 != w2) { return false; }
+    }
+    return true;
 }
 
 bool String::isEmpty() const {
