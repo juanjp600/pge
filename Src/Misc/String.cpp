@@ -391,40 +391,34 @@ const wchar* String::wstr() const {
     return wbuffer;
 }
 
-int String::toInt(bool* success) const {
+int String::toInt(bool& success) const {
     try {
-        *success = true;
+        success = true;
         return std::stoi(cbuffer);
     } catch (std::exception) {
-        *success = false;
+        success = false;
         return 0;
     }
 }
 
-float String::toFloat(bool* success) const {
+float String::toFloat(bool& success) const {
     try {
-        *success = true;
+        success = true;
         return std::stof(cbuffer);
     } catch (std::exception) {
-        *success = false;
+        success = false;
         return 0.f;
     }
 }
 
 int String::toInt() const {
-    try {
-        return std::stoi(cbuffer);
-    } catch (std::exception) {
-        return 0;
-    }
+    bool discard;
+    return toInt(discard);
 }
 
 float String::toFloat() const {
-    try {
-        return std::stof(cbuffer);
-    } catch (std::exception) {
-        return 0.f;
-    }
+    bool discard;
+    return toFloat(discard);
 }
 
 String String::substr(int start,int cnt) const {

@@ -34,8 +34,8 @@ public:
 
     const char* cstr() const;
     const wchar* wstr() const;
-    int toInt(bool* success) const;
-    float toFloat(bool* success) const;
+    int toInt(bool& success) const;
+    float toFloat(bool& success) const;
     int toInt() const;
     float toFloat() const;
 
