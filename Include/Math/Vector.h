@@ -59,6 +59,8 @@ class Vector3f {
         float dotProduct(const Vector3f& b) const;
         Vector3f crossProduct(const Vector3f& b) const;
 
+        static Vector3f lerp(const Vector3f& oldValue, const Vector3f& newValue, float interpolation);
+
         static const Vector3f zero;
         static const Vector3f one;
 };

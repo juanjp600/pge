@@ -135,6 +135,10 @@ Vector3f Vector3f::crossProduct(const Vector3f& b) const {
     return Vector3f(y*b.z-z*b.y,z*b.x-x*b.z,x*b.y-y*b.x);
 }
 
+Vector3f Vector3f::lerp(const Vector3f& oldValue, const Vector3f& newValue, float interpolation) {
+    return oldValue.add(newValue.subtract(oldValue).multiply(interpolation));
+}
+
 Vector4f::Vector4f() {
     x = 0.f; y = 0.f; z = 0.f; w = 0.f;
 }
