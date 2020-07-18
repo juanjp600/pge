@@ -49,6 +49,7 @@ void Color::setAlphaInt(int a) {
 const Color Color::Red = Color(1.f, 0.f, 0.f, 1.f);
 const Color Color::Green = Color(0.f, 1.f, 0.f, 1.f);
 const Color Color::Blue = Color(0.f, 0.f, 1.f, 1.f);
+const Color Color::Orange = Color(1.f, 0.5f, 0.f, 1.f);
 const Color Color::Yellow = Color(1.f, 1.f, 0.f, 1.f);
 const Color Color::Cyan = Color(0.f, 1.f, 1.f, 1.f);
 const Color Color::Magenta = Color(1.f, 0.f, 1.f, 1.f);
