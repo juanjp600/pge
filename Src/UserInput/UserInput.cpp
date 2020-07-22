@@ -23,7 +23,7 @@ void UserInput::setHit(bool hit) {
     inputHit = hit;
 }
 
-KeyboardInput::KeyboardInput(KeyboardInput::SCANCODE inKeyCode) {
+KeyboardInput::KeyboardInput(KeyboardInput::KEYCODE inKeyCode) {
     keyCode = inKeyCode;
 }
 
@@ -31,7 +31,7 @@ UserInput::DEVICE KeyboardInput::getDevice() const {
     return UserInput::DEVICE::KEYBOARD;
 }
 
-KeyboardInput::SCANCODE KeyboardInput::getButton() const {
+KeyboardInput::KEYCODE KeyboardInput::getButton() const {
     return keyCode;
 }
 

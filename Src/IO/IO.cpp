@@ -120,7 +120,7 @@ void IOInternal::update() {
             UserInput* input = (*it);
             if (input->getDevice()==UserInput::DEVICE::KEYBOARD) {
                 KeyboardInput* keyboardInput = (KeyboardInput*)input;
-                if ((int)keyEvent.keysym.scancode==(int)keyboardInput->getButton()) {
+                if ((int)keyEvent.keysym.sym==(int)keyboardInput->getButton()) {
                     if (event.type == SDL_KEYDOWN) {
                         if (!input->isDown()) { input->setHit(true); }
                         input->setDown(true);
