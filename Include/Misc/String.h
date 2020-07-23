@@ -40,6 +40,7 @@ public:
     float toFloat() const;
 
     int size() const;
+    int byteSize() const;
 
     int findFirst(const String& fnd,int from=-1) const;
     int findLast(const String& fnd,int from=-1) const;

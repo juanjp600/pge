@@ -365,6 +365,10 @@ int String::size() const {
     return strSize;
 }
 
+int String::byteSize() const {
+    return strlen(cstr());
+}
+
 int String::findFirst(const String& fnd, int from) const {
     if (fnd.size() == 0) { return -1; }
     if (from<0) { from = 0; }
