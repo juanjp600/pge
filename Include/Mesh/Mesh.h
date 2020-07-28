@@ -80,7 +80,6 @@ class Mesh {
         void clearGeometry();
         void setMaterial(Material* m);
 
-        int getVertexCount() const;
         const std::vector<Vertex>& getVertices(int& vertCount) const;
         const std::vector<Primitive>& getPrimitives(int& primCount) const;
         bool isOpaque() const;
