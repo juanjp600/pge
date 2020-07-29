@@ -142,6 +142,22 @@ Matrix4x4f Matrix4x4f::constructViewMat(const Vector3f& position,const Vector3f&
     return newMat;
 }
 
+Vector3f Matrix4x4f::extractViewTarget() const {
+    return Vector3f(-elements[0][2], -elements[1][2], -elements[2][2]);
+}
+
+Vector3f Matrix4x4f::extractViewUp() const {
+    return Vector3f(elements[0][1], elements[1][1], elements[2][1]);
+}
+
+Vector3f Matrix4x4f::extractViewPosition() const {
+    Vector3f xAxis = Vector3f(elements[0][0], elements[1][0], elements[2][0]);
+    Vector3f yAxis = Vector3f(elements[0][1], elements[1][1], elements[2][1]);
+    Vector3f zAxis = Vector3f(elements[0][2], elements[1][2], elements[2][2]);
+
+    return xAxis.multiply(elements[3][0]).add(yAxis.multiply(elements[3][1])).add(zAxis.multiply(elements[3][2])).multiply(-1.f);
+}
+
 Matrix4x4f Matrix4x4f::constructPerspectiveMat(float horizontalfov, float aspectRatio, float nearZ, float farZ) {
     Matrix4x4f retval = PGE::Matrix4x4f::identity;
     float rad = horizontalfov * 0.5f;
