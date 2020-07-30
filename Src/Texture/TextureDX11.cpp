@@ -397,3 +397,7 @@ ID3D11RenderTargetView* TextureDX11::getRtv() const {
 ID3D11DepthStencilView* TextureDX11::getZBufferView() const {
     return dxZBufferView;
 }
+
+void* TextureDX11::getNative() const {
+    return dxTexture;
+}

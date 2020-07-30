@@ -18,6 +18,8 @@ class Texture {
         virtual bool isRenderTarget() const =0;
 
         int getWidth() const; int getHeight() const;
+        
+        virtual void* getNative() const =0;
 
         static Texture* load(Graphics* gfx, const FilePath& filename);
         static Texture* load(Graphics* gfx, const FilePath& filename,ThreadManager* threadManager);

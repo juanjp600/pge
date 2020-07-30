@@ -25,6 +25,7 @@ class TextureOGL3 : public Texture {
         GLuint getGlTexture() const;
         //GLuint getGlFramebuffer() const;
         GLuint getGlDepthbuffer() const;
+        virtual void* getNative() const;
     private:
         TextureOGL3(){};
 

@@ -247,3 +247,7 @@ GLuint TextureOGL3::getGlTexture() const {
 GLuint TextureOGL3::getGlDepthbuffer() const {
     return glDepthbuffer;
 }
+
+void* TextureOGL3::getNative() const {
+    return (void*)glTexture;
+}

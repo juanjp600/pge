@@ -25,6 +25,7 @@ class TextureDX11 : public Texture {
 
         ID3D11RenderTargetView* getRtv() const;
         ID3D11DepthStencilView* getZBufferView() const;
+        virtual void* getNative() const;
     private:
         TextureDX11(){};
 
