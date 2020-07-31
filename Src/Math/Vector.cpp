@@ -54,6 +54,10 @@ Vector2f Vector2f::multiply(float s) const {
     return Vector2f(x*s,y*s);
 }
 
+Vector2f Vector2f::invert() const {
+    return Vector2f(-x, -y);
+}
+
 Vector2f Vector2f::normalize() const {
     float lenSqr = lengthSquared();
     if (lenSqr < 0.0001f) { return Vector2f::zero; }
@@ -112,6 +116,10 @@ Vector3f Vector3f::subtract(const Vector3f& b) const {
 
 Vector3f Vector3f::multiply(float s) const {
     return Vector3f(x*s,y*s,z*s);
+}
+
+Vector3f Vector3f::invert() const {
+    return Vector3f(-x, -y, -z);
 }
 
 Vector3f Vector3f::normalize() const {

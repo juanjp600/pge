@@ -26,6 +26,7 @@ class Vector2f {
         Vector2f subtract(const Vector2f& b) const;
 
         Vector2f multiply(float s) const;
+        Vector2f invert() const;
         Vector2f normalize() const;
 
         Vector2f reflect(const Vector2f& n) const;
@@ -53,6 +54,7 @@ class Vector3f {
         Vector3f subtract(const Vector3f& b) const;
 
         Vector3f multiply(float s) const;
+        Vector3f invert() const;
         Vector3f normalize() const;
 
         Vector3f reflect(const Vector3f& n) const;
