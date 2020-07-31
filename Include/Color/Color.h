@@ -22,6 +22,7 @@ class Color {
         static const Color Cyan;
         static const Color Magenta;
         static const Color White;
+        static const Color Gray;
         static const Color Black;
 };
 

@@ -54,4 +54,5 @@ const Color Color::Yellow = Color(1.f, 1.f, 0.f, 1.f);
 const Color Color::Cyan = Color(0.f, 1.f, 1.f, 1.f);
 const Color Color::Magenta = Color(1.f, 0.f, 1.f, 1.f);
 const Color Color::White = Color(1.f, 1.f, 1.f, 1.f);
+const Color Color::Gray = Color(0.5f, 0.5f, 0.5f, 1.f);
 const Color Color::Black = Color(0.f, 0.f, 0.f, 1.f);
