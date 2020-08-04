@@ -74,6 +74,7 @@ class Vector4f {
         Vector4f();
         Vector4f(float s);
         Vector4f(float ix,float iy,float iz,float iw);
+        Vector4f(PGE::Vector3f v3, float iw);
 
         static const Vector4f zero;
         static const Vector4f one;
