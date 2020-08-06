@@ -6,11 +6,11 @@ Color::Color() {
     red = 1.f; green = 1.f; blue = 1.f; alpha = 1.f;
 }
 
-Color::Color(int r,int g,int b,int a) {
+Color::Color(int r, int g, int b, int a) {
     red = ((float)r)/255.f; green = ((float)g)/255.f; blue = ((float)b)/255.f; alpha = ((float)a)/255.f;
 }
 
-Color::Color(float r,float g,float b,float a) {
+Color::Color(float r, float g, float b, float a) {
     red = r; green = g; blue = b; alpha = a;
 }
 
@@ -46,13 +46,13 @@ void Color::setAlphaInt(int a) {
     alpha = ((float)a)/255.f;
 }
 
-const Color Color::Red = Color(1.f, 0.f, 0.f, 1.f);
-const Color Color::Green = Color(0.f, 1.f, 0.f, 1.f);
-const Color Color::Blue = Color(0.f, 0.f, 1.f, 1.f);
-const Color Color::Orange = Color(1.f, 0.5f, 0.f, 1.f);
-const Color Color::Yellow = Color(1.f, 1.f, 0.f, 1.f);
-const Color Color::Cyan = Color(0.f, 1.f, 1.f, 1.f);
-const Color Color::Magenta = Color(1.f, 0.f, 1.f, 1.f);
-const Color Color::White = Color(1.f, 1.f, 1.f, 1.f);
-const Color Color::Gray = Color(0.5f, 0.5f, 0.5f, 1.f);
-const Color Color::Black = Color(0.f, 0.f, 0.f, 1.f);
+const Color Color::Red = Color(1.f, 0.f, 0.f);
+const Color Color::Green = Color(0.f, 1.f, 0.f);
+const Color Color::Blue = Color(0.f, 0.f, 1.f);
+const Color Color::Orange = Color(1.f, 0.5f, 0.f);
+const Color Color::Yellow = Color(1.f, 1.f, 0.f);
+const Color Color::Cyan = Color(0.f, 1.f, 1.f);
+const Color Color::Magenta = Color(1.f, 0.f, 1.f);
+const Color Color::White = Color(1.f, 1.f, 1.f);
+const Color Color::Gray = Color(0.5f, 0.5f, 0.5f);
+const Color Color::Black = Color(0.f, 0.f, 0.f);

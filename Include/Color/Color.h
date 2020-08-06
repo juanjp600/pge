@@ -6,8 +6,8 @@ namespace PGE {
 class Color {
     public:
         Color();
-        Color(int r,int g,int b,int a);
-        Color(float r,float g,float b,float a);
+        Color(int r,int g,int b,int a=255);
+        Color(float r,float g,float b,float a=1.0f);
 
         int getRedInt() const; int getGreenInt() const; int getBlueInt() const; int getAlphaInt() const;
         void setRedInt(int r); void setGreenInt(int g); void setBlueInt(int b); void setAlphaInt(int a);
