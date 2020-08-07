@@ -14,6 +14,23 @@ class Vector2f {
         Vector2f(float ix,float iy);
         Vector2f(const Vector2i& vi);
 
+        bool operator==(const Vector2f& other) const;
+
+        Vector2f& operator+=(const Vector2f& other);
+        Vector2f& operator+=(float f);
+        Vector2f& operator-=(const Vector2f& other);
+        Vector2f& operator-=(float f);
+        Vector2f& operator*=(float f);
+        Vector2f& operator/=(float f);
+        Vector2f& operator-();
+
+        Vector2f operator+(const Vector2f& other) const;
+        Vector2f operator+(float f) const;
+        Vector2f operator-(const Vector2f& other) const;
+        Vector2f operator-(float f) const;
+        Vector2f operator*(float f) const;
+        Vector2f operator/(float f) const;
+
         float lengthSquared() const;
         float length() const;
 
@@ -32,6 +49,8 @@ class Vector2f {
         Vector2f reflect(const Vector2f& n) const;
         float dotProduct(const Vector2f& b) const;
 
+        static Vector2f lerp(const Vector2f& oldValue, const Vector2f& newValue, float interpolation);
+
         static const Vector2f zero;
         static const Vector2f one;
 };
@@ -43,6 +62,23 @@ class Vector3f {
         Vector3f();
         Vector3f(float s);
         Vector3f(float ix,float iy,float iz);
+
+        bool operator==(const Vector3f& other) const;
+
+        Vector3f& operator+=(const Vector3f& other);
+        Vector3f& operator+=(float f);
+        Vector3f& operator-=(const Vector3f& other);
+        Vector3f& operator-=(float f);
+        Vector3f& operator*=(float f);
+        Vector3f& operator/=(float f);
+        Vector3f& operator-();
+
+        Vector3f operator+(const Vector3f& other) const;
+        Vector3f operator+(float f) const;
+        Vector3f operator-(const Vector3f& other) const;
+        Vector3f operator-(float f) const;
+        Vector3f operator*(float f) const;
+        Vector3f operator/(float f) const;
 
         float lengthSquared() const;
         float length() const;

@@ -7,7 +7,7 @@ const Vector2f Vector2f::zero = Vector2f(0.f,0.f);
 const Vector2f Vector2f::one = Vector2f(1.f,1.f);
 
 Vector2f::Vector2f() {
-    x=0.f; y=0.f;
+    x = 0.f; y = 0.f;
 }
 
 Vector2f::Vector2f(float s) {
@@ -20,6 +20,76 @@ Vector2f::Vector2f(float ix,float iy) {
 
 Vector2f::Vector2f(const Vector2i& vi) {
     x = (float)vi.x; y = (float)vi.y;
+}
+
+Vector2f& Vector2f::operator+=(const Vector2f& other) {
+    x += other.x;
+    y += other.y;
+    return *this;
+}
+
+Vector2f& Vector2f::operator+=(float f) {
+    x += f;
+    y += f;
+    return *this;
+}
+
+Vector2f& Vector2f::operator-=(const Vector2f& other) {
+    x -= other.x;
+    y -= other.y;
+    return *this;
+}
+
+Vector2f& Vector2f::operator-=(float f) {
+    x -= f;
+    y -= f;
+    return *this;
+}
+
+Vector2f& Vector2f::operator*=(float f) {
+    x *= f;
+    y *= f;
+    return *this;
+}
+
+Vector2f& Vector2f::operator/=(float f) {
+    x /= f;
+    y /= f;
+    return *this;
+}
+
+Vector2f& Vector2f::operator-() {
+    x = -x;
+    y = -y;
+    return *this;
+}
+
+Vector2f Vector2f::operator+(const Vector2f& other) const {
+    return Vector2f(x + other.x, y + other.y);
+}
+
+Vector2f Vector2f::operator+(float f) const {
+    return Vector2f(x + f, y + f);
+}
+
+Vector2f Vector2f::operator-(const Vector2f& other) const {
+    return Vector2f(x - other.x, y - other.y);
+}
+
+Vector2f Vector2f::operator-(float f) const {
+    return Vector2f(x - f, y - f);
+}
+
+Vector2f Vector2f::operator*(float f) const {
+    return Vector2f(x * f, y * f);
+}
+
+Vector2f Vector2f::operator/(float f) const {
+    return Vector2f(x / f, y / f);
+}
+
+bool Vector2f::operator==(const PGE::Vector2f& other) const {
+    return x == other.x && y == other.y;
 }
 
 float Vector2f::lengthSquared() const {
@@ -75,6 +145,10 @@ float Vector2f::dotProduct(const Vector2f& b) const {
     return x*b.x+y*b.y;
 }
 
+Vector2f Vector2f::lerp(const Vector2f& oldValue, const Vector2f& newValue, float interpolation) {
+    return oldValue.add(newValue.subtract(oldValue).multiply(interpolation));
+}
+
 const Vector3f Vector3f::zero = Vector3f(0.f,0.f,0.f);
 const Vector3f Vector3f::one = Vector3f(1.f,1.f,1.f);
 
@@ -88,6 +162,83 @@ Vector3f::Vector3f(float s) {
 
 Vector3f::Vector3f(float ix,float iy,float iz) {
     x=ix; y=iy; z=iz;
+}
+
+Vector3f& Vector3f::operator+=(const Vector3f& other) {
+    x += other.x;
+    y += other.y;
+    z += other.z;
+    return *this;
+}
+
+Vector3f& Vector3f::operator+=(float f) {
+    x += f;
+    y += f;
+    z += f;
+    return *this;
+}
+
+Vector3f& Vector3f::operator-=(const Vector3f& other) {
+    x -= other.x;
+    y -= other.y;
+    z -= other.z;
+    return *this;
+}
+
+Vector3f& Vector3f::operator-=(float f) {
+    x -= f;
+    y -= f;
+    z -= f;
+    return *this;
+}
+
+Vector3f& Vector3f::operator*=(float f) {
+    x *= f;
+    y *= f;
+    z *= f;
+    return *this;
+}
+
+Vector3f& Vector3f::operator/=(float f) {
+    x /= f;
+    y /= f;
+    z /= f;
+    return *this;
+}
+
+Vector3f& Vector3f::operator-() {
+    x = -x;
+    y = -y;
+    z = -z;
+    return *this;
+}
+
+Vector3f Vector3f::operator+(const Vector3f& other) const {
+    return Vector3f(x + other.x, y + other.y, z + other.z);
+}
+
+Vector3f Vector3f::operator+(float f) const {
+    return Vector3f(x + f, y + f, z + f);
+}
+
+Vector3f Vector3f::operator-(const Vector3f& other) const {
+    return Vector3f(x - other.x, y - other.y, z - other.z);
+}
+
+Vector3f Vector3f::operator-(float f) const {
+    return Vector3f(x - f, y - f, z - f);
+}
+
+Vector3f Vector3f::operator*(float f) const {
+    return Vector3f(x * f, y * f, z * f);
+}
+
+Vector3f Vector3f::operator/(float f) const {
+    return Vector3f(x / f, y / f, z / f);
+}
+
+bool Vector3f::operator==(const PGE::Vector3f& other) const {
+    return x == other.x && y == other.y && z == other.z;
 }
 
 float Vector3f::lengthSquared() const {

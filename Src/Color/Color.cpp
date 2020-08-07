@@ -14,6 +14,10 @@ Color::Color(float r, float g, float b, float a) {
     red = r; green = g; blue = b; alpha = a;
 }
 
+bool Color::operator==(const Color& other) const {
+    return red == other.red && blue == other.blue && green == other.green && alpha == other.alpha;
+}
+
 int Color::getRedInt() const {
     return (int)(red*255.f);
 }

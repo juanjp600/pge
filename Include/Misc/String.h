@@ -25,10 +25,10 @@ public:
     #if defined(__APPLE__) && defined(__OBJC__)
     String(const NSString* nsstr);
     #endif
-    String(const String& a,const String& b);
+    String(const String& a, const String& b);
     String(char c);
     String(wchar w);
-    String(int i,bool hex=false);
+    String(int i, bool hex=false);
     String(float f);
     String(double d);
 
@@ -42,12 +42,12 @@ public:
     int size() const;
     int byteSize() const;
 
-    int findFirst(const String& fnd,int from=-1) const;
-    int findLast(const String& fnd,int from=-1) const;
+    int findFirst(const String& fnd, int from=-1) const;
+    int findLast(const String& fnd, int from=-1) const;
 
-    String substr(int start,int cnt=-1) const;
+    String substr(int start, int cnt=-1) const;
     char charAt(int pos) const;
-    String replace(const String& fnd,const String& rplace) const;
+    String replace(const String& fnd, const String& rplace) const;
     String toUpper() const;
     String toLower() const;
     String trim() const;
@@ -81,6 +81,7 @@ protected:
     void wCharToUtf8();
 };
 
+bool operator==(const String& a, const String& b);
 const String operator+(const String& a, const String& b);
 const String operator+(const char* a, const String& b);
 bool operator<(const String& a, const String& b);

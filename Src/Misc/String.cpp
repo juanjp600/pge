@@ -88,7 +88,7 @@ String::String(const NSString* nsstr) {
 }
 #endif
 
-String::String(const String& a,const String& b) {
+String::String(const String& a, const String& b) {
     int len = a.size()+b.size();
     wbuffer = new wchar[len+1];
     cbuffer = nullptr;
@@ -117,7 +117,7 @@ String::String(wchar w) {
     syncBuffers();
 }
 
-String::String(int i,bool hex) {
+String::String(int i, bool hex) {
     cbuffer = new char[32];
     wbuffer = nullptr;
     cCapacity = 32;
@@ -161,6 +161,11 @@ String& String::operator=(const String& other) {
     strSize = other.size();
     hashCode = other.getHashCode();
     return *this;
+}
+
+bool PGE::operator==(const String& a, const String& b) {
+    if (a.size() != b.size()) { return false; }
+    return a.getHashCode() == b.getHashCode();
 }
 
 const String PGE::operator+(const String& a, const String& b) {
@@ -425,7 +430,7 @@ float String::toFloat() const {
     return toFloat(discard);
 }
 
-String String::substr(int start,int cnt) const {
+String String::substr(int start, int cnt) const {
     if ((cnt<0) || (cnt+start>=size())) {
         cnt = size()-start;
     }
@@ -443,7 +448,7 @@ char String::charAt(int pos) const {
     return (char)(wstr()[pos]);
 }
 
-String String::replace(const String& fnd,const String& rplace) const {
+String String::replace(const String& fnd, const String& rplace) const {
     if (fnd.size()==0) { return *this; }
 
     int newSize = strSize;

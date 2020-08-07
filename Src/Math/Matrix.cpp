@@ -1,5 +1,6 @@
 #include <Math/Matrix.h>
 #include <math.h>
+#include <algorithm>
 
 using namespace PGE;
 
@@ -20,6 +21,44 @@ Matrix4x4f::Matrix4x4f(float aa,float ab,float ac,float ad,
     elements[1][0] = ba; elements[1][1] = bb; elements[1][2] = bc; elements[1][3] = bd;
     elements[2][0] = ca; elements[2][1] = cb; elements[2][2] = cc; elements[2][3] = cd;
     elements[3][0] = da; elements[3][1] = db; elements[3][2] = dc; elements[3][3] = dd;
+}
+
+Matrix4x4f& Matrix4x4f::operator*=(const Matrix4x4f& other) {
+    float intVal[4];
+    for (int i = 0; i < 4; i++) {
+        std::fill_n(intVal, 4, 0);
+        for (int j = 0; j < 4; j++) {
+            for (int k = 0; k < 4; k++) {
+                intVal[j] += elements[i][k] * other.elements[k][j];
+            }
+        }
+        memcpy(&elements[i], &intVal, sizeof(float) * 4);
+    }
+    return *this;
+}
+
+Matrix4x4f Matrix4x4f::operator*(const Matrix4x4f& other) const {
+    Matrix4x4f retVal;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            retVal.elements[i][j] = 0.f;
+            for (int k = 0; k < 4; k++) {
+                retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
+            }
+        }
+    }
+    return retVal;
+}
+
+bool Matrix4x4f::operator==(const Matrix4x4f& other) const {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (elements[i][j] != other.elements[i][j]) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 Matrix4x4f Matrix4x4f::transpose() const {
