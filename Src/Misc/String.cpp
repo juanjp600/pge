@@ -117,14 +117,49 @@ String::String(wchar w) {
     syncBuffers();
 }
 
-String::String(int i, bool hex) {
-    cbuffer = new char[32];
+String::String(int32_t i) { // TODO: Custom formatting?
+    cbuffer = new char[12];
     wbuffer = nullptr;
-    cCapacity = 32;
+    cCapacity = 12;
+    snprintf(cbuffer, 12, "%d", i);
+    dominantBuffer = DOMINANT_BUFFER::C;
+    syncBuffers();
+}
+
+String::String(int64_t i) {
+    cbuffer = new char[21];
+    wbuffer = nullptr;
+    cCapacity = 21;
+    snprintf(cbuffer, 21, "%lld", i);
+    dominantBuffer = DOMINANT_BUFFER::C;
+    syncBuffers();
+}
+
+String::String(uint32_t i, bool hex) {
+    wbuffer = nullptr;
     if (hex) {
-        snprintf(cbuffer,32,"%#010x",i);
+        cbuffer = new char[11];
+        cCapacity = 11;
+        snprintf(cbuffer, 11, "%#010x", i);
     } else {
-        snprintf(cbuffer,32,"%d",i);
+        cbuffer = new char[12];
+        cCapacity = 12;
+        snprintf(cbuffer, 12, "%u", i);
+    }
+    dominantBuffer = DOMINANT_BUFFER::C;
+    syncBuffers();
+}
+
+String::String(uint64_t i, bool hex) {
+    wbuffer = nullptr;
+    if (hex) {
+        cbuffer = new char[19];
+        cCapacity = 19;
+        snprintf(cbuffer, 19, "%#010llx", i);
+    } else {
+        cbuffer = new char[22];
+        cCapacity = 22;
+        snprintf(cbuffer, 22, "%llu", i);
     }
     dominantBuffer = DOMINANT_BUFFER::C;
     syncBuffers();

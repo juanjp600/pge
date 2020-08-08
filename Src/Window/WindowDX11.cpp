@@ -67,7 +67,7 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
 
     hResult = CreateDXGIFactory1(__uuidof(IDXGIFactory1),(LPVOID*)(&dxgiFactory));
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create DXGI factory (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create DXGI factory (HRESULT "+String((uint32_t)hResult,true)+")");
     }
 
     SDL_SysWMinfo sysWMinfo;
@@ -96,18 +96,18 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
                       &dxDevice,NULL,&dxContext);
 
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create D3D11 device (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create D3D11 device (HRESULT "+String((uint32_t)hResult,true)+")");
     }
 
     IDXGIDevice1* dxgiDevice = nullptr;
     hResult = dxDevice->QueryInterface(__uuidof(IDXGIDevice1),(LPVOID*)(&dxgiDevice));
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to initialize DXGI device (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to initialize DXGI device (HRESULT "+String((uint32_t)hResult,true)+")");
     }
 
     hResult = dxgiFactory->CreateSwapChain(dxgiDevice,&dxSwapChainDesc,&dxSwapChain);
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create DXGI swapchain (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create DXGI swapchain (HRESULT "+String((uint32_t)hResult,true)+")");
     }
 
     dxgiDevice->Release();
@@ -115,11 +115,11 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
     ID3D11Texture2D* backBuffer;
     hResult = dxSwapChain->GetBuffer(0, __uuidof( ID3D11Texture2D ), (LPVOID*)&backBuffer);
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to retrieve back buffer (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to retrieve back buffer (HRESULT "+String((uint64_t)hResult, true)+")");
     }
     hResult = dxDevice->CreateRenderTargetView(backBuffer, NULL, &dxBackBufferRtv);
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create back buffer target view (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create back buffer target view (HRESULT "+String((uint64_t)hResult, true)+")");
     }
     backBuffer->Release();
 
@@ -139,7 +139,7 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
     descDepth.MiscFlags = 0;
     hResult = dxDevice->CreateTexture2D(&descDepth, NULL, &dxZBufferTexture);
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create main depth stencil texture (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create main depth stencil texture (HRESULT "+String((uint64_t)hResult, true)+")");
     }
     
     // Create the depth stencil view
@@ -150,7 +150,7 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
     descDSV.Texture2D.MipSlice = 0;
     hResult = dxDevice->CreateDepthStencilView(dxZBufferTexture, &descDSV, &dxZBufferView);
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create main depth stencil view (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create main depth stencil view (HRESULT "+String((uint64_t)hResult, true)+")");
     }
 
     dxContext->OMSetRenderTargets(1, &dxBackBufferRtv, dxZBufferView);
@@ -166,7 +166,7 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
 
     hResult = dxDevice->CreateRasterizerState(&dxRasterizerStateDesc,&dxRasterizerState);
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create main rasterizer state (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create main rasterizer state (HRESULT "+String((uint64_t)hResult, true)+")");
     }
     dxContext->RSSetState(dxRasterizerState);
 
@@ -182,7 +182,7 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
 
     hResult = dxDevice->CreateBlendState(&dxBlendStateDesc,&dxBlendState);
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create main blend state (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create main blend state (HRESULT "+String((uint64_t)hResult, true)+")");
     }
 
     dxContext->OMSetBlendState(dxBlendState,0,0xffffffff);
@@ -209,7 +209,7 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
 
     hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE]);
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create ENABLED_WRITE depth stencil state (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create ENABLED_WRITE depth stencil state (HRESULT "+String((uint64_t)hResult, true)+")");
     }
     dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE], 0);
 
@@ -217,14 +217,14 @@ WindowDX11::WindowDX11(String c,int w,int h,bool fs) {
 
     hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE]);
     if (FAILED(hResult)) {
-        throwException("WindowDX11","Failed to create ENABLED_NOWRITE depth stencil state (HRESULT "+String(hResult,true)+")");
+        throwException("WindowDX11","Failed to create ENABLED_NOWRITE depth stencil state (HRESULT "+String((uint64_t)hResult, true)+")");
     }
 
     depthStencilDesc.DepthEnable = FALSE;
 
     hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED]);
     if (FAILED(hResult)) {
-        throwException("WindowDX11", "Failed to create DISABLED depth stencil state (HRESULT " + String(hResult, true) + ")");
+        throwException("WindowDX11", "Failed to create DISABLED depth stencil state (HRESULT " + String((uint64_t)hResult, true) + ")");
     }
 
     open = true;
@@ -293,7 +293,7 @@ void WindowDX11::update() {
 void WindowDX11::swap(bool vsyncEnabled) {
     HRESULT hResult = dxSwapChain->Present(vsyncEnabled ? 1 : 0, 0);
     if (FAILED(hResult)) {
-        throwException("swap","Failed to present (HRESULT "+String(hResult)+")");
+        throwException("swap","Failed to present (HRESULT "+String((uint64_t)hResult)+")");
     }
 }
 

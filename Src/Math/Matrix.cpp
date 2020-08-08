@@ -99,6 +99,16 @@ Vector3f Matrix4x4f::transform(const Vector3f& other) const {
     return Vector3f(retVal.x,retVal.y,retVal.z);
 }
 
+const String Matrix4x4f::toString() const {
+    PGE::String ret;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            ret = ret + elements[i][j] + (j != 4 ? ", " : "");
+        }
+        ret = ret + '\n';
+    }
+}
+
 Matrix4x4f Matrix4x4f::translate(const Vector3f& position) {
     return Matrix4x4f(1.f,0.f,0.f,0.f,
                       0.f,1.f,0.f,0.f,

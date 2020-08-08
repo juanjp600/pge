@@ -119,17 +119,17 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
 
     hResult = dxDevice->CreateVertexShader(vertexShaderBytecode.data(),sizeof(uint8_t)*vertexShaderBytecode.size(),NULL,&dxVertexShader);
     if (FAILED(hResult)) {
-        throwException("ShaderDX11","Failed to create vertex shader (filename: "+path.str()+"; HRESULT "+String(hResult,true)+")");
+        throwException("ShaderDX11","Failed to create vertex shader (filename: "+path.str()+"; HRESULT "+String((uint32_t)hResult,true)+")");
     }
 
     hResult = dxDevice->CreatePixelShader(fragmentShaderBytecode.data(),sizeof(uint8_t)*fragmentShaderBytecode.size(),NULL,&dxFragmentShader);
     if (FAILED(hResult)) {
-        throwException("ShaderDX11", "Failed to create fragment shader (filename: "+path.str()+"; HRESULT "+String(hResult,true)+")");
+        throwException("ShaderDX11", "Failed to create fragment shader (filename: "+path.str()+"; HRESULT "+String((uint32_t)hResult,true)+")");
     }
 
     hResult = dxDevice->CreateInputLayout(dxVertexInputElemDesc.data(), dxVertexInputElemDesc.size(), getDxVsCode(), getDxVsCodeLen() * sizeof(uint8_t), &dxVertexInputLayout);
     if (FAILED(hResult)) {
-        throwException("ShaderDX11", "Failed to create input layout (filename: "+path.str()+"; HRESULT "+String(hResult,true)+")");
+        throwException("ShaderDX11", "Failed to create input layout (filename: "+path.str()+"; HRESULT "+String((uint32_t)hResult,true)+")");
     }
 
     delete[] buf;
@@ -298,7 +298,7 @@ ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics,String nm,int sz) {
 
     hResult = ((WindowDX11*)(graphics->getWindow()))->getDxDevice()->CreateBuffer(&cBufferDesc,&cBufferSubresourceData,&dxCBuffer);
     if (FAILED(hResult)) {
-        throw Exception("ShaderDX11::ShaderDX11","Failed to create CBuffer (name: "+nm+", size: "+String(sz,false)+")");
+        throw Exception("ShaderDX11::ShaderDX11","Failed to create CBuffer (name: "+nm+", size: "+String((uint32_t)sz,false)+")");
     }
 
     dxContext = ((WindowDX11*)(graphics->getWindow()))->getDxContext();

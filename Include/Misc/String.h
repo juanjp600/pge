@@ -28,7 +28,10 @@ public:
     String(const String& a, const String& b);
     String(char c);
     String(wchar w);
-    String(int i, bool hex=false);
+    String(int32_t i);
+    String(int64_t i);
+    String(uint32_t i, bool hex = false);
+    String(uint64_t i, bool hex = false);
     String(float f);
     String(double d);
 

@@ -145,6 +145,10 @@ float Vector2f::dotProduct(const Vector2f& b) const {
     return x*b.x+y*b.y;
 }
 
+const String Vector2f::toString() const {
+    return "Vector2f(" + PGE::String(x) + ", " + y + ")";
+}
+
 Vector2f Vector2f::lerp(const Vector2f& oldValue, const Vector2f& newValue, float interpolation) {
     return oldValue.add(newValue.subtract(oldValue).multiply(interpolation));
 }
@@ -292,6 +296,10 @@ float Vector3f::dotProduct(const Vector3f& b) const {
 
 Vector3f Vector3f::crossProduct(const Vector3f& b) const {
     return Vector3f(y*b.z-z*b.y,z*b.x-x*b.z,x*b.y-y*b.x);
+}
+
+const String Vector3f::toString() const {
+    return "Vector3f(" + PGE::String(x) + ", " + y + ", " + z + ")";
 }
 
 Vector3f Vector3f::lerp(const Vector3f& oldValue, const Vector3f& newValue, float interpolation) {
