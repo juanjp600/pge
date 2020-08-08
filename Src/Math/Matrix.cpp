@@ -107,6 +107,7 @@ const String Matrix4x4f::toString() const {
         }
         ret = ret + '\n';
     }
+    return ret;
 }
 
 Matrix4x4f Matrix4x4f::translate(const Vector3f& position) {
