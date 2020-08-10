@@ -14,6 +14,10 @@ class FileUtil {
         // Attempts to create a folder in the given path, returns whether it suceeds.
         static bool createDirectory(const FilePath& path);
 
+        // Creates a folder in the given path if it doesn't already exist.
+        // Returns -1 if the directory already existed, 0 on failure and 1 on success of creation.
+        static int createDirectoryIfNotExists(const FilePath& path);
+
         // OS-dependant folder for storing external files.
         static String getDataFolder();
 

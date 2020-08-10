@@ -8,6 +8,7 @@
 
 #ifdef WINDOWS
 #include <Windows.h>
+#include <ShlObj_core.h>
 #else
 #include <sys/stat.h>
 #include <dirent.h>
@@ -46,14 +47,29 @@ bool FileUtil::createDirectory(const FilePath& path) {
 #endif
 }
 
+int FileUtil::createDirectoryIfNotExists(const FilePath& path) {
+    if (exists(path)) {
+        return -1;
+    } else {
+        return createDirectory(path);
+    }
+}
+
 String FileUtil::getDataFolder() {
-    // TODO: Windows and Linux.
+    // TODO: Linux.
 #if defined(__APPLE__) && defined(__OBJC__)
     // Volumes/User/*user*/Library/Application Support/
     NSArray* filePaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString* appSupportDir = [filePaths firstObject];
 
     return String([appSupportDir cStringUsingEncoding: NSUTF8StringEncoding]) + "/";
+#elif defined(WINDOWS)
+    // Users/*user*/AppData/Roaming/ 
+    PWSTR filePath;
+    SHGetKnownFolderPath(FOLDERID_RoamingAppData, KF_FLAG_DEFAULT, NULL, &filePath);
+    PGE::String path = filePath;
+    CoTaskMemFree(filePath);
+    return path.replace('\\', '/') + '/';
 #endif
 
     return PGE::String();
