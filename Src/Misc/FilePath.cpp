@@ -31,6 +31,13 @@ FilePath::FilePath(const FilePath& a, const String& b) {
     name = a.str() + b;
 }
 
+FilePath FilePath::validateAsDirectory() const {
+    if (str().charAt(size() - 1) != '/') {
+        return *this + "/";
+    }
+    return *this;
+}
+
 const String& FilePath::str() const {
     return name;
 }

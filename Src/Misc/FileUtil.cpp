@@ -40,8 +40,7 @@ bool FileUtil::createDirectory(const FilePath& path) {
     if (CreateDirectoryW(path.wstr(), NULL)) {
         return true;
     }
-    GetLastError(); //TODO: log this or some shit, idgaf
-    return false;
+    throw new std::runtime_error(PGE::String((int) GetLastError()).cstr());
 #else
     return mkdir(path.cstr(), S_IRWXU) == 0;
 #endif
@@ -75,44 +74,83 @@ String FileUtil::getDataFolder() {
     return PGE::String();
 }
 
-std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
-    std::vector<FilePath> files;
-    
+std::vector<FilePath> FileUtil::enumerateFolders(const FilePath& path) {
+    std::vector<FilePath> folders;
+
 #if WINDOWS
+    HANDLE hFind;
     WIN32_FIND_DATAW ffd;
-    LARGE_INTEGER filesize;
-    size_t length_of_arg;
-    HANDLE hFind = INVALID_HANDLE_VALUE;
-    DWORD dwError = 0;
 
-    FilePath filePath = path;
-    if (filePath.str().charAt(filePath.size() - 1) != '/') {
-        filePath = FilePath(path, "/");
-    }
+    FilePath filePath = path.validateAsDirectory();
 
-    FilePath searchQuery = FilePath(filePath, "*");
-
-    hFind = FindFirstFileW(searchQuery.wstr(), &ffd);
+    hFind = FindFirstFileW(FilePath(filePath, "*").wstr(), &ffd);
 
     if (hFind == INVALID_HANDLE_VALUE) {
-        return files;
+        throw new std::runtime_error(PGE::String((int) GetLastError()).cstr());
     }
 
-    while (true) {
+    do {
         String fileName = ffd.cFileName;
-        if (fileName.equals(".") || fileName.equals(".."))
-        {
-            if (!FindNextFileW(hFind, &ffd)) {
-                break;
-            }
+        if (fileName.equals(".") || fileName.equals("..")) {
             continue;
         }
 
         FilePath newPath = FilePath(filePath, fileName);
         if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
-            if (newPath.str().charAt(newPath.size() - 1) != '/') {
-                newPath = FilePath(newPath, "/");
+            folders.push_back(newPath.validateAsDirectory());
+        }
+    } while (FindNextFileW(hFind, &ffd));
+
+    FindClose(hFind);
+#else
+    DIR* dir;
+    struct dirent* currentEntry;
+
+    dir = opendir(path.cstr());
+
+    if (dir == NULL) {
+        throw new std::runtime_error(path.cstr());
+    }
+
+    while ((currentEntry = readdir(dir)) != NULL) {
+        if (currentEntry->d_type == DT_DIR) {
+            // Skip '.' and '..'.
+            if ((strcmp(currentEntry->d_name, ".")) != 0 && strcmp(currentEntry->d_name, "..") != 0) {
+                folders.push_back(FilePath(path, currentEntry->d_name).validateAsDirectory());
+            } else {
+                continue;
             }
+        }
+    }
+    closedir(dir);
+#endif
+
+    return folders;
+}
+
+std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
+    std::vector<FilePath> files;
+    
+#if WINDOWS
+    HANDLE hFind;
+    WIN32_FIND_DATAW ffd;
+
+    FilePath filePath = path.validateAsDirectory();
+
+    hFind = FindFirstFileW(FilePath(filePath, "*").wstr(), &ffd);
+
+    if (hFind == INVALID_HANDLE_VALUE) {
+        throw new std::runtime_error(PGE::String((int)GetLastError()).cstr());
+    }
+
+    do {
+        String fileName = ffd.cFileName;
+        if (fileName.equals(".") || fileName.equals("..")) {
+            continue;
+        }
+
+        FilePath newPath = FilePath(filePath, fileName);
+        if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
             std::vector<FilePath> nestedFiles = enumerateFiles(newPath);
             for (int i = 0; i < nestedFiles.size(); i++) {
                 files.push_back(nestedFiles[i]);
@@ -120,34 +158,27 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
         } else {
             files.push_back(newPath);
         }
-
-        if (!FindNextFileW(hFind, &ffd)) {
-            break;
-        }
-    }
+    } while (FindNextFileW(hFind, &ffd));
 
     FindClose(hFind);
 #else
-    DIR *dir;
+    DIR* dir;
     struct dirent* currentEntry;
 
     dir = opendir(path.cstr());
     
     if (dir == NULL) {
-        return files;
+        throw new std::runtime_error(path.cstr());
     }
     
     while ((currentEntry = readdir(dir)) != NULL) {
-        if (currentEntry->d_type == DT_DIR){ //if item is a directory, print its contents
+        if (currentEntry->d_type == DT_DIR) { // If item is a directory, print its contents.
 //            char path[1024];
-            //skip '.' and '..'
+            // Skip '.' and '..'.
             if ((strcmp(currentEntry->d_name, ".")) != 0 && strcmp(currentEntry->d_name, "..") != 0) {
 //                printf("[%s]\n","", currentEntry->d_name);
                 FilePath newPath = FilePath(path);
                 newPath = FilePath(newPath, currentEntry->d_name);
-                if (newPath.str().charAt(newPath.size() - 1) != '/') {
-                    newPath = FilePath(newPath, "/");
-                }
                 std::vector<FilePath> nestedFiles = enumerateFiles(newPath);
                 for (int i = 0; i < nestedFiles.size(); i++) {
                     files.push_back(nestedFiles[i]);
@@ -160,7 +191,6 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
         }
     }
     closedir(dir);
-
 #endif
 
     return files;

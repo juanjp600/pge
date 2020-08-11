@@ -16,6 +16,8 @@ class FilePath {
         static FilePath fromStr(const String& str);
         FilePath(const FilePath& a, const String& b);
 
+        FilePath validateAsDirectory() const;
+
         const String& str() const;
         const char* cstr() const;
         const wchar* wstr() const;

@@ -21,6 +21,9 @@ class FileUtil {
         // OS-dependant folder for storing external files.
         static String getDataFolder();
 
+        // Returns all direct subdirectories.
+        static std::vector<FilePath> enumerateFolders(const FilePath& path);
+
         // Enumerates subdirectories.
         static std::vector<FilePath> enumerateFiles(const FilePath& path);
 
