@@ -1,6 +1,7 @@
-#include <iostream>
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
+#else
+#include <filesystem>
 #endif
 
 #include <Misc/FilePath.h>
@@ -17,12 +18,16 @@ String FilePath::getResourcePath() {
     NSBundle* bundle = [NSBundle mainBundle];
     return String(bundle.resourcePath, "/");
 #endif
-    return "";
+    return String(std::filesystem::current_path().c_str()) + "/";
 }
 
 FilePath FilePath::fromStr(const String& str) {
     FilePath fn;
-    fn.name = getResourcePath().replace("\\", "/") + str;
+    if (str.charAt(1) == ':') {
+        fn.name = str;
+    } else {
+        fn.name = getResourcePath().replace("\\", "/") + str;
+    }
     
     return fn;
 }
