@@ -15,16 +15,17 @@ class Texture {
             R32F
         };
 
-        virtual bool isRenderTarget() const =0;
+        virtual bool isRenderTarget() const = 0;
 
         int getWidth() const; int getHeight() const;
         
-        virtual void* getNative() const =0;
+        virtual void* getNative() const = 0;
 
         static Texture* load(Graphics* gfx, const FilePath& filename);
-        static Texture* load(Graphics* gfx, const FilePath& filename,ThreadManager* threadManager);
-        static Texture* create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer,FORMAT fmt);
+        static Texture* load(Graphics* gfx, const FilePath& filename, ThreadManager* threadManager);
+        static Texture* create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer, FORMAT fmt);
         virtual ~Texture(){};
+
     protected:
         virtual void cleanup() =0;
         virtual void throwException(String func, String details) =0;

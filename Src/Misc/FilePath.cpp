@@ -9,7 +9,7 @@
 using namespace PGE;
 
 FilePath::FilePath() {
-    name = String("");
+    name = "";
 }
 
 String FilePath::getResourcePath() {
@@ -17,7 +17,7 @@ String FilePath::getResourcePath() {
     NSBundle* bundle = [NSBundle mainBundle];
     return String(bundle.resourcePath, "/");
 #endif
-    return String();
+    return "";
 }
 
 FilePath FilePath::fromStr(const String& str) {
@@ -77,10 +77,10 @@ bool FilePath::isEmpty() const {
     return name.isEmpty();
 }
 
-const FilePath operator+(const FilePath& a, const String& b) {
+const FilePath PGE::operator+(const FilePath& a, const String& b) {
     return FilePath(a, b);
 }
 
-std::ostream& operator<<(std::ostream& os, const FilePath& fn) {
+std::ostream& PGE::operator<<(std::ostream& os, const FilePath& fn) {
     return os.write(fn.cstr(), fn.size());
 }
