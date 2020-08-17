@@ -62,6 +62,7 @@ public:
     String unHex() const;
 
     String& operator=(const String& other);
+    String& operator+=(const String& other);
 
     long long getHashCode() const;
     bool equals(const String& other) const;

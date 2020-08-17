@@ -198,6 +198,12 @@ String& String::operator=(const String& other) {
     return *this;
 }
 
+String& String::operator+=(const String& other) {
+    if (&other == this) return *this;
+    *this=String(*this, other);
+    return *this;
+}
+
 bool PGE::operator==(const String& a, const String& b) {
     if (a.size() != b.size()) { return false; }
     return a.getHashCode() == b.getHashCode();
