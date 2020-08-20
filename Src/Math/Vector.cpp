@@ -92,6 +92,10 @@ bool Vector2f::operator==(const PGE::Vector2f& other) const {
     return x == other.x && y == other.y;
 }
 
+bool Vector2f::operator!=(const PGE::Vector2f& other) const {
+    return x != other.x || y != other.y;
+}
+
 float Vector2f::lengthSquared() const {
     return x*x+y*y;
 }
@@ -241,8 +245,12 @@ Vector3f Vector3f::operator/(float f) const {
     return Vector3f(x / f, y / f, z / f);
 }
 
-bool Vector3f::operator==(const PGE::Vector3f& other) const {
+bool Vector3f::operator==(const Vector3f& other) const {
     return x == other.x && y == other.y && z == other.z;
+}
+
+bool Vector3f::operator!=(const Vector3f& other) const {
+    return x != other.x || y != other.y || z != other.z;
 }
 
 float Vector3f::lengthSquared() const {

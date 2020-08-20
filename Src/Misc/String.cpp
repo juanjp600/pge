@@ -209,6 +209,10 @@ bool PGE::operator==(const String& a, const String& b) {
     return a.getHashCode() == b.getHashCode();
 }
 
+bool PGE::operator!=(const String& a, const String& b) {
+    return a.getHashCode() != b.getHashCode();
+}
+
 const String PGE::operator+(const String& a, const String& b) {
     return String(a, b);
 }

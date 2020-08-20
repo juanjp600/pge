@@ -17,6 +17,7 @@ class Vector2f {
         Vector2f(const Vector2i& vi);
 
         bool operator==(const Vector2f& other) const;
+        bool operator!=(const Vector2f& other) const;
 
         Vector2f& operator+=(const Vector2f& other);
         Vector2f& operator+=(float f);
@@ -68,6 +69,7 @@ class Vector3f {
         Vector3f(float ix,float iy,float iz);
 
         bool operator==(const Vector3f& other) const;
+        bool operator!=(const Vector3f& other) const;
 
         Vector3f& operator+=(const Vector3f& other);
         Vector3f& operator+=(float f);

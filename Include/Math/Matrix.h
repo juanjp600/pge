@@ -19,6 +19,7 @@ class Matrix4x4f {
         Matrix4x4f operator*(const Matrix4x4f& other) const;
 
         bool operator==(const Matrix4x4f& other) const;
+        bool operator!=(const Matrix4x4f& other) const;
 
         Matrix4x4f transpose() const;
 

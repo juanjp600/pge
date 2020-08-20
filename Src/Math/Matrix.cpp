@@ -61,6 +61,17 @@ bool Matrix4x4f::operator==(const Matrix4x4f& other) const {
     return true;
 }
 
+bool Matrix4x4f::operator!=(const Matrix4x4f& other) const {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (elements[i][j] == other.elements[i][j]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 Matrix4x4f Matrix4x4f::transpose() const {
     Matrix4x4f retVal;
     for (int i=0;i<4;i++) {
