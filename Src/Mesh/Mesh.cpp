@@ -15,14 +15,15 @@ Vertex::Vertex(const Vertex& other) {
 Vertex& Vertex::operator=(const Vertex& other) {
     for (int i = 0; i < other.properties.size(); i++) {
         bool found = false;
+        insertProperty(other.properties[i].hashCode);
         for (int j = 0; j < properties.size(); j++) {
             if (properties[j].hashCode == other.properties[i].hashCode) {
                 properties[j].copyOtherValue(other.properties[i]);
                 found = true;
+                break;
             }
         }
-        if (found) { continue; }
-        properties.push_back(Property(other.properties[i]));
+        if (!found) { throw PGE::Exception("Vertex::operator=", "Failed to copy "+other.properties[i].hashCode); }
     }
     return *this;
 }
@@ -67,7 +68,7 @@ void Vertex::Property::copyOtherValue(const Vertex::Property& other) {
 }
 
 const Vertex::Property& Vertex::getProperty(const String& name,int& indexHint) {
-    if (properties[indexHint].hashCode == name.getHashCode()) {
+    if ((indexHint < properties.size()) && properties[indexHint].hashCode == name.getHashCode()) {
         return properties[indexHint];
     }
     for (int i=0;i<properties.size();i++) {
@@ -92,6 +93,12 @@ Vertex::Property& Vertex::insertProperty(long long hashCode) {
     Property prop;
     prop.hashCode = hashCode;
     properties.insert(properties.begin()+insertPos,prop);
+
+    for (int i=0;i<properties.size()-1;i++) {
+        if (properties[i].hashCode > properties[i+1].hashCode) {
+            throw PGE::Exception("Vertex::insertProperty", "Incorrect vertex property order");
+        }
+    }
 
     return properties[insertPos];
 }
