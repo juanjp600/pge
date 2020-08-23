@@ -18,6 +18,14 @@ Rectanglef::Rectanglef(const Rectanglei& ri) {
     tl = Vector2f(ri.topLeftCorner()); br = Vector2f(ri.bottomRightCorner());
 }
 
+bool Rectanglef::operator==(const Rectanglef& other) const {
+    return topLeftCorner() == other.topLeftCorner() && bottomRightCorner() == other.bottomRightCorner();
+}
+
+bool Rectanglef::operator!=(const Rectanglef& other) const {
+    return topLeftCorner() != other.topLeftCorner() || bottomRightCorner() != other.bottomRightCorner();
+}
+
 void Rectanglef::repair() {
     if (tl.x>br.x) {
         float tlx = tl.x; float brx = br.x;

@@ -14,6 +14,9 @@ class Rectanglef {
         Rectanglef(float il,float it,float ir,float ib);
         Rectanglef(const Rectanglei& ri);
 
+        bool operator==(const Rectanglef& other) const;
+        bool operator!=(const Rectanglef& other) const;
+
         void addPoint(float x,float y);
         void addPoint(const Vector2f& point);
 
@@ -24,6 +27,7 @@ class Rectanglef {
 
         bool isPointInside(const Vector2f& p) const;
         bool intersects(const Rectanglef& other) const;
+
     private:
         Vector2f tl; Vector2f br;
         void repair();
