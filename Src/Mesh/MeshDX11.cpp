@@ -59,7 +59,7 @@ void MeshDX11::updateInternalData() {
     bool recalculateStride = true;
     stride = 0;
     const std::vector<String>& vertexInputElems = ((ShaderDX11*)material->getShader())->getVertexInputElems();
-    int vertexInputElemCount = vertexInputElems.size();
+    int vertexInputElemCount = (int)vertexInputElems.size();
     int* indexHints = new int[vertexInputElemCount];
     for (int j=0;j<vertexInputElemCount;j++) {
         indexHints[j] = 0;
@@ -70,27 +70,27 @@ void MeshDX11::updateInternalData() {
             switch (prop.type) {
                 case Vertex::PROPERTY_TYPE::FLOAT: {
                     if (recalculateStride) { stride += sizeof(float); }
-                    int offset = dxVertexData.size();
+                    int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+sizeof(float));
                     memcpy(&(dxVertexData[offset]),&(prop.value.floatVal),sizeof(float));
                 } break;
                 case Vertex::PROPERTY_TYPE::UINT: {
                     if (recalculateStride) { stride += sizeof(uint32_t); }
-                    int offset = dxVertexData.size();
+                    int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+sizeof(uint32_t));
                     uint32_t uint = prop.value.uintVal;
                     memcpy(&(dxVertexData[offset]),&uint,sizeof(uint32_t));
                 } break;
                 case Vertex::PROPERTY_TYPE::VECTOR2F: {
                     if (recalculateStride) { stride += sizeof(float)*2; }
-                    int offset = dxVertexData.size();
+                    int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+(sizeof(float)*2));
                     memcpy(&(dxVertexData[offset]),&(prop.value.vector2fVal.x),sizeof(float));
                     memcpy(&(dxVertexData[offset])+sizeof(float),&(prop.value.vector2fVal.y),sizeof(float));
                 } break;
                 case Vertex::PROPERTY_TYPE::VECTOR3F: {
                     if (recalculateStride) { stride += sizeof(float)*3; }
-                    int offset = dxVertexData.size();
+                    int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+(sizeof(float)*3));
                     memcpy(&(dxVertexData[offset]),&(prop.value.vector3fVal.x),sizeof(float));
                     memcpy(&(dxVertexData[offset])+sizeof(float),&(prop.value.vector3fVal.y),sizeof(float));
@@ -98,7 +98,7 @@ void MeshDX11::updateInternalData() {
                 } break;
                 case Vertex::PROPERTY_TYPE::VECTOR4F: {
                     if (recalculateStride) { stride += sizeof(float)*4; }
-                    int offset = dxVertexData.size();
+                    int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+(sizeof(float)*4));
                     memcpy(&(dxVertexData[offset]),&(prop.value.vector4fVal.x),sizeof(float));
                     memcpy(&(dxVertexData[offset])+sizeof(float),&(prop.value.vector4fVal.y),sizeof(float));
@@ -107,7 +107,7 @@ void MeshDX11::updateInternalData() {
                 } break;
                 case Vertex::PROPERTY_TYPE::COLOR: {
                     if (recalculateStride) { stride += sizeof(float)*4; }
-                    int offset = dxVertexData.size();
+                    int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+(sizeof(float)*4));
                     memcpy(&(dxVertexData[offset]),&(prop.value.colorVal.red),sizeof(float));
                     memcpy(&(dxVertexData[offset])+sizeof(float),&(prop.value.colorVal.green),sizeof(float));
@@ -121,10 +121,10 @@ void MeshDX11::updateInternalData() {
     delete[] indexHints;
 
     for (int i=0;i<primitiveCount;i++) {
-        dxIndexData.push_back(primitives[i].a);
-        dxIndexData.push_back(primitives[i].b);
+        dxIndexData.push_back((WORD)primitives[i].a);
+        dxIndexData.push_back((WORD)primitives[i].b);
         if (primitiveType==Primitive::TYPE::TRIANGLE) {
-            dxIndexData.push_back(primitives[i].c);
+            dxIndexData.push_back((WORD)primitives[i].c);
         }
     }
 
@@ -150,7 +150,7 @@ void MeshDX11::uploadInternalData() {
     if (dxVertexData.size() > 0) {
         ZeroMemory(&dxVertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
         dxVertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-        dxVertexBufferDesc.ByteWidth = dxVertexData.size();
+        dxVertexBufferDesc.ByteWidth = (UINT)dxVertexData.size();
         dxVertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
         dxVertexBufferDesc.CPUAccessFlags = 0;
 
@@ -166,7 +166,7 @@ void MeshDX11::uploadInternalData() {
     if (dxIndexData.size() > 0) {
         ZeroMemory(&dxIndexBufferDesc, sizeof(D3D11_BUFFER_DESC));
         dxIndexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-        dxIndexBufferDesc.ByteWidth = sizeof(WORD)*dxIndexData.size();
+        dxIndexBufferDesc.ByteWidth = sizeof(WORD)*(UINT)dxIndexData.size();
         dxIndexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
         dxIndexBufferDesc.CPUAccessFlags = 0;
 

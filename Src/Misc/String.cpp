@@ -332,7 +332,7 @@ void String::utf8ToWChar() {
 static int convertWCharToUtf8(wchar chr, char* result) {
     //fits in standard ASCII, just return the char as-is
     if ((chr & 0x7f) == chr) {
-        if (result != nullptr) { result[0] = chr; }
+        if (result != nullptr) { result[0] = (char)chr; }
         return 1;
     }
 
@@ -416,7 +416,7 @@ int String::size() const {
 }
 
 int String::byteSize() const {
-    return strlen(cstr());
+    return (int)strlen(cstr());
 }
 
 int String::findFirst(const String& fnd, int from) const {
