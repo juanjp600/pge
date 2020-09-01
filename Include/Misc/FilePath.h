@@ -20,7 +20,7 @@ class FilePath {
 
         const String& str() const;
         const char* cstr() const;
-        const wchar* wstr() const;
+        void wstr(wchar* buffer) const;
 
         String getExtension() const;
 

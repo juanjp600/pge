@@ -114,7 +114,7 @@ const String Matrix4x4f::toString() const {
     PGE::String ret;
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            ret = ret + elements[i][j] + (j != 3 ? ", " : "");
+            ret = ret + String::fromFloat(elements[i][j]) + (j != 3 ? ", " : "");
         }
         ret = ret + '\n';
     }

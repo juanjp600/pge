@@ -37,10 +37,15 @@ bool FileUtil::createDirectory(const FilePath& path) {
     SECURITY_ATTRIBUTES attrs;
     attrs.bInheritHandle = false;
     attrs.nLength = 0;
-    if (CreateDirectoryW(path.wstr(), NULL)) {
+    wchar* wstr = new wchar[path.size() + 1];
+    path.wstr(wstr);
+    bool success = CreateDirectoryW(wstr, NULL);
+    delete[] wstr;
+    if (success) {
         return true;
+    } else {
+        throw new std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
     }
-    throw new std::runtime_error(PGE::String((int) GetLastError()).cstr());
 #else
     return mkdir(path.cstr(), S_IRWXU) == 0;
 #endif
@@ -83,10 +88,14 @@ std::vector<FilePath> FileUtil::enumerateFolders(const FilePath& path) {
 
     FilePath filePath = path.validateAsDirectory();
 
-    hFind = FindFirstFileW(FilePath(filePath, "*").wstr(), &ffd);
+    FilePath anyPath = filePath + "*";
+    wchar* wstr = new wchar[anyPath.size() + 1];
+    anyPath.wstr(wstr);
+    hFind = FindFirstFileW(wstr, &ffd);
+    //delete[] wstr;
 
     if (hFind == INVALID_HANDLE_VALUE) {
-        throw new std::runtime_error(PGE::String((int) GetLastError()).cstr());
+        throw new std::runtime_error(PGE::String::fromInt((int) GetLastError()).cstr());
     }
 
     do {
@@ -137,10 +146,14 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
 
     FilePath filePath = path.validateAsDirectory();
 
-    hFind = FindFirstFileW(FilePath(filePath, "*").wstr(), &ffd);
+    FilePath anyPath = filePath + "*";
+    wchar* wstr = new wchar[anyPath.size() + 1];
+    anyPath.wstr(wstr);
+    hFind = FindFirstFileW(wstr, &ffd);
+    delete[] wstr;
 
     if (hFind == INVALID_HANDLE_VALUE) {
-        throw new std::runtime_error(PGE::String((int)GetLastError()).cstr());
+        throw new std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
     }
 
     do {

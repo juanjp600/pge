@@ -89,7 +89,7 @@ void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
     TextureDX11* maxSizeTexture = (TextureDX11*)renderTargets[0];
     for (int i=0;i<renderTargets.size();i++) {
         if (!renderTargets[i]->isRenderTarget()) {
-            throwException("setRenderTargets","renderTargets["+String(i)+"] is not a valid render target");
+            throwException("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
         }
         currentRenderTargetViews.push_back(((TextureDX11*)renderTargets[i])->getRtv());
         if (renderTargets[i]->getWidth()+renderTargets[i]->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
@@ -99,8 +99,8 @@ void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
     for (int i=0;i<renderTargets.size();i++) {
         if (renderTargets[i]->getWidth()>maxSizeTexture->getWidth() || renderTargets[i]->getHeight()>maxSizeTexture->getHeight()) {
             throwException("setRenderTargets",
-                "Render target sizes are incompatible ("+String(maxSizeTexture->getWidth())+","+String(maxSizeTexture->getHeight())+" vs "+
-                                                         String(renderTargets[i]->getWidth())+","+String(renderTargets[i]->getHeight())+")");
+                "Render target sizes are incompatible ("+String::fromInt(maxSizeTexture->getWidth())+","+String::fromInt(maxSizeTexture->getHeight())+" vs "+
+                                                         String::fromInt(renderTargets[i]->getWidth())+","+String::fromInt(renderTargets[i]->getHeight())+")");
         }
     }
     currentDepthStencilView = maxSizeTexture->getZBufferView();

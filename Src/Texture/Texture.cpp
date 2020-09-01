@@ -39,7 +39,7 @@ BYTE* PGE::loadFIBuffer(const FilePath& filename,int& width,int& height,int& rea
         temp = image;
         image = FreeImage_Rescale(temp,po2w,po2h,FILTER_BILINEAR);
         if (image==nullptr) {
-            throw Exception("loadFIBuffer","Failed to rescale "+filename.str()+" ("+String(w)+","+String(h)+" to "+String(po2w)+","+String(po2h)+")");
+            throw Exception("loadFIBuffer","Failed to rescale "+filename.str()+" ("+String::fromInt(w)+","+String::fromInt(h)+" to "+String::fromInt(po2w)+","+String::fromInt(po2h)+")");
         }
         FreeImage_Unload(temp);
     }

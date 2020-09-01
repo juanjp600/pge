@@ -51,8 +51,8 @@ const char* FilePath::cstr() const {
     return name.cstr();
 }
 
-const wchar* FilePath::wstr() const {
-    return name.wstr();
+void FilePath::wstr(wchar* buffer) const {
+    name.wstr(buffer);
 }
 
 String FilePath::getExtension() const {
