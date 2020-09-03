@@ -37,7 +37,7 @@ bool FileUtil::createDirectory(const FilePath& path) {
     SECURITY_ATTRIBUTES attrs;
     attrs.bInheritHandle = false;
     attrs.nLength = 0;
-    wchar* wstr = new wchar[path.size() + 1];
+    wchar* wstr = new wchar[path.length() + 1];
     path.wstr(wstr);
     bool success = CreateDirectoryW(wstr, NULL);
     delete[] wstr;
@@ -89,7 +89,7 @@ std::vector<FilePath> FileUtil::enumerateFolders(const FilePath& path) {
     FilePath filePath = path.validateAsDirectory();
 
     FilePath anyPath = filePath + "*";
-    wchar* wstr = new wchar[anyPath.size() + 1];
+    wchar* wstr = new wchar[anyPath.length() + 1];
     anyPath.wstr(wstr);
     hFind = FindFirstFileW(wstr, &ffd);
     //delete[] wstr;
@@ -147,7 +147,7 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
     FilePath filePath = path.validateAsDirectory();
 
     FilePath anyPath = filePath + "*";
-    wchar* wstr = new wchar[anyPath.size() + 1];
+    wchar* wstr = new wchar[anyPath.length() + 1];
     anyPath.wstr(wstr);
     hFind = FindFirstFileW(wstr, &ffd);
     delete[] wstr;
@@ -222,7 +222,7 @@ std::vector<String> FileUtil::readLines(const FilePath& path, bool includeEmptyL
         String str = tempBuf;
         str = str.replace("\n", "").replace("\r", "");
         file.getline(tempBuf, sizeof(char) * 1024);
-        if ((!includeEmptyLines) && (str.size() <= 0)) { continue; }
+        if ((!includeEmptyLines) && (str.length() <= 0)) { continue; }
         retVal.push_back(str);
     }
 

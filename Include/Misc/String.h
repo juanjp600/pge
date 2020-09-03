@@ -41,14 +41,14 @@ class String {
         int toInt() const;
         float toFloat() const;
 
-        int size() const;
-        int byteSize() const;
+        int length() const;
+        int byteLength() const;
 
         int findFirst(const String& fnd, int from=-1) const;
         int findLast(const String& fnd, int from=-1) const;
 
         String substr(int start, int cnt=-1) const;
-        char charAt(int pos) const;
+        wchar charAt(int pos) const;
         String replace(const String& fnd, const String& rplace) const;
         String toUpper() const;
         String toLower() const;
@@ -71,13 +71,24 @@ class String {
     private:
         String(int size);
 
-        char* cbuffer = nullptr;
         long long hashCode;
-        int cCapacity = 16;
-        int strSize = 0;
+        int cCapacity = 0;
+        int strByteLength;
+        int strLength;
 
-        void syncBuffers();
-        void wCharToUtf8(const wchar* wbuffer);
+        const static int shortStrCapacity = 16;
+
+        union _StringData {
+            char shortStr[shortStrCapacity];
+            char* longStr;
+            _StringData();
+        } data;
+
+        void recalculateHashAndLength();
+        void wCharToUtf8Str(const wchar* wbuffer);
+        static wchar utf8ToWChar(const char* cbuffer);
+        void reallocate(int size);
+        char* cstrNoConst();
     };
 
     bool operator==(const String& a, const String& b);

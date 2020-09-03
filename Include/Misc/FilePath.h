@@ -24,7 +24,8 @@ class FilePath {
 
         String getExtension() const;
 
-        int size() const;
+        int byteLength() const;
+        int length() const;
 
         bool exists() const;
 

@@ -11,90 +11,87 @@
 
 using namespace PGE;
 
+String::_StringData::_StringData() {
+    memset(shortStr, 0, shortStrCapacity);
+}
+
 String::~String() {
-    delete[] cbuffer;
+    if (cCapacity > 0) {
+        delete[] data.longStr;
+    }
 }
 
 String::String() {
-    cbuffer = new char[24];
-    cCapacity = 24;
-    cbuffer[0]='\0';
-    syncBuffers();
+    reallocate(0);
+    data.shortStr[0]='\0';
+    recalculateHashAndLength();
 }
 
 String::String(const String& a) {
-    int len = a.byteSize() + 1;
-    cbuffer = new char[len];
-    cCapacity = len;
-    memcpy(cbuffer, a.cstr(), len);
-    syncBuffers();
+    *this = a;
 }
 
 String::String(const char* cstri) {
     int len = (int)strlen(cstri);
-    cbuffer = new char[len+1];
-    cCapacity = len+1;
-    memcpy(cbuffer, cstri, (len+1)*sizeof(char));
-    syncBuffers();
+    reallocate(len);
+    memcpy(cstrNoConst(), cstri, (len+1)*sizeof(char));
+    recalculateHashAndLength();
 }
 
 String::String(const std::string& cppstr) {
     int len = (int)cppstr.size();
-    cbuffer = new char[len+1];
-    cCapacity = len+1;
-    memcpy(cbuffer, cppstr.c_str(), (len+1)*sizeof(char));
-    syncBuffers();
+    reallocate(len);
+    memcpy(cstrNoConst(), cppstr.c_str(), (len+1)*sizeof(char));
+    recalculateHashAndLength();
 }
 
 String::String(const wchar* wstri) {
-    wCharToUtf8(wstri);
-    syncBuffers();
+    wCharToUtf8Str(wstri);
+    recalculateHashAndLength();
 }
 
 String::String(const std::wstring& cppwstr) {
-    wCharToUtf8(cppwstr.c_str());
-    syncBuffers();
+    wCharToUtf8Str(cppwstr.c_str());
+    recalculateHashAndLength();
 }
 
 #if defined(__APPLE__) && defined(__OBJC__)
 String::String(const NSString* nsstr) {
     const char* cPath = [nsstr cStringUsingEncoding: NSUTF8StringEncoding];
     int len = (int)strlen(cPath);
-    cbuffer = new char[len+1];
-    cCapacity = len+1;
-    memcpy(cbuffer, cPath, (len+1)*sizeof(char));
-    syncBuffers();
+    reallocate(len);
+    memcpy(cstrNoConst(), cPath, (len+1)*sizeof(char));
+    recalculateHashAndLength();
 }
 #endif
 
 String::String(const String& a, const String& b) {
-    int len = a.byteSize() + b.byteSize() + 1;
-    cbuffer = new char[len];
-    cCapacity = len;
-    memcpy(cbuffer, a.cstr(), a.byteSize());
-    memcpy(cbuffer + a.byteSize(), b.cstr(), b.byteSize());
-    cbuffer[len - 1] = '\0';
-    syncBuffers();
+    int len = a.byteLength() + b.byteLength();
+    reallocate(len);
+    char* buf = cstrNoConst();
+    memcpy(buf, a.cstr(), a.byteLength());
+    memcpy(buf + a.byteLength(), b.cstr(), b.byteLength());
+    buf[len] = '\0';
+    recalculateHashAndLength();
 }
 
 String::String(char c) {
-    cbuffer = new char[2];
-    cCapacity = 2;
-    cbuffer[0] = c; cbuffer[1] = '\0';
-    syncBuffers();
+    reallocate(1);
+    char* buf = cstrNoConst();
+    buf[0] = c; buf[1] = '\0';
+    recalculateHashAndLength();
 }
 
 String::String(wchar w) {
     wchar* tempBuf = new wchar[2];
     tempBuf[0] = w; tempBuf[1] = L'\0';
-    wCharToUtf8(tempBuf);
+    wCharToUtf8Str(tempBuf);
     delete[] tempBuf;
-    syncBuffers();
+    recalculateHashAndLength();
 }
 
 String::String(int size) {
-    cbuffer = new char[size];
-    cCapacity = size;
+    reallocate(size);
 }
 
 template <class T>
@@ -104,8 +101,8 @@ String String::format(T t, const String& format) {
         throw new std::runtime_error(("Invalid format: " + format).cstr());
     }
     String ret(size);
-    snprintf(ret.cbuffer, size, format.cstr(), t);
-    ret.syncBuffers();
+    snprintf(ret.cstrNoConst(), size, format.cstr(), t);
+    ret.recalculateHashAndLength();
     return ret;
 }
 
@@ -122,25 +119,24 @@ template String String::format<double>(double t, const PGE::String& format);
 
 String String::fromInt(int i) {
     String ret(32);
-    snprintf(ret.cbuffer, 32, "%i", i);
-    ret.syncBuffers();
+    snprintf(ret.cstrNoConst(), 32, "%i", i);
+    ret.recalculateHashAndLength();
     return ret;
 }
 
 String String::fromFloat(float f) {
     String ret(32);
-    snprintf(ret.cbuffer, 32, "%f", f);
-    ret.syncBuffers();
+    snprintf(ret.cstrNoConst(), 32, "%f", f);
+    ret.recalculateHashAndLength();
     return ret;
 }
 
 String& String::operator=(const String& other) {
     if (&other == this) return *this;
-    if (cbuffer!=nullptr) { delete[] cbuffer; }
-    cbuffer = new char[other.cCapacity];
-    memcpy(cbuffer,other.cstr(),(other.size()+1)*sizeof(char));
-    cCapacity = other.cCapacity;
-    strSize = other.size();
+    reallocate(other.byteLength());
+    memcpy(cstrNoConst(),other.cstr(),(other.byteLength()+1)*sizeof(char));
+    strByteLength = other.byteLength();
+    strLength = other.length();
     hashCode = other.getHashCode();
     return *this;
 }
@@ -152,11 +148,12 @@ String& String::operator+=(const String& other) {
 }
 
 bool PGE::operator==(const String& a, const String& b) {
-    if (a.size() != b.size()) { return false; }
+    if (a.byteLength() != b.byteLength()) { return false; }
     return a.getHashCode() == b.getHashCode();
 }
 
 bool PGE::operator!=(const String& a, const String& b) {
+    if (a.byteLength() != b.byteLength()) { return true; }
     return a.getHashCode() != b.getHashCode();
 }
 
@@ -177,7 +174,7 @@ bool PGE::operator>(const String& a, const String& b) {
 }
 
 std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
-    return os.write(s.cstr(),s.size());
+    return os.write(s.cstr(),s.byteLength());
 }
 
 long long String::getHashCode() const {
@@ -185,23 +182,23 @@ long long String::getHashCode() const {
 }
 
 bool String::equals(const String& other) const {
-    if (other.size()!=size()) { return false; }
+    if (other.byteLength()!=byteLength()) { return false; }
     return other.getHashCode()==getHashCode();
 }
 
 bool String::equalsIgnoreCase(const String& other) const {
     // TODO: Other implementation for this as well?
-    if (size() != other.size()) { return false; }
+    if (byteLength() != other.byteLength()) { return false; }
     if (other.getHashCode() == getHashCode()) { return true; }
 
-    wchar* w1 = new wchar[other.size() * sizeof(wchar) + 1];
-    wchar* w2 = new wchar[size() * sizeof(wchar) + 1];
+    wchar* w1 = new wchar[other.byteLength() * sizeof(wchar) + 1];
+    wchar* w2 = new wchar[byteLength() * sizeof(wchar) + 1];
 
     other.wstr(w1);
     wstr(w2);
 
     bool equals = true;
-    for (int i = 0; i<strSize; i++) {
+    for (int i = 0; i<strByteLength; i++) {
         if (w1[i] != w2[i]) {
             equals = false;
             break;
@@ -213,7 +210,7 @@ bool String::equalsIgnoreCase(const String& other) const {
 }
 
 bool String::isEmpty() const {
-    return strSize == 0;
+    return strByteLength == 0;
 }
 
 static int measureCodepoint(unsigned char chr) {
@@ -279,59 +276,85 @@ static int convertWCharToUtf8(wchar chr, char* result) {
     return len;
 }
 
-void String::syncBuffers() {
-    strSize = 0;
+void String::recalculateHashAndLength() {
     hashCode = 5381;
-    for (int i = 0; i < cCapacity; i += measureCodepoint(cbuffer[i])) {
-        if (cbuffer[i] == '\0') {
+    const char* buf = cstrNoConst();
+    strByteLength = strlen(buf);
+    strLength = 0;
+    int capacity = cCapacity > 0 ? cCapacity : shortStrCapacity;
+    for (int i = 0; i < capacity; i += measureCodepoint(buf[i])) {
+        if (buf[i] == '\0') {
             break;
         }
-        strSize++;
-        hashCode = ((hashCode << 5) + hashCode) + cbuffer[i];
+        strLength++;
+        hashCode = ((hashCode << 5) + hashCode) + buf[i];
     }
 }
 
-void String::wCharToUtf8(const wchar* wbuffer) {
-    if (cbuffer != nullptr) { delete[] cbuffer; }
+void String::reallocate(int byteLength) {
+    if ((byteLength+1) < shortStrCapacity) { return; }
+    int targetCapacity = 1;
+    while (targetCapacity < (byteLength+1)) { targetCapacity <<= 1; }
+    if (targetCapacity <= cCapacity) { return; }
 
-    //determine the capacity of the cbuffer by measuring the number of bytes required for each codepoint
-    strSize = 0;
-    cCapacity = 1;
-    for (int i = 0; wbuffer[i] != L'\0'; i++) {
-        strSize++;
-        cCapacity += convertWCharToUtf8(wbuffer[i], nullptr);
+    if (cCapacity < targetCapacity) {
+        if (cCapacity > 0) {
+            delete[] data.longStr;
+        }
+        cCapacity = targetCapacity;
+        data.longStr = new char[targetCapacity];
     }
+}
+
+void String::wCharToUtf8Str(const wchar* wbuffer) {
+    //determine the capacity of the cbuffer by measuring the number of bytes required for each codepoint
+    strByteLength = 0;
+    for (int i = 0; wbuffer[i] != L'\0'; i++) {
+        strByteLength += convertWCharToUtf8(wbuffer[i], nullptr);
+    }
+    reallocate(strByteLength);
 
     //convert all the wchars to codepoints
-    cbuffer = new char[cCapacity];
-    char tempBuf[8]; // TODO: Remove this?
+    char* buf = cstrNoConst();
     int cIndex = 0;
     int i = 0;
     for (int i = 0; wbuffer[i] != L'\0'; i++) {
-        int increment = convertWCharToUtf8(wbuffer[i], tempBuf);
-        for (int j = 0; j < increment; j++) {
-            cbuffer[cIndex] = tempBuf[j];
-            cIndex++;
-        }
+        int increment = convertWCharToUtf8(wbuffer[i], &buf[cIndex]);
+        cIndex += increment;
     }
-    cbuffer[cIndex] = '\0';
+    buf[cIndex] = '\0';
 }
 
-int String::size() const {
-    return strSize;
+wchar String::utf8ToWChar(const char* cbuffer) {
+    int codepointLen = measureCodepoint(cbuffer[0]);
+    if (codepointLen == 1) {
+        return cbuffer[0];
+    } else {
+        //decode first byte by skipping all bits that indicate the length of the codepoint
+        wchar newChar = cbuffer[0] & (0x7f >> codepointLen);
+        for (int j = 1; j < codepointLen; j++) {
+            //decode all of the following bytes, fixed 6 bits per byte
+            newChar = (newChar << 6) | (cbuffer[j] & 0x3f);
+        }
+        return newChar;
+    }
 }
 
-int String::byteSize() const {
-    return (int)strlen(cstr());
+int String::length() const {
+    return strLength;
+}
+
+int String::byteLength() const {
+    return strByteLength;
 }
 
 int String::findFirst(const String& fnd, int from) const {
-    if (fnd.size() == 0) { return -1; }
+    if (fnd.byteLength() == 0) { return -1; }
     if (from < 0) { from = 0; }
     int charPos = 0;
-    for (int i = 0; i <= size()-fnd.size(); i += measureCodepoint(cbuffer[i])) {
+    for (int i = 0; i <= byteLength()-fnd.byteLength(); i += measureCodepoint(cstr()[i])) {
         if (charPos >= from) {
-            if (memcmp(fnd.cstr(), cstr() + i, fnd.byteSize()) == 0) { return charPos; }
+            if (memcmp(fnd.cstr(), cstr() + i, fnd.byteLength()) == 0) { return charPos; }
         }
         charPos++;
     }
@@ -339,13 +362,14 @@ int String::findFirst(const String& fnd, int from) const {
 }
 
 int String::findLast(const String& fnd, int from) const {
-    if (fnd.size() == 0) { return -1; }
+    if (fnd.byteLength() == 0) { return -1; }
     if (from < 0) { from = 0; }
+    const char* buf = cstr();
     int charPos = 0;
     int foundPos = -1;
-    for (int i = 0; i <= size() - fnd.size(); i += measureCodepoint(cbuffer[i])) {
+    for (int i = 0; i <= byteLength() - fnd.byteLength(); i += measureCodepoint(buf[i])) {
         if (charPos >= from) {
-            if (memcmp(fnd.cstr(), cstr() + i, fnd.size() * sizeof(wchar)) == 0) { foundPos = charPos; }
+            if (memcmp(fnd.cstr(), buf + i, fnd.byteLength()) == 0) { foundPos = charPos; }
         }
         charPos++;
     }
@@ -353,41 +377,32 @@ int String::findLast(const String& fnd, int from) const {
 }
 
 const char* String::cstr() const {
-    return cbuffer;
+    return cCapacity>0 ? data.longStr : data.shortStr;
+}
+
+char* String::cstrNoConst() {
+    return cCapacity>0 ? data.longStr : data.shortStr;
 }
 
 void String::wstr(wchar* buffer) const {
     //convert all the codepoints to wchars
+    const char* buf = cstr();
     int wIndex = 0;
-    for (int i = 0; i < cCapacity;) {
-        if (cbuffer[i] == '\0') {
-            buffer[wIndex] = L'\0';
-            break;
-        } else {
-            int codepointLen = measureCodepoint(cbuffer[i]);
+    for (int i = 0; i < strByteLength;) {
+        int codepointLen = measureCodepoint(buf[i]);
 
-            if (codepointLen == 1) {
-                buffer[wIndex] = cbuffer[i];
-            } else {
-                //decode first byte by skipping all bits that indicate the length of the codepoint
-                wchar newChar = cbuffer[i] & (0x7f >> codepointLen);
-                for (int j = 1; j < codepointLen; j++) {
-                    //decode all of the following bytes, fixed 6 bits per byte
-                    newChar = (newChar << 6) | (cbuffer[i + j] & 0x3f);
-                }
-                buffer[wIndex] = newChar;
-            }
+        buffer[wIndex] = utf8ToWChar(buf+i);
 
-            i += codepointLen;
-            wIndex++;
-        }
+        i += codepointLen;
+        wIndex++;
     }
+    buffer[strByteLength] = '\0';
 }
 
 int String::toInt(bool& success) const {
     try {
         success = true;
-        return std::stoi(cbuffer);
+        return std::stoi(cstr());
     } catch (std::exception) {
         success = false;
         return 0;
@@ -397,7 +412,7 @@ int String::toInt(bool& success) const {
 float String::toFloat(bool& success) const {
     try {
         success = true;
-        return std::stof(cbuffer);
+        return std::stof(cstr());
     } catch (std::exception) {
         success = false;
         return 0.f;
@@ -415,88 +430,82 @@ float String::toFloat() const {
 }
 
 String String::substr(int start, int cnt) const {
-    if ((cnt<0) || (cnt+start>=size())) {
-        cnt = size()-start;
+    if ((cnt<0) || (cnt+start>=byteLength())) {
+        cnt = byteLength()-start;
     }
+
+    const char* buf = cstr();
 
     int startPos = 0;
     for (int i = 0; i < start; i++) {
-        startPos += measureCodepoint(cbuffer[startPos]);
+        startPos += measureCodepoint(buf[startPos]);
     }
 
     int actualSize = 0;
     for (int i = 0; i < cnt; i++) {
-        actualSize += measureCodepoint(cbuffer[startPos + actualSize]);
+        actualSize += measureCodepoint(buf[startPos + actualSize]);
     }
 
     String retVal(actualSize + 1);
-    retVal.cbuffer[actualSize] = '\0';
-    memcpy(retVal.cbuffer, cbuffer + startPos, actualSize);
-    retVal.syncBuffers();
+    char* retBuf = retVal.cstrNoConst();
+    retBuf[actualSize] = '\0';
+    memcpy(retBuf, buf + startPos, actualSize);
+    retVal.recalculateHashAndLength();
     return retVal;
 }
 
-char String::charAt(int pos) const {
-    // TODO: Look at this, returns garbage for non-asci.
+wchar String::charAt(int pos) const {
+    const char* buf = cstr();
     int strPos = 0;
     for (int i = 0; i < pos; i++) {
-        strPos += measureCodepoint(cbuffer[strPos]);
+        strPos += measureCodepoint(buf[strPos]);
     }
-    return cbuffer[strPos];
+    return utf8ToWChar(buf+strPos);
 }
 
 String String::replace(const String& fnd, const String& rplace) const {
-    if (fnd.size()==0) { return *this; }
+    if (fnd.byteLength()==0) { return *this; }
 
-    // TODO: Avoid wstr.
+    const char* fndStr = fnd.cstr();
+    const char* rplaceStr = rplace.cstr();
+    const char* thisStr = cstr();
 
-    wchar* fndStr = new wchar[fnd.size() + 1];
-    wchar* rplaceStr = new wchar[rplace.size() + 1];
-    wchar* thisStr = new wchar[size() + 1];
-
-    fnd.wstr(fndStr);
-    rplace.wstr(rplaceStr);
-    wstr(thisStr);
-
-    int newSize = strSize;
-    for (int i=0;i<strSize-fnd.size()+1;) {
-        if (memcmp(fndStr, thisStr+i,fnd.size()*sizeof(wchar))==0) {
-            newSize+=rplace.size()-fnd.size();
-            i+=fnd.size();
+    int newSize = strByteLength;
+    for (int i=0;i<strByteLength-fnd.byteLength()+1;) {
+        if (memcmp(fndStr, thisStr+i,fnd.byteLength())==0) {
+            newSize+=rplace.byteLength()-fnd.byteLength();
+            i+=fnd.byteLength();
         } else {
             i++;
         }
     }
 
-    wchar* newBuf = new wchar[newSize+1];
+    String retVal(newSize);
+    char* retBuf = retVal.cstrNoConst();
     int i=0; int j=0;
-    while (i<strSize) {
-        bool found = i<strSize-fnd.size()+1;
+    while (i<strByteLength) {
+        bool found = i<strByteLength-fnd.byteLength()+1;
         if (found) {
-            found = memcmp(fndStr,thisStr+i,fnd.size()*sizeof(wchar))==0;
+            found = memcmp(fndStr,thisStr+i,fnd.byteLength())==0;
         }
         if (found) {
-            memcpy(newBuf+j,rplaceStr,rplace.size()*sizeof(wchar));
-            i+=fnd.size(); j+=rplace.size();
+            memcpy(retBuf+j,rplaceStr,rplace.byteLength());
+            i+=fnd.byteLength(); j+=rplace.byteLength();
         } else {
-            newBuf[j]=thisStr[i];
+            retBuf[j]=thisStr[i];
             i++; j++;
         }
     }
-    newBuf[j]=L'\0';
+    retBuf[j]=L'\0';
 
-    String retVal(newBuf);
-    delete[] newBuf;
-    delete[] fndStr;
-    delete[] rplaceStr;
-    delete[] thisStr;
+    retVal.recalculateHashAndLength();
     return retVal;
 }
 
 String String::toUpper() const {
-    wchar* newBuf = new wchar[strSize * sizeof(wchar) + 1];
+    wchar* newBuf = new wchar[strByteLength * sizeof(wchar) + 1];
     wstr(newBuf);
-    for (int i = 0; i<strSize; i++) {
+    for (int i = 0; i<strByteLength; i++) {
         newBuf[i] = towupper(newBuf[i]);
     }
     String retVal(newBuf);
@@ -505,10 +514,9 @@ String String::toUpper() const {
 }
 
 String String::toLower() const {
-    // TODO: Probably more consistent and effective with a custom implementation.
-    wchar* newBuf = new wchar[strSize * sizeof(wchar) + 1];
+    wchar* newBuf = new wchar[strByteLength * sizeof(wchar) + 1];
     wstr(newBuf);
-    for (int i = 0; i<strSize; i++) {
+    for (int i = 0; i<strByteLength; i++) {
         newBuf[i] = towlower(newBuf[i]);
     }
     String retVal(newBuf);
@@ -517,35 +525,31 @@ String String::toLower() const {
 }
 
 String String::trim() const {
-    if (strSize==0) { return ""; }
+    if (strByteLength==0) { return ""; }
 
+    const char* buf = cstr();
     int leadingPos = 0;
-    while (cbuffer[leadingPos] == ' ' || cbuffer[leadingPos] == '\t') {
+    while (buf[leadingPos] == ' ' || buf[leadingPos] == '\t') {
         leadingPos++;
-        if (leadingPos>=strSize) {
+        if (leadingPos>=strByteLength) {
             return *this;
         }
     }
 
-    int trailingPos = leadingPos;
-    int checkPos = trailingPos;
-    while (cbuffer[checkPos] != '\0') {
-        int codepoint;
-        while (codepoint = measureCodepoint(cbuffer[checkPos]) != 1) {
-            checkPos += codepoint;
+    int trailingPos = byteLength()-1;
+    while (charAt(trailingPos) == ' ' || charAt(trailingPos) == '\t') {
+        trailingPos--;
+        if (trailingPos<0) {
+            return *this;
         }
-        trailingPos = checkPos;
-        while (cbuffer[checkPos] == ' ' || cbuffer[checkPos] == '\t') {
-            checkPos++;
-        }
-        checkPos++;
     }
 
-    int newSize = trailingPos - leadingPos;
+    int newSize = trailingPos - leadingPos + 1;
     String ret(newSize + 1);
-    memcpy(ret.cbuffer, cbuffer + leadingPos, newSize);
-    ret.cbuffer[newSize] = '\0';
-    ret.syncBuffers();
+    char* retBuf = ret.cstrNoConst();
+    memcpy(retBuf, buf + leadingPos, newSize);
+    retBuf[newSize] = '\0';
+    ret.recalculateHashAndLength();
     return ret;
 }
 
@@ -555,7 +559,7 @@ std::vector<String> String::split(const String& needle, bool removeEmptyEntries)
     while (haystack.findFirst(needle) > -1) {
         String adder = haystack.substr(0, haystack.findFirst(needle));
         retVal.push_back(adder);
-        haystack = haystack.substr(adder.size()+needle.size());
+        haystack = haystack.substr(adder.byteLength()+needle.byteLength());
     }
     // Add the rest of the string to the vector.
     retVal.push_back(haystack);
@@ -596,47 +600,50 @@ std::cmatch String::regexMatch(const std::regex& pattern) const {
 String String::unHex() const {
     int isUnhexing = 0;
 
+    const char* buf = cstr();
+
     String ret(64);
+    char* retBuf = ret.cstrNoConst();
     int resultSize = 0;
 
     int tempAscVal = 0;
     int codepoint;
-    for (int i=0;i<size();i+=codepoint) {
-        codepoint = measureCodepoint(cbuffer[i]);
+    for (int i=0;i<byteLength();i+=codepoint) {
+        codepoint = measureCodepoint(buf[i]);
         if (codepoint == 1) {
             if (isUnhexing == 0) {
-                if (cbuffer[i] == '%') {
+                if (buf[i] == '%') {
                     isUnhexing = 1;
                 } else {
-                    ret.cbuffer[resultSize] = cbuffer[i];
+                    retBuf[resultSize] = buf[i];
                     resultSize++;
                 }
             } else {
                 int toDec = 0;
-                if (cbuffer[i] >= '0' && cbuffer[i] <= '9') {
-                    toDec = cbuffer[i] - '0';
-                } else if (cbuffer[i] >= 'a' && cbuffer[i] <= 'f') {
-                    toDec = cbuffer[i] + 10 - 'a';
-                } else if (cbuffer[i] >= 'A' && cbuffer[i] <= 'F') {
-                    toDec = cbuffer[i] + 10 - 'A';
+                if (buf[i] >= '0' && buf[i] <= '9') {
+                    toDec = buf[i] - '0';
+                } else if (buf[i] >= 'a' && buf[i] <= 'f') {
+                    toDec = buf[i] + 10 - 'a';
+                } else if (buf[i] >= 'A' && buf[i] <= 'F') {
+                    toDec = buf[i] + 10 - 'A';
                 }
                 if (isUnhexing == 1) {
                     tempAscVal = toDec << 4;
                     isUnhexing = 2;
                 } else if (isUnhexing == 2) {
                     tempAscVal |= toDec;
-                    ret.cbuffer[resultSize] = tempAscVal;
+                    retBuf[resultSize] = tempAscVal;
                     resultSize++;
                     isUnhexing = 0;
                 }
             }
         } else {
             for (int j = 0; j < codepoint; j++) {
-                ret.cbuffer[i + j] = cbuffer[i + j];
+                retBuf[i + j] = buf[i + j];
             }
         }
     }
-    ret.cbuffer[resultSize]='\0';
-    ret.syncBuffers();
+    retBuf[resultSize]='\0';
+    ret.recalculateHashAndLength();
     return ret;
 }

@@ -37,7 +37,7 @@ FilePath::FilePath(const FilePath& a, const String& b) {
 }
 
 FilePath FilePath::validateAsDirectory() const {
-    if (str().charAt(size() - 1) != '/') {
+    if (str().charAt(length() - 1) != '/') {
         return *this + "/";
     }
     return *this;
@@ -61,8 +61,12 @@ String FilePath::getExtension() const {
     return name.substr(startIndex+1);
 }
 
-int FilePath::size() const {
-    return name.size();
+int FilePath::byteLength() const {
+    return name.byteLength();
+}
+
+int FilePath::length() const {
+    return name.length();
 }
 
 bool FilePath::exists() const {
@@ -94,5 +98,5 @@ const FilePath PGE::operator+(const FilePath& a, const String& b) {
 }
 
 std::ostream& PGE::operator<<(std::ostream& os, const FilePath& fn) {
-    return os.write(fn.cstr(), fn.size());
+    return os.write(fn.cstr(), fn.byteLength());
 }
