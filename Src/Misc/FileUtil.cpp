@@ -44,7 +44,7 @@ bool FileUtil::createDirectory(const FilePath& path) {
     if (success) {
         return true;
     } else {
-        throw new std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
+        throw std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
     }
 #else
     return mkdir(path.cstr(), S_IRWXU) == 0;
@@ -95,7 +95,7 @@ std::vector<FilePath> FileUtil::enumerateFolders(const FilePath& path) {
     //delete[] wstr;
 
     if (hFind == INVALID_HANDLE_VALUE) {
-        throw new std::runtime_error(PGE::String::fromInt((int) GetLastError()).cstr());
+        throw std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
     }
 
     do {
@@ -118,7 +118,7 @@ std::vector<FilePath> FileUtil::enumerateFolders(const FilePath& path) {
     dir = opendir(path.cstr());
 
     if (dir == NULL) {
-        throw new std::runtime_error(path.cstr());
+        throw std::runtime_error(path.cstr());
     }
 
     while ((currentEntry = readdir(dir)) != NULL) {
@@ -153,7 +153,7 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
     delete[] wstr;
 
     if (hFind == INVALID_HANDLE_VALUE) {
-        throw new std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
+        throw std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
     }
 
     do {
@@ -181,7 +181,7 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
     dir = opendir(path.cstr());
     
     if (dir == NULL) {
-        throw new std::runtime_error(path.cstr());
+        throw std::runtime_error(path.cstr());
     }
     
     while ((currentEntry = readdir(dir)) != NULL) {

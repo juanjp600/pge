@@ -98,7 +98,7 @@ template <class T>
 String String::format(T t, const String& format) {
     int size = snprintf(nullptr, 0, format.cstr(), t) + 1;
     if (size < 0) {
-        throw new std::runtime_error(("Invalid format: " + format).cstr());
+        throw std::runtime_error(("Invalid format: " + format).cstr());
     }
     String ret(size);
     snprintf(ret.cstrNoConst(), size, format.cstr(), t);
