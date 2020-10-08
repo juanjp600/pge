@@ -185,11 +185,10 @@ void IOInternal::update() {
                         if (event.type==SDL_MOUSEBUTTONDOWN) {
                             if (!input->isDown()) { input->setHit(true); }
                             input->setDown(true);
+                            mouseInput->setClickCount(mouseButtonEvent.clicks);
                         } else if (event.type==SDL_MOUSEBUTTONUP) {
                             input->setDown(false);
                         }
-
-                        mouseInput->setClickCount(mouseButtonEvent.clicks);
                     }
                 }
             }
