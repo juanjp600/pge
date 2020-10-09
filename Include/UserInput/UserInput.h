@@ -17,6 +17,7 @@ class UserInput {
         virtual ~UserInput()=default;
 
         virtual DEVICE getDevice() const = 0;
+        virtual int getKey() const = 0;
 
         bool isDown() const;
         bool isHit() const;
@@ -276,7 +277,7 @@ class KeyboardInput : public UserInput {
         };
 
         virtual DEVICE getDevice() const;
-
+        int getKey() const override;
         KEYCODE getButton() const;
 
         KeyboardInput(KEYCODE inKeyCode);
@@ -295,7 +296,7 @@ class MouseInput : public UserInput {
         };
 
         virtual DEVICE getDevice() const;
-
+        int getKey() const override;
         BUTTON getButton() const;
     
         void setClickCount(int count);
@@ -341,7 +342,7 @@ class ControllerInput : public UserInput {
         };
 
         virtual DEVICE getDevice() const;
-
+        int getKey() const override;
         BUTTON getButton() const;
         Vector2f getStickPosition() const;
         float getPressDepth() const;

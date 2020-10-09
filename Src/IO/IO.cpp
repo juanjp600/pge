@@ -185,11 +185,10 @@ void IOInternal::update() {
                         if (event.type==SDL_MOUSEBUTTONDOWN) {
                             if (!input->isDown()) { input->setHit(true); }
                             input->setDown(true);
+                            mouseInput->setClickCount(mouseButtonEvent.clicks);
                         } else if (event.type==SDL_MOUSEBUTTONUP) {
                             input->setDown(false);
                         }
-
-                        mouseInput->setClickCount(mouseButtonEvent.clicks);
                     }
                 }
             }
@@ -394,6 +393,7 @@ Vector2i IOInternal::getMouseWheelDelta() {
     return mwp;
 }
 
+// TODO: Keep all contents unique to increase performance?
 void IOInternal::trackInput(UserInput* input) {
     inputs.emplace(input);
 }
