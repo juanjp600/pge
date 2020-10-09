@@ -393,6 +393,7 @@ Vector2i IOInternal::getMouseWheelDelta() {
     return mwp;
 }
 
+// TODO: Keep all contents unique to increase performance?
 void IOInternal::trackInput(UserInput* input) {
     inputs.emplace(input);
 }

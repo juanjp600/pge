@@ -31,6 +31,10 @@ UserInput::DEVICE KeyboardInput::getDevice() const {
     return UserInput::DEVICE::KEYBOARD;
 }
 
+int KeyboardInput::getKey() const {
+    return (int)keyCode;
+}
+
 KeyboardInput::KEYCODE KeyboardInput::getButton() const {
     return keyCode;
 }
@@ -42,6 +46,10 @@ MouseInput::MouseInput(MouseInput::BUTTON inMouseButton) {
 
 UserInput::DEVICE MouseInput::getDevice() const {
     return UserInput::DEVICE::MOUSE;
+}
+
+int MouseInput::getKey() const {
+    return (int)mouseButton;
 }
 
 MouseInput::BUTTON MouseInput::getButton() const {
@@ -66,6 +74,10 @@ ControllerInput::ControllerInput(Controller* ctrlr, ControllerInput::BUTTON inCo
 
 UserInput::DEVICE ControllerInput::getDevice() const {
     return UserInput::DEVICE::CONTROLLER;
+}
+
+int ControllerInput::getKey() const {
+    return (int)controllerButton;
 }
 
 ControllerInput::BUTTON ControllerInput::getButton() const {
