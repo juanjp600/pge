@@ -238,7 +238,8 @@ Matrix4x4f Matrix4x4f::constructOrthographicMat(float width, float height, float
 
     retval.elements[0][0] = 2.f / width;
     retval.elements[1][1] = -2.f / height;
-    retval.elements[2][2] = 1.f / (farZ - nearZ);
+    retval.elements[2][2] = -1.f / (farZ - nearZ);
+    retval.elements[3][2] = farZ/(farZ-nearZ);
 
     return retval;
 }
