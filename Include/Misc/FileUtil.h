@@ -1,8 +1,9 @@
-#ifndef FileUtil_H_INCLUDED
-#define FileUtil_H_INCLUDED
+#ifndef PGE_FILEUTIL_H_INCLUDED
+#define PGE_FILEUTIL_H_INCLUDED
+
+#include <vector>
 
 #include <Misc/FilePath.h>
-#include <vector>
 
 namespace PGE {
 
@@ -33,4 +34,4 @@ class FileUtil {
     
 }
 
-#endif // FileUtil_H_INCLUDED
+#endif // PGE_FILEUTIL_H_INCLUDED

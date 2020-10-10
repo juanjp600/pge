@@ -16,10 +16,11 @@ class WindowInternal : public Window {
 #if defined(__APPLE__) && defined(__OBJC__)
         NSWindow* getCocoaWindow() const;
 #endif
+
     protected:
         SDL_Window* sdlWindow;
 };
 
 }
 
-#endif
+#endif // PGEINTERNAL_WINDOWINTERNAL_H_INCLUDED

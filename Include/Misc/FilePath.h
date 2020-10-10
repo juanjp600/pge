@@ -41,4 +41,4 @@ std::ostream& operator<<(std::ostream& os, const FilePath& fn);
 
 }
 
-#endif
+#endif // PGE_FILEPATH_H_INCLUDED

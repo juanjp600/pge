@@ -1,7 +1,6 @@
-#ifndef PGEINTERNAL_EXCEPTION_H_INCLUDED
-#define PGEINTERNAL_EXCEPTION_H_INCLUDED
+#ifndef PGE_EXCEPTION_H_INCLUDED
+#define PGE_EXCEPTION_H_INCLUDED
 
-#include <exception>
 #include <Misc/String.h>
 
 namespace PGE {
@@ -10,9 +9,10 @@ class Exception {
     public:
         Exception();
         Exception(const Exception& ex);
-        Exception(String src,String detail);
+        Exception(String src, String detail);
         String getSource() const;
         String getDetails() const;
+
     private:
         String source;
         String details;
@@ -20,4 +20,4 @@ class Exception {
 
 }
 
-#endif
+#endif // PGE_EXCEPTION_H_INCLUDED

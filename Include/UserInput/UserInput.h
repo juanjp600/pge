@@ -14,7 +14,7 @@ class UserInput {
             CONTROLLER
         };
 
-        virtual ~UserInput()=default;
+        virtual ~UserInput() = default;
 
         virtual DEVICE getDevice() const = 0;
         virtual int getKey() const = 0;
@@ -23,6 +23,7 @@ class UserInput {
         bool isHit() const;
         void setDown(bool down);
         void setHit(bool hit);
+
     protected:
         UserInput();
 
@@ -303,6 +304,7 @@ class MouseInput : public UserInput {
         int getClickCount() const;
 
         MouseInput(BUTTON inMouseButton);
+
     private:
         BUTTON mouseButton;
     
@@ -313,8 +315,8 @@ class MouseInput : public UserInput {
 class Controller {
     public:
         virtual ~Controller() {}
-        virtual String getName() const =0;
-        virtual void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) =0;
+        virtual String getName() const = 0;
+        virtual void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) = 0;
 };
 
 class ControllerInput : public UserInput {
@@ -354,7 +356,8 @@ class ControllerInput : public UserInput {
         void setPressDepth(float depth);
         void setDownThreshold(float threshold);
 
-        ControllerInput(Controller* ctrlr, BUTTON inControllerButton, float threshold=0.5f);
+        ControllerInput(Controller* ctrlr, BUTTON inControllerButton, float threshold = 0.5f);
+
     private:
         Controller* controller;
         BUTTON controllerButton;
@@ -365,4 +368,4 @@ class ControllerInput : public UserInput {
 
 }
 
-#endif
+#endif // PGE_INPUT_H_INCLUDED

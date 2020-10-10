@@ -1,10 +1,11 @@
 #ifndef PGEINTERNAL_IOINTERNAL_H_INCLUDED
 #define PGEINTERNAL_IOINTERNAL_H_INCLUDED
 
-#include <IO/IO.h>
-
 #include <vector>
+
 #include <SDL.h>
+
+#include <IO/IO.h>
 
 namespace PGE {
 
@@ -58,6 +59,7 @@ class ControllerInternal : public Controller {
         const IOInternal* io;
         SDL_GameController* sdlController;
         String name;
+
     public:
         ~ControllerInternal() override;
         ControllerInternal(const IOInternal* inIo, SDL_GameController* inSdlController);
@@ -69,5 +71,4 @@ class ControllerInternal : public Controller {
 
 }
 
-#endif
-
+#endif // PGEINTERNAL_IOINTERNAL_H_INCLUDED

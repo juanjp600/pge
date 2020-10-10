@@ -1,16 +1,15 @@
 #ifndef PGEINTERNAL_GRAPHICS_DX11_H_INCLUDED
 #define PGEINTERNAL_GRAPHICS_DX11_H_INCLUDED
 
-#include <Graphics/Graphics.h>
-#include <Shader/Shader.h>
-
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <d3d11.h>
 
+#include <Graphics/Graphics.h>
+#include <Shader/Shader.h>
+
 namespace PGE {
 
-class ShaderDX11;
 class GraphicsDX11 : public Graphics {
     public:
         GraphicsDX11(String name,int w=1280,int h=720,bool fs=false);
@@ -42,4 +41,4 @@ class GraphicsDX11 : public Graphics {
 
 }
 
-#endif
+#endif // PGEINTERNAL_GRAPHICS_DX11_H_INCLUDED

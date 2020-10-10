@@ -1,7 +1,6 @@
 #ifndef PGE_AUDIO_H_INCLUDED
 #define PGE_AUDIO_H_INCLUDED
 
-#include <Sound/Sound.h>
 #include <Threading/ThreadManager.h>
 
 namespace PGE {
@@ -20,6 +19,7 @@ class Audio {
             SOURCE_ALLOC_FAILED
         };
         ERROR_STATE getErrorState() const;
+
     protected:
         Audio(){}
         Audio(const Audio& other){}
@@ -28,4 +28,4 @@ class Audio {
 
 }
 
-#endif
+#endif // PGE_AUDIO_H_INCLUDED

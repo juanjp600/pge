@@ -6,28 +6,29 @@
 namespace PGE {
 
 class Audio;
+
 class Sound {
     public:
         static Sound* load(Audio* a,const FilePath& fn,bool forcePan=false,bool strm=false);
         virtual ~Sound(){}
 
-        virtual bool isStream() const =0;
-        virtual bool isStereo() const =0;
-        virtual int getFrequency() const =0;
+        virtual bool isStream() const = 0;
+        virtual bool isStereo() const = 0;
+        virtual int getFrequency() const = 0;
         
         class Channel {
             public:
                 virtual ~Channel(){}
 
-                virtual bool isPlaying() const =0;
-                virtual bool isStream() const =0;
-                virtual bool isStreamReady() const =0;
-                virtual void updateStream() =0;
+                virtual bool isPlaying() const = 0;
+                virtual bool isStream() const = 0;
+                virtual bool isStreamReady() const = 0;
+                virtual void updateStream() = 0;
         };
 
-        virtual Channel* play(bool loop=false) =0;
+        virtual Channel* play(bool loop=false) = 0;
 };
 
 }
 
-#endif
+#endif // PGE_SOUND_H_INCLUDED

@@ -1,5 +1,8 @@
 #include <Mesh/Mesh.h>
 
+#include <Graphics/Graphics.h>
+#include <Exception/Exception.h>
+
 using namespace PGE;
 
 const Vertex::Property Vertex::Property::def = Vertex::Property();

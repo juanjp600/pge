@@ -44,10 +44,10 @@ class String {
         int length() const;
         int byteLength() const;
 
-        int findFirst(const String& fnd, int from=-1) const;
-        int findLast(const String& fnd, int from=-1) const;
+        int findFirst(const String& fnd, int from = -1) const;
+        int findLast(const String& fnd, int from = -1) const;
 
-        String substr(int start, int cnt=-1) const;
+        String substr(int start, int cnt = -1) const;
         wchar charAt(int pos) const;
         String replace(const String& fnd, const String& rplace) const;
         String toUpper() const;
@@ -101,4 +101,4 @@ class String {
 
 }
 
-#endif
+#endif // PGE_STRING_H_INCLUDED

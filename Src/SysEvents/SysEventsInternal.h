@@ -1,21 +1,25 @@
 #ifndef PGEINTERNAL_SYSEVENTSINTERNAL_H_INCLUDED
 #define PGEINTERNAL_SYSEVENTSINTERNAL_H_INCLUDED
 
-#include <SDL.h>
 #include <set>
 #include <vector>
+
+#include <SDL.h>
 
 #include <SysEvents/SysEvents.h>
 
 namespace PGE {
 
 class Window;
+
 class SysEventsInternal : public SysEvents {
     public:
         class SubscriberInternal;
+
     private:
         static std::set<Subscriber*> subscribers;
         SysEventsInternal(){};
+
     public:
         static void subscribe(Subscriber* sub);
         static void unsubscribe(Subscriber* sub);
@@ -30,11 +34,13 @@ class SysEventsInternal : public SysEvents {
                     CONTROLLER,
                     TEXTINPUT
                 };
+
             private:
                 Window* window;
                 EventType eventType;
                 std::vector<SDL_Event> events;
                 bool receivedEvent;
+
             public:
                 SubscriberInternal();
                 SubscriberInternal(Window* w,EventType et);
@@ -48,4 +54,4 @@ class SysEventsInternal : public SysEvents {
 
 }
 
-#endif // SYSEVENTS_H_INCLUDED
+#endif // PGEINTERNAL_SYSEVENTSINTERNAL_H_INCLUDED

@@ -1,14 +1,13 @@
 #ifndef PGE_THREADMANAGER_H_INCLUDED
 #define PGE_THREADMANAGER_H_INCLUDED
 
-#include <Misc/String.h>
-#include <Exception/Exception.h>
-
 #include <thread>
 #include <mutex>
-#include <condition_variable>
 #include <atomic>
 #include <vector>
+
+#include <Misc/String.h>
+#include <Exception/Exception.h>
 
 namespace PGE {
 
@@ -21,7 +20,7 @@ class ThreadManager {
 
         class MainThreadRequest {
             public:
-                virtual void execute() =0;
+                virtual void execute() = 0;
         };
 
         class NewThreadRequest {
@@ -30,7 +29,7 @@ class ThreadManager {
                 virtual ~NewThreadRequest();
 
                 //execution
-                virtual void execute() =0;
+                virtual void execute() = 0;
                 bool isDone() const;
 
                 //exception handling
@@ -45,8 +44,10 @@ class ThreadManager {
                 void requestExecutionOnMainThread(MainThreadRequest* request);
                 bool isWaitingForMainThread();
                 void executeMainThreadRequest();
+
             protected:
                 void markAsDone();
+
             private:
                 ThreadManager* threadManager;
 
@@ -63,6 +64,7 @@ class ThreadManager {
 
         void requestExecutionOnNewThread(NewThreadRequest* request);
         void handleException(NewThreadRequest* request, Exception& e);
+
     private:
         std::vector<NewThreadRequest*> newThreadRequests;
 
@@ -80,4 +82,4 @@ class ThreadManager {
 
 }
 
-#endif
+#endif // PGE_THREADMANAGER_H_INCLUDED

@@ -7,4 +7,4 @@ int Main();
 
 }
 
-#endif
+#endif // PGE_INIT_H_INCLUDED

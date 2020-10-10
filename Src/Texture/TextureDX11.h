@@ -1,22 +1,21 @@
 #ifndef PGEINTERNAL_TEXTURE_DX11_H_INCLUDED
 #define PGEINTERNAL_TEXTURE_DX11_H_INCLUDED
 
-#include <Windows.h>
-
-#include <Texture/Texture.h>
-#include <Threading/ThreadManager.h>
-
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <d3d11.h>
+
+#include <Windows.h>
+#include <Texture/Texture.h>
+#include <Threading/ThreadManager.h>
 
 namespace PGE {
 
 class TextureDX11 : public Texture {
     public:
-        TextureDX11(Graphics* gfx,int width,int height,bool renderTarget,const void* buffer,FORMAT fmt);
-        TextureDX11(Graphics* gfx,const FilePath& fn);
-        TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager);
+        TextureDX11(Graphics* gfx, int width, int height, bool renderTarget, const void* buffer, FORMAT fmt);
+        TextureDX11(Graphics* gfx, const FilePath& fn);
+        TextureDX11(Graphics* gfx, const FilePath& fn, ThreadManager* threadManager);
         ~TextureDX11();
 
         void useTexture(int index);
@@ -26,6 +25,7 @@ class TextureDX11 : public Texture {
         ID3D11RenderTargetView* getRtv() const;
         ID3D11DepthStencilView* getZBufferView() const;
         virtual void* getNative() const;
+
     private:
         TextureDX11(){};
 
@@ -48,4 +48,4 @@ class TextureDX11 : public Texture {
 
 }
 
-#endif
+#endif // PGEINTERNAL_TEXTURE_DX11_H_INCLUDED

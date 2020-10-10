@@ -1,22 +1,20 @@
 #ifndef PGEINTERNAL_SHADER_DX11_H_INCLUDED
 #define PGEINTERNAL_SHADER_DX11_H_INCLUDED
 
-#include <Graphics/Graphics.h>
-#include <Shader/Shader.h>
-#include <Misc/String.h>
+#include <vector>
 
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <d3d11.h>
 
-#include <inttypes.h>
-#include <vector>
+#include <Shader/Shader.h>
+#include <Misc/String.h>
 
 namespace PGE {
 
 class ShaderDX11 : public Shader {
     public:
-        ShaderDX11(Graphics* gfx,const FilePath& path);
+        ShaderDX11(Graphics* gfx, const FilePath& path);
         virtual ~ShaderDX11();
 
         Constant* getVertexShaderConstant(String name);
@@ -30,6 +28,7 @@ class ShaderDX11 : public Shader {
         uint8_t* getDxFsCode(); int getDxFsCodeLen() const;
 
         const std::vector<String>& getVertexInputElems() const;
+
     private:
         ShaderDX11(){};
 
@@ -59,6 +58,7 @@ class ShaderDX11 : public Shader {
                 void setValue(int value) override;
 
                 String getName() const;
+
             private:
                 virtual void throwException(String func, String details);
 
@@ -67,6 +67,7 @@ class ShaderDX11 : public Shader {
                 int offset;
                 int size;
         };
+
         class CBufferInfo {
             public:
                 CBufferInfo(Graphics* graphics, String nm,int sz);
@@ -79,6 +80,7 @@ class ShaderDX11 : public Shader {
                 void markAsDirty();
                 void update();
                 ID3D11Buffer* getDxCBuffer();
+
             private:
                 String name;
                 uint8_t* data;
@@ -88,6 +90,7 @@ class ShaderDX11 : public Shader {
                 ID3D11Buffer* dxCBuffer;
                 bool dirty;
         };
+
         std::vector<CBufferInfo*> vertexConstantBuffers;
         std::vector<CBufferInfo*> fragmentConstantBuffers;
         void readConstantBuffers(std::ifstream& reflectionInfo, std::vector<CBufferInfo*>& constantBuffers);
@@ -98,9 +101,8 @@ class ShaderDX11 : public Shader {
         ID3D11PixelShader* dxFragmentShader;
 
         Graphics* graphics;
-
 };
 
 }
 
-#endif
+#endif // PGEINTERNAL_SHADER_DX11_H_INCLUDED

@@ -6,8 +6,8 @@ namespace PGE {
 class Color {
     public:
         Color();
-        Color(int r,int g,int b,int a=255);
-        Color(float r,float g,float b,float a=1.0f);
+        Color(int r, int g, int b, int a = 255);
+        Color(float r, float g, float b, float a = 1.0f);
 
         bool operator==(const Color& other) const;
         bool operator!=(const Color& other) const;
@@ -31,4 +31,4 @@ class Color {
 
 }
 
-#endif
+#endif // PGE_COLOR_H_INCLUDED

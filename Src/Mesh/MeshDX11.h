@@ -1,29 +1,26 @@
 #ifndef PGEINTERNAL_MESH_DX11_H_INCLUDED
 #define PGEINTERNAL_MESH_DX11_H_INCLUDED
 
-#include <Windows.h>
-
-#include <Mesh/Mesh.h>
+#include <vector>
 
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <d3d11.h>
-#include <DirectXMath.h>
 
-#include <inttypes.h>
-
-#include <vector>
+#include <Windows.h>
+#include <Mesh/Mesh.h>
 
 namespace PGE {
 
 class MeshDX11 : public Mesh {
     public:
-        MeshDX11(Graphics* gfx,Primitive::TYPE pt);
+        MeshDX11(Graphics* gfx, Primitive::TYPE pt);
         ~MeshDX11();
 
         virtual void updateInternalData();
 
         virtual void render();
+
     private:
         void cleanup() override;
         void throwException(String func, String details) override;
@@ -45,4 +42,4 @@ class MeshDX11 : public Mesh {
 
 }
 
-#endif
+#endif // PGEINTERNAL_MESH_DX11_H_INCLUDED

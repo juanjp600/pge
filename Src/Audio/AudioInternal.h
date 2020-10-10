@@ -1,11 +1,6 @@
 #ifndef PGEINTERNAL_AUDIOINTERNAL_H_INCLUDED
 #define PGEINTERNAL_AUDIOINTERNAL_H_INCLUDED
 
-#include <Audio/Audio.h>
-#include <Sound/Sound.h>
-#include "../Sound/SoundInternal.h"
-
-#include <atomic>
 #include <vector>
 
 #ifdef LINUX
@@ -18,6 +13,10 @@
 #include <al.h>
 #include <alc.h>
 #endif
+
+#include <Audio/Audio.h>
+#include <Sound/Sound.h>
+#include "../Sound/SoundInternal.h"
 
 namespace PGE {
 
@@ -60,4 +59,4 @@ class AudioInternal : public Audio {
 
 }
 
-#endif
+#endif // PGEINTERNAL_AUDIOINTERNAL_H_INCLUDED
