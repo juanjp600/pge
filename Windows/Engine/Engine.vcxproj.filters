@@ -201,6 +201,9 @@
     <ClCompile Include="..\..\Src\Misc\FilePath.cpp">
       <Filter>Src\Misc</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Math\Random.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -307,6 +310,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Exception\Exception.h">
       <Filter>Include\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Math\Random.h">
+      <Filter>Include\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
