@@ -60,7 +60,7 @@ namespace PGE {
 
     // true | false
     bool Random::nextBool() {
-        return next() > UINT16_MAX;
+        return (next() & 1) == 1;
     }
 
     // [0, 1)
