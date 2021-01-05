@@ -8,8 +8,9 @@ class SysEvents {
             protected:
                 Subscriber(){}
         };
+
     protected:
         SysEvents(){}
 };
 
-#endif
+#endif // PGE_SYSEVENTS_H_INCLUDED

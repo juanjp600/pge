@@ -1,7 +1,7 @@
 #ifndef PGE_VECTOR_H_INCLUDED
 #define PGE_VECTOR_H_INCLUDED
 
-#include <Misc\String.h>
+#include <Misc/String.h>
 
 namespace PGE {
 
@@ -40,7 +40,7 @@ class Vector2f {
         float distanceSquared(const Vector2f& b) const;
         float distance(const Vector2f& b) const;
 
-        bool equals(const Vector2f& b,float epsilon=0.002f) const;
+        bool equals(const Vector2f& b, float epsilon=0.002f) const;
 
         Vector2f add(const Vector2f& b) const;
         Vector2f subtract(const Vector2f& b) const;
@@ -150,4 +150,4 @@ class Vector2i {
 
 }
 
-#endif
+#endif // PGE_VECTOR_H_INCLUDED

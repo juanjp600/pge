@@ -1,4 +1,5 @@
 #include <Shader/Shader.h>
+#include <Graphics/Graphics.h>
 #include "ShaderDX11.h"
 #include <Window/Window.h>
 #include "../Window/WindowDX11.h"

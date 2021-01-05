@@ -66,4 +66,4 @@ class Plane
 
 }
 
-#endif
+#endif // PGE_MATRIX_H_INCLUDED

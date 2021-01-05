@@ -53,8 +53,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
             newBuffer = new uint8_t[(size_t)realWidth*(size_t)realHeight*4];
             memset(newBuffer, 0, (size_t)realWidth*(size_t)realHeight*4*sizeof(uint8_t));
             buffer = newBuffer;
-        }
-        else {
+        } else {
             name = String(name, "_Buffer");
         }
     }

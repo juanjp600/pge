@@ -9,7 +9,7 @@ namespace PGE {
 class Window {
     public:
         virtual void update() =0;
-        virtual void swap(bool vsyncEnabled=true) =0;
+        virtual void swap(bool vsyncEnabled=true) = 0;
         virtual bool isOpen() const;
 
         int getWidth() const;
@@ -18,10 +18,11 @@ class Window {
         virtual bool isFocused() const;
 
         virtual ~Window(){};
+
     protected:
         Window(){};
-        virtual void cleanup() =0;
-        virtual void throwException(String func,String details) =0;
+        virtual void cleanup() = 0;
+        virtual void throwException(String func,String details) = 0;
 
         String caption;
         int width; int height; bool fullscreen;
@@ -34,4 +35,4 @@ class Window {
 
 }
 
-#endif
+#endif // PGE_WINDOW_H_INCLUDED

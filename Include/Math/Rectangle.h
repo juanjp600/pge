@@ -49,6 +49,7 @@ class Rectanglei {
 
         bool isPointInside(const Vector2i& p) const;
         bool intersects(const Rectanglei& other) const;
+
     private:
         Vector2i tl; Vector2i br;
         void repair();
@@ -56,4 +57,4 @@ class Rectanglei {
 
 }
 
-#endif
+#endif // PGE_RECTANGLE_H_INCLUDED

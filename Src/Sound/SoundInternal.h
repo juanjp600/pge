@@ -1,8 +1,6 @@
 #ifndef PGEINTERNAL_SOUNDINTERNAL_H_INCLUDED
 #define PGEINTERNAL_SOUNDINTERNAL_H_INCLUDED
 
-#include <Sound/Sound.h>
-
 #ifdef LINUX
 #include <AL/al.h>
 #elif defined __APPLE__
@@ -10,32 +8,37 @@
 #elif defined WINDOWS
 #include <al.h>
 #endif
+
 #include <vorbis/vorbisfile.h>
 #include <ogg/ogg.h>
+
+#include <Sound/Sound.h>
 
 namespace PGE {
 
 class Audio;
+
 class SoundInternal : public Sound {
     public:
-        SoundInternal(Audio* a,const FilePath& fn,bool forcePanning=false,bool strm=false);
+        SoundInternal(Audio* a, const FilePath& fn, bool forcePanning = false, bool strm = false);
         ~SoundInternal();
 
         bool isStream() const;
         bool isStereo() const;
         int getFrequency() const;
-        void fillStreamBuffer(int seekPos,uint8_t* buf,int maxSize,int& outSamples,bool& outEof);
+        void fillStreamBuffer(int seekPos, uint8_t* buf, int maxSize, int& outSamples, bool& outEof);
         ALuint getALBuffer() const;
 
         class ChannelInternal : public Channel {
             public:
-                ChannelInternal(Audio* a,SoundInternal* snd,bool lp);
+                ChannelInternal(Audio* a, SoundInternal* snd, bool lp);
                 ~ChannelInternal();
 
                 virtual bool isPlaying() const;
                 virtual bool isStream() const;
                 virtual bool isStreamReady() const;
                 virtual void updateStream();
+
             private:
                 Audio* audio;
                 SoundInternal* sound;
@@ -52,8 +55,9 @@ class SoundInternal : public Sound {
                 std::atomic<bool> streamReady;
         };
 
-        virtual Channel* play(bool loop=false);
+        virtual Channel* play(bool loop = false);
         void removeChannel(ChannelInternal* channel);
+
     private:
         std::vector<ChannelInternal*> channels;
         int frequency;
@@ -67,4 +71,4 @@ class SoundInternal : public Sound {
 
 }
 
-#endif
+#endif // PGEINTERNAL_SOUNDINTERNAL_H_INCLUDED

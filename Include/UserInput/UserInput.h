@@ -14,14 +14,16 @@ class UserInput {
             CONTROLLER
         };
 
-        virtual ~UserInput()=default;
+        virtual ~UserInput() = default;
 
         virtual DEVICE getDevice() const = 0;
+        virtual int getKey() const = 0;
 
         bool isDown() const;
         bool isHit() const;
         void setDown(bool down);
         void setHit(bool hit);
+
     protected:
         UserInput();
 
@@ -276,7 +278,7 @@ class KeyboardInput : public UserInput {
         };
 
         virtual DEVICE getDevice() const;
-
+        int getKey() const override;
         KEYCODE getButton() const;
 
         KeyboardInput(KEYCODE inKeyCode);
@@ -295,13 +297,14 @@ class MouseInput : public UserInput {
         };
 
         virtual DEVICE getDevice() const;
-
+        int getKey() const override;
         BUTTON getButton() const;
     
         void setClickCount(int count);
         int getClickCount() const;
 
         MouseInput(BUTTON inMouseButton);
+
     private:
         BUTTON mouseButton;
     
@@ -312,8 +315,8 @@ class MouseInput : public UserInput {
 class Controller {
     public:
         virtual ~Controller() {}
-        virtual String getName() const =0;
-        virtual void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) =0;
+        virtual String getName() const = 0;
+        virtual void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) = 0;
 };
 
 class ControllerInput : public UserInput {
@@ -341,7 +344,7 @@ class ControllerInput : public UserInput {
         };
 
         virtual DEVICE getDevice() const;
-
+        int getKey() const override;
         BUTTON getButton() const;
         Vector2f getStickPosition() const;
         float getPressDepth() const;
@@ -353,7 +356,8 @@ class ControllerInput : public UserInput {
         void setPressDepth(float depth);
         void setDownThreshold(float threshold);
 
-        ControllerInput(Controller* ctrlr, BUTTON inControllerButton, float threshold=0.5f);
+        ControllerInput(Controller* ctrlr, BUTTON inControllerButton, float threshold = 0.5f);
+
     private:
         Controller* controller;
         BUTTON controllerButton;
@@ -364,4 +368,4 @@ class ControllerInput : public UserInput {
 
 }
 
-#endif
+#endif // PGE_INPUT_H_INCLUDED

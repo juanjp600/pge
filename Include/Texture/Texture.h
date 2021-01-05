@@ -27,8 +27,8 @@ class Texture {
         virtual ~Texture(){};
 
     protected:
-        virtual void cleanup() =0;
-        virtual void throwException(String func, String details) =0;
+        virtual void cleanup() = 0;
+        virtual void throwException(String func, String details) = 0;
 
         int width; int height;
         int realWidth; int realHeight;
@@ -41,4 +41,4 @@ class Texture {
 
 }
 
-#endif
+#endif // PGE_TEXTURE_H_INCLUDED

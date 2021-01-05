@@ -1,17 +1,16 @@
 #ifndef PGE_MESH_H_INCLUDED
 #define PGE_MESH_H_INCLUDED
 
-#include <Graphics/Graphics.h>
+#include <vector>
 
 #include <Material/Material.h>
-
 #include <Color/Color.h>
 #include <Math/Vector.h>
 #include <Math/Matrix.h>
 
-#include <vector>
-
 namespace PGE {
+
+class Graphics;
 
 class Vertex {
     public:
@@ -52,6 +51,7 @@ class Vertex {
         void setVector3f(const String& name,Vector3f val);
         void setVector4f(const String& name,Vector4f val);
         void setColor(const String& name,Color val);
+
     private:
         std::vector<Property> properties;
         Property& insertProperty(long long hashCode);
@@ -84,20 +84,21 @@ class Mesh {
         const std::vector<Primitive>& getPrimitives(int& primCount) const;
         bool isOpaque() const;
 
-        virtual void updateInternalData() =0;
+        virtual void updateInternalData() = 0;
 
-        virtual void render() =0;
+        virtual void render() = 0;
+
     protected:
         Mesh(){}
         
-        virtual void cleanup() =0;
-        virtual void throwException(String func, String details) =0;
+        virtual void cleanup() = 0;
+        virtual void throwException(String func, String details) = 0;
 
         bool opaque;
         bool mustUpdateInternalData = true;
         bool mustReuploadInternalData = true;
 
-        virtual void uploadInternalData() =0;
+        virtual void uploadInternalData() = 0;
 
         Material* material;
 
@@ -111,4 +112,4 @@ class Mesh {
 
 }
 
-#endif
+#endif // PGE_MESH_H_INCLUDED

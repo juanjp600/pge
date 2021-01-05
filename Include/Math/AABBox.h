@@ -9,7 +9,7 @@ class AABBox {
     public:
         AABBox() {};
         AABBox(const Vector3f& inPoint);
-        AABBox(const Vector3f& firstPoint,const Vector3f& secondPoint);
+        AABBox(const Vector3f& firstPoint, const Vector3f& secondPoint);
 
         Vector3f getMin() const;
         Vector3f getMax() const;
@@ -26,4 +26,4 @@ class AABBox {
 
 }
 
-#endif
+#endif // PGE_AABBOX_H_INCLUDED
