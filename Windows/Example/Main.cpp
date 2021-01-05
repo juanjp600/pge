@@ -31,7 +31,7 @@ struct RM2 {
 RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadManager) {
     //NOTE: this is really hacky, DO NOT USE IN SCPCB
     String path = "";
-    for (int i=name.size()-1;i>=0;i--) {
+    for (int i=name.length()-1;i>=0;i--) {
         if (name.charAt(i)=='/' || name.charAt(i)=='\\') {
             path = name.substr(0,i+1);
             break;
@@ -205,7 +205,7 @@ RM2 loadRM2(String name,Graphics* graphics,Shader* shader,ThreadManager* threadM
 
                     mainThreadRequest0.textures = &textures;
                     requestExecutionOnMainThread(&mainThreadRequest0);
-                    mainThreadRequest0.mesh->setGeometry(vertices,tris);
+                    mainThreadRequest0.mesh->setGeometry(vertices.size(),vertices,tris.size(),tris);
                     mainThreadRequest0.mesh->updateInternalData();
                     mainThreadRequest1.mesh = mainThreadRequest0.mesh;
                     requestExecutionOnMainThread(&mainThreadRequest1);
@@ -234,8 +234,9 @@ int PGEMain::Main() {
     ThreadManager* threadManager = new ThreadManager();
     Audio* audio = Audio::create(threadManager);
 
-    Sound* sound = Sound::load(audio, PGE::FilePath::fromStr("SFX/Music/The Dread.ogg"));
-    Sound::Channel* channel = sound->play();
+    // TODO: Reimplement sound.
+    /*Sound* sound = Sound::load(audio, PGE::FilePath::fromStr("SFX/Music/The Dread.ogg"));
+    Sound::Channel* channel = sound->play();*/
 
     Shader* shader = Shader::load(graphics, PGE::FilePath::fromStr("default/"));
     Shader* postprocessShader = Shader::load(graphics, PGE::FilePath::fromStr("postprocess/"));
@@ -272,7 +273,7 @@ int PGEMain::Main() {
     primitives.push_back(Primitive(1, 0, 2));
     primitives.push_back(Primitive(1, 2, 3));
 
-    quad->setGeometry(vertices,primitives);
+    quad->setGeometry(vertices.size(),vertices,primitives.size(),primitives);
 
     quad->setMaterial(quadMaterial);
 
@@ -297,15 +298,15 @@ int PGEMain::Main() {
     viewMatrixConstant->setValue(viewMatrix);
     Shader::Constant* worldMatrixConstant = shader->getVertexShaderConstant("worldMatrix");
 
-    KeyboardInput testInput = KeyboardInput(KeyboardInput::SCANCODE::SPACE);
+    KeyboardInput testInput = KeyboardInput(KeyboardInput::KEYCODE::SPACE);
     io->trackInput(&testInput);
-    KeyboardInput leftInput = KeyboardInput(KeyboardInput::SCANCODE::A);
+    KeyboardInput leftInput = KeyboardInput(KeyboardInput::KEYCODE::A);
     io->trackInput(&leftInput);
-    KeyboardInput rightInput = KeyboardInput(KeyboardInput::SCANCODE::D);
+    KeyboardInput rightInput = KeyboardInput(KeyboardInput::KEYCODE::D);
     io->trackInput(&rightInput);
-    KeyboardInput forwardInput = KeyboardInput(KeyboardInput::SCANCODE::W);
+    KeyboardInput forwardInput = KeyboardInput(KeyboardInput::KEYCODE::W);
     io->trackInput(&forwardInput);
-    KeyboardInput backwardInput = KeyboardInput(KeyboardInput::SCANCODE::S);
+    KeyboardInput backwardInput = KeyboardInput(KeyboardInput::KEYCODE::S);
     io->trackInput(&backwardInput);
 
     float hAngle = 0;
@@ -393,7 +394,7 @@ int PGEMain::Main() {
     delete postprocessShader;
     delete shader;
 
-    delete channel;
+    //delete channel;
 
     delete audio;
     delete io;
