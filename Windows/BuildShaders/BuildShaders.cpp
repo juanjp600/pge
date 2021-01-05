@@ -267,16 +267,26 @@ int main(int argc, char* argv[]) {
 	if (fHandle == 0) { return 0; }
 
 	do {
-		printf("%ls\n", findData.cFileName);
+		wprintf(L"%ls\n", findData.cFileName);
 		DWORD attribs = GetFileAttributesW(findData.cFileName);
 		if ((attribs & FILE_ATTRIBUTE_DIRECTORY) != 0 && findData.cFileName[0] != '.') {
 			std::wstring fileName = (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/shader.hlsl");
 			printf("Compiling %ls...\n",fileName.c_str());
+			// DX11
 			compileShader(fileName.c_str());
+			// Vulkan
+			// This is fucking ugly and should probably be done properly via Win32's ShellExecute.
+			char* cmd = new char[512];
+			wcstombs(cmd, (std::wstring(L"glslangValidator.exe -S vert -e VS -o ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/shader.spv") + L" -V -D " + fileName).c_str(), 512);
+			system(cmd);
 		}
 	} while (FindNextFileW(fHandle, &findData) != 0);
 
 	FindClose(fHandle);
+
+	if (argc < 2) {
+		system("pause");
+	}
 
 	return 0;
 }
