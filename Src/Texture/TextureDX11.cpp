@@ -58,13 +58,16 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         }
     }
 
-    DXGI_FORMAT dxFormat = DXGI_FORMAT_UNKNOWN;
+    DXGI_FORMAT dxFormat;
     switch (format) {
         case FORMAT::RGBA32: {
             dxFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
         } break;
         case FORMAT::R32F: {
             dxFormat = DXGI_FORMAT_R32_FLOAT;
+        } break;
+        default: {
+            dxFormat = DXGI_FORMAT_UNKNOWN;
         }
     }
 
@@ -246,6 +249,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    // TODO: Different from regular texture loading.
     dxShaderResourceViewDesc.Texture2D.MipLevels = 1;
     hResult = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
     if (FAILED(hResult)) {
@@ -387,6 +391,19 @@ void TextureDX11::useTexture(int index) {
 
 bool TextureDX11::isRenderTarget() const {
     return isRT;
+}
+
+Texture* TextureDX11::copy() const {
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+
+    TextureDX11* copy = new TextureDX11(graphics, getWidth(), getHeight(), false, nullptr, format);
+    copy->name = String(name, "_Copy");
+
+    dxContext->CopyResource(copy->dxTexture, dxTexture);
+
+    // TODO: Check MipLevels, might have to regenerate dxShaderResourceView.
+
+    return copy;
 }
 
 ID3D11RenderTargetView* TextureDX11::getRtv() const {
