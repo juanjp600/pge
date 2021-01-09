@@ -22,6 +22,8 @@ class TextureDX11 : public Texture {
 
         virtual bool isRenderTarget() const;
 
+        virtual Texture* copy() const;
+
         ID3D11RenderTargetView* getRtv() const;
         ID3D11DepthStencilView* getZBufferView() const;
         virtual void* getNative() const;
@@ -35,7 +37,6 @@ class TextureDX11 : public Texture {
         Graphics* graphics;
 
         D3D11_TEXTURE2D_DESC dxTextureDesc;
-        D3D11_SUBRESOURCE_DATA dxTextureData;
         ID3D11Texture2D* dxTexture;
         D3D11_SHADER_RESOURCE_VIEW_DESC dxShaderResourceViewDesc;
         ID3D11ShaderResourceView* dxShaderResourceView;

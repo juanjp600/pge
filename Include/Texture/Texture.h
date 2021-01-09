@@ -18,6 +18,8 @@ class Texture {
         virtual bool isRenderTarget() const = 0;
 
         int getWidth() const; int getHeight() const;
+
+        virtual Texture* copy() const = 0;
         
         virtual void* getNative() const = 0;
 
