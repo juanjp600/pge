@@ -18,11 +18,11 @@ int PGE::InitMain() {
         std::ofstream exceptionLog;
         exceptionLog.open("exception.txt",std::ofstream::out | std::ofstream::trunc);
         PGE::String exceptionType = "PGE::Exception";
-        exceptionLog.write(exceptionType.cstr(),exceptionType.size());
+        exceptionLog.write(exceptionType.cstr(),exceptionType.byteLength());
         exceptionLog.write("\n",1);
-        exceptionLog.write(e.getSource().cstr(),e.getSource().size());
+        exceptionLog.write(e.getSource().cstr(),e.getSource().byteLength());
         exceptionLog.write("\n",1);
-        exceptionLog.write(e.getDetails().cstr(),e.getDetails().size());
+        exceptionLog.write(e.getDetails().cstr(),e.getDetails().byteLength());
         exceptionLog.write("\n",1);
         exceptionLog.close();
         SDL_ShowSimpleMessageBox(0,"Fatal Error",
@@ -32,10 +32,10 @@ int PGE::InitMain() {
         std::ofstream exceptionLog;
         exceptionLog.open("exception.txt",std::ofstream::out | std::ofstream::trunc);
         PGE::String exceptionType = "std::exception";
-        exceptionLog.write(exceptionType.cstr(),exceptionType.size());
+        exceptionLog.write(exceptionType.cstr(),exceptionType.byteLength());
         exceptionLog.write("\n",1);
         PGE::String details = e.what();
-        exceptionLog.write(details.cstr(),details.size());
+        exceptionLog.write(details.cstr(),details.byteLength());
         exceptionLog.write("\n",1);
         exceptionLog.close();
         SDL_ShowSimpleMessageBox(0,"Fatal Error",
