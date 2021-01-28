@@ -92,7 +92,7 @@ std::vector<FilePath> FileUtil::enumerateFolders(const FilePath& path) {
     wchar* wstr = new wchar[anyPath.length() + 1];
     anyPath.wstr(wstr);
     hFind = FindFirstFileW(wstr, &ffd);
-    //delete[] wstr;
+    //delete[] wstr; // TODO Memleak
 
     if (hFind == INVALID_HANDLE_VALUE) {
         throw std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
