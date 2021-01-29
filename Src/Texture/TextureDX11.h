@@ -14,6 +14,7 @@ namespace PGE {
 class TextureDX11 : public Texture {
     public:
         TextureDX11(Graphics* gfx, int width, int height, bool renderTarget, const void* buffer, FORMAT fmt);
+        TextureDX11(Graphics* gfx, const void* buffer, int size);
         TextureDX11(Graphics* gfx, const FilePath& fn);
         TextureDX11(Graphics* gfx, const FilePath& fn, ThreadManager* threadManager);
         ~TextureDX11();
@@ -29,6 +30,7 @@ class TextureDX11 : public Texture {
         virtual void* getNative() const;
 
     private:
+        void initLoad(BYTE* fiBuffer);
         TextureDX11(){};
 
         void cleanup() override;

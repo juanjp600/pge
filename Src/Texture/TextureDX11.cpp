@@ -10,6 +10,10 @@
 
 using namespace PGE;
 
+Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
+    return new TextureDX11(gfx, buffer, size);
+}
+
 Texture* Texture::load(Graphics* gfx, const FilePath& filename) {
     return new TextureDX11(gfx,filename);
 }
@@ -139,26 +143,11 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 }
 
-TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn) {
-    dxShaderResourceView = nullptr;
-    dxTexture = nullptr;
-    dxRtv = nullptr;
-    dxZBufferView = nullptr;
-    dxZBufferTexture = nullptr;
-    isRT = false;
-
+TextureDX11::TextureDX11(Graphics* gfx, const void* buffer, int size) {
     graphics = gfx;
-    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
-
-    filename = fn;
-    name = fn.str();
-
-    format = FORMAT::RGBA32;
-
     BYTE* fiBuffer = nullptr;
     try {
-        fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight);
+        fiBuffer = loadFIBufferFromMemory(buffer, size, width, height, realWidth, realHeight);
     } catch (Exception& e) {
         cleanup();
         throw e;
@@ -166,6 +155,38 @@ TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn) {
         cleanup();
         throw e;
     }
+    initLoad(fiBuffer);
+}
+
+TextureDX11::TextureDX11(Graphics* gfx, const FilePath& fn) {
+    graphics = gfx;
+    filename = fn;
+    name = fn.str();
+    BYTE* fiBuffer = nullptr;
+    try {
+        fiBuffer = loadFIBufferFromFile(filename, width, height, realWidth, realHeight);
+    } catch (Exception& e) {
+        cleanup();
+        throw e;
+    } catch (std::exception& e) {
+        cleanup();
+        throw e;
+    }
+    initLoad(fiBuffer);
+}
+
+void TextureDX11::initLoad(BYTE* fiBuffer) {
+    dxShaderResourceView = nullptr;
+    dxTexture = nullptr;
+    dxRtv = nullptr;
+    dxZBufferView = nullptr;
+    dxZBufferTexture = nullptr;
+    isRT = false;
+    
+    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+
+    format = FORMAT::RGBA32;
 
     ZeroMemory(&dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC));
     dxTextureDesc.Width = (UINT)realWidth;
@@ -334,7 +355,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
             FilePath filename;
             int* width; int* height; int* realWidth; int* realHeight;
             void execute() {
-                BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight);
+                BYTE* fiBuffer = loadFIBufferFromFile(filename,*width,*height,*realWidth,*realHeight);
 
                 mainThreadRequest.realWidth = *realWidth;
                 mainThreadRequest.realHeight = *realHeight;

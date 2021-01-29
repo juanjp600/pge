@@ -5,7 +5,8 @@
 
 namespace PGE {
 
-BYTE* loadFIBuffer(const FilePath& filename, int& width, int& height, int& realWidth, int& realHeight);
+BYTE* loadFIBufferFromMemory(const void* buffer, int size, int& width, int& height, int& realWidth, int& realHeight);
+BYTE* loadFIBufferFromFile(const FilePath& filename, int& width, int& height, int& realWidth, int& realHeight);
 
 }
 

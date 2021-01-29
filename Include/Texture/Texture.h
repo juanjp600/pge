@@ -23,6 +23,7 @@ class Texture {
         
         virtual void* getNative() const = 0;
 
+        static Texture* load(Graphics* gfx, const void* buffer, int size);
         static Texture* load(Graphics* gfx, const FilePath& filename);
         static Texture* load(Graphics* gfx, const FilePath& filename, ThreadManager* threadManager);
         static Texture* create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer, FORMAT fmt);
