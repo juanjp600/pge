@@ -30,6 +30,7 @@
     <ClCompile Include="..\..\Src\Math\Vector.cpp" />
     <ClCompile Include="..\..\Src\Mesh\Mesh.cpp" />
     <ClCompile Include="..\..\Src\Mesh\MeshDX11.cpp" />
+    <ClCompile Include="..\..\Src\Misc\BinaryReader.cpp" />
     <ClCompile Include="..\..\Src\Misc\FilePath.cpp" />
     <ClCompile Include="..\..\Src\Misc\FileUtil.cpp" />
     <ClCompile Include="..\..\Src\Misc\String.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="..\..\Include\Math\Rectangle.h" />
     <ClInclude Include="..\..\Include\Math\Vector.h" />
     <ClInclude Include="..\..\Include\Mesh\Mesh.h" />
+    <ClInclude Include="..\..\Include\Misc\BinaryReader.h" />
     <ClInclude Include="..\..\Include\Misc\FilePath.h" />
     <ClInclude Include="..\..\Include\Misc\FileUtil.h" />
     <ClInclude Include="..\..\Include\Misc\String.h" />
