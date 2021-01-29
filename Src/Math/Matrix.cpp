@@ -9,6 +9,11 @@ const Matrix4x4f Matrix4x4f::identity = Matrix4x4f(1,0,0,0,
                                                    0,0,1,0,
                                                    0,0,0,1);
 
+const Matrix4x4f Matrix4x4f::zero = Matrix4x4f(0,0,0,0,
+                                               0,0,0,0,
+                                               0,0,0,0,
+                                               0,0,0,0);
+
 Matrix4x4f::Matrix4x4f() {
     *this = identity;
 }
@@ -24,25 +29,23 @@ Matrix4x4f::Matrix4x4f(float aa,float ab,float ac,float ad,
 }
 
 Matrix4x4f& Matrix4x4f::operator*=(const Matrix4x4f& other) {
-    float intVal[4];
+    Matrix4x4f retVal = zero;
     for (int i = 0; i < 4; i++) {
-        std::fill_n(intVal, 4, 0);
-        for (int j = 0; j < 4; j++) {
-            for (int k = 0; k < 4; k++) {
-                intVal[j] += elements[i][k] * other.elements[k][j];
+        for (int k = 0; k < 4; k++) {
+            for (int j = 0; j < 4; j++) {
+                retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
             }
         }
-        memcpy(&elements[i], &intVal, sizeof(float) * 4);
     }
+    *this = retVal;
     return *this;
 }
 
 Matrix4x4f Matrix4x4f::operator*(const Matrix4x4f& other) const {
-    Matrix4x4f retVal;
+    Matrix4x4f retVal = zero;
     for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            retVal.elements[i][j] = 0.f;
-            for (int k = 0; k < 4; k++) {
+        for (int k = 0; k < 4; k++) {
+            for (int j = 0; j < 4; j++) {
                 retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
             }
         }
@@ -83,12 +86,11 @@ Matrix4x4f Matrix4x4f::transpose() const {
 }
 
 Matrix4x4f Matrix4x4f::product(const Matrix4x4f& other) const {
-    Matrix4x4f retVal;
-    for (int i=0;i<4;i++) {
-        for (int j=0;j<4;j++) {
-            retVal.elements[i][j] = 0.f;
-            for (int k=0;k<4;k++) {
-                retVal.elements[i][j] += elements[i][k]*other.elements[k][j];
+    Matrix4x4f retVal = zero;
+    for (int i = 0; i < 4; i++) {
+        for (int k = 0; k < 4; k++) {
+            for (int j = 0; j < 4; j++) {
+                retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
             }
         }
     }
