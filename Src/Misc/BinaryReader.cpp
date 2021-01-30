@@ -71,7 +71,8 @@ String BinaryReader::readFixedLengthString(int length) {
 }
 
 Vector3f BinaryReader::readVector3f() {
-    return Vector3f(readFloat(), readFloat(), readFloat());
+    float x = readFloat(); float y = readFloat(); float z = readFloat();
+    return Vector3f(x,y,z);
 }
 
 void BinaryReader::skip(int length) {
