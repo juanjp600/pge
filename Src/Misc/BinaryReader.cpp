@@ -70,6 +70,11 @@ String BinaryReader::readFixedLengthString(int length) {
     return s;
 }
 
+Vector2f BinaryReader::readVector2f() {
+    float x = readFloat(); float y = readFloat();
+    return Vector2f(x,y);
+}
+
 Vector3f BinaryReader::readVector3f() {
     float x = readFloat(); float y = readFloat(); float z = readFloat();
     return Vector3f(x,y,z);
