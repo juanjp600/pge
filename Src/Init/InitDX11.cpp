@@ -4,6 +4,7 @@
 
 #include <SDL.h>
 #include <fstream>
+#include <wtypes.h>
 
 #include "InitInternal.h"
 
@@ -22,7 +23,7 @@ void PGE::QuitEnv() {
 #ifdef DEBUG
 int main() {
 #else
-int WinMain() {
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow) {
 #endif
     return PGE::InitMain();
 }
