@@ -28,6 +28,7 @@ class BinaryReader {
         double readDouble();
         String readNullTerminatedString();
         String readFixedLengthString(int length);
+        Vector2f readVector2f();
         Vector3f readVector3f();
 
         void skip(int length);
