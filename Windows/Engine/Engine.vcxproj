@@ -24,10 +24,9 @@
     <ClCompile Include="..\..\Src\Exception\Exception.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Graphics.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp" />
+    <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsOGL3.cpp" />
     <ClCompile Include="..\..\Src\Init\Init.cpp" />
-    <ClCompile Include="..\..\Src\Init\InitDX11.cpp" />
-    <ClCompile Include="..\..\Src\Init\InitOGL3.cpp" />
     <ClCompile Include="..\..\Src\IO\IO.cpp" />
     <ClCompile Include="..\..\Src\IO\IOInternal.h" />
     <ClCompile Include="..\..\Src\Material\Material.cpp" />
@@ -88,7 +87,6 @@
     <ClInclude Include="..\..\Src\Audio\AudioInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />
-    <ClInclude Include="..\..\Src\Init\InitInternal.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
@@ -175,7 +173,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DEBUG;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;DEBUG;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -186,7 +184,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DEBUG;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;DEBUG;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -199,7 +197,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -215,7 +213,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>

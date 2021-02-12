@@ -15,7 +15,7 @@ class Texture {
             R32F
         };
 
-        virtual bool isRenderTarget() const = 0;
+        bool isRenderTarget() const;
 
         int getWidth() const; int getHeight() const;
 
@@ -33,13 +33,14 @@ class Texture {
         virtual void cleanup() = 0;
         virtual void throwException(String func, String details) = 0;
 
+        Graphics* graphics;
+        bool isRT;
+
         int width; int height;
         int realWidth; int realHeight;
 
         FilePath filename; String name;
         FORMAT format;
-
-        Texture(){};
 };
 
 }

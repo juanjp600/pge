@@ -8,10 +8,6 @@
 
 using namespace PGE;
 
-Graphics* Graphics::create(String name,int w,int h,bool fs) {
-    return new GraphicsOGL3(name,w,h,fs);
-}
-
 GraphicsOGL3::GraphicsOGL3(String name,int w,int h,bool fs) {
     try {
         GLenum glError = GL_NO_ERROR;
@@ -56,6 +52,10 @@ void GraphicsOGL3::throwException(String func, String details) {
     throw Exception("GraphicsOGL3::" + func, details);
 }
 
+Graphics::Renderer GraphicsOGL3::getRenderer() {
+    return Renderer::OpenGL;
+}
+
 void GraphicsOGL3::update() {
     Graphics::update();
     takeGlContext();
@@ -65,10 +65,6 @@ void GraphicsOGL3::takeGlContext() {
     if (window != nullptr && SDL_GL_GetCurrentContext()!=((WindowOGL3*)window)->getGlContext()) {
         SDL_GL_MakeCurrent(((WindowInternal*)window)->getSdlWindow(),((WindowOGL3*)window)->getGlContext());
     }
-}
-
-void GraphicsOGL3::setViewport(Rectanglei vp) {
-    glViewport(vp.topLeftCorner().x,vp.topLeftCorner().y,vp.width(),vp.height());
 }
 
 void GraphicsOGL3::clear(Color color) {
@@ -144,4 +140,8 @@ void GraphicsOGL3::resetRenderTarget() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDepthMask(GL_TRUE);
     glColorMask(true,true,true,true);
+}
+
+void GraphicsOGL3::setViewport(Rectanglei vp) {
+    glViewport(vp.topLeftCorner().x, vp.topLeftCorner().y, vp.width(), vp.height());
 }

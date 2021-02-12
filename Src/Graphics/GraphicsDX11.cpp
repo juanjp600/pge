@@ -8,10 +8,6 @@
 
 using namespace PGE;
 
-Graphics* Graphics::create(String name,int w,int h,bool fs) {
-    return new GraphicsDX11(name,w,h,fs);
-}
-
 GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) {
     try {
         window = nullptr;
@@ -46,6 +42,10 @@ void GraphicsDX11::cleanup() {
 void GraphicsDX11::throwException(String func,String details) {
     cleanup();
     throw Exception("GraphicsDX11::"+func,details);
+}
+
+Graphics::Renderer GraphicsDX11::getRenderer() {
+    return Renderer::DirectX11;
 }
 
 void GraphicsDX11::update() {

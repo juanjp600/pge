@@ -13,10 +13,6 @@
 
 using namespace PGE;
 
-Shader* Shader::load(Graphics* gfx,const FilePath& path) {
-    return new ShaderOGL3(gfx,path);
-}
-
 ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     graphics = gfx;
     ((GraphicsOGL3*)graphics)->takeGlContext();

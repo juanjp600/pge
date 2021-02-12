@@ -10,22 +10,6 @@
 
 using namespace PGE;
 
-Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
-    return new TextureDX11(gfx, buffer, size);
-}
-
-Texture* Texture::load(Graphics* gfx, const FilePath& filename) {
-    return new TextureDX11(gfx,filename);
-}
-
-Texture* Texture::load(Graphics* gfx, const FilePath& filename,ThreadManager* threadManager) {
-    return new TextureDX11(gfx,filename,threadManager);
-}
-
-Texture* Texture::create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer,FORMAT fmt) {
-    return new TextureDX11(gfx,w,h,renderTarget,buffer,fmt);
-}
-
 TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,FORMAT fmt) {
     dxShaderResourceView = nullptr;
     dxTexture = nullptr;
@@ -143,39 +127,15 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 }
 
-TextureDX11::TextureDX11(Graphics* gfx, const void* buffer, int size) {
+TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn) {
     graphics = gfx;
-    BYTE* fiBuffer = nullptr;
-    try {
-        fiBuffer = loadFIBufferFromMemory(buffer, size, width, height, realWidth, realHeight);
-    } catch (Exception& e) {
-        cleanup();
-        throw e;
-    } catch (std::exception& e) {
-        cleanup();
-        throw e;
-    }
-    initLoad(fiBuffer);
-}
-
-TextureDX11::TextureDX11(Graphics* gfx, const FilePath& fn) {
-    graphics = gfx;
+    width = w;
+    height = h;
+    realWidth = rw;
+    realHeight = rh;
     filename = fn;
     name = fn.str();
-    BYTE* fiBuffer = nullptr;
-    try {
-        fiBuffer = loadFIBufferFromFile(filename, width, height, realWidth, realHeight);
-    } catch (Exception& e) {
-        cleanup();
-        throw e;
-    } catch (std::exception& e) {
-        cleanup();
-        throw e;
-    }
-    initLoad(fiBuffer);
-}
 
-void TextureDX11::initLoad(BYTE* fiBuffer) {
     dxShaderResourceView = nullptr;
     dxTexture = nullptr;
     dxRtv = nullptr;
@@ -222,8 +182,6 @@ void TextureDX11::initLoad(BYTE* fiBuffer) {
     dxContext->GenerateMips(dxShaderResourceView);
 
     isRT = false;
-
-    delete[] fiBuffer;
 }
 
 TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager) {

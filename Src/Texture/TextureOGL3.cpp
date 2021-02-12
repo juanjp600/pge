@@ -10,18 +10,6 @@
 
 using namespace PGE;
 
-Texture* Texture::create(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,Texture::FORMAT fmt) {
-    return new TextureOGL3(gfx,w,h,renderTarget,buffer,fmt);
-}
-
-Texture* Texture::load(Graphics* gfx, const FilePath& fn) {
-    return new TextureOGL3(gfx,fn);
-}
-
-Texture* Texture::load(Graphics* gfx, const FilePath& fn,ThreadManager* threadManager) {
-    return new TextureOGL3(gfx,fn,threadManager);
-}
-
 TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,Texture::FORMAT fmt) {
     GLuint glError = GL_NO_ERROR;
 
@@ -97,15 +85,18 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn) {
-    GLuint glError = GL_NO_ERROR;
-
-    graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
-
+TextureOGL3::TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn) {
+    graphics = gfx;
+    width = w;
+    height = h;
+    realWidth = rw;
+    realHeight = rh;
     filename = fn;
     name = fn.str();
 
-    BYTE* fiBuffer = loadFIBufferFromFile(filename,width,height,realWidth,realHeight);
+    GLuint glError = GL_NO_ERROR;
+
+    ((GraphicsOGL3*)graphics)->takeGlContext();
 
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
@@ -117,8 +108,6 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn) {
     }
 
     glGenerateMipmap(GL_TEXTURE_2D);
-
-    delete[] fiBuffer;
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -230,10 +219,6 @@ void TextureOGL3::cleanup() {
         glDeleteRenderbuffers(1,&glDepthbuffer);
     }
     glDeleteTextures(1,&glTexture);
-}
-
-bool TextureOGL3::isRenderTarget() const {
-    return isRT;
 }
 
 // TODO: Test.

@@ -12,10 +12,6 @@
 
 using namespace PGE;
 
-Mesh* Mesh::create(Graphics* gfx, Primitive::TYPE pt) {
-    return new MeshOGL3(gfx, pt);
-}
-
 MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 

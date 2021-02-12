@@ -1,9 +1,12 @@
 #include <Texture/Texture.h>
 #include "TextureInternal.h"
-#include <inttypes.h>
 #include <Exception/Exception.h>
 
 using namespace PGE;
+
+bool Texture::isRenderTarget() const {
+    return isRT;
+}
 
 int Texture::getWidth() const {
     return width;

@@ -13,10 +13,6 @@
 
 using namespace PGE;
 
-Mesh* Mesh::create(Graphics* gfx, Primitive::TYPE pt) {
-    return new MeshDX11(gfx, pt);
-}
-
 MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) {
     graphics = gfx;
 

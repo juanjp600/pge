@@ -189,9 +189,6 @@
     <ClCompile Include="..\..\Src\Init\Init.cpp">
       <Filter>Src\Init</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Init\InitDX11.cpp">
-      <Filter>Src\Init</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Misc\FileUtil.cpp">
       <Filter>Src\Misc</Filter>
     </ClCompile>
@@ -207,9 +204,6 @@
     <ClCompile Include="..\..\Src\Misc\BinaryReader.cpp">
       <Filter>Src\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Init\InitOGL3.cpp">
-      <Filter>Src\Init</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\GraphicsOGL3.cpp">
       <Filter>Src\Graphics</Filter>
     </ClCompile>
@@ -224,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Window\WindowOGL3.cpp">
       <Filter>Src\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp">
+      <Filter>Src\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -319,9 +316,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\SysEvents\SysEvents.h">
       <Filter>Include\SysEvents</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Init\InitInternal.h">
-      <Filter>Src\Init</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Misc\FileUtil.h">
       <Filter>Include\Misc</Filter>

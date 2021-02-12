@@ -8,10 +8,6 @@
 
 using namespace PGE;
 
-Shader* Shader::load(Graphics* gfx, const FilePath& path) {
-    return new ShaderDX11(gfx,path);
-}
-
 ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     dxVertexInputLayout = nullptr;
     dxVertexShader = nullptr;
