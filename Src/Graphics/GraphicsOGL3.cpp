@@ -4,7 +4,7 @@
 #include "../Window/WindowOGL3.h"
 #include <Texture/Texture.h>
 #include "../Texture/TextureOGL3.h"
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 
 using namespace PGE;
 
@@ -25,7 +25,7 @@ GraphicsOGL3::GraphicsOGL3(String name,int w,int h,bool fs) {
         glError = glGetError();
         if (glError != GL_NO_ERROR) {
             glFramebuffer = 0;
-            throwException("GraphicsOGL3", "Failed to generate frame buffer. (GL_ERROR: " + String(glError, true) + ")");
+            throwException("GraphicsOGL3", "Failed to generate frame buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
         }
 
     } catch (Exception& e) {
@@ -113,7 +113,7 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
     TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
     for (int i=0;i<renderTargets.size();i++) {
         if (!renderTargets[i]->isRenderTarget()) {
-            throwException("setRenderTargets","renderTargets["+String(i)+"] is not a valid render target");
+            throwException("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
         }
 
         if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i]->getWidth()+renderTargets[i]->getHeight())) {

@@ -22,6 +22,8 @@ class TextureOGL3 : public Texture {
 
         virtual bool isRenderTarget() const override;
 
+        virtual Texture* copy() const;
+
         GLuint getGlTexture() const;
         //GLuint getGlFramebuffer() const;
         GLuint getGlDepthbuffer() const;

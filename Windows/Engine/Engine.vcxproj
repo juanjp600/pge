@@ -24,8 +24,10 @@
     <ClCompile Include="..\..\Src\Exception\Exception.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Graphics.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp" />
+    <ClCompile Include="..\..\Src\Graphics\GraphicsOGL3.cpp" />
     <ClCompile Include="..\..\Src\Init\Init.cpp" />
     <ClCompile Include="..\..\Src\Init\InitDX11.cpp" />
+    <ClCompile Include="..\..\Src\Init\InitOGL3.cpp" />
     <ClCompile Include="..\..\Src\IO\IO.cpp" />
     <ClCompile Include="..\..\Src\IO\IOInternal.h" />
     <ClCompile Include="..\..\Src\Material\Material.cpp" />
@@ -38,19 +40,23 @@
     <ClCompile Include="..\..\Src\Math\Vector.cpp" />
     <ClCompile Include="..\..\Src\Mesh\Mesh.cpp" />
     <ClCompile Include="..\..\Src\Mesh\MeshDX11.cpp" />
+    <ClCompile Include="..\..\Src\Mesh\MeshOGL3.cpp" />
     <ClCompile Include="..\..\Src\Misc\BinaryReader.cpp" />
     <ClCompile Include="..\..\Src\Misc\FilePath.cpp" />
     <ClCompile Include="..\..\Src\Misc\FileUtil.cpp" />
     <ClCompile Include="..\..\Src\Misc\String.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp" />
+    <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp" />
     <ClCompile Include="..\..\Src\Sound\Sound.cpp" />
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
     <ClCompile Include="..\..\Src\Texture\Texture.cpp" />
     <ClCompile Include="..\..\Src\Texture\TextureDX11.cpp" />
+    <ClCompile Include="..\..\Src\Texture\TextureOGL3.cpp" />
     <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp" />
     <ClCompile Include="..\..\Src\UserInput\UserInput.cpp" />
     <ClCompile Include="..\..\Src\Window\Window.cpp" />
     <ClCompile Include="..\..\Src\Window\WindowDX11.cpp" />
+    <ClCompile Include="..\..\Src\Window\WindowOGL3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\Audio\Audio.h" />
@@ -81,15 +87,20 @@
     <ClInclude Include="..\..\Include\Window\Window.h" />
     <ClInclude Include="..\..\Src\Audio\AudioInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
+    <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />
     <ClInclude Include="..\..\Src\Init\InitInternal.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
+    <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
+    <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h" />
     <ClInclude Include="..\..\Src\Sound\SoundInternal.h" />
     <ClInclude Include="..\..\Src\SysEvents\SysEventsInternal.h" />
     <ClInclude Include="..\..\Src\Texture\TextureDX11.h" />
     <ClInclude Include="..\..\Src\Texture\TextureInternal.h" />
+    <ClInclude Include="..\..\Src\Texture\TextureOGL3.h" />
     <ClInclude Include="..\..\Src\Window\WindowDX11.h" />
     <ClInclude Include="..\..\Src\Window\WindowInternal.h" />
+    <ClInclude Include="..\..\Src\Window\WindowOGL3.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -143,18 +154,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glew-2.1.0/include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glew-2.1.0/include</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glew-2.1.0/include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glew-2.1.0/include</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>

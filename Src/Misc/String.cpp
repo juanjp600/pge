@@ -106,6 +106,7 @@ String String::format(T t, const String& format) {
     return ret;
 }
 
+// TODO: Possibly remove
 template String String::format<int8_t>(int8_t t, const PGE::String& format);
 template String String::format<int16_t>(int16_t t, const PGE::String& format);
 template String String::format<int32_t>(int32_t t, const PGE::String& format);
