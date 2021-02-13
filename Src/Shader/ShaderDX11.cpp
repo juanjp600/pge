@@ -5,6 +5,7 @@
 #include "../Window/WindowDX11.h"
 #include <Exception/Exception.h>
 #include <fstream>
+#include <Misc/FileUtil.h>
 
 using namespace PGE;
 
@@ -16,8 +17,6 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     graphics = gfx;
 
     filepath = path;
-
-    char* buf = new char[512];
 
     std::ifstream reflectionInfo; reflectionInfo.open(String(path.str(),"reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
     
@@ -84,33 +83,15 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
 
     reflectionInfo.close();
 
-    vertexShaderBytecode.clear();
-    std::ifstream vertexSourceFile; vertexSourceFile.open(String(path.str(),"vertex.dxbc").cstr(), std::ios_base::in | std::ios_base::binary);
-    while (!vertexSourceFile.eof()) {
-        int writeInd = (int)vertexShaderBytecode.size();
-        vertexSourceFile.read(buf,512); int bytesRead = (int)vertexSourceFile.gcount();
-        if (bytesRead<=0) { break; }
-        vertexShaderBytecode.resize(vertexShaderBytecode.size()+bytesRead);
-        memcpy(&(vertexShaderBytecode[writeInd]),buf,bytesRead);
-    }
+    vertexShaderBytecode = FileUtil::readBytes(path + "vertex.dxbc");
     if (vertexShaderBytecode.size() <= 0) {
         throwException("ShaderDX11","Vertex shader is empty (filename: "+path.str() +")");
     }
-    vertexSourceFile.close();
 
-    fragmentShaderBytecode.clear();
-    std::ifstream fragmentSourceFile; fragmentSourceFile.open(String(path.str(),"fragment.dxbc").cstr(), std::ios_base::in | std::ios_base::binary);
-    while (!fragmentSourceFile.eof()) {
-        int writeInd = (int)fragmentShaderBytecode.size();
-        fragmentSourceFile.read(buf,512); int bytesRead = (int)fragmentSourceFile.gcount();
-        if (bytesRead<=0) { break; }
-        fragmentShaderBytecode.resize(fragmentShaderBytecode.size()+bytesRead);
-        memcpy(&(fragmentShaderBytecode[writeInd]),buf,bytesRead);
-    }
+    fragmentShaderBytecode = FileUtil::readBytes(path + "fragment.dxbc");
     if (fragmentShaderBytecode.size() <= 0) {
         throwException("ShaderDX11","Fragment shader is empty (filename: "+path.str()+")");
     }
-    fragmentSourceFile.close();
 
     HRESULT hResult = 0;
 
@@ -128,8 +109,6 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     if (FAILED(hResult)) {
         throwException("ShaderDX11", "Failed to create input layout (filename: "+path.str()+"; HRESULT "+String::fromInt(hResult)+")");
     }
-
-    delete[] buf;
 }
 
 ShaderDX11::~ShaderDX11() {

@@ -2,6 +2,7 @@
 #include "../Graphics/GraphicsOGL3.h"
 #include "ShaderOGL3.h"
 #include <Exception/Exception.h>
+#include <Misc/FileUtil.h>
 
 #include <GL/glew.h>
 #ifndef __APPLE__
@@ -9,7 +10,6 @@
 #else
 #include <OpenGL/GL.h>
 #endif
-#include <fstream>
 
 using namespace PGE;
 
@@ -19,24 +19,16 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
 
     filepath = path;
 
-    String vertexSource = "";
-    std::ifstream vertexSourceFile; vertexSourceFile.open(String(path.str(),"vertex.glsl").cstr());
-    if (!vertexSourceFile.good()) {
+    std::vector<uint8_t> vertexFile = FileUtil::readBytes(path + "vertex.glsl");
+    if (vertexFile.empty()) {
         throwException("ShaderOGL3", "Failed to find vertex.glsl. (filepath: " + path.str() + ")");
     }
-
-    char* buf = new char[512];
-    while (!vertexSourceFile.eof()) {
-        vertexSourceFile.read(buf,511);
-        buf[vertexSourceFile.gcount()]='\0';
-        vertexSource = String(vertexSource,buf);
-    }
-    delete[] buf;
+    vertexFile.push_back(0);
+    const char* cstr = (char*)&vertexFile[0];
+    String vertexSource = String(cstr);
 
     std::vector<ShaderVar> vertexUniforms;
     extractShaderVars(vertexSource,"uniform",vertexUniforms);
-
-    const char* cstr = vertexSource.cstr();
 
     int errorCode = 0;
     glVertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -55,24 +47,16 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
         throwException("ShaderOGL3", "Failed to create vertex shader. (filepath: " + path.str() + ")\n" + errorStr);
     }
 
-    String fragmentSource = "";
-    std::ifstream fragmentSourceFile; fragmentSourceFile.open(String(path.str(),"fragment.glsl").cstr());
-    if (!fragmentSourceFile.good()) {
+    std::vector<uint8_t> fragmentFile = FileUtil::readBytes(path + "fragment.glsl");
+    if (fragmentFile.empty()) {
         throwException("ShaderOGL3", "Failed to find fragment.glsl. (filepath: " + path.str() + ")");
     }
-
-    buf = new char[512];
-    while (!fragmentSourceFile.eof()) {
-        fragmentSourceFile.read(buf,511);
-        buf[fragmentSourceFile.gcount()]='\0';
-        fragmentSource = String(fragmentSource,buf);
-    }
-    delete[] buf;
+    fragmentFile.push_back(0);
+    cstr = (char*)&fragmentFile[0];
+    String fragmentSource = String(cstr);
 
     std::vector<ShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource,"uniform",fragmentUniforms);
-
-    cstr = fragmentSource.cstr();
 
     glFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(glFragmentShader,1,&cstr,nullptr);

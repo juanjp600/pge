@@ -233,3 +233,13 @@ std::vector<String> FileUtil::readLines(const FilePath& path, bool includeEmptyL
     return retVal;
 }
 
+std::vector<uint8_t> FileUtil::readBytes(const FilePath& path) {
+    std::ifstream file;
+    file.open(path.cstr(), std::ios::ate | std::ios::binary);
+    size_t vertSize = file.tellg();
+    std::vector<uint8_t> ret = std::vector<uint8_t>(vertSize);
+    file.seekg(0);
+    file.read((char*)&ret[0], vertSize);
+    file.close();
+    return ret;
+}
