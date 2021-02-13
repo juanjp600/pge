@@ -1,13 +1,22 @@
 #include "ShaderVK.h"
 
+#include <Exception/Exception.h>
+#include <Misc/FileUtil.h>
+
 using namespace PGE;
 
 ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
     tempConstant = new ConstantVK();
+
+    FileUtil::readBytes(path + "vert.spv");
 }
 
 ShaderVK::~ShaderVK() {
+    
+}
 
+ShaderVK::~ShaderVK() {
+    cleanup();
 }
 
 Shader::Constant* ShaderVK::getVertexShaderConstant(String name) {
@@ -23,7 +32,8 @@ void ShaderVK::cleanup() {
 }
 
 void ShaderVK::throwException(String func, String details) {
-
+    cleanup();
+    throw Exception("ShaderVK::" + func, details);
 }
 
 ShaderVK::ConstantVK::ConstantVK() {
