@@ -277,7 +277,9 @@ int main(int argc, char* argv[]) {
 			// Vulkan
 			// This is fucking ugly and should probably be done properly via Win32's ShellExecute.
 			char* cmd = new char[512];
-			wcstombs(cmd, (std::wstring(L"glslangValidator.exe -S vert -e VS -o ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/shader.spv") + L" -V -D " + fileName).c_str(), 512);
+			wcstombs(cmd, (std::wstring(L"glslangValidator.exe -S vert -e VS -o ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/vert.spv") + L" -V -D " + fileName).c_str(), 512);
+			system(cmd);
+			wcstombs(cmd, (std::wstring(L"glslangValidator.exe -S frag -e PS -o ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/frag.spv") + L" -V -D " + fileName).c_str(), 512);
 			system(cmd);
 		}
 	} while (FindNextFileW(fHandle, &findData) != 0);
