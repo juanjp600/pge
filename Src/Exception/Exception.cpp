@@ -2,6 +2,10 @@
 
 using namespace PGE;
 
+#ifdef DEBUG
+#include <iostream>
+#endif
+
 Exception::Exception() {
     source = "N/A";
     details = "Improperly constructed exception";
@@ -15,6 +19,9 @@ Exception::Exception(const Exception& ex) {
 Exception::Exception(String src,String detail) {
     source = src;
     details = detail;
+#ifdef DEBUG
+    std::cout << src << ": " << detail << std::endl;
+#endif
 }
 
 String Exception::getSource() const {
