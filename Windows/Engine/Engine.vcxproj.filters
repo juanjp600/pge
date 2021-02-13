@@ -189,9 +189,6 @@
     <ClCompile Include="..\..\Src\Init\Init.cpp">
       <Filter>Src\Init</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Init\InitDX11.cpp">
-      <Filter>Src\Init</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Misc\FileUtil.cpp">
       <Filter>Src\Misc</Filter>
     </ClCompile>
@@ -203,6 +200,42 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Math\Random.cpp">
       <Filter>Src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Misc\BinaryReader.cpp">
+      <Filter>Src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\GraphicsOGL3.cpp">
+      <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Mesh\MeshOGL3.cpp">
+      <Filter>Src\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp">
+      <Filter>Src\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Texture\TextureOGL3.cpp">
+      <Filter>Src\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Window\WindowOGL3.cpp">
+      <Filter>Src\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp">
+      <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Mesh\MeshVK.cpp">
+      <Filter>Src\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\GraphicsVK.cpp">
+      <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Window\WindowVK.cpp">
+      <Filter>Src\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Texture\TextureVK.cpp">
+      <Filter>Src\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Shader\ShaderVK.cpp">
+      <Filter>Src\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,9 +332,6 @@
     <ClInclude Include="..\..\Include\SysEvents\SysEvents.h">
       <Filter>Include\SysEvents</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Init\InitInternal.h">
-      <Filter>Src\Init</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\Misc\FileUtil.h">
       <Filter>Include\Misc</Filter>
     </ClInclude>
@@ -313,6 +343,39 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Math\Random.h">
       <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Misc\BinaryReader.h">
+      <Filter>Include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h">
+      <Filter>Src\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h">
+      <Filter>Src\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Texture\TextureOGL3.h">
+      <Filter>Src\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Window\WindowOGL3.h">
+      <Filter>Src\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Mesh\MeshVK.h">
+      <Filter>Src\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Graphics\GraphicsVK.h">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Window\WindowVK.h">
+      <Filter>Src\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Texture\TextureVK.h">
+      <Filter>Src\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Shader\ShaderVK.h">
+      <Filter>Src\Shader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

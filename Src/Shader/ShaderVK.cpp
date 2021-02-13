@@ -2,12 +2,6 @@
 
 using namespace PGE;
 
-#ifdef VULKAN
-Shader* Shader::load(Graphics* gfx, const FilePath& path) {
-    return new ShaderVK(gfx, path);
-}
-#endif
-
 ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
     tempConstant = new ConstantVK();
 }

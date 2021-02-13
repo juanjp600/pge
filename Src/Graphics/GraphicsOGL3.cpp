@@ -4,13 +4,9 @@
 #include "../Window/WindowOGL3.h"
 #include <Texture/Texture.h>
 #include "../Texture/TextureOGL3.h"
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 
 using namespace PGE;
-
-Graphics* Graphics::create(String name,int w,int h,bool fs) {
-    return new GraphicsOGL3(name,w,h,fs);
-}
 
 GraphicsOGL3::GraphicsOGL3(String name,int w,int h,bool fs) {
     try {
@@ -25,7 +21,7 @@ GraphicsOGL3::GraphicsOGL3(String name,int w,int h,bool fs) {
         glError = glGetError();
         if (glError != GL_NO_ERROR) {
             glFramebuffer = 0;
-            throwException("GraphicsOGL3", "Failed to generate frame buffer. (GL_ERROR: " + String(glError, true) + ")");
+            throwException("GraphicsOGL3", "Failed to generate frame buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
         }
 
     } catch (Exception& e) {
@@ -56,6 +52,10 @@ void GraphicsOGL3::throwException(String func, String details) {
     throw Exception("GraphicsOGL3::" + func, details);
 }
 
+Graphics::Renderer GraphicsOGL3::getRenderer() {
+    return Renderer::OpenGL;
+}
+
 void GraphicsOGL3::update() {
     Graphics::update();
     takeGlContext();
@@ -65,10 +65,6 @@ void GraphicsOGL3::takeGlContext() {
     if (window != nullptr && SDL_GL_GetCurrentContext()!=((WindowOGL3*)window)->getGlContext()) {
         SDL_GL_MakeCurrent(((WindowInternal*)window)->getSdlWindow(),((WindowOGL3*)window)->getGlContext());
     }
-}
-
-void GraphicsOGL3::setViewport(Rectanglei vp) {
-    glViewport(vp.topLeftCorner().x,vp.topLeftCorner().y,vp.width(),vp.height());
 }
 
 void GraphicsOGL3::clear(Color color) {
@@ -113,7 +109,7 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
     TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
     for (int i=0;i<renderTargets.size();i++) {
         if (!renderTargets[i]->isRenderTarget()) {
-            throwException("setRenderTargets","renderTargets["+String(i)+"] is not a valid render target");
+            throwException("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
         }
 
         if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i]->getWidth()+renderTargets[i]->getHeight())) {
@@ -144,4 +140,8 @@ void GraphicsOGL3::resetRenderTarget() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDepthMask(GL_TRUE);
     glColorMask(true,true,true,true);
+}
+
+void GraphicsOGL3::setViewport(Rectanglei vp) {
+    glViewport(vp.topLeftCorner().x, vp.topLeftCorner().y, vp.width(), vp.height());
 }

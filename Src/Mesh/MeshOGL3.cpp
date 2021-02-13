@@ -8,13 +8,9 @@
 #include "../Shader/ShaderOGL3.h"
 #include <Texture/Texture.h>
 #include "../Texture/TextureOGL3.h"
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 
 using namespace PGE;
-
-Mesh* Mesh::create(Graphics* gfx, Primitive::TYPE pt) {
-    return new MeshOGL3(gfx, pt);
-}
 
 MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
@@ -133,12 +129,12 @@ void MeshOGL3::uploadInternalData() {
     glBufferData(GL_ARRAY_BUFFER, glVertexData.size(),glVertexData.data(),GL_STATIC_DRAW);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("uploadInternalData", "Failed to create data store for vertex buffer. (GL_ERROR: " + String(glError, true) + ")");
+        throwException("uploadInternalData", "Failed to create data store for vertex buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
     }
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,glIndexData.size()*sizeof(GLuint),glIndexData.data(),GL_STATIC_DRAW);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("uploadInternalData", "Failed to create data store for index buffer. (GL_ERROR: " + String(glError, true) + ")");
+        throwException("uploadInternalData", "Failed to create data store for index buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
     }
 
     mustReuploadInternalData = false;

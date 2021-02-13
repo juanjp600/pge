@@ -1,11 +1,8 @@
 #include <Graphics/Graphics.h>
+#include <Mesh/Mesh.h>
 #include <Exception/Exception.h>
 
 using namespace PGE;
-
-Graphics::Graphics() {
-    
-}
 
 Window* Graphics::getWindow() const {
     return window;

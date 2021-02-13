@@ -4,12 +4,6 @@
 
 using namespace PGE;
 
-#ifdef VULKAN
-Mesh* Mesh::create(Graphics* gfx, Primitive::TYPE pt) {
-    return new MeshVK(gfx, pt);
-}
-#endif
-
 MeshVK::MeshVK(Graphics* gfx, Primitive::TYPE pt) {
 
 }

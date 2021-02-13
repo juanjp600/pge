@@ -18,6 +18,8 @@ class GraphicsOGL3 : public Graphics {
         GraphicsOGL3(String name,int w=1280,int h=720,bool fs=false);
         ~GraphicsOGL3();
 
+        virtual Renderer getRenderer() override;
+
         virtual void update() override;
 
         virtual void clear(Color color) override;

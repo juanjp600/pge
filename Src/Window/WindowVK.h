@@ -24,8 +24,7 @@ class WindowVK : public WindowInternal {
         vk::SwapchainKHR swapchain;
         vk::Extent2D swapchainExtent;
         vk::SurfaceFormatKHR swapchainFormat;
-        int swapchainImageViewsCount;
-        vk::ImageView* swapchainImageViews;
+        std::vector<vk::ImageView> swapchainImageViews;
 
         void cleanup() override;
         void throwException(String func, String details) override;

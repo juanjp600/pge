@@ -39,12 +39,12 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) {
     std::vector<const char*> extensions = std::vector<const char*>(extensionData, extensionData + extensionCount);
     free(extensionData);
     
-    vkInstance = vk::createInstance(vk::InstanceCreateInfo({}, &vk::ApplicationInfo(c.cstr(), VK_MAKE_VERSION(0, 0, 0), "Pulse-Gun Engine", VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_0),
-        layers, extensions));
+    vk::ApplicationInfo vkAppInfo = vk::ApplicationInfo(c.cstr(), VK_MAKE_VERSION(0, 0, 0), "Pulse-Gun Engine", VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_0);
+    vkInstance = vk::createInstance(vk::InstanceCreateInfo({}, &vkAppInfo, layers, extensions));
 
     // Creating the window's surface via SDL.
     VkSurfaceKHR tmpSurface;
-    if (!SDL_Vulkan_CreateSurface(sdlWindow, vkInstance, &tmpSurface)) {
+    if (!SDL_Vulkan_CreateSurface(sdlWindow, (VkInstance)vkInstance, &tmpSurface)) {
         throwException("WindowVK", "Failed to create Vulkan surface: " + String(SDL_GetError()));
     }
     vkSurface = vk::SurfaceKHR(tmpSurface);
@@ -113,7 +113,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) {
         for (int i = 0; i < pdmp.memoryHeapCount; i++) {
             pdSize += pdmp.memoryHeaps.at(i).size;
         }
-        
+
         if (pdSize > selectedPdSize) {
             foundCompatibleDevice = true;
             selectedDevice = pd;
@@ -150,7 +150,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) {
 
     // TODO: Selecting the present mode.
     // Remember: https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPresentModeKHR.html
-    
+
     // Setting the size of the swap chain images.
     vk::SurfaceCapabilitiesKHR sc = selectedDevice.getSurfaceCapabilitiesKHR(vkSurface);
     // 0xFFFFFFFF indicates to just rely on the size of the window clamped by the given maxs and mins.
@@ -180,14 +180,11 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) {
 
     // Creating image views for our swapchain images to ultimately write to.
     std::vector<vk::Image> swapchainImages = vkDevice.getSwapchainImagesKHR(swapchain);
-    swapchainImageViewsCount = swapchainImages.size();
-    swapchainImageViews = new vk::ImageView[swapchainImageViewsCount];
-    int i = 0;
-    for (const auto& image : swapchainImages) {
+    std::vector<vk::ImageView> swapchainImageViews = std::vector<vk::ImageView>(swapchainImages.size());
+    for (vk::Image image : swapchainImages) {
         vk::ImageViewCreateInfo ivci = vk::ImageViewCreateInfo({}, image, vk::ImageViewType::e2D, swapchainFormat.format);
         ivci.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
-        swapchainImageViews[i] = vkDevice.createImageView(ivci);
-        i++;
+        swapchainImageViews.push_back(vkDevice.createImageView(ivci));
     }
 
     open = true;
@@ -212,15 +209,14 @@ void WindowVK::update() {
 }
 
 void WindowVK::swap(bool vsyncEnabled) {
-
+    
 }
 
 void WindowVK::cleanup() {
     SysEventsInternal::unsubscribe(eventSubscriber);
-    for (int i = 0; i < swapchainImageViewsCount; i++) {
-        vkDevice.destroyImageView(swapchainImageViews[i]);
+    for (vk::ImageView iw : swapchainImageViews) {
+        vkDevice.destroyImageView(iw);
     }
-    delete[] swapchainImageViews;
     vkDevice.destroySwapchainKHR(swapchain);
     vkDevice.destroy();
     vkInstance.destroySurfaceKHR(vkSurface);
@@ -230,5 +226,5 @@ void WindowVK::cleanup() {
 
 void WindowVK::throwException(String func, String details) {
     cleanup();
-    throw Exception("WindowOGL3::" + func, details);
+    throw Exception("WindowVK::" + func, details);
 }

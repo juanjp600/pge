@@ -10,6 +10,8 @@ class GraphicsVK : public Graphics {
         GraphicsVK(String name, int w = 1280, int h = 720, bool fs = false);
         ~GraphicsVK();
 
+        virtual Renderer getRenderer() override;
+
         void clear(Color color) override;
 
         virtual void setDepthTest(bool enabled) override;

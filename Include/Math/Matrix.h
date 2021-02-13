@@ -42,6 +42,7 @@ class Matrix4x4f {
         static Matrix4x4f constructOrthographicMat(float width, float height, float nearZ, float farZ);
 
         static const Matrix4x4f identity;
+        static const Matrix4x4f zero;
 };
 
 }

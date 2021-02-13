@@ -13,9 +13,17 @@ class Texture;
 
 class Graphics {
     public:
-        static Graphics* create(String name, int w, int h, bool fs);
+        enum class Renderer {
+            OpenGL,
+            DirectX11,
+            Vulkan
+        };
+
+        static Graphics* create(Renderer r, String name, int w, int h, bool fs);
 
         Window* getWindow() const;
+
+        virtual Renderer getRenderer() = 0;
         
         virtual void update();
         void swap(bool vsync = true);
@@ -33,8 +41,8 @@ class Graphics {
         Rectanglei getViewport() const;
 
         virtual ~Graphics(){};
+
     protected:
-        Graphics();
         virtual void cleanup() = 0;
         virtual void throwException(String func, String details) = 0;
 

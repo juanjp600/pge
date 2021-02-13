@@ -1,7 +1,7 @@
 #include <Graphics/Graphics.h>
 #include "../Graphics/GraphicsOGL3.h"
 #include "ShaderOGL3.h"
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 
 #include <GL/glew.h>
 #ifndef __APPLE__
@@ -12,10 +12,6 @@
 #include <fstream>
 
 using namespace PGE;
-
-Shader* Shader::load(Graphics* gfx,const FilePath& path) {
-    return new ShaderOGL3(gfx,path);
-}
 
 ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     graphics = gfx;
@@ -54,7 +50,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     errorStr = String(errorCStr);
 
     glGetShaderiv(glVertexShader, GL_COMPILE_STATUS, &errorCode);
-    if (errorCode != GL_TRUE || errorStr.size() > 0) {
+    if (errorCode != GL_TRUE || errorStr.length() > 0) {
         delete[] errorCStr;
         throwException("ShaderOGL3", "Failed to create vertex shader. (filepath: " + path.str() + ")\n" + errorStr);
     }
@@ -85,7 +81,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     errorStr = String(errorCStr);
 
     glGetShaderiv(glFragmentShader, GL_COMPILE_STATUS, &errorCode);
-    if (errorCode != GL_TRUE || errorStr.size() > 0) {
+    if (errorCode != GL_TRUE || errorStr.length() > 0) {
         delete[] errorCStr;
         throwException("ShaderOGL3", "Failed to create fragment shader. (filepath: " + path.str() + ")\n" + errorStr);
     }
@@ -239,20 +235,20 @@ Shader::Constant* ShaderOGL3::getFragmentShaderConstant(String name) {
 void ShaderOGL3::extractShaderVars(const String& src,String varKind,std::vector<ShaderVar>& varList) {
     String line = "";
     varKind = String(varKind," ");
-    for (int i=0;i<src.size();i++) {
+    for (int i=0;i<src.length();i++) {
         char chr = src.charAt(i);
         if (chr!='\r' && chr!='\n') {
             line = String(line,chr);
         } else {
-            if (line.substr(0,varKind.size()).equals(varKind)) {
+            if (line.substr(0,varKind.length()).equals(varKind)) {
                 bool readType = false;
                 ShaderVar var;
                 var.type = "";
                 var.name = "";
-                for (int j=varKind.size();j<line.size();j++) {
+                for (int j=varKind.length();j<line.length();j++) {
                     chr = line.charAt(j);
                     if (chr==' ') {
-                        if (readType && var.name.size()>0) {
+                        if (readType && var.name.length()>0) {
                             break;
                         }
                         readType = true;

@@ -10,18 +10,6 @@
 
 using namespace PGE;
 
-Texture* Texture::load(Graphics* gfx, const FilePath& filename) {
-    return new TextureDX11(gfx,filename);
-}
-
-Texture* Texture::load(Graphics* gfx, const FilePath& filename,ThreadManager* threadManager) {
-    return new TextureDX11(gfx,filename,threadManager);
-}
-
-Texture* Texture::create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer,FORMAT fmt) {
-    return new TextureDX11(gfx,w,h,renderTarget,buffer,fmt);
-}
-
 TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,FORMAT fmt) {
     dxShaderResourceView = nullptr;
     dxTexture = nullptr;
@@ -139,33 +127,26 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 }
 
-TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn) {
+TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn) {
+    graphics = gfx;
+    width = w;
+    height = h;
+    realWidth = rw;
+    realHeight = rh;
+    filename = fn;
+    name = fn.str();
+
     dxShaderResourceView = nullptr;
     dxTexture = nullptr;
     dxRtv = nullptr;
     dxZBufferView = nullptr;
     dxZBufferTexture = nullptr;
     isRT = false;
-
-    graphics = gfx;
+    
     ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
 
-    filename = fn;
-    name = fn.str();
-
     format = FORMAT::RGBA32;
-
-    BYTE* fiBuffer = nullptr;
-    try {
-        fiBuffer = loadFIBuffer(filename,width,height,realWidth,realHeight);
-    } catch (Exception& e) {
-        cleanup();
-        throw e;
-    } catch (std::exception& e) {
-        cleanup();
-        throw e;
-    }
 
     ZeroMemory(&dxTextureDesc,sizeof(D3D11_TEXTURE2D_DESC));
     dxTextureDesc.Width = (UINT)realWidth;
@@ -201,8 +182,6 @@ TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn) {
     dxContext->GenerateMips(dxShaderResourceView);
 
     isRT = false;
-
-    delete[] fiBuffer;
 }
 
 TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager) {
@@ -334,7 +313,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
             FilePath filename;
             int* width; int* height; int* realWidth; int* realHeight;
             void execute() {
-                BYTE* fiBuffer = loadFIBuffer(filename,*width,*height,*realWidth,*realHeight);
+                BYTE* fiBuffer = loadFIBufferFromFile(filename,*width,*height,*realWidth,*realHeight);
 
                 mainThreadRequest.realWidth = *realWidth;
                 mainThreadRequest.realHeight = *realHeight;
@@ -387,10 +366,6 @@ void TextureDX11::cleanup() {
 void TextureDX11::useTexture(int index) {
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
     dxContext->PSSetShaderResources(index,1,&dxShaderResourceView);
-}
-
-bool TextureDX11::isRenderTarget() const {
-    return isRT;
 }
 
 Texture* TextureDX11::copy() const {

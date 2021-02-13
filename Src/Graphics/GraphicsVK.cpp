@@ -6,18 +6,16 @@
 
 using namespace PGE;
 
-#ifdef VULKAN
-Graphics* Graphics::create(String name, int w, int h, bool fs) {
-    return new GraphicsVK(name, w, h, fs);
-}
-#endif
-
 GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) {
     window = new WindowVK(name, w, h, fs);
 }
 
 GraphicsVK::~GraphicsVK() {
     cleanup();
+}
+
+Graphics::Renderer GraphicsVK::getRenderer() {
+    return Renderer::Vulkan;
 }
 
 void GraphicsVK::setDepthTest(bool enabled) {

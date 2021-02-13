@@ -1,7 +1,7 @@
 #include <Graphics/Graphics.h>
 #include "../Graphics/GraphicsOGL3.h"
 #include "../SysEvents/SysEventsInternal.h"
-#include "../Exception/Exception.h"
+#include <Exception/Exception.h>
 #include <Window/Window.h>
 #include "WindowOGL3.h"
 
@@ -55,7 +55,7 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
     glewExperimental = true;
     glError = glewInit();
     if (glError != GL_NO_ERROR) {
-        throwException("WindowOGL3", "Failed to initialize GLEW (GLERROR: " + String(glError, true) + ")");
+        throwException("WindowOGL3", "Failed to initialize GLEW (GLERROR: " + String::format(glError, "%u") + ")");
     }
 
     glEnable(GL_DEPTH_TEST);
@@ -69,7 +69,7 @@ WindowOGL3::WindowOGL3(String c,int w,int h,bool fs) {
 
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("WindowOGL3", "Failed to initialize window data post-GLEW initialization. (GL_ERROR: " + String(glError, true) + ")");
+        throwException("WindowOGL3", "Failed to initialize window data post-GLEW initialization. (GL_ERROR: " + String::format(glError, "%u") + ")");
     }
 
     vsync = true;
