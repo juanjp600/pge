@@ -20,7 +20,7 @@ class TextureOGL3 : public Texture {
         TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn = FilePath::fromStr(""));
         ~TextureOGL3();
 
-        virtual Texture* copy() const;
+        virtual Texture* copy() const override;
 
         GLuint getGlTexture() const;
         //GLuint getGlFramebuffer() const;

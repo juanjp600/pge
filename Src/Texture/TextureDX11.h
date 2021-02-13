@@ -19,9 +19,7 @@ class TextureDX11 : public Texture {
 
         void useTexture(int index);
 
-        virtual bool isRenderTarget() const;
-
-        virtual Texture* copy() const;
+        virtual Texture* copy() const override;
 
         ID3D11RenderTargetView* getRtv() const;
         ID3D11DepthStencilView* getZBufferView() const;

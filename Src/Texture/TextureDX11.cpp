@@ -368,10 +368,6 @@ void TextureDX11::useTexture(int index) {
     dxContext->PSSetShaderResources(index,1,&dxShaderResourceView);
 }
 
-bool TextureDX11::isRenderTarget() const {
-    return isRT;
-}
-
 Texture* TextureDX11::copy() const {
     ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
 
