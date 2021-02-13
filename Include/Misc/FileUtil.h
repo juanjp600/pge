@@ -30,6 +30,9 @@ class FileUtil {
 
         // Returns all lines from a file.
         static std::vector<String> readLines(const FilePath& path, bool includeEmptyLines=false);
+
+        // Returns all bytes in a file.
+        static std::vector<uint8_t> readBytes(const FilePath& path);
 };
     
 }
