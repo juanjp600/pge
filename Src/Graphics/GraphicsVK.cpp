@@ -26,10 +26,6 @@ bool GraphicsVK::getDepthTest() const {
     return depthTestEnabled;
 }
 
-void GraphicsVK::startRender() {
-    ((WindowVK*)window)->startRender();
-}
-
 void GraphicsVK::clear(Color color) {
 
 }

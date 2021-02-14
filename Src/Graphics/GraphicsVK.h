@@ -14,8 +14,6 @@ class GraphicsVK : public Graphics {
 
         virtual Renderer getRenderer() override;
 
-        void startRender();
-
         void clear(Color color) override;
 
         virtual void setDepthTest(bool enabled) override;

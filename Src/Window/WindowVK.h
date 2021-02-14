@@ -13,8 +13,6 @@ class WindowVK : public WindowInternal {
         void update() override;
         void swap(bool vsyncEnabled=true) override;
 
-        void startRender();
-
         vk::Device getDevice() const;
         vk::PipelineViewportStateCreateInfo* getViewportInfo();
         vk::PipelineColorBlendStateCreateInfo* getColorBlendInfo();
@@ -24,8 +22,6 @@ class WindowVK : public WindowInternal {
         std::vector<vk::CommandBuffer> getCommandBuffers();
 
     private:
-        bool startedRender;
-
         vk::Instance vkInstance;
         vk::Device device;
         vk::SurfaceKHR vkSurface;
@@ -55,13 +51,20 @@ class WindowVK : public WindowInternal {
         vk::CommandPool comPool;
         std::vector<vk::CommandBuffer> comBuffers;
 
-        vk::Semaphore imageAvailableSemaphore;
-        vk::Semaphore renderFinishedSemaphore;
+        std::vector<vk::Semaphore> imageAvailableSemaphores;
+        std::vector<vk::Semaphore> renderFinishedSemaphores;
+        std::vector<vk::Fence> inFlightFences;
+        std::vector<vk::Fence> imagesInFlight;
+
+        const int MAX_FRAMES_IN_FLIGHT;
+        int currentFrame;
 
         uint32_t backBufferIndex;
 
         void cleanup() override;
         void throwException(String func, String details) override;
+
+        void acquireNextImage();
 };
 
 }

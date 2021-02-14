@@ -8,15 +8,13 @@
 
 using namespace PGE;
 
-#include <iostream>
-
-WindowVK::WindowVK(String c, int w, int h, bool fs) {
+WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(2) {
     caption = c;
     width = w;
     height = h;
     fullscreen = fs;
 
-    startedRender = false;
+    currentFrame = 0;
 
     // SDL window creation.
     sdlWindow = SDL_CreateWindow(c.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI);
@@ -41,7 +39,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) {
     std::vector<const char*> extensions = std::vector<const char*>(extensionData, extensionData + extensionCount);
     free(extensionData);
     
-    vk::ApplicationInfo vkAppInfo = vk::ApplicationInfo(c.cstr(), VK_MAKE_VERSION(0, 0, 0), "Pulse-Gun Engine", VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_0);
+    vk::ApplicationInfo vkAppInfo = vk::ApplicationInfo(c.cstr(), VK_MAKE_VERSION(0, 0, 0), "Pulse-Gun Engine", VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_1);
     vkInstance = vk::createInstance(vk::InstanceCreateInfo({}, &vkAppInfo, layers, extensions));
 
     // Creating the window's surface via SDL.
@@ -173,7 +171,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) {
     }
 
     // Creating the swap chain.
-    vk::SwapchainCreateInfoKHR sci = vk::SwapchainCreateInfoKHR({}, vkSurface, imageCount, swapchainFormat.format, swapchainFormat.colorSpace, swapchainExtent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive, 0, nullptr, sc.currentTransform, vk::CompositeAlphaFlagBitsKHR::eOpaque, vk::PresentModeKHR::eFifo, VK_TRUE, nullptr);
+    vk::SwapchainCreateInfoKHR sci = vk::SwapchainCreateInfoKHR({}, vkSurface, imageCount, swapchainFormat.format, swapchainFormat.colorSpace, swapchainExtent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive, 0, nullptr, sc.currentTransform, vk::CompositeAlphaFlagBitsKHR::eOpaque, vk::PresentModeKHR::eImmediate, VK_TRUE, nullptr);
     if (graphicsQueueIndex != presentQueueIndex) {
         sci.setImageSharingMode(vk::SharingMode::eConcurrent);
         sci.setQueueFamilyIndices(std::vector<uint32_t> { graphicsQueueIndex, presentQueueIndex });
@@ -190,7 +188,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) {
     }
 
     // Creating a viewport.
-    viewport = vk::Viewport(0, 0, swapchainExtent.width, swapchainExtent.height, 0.f, 1.f);
+    viewport = vk::Viewport(0, swapchainExtent.height, swapchainExtent.width, -(float)swapchainExtent.height, 0.f, 1.f);
     scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
     viewportInfo = vk::PipelineViewportStateCreateInfo({}, 1, &viewport, 1, &scissor);
 
@@ -216,21 +214,22 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) {
         framebuffers[i] = device.createFramebuffer(framebufferInfo);
     }
 
-    vk::CommandPoolCreateInfo commandPoolInfo = vk::CommandPoolCreateInfo({}, graphicsQueueIndex);
+    vk::CommandPoolCreateInfo commandPoolInfo = vk::CommandPoolCreateInfo(vk::CommandPoolCreateFlagBits::eResetCommandBuffer, graphicsQueueIndex);
     comPool = device.createCommandPool(commandPoolInfo);
 
     vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPool, vk::CommandBufferLevel::ePrimary, framebuffers.size());
     comBuffers = device.allocateCommandBuffers(comBufAllInfo);
 
-    for (int i = 0; i < comBuffers.size(); i++) {
-        comBuffers[i].begin(vk::CommandBufferBeginInfo());
-        vk::ClearValue clear = vk::ClearValue(vk::ClearColorValue(std::array<float, 4>{ { 0.f, 0.f, 1.f, 1.f }}));
-        vk::RenderPassBeginInfo beginInfo = vk::RenderPassBeginInfo(renderPass, framebuffers[i], vk::Rect2D(vk::Offset2D(0.f, 0.f), swapchainExtent), 1, &clear);
-        comBuffers[i].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
+    imageAvailableSemaphores = std::vector<vk::Semaphore>(MAX_FRAMES_IN_FLIGHT);
+    renderFinishedSemaphores = std::vector<vk::Semaphore>(MAX_FRAMES_IN_FLIGHT);
+    inFlightFences = std::vector<vk::Fence>(MAX_FRAMES_IN_FLIGHT);
+    for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        imageAvailableSemaphores[i] = device.createSemaphore(vk::SemaphoreCreateInfo({}));
+        renderFinishedSemaphores[i] = device.createSemaphore(vk::SemaphoreCreateInfo({}));
+        inFlightFences[i] = device.createFence(vk::FenceCreateInfo({ i != 0 ? vk::FenceCreateFlagBits::eSignaled : (vk::FenceCreateFlags)0 }));
     }
-
-    imageAvailableSemaphore = device.createSemaphore(vk::SemaphoreCreateInfo());
-    renderFinishedSemaphore = device.createSemaphore(vk::SemaphoreCreateInfo());
+    imagesInFlight = std::vector<vk::Fence>(swapchainImages.size(), VK_NULL_HANDLE);
+    acquireNextImage();
 
     open = true;
     focused = true;
@@ -254,29 +253,49 @@ void WindowVK::update() {
 }
 
 void WindowVK::swap(bool vsyncEnabled) {
-    vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphore, 1, &swapchain, &backBufferIndex, nullptr);
-    presentQueue.presentKHR(presentInfo);
-
-    startedRender = false;
-}
-
-void WindowVK::startRender() {
-    if (startedRender) { return; }
-
-    backBufferIndex = device.acquireNextImageKHR(swapchain, UINT64_MAX, imageAvailableSemaphore, nullptr).value;
-
     vk::PipelineStageFlags waitStages = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 
-    vk::SubmitInfo submitInfo = vk::SubmitInfo(1, &imageAvailableSemaphore, &waitStages, 1, &comBuffers[backBufferIndex], 1, &renderFinishedSemaphore);
-    graphicsQueue.submit(1, &submitInfo, nullptr);
+    device.resetFences(inFlightFences[currentFrame]);
+    vk::SubmitInfo submitInfo = vk::SubmitInfo(1, &imageAvailableSemaphores[currentFrame], &waitStages, 1, &comBuffers[backBufferIndex], 1, &renderFinishedSemaphores[currentFrame]);
+    graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
 
-    startedRender = true;
+    vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, &backBufferIndex, nullptr);
+    presentQueue.presentKHR(presentInfo);
+
+    currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+
+    // Wait until the current frames in flight are less than the max.
+    device.waitForFences(inFlightFences[currentFrame], false, UINT64_MAX);
+
+    acquireNextImage();
+}
+
+void WindowVK::acquireNextImage() {
+    backBufferIndex = device.acquireNextImageKHR(swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame], nullptr).value;
+
+    // Is the image we just acquired currently still being submitted?
+    if (imagesInFlight[backBufferIndex] != VK_NULL_HANDLE) {
+        // If so, wait on it!
+        device.waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX);
+        imagesInFlight[backBufferIndex] = VK_NULL_HANDLE;
+    }
+    imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
+
+    for (int i = 0; i < comBuffers.size(); i++) {
+        comBuffers[i].begin(vk::CommandBufferBeginInfo());
+        vk::ClearValue clear = vk::ClearValue(vk::ClearColorValue(std::array<float, 4>{ { 0.f, 0.f, 1.f, 1.f }}));
+        vk::RenderPassBeginInfo beginInfo = vk::RenderPassBeginInfo(renderPass, framebuffers[i], vk::Rect2D(vk::Offset2D(0.f, 0.f), swapchainExtent), 1, &clear);
+        comBuffers[i].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
+    }
 }
 
 void WindowVK::cleanup() {
     SysEventsInternal::unsubscribe(eventSubscriber);
-    device.destroySemaphore(imageAvailableSemaphore);
-    device.destroySemaphore(renderFinishedSemaphore);
+    for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        device.destroySemaphore(imageAvailableSemaphores[i]);
+        device.destroySemaphore(renderFinishedSemaphores[i]);
+        device.destroyFence(inFlightFences[i]);
+    }
     device.destroyCommandPool(comPool);
     for (vk::ImageView iw : swapchainImageViews) {
         device.destroyImageView(iw);

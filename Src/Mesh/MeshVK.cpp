@@ -40,13 +40,6 @@ void MeshVK::updateInternalData() {
 	pipeline = window->getDevice().createGraphicsPipeline(nullptr, pipelineInfo).value;
 
 	// TODO: Move.
-	std::vector<vk::CommandBuffer> comBuffers = ((GraphicsVK*)graphics)->getCommandBuffers();
-	for (int i = 0; i < comBuffers.size(); i++) {
-		comBuffers[i].bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
-		comBuffers[i].draw(3, 1, 0, 0);
-		comBuffers[i].endRenderPass();
-		comBuffers[i].end();
-	}
 
 	mustUpdateInternalData = false;
 }
@@ -55,7 +48,14 @@ void MeshVK::render() {
 	if (mustUpdateInternalData) {
 		updateInternalData();
 	}
-	((GraphicsVK*)graphics)->startRender();
+
+	std::vector<vk::CommandBuffer> comBuffers = ((GraphicsVK*)graphics)->getCommandBuffers();
+	for (int i = 0; i < comBuffers.size(); i++) {
+		comBuffers[i].bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
+		comBuffers[i].draw(3, 1, 0, 0);
+		comBuffers[i].endRenderPass();
+		comBuffers[i].end();
+	}
 }
 
 void MeshVK::cleanup() {
