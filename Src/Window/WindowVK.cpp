@@ -16,6 +16,8 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) {
     height = h;
     fullscreen = fs;
 
+    startedRender = false;
+
     // SDL window creation.
     sdlWindow = SDL_CreateWindow(c.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI);
     if (sdlWindow == nullptr) {
@@ -133,10 +135,10 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) {
     for (int index : queueIndices) {
         infos.push_back(vk::DeviceQueueCreateInfo({}, index, 1, &queuePriority));
     }
-    vkDevice = selectedDevice.createDevice(vk::DeviceCreateInfo({}, infos, layers, deviceExtensions));
+    device = selectedDevice.createDevice(vk::DeviceCreateInfo({}, infos, layers, deviceExtensions));
 
-    graphicsQueue = vkDevice.getQueue(graphicsQueueIndex, 0);
-    presentQueue = vkDevice.getQueue(presentQueueIndex, 0);
+    graphicsQueue = device.getQueue(graphicsQueueIndex, 0);
+    presentQueue = device.getQueue(presentQueueIndex, 0);
 
     // Selecting the right surface format.
     // If we don't find the one we want we'll settle for the first available one.
@@ -176,16 +178,59 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) {
         sci.setImageSharingMode(vk::SharingMode::eConcurrent);
         sci.setQueueFamilyIndices(std::vector<uint32_t> { graphicsQueueIndex, presentQueueIndex });
     }
-    swapchain = vkDevice.createSwapchainKHR(sci);
+    swapchain = device.createSwapchainKHR(sci);
 
     // Creating image views for our swapchain images to ultimately write to.
-    std::vector<vk::Image> swapchainImages = vkDevice.getSwapchainImagesKHR(swapchain);
+    std::vector<vk::Image> swapchainImages = device.getSwapchainImagesKHR(swapchain);
     std::vector<vk::ImageView> swapchainImageViews = std::vector<vk::ImageView>(swapchainImages.size());
-    for (vk::Image image : swapchainImages) {
-        vk::ImageViewCreateInfo ivci = vk::ImageViewCreateInfo({}, image, vk::ImageViewType::e2D, swapchainFormat.format);
+    for (int i = 0; i < swapchainImages.size(); i++) {
+        vk::ImageViewCreateInfo ivci = vk::ImageViewCreateInfo({}, swapchainImages[i], vk::ImageViewType::e2D, swapchainFormat.format);
         ivci.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
-        swapchainImageViews.push_back(vkDevice.createImageView(ivci));
+        swapchainImageViews[i] = device.createImageView(ivci);
     }
+
+    // Creating a viewport.
+    viewport = vk::Viewport(0, 0, swapchainExtent.width, swapchainExtent.height, 0.f, 1.f);
+    scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
+    viewportInfo = vk::PipelineViewportStateCreateInfo({}, 1, &viewport, 1, &scissor);
+
+    // Color blending.
+    colorBlendAttachmentState = vk::PipelineColorBlendAttachmentState(false);
+    colorBlendAttachmentState.colorWriteMask = vk::ColorComponentFlagBits::eA | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG;
+    colorBlendInfo = vk::PipelineColorBlendStateCreateInfo({}, false, vk::LogicOp::eClear, 1, &colorBlendAttachmentState);
+
+    // Creating a render pass.
+    vk::AttachmentDescription colorAttachment = vk::AttachmentDescription({}, swapchainFormat.format, vk::SampleCountFlagBits::e1, vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore, vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR);
+    vk::AttachmentReference colorAttachmentRef = vk::AttachmentReference(0, vk::ImageLayout::eColorAttachmentOptimal);
+    vk::SubpassDescription subpass = vk::SubpassDescription({}, vk::PipelineBindPoint::eGraphics, 0, nullptr, 1, &colorAttachmentRef);
+    vk::SubpassDependency dependency = vk::SubpassDependency(VK_SUBPASS_EXTERNAL, 0, vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput, {}, vk::AccessFlagBits::eColorAttachmentWrite);
+    vk::RenderPassCreateInfo renderPassInfo = vk::RenderPassCreateInfo({}, 1, &colorAttachment, 1, &subpass, 1, &dependency);
+    renderPass = device.createRenderPass(renderPassInfo);
+
+    rasterizationInfo = vk::PipelineRasterizationStateCreateInfo({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eNone, vk::FrontFace::eCounterClockwise, false, 0.f, 0.f, 0.f, 1.f);
+    multisamplerInfo = vk::PipelineMultisampleStateCreateInfo({}, vk::SampleCountFlagBits::e1, false, 0.f, nullptr, false, false);
+
+    framebuffers = std::vector<vk::Framebuffer>(swapchainImageViews.size());
+    for (int i = 0; i < swapchainImageViews.size(); i++) {
+        vk::FramebufferCreateInfo framebufferInfo = vk::FramebufferCreateInfo({}, renderPass, 1, &swapchainImageViews[i], swapchainExtent.width, swapchainExtent.height, 1);
+        framebuffers[i] = device.createFramebuffer(framebufferInfo);
+    }
+
+    vk::CommandPoolCreateInfo commandPoolInfo = vk::CommandPoolCreateInfo({}, graphicsQueueIndex);
+    comPool = device.createCommandPool(commandPoolInfo);
+
+    vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPool, vk::CommandBufferLevel::ePrimary, framebuffers.size());
+    comBuffers = device.allocateCommandBuffers(comBufAllInfo);
+
+    for (int i = 0; i < comBuffers.size(); i++) {
+        comBuffers[i].begin(vk::CommandBufferBeginInfo());
+        vk::ClearValue clear = vk::ClearValue(vk::ClearColorValue(std::array<float, 4>{ { 0.f, 0.f, 1.f, 1.f }}));
+        vk::RenderPassBeginInfo beginInfo = vk::RenderPassBeginInfo(renderPass, framebuffers[i], vk::Rect2D(vk::Offset2D(0.f, 0.f), swapchainExtent), 1, &clear);
+        comBuffers[i].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
+    }
+
+    imageAvailableSemaphore = device.createSemaphore(vk::SemaphoreCreateInfo());
+    renderFinishedSemaphore = device.createSemaphore(vk::SemaphoreCreateInfo());
 
     open = true;
     focused = true;
@@ -209,16 +254,39 @@ void WindowVK::update() {
 }
 
 void WindowVK::swap(bool vsyncEnabled) {
-    
+    vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphore, 1, &swapchain, &backBufferIndex, nullptr);
+    presentQueue.presentKHR(presentInfo);
+
+    startedRender = false;
+}
+
+void WindowVK::startRender() {
+    if (startedRender) { return; }
+
+    backBufferIndex = device.acquireNextImageKHR(swapchain, UINT64_MAX, imageAvailableSemaphore, nullptr).value;
+
+    vk::PipelineStageFlags waitStages = vk::PipelineStageFlagBits::eColorAttachmentOutput;
+
+    vk::SubmitInfo submitInfo = vk::SubmitInfo(1, &imageAvailableSemaphore, &waitStages, 1, &comBuffers[backBufferIndex], 1, &renderFinishedSemaphore);
+    graphicsQueue.submit(1, &submitInfo, nullptr);
+
+    startedRender = true;
 }
 
 void WindowVK::cleanup() {
     SysEventsInternal::unsubscribe(eventSubscriber);
+    device.destroySemaphore(imageAvailableSemaphore);
+    device.destroySemaphore(renderFinishedSemaphore);
+    device.destroyCommandPool(comPool);
     for (vk::ImageView iw : swapchainImageViews) {
-        vkDevice.destroyImageView(iw);
+        device.destroyImageView(iw);
     }
-    vkDevice.destroySwapchainKHR(swapchain);
-    vkDevice.destroy();
+    for (vk::Framebuffer fb : framebuffers) {
+        device.destroyFramebuffer(fb);
+    }
+    device.destroySwapchainKHR(swapchain);
+    device.destroyRenderPass(renderPass);
+    device.destroy();
     vkInstance.destroySurfaceKHR(vkSurface);
     vkInstance.destroy();
     if (sdlWindow != nullptr) { SDL_DestroyWindow(sdlWindow); }
@@ -227,4 +295,32 @@ void WindowVK::cleanup() {
 void WindowVK::throwException(String func, String details) {
     cleanup();
     throw Exception("WindowVK::" + func, details);
+}
+
+vk::Device WindowVK::getDevice() const {
+    return device;
+}
+
+vk::PipelineViewportStateCreateInfo* WindowVK::getViewportInfo() {
+    return &viewportInfo;
+}
+
+vk::PipelineColorBlendStateCreateInfo* WindowVK::getColorBlendInfo() {
+    return &colorBlendInfo;
+}
+
+vk::PipelineRasterizationStateCreateInfo* WindowVK::getRasterizationInfo() {
+    return &rasterizationInfo;
+}
+
+vk::PipelineMultisampleStateCreateInfo* WindowVK::getMultisamplerInfo() {
+    return &multisamplerInfo;
+}
+
+vk::RenderPass* WindowVK::getRenderPass() {
+    return &renderPass;
+}
+
+std::vector<vk::CommandBuffer> WindowVK::getCommandBuffers() {
+    return comBuffers;
 }

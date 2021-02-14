@@ -180,7 +180,7 @@ HRESULT compileShader(const wchar_t* input) {
 	fclose(vsOutFile);
 
 	ID3DBlob* psBlob = nullptr;
-	hr = D3DCompileFromFile(input, NULL, NULL, "PS", "ps_4_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3, 0, &psBlob, NULL);
+	hr = D3DCompileFromFile(input, NULL, NULL, "PS", "ps_4_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3, 0, &psBlob, &errorBlob);
 
 	if (FAILED(hr)) {
 		if (errorBlob) {

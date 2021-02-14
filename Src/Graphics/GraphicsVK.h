@@ -1,6 +1,8 @@
 #ifndef PGEINTERNAL_GRAPHICS_VK_H_INCLUDED
 #define PGEINTERNAL_GRAPHICS_VK_H_INCLUDED
 
+#include <vulkan/vulkan.hpp>
+
 #include <Graphics/Graphics.h>
 
 namespace PGE {
@@ -11,6 +13,8 @@ class GraphicsVK : public Graphics {
         ~GraphicsVK();
 
         virtual Renderer getRenderer() override;
+
+        void startRender();
 
         void clear(Color color) override;
 
@@ -23,6 +27,9 @@ class GraphicsVK : public Graphics {
 
         void setViewport(Rectanglei vp) override;
 
+        vk::Device getDevice() const;
+        std::vector<vk::CommandBuffer> getCommandBuffers();
+
     private:
         void throwException(String func, String details) override;
         void cleanup() override;
@@ -32,4 +39,4 @@ class GraphicsVK : public Graphics {
 
 }
 
-#endif
+#endif // PGEINTERNAL_GRAPHICS_VK_H_INCLUDED

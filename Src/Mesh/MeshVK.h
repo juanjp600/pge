@@ -1,6 +1,8 @@
 #ifndef PGEINTERNAL_MESH_VK_H_INCLUDED
 #define PGEINTERNAL_MESH_VK_H_INCLUDED
 
+#include <vulkan/vulkan.hpp>
+
 #include <Mesh/Mesh.h>
 
 namespace PGE {
@@ -14,6 +16,10 @@ class MeshVK : public Mesh {
         void render() override;
 
     private:
+        vk::Pipeline pipeline;
+
+        vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
+
         void cleanup() override;
         void throwException(String func, String details) override;
 
@@ -22,4 +28,4 @@ class MeshVK : public Mesh {
 
 }
 
-#endif
+#endif // PGEINTERNAL_MESH_VK_H_INCLUDED

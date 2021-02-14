@@ -1,5 +1,7 @@
 #include <Shader/Shader.h>
 
+#include <vulkan/vulkan.hpp>
+
 namespace PGE {
 
 class ShaderVK : public Shader {
@@ -10,11 +12,28 @@ class ShaderVK : public Shader {
         Constant* getVertexShaderConstant(String name) override;
         Constant* getFragmentShaderConstant(String name) override;
 
+        vk::ShaderModule* getModules();
+        vk::PipelineShaderStageCreateInfo* getShaderStageInfo();
+        vk::PipelineVertexInputStateCreateInfo* getVertexInputInfo();
+        vk::PipelineLayout* getLayout();
+
     private:
         Constant* tempConstant; // TODO: Remove with actual implementation.
 
         void cleanup() override;
         void throwException(String func, String details) override;
+
+        vk::Device device;
+
+        vk::ShaderModule vertexShader;
+        vk::ShaderModule fragmentShader;
+        vk::ShaderModule modules[2];
+
+        vk::PipelineShaderStageCreateInfo shaderStageInfo[2];
+
+        vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
+
+        vk::PipelineLayout layout;
 
         class ConstantVK : public Constant {
             public:

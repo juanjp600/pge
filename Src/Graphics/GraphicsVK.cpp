@@ -26,6 +26,10 @@ bool GraphicsVK::getDepthTest() const {
     return depthTestEnabled;
 }
 
+void GraphicsVK::startRender() {
+    ((WindowVK*)window)->startRender();
+}
+
 void GraphicsVK::clear(Color color) {
 
 }
@@ -54,4 +58,12 @@ void GraphicsVK::cleanup() {
 void GraphicsVK::throwException(String func, String details) {
     cleanup();
     throw Exception("GraphicsVK::" + func, details);
+}
+
+vk::Device GraphicsVK::getDevice() const {
+    return ((WindowVK*)window)->getDevice();
+}
+
+std::vector<vk::CommandBuffer> GraphicsVK::getCommandBuffers() {
+    return ((WindowVK*)window)->getCommandBuffers();
 }
