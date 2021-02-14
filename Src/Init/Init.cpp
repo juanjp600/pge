@@ -2,6 +2,7 @@
 #include <Init/Init.h>
 #include <Exception/Exception.h>
 #include <fstream>
+#include <wtypes.h>
 
 #ifdef DEBUG
 int main(int argc, char** argv) {
