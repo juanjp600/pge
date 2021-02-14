@@ -60,6 +60,6 @@ vk::Device GraphicsVK::getDevice() const {
     return ((WindowVK*)window)->getDevice();
 }
 
-std::vector<vk::CommandBuffer> GraphicsVK::getCommandBuffers() {
-    return ((WindowVK*)window)->getCommandBuffers();
+vk::CommandBuffer GraphicsVK::getCurrentCommandBuffer() {
+    return ((WindowVK*)window)->getCurrentCommandBuffer();
 }

@@ -19,7 +19,7 @@ class WindowVK : public WindowInternal {
         vk::PipelineRasterizationStateCreateInfo* getRasterizationInfo();
         vk::PipelineMultisampleStateCreateInfo* getMultisamplerInfo();
         vk::RenderPass* getRenderPass();
-        std::vector<vk::CommandBuffer> getCommandBuffers();
+        vk::CommandBuffer getCurrentCommandBuffer();
 
     private:
         vk::Instance vkInstance;

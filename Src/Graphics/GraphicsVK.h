@@ -26,7 +26,7 @@ class GraphicsVK : public Graphics {
         void setViewport(Rectanglei vp) override;
 
         vk::Device getDevice() const;
-        std::vector<vk::CommandBuffer> getCommandBuffers();
+        vk::CommandBuffer getCurrentCommandBuffer();
 
     private:
         void throwException(String func, String details) override;

@@ -12,6 +12,8 @@ using namespace PGE;
 MeshVK::MeshVK(Graphics* gfx, Primitive::TYPE pt) {
 	graphics = gfx;
 
+	pipeline = VK_NULL_HANDLE;
+
 	vk::PrimitiveTopology vkPrim;
 	switch (pt) {
 		case Primitive::TYPE::TRIANGLE: {
@@ -28,18 +30,22 @@ MeshVK::MeshVK(Graphics* gfx, Primitive::TYPE pt) {
 }
 
 MeshVK::~MeshVK() {
-
+	cleanup();
 }
 
 void MeshVK::updateInternalData() {
 	if (!mustUpdateInternalData) { return; }
 
-	ShaderVK* shader = (ShaderVK*)material->getShader();
 	WindowVK* window = (WindowVK*)graphics->getWindow();
-	vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shader->getShaderStageInfo(), shader->getVertexInputInfo(), &inputAssemblyInfo, nullptr, window->getViewportInfo(), window->getRasterizationInfo(), window->getMultisamplerInfo(), nullptr, window->getColorBlendInfo(), nullptr, *shader->getLayout(), *window->getRenderPass(), 0, {}, -1);
-	pipeline = window->getDevice().createGraphicsPipeline(nullptr, pipelineInfo).value;
+	vk::Device device = window->getDevice();
 
-	// TODO: Move.
+	if (pipeline != VK_NULL_HANDLE) {
+		device.destroyPipeline(pipeline);
+	}
+
+	ShaderVK* shader = (ShaderVK*)material->getShader();
+	vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shader->getShaderStageInfo(), shader->getVertexInputInfo(), &inputAssemblyInfo, nullptr, window->getViewportInfo(), window->getRasterizationInfo(), window->getMultisamplerInfo(), nullptr, window->getColorBlendInfo(), nullptr, *shader->getLayout(), *window->getRenderPass(), 0, {}, -1);
+	pipeline = device.createGraphicsPipeline(nullptr, pipelineInfo).value;
 
 	mustUpdateInternalData = false;
 }
@@ -49,13 +55,9 @@ void MeshVK::render() {
 		updateInternalData();
 	}
 
-	std::vector<vk::CommandBuffer> comBuffers = ((GraphicsVK*)graphics)->getCommandBuffers();
-	for (int i = 0; i < comBuffers.size(); i++) {
-		comBuffers[i].bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
-		comBuffers[i].draw(3, 1, 0, 0);
-		comBuffers[i].endRenderPass();
-		comBuffers[i].end();
-	}
+	vk::CommandBuffer comBuffer = ((GraphicsVK*)graphics)->getCurrentCommandBuffer();
+	comBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
+	comBuffer.draw(3, 1, 0, 0);
 }
 
 void MeshVK::cleanup() {

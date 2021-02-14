@@ -180,7 +180,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(2) {
 
     // Creating image views for our swapchain images to ultimately write to.
     std::vector<vk::Image> swapchainImages = device.getSwapchainImagesKHR(swapchain);
-    std::vector<vk::ImageView> swapchainImageViews = std::vector<vk::ImageView>(swapchainImages.size());
+    swapchainImageViews = std::vector<vk::ImageView>(swapchainImages.size());
     for (int i = 0; i < swapchainImages.size(); i++) {
         vk::ImageViewCreateInfo ivci = vk::ImageViewCreateInfo({}, swapchainImages[i], vk::ImageViewType::e2D, swapchainFormat.format);
         ivci.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
@@ -214,6 +214,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(2) {
         framebuffers[i] = device.createFramebuffer(framebufferInfo);
     }
 
+    // TODO: Optimize.
     vk::CommandPoolCreateInfo commandPoolInfo = vk::CommandPoolCreateInfo(vk::CommandPoolCreateFlagBits::eResetCommandBuffer, graphicsQueueIndex);
     comPool = device.createCommandPool(commandPoolInfo);
 
@@ -253,6 +254,9 @@ void WindowVK::update() {
 }
 
 void WindowVK::swap(bool vsyncEnabled) {
+    comBuffers[backBufferIndex].endRenderPass();
+    comBuffers[backBufferIndex].end();
+
     vk::PipelineStageFlags waitStages = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 
     device.resetFences(inFlightFences[currentFrame]);
@@ -281,12 +285,10 @@ void WindowVK::acquireNextImage() {
     }
     imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
 
-    for (int i = 0; i < comBuffers.size(); i++) {
-        comBuffers[i].begin(vk::CommandBufferBeginInfo());
-        vk::ClearValue clear = vk::ClearValue(vk::ClearColorValue(std::array<float, 4>{ { 0.f, 0.f, 1.f, 1.f }}));
-        vk::RenderPassBeginInfo beginInfo = vk::RenderPassBeginInfo(renderPass, framebuffers[i], vk::Rect2D(vk::Offset2D(0.f, 0.f), swapchainExtent), 1, &clear);
-        comBuffers[i].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
-    }
+    comBuffers[backBufferIndex].begin(vk::CommandBufferBeginInfo());
+    vk::ClearValue clear = vk::ClearValue(vk::ClearColorValue(std::array<float, 4>{ { 0.f, 0.f, 1.f, 1.f }}));
+    vk::RenderPassBeginInfo beginInfo = vk::RenderPassBeginInfo(renderPass, framebuffers[backBufferIndex], vk::Rect2D(vk::Offset2D(0.f, 0.f), swapchainExtent), 1, &clear);
+    comBuffers[backBufferIndex].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
 }
 
 void WindowVK::cleanup() {
@@ -340,6 +342,6 @@ vk::RenderPass* WindowVK::getRenderPass() {
     return &renderPass;
 }
 
-std::vector<vk::CommandBuffer> WindowVK::getCommandBuffers() {
-    return comBuffers;
+vk::CommandBuffer WindowVK::getCurrentCommandBuffer() {
+    return comBuffers[backBufferIndex];
 }
