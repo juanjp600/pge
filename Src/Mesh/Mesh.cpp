@@ -175,6 +175,10 @@ void Mesh::setGeometry(int vertCount, const std::vector<Vertex>& verts, int prim
     opaque = material!=nullptr ? material->isOpaque() : true;
 }
 
+void Mesh::setGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims) {
+    setGeometry(verts.size(), verts, prims.size(), prims);
+}
+
 void Mesh::clearGeometry() {
     mustUpdateInternalData = true; mustReuploadInternalData = true;
     vertexCount = 0; primitiveCount = 0;

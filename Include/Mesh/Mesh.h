@@ -77,6 +77,7 @@ class Mesh {
         virtual ~Mesh(){}
 
         void setGeometry(int vertexCount, const std::vector<Vertex>& verts, int primCount, const std::vector<Primitive>& prims);
+        void setGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims);
         void clearGeometry();
         void setMaterial(Material* m);
 
