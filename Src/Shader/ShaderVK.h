@@ -4,8 +4,8 @@
 
 namespace PGE {
 
-class ShaderVK : public Shader {
-    public:
+    class ShaderVK : public Shader {
+        public:
         ShaderVK(Graphics* gfx, const FilePath& path);
         ~ShaderVK();
 
@@ -17,7 +17,7 @@ class ShaderVK : public Shader {
         vk::PipelineVertexInputStateCreateInfo* getVertexInputInfo();
         vk::PipelineLayout* getLayout();
 
-    private:
+        private:
         Constant* tempConstant; // TODO: Remove with actual implementation.
 
         void cleanup() override;
@@ -31,26 +31,28 @@ class ShaderVK : public Shader {
 
         vk::PipelineShaderStageCreateInfo shaderStageInfo[2];
 
+        vk::VertexInputBindingDescription vertexInputBinding;
+        std::vector<vk::VertexInputAttributeDescription> vertexInputAttributes;
         vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
 
         vk::PipelineLayout layout;
 
         class ConstantVK : public Constant {
             public:
-                ConstantVK();
-                ~ConstantVK(){};
+            ConstantVK();
+            ~ConstantVK() {};
 
-                void setValue(Matrix4x4f value) override;
-                void setValue(Vector2f value) override;
-                void setValue(Vector3f value) override;
-                void setValue(Vector4f value) override;
-                void setValue(Color value) override;
-                void setValue(float value) override;
-                void setValue(int value) override;
+            void setValue(Matrix4x4f value) override;
+            void setValue(Vector2f value) override;
+            void setValue(Vector3f value) override;
+            void setValue(Vector4f value) override;
+            void setValue(Color value) override;
+            void setValue(float value) override;
+            void setValue(int value) override;
 
             private:
-                void throwException(String func, String details) override;
+            void throwException(String func, String details) override;
         };
-};
+    };
 
 }

@@ -27,7 +27,7 @@ bool GraphicsVK::getDepthTest() const {
 }
 
 void GraphicsVK::clear(Color color) {
-
+    ((WindowVK*)window)->clear(color);
 }
 
 void GraphicsVK::setRenderTarget(Texture* renderTarget) {

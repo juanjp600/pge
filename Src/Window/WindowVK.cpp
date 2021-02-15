@@ -8,7 +8,7 @@
 
 using namespace PGE;
 
-WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(2) {
+WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(3) {
     caption = c;
     width = w;
     height = h;
@@ -61,7 +61,6 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(2) {
     // Selecting a physical device and setting up queues.
     // Currently we just pick the one that supports what we need and has the most VRAM.
     bool foundCompatibleDevice = false;
-    vk::PhysicalDevice selectedDevice;
     vk::DeviceSize selectedPdSize = 0;
     std::vector<vk::SurfaceFormatKHR> selectedPdFormats;
     std::vector<vk::PresentModeKHR> selectedPdPresentModes;
@@ -116,7 +115,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(2) {
 
         if (pdSize > selectedPdSize) {
             foundCompatibleDevice = true;
-            selectedDevice = pd;
+            physicalDevice = pd;
             selectedPdFormats = pdFormats;
             selectedPdPresentModes = pdPresentModes;
             selectedPdSize = pdSize;
@@ -133,7 +132,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(2) {
     for (int index : queueIndices) {
         infos.push_back(vk::DeviceQueueCreateInfo({}, index, 1, &queuePriority));
     }
-    device = selectedDevice.createDevice(vk::DeviceCreateInfo({}, infos, layers, deviceExtensions));
+    device = physicalDevice.createDevice(vk::DeviceCreateInfo({}, infos, layers, deviceExtensions));
 
     graphicsQueue = device.getQueue(graphicsQueueIndex, 0);
     presentQueue = device.getQueue(presentQueueIndex, 0);
@@ -152,7 +151,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(2) {
     // Remember: https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPresentModeKHR.html
 
     // Setting the size of the swap chain images.
-    vk::SurfaceCapabilitiesKHR sc = selectedDevice.getSurfaceCapabilitiesKHR(vkSurface);
+    vk::SurfaceCapabilitiesKHR sc = physicalDevice.getSurfaceCapabilitiesKHR(vkSurface);
     // 0xFFFFFFFF indicates to just rely on the size of the window clamped by the given maxs and mins.
     if (sc.currentExtent.width != 0xFFFFFFFF) {
         swapchainExtent = sc.currentExtent;
@@ -198,7 +197,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(2) {
     colorBlendInfo = vk::PipelineColorBlendStateCreateInfo({}, false, vk::LogicOp::eClear, 1, &colorBlendAttachmentState);
 
     // Creating a render pass.
-    vk::AttachmentDescription colorAttachment = vk::AttachmentDescription({}, swapchainFormat.format, vk::SampleCountFlagBits::e1, vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore, vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR);
+    vk::AttachmentDescription colorAttachment = vk::AttachmentDescription({}, swapchainFormat.format, vk::SampleCountFlagBits::e1, vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eStore, vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR);
     vk::AttachmentReference colorAttachmentRef = vk::AttachmentReference(0, vk::ImageLayout::eColorAttachmentOptimal);
     vk::SubpassDescription subpass = vk::SubpassDescription({}, vk::PipelineBindPoint::eGraphics, 0, nullptr, 1, &colorAttachmentRef);
     vk::SubpassDependency dependency = vk::SubpassDependency(VK_SUBPASS_EXTERNAL, 0, vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput, {}, vk::AccessFlagBits::eColorAttachmentWrite);
@@ -214,12 +213,14 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(2) {
         framebuffers[i] = device.createFramebuffer(framebufferInfo);
     }
 
-    // TODO: Optimize.
-    vk::CommandPoolCreateInfo commandPoolInfo = vk::CommandPoolCreateInfo(vk::CommandPoolCreateFlagBits::eResetCommandBuffer, graphicsQueueIndex);
-    comPool = device.createCommandPool(commandPoolInfo);
-
-    vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPool, vk::CommandBufferLevel::ePrimary, framebuffers.size());
-    comBuffers = device.allocateCommandBuffers(comBufAllInfo);
+    comPools = std::vector<vk::CommandPool>(framebuffers.size());
+    comBuffers = std::vector<vk::CommandBuffer>(framebuffers.size());
+    for (int i = 0; i < framebuffers.size(); i++) {
+        vk::CommandPoolCreateInfo commandPoolInfo = vk::CommandPoolCreateInfo({}, graphicsQueueIndex);
+        comPools[i] = device.createCommandPool(commandPoolInfo);
+        vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPools[i], vk::CommandBufferLevel::ePrimary, 1);
+        device.allocateCommandBuffers(&comBufAllInfo, &comBuffers[i]);
+    }
 
     imageAvailableSemaphores = std::vector<vk::Semaphore>(MAX_FRAMES_IN_FLIGHT);
     renderFinishedSemaphores = std::vector<vk::Semaphore>(MAX_FRAMES_IN_FLIGHT);
@@ -229,7 +230,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(2) {
         renderFinishedSemaphores[i] = device.createSemaphore(vk::SemaphoreCreateInfo({}));
         inFlightFences[i] = device.createFence(vk::FenceCreateInfo({ i != 0 ? vk::FenceCreateFlagBits::eSignaled : (vk::FenceCreateFlags)0 }));
     }
-    imagesInFlight = std::vector<vk::Fence>(swapchainImages.size(), VK_NULL_HANDLE);
+    imagesInFlight = std::vector<vk::Fence>(swapchainImages.size(), vk::Fence(nullptr));
     acquireNextImage();
 
     open = true;
@@ -281,29 +282,35 @@ void WindowVK::acquireNextImage() {
     if (imagesInFlight[backBufferIndex] != VK_NULL_HANDLE) {
         // If so, wait on it!
         device.waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX);
-        imagesInFlight[backBufferIndex] = VK_NULL_HANDLE;
+        imagesInFlight[backBufferIndex] = vk::Fence(nullptr);
     }
     imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
 
+    device.resetCommandPool(comPools[backBufferIndex], {});
+
     comBuffers[backBufferIndex].begin(vk::CommandBufferBeginInfo());
-    vk::ClearValue clear = vk::ClearValue(vk::ClearColorValue(std::array<float, 4>{ { 0.f, 0.f, 1.f, 1.f }}));
-    vk::RenderPassBeginInfo beginInfo = vk::RenderPassBeginInfo(renderPass, framebuffers[backBufferIndex], vk::Rect2D(vk::Offset2D(0.f, 0.f), swapchainExtent), 1, &clear);
+    vk::RenderPassBeginInfo beginInfo = vk::RenderPassBeginInfo(renderPass, framebuffers[backBufferIndex], scissor);
     comBuffers[backBufferIndex].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
+}
+
+void WindowVK::clear(Color color) {
+    vk::ClearAttachment cl = vk::ClearAttachment(vk::ImageAspectFlagBits::eColor, 0, vk::ClearValue(vk::ClearColorValue(std::array<float, 4>{ { color.red, color.green, color.blue, color.alpha }})));
+    vk::ClearRect rect = vk::ClearRect(scissor, 0, 1);
+    comBuffers[backBufferIndex].clearAttachments(cl, rect);
 }
 
 void WindowVK::cleanup() {
     SysEventsInternal::unsubscribe(eventSubscriber);
+    device.waitIdle();
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         device.destroySemaphore(imageAvailableSemaphores[i]);
         device.destroySemaphore(renderFinishedSemaphores[i]);
         device.destroyFence(inFlightFences[i]);
     }
-    device.destroyCommandPool(comPool);
-    for (vk::ImageView iw : swapchainImageViews) {
-        device.destroyImageView(iw);
-    }
-    for (vk::Framebuffer fb : framebuffers) {
-        device.destroyFramebuffer(fb);
+    for (int i = 0; i < framebuffers.size(); i++) {
+        device.destroyCommandPool(comPools[i]);
+        device.destroyImageView(swapchainImageViews[i]);
+        device.destroyFramebuffer(framebuffers[i]);
     }
     device.destroySwapchainKHR(swapchain);
     device.destroyRenderPass(renderPass);
@@ -316,6 +323,25 @@ void WindowVK::cleanup() {
 void WindowVK::throwException(String func, String details) {
     cleanup();
     throw Exception("WindowVK::" + func, details);
+}
+
+int WindowVK::findMemoryType(int typeFilter, vk::MemoryPropertyFlags memPropFlags) {
+    vk::PhysicalDeviceMemoryProperties memProps = physicalDevice.getMemoryProperties();
+    int safeIndex = -1;
+    for (int i = 0; i < memProps.memoryTypeCount; i++) {
+        if ((typeFilter & (1 << i)) && (memProps.memoryTypes[i].propertyFlags & memPropFlags) == memPropFlags) {
+            // We prefer device memory.
+            if (memProps.memoryHeaps[memProps.memoryTypes[i].heapIndex].flags & vk::MemoryHeapFlagBits::eDeviceLocal) {
+                return i;
+            } else {
+                safeIndex = i;
+            }
+        }
+    }
+    if (safeIndex != -1) {
+        return safeIndex;
+    }
+    throwException("findMemoryType", "Found no suitable memory type!");
 }
 
 vk::Device WindowVK::getDevice() const {

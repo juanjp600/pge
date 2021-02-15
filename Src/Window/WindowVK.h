@@ -1,7 +1,12 @@
+#ifndef PGEINTERNAL_WINDOW_VK_H_INCLUDED
+#define PGEINTERNAL_WINDOW_VK_H_INCLUDED
+
 #include <Window/Window.h>
 #include "WindowInternal.h"
 
 #include <vulkan/vulkan.hpp>
+
+#include <Color/Color.h>
 
 namespace PGE {
 
@@ -13,6 +18,10 @@ class WindowVK : public WindowInternal {
         void update() override;
         void swap(bool vsyncEnabled=true) override;
 
+        void clear(Color color);
+
+        int findMemoryType(int typeFilter, vk::MemoryPropertyFlags memPropFlags);
+
         vk::Device getDevice() const;
         vk::PipelineViewportStateCreateInfo* getViewportInfo();
         vk::PipelineColorBlendStateCreateInfo* getColorBlendInfo();
@@ -23,6 +32,7 @@ class WindowVK : public WindowInternal {
 
     private:
         vk::Instance vkInstance;
+        vk::PhysicalDevice physicalDevice;
         vk::Device device;
         vk::SurfaceKHR vkSurface;
 
@@ -48,7 +58,7 @@ class WindowVK : public WindowInternal {
 
         std::vector<vk::Framebuffer> framebuffers;
 
-        vk::CommandPool comPool;
+        std::vector<vk::CommandPool> comPools;
         std::vector<vk::CommandBuffer> comBuffers;
 
         std::vector<vk::Semaphore> imageAvailableSemaphores;
@@ -68,3 +78,5 @@ class WindowVK : public WindowInternal {
 };
 
 }
+
+#endif // PGEINTERNAL_WINDOW_VK_H_INCLUDED

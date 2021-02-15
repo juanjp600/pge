@@ -20,6 +20,16 @@ class MeshVK : public Mesh {
 
         vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 
+        vk::Buffer vertexBuffer;
+        vk::DeviceMemory vertexMemory;
+
+        vk::Buffer indexBuffer;
+        vk::DeviceMemory indexMemory;
+
+        int indicesCount;
+
+        vk::DeviceMemory populateBuffer(vk::Buffer buffer);
+
         void cleanup() override;
         void throwException(String func, String details) override;
 
