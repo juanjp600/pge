@@ -20,15 +20,14 @@ class MeshVK : public Mesh {
 
         vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 
-        vk::Buffer vertexBuffer;
-        vk::DeviceMemory vertexMemory;
+        // TODO: Combine buffers.
+        vk::Buffer dataBuffer;
+        vk::DeviceMemory dataMemory;
 
-        vk::Buffer indexBuffer;
-        vk::DeviceMemory indexMemory;
-
+        int totalVertexSize;
         int indicesCount;
 
-        vk::DeviceMemory populateBuffer(vk::Buffer buffer);
+        void createBuffer(int size, vk::BufferUsageFlags bufferUsage, vk::MemoryPropertyFlags memProps, vk::Buffer& buffer, vk::DeviceMemory& memory);
 
         void cleanup() override;
         void throwException(String func, String details) override;

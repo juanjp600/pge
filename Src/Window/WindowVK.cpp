@@ -57,6 +57,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(3) {
     // Declaring the indices for needed queues.
     uint32_t graphicsQueueIndex;
     uint32_t presentQueueIndex;
+    uint32_t transferQueueIndex;
 
     // Selecting a physical device and setting up queues.
     // Currently we just pick the one that supports what we need and has the most VRAM.
@@ -89,6 +90,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(3) {
         uint32_t i = 0;
         bool foundGraphics = false;
         bool foundPresent = false;
+        bool foundTransfer = false;
         for (const auto& qfp : pd.getQueueFamilyProperties()) {
             if (!foundGraphics && qfp.queueFlags & vk::QueueFlagBits::eGraphics) {
                 graphicsQueueIndex = i;
@@ -98,6 +100,10 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(3) {
                 presentQueueIndex = i;
                 foundPresent = true;
             }
+            if (!foundTransfer && qfp.queueFlags & vk::QueueFlagBits::eTransfer && !(qfp.queueFlags & vk::QueueFlagBits::eGraphics)) {
+                transferQueueIndex = i;
+                foundTransfer = true;
+            }
             if (foundGraphics && foundPresent) {
                 break;
             }
@@ -105,6 +111,11 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(3) {
         }
         // Something we need is not supported on this GPU, ignore it.
         if (!foundGraphics || !foundPresent) { break; }
+
+        // We didn't find a seperate transfer queue, so use the graphics one.
+        if (!foundTransfer) {
+            transferQueueIndex = graphicsQueueIndex;
+        }
 
         // Calculate complete VRAM size.
         vk::DeviceSize pdSize = 0;
@@ -127,7 +138,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(3) {
 
     // Creating the logical device.
     float queuePriority = 1.f;
-    std::set<uint32_t> queueIndices = { graphicsQueueIndex, presentQueueIndex };
+    std::set<uint32_t> queueIndices = { graphicsQueueIndex, presentQueueIndex, transferQueueIndex };
     std::vector<vk::DeviceQueueCreateInfo> infos;
     for (int index : queueIndices) {
         infos.push_back(vk::DeviceQueueCreateInfo({}, index, 1, &queuePriority));
@@ -136,6 +147,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(3) {
 
     graphicsQueue = device.getQueue(graphicsQueueIndex, 0);
     presentQueue = device.getQueue(presentQueueIndex, 0);
+    transferQueue = device.getQueue(transferQueueIndex, 0);
 
     // Selecting the right surface format.
     // If we don't find the one we want we'll settle for the first available one.
@@ -170,10 +182,11 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(3) {
     }
 
     // Creating the swap chain.
-    vk::SwapchainCreateInfoKHR sci = vk::SwapchainCreateInfoKHR({}, vkSurface, imageCount, swapchainFormat.format, swapchainFormat.colorSpace, swapchainExtent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive, 0, nullptr, sc.currentTransform, vk::CompositeAlphaFlagBitsKHR::eOpaque, vk::PresentModeKHR::eImmediate, VK_TRUE, nullptr);
-    if (graphicsQueueIndex != presentQueueIndex) {
+    vk::SwapchainCreateInfoKHR sci = vk::SwapchainCreateInfoKHR({}, vkSurface, imageCount, swapchainFormat.format, swapchainFormat.colorSpace, swapchainExtent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive, 0, nullptr, sc.currentTransform, vk::CompositeAlphaFlagBitsKHR::eOpaque, vk::PresentModeKHR::eMailbox, VK_TRUE, nullptr);
+    // TODO: Remove.
+    if (graphicsQueueIndex != presentQueueIndex || presentQueueIndex != transferQueueIndex) {
         sci.setImageSharingMode(vk::SharingMode::eConcurrent);
-        sci.setQueueFamilyIndices(std::vector<uint32_t> { graphicsQueueIndex, presentQueueIndex });
+        sci.setQueueFamilyIndices(std::vector<uint32_t> { graphicsQueueIndex, presentQueueIndex, transferQueueIndex });
     }
     swapchain = device.createSwapchainKHR(sci);
 
@@ -204,7 +217,7 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(3) {
     vk::RenderPassCreateInfo renderPassInfo = vk::RenderPassCreateInfo({}, 1, &colorAttachment, 1, &subpass, 1, &dependency);
     renderPass = device.createRenderPass(renderPassInfo);
 
-    rasterizationInfo = vk::PipelineRasterizationStateCreateInfo({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eNone, vk::FrontFace::eCounterClockwise, false, 0.f, 0.f, 0.f, 1.f);
+    rasterizationInfo = vk::PipelineRasterizationStateCreateInfo({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack, vk::FrontFace::eCounterClockwise, false, 0.f, 0.f, 0.f, 1.f);
     multisamplerInfo = vk::PipelineMultisampleStateCreateInfo({}, vk::SampleCountFlagBits::e1, false, 0.f, nullptr, false, false);
 
     framebuffers = std::vector<vk::Framebuffer>(swapchainImageViews.size());
@@ -221,6 +234,12 @@ WindowVK::WindowVK(String c, int w, int h, bool fs) : MAX_FRAMES_IN_FLIGHT(3) {
         vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPools[i], vk::CommandBufferLevel::ePrimary, 1);
         device.allocateCommandBuffers(&comBufAllInfo, &comBuffers[i]);
     }
+
+    vk::CommandPoolCreateInfo transferComPoolInfo = vk::CommandPoolCreateInfo({}, graphicsQueueIndex);
+    transferComPool = device.createCommandPool(transferComPoolInfo);
+    // TODO: How many buffers should we have?
+    vk::CommandBufferAllocateInfo transferComBufferInfo = vk::CommandBufferAllocateInfo(transferComPool, vk::CommandBufferLevel::ePrimary, 1);
+    device.allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer);
 
     imageAvailableSemaphores = std::vector<vk::Semaphore>(MAX_FRAMES_IN_FLIGHT);
     renderFinishedSemaphores = std::vector<vk::Semaphore>(MAX_FRAMES_IN_FLIGHT);
@@ -307,6 +326,7 @@ void WindowVK::cleanup() {
         device.destroySemaphore(renderFinishedSemaphores[i]);
         device.destroyFence(inFlightFences[i]);
     }
+    device.destroyCommandPool(transferComPool);
     for (int i = 0; i < framebuffers.size(); i++) {
         device.destroyCommandPool(comPools[i]);
         device.destroyImageView(swapchainImageViews[i]);
@@ -325,23 +345,33 @@ void WindowVK::throwException(String func, String details) {
     throw Exception("WindowVK::" + func, details);
 }
 
+// TODO: Remove if unneeded.
+int WindowVK::validNextHighestMemoryRange(int input) {
+    int sizeMultiplier = physicalDevice.getProperties().limits.nonCoherentAtomSize;
+    return std::ceil((double)input / sizeMultiplier) * sizeMultiplier;
+}
+
+// TODO: Move?
 int WindowVK::findMemoryType(int typeFilter, vk::MemoryPropertyFlags memPropFlags) {
     vk::PhysicalDeviceMemoryProperties memProps = physicalDevice.getMemoryProperties();
-    int safeIndex = -1;
     for (int i = 0; i < memProps.memoryTypeCount; i++) {
         if ((typeFilter & (1 << i)) && (memProps.memoryTypes[i].propertyFlags & memPropFlags) == memPropFlags) {
-            // We prefer device memory.
-            if (memProps.memoryHeaps[memProps.memoryTypes[i].heapIndex].flags & vk::MemoryHeapFlagBits::eDeviceLocal) {
-                return i;
-            } else {
-                safeIndex = i;
-            }
+            return i;
         }
     }
-    if (safeIndex != -1) {
-        return safeIndex;
-    }
     throwException("findMemoryType", "Found no suitable memory type!");
+}
+
+// TODO: Optimize.
+void WindowVK::transfer(const vk::Buffer& src, const vk::Buffer& dst, int size) {
+    device.resetCommandPool(transferComPool, {});
+    transferComBuffer.begin(vk::CommandBufferBeginInfo({}));
+    transferComBuffer.copyBuffer(src, dst, vk::BufferCopy(0, 0, size));
+    transferComBuffer.end();
+    vk::SubmitInfo sui;
+    sui.setCommandBuffers(transferComBuffer);
+    transferQueue.submit(sui, nullptr);
+    transferQueue.waitIdle();
 }
 
 vk::Device WindowVK::getDevice() const {

@@ -15,7 +15,7 @@ MeshVK::MeshVK(Graphics* gfx, Primitive::TYPE pt) {
 	primitiveType = pt;
 
 	pipeline = vk::Pipeline(nullptr);
-	vertexBuffer = vk::Buffer(nullptr);
+	dataBuffer = vk::Buffer(nullptr);
 
 	vk::PrimitiveTopology vkPrim;
 	switch (pt) {
@@ -42,77 +42,114 @@ void MeshVK::updateInternalData() {
 
 	WindowVK* window = (WindowVK*)graphics->getWindow();
 	vk::Device device = window->getDevice();
+	ShaderVK* shader = (ShaderVK*)material->getShader();
 
 	if (pipeline != VK_NULL_HANDLE) {
 		device.destroyPipeline(pipeline);
-		device.destroyBuffer(vertexBuffer);
-		device.freeMemory(vertexMemory);
-		device.destroyBuffer(indexBuffer);
-		device.freeMemory(indexMemory);
+		device.destroyBuffer(dataBuffer);
+		device.freeMemory(dataMemory);
 	}
 
-	int stride = sizeof(float) * 5;
-	int totalSize = stride * vertexCount;
-
-	vk::BufferCreateInfo vertexBufferInfo = vk::BufferCreateInfo({}, totalSize, vk::BufferUsageFlagBits::eVertexBuffer, vk::SharingMode::eExclusive);
-	vertexBuffer = device.createBuffer(vertexBufferInfo);
-	vertexMemory = populateBuffer(vertexBuffer);
-	device.bindBufferMemory(vertexBuffer, vertexMemory, 0);
-	int indexInt = 0;
-	int colorIndexInt = 1;
-	float* vertexData = (float*)device.mapMemory(vertexMemory, 0, totalSize);
-	for (int i = 0; i < vertexCount; i++) {
-		Vertex::Property lol = vertices[i].getProperty("position", indexInt);
-		*vertexData = lol.value.vector2fVal.x;
-		vertexData++;
-		*vertexData = lol.value.vector2fVal.y;
-		vertexData++;
-		Vertex::Property lol2 = vertices[i].getProperty("color", colorIndexInt);
-		*vertexData = lol2.value.vector3fVal.x;
-		vertexData++;
-		*vertexData = lol2.value.vector3fVal.y;
-		vertexData++;
-		*vertexData = lol2.value.vector3fVal.z;
-		vertexData++;
-	}
-	device.flushMappedMemoryRanges(vk::MappedMemoryRange(vertexMemory, 0, VK_WHOLE_SIZE));
-	device.unmapMemory(vertexMemory);
-
+	totalVertexSize = shader->getVertexStride() * vertexCount;
 	indicesCount = primitiveCount * (primitiveType == Primitive::TYPE::TRIANGLE ? 3 : 2);
-	int indexTotalSize = sizeof(uint16_t) * indicesCount;
-	vk::BufferCreateInfo indexBufferInfo = vk::BufferCreateInfo({}, indexTotalSize, vk::BufferUsageFlagBits::eIndexBuffer, vk::SharingMode::eExclusive);
-	indexBuffer = device.createBuffer(indexBufferInfo);
-	indexMemory = populateBuffer(indexBuffer);
-	device.bindBufferMemory(indexBuffer, indexMemory, 0);
-	uint16_t* indexData = (uint16_t*)device.mapMemory(indexMemory, 0, indexTotalSize);
-	for (int i = 0; i < primitiveCount; i++) {
-		*indexData = primitives[i].a;
-		indexData++;
-		*indexData = primitives[i].b;
-		indexData++;
-		if (primitiveType == Primitive::TYPE::TRIANGLE) {
-			*indexData = primitives[i].c;
-			indexData++;
+	int finalTotalSize = totalVertexSize + sizeof(uint16_t) * indicesCount;
+
+	vk::Buffer stagingBuffer;
+	vk::DeviceMemory stagingMemory;
+	createBuffer(finalTotalSize, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible, stagingBuffer, stagingMemory);
+
+	std::vector<String> vertexInputNames = shader->getVertexInputNames();
+	std::vector<int> hintIndices(vertexInputNames.size());
+	float* vertexCursor = (float*)device.mapMemory(stagingMemory, 0, finalTotalSize);
+	for (int i = 0; i < vertexCount; i++) {
+		for (int j = 0; j < vertexInputNames.size(); j++) {
+			const Vertex::Property& prop = vertices[i].getProperty(vertexInputNames[j], hintIndices[j]);
+			switch (prop.type) {
+				case Vertex::PROPERTY_TYPE::FLOAT: {
+					*vertexCursor = prop.value.floatVal;
+					vertexCursor++;
+				} break;
+				case Vertex::PROPERTY_TYPE::UINT: {
+					*((uint32_t*)vertexCursor) = prop.value.uintVal;
+					vertexCursor++;
+				} break;
+				case Vertex::PROPERTY_TYPE::VECTOR2F: {
+					*vertexCursor = prop.value.vector2fVal.x;
+					vertexCursor++;
+					*vertexCursor = prop.value.vector2fVal.y;
+					vertexCursor++;
+				} break;
+				case Vertex::PROPERTY_TYPE::VECTOR3F: {
+					*vertexCursor = prop.value.vector3fVal.x;
+					vertexCursor++;
+					*vertexCursor = prop.value.vector3fVal.y;
+					vertexCursor++;
+					*vertexCursor = prop.value.vector3fVal.z;
+					vertexCursor++;
+				} break;
+				case Vertex::PROPERTY_TYPE::VECTOR4F: {
+					*vertexCursor = prop.value.vector4fVal.x;
+					vertexCursor++;
+					*vertexCursor = prop.value.vector4fVal.y;
+					vertexCursor++;
+					*vertexCursor = prop.value.vector4fVal.z;
+					vertexCursor++;
+					*vertexCursor = prop.value.vector4fVal.w;
+					vertexCursor++;
+				} break;
+				case Vertex::PROPERTY_TYPE::COLOR: {
+					*vertexCursor = prop.value.colorVal.red;
+					vertexCursor++;
+					*vertexCursor = prop.value.colorVal.green;
+					vertexCursor++;
+					*vertexCursor = prop.value.colorVal.blue;
+					vertexCursor++;
+					*vertexCursor = prop.value.colorVal.alpha;
+					vertexCursor++;
+				} break;
+			}
 		}
 	}
-	device.flushMappedMemoryRanges(vk::MappedMemoryRange(indexMemory, 0, VK_WHOLE_SIZE));
-	device.unmapMemory(indexMemory);
 
-	ShaderVK* shader = (ShaderVK*)material->getShader();
+	uint16_t* indexCursor = (uint16_t*)vertexCursor;
+	for (int i = 0; i < primitiveCount; i++) {
+		*indexCursor = primitives[i].a;
+		indexCursor++;
+		*indexCursor = primitives[i].b;
+		indexCursor++;
+		if (primitiveType == Primitive::TYPE::TRIANGLE) {
+			*indexCursor = primitives[i].c;
+			indexCursor++;
+		}
+	}
+	device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, VK_WHOLE_SIZE));
+	device.unmapMemory(stagingMemory);
+
+	createBuffer(finalTotalSize, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, dataBuffer, dataMemory);
+	window->transfer(stagingBuffer, dataBuffer, finalTotalSize);
+
+	device.destroyBuffer(stagingBuffer);
+	device.freeMemory(stagingMemory);
+
 	vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shader->getShaderStageInfo(), shader->getVertexInputInfo(), &inputAssemblyInfo, nullptr, window->getViewportInfo(), window->getRasterizationInfo(), window->getMultisamplerInfo(), nullptr, window->getColorBlendInfo(), nullptr, *shader->getLayout(), *window->getRenderPass(), 0, {}, -1);
 	pipeline = device.createGraphicsPipeline(nullptr, pipelineInfo).value;
 
 	mustUpdateInternalData = false;
 }
 
-vk::DeviceMemory MeshVK::populateBuffer(vk::Buffer buffer) {
+void MeshVK::createBuffer(int size, vk::BufferUsageFlags bufferUsage, vk::MemoryPropertyFlags memProps, vk::Buffer& buffer, vk::DeviceMemory& memory) {
 	WindowVK* window = (WindowVK*)graphics->getWindow();
-	vk::Device device = window->getDevice();
+	const vk::Device& device = window->getDevice();
+
+	vk::BufferCreateInfo indexBufferInfo = vk::BufferCreateInfo({}, size, bufferUsage, vk::SharingMode::eExclusive);
+	buffer = device.createBuffer(indexBufferInfo);
 
 	vk::MemoryRequirements memReq = device.getBufferMemoryRequirements(buffer);
-	int memType = window->findMemoryType(memReq.memoryTypeBits, vk::MemoryPropertyFlagBits::eHostVisible);
+	int memType = window->findMemoryType(memReq.memoryTypeBits, memProps);
 	vk::MemoryAllocateInfo memoryInfo = vk::MemoryAllocateInfo(memReq.size, memType);
-	return device.allocateMemory(memoryInfo);
+
+	memory = device.allocateMemory(memoryInfo);
+	device.bindBufferMemory(buffer, memory, 0);
 }
 
 void MeshVK::render() {
@@ -121,22 +158,21 @@ void MeshVK::render() {
 	}
 
 	vk::CommandBuffer comBuffer = ((GraphicsVK*)graphics)->getCurrentCommandBuffer();
-	comBuffer.bindVertexBuffers(0, vertexBuffer, (vk::DeviceSize)0);
-	comBuffer.bindIndexBuffer(indexBuffer, 0, vk::IndexType::eUint16);
+	// TODO: How the fuck does the buffer know how much vertex data there is???
+	comBuffer.bindVertexBuffers(0, dataBuffer, (vk::DeviceSize)0);
+	comBuffer.bindIndexBuffer(dataBuffer, totalVertexSize, vk::IndexType::eUint16);
 	comBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
 	comBuffer.drawIndexed(indicesCount, 1, 0, 0, 0);
 }
 
 void MeshVK::cleanup() {
 	vk::Device device = ((GraphicsVK*)graphics)->getDevice();
-	// TODO test over frames in flight
+	// TODO test over frames in flight.
 	device.waitIdle();
 	if (pipeline != VK_NULL_HANDLE) {
 		device.destroyPipeline(pipeline);
-		device.destroyBuffer(vertexBuffer);
-		device.freeMemory(vertexMemory);
-		device.destroyBuffer(indexBuffer);
-		device.freeMemory(indexMemory);
+		device.destroyBuffer(dataBuffer);
+		device.freeMemory(dataMemory);
 	}
 }
 

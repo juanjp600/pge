@@ -1,58 +1,72 @@
 #include <Shader/Shader.h>
 
+#include <map>
+
 #include <vulkan/vulkan.hpp>
+
+#include "../Window/WindowVK.h"
+#include "../Graphics/GraphicsVK.h"
 
 namespace PGE {
 
     class ShaderVK : public Shader {
         public:
-        ShaderVK(Graphics* gfx, const FilePath& path);
-        ~ShaderVK();
+            ShaderVK(Graphics* gfx, const FilePath& path);
+            ~ShaderVK();
 
-        Constant* getVertexShaderConstant(String name) override;
-        Constant* getFragmentShaderConstant(String name) override;
+            Constant* getVertexShaderConstant(String name) override;
+            Constant* getFragmentShaderConstant(String name) override;
 
-        vk::ShaderModule* getModules();
-        vk::PipelineShaderStageCreateInfo* getShaderStageInfo();
-        vk::PipelineVertexInputStateCreateInfo* getVertexInputInfo();
-        vk::PipelineLayout* getLayout();
+            int getVertexStride() const;
+            std::vector<String> getVertexInputNames() const;
+
+            vk::PipelineShaderStageCreateInfo* getShaderStageInfo();
+            vk::PipelineVertexInputStateCreateInfo* getVertexInputInfo();
+            vk::PipelineLayout* getLayout();
 
         private:
-        Constant* tempConstant; // TODO: Remove with actual implementation.
+            GraphicsVK* graphics;
+            vk::Device device;
 
-        void cleanup() override;
-        void throwException(String func, String details) override;
+            int vertexStride;
+            std::vector<String> vertexInputNames;
 
-        vk::Device device;
+            vk::ShaderModule vkShader;
 
-        vk::ShaderModule vertexShader;
-        vk::ShaderModule fragmentShader;
-        vk::ShaderModule modules[2];
+            vk::PipelineShaderStageCreateInfo shaderStageInfo[2];
 
-        vk::PipelineShaderStageCreateInfo shaderStageInfo[2];
+            vk::VertexInputBindingDescription vertexInputBinding;
+            std::vector<vk::VertexInputAttributeDescription> vertexInputAttributes;
+            vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
 
-        vk::VertexInputBindingDescription vertexInputBinding;
-        std::vector<vk::VertexInputAttributeDescription> vertexInputAttributes;
-        vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
+            vk::PipelineLayout layout;
 
-        vk::PipelineLayout layout;
-
-        class ConstantVK : public Constant {
-            public:
-            ConstantVK();
-            ~ConstantVK() {};
-
-            void setValue(Matrix4x4f value) override;
-            void setValue(Vector2f value) override;
-            void setValue(Vector3f value) override;
-            void setValue(Vector4f value) override;
-            void setValue(Color value) override;
-            void setValue(float value) override;
-            void setValue(int value) override;
-
-            private:
+            void cleanup() override;
             void throwException(String func, String details) override;
-        };
+
+            class ConstantVK : public Constant {
+                public:
+                    ConstantVK(Graphics* gfx, vk::PipelineLayout lay, vk::ShaderStageFlags stg, int off);
+                    ~ConstantVK() {};
+
+                    void setValue(Matrix4x4f value) override;
+                    void setValue(Vector2f value) override;
+                    void setValue(Vector3f value) override;
+                    void setValue(Vector4f value) override;
+                    void setValue(Color value) override;
+                    void setValue(float value) override;
+                    void setValue(int value) override;
+
+                private:
+                    Graphics* graphics;
+                    vk::PipelineLayout layout;
+                    vk::ShaderStageFlags stage;
+                    int offset;
+
+                    void throwException(String func, String details) override;
+            };
+            std::map<long long, ConstantVK*> vertexConstantMap;
+            std::map<long long, ConstantVK*> fragmentConstantMap;
     };
 
 }

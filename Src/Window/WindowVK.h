@@ -20,7 +20,10 @@ class WindowVK : public WindowInternal {
 
         void clear(Color color);
 
+        int validNextHighestMemoryRange(int input);
         int findMemoryType(int typeFilter, vk::MemoryPropertyFlags memPropFlags);
+
+        void transfer(const vk::Buffer& src, const vk::Buffer& dst, int size);
 
         vk::Device getDevice() const;
         vk::PipelineViewportStateCreateInfo* getViewportInfo();
@@ -38,6 +41,7 @@ class WindowVK : public WindowInternal {
 
         vk::Queue graphicsQueue;
         vk::Queue presentQueue;
+        vk::Queue transferQueue;
 
         vk::SwapchainKHR swapchain;
         vk::Extent2D swapchainExtent;
@@ -60,6 +64,8 @@ class WindowVK : public WindowInternal {
 
         std::vector<vk::CommandPool> comPools;
         std::vector<vk::CommandBuffer> comBuffers;
+        vk::CommandPool transferComPool;
+        vk::CommandBuffer transferComBuffer;
 
         std::vector<vk::Semaphore> imageAvailableSemaphores;
         std::vector<vk::Semaphore> renderFinishedSemaphores;
