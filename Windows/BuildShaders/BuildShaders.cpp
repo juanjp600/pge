@@ -29,10 +29,12 @@ DXGI_FORMAT computeDxgiFormat(const D3D11_SIGNATURE_PARAMETER_DESC& paramDesc) {
 HRESULT compileShader(const wchar_t* input) {
 	ID3DBlob* errorBlob = nullptr;
 
+	D3D_SHADER_MACRO shaderMacros[2] = { "[[vk::push_constant]]", "", NULL, NULL };
+
 	HRESULT hr = S_OK;
 
 	ID3DBlob* vsBlob = nullptr;
-	hr = D3DCompileFromFile(input, NULL, NULL, "VS", "vs_4_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3, 0, &vsBlob, &errorBlob);
+	hr = D3DCompileFromFile(input, shaderMacros, NULL, "VS", "vs_4_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3, 0, &vsBlob, &errorBlob);
 
 	if (FAILED(hr)) {
 		if (errorBlob) {
@@ -180,7 +182,7 @@ HRESULT compileShader(const wchar_t* input) {
 	fclose(vsOutFile);
 
 	ID3DBlob* psBlob = nullptr;
-	hr = D3DCompileFromFile(input, NULL, NULL, "PS", "ps_4_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3, 0, &psBlob, &errorBlob);
+	hr = D3DCompileFromFile(input, shaderMacros, NULL, "PS", "ps_4_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3, 0, &psBlob, &errorBlob);
 
 	if (FAILED(hr)) {
 		if (errorBlob) {
@@ -280,6 +282,8 @@ int main(int argc, char* argv[]) {
 			wcstombs(cmd, (std::wstring(L"glslangValidator.exe -S vert -e VS -o ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/vert.spv") + L" -V -D " + fileName).c_str(), 512);
 			system(cmd);
 			wcstombs(cmd, (std::wstring(L"glslangValidator.exe -S frag -e PS -o ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/frag.spv") + L" -V -D " + fileName).c_str(), 512);
+			system(cmd);
+			wcstombs(cmd, (std::wstring(L"spirv-link ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/vert.spv ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/frag.spv") + (L" -o " + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/shader.spv"))).c_str(), 512);
 			system(cmd);
 		}
 	} while (FindNextFileW(fHandle, &findData) != 0);
