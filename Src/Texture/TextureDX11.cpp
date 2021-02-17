@@ -1,9 +1,8 @@
 #include "TextureDX11.h"
 #include "TextureInternal.h"
-#include <Window/Window.h>
-#include "../Window/WindowDX11.h"
 #include <Exception/Exception.h>
 #include <Threading/ThreadManager.h>
+#include "../Graphics/GraphicsDX11.h"
 
 #include <stdlib.h>
 #include <inttypes.h>
@@ -19,8 +18,8 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     isRT = false;
 
     graphics = gfx;
-    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     // filename = "<n/a>";
 
@@ -143,8 +142,8 @@ TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
     dxZBufferTexture = nullptr;
     isRT = false;
     
-    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     format = FORMAT::RGBA32;
 
@@ -193,8 +192,8 @@ TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     isRT = false;
 
     graphics = gfx;
-    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     filename = fn;
     name = fn.str();
@@ -364,12 +363,12 @@ void TextureDX11::cleanup() {
 }
 
 void TextureDX11::useTexture(int index) {
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
     dxContext->PSSetShaderResources(index,1,&dxShaderResourceView);
 }
 
 Texture* TextureDX11::copy() const {
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     TextureDX11* copy = new TextureDX11(graphics, getWidth(), getHeight(), false, nullptr, format);
     copy->name = String(name, "_Copy");

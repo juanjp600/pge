@@ -1,7 +1,5 @@
 #include <Mesh/Mesh.h>
 #include "MeshOGL3.h"
-#include <Window/Window.h>
-#include "../Window/WindowOGL3.h"
 #include <Graphics/Graphics.h>
 #include "../Graphics/GraphicsOGL3.h"
 #include <Shader/Shader.h>

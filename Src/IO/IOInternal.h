@@ -9,9 +9,11 @@
 
 namespace PGE {
 
+class Graphics;
+
 class IOInternal : public IO {
     private:
-        Window* window;
+        Graphics* graphics;
 
         SysEvents::Subscriber* keyboardSubscriber;
         SysEvents::Subscriber* mouseSubscriber;
@@ -28,7 +30,7 @@ class IOInternal : public IO {
         String textInput;
 
     public:
-        IOInternal(Window* win);
+        IOInternal(Graphics* gfx);
         ~IOInternal();
 
         void update() override;

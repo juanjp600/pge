@@ -115,6 +115,14 @@ Rectanglei::Rectanglei(const Rectanglef& rf) {
     tl = Vector2i(rf.topLeftCorner()); br = Vector2i(rf.bottomRightCorner());
 }
 
+bool Rectanglei::operator==(const Rectanglei& other) const {
+    return topLeftCorner() == other.topLeftCorner() && bottomRightCorner() == other.bottomRightCorner();
+}
+
+bool Rectanglei::operator!=(const Rectanglei& other) const {
+    return topLeftCorner() != other.topLeftCorner() || bottomRightCorner() != other.bottomRightCorner();
+}
+
 void Rectanglei::repair() {
     if (tl.x>br.x) {
         int tlx = tl.x; int brx = br.x;

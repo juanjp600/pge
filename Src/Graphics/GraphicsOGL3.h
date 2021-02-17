@@ -2,30 +2,35 @@
 #define PGEINTERNAL_GRAPHICSOGL3_H_INCLUDED
 
 #include <Graphics/Graphics.h>
-#include <Texture/Texture.h>
+#include "GraphicsInternal.h"
 
+#include <SDL.h>
 #include <GL/glew.h>
 #ifndef __APPLE__
 #include <GL/gl.h>
 #else
+#ifdef __OBJC__
+#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
+#endif
 #include <OpenGL/GL.h>
 #endif
 
 namespace PGE {
 
-class GraphicsOGL3 : public Graphics {
-    public:
-        GraphicsOGL3(String name,int w=1280,int h=720,bool fs=false);
-        ~GraphicsOGL3();
+class Texture;
 
-        virtual Renderer getRenderer() override;
+class GraphicsOGL3 : public GraphicsInternal {
+    public:
+        GraphicsOGL3(String name,int w,int h,bool fs);
+        ~GraphicsOGL3() override;
 
         virtual void update() override;
+        virtual void swap() override;
 
         virtual void clear(Color color) override;
     
         virtual void setDepthTest(bool enabled) override;
-        virtual bool getDepthTest() const override;
 
         virtual void setRenderTarget(Texture* renderTarget) override;
         virtual void setRenderTargets(std::vector<Texture*> renderTargets) override;
@@ -33,19 +38,18 @@ class GraphicsOGL3 : public Graphics {
 
         virtual void setViewport(Rectanglei vp) override;
 
+        virtual void setVsync(bool isEnabled) override;
+
         void takeGlContext();
-    
+        SDL_GLContext getGlContext() const;
+
     private:
+        SDL_GLContext glContext;
+
         GLuint glFramebuffer;
-
-        Rectanglei currentViewport;
-    
-        bool depthTestEnabled;
-
-        void throwException(String func,String details) override;
-        void cleanup() override;
+        virtual void cleanup() override;
 };
 
 }
 
-#endif
+#endif // PGEINTERNAL_GRAPHICSOGL3_H_INCLUDED

@@ -1,6 +1,4 @@
 #include "MeshDX11.h"
-#include <Window/Window.h>
-#include "../Window/WindowDX11.h"
 #include <Graphics/Graphics.h>
 #include "../Graphics/GraphicsDX11.h"
 #include <Shader/Shader.h>
@@ -131,8 +129,8 @@ void MeshDX11::uploadInternalData() {
     if (mustUpdateInternalData) { updateInternalData(); }
     if (!mustReuploadInternalData) { return; }
 
-    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     if (dxVertexBuffer!=nullptr) {
         dxVertexBuffer->Release(); dxVertexBuffer=nullptr;
@@ -179,7 +177,7 @@ void MeshDX11::uploadInternalData() {
 }
 
 void MeshDX11::render() {
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     updateInternalData();
     uploadInternalData();
@@ -209,10 +207,10 @@ void MeshDX11::render() {
         ((TextureDX11*)material->getTexture(i))->useTexture(i);
     }
 
-    ((WindowDX11*)graphics->getWindow())->setZBufferState(
+    ((GraphicsDX11*)graphics)->setZBufferState(
         graphics->getDepthTest()
-                ? (opaque ? WindowDX11::ZBUFFER_STATE_INDEX::ENABLED_WRITE : WindowDX11::ZBUFFER_STATE_INDEX::ENABLED_NOWRITE)
-                : WindowDX11::ZBUFFER_STATE_INDEX::DISABLED);
+                ? (opaque ? GraphicsDX11::ZBUFFER_STATE_INDEX::ENABLED_WRITE : GraphicsDX11::ZBUFFER_STATE_INDEX::ENABLED_NOWRITE)
+                : GraphicsDX11::ZBUFFER_STATE_INDEX::DISABLED);
     
     dxContext->DrawIndexed(primitiveCount*dxIndexMultiplier,0,0);
 

@@ -352,6 +352,14 @@ Vector2i::Vector2i(const Vector2f& vf) {
     x = (int)vf.x; y = (int)vf.y;
 }
 
+bool Vector2i::operator==(const PGE::Vector2i& other) const {
+    return x == other.x && y == other.y;
+}
+
+bool Vector2i::operator!=(const PGE::Vector2i& other) const {
+    return x != other.x || y != other.y;
+}
+
 int Vector2i::lengthSquared() const {
     return x*x+y*y;
 }

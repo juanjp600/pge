@@ -53,9 +53,6 @@
     <ClCompile Include="..\..\Src\Texture\TextureOGL3.cpp" />
     <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp" />
     <ClCompile Include="..\..\Src\UserInput\UserInput.cpp" />
-    <ClCompile Include="..\..\Src\Window\Window.cpp" />
-    <ClCompile Include="..\..\Src\Window\WindowDX11.cpp" />
-    <ClCompile Include="..\..\Src\Window\WindowOGL3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\Audio\Audio.h" />
@@ -83,9 +80,9 @@
     <ClInclude Include="..\..\Include\Texture\Texture.h" />
     <ClInclude Include="..\..\Include\Threading\ThreadManager.h" />
     <ClInclude Include="..\..\Include\UserInput\UserInput.h" />
-    <ClInclude Include="..\..\Include\Window\Window.h" />
     <ClInclude Include="..\..\Src\Audio\AudioInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
+    <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h" />
@@ -96,9 +93,6 @@
     <ClInclude Include="..\..\Src\Texture\TextureDX11.h" />
     <ClInclude Include="..\..\Src\Texture\TextureInternal.h" />
     <ClInclude Include="..\..\Src\Texture\TextureOGL3.h" />
-    <ClInclude Include="..\..\Src\Window\WindowDX11.h" />
-    <ClInclude Include="..\..\Src\Window\WindowInternal.h" />
-    <ClInclude Include="..\..\Src\Window\WindowOGL3.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

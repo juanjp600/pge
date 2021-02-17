@@ -3,9 +3,11 @@
 
 #include <vector>
 
-#include <Window/Window.h>
 #include <Math/Rectangle.h>
 #include <Color/Color.h>
+#include <SysEvents/SysEvents.h>
+
+struct SDL_Window;
 
 namespace PGE {
 
@@ -15,39 +17,64 @@ class Graphics {
     public:
         enum class Renderer {
             OpenGL,
-            DirectX11
+            DirectX11,
+            Default
         };
 
-        static Graphics* create(Renderer r, String name, int w, int h, bool fs);
+        static Graphics* create(String name="PGE Application", int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default);
 
-        Window* getWindow() const;
-
-        virtual Renderer getRenderer() = 0;
+        Graphics(String name, int w, int h, bool fs);
+        // Destructor should only be overriden to call cleanup which should deal with all cleanup!
+        virtual ~Graphics() = 0;
         
         virtual void update();
-        void swap(bool vsync = true);
+        virtual void swap() = 0;
 
         virtual void clear(Color color) = 0;
-
-        virtual void setDepthTest(bool enabled) = 0;
-        virtual bool getDepthTest() const = 0;
 
         virtual void setRenderTarget(Texture* renderTarget) = 0;
         virtual void setRenderTargets(std::vector<Texture*> renderTargets) = 0;
         virtual void resetRenderTarget() = 0;
 
-        virtual void setViewport(Rectanglei vp);
+        virtual void setViewport(Rectanglei vp) = 0;
         Rectanglei getViewport() const;
 
-        virtual ~Graphics(){};
+        int getWidth() const;
+        int getHeight() const;
+
+        bool isWindowOpen() const;
+        bool isWindowFocused() const;
+
+        virtual void setDepthTest(bool isEnabled);
+        virtual bool getDepthTest() const;
+
+        virtual void setVsync(bool isEnabled);
+        virtual bool getVsync() const;
 
     protected:
-        virtual void cleanup() = 0;
-        virtual void throwException(String func, String details) = 0;
+        Renderer renderer;
+        String rendererName;
+
+        String caption;
 
         Rectanglei viewport;
 
-        Window* window;
+        int width; int height; bool fullscreen;
+
+        bool open;
+        bool focused;
+
+        bool depthTest;
+        bool vsync;
+
+        SysEvents::Subscriber* eventSubscriber;
+
+        SDL_Window* sdlWindow;
+
+        // Should be designed to allow for multiple calls.
+        // Base class always automatically takes care of sdlWindow and SysEvents.
+        virtual void cleanup();
+        void throwException(String func, String details);
 };
 
 }

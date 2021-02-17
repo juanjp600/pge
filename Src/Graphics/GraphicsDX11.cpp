@@ -1,33 +1,227 @@
 #include "GraphicsDX11.h"
-#include <Window/Window.h>
-#include <Exception/Exception.h>
-#include "../Window/WindowDX11.h"
+
 #include "../Texture/TextureDX11.h"
 
+#include <SDL_syswm.h>
 #include <stdlib.h>
 
 using namespace PGE;
 
-GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) {
-    try {
-        window = nullptr;
-        window = new WindowDX11(name,w,h,fs);
-    } catch (Exception& e) {
-        cleanup();
-        throw e;
-    } catch (std::exception& e) {
-        cleanup();
-        throw e;
+//REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
+
+GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(name, w, h, fs) {
+    dxgiFactory = nullptr;
+
+    dxSwapChain = nullptr;
+
+    dxDevice = nullptr;
+    dxContext = nullptr;
+
+    dxBackBufferRtv = nullptr;
+    dxZBufferTexture = nullptr;
+    dxZBufferView = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE] = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] = nullptr;
+
+    dxRasterizerState = nullptr;
+
+    dxBlendState = nullptr;
+
+    HRESULT hResult = 0;
+    int errorCode = 0;
+
+    sdlWindow = SDL_CreateWindow(name.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN);
+    if (sdlWindow == nullptr) {
+        throwException("GraphicsDX11", "Failed to create SDL window: " + String(SDL_GetError()));
     }
 
-    ID3D11Device* dxDevice = ((WindowDX11*)window)->getDxDevice();
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)window)->getDxContext();
+    if (fullscreen) {
+        SDL_SetWindowBordered(sdlWindow, SDL_bool::SDL_FALSE);
+        SDL_Rect displayBounds;
+        int displayIndex = SDL_GetWindowDisplayIndex(sdlWindow);
+        if (displayIndex < 0) {
+            throwException("GraphicsDX11", "Failed to determine display index: " + String(SDL_GetError()));
+        }
+        errorCode = SDL_GetDisplayBounds(displayIndex, &displayBounds);
+        if (errorCode < 0) {
+            throwException("GraphicsDX11", "Failed to get display bounds: " + String(SDL_GetError()));
+        }
+        if (displayBounds.w <= 0 || displayBounds.h <= 0) {
+            throwException("GraphicsDX11", "Display bounds are invalid (" + String::fromInt(displayBounds.w) + ", " + String::fromInt(displayBounds.h) + ")");
+        }
+        SDL_SetWindowSize(sdlWindow, displayBounds.w, displayBounds.h);
+        SDL_SetWindowPosition(sdlWindow, 0, 0);
+    }
+
+    hResult = CreateDXGIFactory1(__uuidof(IDXGIFactory1), (LPVOID*)(&dxgiFactory));
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to create DXGI factory (HRESULT " + String::fromInt(hResult) + ")");
+    }
+
+    SDL_SysWMinfo sysWMinfo;
+    SDL_VERSION(&sysWMinfo.version); //REMINDER: THIS LINE IS VERY IMPORTANT
+    bool validInfo = SDL_GetWindowWMInfo(sdlWindow, &sysWMinfo);
+    if (!validInfo) {
+        throwException("GraphicsDX11", "Failed to initialize SDL version info: " + String(SDL_GetError()));
+    }
+
+    ZeroMemory(&dxSwapChainDesc, sizeof(dxSwapChainDesc));
+    dxSwapChainDesc.BufferCount = 1;
+    dxSwapChainDesc.BufferDesc.Width = w;
+    dxSwapChainDesc.BufferDesc.Height = h;
+    dxSwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    dxSwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+    dxSwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+    dxSwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    dxSwapChainDesc.OutputWindow = sysWMinfo.info.win.window;
+    dxSwapChainDesc.SampleDesc.Count = 1;
+    dxSwapChainDesc.SampleDesc.Quality = 0;
+    dxSwapChainDesc.Windowed = TRUE;
+
+    D3D_FEATURE_LEVEL dxFeatureLevel[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_9_3 };
+
+    hResult = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, dxFeatureLevel, 2, D3D11_SDK_VERSION,
+        &dxDevice, NULL, &dxContext);
+
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to create D3D11 device (HRESULT " + String::fromInt(hResult) + ")");
+    }
+
+    IDXGIDevice1* dxgiDevice = nullptr;
+    hResult = dxDevice->QueryInterface(__uuidof(IDXGIDevice1), (LPVOID*)(&dxgiDevice));
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to initialize DXGI device (HRESULT " + String::fromInt(hResult) + ")");
+    }
+
+    hResult = dxgiFactory->CreateSwapChain(dxgiDevice, &dxSwapChainDesc, &dxSwapChain);
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to create DXGI swapchain (HRESULT " + String::fromInt(hResult) + ")");
+    }
+
+    dxgiDevice->Release();
+
+    ID3D11Texture2D* backBuffer;
+    hResult = dxSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to retrieve back buffer (HRESULT " + String::fromInt(hResult) + ")");
+    }
+    hResult = dxDevice->CreateRenderTargetView(backBuffer, NULL, &dxBackBufferRtv);
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to create back buffer target view (HRESULT " + String::fromInt(hResult) + ")");
+    }
+    backBuffer->Release();
+
+    // Create depth stencil texture
+    D3D11_TEXTURE2D_DESC descDepth;
+    ZeroMemory(&descDepth, sizeof(descDepth));
+    descDepth.Width = width;
+    descDepth.Height = height;
+    descDepth.MipLevels = 1;
+    descDepth.ArraySize = 1;
+    descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    descDepth.SampleDesc.Count = 1;
+    descDepth.SampleDesc.Quality = 0;
+    descDepth.Usage = D3D11_USAGE_DEFAULT;
+    descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    descDepth.CPUAccessFlags = 0;
+    descDepth.MiscFlags = 0;
+    hResult = dxDevice->CreateTexture2D(&descDepth, NULL, &dxZBufferTexture);
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to create main depth stencil texture (HRESULT " + String::fromInt(hResult) + ")");
+    }
+
+    // Create the depth stencil view
+    D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+    ZeroMemory(&descDSV, sizeof(descDSV));
+    descDSV.Format = descDepth.Format;
+    descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+    descDSV.Texture2D.MipSlice = 0;
+    hResult = dxDevice->CreateDepthStencilView(dxZBufferTexture, &descDSV, &dxZBufferView);
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to create main depth stencil view (HRESULT " + String::fromInt(hResult) + ")");
+    }
+
+    dxContext->OMSetRenderTargets(1, &dxBackBufferRtv, dxZBufferView);
+
+    ZeroMemory(&dxRasterizerStateDesc, sizeof(D3D11_RASTERIZER_DESC));
+    dxRasterizerStateDesc.AntialiasedLineEnable = false;
+    dxRasterizerStateDesc.CullMode = D3D11_CULL_BACK;
+    dxRasterizerStateDesc.DepthClipEnable = true;
+    dxRasterizerStateDesc.FillMode = D3D11_FILL_SOLID;
+    dxRasterizerStateDesc.ScissorEnable = false;
+    dxRasterizerStateDesc.MultisampleEnable = false;
+    dxRasterizerStateDesc.FrontCounterClockwise = true;
+
+    hResult = dxDevice->CreateRasterizerState(&dxRasterizerStateDesc, &dxRasterizerState);
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to create main rasterizer state (HRESULT " + String::fromInt(hResult) + ")");
+    }
+    dxContext->RSSetState(dxRasterizerState);
+
+    ZeroMemory(&dxBlendStateDesc, sizeof(D3D11_BLEND_DESC));
+    dxBlendStateDesc.RenderTarget[0].BlendEnable = true;
+    dxBlendStateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    dxBlendStateDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    dxBlendStateDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    dxBlendStateDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    dxBlendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+    dxBlendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    dxBlendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    hResult = dxDevice->CreateBlendState(&dxBlendStateDesc, &dxBlendState);
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to create main blend state (HRESULT " + String::fromInt(hResult) + ")");
+    }
+
+    dxContext->OMSetBlendState(dxBlendState, 0, 0xffffffff);
+
+    D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+    depthStencilDesc.DepthEnable = TRUE;
+    depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+    depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+    depthStencilDesc.StencilEnable = FALSE;
+    depthStencilDesc.StencilReadMask = 0xFF;
+    depthStencilDesc.StencilWriteMask = 0xFF;
+
+    //Stencil operations if pixel is front-facing
+    depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+    depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+    depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+    depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+    //Stencil operations if pixel is back-facing
+    depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+    depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+    depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+    depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+    hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE]);
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to create ENABLED_WRITE depth stencil state (HRESULT " + String::fromInt(hResult) + ")");
+    }
+    dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE], 0);
+
+    depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+
+    hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE]);
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to create ENABLED_NOWRITE depth stencil state (HRESULT " + String::fromInt(hResult) + ")");
+    }
+
+    depthStencilDesc.DepthEnable = FALSE;
+
+    hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED]);
+    if (FAILED(hResult)) {
+        throwException("GraphicsDX11", "Failed to create DISABLED depth stencil state (HRESULT " + String::fromInt(hResult) + ")");
+    }
 
     setViewport(Rectanglei(0,0,w,h));
-    currentRenderTargetViews.push_back(((WindowDX11*)window)->getBackBufferRtv());
-    currentDepthStencilView = ((WindowDX11*)window)->getZBufferView();
+    currentRenderTargetViews.push_back(dxBackBufferRtv);
+    currentDepthStencilView = dxZBufferView;
 
-    depthTestEnabled = true;
+    depthTest = true;
+    vsync = true;
 }
 
 GraphicsDX11::~GraphicsDX11() {
@@ -35,55 +229,67 @@ GraphicsDX11::~GraphicsDX11() {
 }
 
 void GraphicsDX11::cleanup() {
-    if (window != nullptr) { delete window; }
-    window = nullptr;
+    if (dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE] != nullptr) {
+        dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE]->Release();
+    }
+    if (dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] != nullptr) {
+        dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE]->Release();
+    }
+    if (dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] != nullptr) {
+        dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED]->Release();
+    }
+    if (dxRasterizerState != nullptr) { dxRasterizerState->Release(); }
+    if (dxBlendState != nullptr) { dxBlendState->Release(); }
+    if (dxContext != nullptr) { dxContext->Release(); }
+    if (dxZBufferView != nullptr) { dxZBufferView->Release(); }
+    if (dxZBufferTexture != nullptr) { dxZBufferTexture->Release(); }
+    if (dxBackBufferRtv != nullptr) { dxBackBufferRtv->Release(); }
+    if (dxSwapChain != nullptr) { dxSwapChain->Release(); }
+    if (dxgiFactory != nullptr) { dxgiFactory->Release(); }
+    if (dxDevice != nullptr) { dxDevice->Release(); }
+
+    dxgiFactory = nullptr;
+    dxSwapChain = nullptr;
+    dxDevice = nullptr;
+    dxContext = nullptr;
+    dxBackBufferRtv = nullptr;
+    dxZBufferTexture = nullptr;
+    dxZBufferView = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE] = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] = nullptr;
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] = nullptr;
+    dxRasterizerState = nullptr;
+    dxBlendState = nullptr;
 }
 
-void GraphicsDX11::throwException(String func,String details) {
-    cleanup();
-    throw Exception("GraphicsDX11::"+func,details);
-}
-
-Graphics::Renderer GraphicsDX11::getRenderer() {
-    return Renderer::DirectX11;
-}
-
-void GraphicsDX11::update() {
-    Graphics::update();
+void GraphicsDX11::swap() {
+    dxSwapChain->Present(vsync ? 1 : 0, 0);
 }
 
 void GraphicsDX11::clear(Color color) {
     float clearColor[4] = {color.red,color.green,color.blue,color.alpha};
     for (int i=0;i<currentRenderTargetViews.size();i++) {
-        ((WindowDX11*)window)->getDxContext()->ClearRenderTargetView( currentRenderTargetViews[i], clearColor );
+        dxContext->ClearRenderTargetView( currentRenderTargetViews[i], clearColor );
     }
-    ((WindowDX11*)window)->getDxContext()->ClearDepthStencilView( currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
-}
-
-void GraphicsDX11::setDepthTest(bool enabled) {
-    depthTestEnabled = enabled;
-}
-
-bool GraphicsDX11::getDepthTest() const {
-    return depthTestEnabled;
+    dxContext->ClearDepthStencilView( currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
 }
 
 void GraphicsDX11::setRenderTarget(Texture* renderTarget) {
     for (int i=0;i<currentRenderTargetViews.size();i++) {
         currentRenderTargetViews[i] = nullptr;
     }
-    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
     currentRenderTargetViews.clear(); currentRenderTargetViews.push_back(((TextureDX11*)renderTarget)->getRtv());
     currentDepthStencilView = ((TextureDX11*)renderTarget)->getZBufferView();
-    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
     for (int i=0;i<currentRenderTargetViews.size();i++) {
         currentRenderTargetViews[i] = nullptr;
     }
-    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
     currentRenderTargetViews.clear();
     TextureDX11* maxSizeTexture = (TextureDX11*)renderTargets[0];
@@ -104,25 +310,22 @@ void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
         }
     }
     currentDepthStencilView = maxSizeTexture->getZBufferView();
-    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::resetRenderTarget() {
     for (int i=0;i<currentRenderTargetViews.size();i++) {
         currentRenderTargetViews[i] = nullptr;
     }
-    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
-    currentRenderTargetViews.clear(); currentRenderTargetViews.push_back(((WindowDX11*)window)->getBackBufferRtv());
-    currentDepthStencilView = ((WindowDX11*)window)->getZBufferView();
-    ((WindowDX11*)window)->getDxContext()->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    currentRenderTargetViews.clear(); currentRenderTargetViews.push_back(dxBackBufferRtv);
+    currentDepthStencilView = dxZBufferView;
+    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::setViewport(Rectanglei vp) {
-    if (viewport.width()!=vp.width() ||
-        viewport.height()!=vp.height() ||
-        viewport.topLeftCorner().x!=vp.topLeftCorner().x ||
-        viewport.topLeftCorner().y!=vp.topLeftCorner().y) {
+    if (vp != viewport) {
         viewport = vp;
 
         dxViewport.Width = (FLOAT)viewport.width();
@@ -131,6 +334,26 @@ void GraphicsDX11::setViewport(Rectanglei vp) {
         dxViewport.MaxDepth = 1.0f;
         dxViewport.TopLeftX = viewport.topLeftCorner().x;
         dxViewport.TopLeftY = viewport.topLeftCorner().y;
-        ((WindowDX11*)window)->getDxContext()->RSSetViewports( 1, &dxViewport );
+        dxContext->RSSetViewports( 1, &dxViewport );
     }
+}
+
+ID3D11Device* GraphicsDX11::getDxDevice() const {
+    return dxDevice;
+}
+
+ID3D11DeviceContext* GraphicsDX11::getDxContext() const {
+    return dxContext;
+}
+
+ID3D11RenderTargetView* GraphicsDX11::getBackBufferRtv() const {
+    return dxBackBufferRtv;
+}
+
+ID3D11DepthStencilView* GraphicsDX11::getZBufferView() const {
+    return dxZBufferView;
+}
+
+void GraphicsDX11::setZBufferState(GraphicsDX11::ZBUFFER_STATE_INDEX index) {
+    dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)index], 0);
 }

@@ -1,11 +1,10 @@
 #include <Shader/Shader.h>
 #include <Graphics/Graphics.h>
 #include "ShaderDX11.h"
-#include <Window/Window.h>
-#include "../Window/WindowDX11.h"
 #include <Exception/Exception.h>
 #include <fstream>
 #include <Misc/FileUtil.h>
+#include "../Graphics/GraphicsDX11.h"
 
 using namespace PGE;
 
@@ -74,7 +73,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
     samplerDesc.MipLODBias = -0.1f;
 
-    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
+    ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     for (int i = 0; i < samplerCount; i++) {
         ID3D11SamplerState* samplerState = NULL;
         dxDevice->CreateSamplerState(&samplerDesc, &samplerState);
@@ -223,7 +222,7 @@ const std::vector<String>& ShaderDX11::getVertexInputElems() const {
 }
 
 void ShaderDX11::useShader() {
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     for (int i=0;i<vertexConstantBuffers.size();i++) {
         vertexConstantBuffers[i]->update();
@@ -242,12 +241,12 @@ void ShaderDX11::useShader() {
 }
 
 void ShaderDX11::useVertexInputLayout() {
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
     dxContext->IASetInputLayout(dxVertexInputLayout);
 }
 
 void ShaderDX11::useSamplers() {
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
     dxContext->PSSetSamplers(0, (UINT)dxSamplerState.size(), dxSamplerState.data());
 }
 
@@ -272,12 +271,12 @@ ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics,String nm,int sz) {
 
     HRESULT hResult = 0;
 
-    hResult = ((WindowDX11*)(graphics->getWindow()))->getDxDevice()->CreateBuffer(&cBufferDesc,&cBufferSubresourceData,&dxCBuffer);
+    hResult = ((GraphicsDX11*)graphics)->getDxDevice()->CreateBuffer(&cBufferDesc,&cBufferSubresourceData,&dxCBuffer);
     if (FAILED(hResult)) {
         throw Exception("ShaderDX11::ShaderDX11","Failed to create CBuffer (name: "+nm+", size: "+String::fromInt(sz)+")");
     }
 
-    dxContext = ((WindowDX11*)(graphics->getWindow()))->getDxContext();
+    dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     dirty = true;
 }

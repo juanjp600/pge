@@ -5,14 +5,15 @@
 
 #include <SysEvents/SysEvents.h>
 #include <UserInput/UserInput.h>
-#include <Window/Window.h>
 #include <Math/Vector.h>
 
 namespace PGE {
 
+class Graphics;
+
 class IO {
     public:
-        static IO* create(Window* window);
+        static IO* create(Graphics* gfx);
         virtual ~IO() {}
 
         virtual void update() = 0;

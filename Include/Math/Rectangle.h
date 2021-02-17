@@ -40,6 +40,9 @@ class Rectanglei {
         Rectanglei(int il,int it,int ir,int ib);
         Rectanglei(const Rectanglef& rf);
 
+        bool operator==(const Rectanglei& other) const;
+        bool operator!=(const Rectanglei& other) const;
+
         void addPoint(int x,int y);
         void addPoint(const Vector2i& point);
 
