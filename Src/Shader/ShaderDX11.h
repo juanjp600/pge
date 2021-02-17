@@ -60,7 +60,7 @@ class ShaderDX11 : public Shader {
                 String getName() const;
 
             private:
-                virtual void throwException(String func, String details);
+                virtual void throwException(String func, String details) override;
 
                 CBufferInfo* constantBuffer;
                 String name;

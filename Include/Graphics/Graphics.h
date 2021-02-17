@@ -71,6 +71,7 @@ class Graphics {
 
         SDL_Window* sdlWindow;
 
+        // TODO: Model all graphics classes in this way?
         // Should be designed to allow for multiple calls.
         // Base class always automatically takes care of sdlWindow and SysEvents.
         virtual void cleanup();
