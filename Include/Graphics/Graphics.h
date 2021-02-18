@@ -24,8 +24,6 @@ class Graphics {
         static Graphics* create(String name="PGE Application", int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default);
 
         Graphics(String name, int w, int h, bool fs);
-        // Destructor should only be overriden to call cleanup which should deal with all cleanup!
-        virtual ~Graphics() = 0;
         
         virtual void update();
         virtual void swap() = 0;
@@ -67,15 +65,10 @@ class Graphics {
         bool depthTest;
         bool vsync;
 
-        SysEvents::Subscriber* eventSubscriber;
+        // Base class always automatically takes care SysEvents.
+        std::shared_ptr<SysEvents::Subscriber> eventSubscriber;
 
-        SDL_Window* sdlWindow;
-
-        // TODO: Model all graphics classes in this way?
-        // Should be designed to allow for multiple calls.
-        // Base class always automatically takes care of sdlWindow and SysEvents.
-        virtual void cleanup();
-        void throwException(String func, String details);
+        std::shared_ptr<SDL_Window> sdlWindow;
 };
 
 }

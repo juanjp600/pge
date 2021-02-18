@@ -18,7 +18,6 @@ class TextureOGL3 : public Texture {
         TextureOGL3(Graphics* gfx, int w, int h, bool renderTarget = false, const void* buffer = nullptr, FORMAT fmt = FORMAT::RGBA32);
         TextureOGL3(Graphics* gfx, const FilePath& fn, ThreadManager* threadManager);
         TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn = FilePath::fromStr(""));
-        ~TextureOGL3();
 
         virtual Texture* copy() const override;
 
@@ -28,12 +27,9 @@ class TextureOGL3 : public Texture {
         virtual void* getNative() const;
 
     private:
-        void cleanup() override;
-        void throwException(String func, String details) override;
-
-        GLuint glTexture;
+        SmartPrimitive<GLuint> glTexture;
         //GLuint glFramebuffer;
-        GLuint glDepthbuffer;
+        SmartPrimitive<GLuint> glDepthbuffer;
 };
 
 }

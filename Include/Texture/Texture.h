@@ -30,9 +30,6 @@ class Texture {
         virtual ~Texture(){};
 
     protected:
-        virtual void cleanup() = 0;
-        virtual void throwException(String func, String details) = 0;
-
         Graphics* graphics;
         bool isRT;
 

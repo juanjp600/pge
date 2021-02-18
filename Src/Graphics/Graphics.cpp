@@ -11,35 +11,18 @@ Graphics::Graphics(String name, int w, int h, bool fs) {
     caption = name;
     width = w; height = h; fullscreen = fs;
 
-    eventSubscriber = new SysEventsInternal::SubscriberInternal(this, SysEventsInternal::SubscriberInternal::EventType::WINDOW);
-    SysEventsInternal::subscribe(eventSubscriber);
-
-    sdlWindow = nullptr;
+    eventSubscriber = std::shared_ptr<SysEventsInternal::SubscriberInternal>(new SysEventsInternal::SubscriberInternal(this, SysEventsInternal::SubscriberInternal::EventType::WINDOW),
+        [](SysEventsInternal::SubscriberInternal* s) { SysEventsInternal::unsubscribe(s); });
+    SysEventsInternal::subscribe(eventSubscriber.get());
 
     open = true;
     focused = true;
 }
 
-Graphics::~Graphics() {
-    cleanup();
-}
-
-void Graphics::cleanup() {
-    SysEventsInternal::unsubscribe(eventSubscriber);
-
-    if (sdlWindow != nullptr) { SDL_DestroyWindow(sdlWindow); }
-
-    sdlWindow = nullptr;
-}
-
-void Graphics::throwException(String func, String details) {
-    cleanup();
-    throw Exception(rendererName + "::" + func, details);
-}
-
 void Graphics::update() {
     SDL_Event event;
-    while (((SysEventsInternal::SubscriberInternal*)eventSubscriber)->popEvent(event)) {
+    auto test = [](int a) {};
+    while (((SysEventsInternal::SubscriberInternal*)eventSubscriber.get())->popEvent(event)) {
         if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
             open = false;
         } else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {

@@ -18,7 +18,6 @@ namespace PGE {
 class ShaderOGL3 : public Shader {
     public:
         ShaderOGL3(Graphics* gfx,const FilePath& path);
-        virtual ~ShaderOGL3();
 
         Constant* getVertexShaderConstant(String name) override;
         Constant* getFragmentShaderConstant(String name) override;
@@ -28,15 +27,10 @@ class ShaderOGL3 : public Shader {
         void useShader();
         void unbindGLAttribs();
     private:
-        ShaderOGL3(){};
-
-        void cleanup() override;
-        void throwException(String func, String details) override;
 
         class ConstantOGL3 : public Constant {
             public:
                 ConstantOGL3(Graphics* gfx,String nm, int loc);
-                ~ConstantOGL3(){};
 
                 void setValue(Matrix4x4f value) override;
                 void setValue(Vector2f value) override;
@@ -49,9 +43,6 @@ class ShaderOGL3 : public Shader {
                 void setUniform();
 
                 String getName() const;
-
-            protected:
-                void throwException(String func, String details) override;
 
             private:
                 enum class VALUE_TYPE {
@@ -100,13 +91,13 @@ class ShaderOGL3 : public Shader {
         };
         void extractShaderVars(const String& src,String varKind,std::vector<ShaderVar>& varList);
 
-        GLuint glVertexShader;
-        GLuint glFragmentShader;
-        GLuint glShaderProgram;
+        SmartPrimitive<GLuint> glVertexShader;
+        SmartPrimitive<GLuint> glFragmentShader;
+        SmartPrimitive<GLuint> glShaderProgram;
 
         Graphics* graphics;
 };
 
 }
 
-#endif
+#endif // PGEINTERNAL_SHADEROGL3_H_INCLUDED

@@ -207,6 +207,9 @@
     <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp">
       <Filter>Src\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Misc\SmartPrimitive.cpp">
+      <Filter>Src\Misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -322,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h">
       <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Misc\SmartPrimitive.h">
+      <Filter>Src\Misc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

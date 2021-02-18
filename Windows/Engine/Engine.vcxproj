@@ -43,6 +43,7 @@
     <ClCompile Include="..\..\Src\Misc\BinaryReader.cpp" />
     <ClCompile Include="..\..\Src\Misc\FilePath.cpp" />
     <ClCompile Include="..\..\Src\Misc\FileUtil.cpp" />
+    <ClCompile Include="..\..\Src\Misc\SmartPrimitive.cpp" />
     <ClCompile Include="..\..\Src\Misc\String.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp" />
@@ -86,6 +87,7 @@
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h" />
+    <ClInclude Include="..\..\Src\Misc\SmartPrimitive.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h" />
     <ClInclude Include="..\..\Src\Sound\SoundInternal.h" />

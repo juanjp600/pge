@@ -17,12 +17,18 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     h = NSHeight(rect);
 #endif
 
-    sdlWindow = nullptr;
-    sdlWindow = SDL_CreateWindow(caption.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/);
+    GLenum l3asd2ol = glGetError();
+
+    SDL_Window* aaaa = SDL_CreateWindow(caption.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
+
+    //sdlWindow = std::shared_ptr<SDL_Window>(SDL_CreateWindow(caption.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/),
+    //    [](SDL_Window* w) { SDL_DestroyWindow(w); });
 
     if (sdlWindow == nullptr) {
-        throwException("GraphicsOGL3", "Failed to create SDL window: " + String(SDL_GetError()));
+    //    throw Exception("GraphicsOGL3", "Failed to create SDL window: " + String(SDL_GetError()));
     }
+
+    GLenum l32ol = glGetError();
 
     //    if (fullscreen) {
     //        SDL_SetWindowBordered(sdlWindow,SDL_bool::SDL_FALSE);
@@ -33,14 +39,17 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     //        SDL_SetWindowPosition(sdlWindow,0,0);
     //    }
 
-    glContext = SDL_GL_CreateContext(sdlWindow);
+    glContext = SmartPrimitive<SDL_GLContext>(SDL_GL_CreateContext(aaaa), [](SDL_GLContext c) { SDL_GL_DeleteContext(c); });
     // And make it later in the day.
-    SDL_GL_MakeCurrent(sdlWindow, glContext);
+    GLenum l2ol = glGetError();
+    SDL_GL_MakeCurrent(aaaa, glContext);
+    GLenum lol = glGetError();
 
     glewExperimental = true;
     glError = glewInit();
     if (glError != GL_NO_ERROR) {
-        throwException("GraphicsOGL3", "Failed to initialize GLEW (GLERROR: " + String::format(glError, "%u") + ")");
+        GLenum lol = glGetError();
+        throw Exception("GraphicsOGL3", "Failed to initialize GLEW (GLERROR: " + String::format(glError, "%u") + ")");
     }
 
     depthTest = true;
@@ -55,37 +64,22 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
 
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("GraphicsOGL3", "Failed to initialize window data post-GLEW initialization. (GL_ERROR: " + String::format(glError, "%u") + ")");
+        throw Exception("GraphicsOGL3", "Failed to initialize window data post-GLEW initialization. (GL_ERROR: " + String::format(glError, "%u") + ")");
     }
 
-    SDL_GL_SwapWindow(sdlWindow);
+    SDL_GL_SwapWindow(sdlWindow.get());
 
     setViewport(Rectanglei(0,0,w,h));
 
+    glFramebuffer = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](GLuint i) { if (i != GL_INVALID_VALUE) { glBindFramebuffer(GL_FRAMEBUFFER, 0);  glDeleteFramebuffers(1, &i); } });
     glGenFramebuffers(1,&glFramebuffer);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        glFramebuffer = 0;
-        throwException("GraphicsOGL3", "Failed to generate frame buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
+        throw Exception("GraphicsOGL3", "Failed to generate frame buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
     }
 
     vsync = true;
     SDL_GL_SetSwapInterval(1);
-}
-
-GraphicsOGL3::~GraphicsOGL3() {
-    cleanup();
-}
-void GraphicsOGL3::cleanup() {
-    takeGlContext();
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    if (glFramebuffer != 0) { glDeleteFramebuffers(1,&glFramebuffer); }
-
-    if (glContext != 0) { SDL_GL_DeleteContext(glContext); };
-
-    glFramebuffer = 0;
-    glContext = 0;
 }
 
 void GraphicsOGL3::update() {
@@ -94,12 +88,12 @@ void GraphicsOGL3::update() {
 }
 
 void GraphicsOGL3::swap() {
-    SDL_GL_SwapWindow(sdlWindow);
+    SDL_GL_SwapWindow(sdlWindow.get());
 }
 
 void GraphicsOGL3::takeGlContext() {
     if (SDL_GL_GetCurrentContext()!=glContext) {
-        SDL_GL_MakeCurrent(sdlWindow,glContext);
+        SDL_GL_MakeCurrent(sdlWindow.get(),glContext);
     }
 }
 
@@ -146,7 +140,7 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
     TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
     for (int i=0;i<renderTargets.size();i++) {
         if (!renderTargets[i]->isRenderTarget()) {
-            throwException("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
+            throw Exception("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
         }
 
         if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i]->getWidth()+renderTargets[i]->getHeight())) {

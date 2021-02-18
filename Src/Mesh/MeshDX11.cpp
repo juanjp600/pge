@@ -20,28 +20,9 @@ MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) {
     dxIndexData.clear();
     vertices.clear(); vertexCount = 0;
     primitives.clear(); primitiveCount = 0;
-    dxVertexBuffer = nullptr;
-    dxIndexBuffer = nullptr;
-}
 
-MeshDX11::~MeshDX11() {
-    cleanup();
-}
-
-void MeshDX11::throwException(String func, String details) {
-    cleanup();
-    throw Exception("MeshDX11::" + func, details);
-}
-
-void MeshDX11::cleanup() {
-    dxVertexData.clear();
-    dxIndexData.clear();
-    if (dxVertexBuffer != nullptr) { dxVertexBuffer->Release(); }
-    if (dxIndexBuffer != nullptr) { dxIndexBuffer->Release(); }
-    vertices.clear();
-    primitives.clear();
-    dxVertexBuffer = nullptr;
-    dxIndexBuffer = nullptr;
+    dxVertexBuffer = SmartPrimitive<ID3D11Buffer*>(nullptr, [](ID3D11Buffer* b) { if (b != nullptr) { b->Release(); } });
+    dxIndexBuffer = SmartPrimitive<ID3D11Buffer*>(nullptr, [](ID3D11Buffer* b) { if (b != nullptr) { b->Release(); } });
 }
 
 void MeshDX11::updateInternalData() {
@@ -133,10 +114,11 @@ void MeshDX11::uploadInternalData() {
     ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     if (dxVertexBuffer!=nullptr) {
-        dxVertexBuffer->Release(); dxVertexBuffer=nullptr;
+        String s;
+        dxVertexBuffer()->Release(); dxVertexBuffer = nullptr;
     }
     if (dxIndexBuffer!=nullptr) {
-        dxIndexBuffer->Release(); dxIndexBuffer=nullptr;
+        dxIndexBuffer()->Release(); dxIndexBuffer = nullptr;
     }
 
     HRESULT hResult = 0;
@@ -153,7 +135,7 @@ void MeshDX11::uploadInternalData() {
 
         hResult = dxDevice->CreateBuffer(&dxVertexBufferDesc, &dxVertexBufferData, &dxVertexBuffer);
         if (FAILED(hResult)) {
-            throwException("uploadInternalData", "Failed to create vertex buffer (vertex count: " + String::fromInt(vertices.size()) + "; vertex data size: " + String::fromInt(dxVertexData.size()) + "; HRESULT " + String::fromInt(hResult) + ")");
+            throw Exception("uploadInternalData", "Failed to create vertex buffer (vertex count: " + String::fromInt(vertices.size()) + "; vertex data size: " + String::fromInt(dxVertexData.size()) + "; HRESULT " + String::fromInt(hResult) + ")");
         }
     }
 
@@ -169,7 +151,7 @@ void MeshDX11::uploadInternalData() {
 
         hResult = dxDevice->CreateBuffer(&dxIndexBufferDesc, &dxIndexBufferData, &dxIndexBuffer);
         if (FAILED(hResult)) {
-            throwException("uploadInternalData", "Failed to create index buffer (index count: " + String::fromInt(dxIndexData.size()) + "; HRESULT " + String::fromInt(hResult) + ")");
+            throw Exception("uploadInternalData", "Failed to create index buffer (index count: " + String::fromInt(dxIndexData.size()) + "; HRESULT " + String::fromInt(hResult) + ")");
         }
     }
 

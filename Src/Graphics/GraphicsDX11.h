@@ -12,7 +12,6 @@ namespace PGE {
 class GraphicsDX11 : public GraphicsInternal {
     public:
         GraphicsDX11(String name,int w,int h,bool fs);
-        ~GraphicsDX11() override;
 
         virtual void swap() override;
 
@@ -38,8 +37,6 @@ class GraphicsDX11 : public GraphicsInternal {
         void setZBufferState(ZBUFFER_STATE_INDEX index);
 
     private:
-        virtual void cleanup() override;
-
         IDXGIFactory1* dxgiFactory;
 
         DXGI_SWAP_CHAIN_DESC dxSwapChainDesc;

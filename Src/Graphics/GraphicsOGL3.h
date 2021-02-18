@@ -4,6 +4,8 @@
 #include <Graphics/Graphics.h>
 #include "GraphicsInternal.h"
 
+#include "../Misc/SmartPrimitive.h"
+
 #include <SDL.h>
 #include <GL/glew.h>
 #ifndef __APPLE__
@@ -23,7 +25,6 @@ class Texture;
 class GraphicsOGL3 : public GraphicsInternal {
     public:
         GraphicsOGL3(String name,int w,int h,bool fs);
-        ~GraphicsOGL3() override;
 
         virtual void update() override;
         virtual void swap() override;
@@ -44,10 +45,9 @@ class GraphicsOGL3 : public GraphicsInternal {
         SDL_GLContext getGlContext() const;
 
     private:
-        SDL_GLContext glContext;
+        SmartPrimitive<SDL_GLContext> glContext;
 
-        GLuint glFramebuffer;
-        virtual void cleanup() override;
+        SmartPrimitive<GLuint> glFramebuffer;
 };
 
 }

@@ -10,12 +10,13 @@
 #include <Shader/Shader.h>
 #include <Misc/String.h>
 
+#include "../Misc/SmartPrimitive.h"
+
 namespace PGE {
 
 class ShaderDX11 : public Shader {
     public:
         ShaderDX11(Graphics* gfx, const FilePath& path);
-        virtual ~ShaderDX11();
 
         Constant* getVertexShaderConstant(String name);
         Constant* getFragmentShaderConstant(String name);
@@ -30,15 +31,10 @@ class ShaderDX11 : public Shader {
         const std::vector<String>& getVertexInputElems() const;
 
     private:
-        ShaderDX11(){};
-
-        void cleanup() override;
-        void throwException(String func, String details) override;
-
         std::vector<uint8_t> vertexShaderBytecode;
         std::vector<uint8_t> fragmentShaderBytecode;
 
-        std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc;
+        SmartPrimitiveMinimalCopying<std::vector<D3D11_INPUT_ELEMENT_DESC>> dxVertexInputElemDesc;
         ID3D11InputLayout* dxVertexInputLayout;
 
         std::vector<String> vertexInputElems;
@@ -60,8 +56,6 @@ class ShaderDX11 : public Shader {
                 String getName() const;
 
             private:
-                virtual void throwException(String func, String details) override;
-
                 CBufferInfo* constantBuffer;
                 String name;
                 int offset;
@@ -91,11 +85,11 @@ class ShaderDX11 : public Shader {
                 bool dirty;
         };
 
-        std::vector<CBufferInfo*> vertexConstantBuffers;
-        std::vector<CBufferInfo*> fragmentConstantBuffers;
-        void readConstantBuffers(std::ifstream& reflectionInfo, std::vector<CBufferInfo*>& constantBuffers);
+        SmartPrimitiveArray<CBufferInfo*> vertexConstantBuffers;
+        SmartPrimitiveArray<CBufferInfo*> fragmentConstantBuffers;
+        void readConstantBuffers(std::ifstream& reflectionInfo, SmartPrimitiveArray<CBufferInfo*>& constantBuffers);
 
-        std::vector<ID3D11SamplerState*> dxSamplerState;
+        SmartPrimitiveArray<ID3D11SamplerState*> dxSamplerState;
 
         ID3D11VertexShader* dxVertexShader;
         ID3D11PixelShader* dxFragmentShader;
