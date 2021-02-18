@@ -17,18 +17,12 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     h = NSHeight(rect);
 #endif
 
-    GLenum l3asd2ol = glGetError();
-
-    SDL_Window* aaaa = SDL_CreateWindow(caption.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
-
-    //sdlWindow = std::shared_ptr<SDL_Window>(SDL_CreateWindow(caption.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/),
-    //    [](SDL_Window* w) { SDL_DestroyWindow(w); });
+    sdlWindow = std::shared_ptr<SDL_Window>(SDL_CreateWindow(caption.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/),
+        [](SDL_Window* w) { SDL_DestroyWindow(w); });
 
     if (sdlWindow == nullptr) {
-    //    throw Exception("GraphicsOGL3", "Failed to create SDL window: " + String(SDL_GetError()));
+        throw Exception("GraphicsOGL3", "Failed to create SDL window: " + String(SDL_GetError()));
     }
-
-    GLenum l32ol = glGetError();
 
     //    if (fullscreen) {
     //        SDL_SetWindowBordered(sdlWindow,SDL_bool::SDL_FALSE);
@@ -39,16 +33,13 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     //        SDL_SetWindowPosition(sdlWindow,0,0);
     //    }
 
-    glContext = SmartPrimitive<SDL_GLContext>(SDL_GL_CreateContext(aaaa), [](SDL_GLContext c) { SDL_GL_DeleteContext(c); });
+    glContext = SmartPrimitive<SDL_GLContext>(SDL_GL_CreateContext(sdlWindow.get()), [](SDL_GLContext c) { SDL_GL_DeleteContext(c); });
     // And make it later in the day.
-    GLenum l2ol = glGetError();
-    SDL_GL_MakeCurrent(aaaa, glContext);
-    GLenum lol = glGetError();
+    SDL_GL_MakeCurrent(sdlWindow.get(), glContext());
 
     glewExperimental = true;
     glError = glewInit();
     if (glError != GL_NO_ERROR) {
-        GLenum lol = glGetError();
         throw Exception("GraphicsOGL3", "Failed to initialize GLEW (GLERROR: " + String::format(glError, "%u") + ")");
     }
 

@@ -26,9 +26,14 @@ class SmartPrimitive {
         T* operator&() {
             return &value;
         }
-        
+        void operator=(const SmartPrimitive& sp) {
+            value = sp.value;
+            destructor = sp.destructor;
+            ((SmartPrimitive&)sp).destructor = noop;
+        }
+
         SmartPrimitive() {
-            //destructor = [](T){};
+            destructor = noop;
         }
         SmartPrimitive(T val) : SmartPrimitive() {
             value = val;
@@ -41,6 +46,8 @@ class SmartPrimitive {
         }
 
     private:
+        static inline void(*noop)(S t) = [](S){};
+        
         T value;
         void(*destructor)(S t);
 };
@@ -56,6 +63,11 @@ class SmartPrimitiveMinimalCopying {
         T operator()() const {
             return value;
         }
+        void operator=(const SmartPrimitiveMinimalCopying& sp) {
+            value = sp.value;
+            destructor = sp.destructor;
+            ((SmartPrimitiveMinimalCopying&)sp).destructor = noop;
+        }
 
         SmartPrimitiveMinimalCopying() {
             //destructor = [](T&){};
@@ -70,6 +82,8 @@ class SmartPrimitiveMinimalCopying {
         }
 
     private:
+        static inline void(*noop)(const T& t) = [](const T&){};
+
         T value;
         void(*destructor)(const T& t);
 };
@@ -89,6 +103,11 @@ class SmartPrimitiveArray {
         /*T operator[](int i) const {
             return values[i];
         }*/
+        void operator=(const SmartPrimitiveArray& sp) {
+            values = sp.values;
+            destructor = sp.destructor;
+            ((SmartPrimitiveArray&)sp).destructor = noop;
+        }
 
         SmartPrimitiveArray() {
             //destructor = [](T&){};
@@ -106,6 +125,8 @@ class SmartPrimitiveArray {
         }
 
     private:
+        static inline void(*noop)(T& t) = [](T&){};
+
         std::vector<T> values;
         void(*destructor)(T& t);
 };
