@@ -24,6 +24,7 @@ class Graphics {
         static Graphics* create(String name="PGE Application", int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default);
 
         Graphics(String name, int w, int h, bool fs);
+        virtual ~Graphics() {};
         
         virtual void update();
         virtual void swap() = 0;
