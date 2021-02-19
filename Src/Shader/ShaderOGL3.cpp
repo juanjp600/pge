@@ -31,7 +31,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     extractShaderVars(vertexSource,"uniform",vertexUniforms);
 
     int errorCode = 0;
-    glVertexShader = SmartPrimitive<GLuint>(glCreateShader(GL_VERTEX_SHADER), [](GLuint i) { glDeleteShader(i); });
+    glVertexShader = SmartPrimitive<GLuint>(glCreateShader(GL_VERTEX_SHADER), [](const GLuint& i) { glDeleteShader(i); });
     glShaderSource(glVertexShader,1,&cstr,nullptr);
     glCompileShader(glVertexShader);
 
@@ -58,7 +58,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     std::vector<ShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource,"uniform",fragmentUniforms);
 
-    glFragmentShader = SmartPrimitive<GLuint>(glCreateShader(GL_FRAGMENT_SHADER), [](GLuint i) { glDeleteShader(i); });
+    glFragmentShader = SmartPrimitive<GLuint>(glCreateShader(GL_FRAGMENT_SHADER), [](const GLuint& i) { glDeleteShader(i); });
     glShaderSource(glFragmentShader,1,&cstr,nullptr);
     glCompileShader(glFragmentShader);
     glGetShaderInfoLog(glFragmentShader, 512, &len, errorCStr);
@@ -71,7 +71,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     }
     delete[] errorCStr;
 
-    glShaderProgram = SmartPrimitive<GLuint>(glCreateProgram(), [](GLuint i) { glDeleteProgram(i); });
+    glShaderProgram = SmartPrimitive<GLuint>(glCreateProgram(), [](const GLuint& i) { glDeleteProgram(i); });
     glAttachShader(glShaderProgram,glVertexShader);
     glAttachShader(glShaderProgram,glFragmentShader);
 

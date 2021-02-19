@@ -34,7 +34,7 @@ class ShaderDX11 : public Shader {
         std::vector<uint8_t> vertexShaderBytecode;
         std::vector<uint8_t> fragmentShaderBytecode;
 
-        SmartPrimitiveMinimalCopying<std::vector<D3D11_INPUT_ELEMENT_DESC>> dxVertexInputElemDesc;
+        SmartPrimitive<std::vector<D3D11_INPUT_ELEMENT_DESC>> dxVertexInputElemDesc;
         ID3D11InputLayout* dxVertexInputLayout;
 
         std::vector<String> vertexInputElems;

@@ -9,7 +9,7 @@
 
 using namespace PGE;
 
-static void destroyDeviceChild(ID3D11DeviceChild* v) { v->Release(); }
+static void destroyDeviceChild(ID3D11DeviceChild* const& v) { v->Release(); }
 
 TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,FORMAT fmt) {
     dxShaderResourceView = SmartPrimitive<ID3D11ShaderResourceView*,ID3D11DeviceChild*>(nullptr, destroyDeviceChild);

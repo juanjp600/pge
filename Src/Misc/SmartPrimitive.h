@@ -11,15 +11,18 @@ template <typename T, typename S=T>
 class SmartPrimitive {
     public:
         // Cast.
+        operator T&() {
+            return value;
+        }
         operator T() const {
             return value;
         }
         // Get.
-        T operator()() const {
+        T& operator()() {
             return value;
         }
         // Set.
-        void operator=(T t) {
+        void operator=(const T& t) {
             value = t;
         }
         // Get as pointer.
@@ -35,10 +38,10 @@ class SmartPrimitive {
         SmartPrimitive() {
             destructor = noop;
         }
-        SmartPrimitive(T val) : SmartPrimitive() {
+        SmartPrimitive(const T& val) : SmartPrimitive() {
             value = val;
         }
-        SmartPrimitive(T val, void(*dtor)(S)) : SmartPrimitive(val) {
+        SmartPrimitive(const T& val, void(*dtor)(const S&)) : SmartPrimitive(val) {
             destructor = dtor;
         }
         ~SmartPrimitive() {
@@ -46,48 +49,13 @@ class SmartPrimitive {
         }
 
     private:
-        static inline void(*noop)(S t) = [](S){};
+        static inline void(*noop)(const S& t) = [](const S&){};
         
         T value;
-        void(*destructor)(S t);
+        void(*destructor)(const S& t);
 };
 
-template <typename T>
-class SmartPrimitiveMinimalCopying {
-    public:
-        // Cast.
-        operator T() const {
-            return value;
-        }
-        // Get.
-        T operator()() const {
-            return value;
-        }
-        void operator=(const SmartPrimitiveMinimalCopying& sp) {
-            value = sp.value;
-            destructor = sp.destructor;
-            ((SmartPrimitiveMinimalCopying&)sp).destructor = noop;
-        }
-
-        SmartPrimitiveMinimalCopying() {
-            //destructor = [](T&){};
-        }
-        // TODO: The lambda breaks with a reference, why?
-        SmartPrimitiveMinimalCopying(T val, void(*dtor)(const T&)) {
-            value = val;
-            destructor = dtor;
-        }
-        ~SmartPrimitiveMinimalCopying() {
-            destructor(value);
-        }
-
-    private:
-        static inline void(*noop)(const T& t) = [](const T&){};
-
-        T value;
-        void(*destructor)(const T& t);
-};
-
+// TODO: Do we need this?
 template <typename T>
 class SmartPrimitiveArray {
     public:

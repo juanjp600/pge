@@ -10,7 +10,7 @@
 
 using namespace PGE;
 
-static void destroyTexture(GLuint texture) {
+static void destroyTexture(const GLuint& texture) {
     glDeleteTextures(1, &texture);
 }
 
@@ -80,7 +80,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
         /*glGenFramebuffers(1,&glFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);*/
 
-        glDepthbuffer = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](GLuint i) { glDeleteRenderbuffers(1, &i); });
+        glDepthbuffer = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](const GLuint& i) { glDeleteRenderbuffers(1, &i); });
         glGenRenderbuffers(1, &glDepthbuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, glDepthbuffer);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);

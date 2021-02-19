@@ -22,12 +22,11 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
     vertices.clear(); vertexCount = 0;
 	primitives.clear(); primitiveCount = 0;
 
-    glVertexBufferObject = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](GLuint i) { glDeleteBuffers(1, &i); });
-    glIndexBufferObject = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](GLuint i) { glDeleteBuffers(1, &i); });
+    glVertexBufferObject = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](const GLuint& i) { glDeleteBuffers(1, &i); });
+    glIndexBufferObject = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](const GLuint& i) { glDeleteBuffers(1, &i); });
     glGenBuffers(1, &glVertexBufferObject);
     glGenBuffers(1, &glIndexBufferObject);
 
-    glIndexBufferObject = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](GLuint i) { glDeleteVertexArrays(1, &i); });
     glGenVertexArrays(1, &glVertexArrayObject);
 }
 

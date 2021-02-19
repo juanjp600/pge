@@ -33,7 +33,7 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     //        SDL_SetWindowPosition(sdlWindow,0,0);
     //    }
 
-    glContext = SmartPrimitive<SDL_GLContext>(SDL_GL_CreateContext(sdlWindow.get()), [](SDL_GLContext c) { SDL_GL_DeleteContext(c); });
+    glContext = SmartPrimitive<SDL_GLContext>(SDL_GL_CreateContext(sdlWindow.get()), [](const SDL_GLContext& c) { SDL_GL_DeleteContext(c); });
     // And make it later in the day.
     SDL_GL_MakeCurrent(sdlWindow.get(), glContext());
 
@@ -62,7 +62,7 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
 
     setViewport(Rectanglei(0,0,w,h));
 
-    glFramebuffer = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](GLuint i) { if (i != GL_INVALID_VALUE) { glBindFramebuffer(GL_FRAMEBUFFER, 0);  glDeleteFramebuffers(1, &i); } });
+    glFramebuffer = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](const GLuint& i) { if (i != GL_INVALID_VALUE) { glBindFramebuffer(GL_FRAMEBUFFER, 0);  glDeleteFramebuffers(1, &i); } });
     glGenFramebuffers(1,&glFramebuffer);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {

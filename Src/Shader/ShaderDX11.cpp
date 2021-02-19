@@ -22,8 +22,8 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     readConstantBuffers(reflectionInfo,vertexConstantBuffers);
 
     int inputParamCount = 0; reflectionInfo.read((char*)(void*)&inputParamCount,1);
-    dxVertexInputElemDesc = SmartPrimitiveMinimalCopying<std::vector<D3D11_INPUT_ELEMENT_DESC>>(std::vector<D3D11_INPUT_ELEMENT_DESC>(inputParamCount),
-        [](const std::vector<D3D11_INPUT_ELEMENT_DESC>& v) { for (D3D11_INPUT_ELEMENT_DESC e : v) { delete[] e.SemanticName; } });
+    dxVertexInputElemDesc = SmartPrimitive<std::vector<D3D11_INPUT_ELEMENT_DESC>>(std::vector<D3D11_INPUT_ELEMENT_DESC>(inputParamCount),
+        [](const std::vector<D3D11_INPUT_ELEMENT_DESC>& v) { for (const D3D11_INPUT_ELEMENT_DESC& e : v) { delete[] e.SemanticName; } });
     for (int i=0;i<inputParamCount;i++) {
         String propertyName = "";
         char chr; reflectionInfo.read(&chr,1);
