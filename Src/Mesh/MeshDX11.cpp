@@ -113,11 +113,11 @@ void MeshDX11::uploadInternalData() {
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
-    if (dxVertexBuffer!=nullptr) {
+    if (dxVertexBuffer()!=nullptr) {
         String s;
         dxVertexBuffer()->Release(); dxVertexBuffer = nullptr;
     }
-    if (dxIndexBuffer!=nullptr) {
+    if (dxIndexBuffer()!=nullptr) {
         dxIndexBuffer()->Release(); dxIndexBuffer = nullptr;
     }
 
@@ -164,13 +164,13 @@ void MeshDX11::render() {
     updateInternalData();
     uploadInternalData();
 
-    if (dxVertexBuffer == nullptr || dxIndexBuffer == nullptr) { return; }
+    if (dxVertexBuffer() == nullptr || dxIndexBuffer() == nullptr) { return; }
 
     ((ShaderDX11*)material->getShader())->useVertexInputLayout();
 
     UINT offset = 0;
     dxContext->IASetVertexBuffers(0,1,&dxVertexBuffer,&stride,&offset);
-    dxContext->IASetIndexBuffer(dxIndexBuffer,DXGI_FORMAT_R16_UINT,0);
+    dxContext->IASetIndexBuffer(dxIndexBuffer(),DXGI_FORMAT_R16_UINT,0);
 
     D3D11_PRIMITIVE_TOPOLOGY dxPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     int dxIndexMultiplier = 3;

@@ -9,22 +9,8 @@
 
 using namespace PGE;
 
-static void destroyDeviceChild(ID3D11DeviceChild* const& v) { v->Release(); }
-
 TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,FORMAT fmt) {
-    dxShaderResourceView = SmartPrimitive<ID3D11ShaderResourceView*,ID3D11DeviceChild*>(nullptr, destroyDeviceChild);
-    dxTexture = SmartPrimitive<ID3D11Texture2D*,ID3D11DeviceChild*>(nullptr, destroyDeviceChild);
-
     isRT = renderTarget;
-    if (isRT) {
-        dxRtv = SmartPrimitive<ID3D11RenderTargetView*,ID3D11DeviceChild*>(nullptr, destroyDeviceChild);
-        dxZBufferView = SmartPrimitive<ID3D11DepthStencilView*,ID3D11DeviceChild*>(nullptr, destroyDeviceChild);
-        dxZBufferTexture = SmartPrimitive<ID3D11Texture2D*,ID3D11DeviceChild*>(nullptr, destroyDeviceChild);
-    } else {
-        dxRtv = SmartPrimitive<ID3D11RenderTargetView*>();
-        dxZBufferView = SmartPrimitive<ID3D11DepthStencilView*>();
-        dxZBufferTexture = SmartPrimitive<ID3D11Texture2D*>();
-    }
 
     graphics = gfx;
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
@@ -85,19 +71,19 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     if (FAILED(hResult)) {
         throw Exception("TextureDX11(w,h,rt)","Failed to create D3D11 texture ("+String::fromInt(realWidth)+","+String::fromInt(realHeight)+"; HRESULT "+String::fromInt(hResult)+")");
     }
-    if (buffer != nullptr) { dxContext->UpdateSubresource(dxTexture,0,NULL,buffer,realWidth*4,0); }
+    if (buffer != nullptr) { dxContext->UpdateSubresource(dxTexture(),0,NULL,buffer,realWidth*4,0); }
 
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = dxFormat;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     dxShaderResourceViewDesc.Texture2D.MipLevels = 1;
-    hResult = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
+    hResult = dxDevice->CreateShaderResourceView(dxTexture(),&dxShaderResourceViewDesc,&dxShaderResourceView);
     if (FAILED(hResult)) {
         throw Exception("TextureDX11(w,h,rt)", "Failed to create shader resource view ("+String::fromInt(realWidth)+","+String::fromInt(realHeight)+"; HRESULT "+String::fromInt(hResult) + ")");
     }
 
     if (isRT) {
-        dxDevice->CreateRenderTargetView(dxTexture, NULL, &dxRtv);
+        dxDevice->CreateRenderTargetView(dxTexture(), NULL, &dxRtv);
 
         // Create depth stencil texture
         D3D11_TEXTURE2D_DESC descDepth;
@@ -124,7 +110,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         descDSV.Format = descDepth.Format;
         descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
         descDSV.Texture2D.MipSlice = 0;
-        hResult = dxDevice->CreateDepthStencilView(dxZBufferTexture, &descDSV, &dxZBufferView);
+        hResult = dxDevice->CreateDepthStencilView(dxZBufferTexture(), &descDSV, &dxZBufferView);
         if (FAILED(hResult)) {
             throw Exception("TextureDX11(w,h,rt)", "Failed to create depth stencil view ("+String::fromInt(realWidth)+","+String::fromInt(realHeight)+"; HRESULT "+String::fromInt(hResult)+")");
         }
@@ -141,9 +127,6 @@ TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
     realHeight = rh;
     filename = fn;
     name = fn.str();
-
-    dxShaderResourceView = SmartPrimitive<ID3D11ShaderResourceView*, ID3D11DeviceChild*>(nullptr, destroyDeviceChild);
-    dxTexture = SmartPrimitive<ID3D11Texture2D*, ID3D11DeviceChild*>(nullptr, destroyDeviceChild);
     
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
@@ -169,30 +152,24 @@ TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
     if (FAILED(hResult)) {
         throw Exception("TextureDX11(fn)", "Failed to create D3D11 texture (filename: "+filename.str()+", HRESULT "+String::fromInt(hResult)+")");
     }
-    dxContext->UpdateSubresource(dxTexture,0,NULL,fiBuffer,realWidth*4,0);
+    dxContext->UpdateSubresource(dxTexture(),0,NULL,fiBuffer,realWidth*4,0);
 
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     dxShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
     dxShaderResourceViewDesc.Texture2D.MipLevels = -1;
-    hResult = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
+    hResult = dxDevice->CreateShaderResourceView(dxTexture(),&dxShaderResourceViewDesc,&dxShaderResourceView);
     if (FAILED(hResult)) {
         throw Exception("TextureDX11(fn)","Failed to create shader resource view (filename: "+filename.str()+", HRESULT "+String::fromInt(hResult)+")");
     }
 
-    dxContext->GenerateMips(dxShaderResourceView);
+    dxContext->GenerateMips(dxShaderResourceView());
 
     isRT = false;
 }
 
 TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager) {
-    dxShaderResourceView = SmartPrimitive<ID3D11ShaderResourceView*, ID3D11DeviceChild*>(nullptr, destroyDeviceChild);
-    dxTexture = SmartPrimitive<ID3D11Texture2D*, ID3D11DeviceChild*>(nullptr, destroyDeviceChild);
-    dxRtv = nullptr;
-    dxZBufferView = nullptr;
-    dxZBufferTexture = nullptr;
-
     graphics = gfx;
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
@@ -231,7 +208,7 @@ TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     // TODO: Different from regular texture loading.
     dxShaderResourceViewDesc.Texture2D.MipLevels = 1;
-    hResult = dxDevice->CreateShaderResourceView(dxTexture,&dxShaderResourceViewDesc,&dxShaderResourceView);
+    hResult = dxDevice->CreateShaderResourceView(dxTexture(),&dxShaderResourceViewDesc,&dxShaderResourceView);
     if (FAILED(hResult)) {
         throw Exception("TextureDX11(fn,threadMgr)", "Failed to create shader resource view (filename: "+filename.str()+", HRESULT " + String::fromInt(hResult) + ")");
     }
@@ -349,7 +326,7 @@ Texture* TextureDX11::copy() const {
     TextureDX11* copy = new TextureDX11(graphics, getWidth(), getHeight(), false, nullptr, format);
     copy->name = String(name, "_Copy");
 
-    dxContext->CopyResource(copy->dxTexture, dxTexture);
+    dxContext->CopyResource(copy->dxTexture(), dxTexture());
 
     // TODO: Check MipLevels, might have to regenerate dxShaderResourceView.
 
@@ -357,13 +334,13 @@ Texture* TextureDX11::copy() const {
 }
 
 ID3D11RenderTargetView* TextureDX11::getRtv() const {
-    return dxRtv;
+    return dxRtv();
 }
 
 ID3D11DepthStencilView* TextureDX11::getZBufferView() const {
-    return dxZBufferView;
+    return dxZBufferView();
 }
 
 void* TextureDX11::getNative() const {
-    return dxTexture;
+    return dxTexture();
 }

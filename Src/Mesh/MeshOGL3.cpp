@@ -125,9 +125,9 @@ void MeshOGL3::uploadInternalData() {
 void MeshOGL3::render() {
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
-    glBindVertexArray(glVertexArrayObject);
-    glBindBuffer(GL_ARRAY_BUFFER,glVertexBufferObject);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,glIndexBufferObject);
+    glBindVertexArray(glVertexArrayObject());
+    glBindBuffer(GL_ARRAY_BUFFER,glVertexBufferObject());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,glIndexBufferObject());
 
     updateInternalData();
     uploadInternalData();

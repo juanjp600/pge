@@ -46,7 +46,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
     glTexture = SmartPrimitive<GLuint>(GL_INVALID_VALUE, destroyTexture);
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,glTexture);
+    glBindTexture(GL_TEXTURE_2D,glTexture());
 
     GLint glInternalFormat;
     GLenum glFormat;
@@ -82,7 +82,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
 
         glDepthbuffer = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](const GLuint& i) { glDeleteRenderbuffers(1, &i); });
         glGenRenderbuffers(1, &glDepthbuffer);
-        glBindRenderbuffer(GL_RENDERBUFFER, glDepthbuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, glDepthbuffer());
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
         //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, glDepthbuffer);
@@ -107,7 +107,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
     glTexture = SmartPrimitive<GLuint>(GL_INVALID_VALUE, destroyTexture);
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,glTexture);
+    glBindTexture(GL_TEXTURE_2D,glTexture());
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,fiBuffer);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
@@ -136,7 +136,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     glTexture = SmartPrimitive<GLuint>(GL_INVALID_VALUE, destroyTexture);
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,glTexture);
+    glBindTexture(GL_TEXTURE_2D,glTexture());
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,nullptr);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
@@ -178,7 +178,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     } mainThreadRequest;
     mainThreadRequest.filename = filename;
     mainThreadRequest.graphics = (GraphicsOGL3*)graphics;
-    mainThreadRequest.glTexture = glTexture;
+    mainThreadRequest.glTexture = glTexture();
 
     class TextureLoadRequest : public ThreadManager::NewThreadRequest {
         public:
@@ -221,7 +221,7 @@ Texture* TextureOGL3::copy() const {
 }
 
 GLuint TextureOGL3::getGlTexture() const {
-    return glTexture;
+    return glTexture();
 }
 
 /*GLuint TextureOGL3::getGlFramebuffer() const {
@@ -229,7 +229,7 @@ GLuint TextureOGL3::getGlTexture() const {
 }*/
 
 GLuint TextureOGL3::getGlDepthbuffer() const {
-    return glDepthbuffer;
+    return glDepthbuffer();
 }
 
 void* TextureOGL3::getNative() const {

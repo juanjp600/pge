@@ -21,7 +21,6 @@ Graphics::Graphics(String name, int w, int h, bool fs) {
 
 void Graphics::update() {
     SDL_Event event;
-    auto test = [](int a) {};
     while (((SysEventsInternal::SubscriberInternal*)eventSubscriber.get())->popEvent(event)) {
         if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
             open = false;

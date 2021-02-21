@@ -4,6 +4,8 @@
 
 using namespace PGE;
 
+#include <iostream>
+
 GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs) {
     GLenum glError = GL_NO_ERROR;
 
@@ -83,13 +85,13 @@ void GraphicsOGL3::swap() {
 }
 
 void GraphicsOGL3::takeGlContext() {
-    if (SDL_GL_GetCurrentContext()!=glContext) {
-        SDL_GL_MakeCurrent(sdlWindow.get(),glContext);
+    if (SDL_GL_GetCurrentContext()!=glContext()) {
+        SDL_GL_MakeCurrent(sdlWindow.get(),glContext());
     }
 }
 
 SDL_GLContext GraphicsOGL3::getGlContext() const {
-    return glContext;
+    return glContext();
 }
 
 void GraphicsOGL3::clear(Color color) {
@@ -115,7 +117,7 @@ void GraphicsOGL3::setDepthTest(bool isEnabled) {
 void GraphicsOGL3::setRenderTarget(Texture* renderTarget) {
     takeGlContext();
 
-    glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer());
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, ((TextureOGL3*)renderTarget)->getGlDepthbuffer());
     glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ((TextureOGL3*)renderTarget)->getGlTexture(), 0);
 
@@ -148,7 +150,7 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
         GL_COLOR_ATTACHMENT6,
         GL_COLOR_ATTACHMENT7
     };
-    glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer());
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, largestTarget->getGlDepthbuffer());
     for (int i=0;i<renderTargets.size();i++) {
         glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3*)renderTargets[i])->getGlTexture(), 0);

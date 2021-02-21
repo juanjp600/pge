@@ -8,7 +8,7 @@
 #include <Texture/Texture.h>
 #include <Threading/ThreadManager.h>
 
-#include "../Misc/SmartPrimitive.h"
+#include "../Graphics/GraphicsDX11.h"
 
 namespace PGE {
 
@@ -28,13 +28,13 @@ class TextureDX11 : public Texture {
 
     private:
         D3D11_TEXTURE2D_DESC dxTextureDesc;
-        ID3D11Texture2D* dxTexture;
+        SmartDeviceChild<ID3D11Texture2D> dxTexture;
         D3D11_SHADER_RESOURCE_VIEW_DESC dxShaderResourceViewDesc;
-        SmartPrimitive<ID3D11ShaderResourceView*> dxShaderResourceView;
+        SmartDeviceChild<ID3D11ShaderResourceView> dxShaderResourceView;
 
-        SmartPrimitive<ID3D11RenderTargetView*> dxRtv;
-        SmartPrimitive<ID3D11Texture2D*> dxZBufferTexture;
-        SmartPrimitive<ID3D11DepthStencilView*> dxZBufferView;
+        SmartDeviceChild<ID3D11RenderTargetView> dxRtv;
+        SmartDeviceChild<ID3D11Texture2D> dxZBufferTexture;
+        SmartDeviceChild<ID3D11DepthStencilView> dxZBufferView;
 };
 
 }

@@ -14,6 +14,8 @@
 using namespace PGE;
 
 ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
+    destructor.setSize(3);
+
     graphics = gfx;
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
@@ -31,17 +33,17 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     extractShaderVars(vertexSource,"uniform",vertexUniforms);
 
     int errorCode = 0;
-    glVertexShader = SmartPrimitive<GLuint>(glCreateShader(GL_VERTEX_SHADER), [](const GLuint& i) { glDeleteShader(i); });
-    glShaderSource(glVertexShader,1,&cstr,nullptr);
-    glCompileShader(glVertexShader);
+    destructor.addPointer(glVertexShader = new SmartPrimitive<GLuint>(glCreateShader(GL_VERTEX_SHADER), [](const GLuint& i) { glDeleteShader(i); }));
+    glShaderSource((*glVertexShader)(),1,&cstr,nullptr);
+    glCompileShader((*glVertexShader)());
 
     String errorStr;
     char* errorCStr = new char[512];
     GLsizei len = 0;
-    glGetShaderInfoLog(glVertexShader, 512, &len, errorCStr);
+    glGetShaderInfoLog((*glVertexShader)(), 512, &len, errorCStr);
     errorStr = String(errorCStr);
 
-    glGetShaderiv(glVertexShader, GL_COMPILE_STATUS, &errorCode);
+    glGetShaderiv((*glVertexShader)(), GL_COMPILE_STATUS, &errorCode);
     if (errorCode != GL_TRUE || errorStr.length() > 0) {
         delete[] errorCStr;
         throw Exception("ShaderOGL3", "Failed to create vertex shader. (filepath: " + path.str() + ")\n" + errorStr);
@@ -58,31 +60,31 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     std::vector<ShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource,"uniform",fragmentUniforms);
 
-    glFragmentShader = SmartPrimitive<GLuint>(glCreateShader(GL_FRAGMENT_SHADER), [](const GLuint& i) { glDeleteShader(i); });
-    glShaderSource(glFragmentShader,1,&cstr,nullptr);
-    glCompileShader(glFragmentShader);
-    glGetShaderInfoLog(glFragmentShader, 512, &len, errorCStr);
+    destructor.addPointer(glFragmentShader = new SmartPrimitive<GLuint>(glCreateShader(GL_FRAGMENT_SHADER), [](const GLuint& i) { glDeleteShader(i); }));
+    glShaderSource((*glFragmentShader)(),1,&cstr,nullptr);
+    glCompileShader((*glFragmentShader)());
+    glGetShaderInfoLog((*glFragmentShader)(), 512, &len, errorCStr);
     errorStr = String(errorCStr);
 
-    glGetShaderiv(glFragmentShader, GL_COMPILE_STATUS, &errorCode);
+    glGetShaderiv((*glFragmentShader)(), GL_COMPILE_STATUS, &errorCode);
     if (errorCode != GL_TRUE || errorStr.length() > 0) {
         delete[] errorCStr;
         throw Exception("ShaderOGL3", "Failed to create fragment shader. (filepath: " + path.str() + ")\n" + errorStr);
     }
     delete[] errorCStr;
 
-    glShaderProgram = SmartPrimitive<GLuint>(glCreateProgram(), [](const GLuint& i) { glDeleteProgram(i); });
-    glAttachShader(glShaderProgram,glVertexShader);
-    glAttachShader(glShaderProgram,glFragmentShader);
+    destructor.addPointer(glShaderProgram = new SmartPrimitive<GLuint>(glCreateProgram(), [](const GLuint& i) { glDeleteProgram(i); }));
+    glAttachShader((*glShaderProgram)(),(*glVertexShader)());
+    glAttachShader((*glShaderProgram)(),(*glFragmentShader)());
 
-    glLinkProgram(glShaderProgram);
+    glLinkProgram((*glShaderProgram)());
 
     for (int i=0;i<vertexUniforms.size();i++) {
-        vertexShaderConstants.push_back(ConstantOGL3(graphics,vertexUniforms[i].name,glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr())));
+        vertexShaderConstants.push_back(ConstantOGL3(graphics,vertexUniforms[i].name,glGetUniformLocation((*glShaderProgram)(), vertexUniforms[i].name.cstr())));
     }
 
     for (int i=0;i<fragmentUniforms.size();i++) {
-        ConstantOGL3 constant = ConstantOGL3(graphics,fragmentUniforms[i].name,glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr()));
+        ConstantOGL3 constant = ConstantOGL3(graphics,fragmentUniforms[i].name,glGetUniformLocation((*glShaderProgram)(), fragmentUniforms[i].name.cstr()));
         if (fragmentUniforms[i].type.equals("sampler2D")) {
             constant.setValue((int)samplerConstants.size());
             samplerConstants.push_back(constant);
@@ -97,7 +99,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     for (int i=0;i<vertexInput.size();i++) {
         VertexAttrib attrib;
         attrib.name = vertexInput[i].name;
-        attrib.location = glGetAttribLocation(glShaderProgram, vertexInput[i].name.cstr());
+        attrib.location = glGetAttribLocation((*glShaderProgram)(), vertexInput[i].name.cstr());
         if (vertexInput[i].type.equals("float")) {
             attrib.size = 1;
             attrib.type = GL_FLOAT;
@@ -126,7 +128,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     std::vector<ShaderVar> fragmentOutputs;
     extractShaderVars(fragmentSource,"out",fragmentOutputs);
     for (int i=0;i<fragmentOutputs.size();i++) {
-        glBindFragDataLocation(glShaderProgram,i,fragmentOutputs[i].name.cstr());
+        glBindFragDataLocation((*glShaderProgram)(),i,fragmentOutputs[i].name.cstr());
     }
 }
 
@@ -139,7 +141,7 @@ void ShaderOGL3::useShader() {
 
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
-    glUseProgram(glShaderProgram);
+    glUseProgram((*glShaderProgram)());
 
     uint8_t* ptr = nullptr;
     for (int i=0;i<vertexAttribs.size();i++) {

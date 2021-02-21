@@ -10,7 +10,7 @@
 #include <Shader/Shader.h>
 #include <Misc/String.h>
 
-#include "../Misc/SmartPrimitive.h"
+#include "../Graphics/GraphicsDX11.h"
 
 namespace PGE {
 
@@ -34,8 +34,8 @@ class ShaderDX11 : public Shader {
         std::vector<uint8_t> vertexShaderBytecode;
         std::vector<uint8_t> fragmentShaderBytecode;
 
-        SmartPrimitive<std::vector<D3D11_INPUT_ELEMENT_DESC>> dxVertexInputElemDesc;
-        ID3D11InputLayout* dxVertexInputLayout;
+        SmartPrimitiveArray<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc;
+        SmartDeviceChild<ID3D11InputLayout> dxVertexInputLayout;
 
         std::vector<String> vertexInputElems;
 
@@ -91,8 +91,8 @@ class ShaderDX11 : public Shader {
 
         SmartPrimitiveArray<ID3D11SamplerState*> dxSamplerState;
 
-        ID3D11VertexShader* dxVertexShader;
-        ID3D11PixelShader* dxFragmentShader;
+        SmartPrimitive<ID3D11VertexShader*, ID3D11DeviceChild*> dxVertexShader;
+        SmartPrimitive<ID3D11PixelShader*, ID3D11DeviceChild*> dxFragmentShader;
 
         Graphics* graphics;
 };

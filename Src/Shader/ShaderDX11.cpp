@@ -9,10 +9,6 @@
 using namespace PGE;
 
 ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
-    dxVertexInputLayout = nullptr;
-    dxVertexShader = nullptr;
-    dxFragmentShader = nullptr;
-
     graphics = gfx;
 
     filepath = path;
@@ -22,8 +18,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     readConstantBuffers(reflectionInfo,vertexConstantBuffers);
 
     int inputParamCount = 0; reflectionInfo.read((char*)(void*)&inputParamCount,1);
-    dxVertexInputElemDesc = SmartPrimitive<std::vector<D3D11_INPUT_ELEMENT_DESC>>(std::vector<D3D11_INPUT_ELEMENT_DESC>(inputParamCount),
-        [](const std::vector<D3D11_INPUT_ELEMENT_DESC>& v) { for (const D3D11_INPUT_ELEMENT_DESC& e : v) { delete[] e.SemanticName; } });
+    dxVertexInputElemDesc = SmartPrimitiveArray<D3D11_INPUT_ELEMENT_DESC>(inputParamCount, [](const D3D11_INPUT_ELEMENT_DESC& e) { delete[] e.SemanticName; } );
     for (int i=0;i<inputParamCount;i++) {
         String propertyName = "";
         char chr; reflectionInfo.read(&chr,1);
@@ -56,7 +51,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
         vertexInputElemDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
         vertexInputElemDesc.InstanceDataStepRate = 0;
 
-        dxVertexInputElemDesc()[i] = vertexInputElemDesc;
+        dxVertexInputElemDesc[i] = vertexInputElemDesc;
     }
 
     readConstantBuffers(reflectionInfo, fragmentConstantBuffers);
@@ -76,8 +71,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     samplerDesc.MipLODBias = -0.1f;
 
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
-    dxSamplerState = SmartPrimitiveArray<ID3D11SamplerState*>(samplerCount, [](ID3D11SamplerState*& s) { s->Release(); });
-    dxSamplerState().resize(samplerCount);
+    dxSamplerState = SmartPrimitiveArray<ID3D11SamplerState*>(samplerCount, [](ID3D11SamplerState* const& s) { s->Release(); });
     for (int i = 0; i < samplerCount; i++) {
         ID3D11SamplerState* samplerState = NULL;
         dxDevice->CreateSamplerState(&samplerDesc, &samplerState);
@@ -112,19 +106,6 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     if (FAILED(hResult)) {
         throw Exception("ShaderDX11", "Failed to create input layout (filename: "+path.str()+"; HRESULT "+String::fromInt(hResult)+")");
     }
-
-
-
-
-
-
-
-
-
-
-    if (dxVertexInputLayout != nullptr) { dxVertexInputLayout->Release(); }
-    if (dxVertexShader != nullptr) { dxVertexShader->Release(); }
-    if (dxFragmentShader != nullptr) { dxFragmentShader->Release(); }
 }
 
 void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, SmartPrimitiveArray<CBufferInfo*>& constantBuffers) {
@@ -215,13 +196,13 @@ void ShaderDX11::useShader() {
         dxContext->PSSetConstantBuffers(i,1,&dxCBuffer);
     }
     
-    dxContext->VSSetShader(dxVertexShader,NULL,0);
-    dxContext->PSSetShader(dxFragmentShader,NULL,0);
+    dxContext->VSSetShader(dxVertexShader(),NULL,0);
+    dxContext->PSSetShader(dxFragmentShader(),NULL,0);
 }
 
 void ShaderDX11::useVertexInputLayout() {
     ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
-    dxContext->IASetInputLayout(dxVertexInputLayout);
+    dxContext->IASetInputLayout(dxVertexInputLayout());
 }
 
 void ShaderDX11::useSamplers() {

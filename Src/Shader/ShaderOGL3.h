@@ -27,7 +27,6 @@ class ShaderOGL3 : public Shader {
         void useShader();
         void unbindGLAttribs();
     private:
-
         class ConstantOGL3 : public Constant {
             public:
                 ConstantOGL3(Graphics* gfx,String nm, int loc);
@@ -91,11 +90,13 @@ class ShaderOGL3 : public Shader {
         };
         void extractShaderVars(const String& src,String varKind,std::vector<ShaderVar>& varList);
 
-        SmartPrimitive<GLuint> glVertexShader;
-        SmartPrimitive<GLuint> glFragmentShader;
-        SmartPrimitive<GLuint> glShaderProgram;
+        SmartPrimitive<GLuint>* glVertexShader;
+        SmartPrimitive<GLuint>* glFragmentShader;
+        SmartPrimitive<GLuint>* glShaderProgram;
 
         Graphics* graphics;
+
+        SmartOrderedDestructor destructor;
 };
 
 }
