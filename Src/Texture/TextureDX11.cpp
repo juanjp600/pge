@@ -67,12 +67,14 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
 
     HRESULT hResult = 0;
 
+    dxTexture = destructor.referenceDifferentDestructor<ID3D11Texture2D*>(GraphicsDX11::destroyChild);
     hResult = dxDevice->CreateTexture2D(&dxTextureDesc,NULL,&dxTexture);
     if (FAILED(hResult)) {
         throw Exception("TextureDX11(w,h,rt)","Failed to create D3D11 texture ("+String::fromInt(realWidth)+","+String::fromInt(realHeight)+"; HRESULT "+String::fromInt(hResult)+")");
     }
     if (buffer != nullptr) { dxContext->UpdateSubresource(dxTexture(),0,NULL,buffer,realWidth*4,0); }
 
+    dxShaderResourceView = destructor.referenceDifferentDestructor<ID3D11ShaderResourceView*>(GraphicsDX11::destroyChild);
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = dxFormat;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
@@ -83,6 +85,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     }
 
     if (isRT) {
+        dxRtv = destructor.referenceDifferentDestructor<ID3D11RenderTargetView*>(GraphicsDX11::destroyChild);
         dxDevice->CreateRenderTargetView(dxTexture(), NULL, &dxRtv);
 
         // Create depth stencil texture
@@ -99,6 +102,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
         descDepth.CPUAccessFlags = 0;
         descDepth.MiscFlags = 0;
+        dxZBufferTexture = destructor.referenceDifferentDestructor<ID3D11Texture2D*>(GraphicsDX11::destroyChild);
         hResult = dxDevice->CreateTexture2D(&descDepth, NULL, &dxZBufferTexture);
         if (FAILED(hResult)) {
             throw Exception("TextureDX11(w,h,rt)", "Failed to create ZBuffer texture ("+String::fromInt(realWidth)+","+String::fromInt(realHeight)+"; HRESULT "+String::fromInt(hResult)+")");
@@ -110,6 +114,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         descDSV.Format = descDepth.Format;
         descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
         descDSV.Texture2D.MipSlice = 0;
+        dxZBufferView = destructor.referenceDifferentDestructor<ID3D11DepthStencilView*>(GraphicsDX11::destroyChild);
         hResult = dxDevice->CreateDepthStencilView(dxZBufferTexture(), &descDSV, &dxZBufferView);
         if (FAILED(hResult)) {
             throw Exception("TextureDX11(w,h,rt)", "Failed to create depth stencil view ("+String::fromInt(realWidth)+","+String::fromInt(realHeight)+"; HRESULT "+String::fromInt(hResult)+")");
@@ -148,12 +153,14 @@ TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
 
     HRESULT hResult = 0;
 
+    dxTexture = destructor.referenceDifferentDestructor<ID3D11Texture2D*>(GraphicsDX11::destroyChild);
     hResult = dxDevice->CreateTexture2D(&dxTextureDesc,NULL,&dxTexture);
     if (FAILED(hResult)) {
         throw Exception("TextureDX11(fn)", "Failed to create D3D11 texture (filename: "+filename.str()+", HRESULT "+String::fromInt(hResult)+")");
     }
     dxContext->UpdateSubresource(dxTexture(),0,NULL,fiBuffer,realWidth*4,0);
 
+    dxShaderResourceView = destructor.referenceDifferentDestructor<ID3D11ShaderResourceView*>(GraphicsDX11::destroyChild);
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
@@ -198,11 +205,13 @@ TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
 
     HRESULT hResult = 0;
 
+    dxTexture = destructor.referenceDifferentDestructor<ID3D11Texture2D*>(GraphicsDX11::destroyChild);
     hResult = dxDevice->CreateTexture2D(&dxTextureDesc,NULL,&dxTexture);
     if (FAILED(hResult)) {
         throw Exception("TextureDX11(fn,threadMgr)", "Failed to create D3D11 texture (filename: "+filename.str()+", HRESULT "+String::fromInt(hResult)+")");
     }
 
+    dxShaderResourceView = destructor.referenceDifferentDestructor<ID3D11ShaderResourceView*>(GraphicsDX11::destroyChild);
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;

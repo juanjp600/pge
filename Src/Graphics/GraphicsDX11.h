@@ -9,20 +9,6 @@
 
 #include "../Misc/SmartPrimitive.h"
 
-template <typename T>
-class SmartDeviceChild : public SmartPrimitive<T*, ID3D11DeviceChild*> {
-    public:
-    SmartDeviceChild() {
-        SmartPrimitive<T*, ID3D11DeviceChild*>::value = nullptr;
-    }
-
-    ~SmartDeviceChild() {
-        if (SmartPrimitive<T*, ID3D11DeviceChild*>::value != nullptr) {
-            SmartPrimitive<T*, ID3D11DeviceChild*>::value->Release();
-        }
-    }
-};
-
 namespace PGE {
 
 class GraphicsDX11 : public GraphicsInternal {
@@ -53,32 +39,42 @@ class GraphicsDX11 : public GraphicsInternal {
 
         void setZBufferState(ZBUFFER_STATE_INDEX index);
 
+        static void destroyChild(ID3D11DeviceChild* const& child) {
+            child->Release();
+        }
+
+        static void destroyChildren(std::vector<ID3D11DeviceChild*> const& children) {
+            for (auto& c : children) {
+                c->Release();
+            }
+        }
+
     private:
-        SmartDeviceChild<IDXGIFactory1>* dxgiFactory;
+        SmartRef<IDXGIFactory1*> dxgiFactory;
 
         DXGI_SWAP_CHAIN_DESC dxSwapChainDesc;
-        SmartDeviceChild<IDXGISwapChain>* dxSwapChain;
+        SmartRef<IDXGISwapChain*> dxSwapChain;
 
-        SmartDeviceChild<ID3D11Device>* dxDevice;
-        SmartDeviceChild<ID3D11DeviceContext>* dxContext;
+        SmartRef<ID3D11Device*> dxDevice;
+        SmartRef<ID3D11DeviceContext*> dxContext;
 
-        SmartDeviceChild<ID3D11RenderTargetView>* dxBackBufferRtv;
-        SmartDeviceChild<ID3D11Texture2D>* dxZBufferTexture;
-        SmartDeviceChild<ID3D11DepthStencilView>* dxZBufferView;
-        SmartPrimitiveArray<ID3D11DepthStencilState*>* dxDepthStencilState;
+        SmartRef<ID3D11RenderTargetView*> dxBackBufferRtv;
+        SmartRef<ID3D11Texture2D*> dxZBufferTexture;
+        SmartRef<ID3D11DepthStencilView*> dxZBufferView;
+        SmartRef<std::vector<ID3D11DepthStencilState*>> dxDepthStencilState;
 
         D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
-        SmartDeviceChild<ID3D11RasterizerState>* dxRasterizerState;
+        SmartRef<ID3D11RasterizerState*> dxRasterizerState;
 
         D3D11_BLEND_DESC dxBlendStateDesc;
-        SmartDeviceChild<ID3D11BlendState>* dxBlendState;
+        SmartRef<ID3D11BlendState*> dxBlendState;
+
+        SmartOrderedDestructor destructor = 10;
 
         D3D11_VIEWPORT dxViewport;
 
         std::vector<ID3D11RenderTargetView*> currentRenderTargetViews;
         ID3D11DepthStencilView* currentDepthStencilView;
-
-        SmartOrderedDestructor destructor;
 };
 
 }

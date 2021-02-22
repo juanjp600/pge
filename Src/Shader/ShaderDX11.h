@@ -34,8 +34,8 @@ class ShaderDX11 : public Shader {
         std::vector<uint8_t> vertexShaderBytecode;
         std::vector<uint8_t> fragmentShaderBytecode;
 
-        SmartPrimitiveArray<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc;
-        SmartDeviceChild<ID3D11InputLayout> dxVertexInputLayout;
+        SmartRef<std::vector<D3D11_INPUT_ELEMENT_DESC>> dxVertexInputElemDesc;
+        SmartRef<ID3D11InputLayout*> dxVertexInputLayout;
 
         std::vector<String> vertexInputElems;
 
@@ -85,14 +85,16 @@ class ShaderDX11 : public Shader {
                 bool dirty;
         };
 
-        SmartPrimitiveArray<CBufferInfo*> vertexConstantBuffers;
-        SmartPrimitiveArray<CBufferInfo*> fragmentConstantBuffers;
-        void readConstantBuffers(std::ifstream& reflectionInfo, SmartPrimitiveArray<CBufferInfo*>& constantBuffers);
+        SmartRef<std::vector<CBufferInfo*>> vertexConstantBuffers;
+        SmartRef<std::vector<CBufferInfo*>> fragmentConstantBuffers;
+        void readConstantBuffers(std::ifstream& reflectionInfo, SmartRef<std::vector<CBufferInfo*>>& constantBuffers);
 
-        SmartPrimitiveArray<ID3D11SamplerState*> dxSamplerState;
+        SmartRef<std::vector<ID3D11SamplerState*>> dxSamplerState;
 
-        SmartPrimitive<ID3D11VertexShader*, ID3D11DeviceChild*> dxVertexShader;
-        SmartPrimitive<ID3D11PixelShader*, ID3D11DeviceChild*> dxFragmentShader;
+        SmartRef<ID3D11VertexShader*> dxVertexShader;
+        SmartRef<ID3D11PixelShader*> dxFragmentShader;
+
+        SmartOrderedDestructor destructor = 7;
 
         Graphics* graphics;
 };

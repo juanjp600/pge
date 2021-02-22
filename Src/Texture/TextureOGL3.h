@@ -27,9 +27,11 @@ class TextureOGL3 : public Texture {
         virtual void* getNative() const;
 
     private:
-        SmartPrimitive<GLuint> glTexture;
+        SmartRef<GLuint> glTexture;
         //GLuint glFramebuffer;
-        SmartPrimitive<GLuint> glDepthbuffer;
+        SmartRef<GLuint> glDepthbuffer;
+
+        SmartOrderedDestructor destructor = 2;
 };
 
 }

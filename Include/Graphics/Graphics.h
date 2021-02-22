@@ -7,6 +7,8 @@
 #include <Color/Color.h>
 #include <SysEvents/SysEvents.h>
 
+#include "../../Src/Misc/SmartPrimitive.h"
+
 struct SDL_Window;
 
 namespace PGE {
@@ -66,10 +68,13 @@ class Graphics {
         bool depthTest;
         bool vsync;
 
-        // Base class always automatically takes care SysEvents.
-        std::shared_ptr<SysEvents::Subscriber> eventSubscriber;
+        // Base class always automatically takes care of SysEvents.
+        SmartRef<SysEvents::Subscriber*> eventSubscriber;
 
-        std::shared_ptr<SDL_Window> sdlWindow;
+        SmartRef<SDL_Window*> sdlWindow;
+
+    private:
+        SmartOrderedDestructor destructor = 2;
 };
 
 }

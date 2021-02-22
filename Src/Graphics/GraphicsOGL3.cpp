@@ -6,6 +6,14 @@ using namespace PGE;
 
 #include <iostream>
 
+GraphicsOGL3::OpTakeContext::OpTakeContext(GraphicsOGL3* gfx) {
+    graphics = gfx;
+}
+
+void GraphicsOGL3::OpTakeContext::exec() {
+    graphics->takeGlContext();
+}
+
 GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs) {
     GLenum glError = GL_NO_ERROR;
 
@@ -19,10 +27,9 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     h = NSHeight(rect);
 #endif
 
-    sdlWindow = std::shared_ptr<SDL_Window>(SDL_CreateWindow(caption.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/),
-        [](SDL_Window* w) { SDL_DestroyWindow(w); });
+    sdlWindow = SDL_CreateWindow(caption.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/);
 
-    if (sdlWindow == nullptr) {
+    if (sdlWindow() == nullptr) {
         throw Exception("GraphicsOGL3", "Failed to create SDL window: " + String(SDL_GetError()));
     }
 
@@ -35,9 +42,11 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     //        SDL_SetWindowPosition(sdlWindow,0,0);
     //    }
 
-    glContext = SmartPrimitive<SDL_GLContext>(SDL_GL_CreateContext(sdlWindow.get()), [](const SDL_GLContext& c) { SDL_GL_DeleteContext(c); });
+    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)this));
+
+    glContext = destructor.reference<SDL_GLContext>([](const SDL_GLContext& c) { SDL_GL_DeleteContext(c); }, SDL_GL_CreateContext(sdlWindow()));
     // And make it later in the day.
-    SDL_GL_MakeCurrent(sdlWindow.get(), glContext());
+    SDL_GL_MakeCurrent(sdlWindow(), glContext());
 
     glewExperimental = true;
     glError = glewInit();
@@ -60,11 +69,11 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
         throw Exception("GraphicsOGL3", "Failed to initialize window data post-GLEW initialization. (GL_ERROR: " + String::format(glError, "%u") + ")");
     }
 
-    SDL_GL_SwapWindow(sdlWindow.get());
+    SDL_GL_SwapWindow(sdlWindow());
 
     setViewport(Rectanglei(0,0,w,h));
 
-    glFramebuffer = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](const GLuint& i) { if (i != GL_INVALID_VALUE) { glBindFramebuffer(GL_FRAMEBUFFER, 0);  glDeleteFramebuffers(1, &i); } });
+    glFramebuffer = destructor.reference<GLuint>([](const GLuint& i) { if (i != GL_INVALID_VALUE) { glBindFramebuffer(GL_FRAMEBUFFER, 0);  glDeleteFramebuffers(1, &i); } }, GL_INVALID_VALUE);
     glGenFramebuffers(1,&glFramebuffer);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
@@ -81,12 +90,12 @@ void GraphicsOGL3::update() {
 }
 
 void GraphicsOGL3::swap() {
-    SDL_GL_SwapWindow(sdlWindow.get());
+    SDL_GL_SwapWindow(sdlWindow());
 }
 
 void GraphicsOGL3::takeGlContext() {
     if (SDL_GL_GetCurrentContext()!=glContext()) {
-        SDL_GL_MakeCurrent(sdlWindow.get(),glContext());
+        SDL_GL_MakeCurrent(sdlWindow(),glContext());
     }
 }
 

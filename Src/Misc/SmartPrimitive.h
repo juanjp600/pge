@@ -7,116 +7,16 @@
 //template <typename T, typename S=T, typename = typename std::enable_if<std::is_base_of<T, S>::value || std::is_same<T,S>::value || true>::type >
 //class SmartPrimitive;
 
+// TODO: Dedicated SmartPointer/SmartArray?
+
 class SmartBase {
     public:
         virtual ~SmartBase(){};
 };
 
-class SmartOrderedDestructor {
-    public:
-        SmartOrderedDestructor() {
-            preop = nullptr;
-            postop = nullptr;
-            objects = nullptr;
-            index = 0;
-        }
-
-        ~SmartOrderedDestructor() {
-            if (preop != nullptr) {
-                preop();
-            }
-            for (int i = index-1; i >= 0; i--) {
-                delete (SmartBase*)objects[i];
-            }
-            delete[] objects;
-            if (postop != nullptr) {
-                postop();
-            }
-        }
-
-        void setPreop(void(*preop)()) {
-            this->preop = preop;
-        }
-
-        void setPostop(void(*postop)()) {
-            this->postop = postop;
-        }
-
-        void setSize(int size) {
-            if (objects != nullptr) {
-                SmartBase** oldObjects = objects;
-                objects = new SmartBase*[size];
-                index = (index > size ? size : index);
-                std::memcpy(objects, oldObjects, index * sizeof(SmartBase*));
-                delete[] oldObjects;
-            } else {
-                objects = new SmartBase*[size];
-            }
-        }
-
-        void addPointer(SmartBase* ptr) {
-            objects[index] = ptr;
-            index++;
-        }
-
-    private:
-        void(*preop)();
-        void(*postop)();
-        SmartBase** objects;
-        int index;
-};
-
-template <typename T>
-class SmartPointer : public SmartBase {
-    public:
-        SmartPointer(T* t) {
-            ptr = t;
-        }
-
-        ~SmartPointer() {
-            delete ptr;
-        }
-
-    protected:
-        T* ptr;
-};
-
 template <typename T, typename S=T>
 class SmartPrimitive : public SmartBase {
     public:
-        void operator=(const SmartPrimitive& sp) {
-            value = sp.value;
-            destructor = sp.destructor;
-            ((SmartPrimitive&)sp).destructor = nullptr;
-        }
-
-        // Get.
-        T& operator()() {
-            return value;
-        }
-        const T& operator()() const {
-            return value;
-        }
-        // Set.
-        void operator=(const T& t) {
-            value = t;
-        }
-        // Get as pointer.
-        T* operator&() {
-            return &value;
-        }
-
-        T* operator->() const {
-            return &value;
-        }
-
-        T* operator->() {
-            return &value;
-        }
-
-        SmartPrimitive() {
-            destructor = nullptr;
-        }
         SmartPrimitive(const T& val) {
             destructor = nullptr;
             value = val;
@@ -127,8 +27,23 @@ class SmartPrimitive : public SmartBase {
         }
         ~SmartPrimitive() {
             if (destructor != nullptr) {
-                destructor(value);
+                destructor((const S&)value);
             }
+        }
+
+        void set(const T& t) {
+            value = t;
+        }
+
+        T& get() {
+            return value;
+        }
+        T& get() const {
+            return value;
+        }
+
+        T* getPointer() {
+            return &value;
         }
 
     protected:
@@ -137,44 +52,123 @@ class SmartPrimitive : public SmartBase {
 };
 
 template <typename T>
-class SmartPrimitiveArray : public SmartBase {
+class SmartRef {
     public:
-        // Get.
-        std::vector<T>& operator()() {
-            return values;
-        }
-        // Index.
-        T& operator[](int i) {
-            return values[i];
+    // Get.
+    T& operator()() {
+        return sp->get();
+    }
+    const T& operator()() const {
+        return sp->get();
+    }
+    // Set.
+    void operator=(const T& t) {
+        sp->set(t);
+    }
+    // Get as pointer.
+    T* operator&() {
+        return sp->getPointer();
+    }
+    T operator->() {
+        return sp->get();
+    }
+
+    SmartRef() {}
+    SmartRef(SmartPrimitive<T>* sp) {
+        this->sp = sp;
+    }
+
+    private:
+        SmartPrimitive<T>* sp;
+};
+
+template <typename T>
+static void deletePointer(T* const& t) {
+    delete t;
+}
+
+template <typename T>
+static void clearPointerArray(std::vector<T*> const& v) {
+    for (auto& e : v) {
+        delete e;
+    }
+}
+
+class OpContainer {
+    public:
+        virtual ~OpContainer() {};
+
+        virtual void exec() = 0;
+};
+
+class SmartOrderedDestructor {
+    public:
+        SmartOrderedDestructor(int size) {
+            preop = nullptr;
+            postop = nullptr;
+            objects = new SmartBase*[size];;
+            index = 0;
         }
 
-        void operator=(const SmartPrimitiveArray& spa) {
-            values = spa.values;
-            destructor = spa.destructor;
-            ((SmartPrimitiveArray&)spa).destructor = nullptr;
-        }
-
-        SmartPrimitiveArray() {
-            destructor = nullptr;
-        }
-        SmartPrimitiveArray(void(*dtor)(const T&)) {
-            destructor = dtor;
-        }
-        SmartPrimitiveArray(int size, void(*dtor)(const T&)) {
-            values.resize(size);
-            destructor = dtor;
-        }
-        ~SmartPrimitiveArray() {
-            if (destructor != nullptr) {
-                for (T val : values) {
-                    destructor(val);
-                }
+        ~SmartOrderedDestructor() {
+            if (preop != nullptr) {
+                preop->exec();
             }
+            delete preop;
+            for (int i = index - 1; i >= 0; i--) {
+                delete objects[i];
+            }
+            delete[] objects;
+            if (postop != nullptr) {
+                postop->exec();
+            }
+            delete postop;
         }
 
-    protected:
-        std::vector<T> values;
-        void(*destructor)(const T& t);
+        void setPreop(OpContainer* preop) {
+            this->preop = preop;
+        }
+
+        void setPostop(OpContainer* postop) {
+            this->postop = postop;
+        }
+
+        template <typename T, class... Args>
+        SmartRef<T> getReference(void(*dtor)(const T&), Args&&... args) {
+            objects[index] = new SmartPrimitive(T(args...), dtor);
+            return SmartRef<T>((SmartPrimitive<T>*)objects[index++]);
+        }
+
+        template <typename T, class... Args>
+        SmartRef<T> getReference(void(*dtor)(const T&), const T& t) {
+            objects[index] = new SmartPrimitive(t, dtor);
+            return SmartRef<T>((SmartPrimitive<T>*)objects[index++]);
+        }
+
+        template <typename T, typename S, typename... Args>
+        SmartRef<T> getReferenceDifferentDestructor(void(*dtor)(const S&), Args&&... args) {
+            objects[index] = new SmartPrimitive(T(args...), dtor);
+            return SmartRef<T>((SmartPrimitive<T>*)objects[index++]);
+        }
+
+        // TODO: Remove? Unused.
+        template <typename T, typename... Args>
+        SmartRef<T> getReferencePointer(Args&&... args) {
+            objects[index] = new SmartPrimitive(new T(args...), deletePointer);
+            return SmartRef<T>((SmartPrimitive<T>*)objects[index++]);
+        }
+    
+        template <typename T>
+        SmartRef<std::vector<T*>> getReferenceArray(int size=0) {
+            objects[index] = new SmartPrimitive(std::vector<T*>(size), clearPointerArray);
+            return SmartRef<std::vector<T*>>((SmartPrimitive<std::vector<T*>>*)objects[index++]);
+        }
+
+    private:
+        OpContainer* preop;
+        OpContainer* postop;
+        SmartBase** objects;
+        int index;
 };
 
 #endif // PGEINTERNAL_SMARTPRIMITIVE_INCLUDED

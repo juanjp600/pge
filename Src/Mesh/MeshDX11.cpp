@@ -21,8 +21,8 @@ MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) {
     vertices.clear(); vertexCount = 0;
     primitives.clear(); primitiveCount = 0;
 
-    dxVertexBuffer = SmartPrimitive<ID3D11Buffer*>(nullptr, [](ID3D11Buffer* const& b) { if (b != nullptr) { b->Release(); } });
-    dxIndexBuffer = SmartPrimitive<ID3D11Buffer*>(nullptr, [](ID3D11Buffer* const& b) { if (b != nullptr) { b->Release(); } });
+    dxVertexBuffer = destructor.referenceDifferentDestructor<ID3D11Buffer*>(GraphicsDX11::destroyChild);
+    dxIndexBuffer = destructor.referenceDifferentDestructor<ID3D11Buffer*>(GraphicsDX11::destroyChild);
 }
 
 void MeshDX11::updateInternalData() {

@@ -10,6 +10,8 @@
 
 using namespace PGE;
 
+#include <iostream>
+
 MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
@@ -22,11 +24,14 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
     vertices.clear(); vertexCount = 0;
 	primitives.clear(); primitiveCount = 0;
 
-    glVertexBufferObject = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](const GLuint& i) { glDeleteBuffers(1, &i); });
-    glIndexBufferObject = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](const GLuint& i) { glDeleteBuffers(1, &i); });
+    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
+
+    glVertexBufferObject = destructor.reference<GLuint>([](const GLuint& i) { glDeleteBuffers(1, &i); });
+    glIndexBufferObject = destructor.reference<GLuint>([](const GLuint& i) { glDeleteBuffers(1, &i); });
     glGenBuffers(1, &glVertexBufferObject);
     glGenBuffers(1, &glIndexBufferObject);
 
+    glVertexArrayObject = destructor.reference<GLuint>([](const GLuint& i) { glDeleteVertexArrays(1, &i); });
     glGenVertexArrays(1, &glVertexArrayObject);
 }
 

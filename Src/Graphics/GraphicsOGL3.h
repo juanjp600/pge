@@ -24,6 +24,16 @@ class Texture;
 
 class GraphicsOGL3 : public GraphicsInternal {
     public:
+        class OpTakeContext : public OpContainer {
+            public:
+                OpTakeContext(GraphicsOGL3* gfx);
+
+                virtual void exec() override;
+
+            private:
+                GraphicsOGL3* graphics;
+        };
+
         GraphicsOGL3(String name,int w,int h,bool fs);
 
         virtual void update() override;
@@ -45,9 +55,11 @@ class GraphicsOGL3 : public GraphicsInternal {
         SDL_GLContext getGlContext() const;
 
     private:
-        SmartPrimitive<SDL_GLContext> glContext;
+        SmartRef<SDL_GLContext> glContext;
 
-        SmartPrimitive<GLuint> glFramebuffer;
+        SmartRef<GLuint> glFramebuffer;
+
+        SmartOrderedDestructor destructor = 2;
 };
 
 }

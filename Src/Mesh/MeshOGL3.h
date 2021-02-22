@@ -27,10 +27,12 @@ class MeshOGL3 : public Mesh {
     private:
         virtual void uploadInternalData() override;
 
-        SmartPrimitive<GLuint> glVertexBufferObject;
-        SmartPrimitive<GLuint> glIndexBufferObject;
+        SmartRef<GLuint> glVertexBufferObject;
+        SmartRef<GLuint> glIndexBufferObject;
 
-        SmartPrimitive<GLuint> glVertexArrayObject;
+        SmartRef<GLuint> glVertexArrayObject;
+
+        SmartOrderedDestructor destructor = 3;
 
         std::vector<uint8_t> glVertexData;
         std::vector<GLuint> glIndexData;

@@ -28,13 +28,15 @@ class TextureDX11 : public Texture {
 
     private:
         D3D11_TEXTURE2D_DESC dxTextureDesc;
-        SmartDeviceChild<ID3D11Texture2D> dxTexture;
+        SmartRef<ID3D11Texture2D*> dxTexture;
         D3D11_SHADER_RESOURCE_VIEW_DESC dxShaderResourceViewDesc;
-        SmartDeviceChild<ID3D11ShaderResourceView> dxShaderResourceView;
+        SmartRef<ID3D11ShaderResourceView*> dxShaderResourceView;
 
-        SmartDeviceChild<ID3D11RenderTargetView> dxRtv;
-        SmartDeviceChild<ID3D11Texture2D> dxZBufferTexture;
-        SmartDeviceChild<ID3D11DepthStencilView> dxZBufferView;
+        SmartRef<ID3D11RenderTargetView*> dxRtv;
+        SmartRef<ID3D11Texture2D*> dxZBufferTexture;
+        SmartRef<ID3D11DepthStencilView*> dxZBufferView;
+
+        SmartOrderedDestructor destructor = 6;
 };
 
 }

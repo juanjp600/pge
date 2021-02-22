@@ -90,13 +90,13 @@ class ShaderOGL3 : public Shader {
         };
         void extractShaderVars(const String& src,String varKind,std::vector<ShaderVar>& varList);
 
-        SmartPrimitive<GLuint>* glVertexShader;
-        SmartPrimitive<GLuint>* glFragmentShader;
-        SmartPrimitive<GLuint>* glShaderProgram;
+        SmartRef<GLuint> glVertexShader;
+        SmartRef<GLuint> glFragmentShader;
+        SmartRef<GLuint> glShaderProgram;
+
+        SmartOrderedDestructor destructor = 3;
 
         Graphics* graphics;
-
-        SmartOrderedDestructor destructor;
 };
 
 }

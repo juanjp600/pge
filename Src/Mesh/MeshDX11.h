@@ -29,11 +29,13 @@ class MeshDX11 : public Mesh {
 
         D3D11_BUFFER_DESC dxVertexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxVertexBufferData;
-        SmartPrimitive<ID3D11Buffer*> dxVertexBuffer;
+        SmartRef<ID3D11Buffer*> dxVertexBuffer;
 
         D3D11_BUFFER_DESC dxIndexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxIndexBufferData;
-        SmartPrimitive<ID3D11Buffer*> dxIndexBuffer;
+        SmartRef<ID3D11Buffer*> dxIndexBuffer;
+
+        SmartOrderedDestructor destructor = 2;
 
         virtual void uploadInternalData();
 };

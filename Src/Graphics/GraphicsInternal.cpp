@@ -31,7 +31,7 @@ Graphics::Renderer GraphicsInternal::getRenderer() {
 }
 
 SDL_Window* GraphicsInternal::getSdlWindow() const {
-    return sdlWindow.get();
+    return sdlWindow();
 }
 
 #if defined(__APPLE__) && defined(__OBJC__)

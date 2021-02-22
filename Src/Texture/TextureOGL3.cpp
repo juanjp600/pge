@@ -43,7 +43,9 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
         }
     }
 
-    glTexture = SmartPrimitive<GLuint>(GL_INVALID_VALUE, destroyTexture);
+    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
+
+    glTexture = destructor.reference<GLuint>(destroyTexture);
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,glTexture());
@@ -80,7 +82,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
         /*glGenFramebuffers(1,&glFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);*/
 
-        glDepthbuffer = SmartPrimitive<GLuint>(GL_INVALID_VALUE, [](const GLuint& i) { glDeleteRenderbuffers(1, &i); });
+        glDepthbuffer = destructor.reference<GLuint>([](const GLuint& i) { glDeleteRenderbuffers(1, &i); });
         glGenRenderbuffers(1, &glDepthbuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, glDepthbuffer());
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
@@ -104,7 +106,9 @@ TextureOGL3::TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
 
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
-    glTexture = SmartPrimitive<GLuint>(GL_INVALID_VALUE, destroyTexture);
+    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
+
+    glTexture = destructor.reference<GLuint>(destroyTexture);
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,glTexture());
@@ -133,7 +137,9 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     filename = fn;
     name = fn.str();
 
-    glTexture = SmartPrimitive<GLuint>(GL_INVALID_VALUE, destroyTexture);
+    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
+
+    glTexture = destructor.reference<GLuint>(destroyTexture);
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,glTexture());
