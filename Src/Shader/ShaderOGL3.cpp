@@ -33,7 +33,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
 
     int errorCode = 0;
-    glVertexShader = destructor.reference<GLuint>([](const GLuint& i) { glDeleteShader(i); }, glCreateShader(GL_VERTEX_SHADER));
+    glVertexShader = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteShader(i); }, glCreateShader(GL_VERTEX_SHADER));
     glShaderSource(glVertexShader(),1,&cstr,nullptr);
     glCompileShader(glVertexShader());
 
@@ -60,7 +60,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     std::vector<ShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource,"uniform",fragmentUniforms);
 
-    glFragmentShader = destructor.reference<GLuint>([](const GLuint& i) { glDeleteShader(i); }, glCreateShader(GL_FRAGMENT_SHADER));
+    glFragmentShader = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteShader(i); }, glCreateShader(GL_FRAGMENT_SHADER));
     glShaderSource(glFragmentShader(),1,&cstr,nullptr);
     glCompileShader(glFragmentShader());
     glGetShaderInfoLog(glFragmentShader(), 512, &len, errorCStr);
@@ -75,7 +75,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
 
     
 
-    glShaderProgram = destructor.reference<GLuint>([](const GLuint& i) { glDeleteProgram(i); }, glCreateProgram());
+    glShaderProgram = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteProgram(i); }, glCreateProgram());
     glAttachShader(glShaderProgram(),glVertexShader());
     glAttachShader(glShaderProgram(),glFragmentShader());
 

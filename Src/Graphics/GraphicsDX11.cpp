@@ -36,7 +36,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
         SDL_SetWindowPosition(sdlWindow(), 0, 0);
     }
 
-    dxgiFactory = destructor.referenceDifferentDestructor<IDXGIFactory1*>(destroyChild);
+    dxgiFactory = destructor.getReferenceDifferentDestructor<IDXGIFactory1*>(destroyChild);
     hResult = CreateDXGIFactory1(__uuidof(IDXGIFactory1), (LPVOID*)(&dxgiFactory));
     if (FAILED(hResult)) {
         throw Exception("GraphicsDX11", "Failed to create DXGI factory (HRESULT " + String::fromInt(hResult) + ")");
@@ -49,7 +49,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
         throw Exception("GraphicsDX11", "Failed to initialize SDL version info: " + String(SDL_GetError()));
     }
 
-    dxSwapChain = destructor.referenceDifferentDestructor<IDXGISwapChain*>(destroyChild);
+    dxSwapChain = destructor.getReferenceDifferentDestructor<IDXGISwapChain*>(destroyChild);
     ZeroMemory(&dxSwapChainDesc, sizeof(dxSwapChainDesc));
     dxSwapChainDesc.BufferCount = 1;
     dxSwapChainDesc.BufferDesc.Width = w;
@@ -65,8 +65,8 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
 
     D3D_FEATURE_LEVEL dxFeatureLevel[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_9_3 };
 
-    dxContext = destructor.referenceDifferentDestructor<ID3D11DeviceContext*>(destroyChild);
-    dxDevice = destructor.reference<ID3D11Device*>([](ID3D11Device* const& d) { d->Release(); });
+    dxContext = destructor.getReferenceDifferentDestructor<ID3D11DeviceContext*>(destroyChild);
+    dxDevice = destructor.getReference<ID3D11Device*>([](ID3D11Device* const& d) { d->Release(); });
     hResult = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, dxFeatureLevel, 2, D3D11_SDK_VERSION,
         &dxDevice, NULL, &dxContext);
 
@@ -87,7 +87,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
 
     dxgiDevice->Release();
 
-    dxBackBufferRtv = destructor.referenceDifferentDestructor<ID3D11RenderTargetView*>(destroyChild);
+    dxBackBufferRtv = destructor.getReferenceDifferentDestructor<ID3D11RenderTargetView*>(destroyChild);
     ID3D11Texture2D* backBuffer;
     hResult = dxSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
     if (FAILED(hResult)) {
@@ -100,7 +100,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     backBuffer->Release();
 
     // Create depth stencil texture
-    dxZBufferTexture = destructor.referenceDifferentDestructor<ID3D11Texture2D*>(destroyChild);
+    dxZBufferTexture = destructor.getReferenceDifferentDestructor<ID3D11Texture2D*>(destroyChild);
     D3D11_TEXTURE2D_DESC descDepth;
     ZeroMemory(&descDepth, sizeof(descDepth));
     descDepth.Width = width;
@@ -120,7 +120,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     }
 
     // Create the depth stencil view
-    dxZBufferView = destructor.referenceDifferentDestructor<ID3D11DepthStencilView*>(destroyChild);
+    dxZBufferView = destructor.getReferenceDifferentDestructor<ID3D11DepthStencilView*>(destroyChild);
     D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
     ZeroMemory(&descDSV, sizeof(descDSV));
     descDSV.Format = descDepth.Format;
@@ -133,7 +133,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
 
     dxContext->OMSetRenderTargets(1, &dxBackBufferRtv, dxZBufferView());
 
-    dxRasterizerState = destructor.referenceDifferentDestructor<ID3D11RasterizerState*>(destroyChild);
+    dxRasterizerState = destructor.getReferenceDifferentDestructor<ID3D11RasterizerState*>(destroyChild);
     ZeroMemory(&dxRasterizerStateDesc, sizeof(D3D11_RASTERIZER_DESC));
     dxRasterizerStateDesc.AntialiasedLineEnable = false;
     dxRasterizerStateDesc.CullMode = D3D11_CULL_BACK;
@@ -149,7 +149,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     }
     dxContext->RSSetState(dxRasterizerState());
 
-    dxBlendState = destructor.referenceDifferentDestructor<ID3D11BlendState*>(destroyChild);
+    dxBlendState = destructor.getReferenceDifferentDestructor<ID3D11BlendState*>(destroyChild);
     ZeroMemory(&dxBlendStateDesc, sizeof(D3D11_BLEND_DESC));
     dxBlendStateDesc.RenderTarget[0].BlendEnable = true;
     dxBlendStateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -187,7 +187,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    dxDepthStencilState = destructor.referenceDifferentDestructor<std::vector<ID3D11DepthStencilState*>>(destroyChildren, 3);
+    dxDepthStencilState = destructor.getReferenceDifferentDestructor<std::vector<ID3D11DepthStencilState*>>(destroyChildren, 3);
     hResult = dxDevice->CreateDepthStencilState(&depthStencilDesc, &dxDepthStencilState()[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE]);
     if (FAILED(hResult)) {
         throw Exception("GraphicsDX11", "Failed to create ENABLED_WRITE depth stencil state (HRESULT " + String::fromInt(hResult) + ")");

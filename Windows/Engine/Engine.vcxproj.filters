@@ -207,9 +207,6 @@
     <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp">
       <Filter>Src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Misc\SmartPrimitive.cpp">
-      <Filter>Src\Misc</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">

@@ -44,7 +44,7 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
 
     destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)this));
 
-    glContext = destructor.reference<SDL_GLContext>([](const SDL_GLContext& c) { SDL_GL_DeleteContext(c); }, SDL_GL_CreateContext(sdlWindow()));
+    glContext = destructor.getReference<SDL_GLContext>([](const SDL_GLContext& c) { SDL_GL_DeleteContext(c); }, SDL_GL_CreateContext(sdlWindow()));
     // And make it later in the day.
     SDL_GL_MakeCurrent(sdlWindow(), glContext());
 
@@ -73,7 +73,7 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
 
     setViewport(Rectanglei(0,0,w,h));
 
-    glFramebuffer = destructor.reference<GLuint>([](const GLuint& i) { if (i != GL_INVALID_VALUE) { glBindFramebuffer(GL_FRAMEBUFFER, 0);  glDeleteFramebuffers(1, &i); } }, GL_INVALID_VALUE);
+    glFramebuffer = destructor.getReference<GLuint>([](const GLuint& i) { if (i != GL_INVALID_VALUE) { glBindFramebuffer(GL_FRAMEBUFFER, 0);  glDeleteFramebuffers(1, &i); } }, GL_INVALID_VALUE);
     glGenFramebuffers(1,&glFramebuffer);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {

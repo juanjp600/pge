@@ -43,7 +43,6 @@
     <ClCompile Include="..\..\Src\Misc\BinaryReader.cpp" />
     <ClCompile Include="..\..\Src\Misc\FilePath.cpp" />
     <ClCompile Include="..\..\Src\Misc\FileUtil.cpp" />
-    <ClCompile Include="..\..\Src\Misc\SmartPrimitive.cpp" />
     <ClCompile Include="..\..\Src\Misc\String.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp" />

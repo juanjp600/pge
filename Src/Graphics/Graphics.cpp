@@ -11,10 +11,10 @@ Graphics::Graphics(String name, int w, int h, bool fs) {
     caption = name;
     width = w; height = h; fullscreen = fs;
 
-    eventSubscriber = destructor.reference<SysEvents::Subscriber*>([](SysEvents::Subscriber* const& s) { SysEventsInternal::unsubscribe(s); }, new SysEventsInternal::SubscriberInternal(this, SysEventsInternal::SubscriberInternal::EventType::WINDOW));
+    eventSubscriber = destructor.getReference<SysEvents::Subscriber*>([](SysEvents::Subscriber* const& s) { SysEventsInternal::unsubscribe(s); }, new SysEventsInternal::SubscriberInternal(this, SysEventsInternal::SubscriberInternal::EventType::WINDOW));
     SysEventsInternal::subscribe(eventSubscriber());
 
-    sdlWindow = destructor.reference<SDL_Window*>([](SDL_Window* const& w) { SDL_DestroyWindow(w); }, nullptr);
+    sdlWindow = destructor.getReference<SDL_Window*>([](SDL_Window* const& w) { SDL_DestroyWindow(w); }, nullptr);
 
     open = true;
     focused = true;

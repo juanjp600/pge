@@ -26,12 +26,12 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
 
     destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
 
-    glVertexBufferObject = destructor.reference<GLuint>([](const GLuint& i) { glDeleteBuffers(1, &i); });
-    glIndexBufferObject = destructor.reference<GLuint>([](const GLuint& i) { glDeleteBuffers(1, &i); });
+    glVertexBufferObject = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteBuffers(1, &i); });
+    glIndexBufferObject = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteBuffers(1, &i); });
     glGenBuffers(1, &glVertexBufferObject);
     glGenBuffers(1, &glIndexBufferObject);
 
-    glVertexArrayObject = destructor.reference<GLuint>([](const GLuint& i) { glDeleteVertexArrays(1, &i); });
+    glVertexArrayObject = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteVertexArrays(1, &i); });
     glGenVertexArrays(1, &glVertexArrayObject);
 }
 
