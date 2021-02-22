@@ -1,6 +1,6 @@
 #include <SysEvents/SysEvents.h>
 #include "SysEventsInternal.h"
-#include "../Window/WindowInternal.h"
+#include "../Graphics/GraphicsInternal.h"
 
 using namespace PGE;
 
@@ -26,7 +26,7 @@ void SysEventsInternal::update() {
     while (SDL_PollEvent(&event)) {
         for (std::set<Subscriber*>::iterator it=subscribers.begin();it!=subscribers.end();it++) {
             SubscriberInternal* subscriber = (SubscriberInternal*)(*it);
-            SDL_Window* sdlWindow = ((WindowInternal*)subscriber->getWindow())->getSdlWindow();
+            SDL_Window* sdlWindow = ((GraphicsInternal*)subscriber->getGraphics())->getSdlWindow();
             bool takeEvent = false;
             if (subscriber->getEventType()==SubscriberInternal::EventType::WINDOW) {
                 if (event.type == SDL_WINDOWEVENT) {
@@ -62,14 +62,14 @@ void SysEventsInternal::update() {
 
 SysEventsInternal::SubscriberInternal::SubscriberInternal() {}
 
-SysEventsInternal::SubscriberInternal::SubscriberInternal(Window* w,EventType et) {
-    window = w; eventType = et;
+SysEventsInternal::SubscriberInternal::SubscriberInternal(Graphics* gfx,EventType et) {
+    graphics = gfx; eventType = et;
     receivedEvent = false;
     events.clear();
 }
 
-Window* SysEventsInternal::SubscriberInternal::getWindow() const {
-    return window;
+Graphics* SysEventsInternal::SubscriberInternal::getGraphics() const {
+    return graphics;
 }
 
 SysEventsInternal::SubscriberInternal::EventType SysEventsInternal::SubscriberInternal::getEventType() const {

@@ -4,7 +4,6 @@
 #include <Graphics/Graphics.h>
 
 #include "../Shader/ShaderVK.h"
-#include "../Window/WindowVK.h"
 #include "../Graphics/GraphicsVK.h"
 
 using namespace PGE;
@@ -32,16 +31,12 @@ MeshVK::MeshVK(Graphics* gfx, Primitive::TYPE pt) {
 	inputAssemblyInfo = vk::PipelineInputAssemblyStateCreateInfo({}, vkPrim, false);
 }
 
-MeshVK::~MeshVK() {
-	cleanup();
-}
-
 // TODO: Crash when no vertices.
 void MeshVK::updateInternalData() {
 	if (!mustUpdateInternalData) { return; }
 
-	WindowVK* window = (WindowVK*)graphics->getWindow();
-	vk::Device device = window->getDevice();
+	GraphicsVK* graphics = (GraphicsVK*)this->graphics;
+	vk::Device device = graphics->getDevice();
 	ShaderVK* shader = (ShaderVK*)material->getShader();
 
 	if (pipeline != VK_NULL_HANDLE) {
@@ -126,26 +121,26 @@ void MeshVK::updateInternalData() {
 	device.unmapMemory(stagingMemory);
 
 	createBuffer(finalTotalSize, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, dataBuffer, dataMemory);
-	window->transfer(stagingBuffer, dataBuffer, finalTotalSize);
+	graphics->transfer(stagingBuffer, dataBuffer, finalTotalSize);
 
 	device.destroyBuffer(stagingBuffer);
 	device.freeMemory(stagingMemory);
 
-	vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shader->getShaderStageInfo(), shader->getVertexInputInfo(), &inputAssemblyInfo, nullptr, window->getViewportInfo(), window->getRasterizationInfo(), window->getMultisamplerInfo(), nullptr, window->getColorBlendInfo(), nullptr, *shader->getLayout(), *window->getRenderPass(), 0, {}, -1);
+	vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shader->getShaderStageInfo(), shader->getVertexInputInfo(), &inputAssemblyInfo, nullptr, graphics->getViewportInfo(), graphics->getRasterizationInfo(), graphics->getMultisamplerInfo(), nullptr, graphics->getColorBlendInfo(), nullptr, *shader->getLayout(), *graphics->getRenderPass(), 0, {}, -1);
 	pipeline = device.createGraphicsPipeline(nullptr, pipelineInfo).value;
 
 	mustUpdateInternalData = false;
 }
 
 void MeshVK::createBuffer(int size, vk::BufferUsageFlags bufferUsage, vk::MemoryPropertyFlags memProps, vk::Buffer& buffer, vk::DeviceMemory& memory) {
-	WindowVK* window = (WindowVK*)graphics->getWindow();
-	const vk::Device& device = window->getDevice();
+	GraphicsVK* graphics = (GraphicsVK*)this->graphics;
+	const vk::Device& device = graphics->getDevice();
 
 	vk::BufferCreateInfo indexBufferInfo = vk::BufferCreateInfo({}, size, bufferUsage, vk::SharingMode::eExclusive);
 	buffer = device.createBuffer(indexBufferInfo);
 
 	vk::MemoryRequirements memReq = device.getBufferMemoryRequirements(buffer);
-	int memType = window->findMemoryType(memReq.memoryTypeBits, memProps);
+	int memType = graphics->findMemoryType(memReq.memoryTypeBits, memProps);
 	vk::MemoryAllocateInfo memoryInfo = vk::MemoryAllocateInfo(memReq.size, memType);
 
 	memory = device.allocateMemory(memoryInfo);
@@ -165,7 +160,7 @@ void MeshVK::render() {
 	comBuffer.drawIndexed(indicesCount, 1, 0, 0, 0);
 }
 
-void MeshVK::cleanup() {
+/*void MeshVK::cleanup() {
 	vk::Device device = ((GraphicsVK*)graphics)->getDevice();
 	// TODO test over frames in flight.
 	device.waitIdle();
@@ -174,12 +169,7 @@ void MeshVK::cleanup() {
 		device.destroyBuffer(dataBuffer);
 		device.freeMemory(dataMemory);
 	}
-}
-
-void MeshVK::throwException(String func, String details) {
-	cleanup();
-	throw Exception("MeshVK::" + func, details);
-}
+}*/
 
 void MeshVK::uploadInternalData() {
 

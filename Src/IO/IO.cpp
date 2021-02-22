@@ -4,25 +4,25 @@
 #endif
 
 #include "../SysEvents/SysEventsInternal.h"
-#include <Window/Window.h>
-#include "../Window/WindowInternal.h"
 #include <IO/IO.h>
 #include "IOInternal.h"
 #include <Exception/Exception.h>
+#include <Graphics/Graphics.h>
+#include "../Graphics/GraphicsInternal.h"
 
 using namespace PGE;
 
-IO* IO::create(Window* window) {
-    return new IOInternal(window);
+IO* IO::create(Graphics* graphics) {
+    return new IOInternal(graphics);
 }
 
-IOInternal::IOInternal(Window* win) {
-    window = win;
+IOInternal::IOInternal(Graphics* gfx) {
+    graphics = gfx;
 
-    keyboardSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::KEYBOARD);
-    mouseSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::MOUSE);
-    controllerSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::CONTROLLER);
-    textSubscriber = new SysEventsInternal::SubscriberInternal(window,SysEventsInternal::SubscriberInternal::EventType::TEXTINPUT);
+    keyboardSubscriber = new SysEventsInternal::SubscriberInternal(graphics,SysEventsInternal::SubscriberInternal::EventType::KEYBOARD);
+    mouseSubscriber = new SysEventsInternal::SubscriberInternal(graphics,SysEventsInternal::SubscriberInternal::EventType::MOUSE);
+    controllerSubscriber = new SysEventsInternal::SubscriberInternal(graphics,SysEventsInternal::SubscriberInternal::EventType::CONTROLLER);
+    textSubscriber = new SysEventsInternal::SubscriberInternal(graphics,SysEventsInternal::SubscriberInternal::EventType::TEXTINPUT);
 
     SysEventsInternal::subscribe(keyboardSubscriber);
     SysEventsInternal::subscribe(mouseSubscriber);
@@ -361,7 +361,7 @@ Vector2f IOInternal::getMousePosition() const {
 }
 
 void IOInternal::setMousePosition(Vector2f position) {
-    if (!window->isFocused()) { return; }
+    if (!graphics->isWindowFocused()) { return; }
 
     mousePos = position;
 
@@ -379,7 +379,7 @@ void IOInternal::setMousePosition(Vector2f position) {
     // For some reason updating the mouse position this way doesn't update the cursor position, so we need to tell Cocoa to sync that.
     CGAssociateMouseAndMouseCursorPosition(true);
 #else
-    SDL_WarpMouseInWindow(((WindowInternal*)window)->getSdlWindow(), position.x, position.y);
+    SDL_WarpMouseInWindow(((GraphicsInternal*)graphics)->getSdlWindow(), position.x, position.y);
 #endif
 }
 

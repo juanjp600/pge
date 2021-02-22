@@ -3,6 +3,7 @@
 
 #include <Misc/String.h>
 
+// TODO: Move consistency across classes?
 namespace PGE {
 
 class Vector2f; class Vector3f; class Vector2i;
@@ -132,6 +133,9 @@ class Vector2i {
         Vector2i(int s);
         Vector2i(int ix,int iy);
         Vector2i(const Vector2f& vf);
+
+        bool operator==(const Vector2i& other) const;
+        bool operator!=(const Vector2i& other) const;
 
         int lengthSquared() const;
         float length() const;

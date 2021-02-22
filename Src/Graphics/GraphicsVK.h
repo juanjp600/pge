@@ -3,21 +3,22 @@
 
 #include <vulkan/vulkan.hpp>
 
-#include <Graphics/Graphics.h>
+#include "GraphicsInternal.h"
 
 namespace PGE {
 
-class GraphicsVK : public Graphics {
+class GraphicsVK : public GraphicsInternal {
     public:
         GraphicsVK(String name, int w = 1280, int h = 720, bool fs = false);
-        ~GraphicsVK();
 
-        virtual Renderer getRenderer() override;
+        void swap() override;
 
         void clear(Color color) override;
 
-        virtual void setDepthTest(bool enabled) override;
-        virtual bool getDepthTest() const override;
+        int validNextHighestMemoryRange(int input);
+        int findMemoryType(int typeFilter, vk::MemoryPropertyFlags memPropFlags);
+
+        void transfer(const vk::Buffer& src, const vk::Buffer& dst, int size);
 
         void setRenderTarget(Texture* renderTarget) override;
         void setRenderTargets(std::vector<Texture*> renderTargets) override;
@@ -26,13 +27,58 @@ class GraphicsVK : public Graphics {
         void setViewport(Rectanglei vp) override;
 
         vk::Device getDevice() const;
+        vk::PipelineViewportStateCreateInfo* getViewportInfo();
+        vk::PipelineColorBlendStateCreateInfo* getColorBlendInfo();
+        vk::PipelineRasterizationStateCreateInfo* getRasterizationInfo();
+        vk::PipelineMultisampleStateCreateInfo* getMultisamplerInfo();
+        vk::RenderPass* getRenderPass();
         vk::CommandBuffer getCurrentCommandBuffer();
 
     private:
-        void throwException(String func, String details) override;
-        void cleanup() override;
+        vk::Instance vkInstance;
+        vk::PhysicalDevice physicalDevice;
+        vk::Device device;
+        vk::SurfaceKHR vkSurface;
 
-        bool depthTestEnabled;
+        vk::Queue graphicsQueue;
+        vk::Queue presentQueue;
+        vk::Queue transferQueue;
+
+        vk::SwapchainKHR swapchain;
+        vk::Extent2D swapchainExtent;
+        vk::SurfaceFormatKHR swapchainFormat;
+        std::vector<vk::ImageView> swapchainImageViews;
+
+        vk::Viewport viewport;
+        vk::Rect2D scissor;
+        vk::PipelineViewportStateCreateInfo viewportInfo;
+
+        vk::PipelineColorBlendAttachmentState colorBlendAttachmentState;
+        vk::PipelineColorBlendStateCreateInfo colorBlendInfo;
+
+        vk::PipelineRasterizationStateCreateInfo rasterizationInfo;
+        vk::PipelineMultisampleStateCreateInfo multisamplerInfo;
+
+        vk::RenderPass renderPass;
+
+        std::vector<vk::Framebuffer> framebuffers;
+
+        std::vector<vk::CommandPool> comPools;
+        std::vector<vk::CommandBuffer> comBuffers;
+        vk::CommandPool transferComPool;
+        vk::CommandBuffer transferComBuffer;
+
+        std::vector<vk::Semaphore> imageAvailableSemaphores;
+        std::vector<vk::Semaphore> renderFinishedSemaphores;
+        std::vector<vk::Fence> inFlightFences;
+        std::vector<vk::Fence> imagesInFlight;
+
+        const int MAX_FRAMES_IN_FLIGHT;
+        int currentFrame;
+
+        uint32_t backBufferIndex;
+
+        void acquireNextImage();
 };
 
 }

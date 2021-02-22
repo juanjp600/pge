@@ -22,9 +22,6 @@
     <Filter Include="Src\Mesh">
       <UniqueIdentifier>{0950afbc-52c4-4f23-ac2f-c6a346e67691}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Window">
-      <UniqueIdentifier>{5f6bbd01-3273-4079-86ea-e3ac9b9f22e8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\UserInput">
       <UniqueIdentifier>{6f3b5972-7d01-4ac1-8eec-8932b36f0ebe}</UniqueIdentifier>
     </Filter>
@@ -69,9 +66,6 @@
     </Filter>
     <Filter Include="Include\UserInput">
       <UniqueIdentifier>{dd80612f-92bd-47a2-9b47-b92643a2fc4e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\Window">
-      <UniqueIdentifier>{53d3a034-f2b7-4796-9aec-486aac004ab4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\SysEvents">
       <UniqueIdentifier>{8861551c-1482-4205-8649-e471619f6b87}</UniqueIdentifier>
@@ -141,9 +135,6 @@
     <ClCompile Include="..\..\Src\Material\Material.cpp">
       <Filter>Src\Material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Window\WindowDX11.cpp">
-      <Filter>Src\Window</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\UserInput\UserInput.cpp">
       <Filter>Src\UserInput</Filter>
     </ClCompile>
@@ -161,9 +152,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Texture\Texture.cpp">
       <Filter>Src\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Window\Window.cpp">
-      <Filter>Src\Window</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Misc\String.cpp">
       <Filter>Src\Misc</Filter>
@@ -216,9 +204,6 @@
     <ClCompile Include="..\..\Src\Texture\TextureOGL3.cpp">
       <Filter>Src\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Window\WindowOGL3.cpp">
-      <Filter>Src\Window</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp">
       <Filter>Src\Graphics</Filter>
     </ClCompile>
@@ -227,9 +212,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\GraphicsVK.cpp">
       <Filter>Src\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Window\WindowVK.cpp">
-      <Filter>Src\Window</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Texture\TextureVK.cpp">
       <Filter>Src\Texture</Filter>
@@ -244,9 +226,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h">
       <Filter>Src\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Window\WindowDX11.h">
-      <Filter>Src\Window</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Texture\TextureDX11.h">
       <Filter>Src\Texture</Filter>
@@ -287,9 +266,6 @@
     <ClInclude Include="..\..\Include\Misc\String.h">
       <Filter>Include\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Window\Window.h">
-      <Filter>Include\Window</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\UserInput\UserInput.h">
       <Filter>Include\UserInput</Filter>
     </ClInclude>
@@ -316,9 +292,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Math\Plane.h">
       <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Window\WindowInternal.h">
-      <Filter>Src\Window</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Audio\AudioInternal.h">
       <Filter>Src\Audio</Filter>
@@ -359,17 +332,17 @@
     <ClInclude Include="..\..\Src\Texture\TextureOGL3.h">
       <Filter>Src\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Window\WindowOGL3.h">
-      <Filter>Src\Window</Filter>
+    <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Misc\SmartPrimitive.h">
+      <Filter>Src\Misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Mesh\MeshVK.h">
       <Filter>Src\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Graphics\GraphicsVK.h">
       <Filter>Src\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Window\WindowVK.h">
-      <Filter>Src\Window</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Texture\TextureVK.h">
       <Filter>Src\Texture</Filter>

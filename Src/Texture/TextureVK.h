@@ -15,10 +15,6 @@ class TextureVK : public Texture {
         virtual Texture* copy() const override;
 
         void* getNative() const override;
-
-    private:
-        void cleanup() override;
-        void throwException(String func, String details) override;
 };
 
 }

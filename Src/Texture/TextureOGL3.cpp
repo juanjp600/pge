@@ -10,6 +10,10 @@
 
 using namespace PGE;
 
+static void destroyTexture(const GLuint& texture) {
+    glDeleteTextures(1, &texture);
+}
+
 TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,Texture::FORMAT fmt) {
     GLuint glError = GL_NO_ERROR;
 
@@ -39,9 +43,12 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
         }
     }
 
+    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
+
+    glTexture = destructor.getReference<GLuint>(destroyTexture);
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,glTexture);
+    glBindTexture(GL_TEXTURE_2D,glTexture());
 
     GLint glInternalFormat;
     GLenum glFormat;
@@ -62,7 +69,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
     glTexImage2D(GL_TEXTURE_2D,0,glInternalFormat,realWidth,realHeight,0,glFormat,glPixelType,buffer);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("TextureOGL3(w,h,rt)", "Failed to create texture ("+String::fromInt(realWidth)+","+String::fromInt(realHeight)+"; GLERROR "+String::format(glError, "%u")+")");
+        throw Exception("TextureOGL3(w,h,rt)", "Failed to create texture ("+String::fromInt(realWidth)+","+String::fromInt(realHeight)+"; GLERROR "+String::format(glError, "%u")+")");
     }
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -75,8 +82,9 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
         /*glGenFramebuffers(1,&glFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);*/
 
+        glDepthbuffer = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteRenderbuffers(1, &i); });
         glGenRenderbuffers(1, &glDepthbuffer);
-        glBindRenderbuffer(GL_RENDERBUFFER, glDepthbuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, glDepthbuffer());
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
         //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, glDepthbuffer);
@@ -98,13 +106,16 @@ TextureOGL3::TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
 
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
+    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
+
+    glTexture = destructor.getReference<GLuint>(destroyTexture);
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,glTexture);
+    glBindTexture(GL_TEXTURE_2D,glTexture());
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,fiBuffer);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("TextureOGL3(fn)", "Failed to create texture (filename: "+filename.str()+"; GLERROR "+String::format(glError, "%u")+")");
+        throw Exception("TextureOGL3(fn)", "Failed to create texture (filename: "+filename.str()+"; GLERROR "+String::format(glError, "%u")+")");
     }
 
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -126,13 +137,16 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     filename = fn;
     name = fn.str();
 
+    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
+
+    glTexture = destructor.getReference<GLuint>(destroyTexture);
     glGenTextures(1,&glTexture);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,glTexture);
+    glBindTexture(GL_TEXTURE_2D,glTexture());
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,nullptr);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("TextureOGL3(fn,threadMgr)", "Failed to create texture (filename: "+filename.str()+"; GLERROR "+String::format(glError, "%u")+")");
+        throw Exception("TextureOGL3(fn,threadMgr)", "Failed to create texture (filename: "+filename.str()+"; GLERROR "+String::format(glError, "%u")+")");
     }
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -170,7 +184,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     } mainThreadRequest;
     mainThreadRequest.filename = filename;
     mainThreadRequest.graphics = (GraphicsOGL3*)graphics;
-    mainThreadRequest.glTexture = glTexture;
+    mainThreadRequest.glTexture = glTexture();
 
     class TextureLoadRequest : public ThreadManager::NewThreadRequest {
         public:
@@ -202,25 +216,6 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     threadManager->requestExecutionOnNewThread(textureLoadRequest);
 }
 
-TextureOGL3::~TextureOGL3() {
-    cleanup();
-}
-
-void TextureOGL3::throwException(String func, String details) {
-    cleanup();
-    throw Exception("TextureOGL3::" + func, details);
-}
-
-void TextureOGL3::cleanup() {
-    ((GraphicsOGL3*)graphics)->takeGlContext();
-
-    if (isRT) {
-        //glDeleteFramebuffers(1,&glFramebuffer);
-        glDeleteRenderbuffers(1,&glDepthbuffer);
-    }
-    glDeleteTextures(1,&glTexture);
-}
-
 // TODO: Test.
 Texture* TextureOGL3::copy() const {
     TextureOGL3* copy = new TextureOGL3(graphics, width, height, false, nullptr, format);
@@ -232,7 +227,7 @@ Texture* TextureOGL3::copy() const {
 }
 
 GLuint TextureOGL3::getGlTexture() const {
-    return glTexture;
+    return glTexture();
 }
 
 /*GLuint TextureOGL3::getGlFramebuffer() const {
@@ -240,9 +235,9 @@ GLuint TextureOGL3::getGlTexture() const {
 }*/
 
 GLuint TextureOGL3::getGlDepthbuffer() const {
-    return glDepthbuffer;
+    return glDepthbuffer();
 }
 
 void* TextureOGL3::getNative() const {
-    return (void*)glTexture;
+    return (void*)&glTexture;
 }

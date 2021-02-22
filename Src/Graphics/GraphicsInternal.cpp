@@ -1,3 +1,4 @@
+#include "GraphicsInternal.h"
 #include "GraphicsDX11.h"
 #include "GraphicsOGL3.h"
 #include "GraphicsVK.h"
@@ -12,24 +13,66 @@
 #include "../Texture/TextureVK.h"
 #include "../Texture/TextureInternal.h"
 
+#if defined(__APPLE__) && defined(__OBJC__)
+#import <Foundation/Foundation.h>
+#include <SDL_syswm.h>
+#endif
+
 using namespace PGE;
 
-Graphics* Graphics::create(Renderer r, String name, int w, int h, bool fs) {
+GraphicsInternal::GraphicsInternal(String name, int w, int h, bool fs) : Graphics(name, w, h, fs) {}
+
+void GraphicsInternal::setRenderer(Renderer r) {
+    renderer = r;
+}
+
+Graphics::Renderer GraphicsInternal::getRenderer() {
+    return renderer;
+}
+
+SDL_Window* GraphicsInternal::getSdlWindow() const {
+    return sdlWindow();
+}
+
+#if defined(__APPLE__) && defined(__OBJC__)
+NSWindow* GraphicsInternal::getCocoaWindow() const {
+    SDL_SysWMinfo info;
+    SDL_VERSION(&info.version);
+    SDL_GetWindowWMInfo(getSdlWindow(), &info);
+
+    return info.info.cocoa.window;
+}
+#endif
+
+Graphics* Graphics::create(String name, int w, int h, bool fs, Renderer r) {
+    if (r == Renderer::Default) {
+#ifdef WINDOWS
+        r = Renderer::DirectX11;
+#else
+        r = Renderer::OpenGL;
+#endif
+    }
+    GraphicsInternal* gfx;
     switch (r) {
         case Renderer::DirectX11: {
-            return new GraphicsDX11(name, w, h, fs);
-        }
+            gfx = new GraphicsDX11(name, w, h, fs);
+        } break;
         case Renderer::OpenGL: {
-            return new GraphicsOGL3(name, w, h, fs);
-        }
+            gfx = new GraphicsOGL3(name, w, h, fs);
+        } break;
         case Renderer::Vulkan: {
-            return new GraphicsVK(name, w, h, fs);
-        }
+            gfx = new GraphicsVK(name, w, h, fs);
+        } break;
+        default: {
+            gfx = nullptr;
+        } break;
     }
+    gfx->setRenderer(r);
+    return gfx;
 }
 
 Shader* Shader::load(Graphics* gfx, const FilePath& path) {
-    switch (gfx->getRenderer()) {
+    switch (((GraphicsInternal*)gfx)->getRenderer()) {
         case Graphics::Renderer::DirectX11: {
             return new ShaderDX11(gfx, path);
         }
@@ -39,11 +82,14 @@ Shader* Shader::load(Graphics* gfx, const FilePath& path) {
         case Graphics::Renderer::Vulkan: {
             return new ShaderVK(gfx, path);
         }
+        default: {
+            return nullptr;
+        }
     }
 }
 
 Mesh* Mesh::create(Graphics* gfx, Primitive::TYPE pt) {
-    switch (gfx->getRenderer()) {
+    switch (((GraphicsInternal*)gfx)->getRenderer()) {
         case Graphics::Renderer::DirectX11: {
             return new MeshDX11(gfx, pt);
         }
@@ -52,6 +98,9 @@ Mesh* Mesh::create(Graphics* gfx, Primitive::TYPE pt) {
         }
         case Graphics::Renderer::Vulkan: {
             return new MeshVK(gfx, pt);
+        }
+        default: {
+            return nullptr;
         }
     }
 }
@@ -69,7 +118,7 @@ Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
         delete[] fiBuffer;
         throw e;
     }
-    switch (gfx->getRenderer()) {
+    switch (((GraphicsInternal*)gfx)->getRenderer()) {
         case Graphics::Renderer::DirectX11: {
             return new TextureDX11(gfx, fiBuffer, width, height, realWidth, realHeight);
         }
@@ -79,7 +128,11 @@ Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
         case Graphics::Renderer::Vulkan: {
             return new TextureVK(gfx, fiBuffer, width, height, realWidth, realHeight);
         }
+        default: {
+            return nullptr;
+        }
     }
+    // TODO: lol
     delete[] fiBuffer;
 }
 
@@ -96,7 +149,7 @@ Texture* Texture::load(Graphics* gfx, const FilePath& filename) {
         delete[] fiBuffer;
         throw e;
     }
-    switch (gfx->getRenderer()) {
+    switch (((GraphicsInternal*)gfx)->getRenderer()) {
         case Graphics::Renderer::DirectX11: {
             return new TextureDX11(gfx, fiBuffer, width, height, realWidth, realHeight);
         }
@@ -106,12 +159,15 @@ Texture* Texture::load(Graphics* gfx, const FilePath& filename) {
         case Graphics::Renderer::Vulkan: {
             return new TextureVK(gfx, fiBuffer, width, height, realWidth, realHeight);
         }
+        default: {
+            return nullptr;
+        }
     }
     delete[] fiBuffer;
 }
 
 Texture* Texture::load(Graphics* gfx, const FilePath& filename, ThreadManager* threadManager) {
-    switch (gfx->getRenderer()) {
+    switch (((GraphicsInternal*)gfx)->getRenderer()) {
         case Graphics::Renderer::DirectX11: {
             return new TextureDX11(gfx, filename, threadManager);
         }
@@ -121,11 +177,14 @@ Texture* Texture::load(Graphics* gfx, const FilePath& filename, ThreadManager* t
         case Graphics::Renderer::Vulkan: {
             return new TextureVK(gfx, filename, threadManager);
         }
+        default: {
+            return nullptr;
+        }
     }
 }
 
 Texture* Texture::create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer, FORMAT fmt) {
-    switch (gfx->getRenderer()) {
+    switch (((GraphicsInternal*)gfx)->getRenderer()) {
         case Graphics::Renderer::DirectX11: {
             return new TextureDX11(gfx, w, h, renderTarget, buffer, fmt);
         }
@@ -134,6 +193,9 @@ Texture* Texture::create(Graphics* gfx, int w, int h, bool renderTarget, const v
         }
         case Graphics::Renderer::Vulkan: {
             return new TextureVK(gfx, w, h, renderTarget, buffer, fmt);
+        }
+        default: {
+            return nullptr;
         }
     }
 }

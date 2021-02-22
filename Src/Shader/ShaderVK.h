@@ -4,7 +4,6 @@
 
 #include <vulkan/vulkan.hpp>
 
-#include "../Window/WindowVK.h"
 #include "../Graphics/GraphicsVK.h"
 
 namespace PGE {
@@ -12,7 +11,6 @@ namespace PGE {
     class ShaderVK : public Shader {
         public:
             ShaderVK(Graphics* gfx, const FilePath& path);
-            ~ShaderVK();
 
             Constant* getVertexShaderConstant(String name) override;
             Constant* getFragmentShaderConstant(String name) override;
@@ -41,9 +39,6 @@ namespace PGE {
 
             vk::PipelineLayout layout;
 
-            void cleanup() override;
-            void throwException(String func, String details) override;
-
             class ConstantVK : public Constant {
                 public:
                     ConstantVK(Graphics* gfx, vk::PipelineLayout lay, vk::ShaderStageFlags stg, int off);
@@ -62,8 +57,6 @@ namespace PGE {
                     vk::PipelineLayout layout;
                     vk::ShaderStageFlags stage;
                     int offset;
-
-                    void throwException(String func, String details) override;
             };
             std::map<long long, ConstantVK*> vertexConstantMap;
             std::map<long long, ConstantVK*> fragmentConstantMap;

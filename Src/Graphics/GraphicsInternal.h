@@ -1,24 +1,31 @@
 #ifndef PGEINTERNAL_WINDOWINTERNAL_H_INCLUDED
 #define PGEINTERNAL_WINDOWINTERNAL_H_INCLUDED
 
-#include <SDL.h>
-#include <Window/Window.h>
+#include <Graphics/Graphics.h>
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <AppKit/AppKit.h>
 #endif
 
+struct SDL_Window;
+
 namespace PGE {
 
-class WindowInternal : public Window {
+class GraphicsInternal : public Graphics {
     public:
+        GraphicsInternal(String name, int w, int h, bool fs);
+
+        void setRenderer(Renderer r);
+        Renderer getRenderer();
+
         SDL_Window* getSdlWindow() const;
 #if defined(__APPLE__) && defined(__OBJC__)
         NSWindow* getCocoaWindow() const;
 #endif
 
-    protected:
-        SDL_Window* sdlWindow;
+    private:
+        // Hiding.
+        using Graphics::renderer;
 };
 
 }

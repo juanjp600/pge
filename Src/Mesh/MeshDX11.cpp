@@ -1,6 +1,4 @@
 #include "MeshDX11.h"
-#include <Window/Window.h>
-#include "../Window/WindowDX11.h"
 #include <Graphics/Graphics.h>
 #include "../Graphics/GraphicsDX11.h"
 #include <Shader/Shader.h>
@@ -22,28 +20,9 @@ MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) {
     dxIndexData.clear();
     vertices.clear(); vertexCount = 0;
     primitives.clear(); primitiveCount = 0;
-    dxVertexBuffer = nullptr;
-    dxIndexBuffer = nullptr;
-}
 
-MeshDX11::~MeshDX11() {
-    cleanup();
-}
-
-void MeshDX11::throwException(String func, String details) {
-    cleanup();
-    throw Exception("MeshDX11::" + func, details);
-}
-
-void MeshDX11::cleanup() {
-    dxVertexData.clear();
-    dxIndexData.clear();
-    if (dxVertexBuffer != nullptr) { dxVertexBuffer->Release(); }
-    if (dxIndexBuffer != nullptr) { dxIndexBuffer->Release(); }
-    vertices.clear();
-    primitives.clear();
-    dxVertexBuffer = nullptr;
-    dxIndexBuffer = nullptr;
+    dxVertexBuffer = destructor.getReferenceDifferentDestructor<ID3D11Buffer*>(GraphicsDX11::destroyChild);
+    dxIndexBuffer = destructor.getReferenceDifferentDestructor<ID3D11Buffer*>(GraphicsDX11::destroyChild);
 }
 
 void MeshDX11::updateInternalData() {
@@ -131,14 +110,15 @@ void MeshDX11::uploadInternalData() {
     if (mustUpdateInternalData) { updateInternalData(); }
     if (!mustReuploadInternalData) { return; }
 
-    ID3D11Device* dxDevice = ((WindowDX11*)graphics->getWindow())->getDxDevice();
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
-    if (dxVertexBuffer!=nullptr) {
-        dxVertexBuffer->Release(); dxVertexBuffer=nullptr;
+    if (dxVertexBuffer()!=nullptr) {
+        String s;
+        dxVertexBuffer()->Release(); dxVertexBuffer = nullptr;
     }
-    if (dxIndexBuffer!=nullptr) {
-        dxIndexBuffer->Release(); dxIndexBuffer=nullptr;
+    if (dxIndexBuffer()!=nullptr) {
+        dxIndexBuffer()->Release(); dxIndexBuffer = nullptr;
     }
 
     HRESULT hResult = 0;
@@ -155,7 +135,7 @@ void MeshDX11::uploadInternalData() {
 
         hResult = dxDevice->CreateBuffer(&dxVertexBufferDesc, &dxVertexBufferData, &dxVertexBuffer);
         if (FAILED(hResult)) {
-            throwException("uploadInternalData", "Failed to create vertex buffer (vertex count: " + String::fromInt(vertices.size()) + "; vertex data size: " + String::fromInt(dxVertexData.size()) + "; HRESULT " + String::fromInt(hResult) + ")");
+            throw Exception("uploadInternalData", "Failed to create vertex buffer (vertex count: " + String::fromInt(vertices.size()) + "; vertex data size: " + String::fromInt(dxVertexData.size()) + "; HRESULT " + String::fromInt(hResult) + ")");
         }
     }
 
@@ -171,7 +151,7 @@ void MeshDX11::uploadInternalData() {
 
         hResult = dxDevice->CreateBuffer(&dxIndexBufferDesc, &dxIndexBufferData, &dxIndexBuffer);
         if (FAILED(hResult)) {
-            throwException("uploadInternalData", "Failed to create index buffer (index count: " + String::fromInt(dxIndexData.size()) + "; HRESULT " + String::fromInt(hResult) + ")");
+            throw Exception("uploadInternalData", "Failed to create index buffer (index count: " + String::fromInt(dxIndexData.size()) + "; HRESULT " + String::fromInt(hResult) + ")");
         }
     }
 
@@ -179,18 +159,18 @@ void MeshDX11::uploadInternalData() {
 }
 
 void MeshDX11::render() {
-    ID3D11DeviceContext* dxContext = ((WindowDX11*)graphics->getWindow())->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     updateInternalData();
     uploadInternalData();
 
-    if (dxVertexBuffer == nullptr || dxIndexBuffer == nullptr) { return; }
+    if (dxVertexBuffer() == nullptr || dxIndexBuffer() == nullptr) { return; }
 
     ((ShaderDX11*)material->getShader())->useVertexInputLayout();
 
     UINT offset = 0;
     dxContext->IASetVertexBuffers(0,1,&dxVertexBuffer,&stride,&offset);
-    dxContext->IASetIndexBuffer(dxIndexBuffer,DXGI_FORMAT_R16_UINT,0);
+    dxContext->IASetIndexBuffer(dxIndexBuffer(),DXGI_FORMAT_R16_UINT,0);
 
     D3D11_PRIMITIVE_TOPOLOGY dxPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     int dxIndexMultiplier = 3;
@@ -209,10 +189,10 @@ void MeshDX11::render() {
         ((TextureDX11*)material->getTexture(i))->useTexture(i);
     }
 
-    ((WindowDX11*)graphics->getWindow())->setZBufferState(
+    ((GraphicsDX11*)graphics)->setZBufferState(
         graphics->getDepthTest()
-                ? (opaque ? WindowDX11::ZBUFFER_STATE_INDEX::ENABLED_WRITE : WindowDX11::ZBUFFER_STATE_INDEX::ENABLED_NOWRITE)
-                : WindowDX11::ZBUFFER_STATE_INDEX::DISABLED);
+                ? (opaque ? GraphicsDX11::ZBUFFER_STATE_INDEX::ENABLED_WRITE : GraphicsDX11::ZBUFFER_STATE_INDEX::ENABLED_NOWRITE)
+                : GraphicsDX11::ZBUFFER_STATE_INDEX::DISABLED);
     
     dxContext->DrawIndexed(primitiveCount*dxIndexMultiplier,0,0);
 

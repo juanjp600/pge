@@ -41,7 +41,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
         } else if (!strcmp(var.name, "cbFragment")) {
             stage = vk::ShaderStageFlagBits::eFragment;
         } else {
-            throwException("ShaderVK", "Invalid push constant name.");
+            throw Exception("ShaderVK", "Invalid push constant name.");
         }
         pushConstants[i] = vk::PushConstantRange({ stage }, var.offset, var.size);
     }
@@ -75,10 +75,6 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
     shaderStageInfo[1] = fragmentInfo;
 }
 
-ShaderVK::~ShaderVK() {
-    cleanup();
-}
-
 Shader::Constant* ShaderVK::getVertexShaderConstant(String name) {
     return vertexConstantMap[name.getHashCode()];
 }
@@ -87,7 +83,7 @@ Shader::Constant* ShaderVK::getFragmentShaderConstant(String name) {
     return fragmentConstantMap[name.getHashCode()];
 }
 
-void ShaderVK::cleanup() {
+/*void ShaderVK::cleanup() {
     for (std::pair<long long, ConstantVK*> constant : vertexConstantMap) {
         delete constant.second;
     }
@@ -96,12 +92,7 @@ void ShaderVK::cleanup() {
     }
     device.destroyShaderModule(vkShader);
     device.destroyPipelineLayout(layout);
-}
-
-void ShaderVK::throwException(String func, String details) {
-    cleanup();
-    throw Exception("ShaderVK::" + func, details);
-}
+}TODO*/
 
 ShaderVK::ConstantVK::ConstantVK(Graphics* gfx, vk::PipelineLayout lay, vk::ShaderStageFlags stg, int off) {
     graphics = gfx;
@@ -111,39 +102,35 @@ ShaderVK::ConstantVK::ConstantVK(Graphics* gfx, vk::PipelineLayout lay, vk::Shad
 }
 
 void ShaderVK::ConstantVK::setValue(Matrix4x4f value) {
-    ((WindowVK*)graphics->getWindow())->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 4 * 4 * sizeof(float), &value.elements[0][0]);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 4 * 4 * sizeof(float), &value.elements[0][0]);
 }
 
 void ShaderVK::ConstantVK::setValue(Vector2f value) {
     float val[] = { value.x, value.y };
-    ((WindowVK*)graphics->getWindow())->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 2 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 2 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(Vector3f value) {
     float val[] = { value.x, value.y, value.z };
-    ((WindowVK*)graphics->getWindow())->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 3 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 3 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(Vector4f value) {
     float val[] = { value.x, value.y, value.z, value.w };
-    ((WindowVK*)graphics->getWindow())->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 4 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 4 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(Color value) {
     float val[] = { value.red, value.green, value.blue, value.alpha };
-    ((WindowVK*)graphics->getWindow())->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 4 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 4 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(float value) {
-    ((WindowVK*)graphics->getWindow())->getCurrentCommandBuffer().pushConstants(layout, stage, offset, sizeof(float), &value);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, sizeof(float), &value);
 }
 
 void ShaderVK::ConstantVK::setValue(int value) {
-    ((WindowVK*)graphics->getWindow())->getCurrentCommandBuffer().pushConstants(layout, stage, offset, sizeof(int), &value);
-}
-
-void ShaderVK::ConstantVK::throwException(String func, String details) {
-    throw Exception("ShaderVK::ConstantVK::" + func, details);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, sizeof(int), &value);
 }
 
 int ShaderVK::getVertexStride() const {

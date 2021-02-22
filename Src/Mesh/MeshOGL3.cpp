@@ -1,7 +1,5 @@
 #include <Mesh/Mesh.h>
 #include "MeshOGL3.h"
-#include <Window/Window.h>
-#include "../Window/WindowOGL3.h"
 #include <Graphics/Graphics.h>
 #include "../Graphics/GraphicsOGL3.h"
 #include <Shader/Shader.h>
@@ -11,6 +9,8 @@
 #include <Exception/Exception.h>
 
 using namespace PGE;
+
+#include <iostream>
 
 MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
@@ -24,28 +24,15 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
     vertices.clear(); vertexCount = 0;
 	primitives.clear(); primitiveCount = 0;
 
+    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
+
+    glVertexBufferObject = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteBuffers(1, &i); });
+    glIndexBufferObject = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteBuffers(1, &i); });
     glGenBuffers(1, &glVertexBufferObject);
     glGenBuffers(1, &glIndexBufferObject);
 
+    glVertexArrayObject = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteVertexArrays(1, &i); });
     glGenVertexArrays(1, &glVertexArrayObject);
-}
-
-MeshOGL3::~MeshOGL3() {
-    cleanup();
-}
-
-void MeshOGL3::throwException(String func, String details) {
-    cleanup();
-    throw Exception("MeshOGL3::" + func, details);
-}
-
-void MeshOGL3::cleanup() {
-    ((GraphicsOGL3*)graphics)->takeGlContext();
-
-    glDeleteBuffers(1, &glVertexBufferObject);
-    glDeleteBuffers(1, &glIndexBufferObject);
-
-    glDeleteVertexArrays(1,&glVertexArrayObject);
 }
 
 void MeshOGL3::updateInternalData() {
@@ -129,12 +116,12 @@ void MeshOGL3::uploadInternalData() {
     glBufferData(GL_ARRAY_BUFFER, glVertexData.size(),glVertexData.data(),GL_STATIC_DRAW);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("uploadInternalData", "Failed to create data store for vertex buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
+        throw Exception("uploadInternalData", "Failed to create data store for vertex buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
     }
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,glIndexData.size()*sizeof(GLuint),glIndexData.data(),GL_STATIC_DRAW);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("uploadInternalData", "Failed to create data store for index buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
+        throw Exception("uploadInternalData", "Failed to create data store for index buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
     }
 
     mustReuploadInternalData = false;
@@ -143,9 +130,9 @@ void MeshOGL3::uploadInternalData() {
 void MeshOGL3::render() {
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
-    glBindVertexArray(glVertexArrayObject);
-    glBindBuffer(GL_ARRAY_BUFFER,glVertexBufferObject);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,glIndexBufferObject);
+    glBindVertexArray(glVertexArrayObject());
+    glBindBuffer(GL_ARRAY_BUFFER,glVertexBufferObject());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,glIndexBufferObject());
 
     updateInternalData();
     uploadInternalData();

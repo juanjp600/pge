@@ -10,7 +10,7 @@
 
 namespace PGE {
 
-class Window;
+class Graphics;
 
 class SysEventsInternal : public SysEvents {
     public:
@@ -36,16 +36,16 @@ class SysEventsInternal : public SysEvents {
                 };
 
             private:
-                Window* window;
+                Graphics* graphics;
                 EventType eventType;
                 std::vector<SDL_Event> events;
                 bool receivedEvent;
 
             public:
                 SubscriberInternal();
-                SubscriberInternal(Window* w,EventType et);
+                SubscriberInternal(Graphics* gfx,EventType et);
 
-                Window* getWindow() const;
+                Graphics* getGraphics() const;
                 EventType getEventType() const;
                 void pushEvent(SDL_Event e);
                 bool popEvent(SDL_Event& e);

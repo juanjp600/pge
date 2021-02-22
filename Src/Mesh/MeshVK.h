@@ -10,7 +10,6 @@ namespace PGE {
 class MeshVK : public Mesh {
     public:
         MeshVK(Graphics* gfx, Primitive::TYPE pt);
-        ~MeshVK();
 
         void updateInternalData() override;
         void render() override;
@@ -28,9 +27,6 @@ class MeshVK : public Mesh {
         int indicesCount;
 
         void createBuffer(int size, vk::BufferUsageFlags bufferUsage, vk::MemoryPropertyFlags memProps, vk::Buffer& buffer, vk::DeviceMemory& memory);
-
-        void cleanup() override;
-        void throwException(String func, String details) override;
 
         void uploadInternalData() override;
 };

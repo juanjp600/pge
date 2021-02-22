@@ -57,10 +57,6 @@
     <ClCompile Include="..\..\Src\Texture\TextureVK.cpp" />
     <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp" />
     <ClCompile Include="..\..\Src\UserInput\UserInput.cpp" />
-    <ClCompile Include="..\..\Src\Window\Window.cpp" />
-    <ClCompile Include="..\..\Src\Window\WindowDX11.cpp" />
-    <ClCompile Include="..\..\Src\Window\WindowOGL3.cpp" />
-    <ClCompile Include="..\..\Src\Window\WindowVK.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\Audio\Audio.h" />
@@ -88,14 +84,15 @@
     <ClInclude Include="..\..\Include\Texture\Texture.h" />
     <ClInclude Include="..\..\Include\Threading\ThreadManager.h" />
     <ClInclude Include="..\..\Include\UserInput\UserInput.h" />
-    <ClInclude Include="..\..\Include\Window\Window.h" />
     <ClInclude Include="..\..\Src\Audio\AudioInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
+    <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsVK.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshVK.h" />
+    <ClInclude Include="..\..\Src\Misc\SmartPrimitive.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderVK.h" />
@@ -105,10 +102,6 @@
     <ClInclude Include="..\..\Src\Texture\TextureInternal.h" />
     <ClInclude Include="..\..\Src\Texture\TextureOGL3.h" />
     <ClInclude Include="..\..\Src\Texture\TextureVK.h" />
-    <ClInclude Include="..\..\Src\Window\WindowDX11.h" />
-    <ClInclude Include="..\..\Src\Window\WindowInternal.h" />
-    <ClInclude Include="..\..\Src\Window\WindowOGL3.h" />
-    <ClInclude Include="..\..\Src\Window\WindowVK.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

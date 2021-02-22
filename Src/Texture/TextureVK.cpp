@@ -25,11 +25,3 @@ Texture* TextureVK::copy() const {
 void* TextureVK::getNative() const {
     return nullptr;
 }
-
-void TextureVK::cleanup() {
-
-}
-
-void TextureVK::throwException(String func, String details) {
-
-}
