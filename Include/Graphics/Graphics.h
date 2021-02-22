@@ -54,7 +54,6 @@ class Graphics {
 
     protected:
         Renderer renderer;
-        String rendererName;
 
         String caption;
 

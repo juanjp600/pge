@@ -16,7 +16,6 @@ class GraphicsInternal : public Graphics {
         GraphicsInternal(String name, int w, int h, bool fs);
 
         void setRenderer(Renderer r);
-        void setRendererName(String name);
         Renderer getRenderer();
 
         SDL_Window* getSdlWindow() const;
@@ -27,7 +26,6 @@ class GraphicsInternal : public Graphics {
     private:
         // Hiding.
         using Graphics::renderer;
-        using Graphics::rendererName;
 };
 
 }
