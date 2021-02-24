@@ -9,6 +9,15 @@ namespace PGE {
 
 class GraphicsVK : public GraphicsInternal {
     public:
+        class OpDeviceIdle : public OpContainer {
+            public:
+                OpDeviceIdle(const vk::Device& device);
+                virtual void exec() override;
+
+            private:
+                vk::Device device;
+        };
+
         GraphicsVK(String name, int w = 1280, int h = 720, bool fs = false);
 
         void swap() override;

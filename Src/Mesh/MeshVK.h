@@ -5,6 +5,8 @@
 
 #include <Mesh/Mesh.h>
 
+#include "../Misc/SmartPrimitive.h"
+
 namespace PGE {
 
 class MeshVK : public Mesh {
@@ -15,13 +17,15 @@ class MeshVK : public Mesh {
         void render() override;
 
     private:
-        vk::Pipeline pipeline;
+        SmartRef<vk::Pipeline> pipeline;
 
         vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 
-        // TODO: Combine buffers.
-        vk::Buffer dataBuffer;
-        vk::DeviceMemory dataMemory;
+        // TODO: Combine buffers??
+        SmartRef<vk::Buffer> dataBuffer;
+        SmartRef<vk::DeviceMemory> dataMemory;
+
+        SmartOrderedDestructor destructor = 3;
 
         int totalVertexSize;
         int indicesCount;

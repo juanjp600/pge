@@ -24,12 +24,11 @@ namespace PGE {
 
         private:
             GraphicsVK* graphics;
-            vk::Device device;
 
             int vertexStride;
             std::vector<String> vertexInputNames;
 
-            vk::ShaderModule vkShader;
+            SmartRef<vk::ShaderModule> vkShader;
 
             vk::PipelineShaderStageCreateInfo shaderStageInfo[2];
 
@@ -37,12 +36,11 @@ namespace PGE {
             std::vector<vk::VertexInputAttributeDescription> vertexInputAttributes;
             vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
 
-            vk::PipelineLayout layout;
+            SmartRef<vk::PipelineLayout> layout;
 
             class ConstantVK : public Constant {
                 public:
-                    ConstantVK(Graphics* gfx, vk::PipelineLayout lay, vk::ShaderStageFlags stg, int off);
-                    ~ConstantVK() {};
+                    ConstantVK(Graphics* gfx, ShaderVK* she, vk::ShaderStageFlags stg, int off);
 
                     void setValue(Matrix4x4f value) override;
                     void setValue(Vector2f value) override;
@@ -54,12 +52,17 @@ namespace PGE {
 
                 private:
                     Graphics* graphics;
-                    vk::PipelineLayout layout;
+                    ShaderVK* shader;
                     vk::ShaderStageFlags stage;
                     int offset;
             };
-            std::map<long long, ConstantVK*> vertexConstantMap;
-            std::map<long long, ConstantVK*> fragmentConstantMap;
+            SmartRef<std::map<long long, ConstantVK*>> vertexConstantMap;
+            SmartRef<std::map<long long, ConstantVK*>> fragmentConstantMap;
+
+            // Static class member because ConstantVK is private.
+            static void clearMap(const std::map<long long, PGE::ShaderVK::ConstantVK*>& m);
+
+            SmartOrderedDestructor destructor = 4;
     };
 
 }

@@ -9,14 +9,23 @@
 
 using namespace PGE;
 
+void ShaderVK::clearMap(const std::map<long long, PGE::ShaderVK::ConstantVK*>& m) {
+    for (std::pair<long long, ConstantVK*> constant : m) {
+        delete constant.second;
+    }
+}
+
 ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
     graphics = (GraphicsVK*)gfx;
-    device = ((GraphicsVK*)gfx)->getDevice();
+    vk::Device device = ((GraphicsVK*)gfx)->getDevice();
+
+    destructor.setPreop(new GraphicsVK::OpDeviceIdle(device));
 
     // Shader.
     std::vector<uint8_t> shaderFile = FileUtil::readBytes(path + "shader.spv");
     vk::ShaderModuleCreateInfo shaderCreateInfo = vk::ShaderModuleCreateInfo({}, shaderFile.size(), (uint32_t*)&shaderFile[0]);
-    vkShader = device.createShaderModule(shaderCreateInfo);
+    vkShader = destructor.getReference(device.createShaderModule(shaderCreateInfo), device,
+        +[](const vk::ShaderModule& s, vk::Device d) { d.destroy(s); });
 
     // Reflect.
     SpvReflectShaderModule reflection; SpvReflectResult res = spvReflectCreateShaderModule(shaderFile.size(), &shaderFile[0], &reflection);
@@ -31,37 +40,43 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
         // TODO: Better way to get vertex input size?
         vertexStride += 4 * (reflection.input_variables[0][i].numeric.vector.component_count > 0 ? reflection.input_variables[0][i].numeric.vector.component_count : 1);
     }
-    vk::PushConstantRange pushConstants[2];
-    // Push constants.
-    for (int i = 0; i < reflection.push_constant_block_count; i++) {
-        SpvReflectBlockVariable var = reflection.push_constant_blocks[i];
-        vk::ShaderStageFlags stage;
-        if (!strcmp(var.name, "cbMatrices")) {
-            stage = vk::ShaderStageFlagBits::eVertex;
-        } else if (!strcmp(var.name, "cbFragment")) {
-            stage = vk::ShaderStageFlagBits::eFragment;
-        } else {
-            throw Exception("ShaderVK", "Invalid push constant name.");
-        }
-        pushConstants[i] = vk::PushConstantRange({ stage }, var.offset, var.size);
-    }
 
-    vk::PipelineLayoutCreateInfo layoutInfo({}, 0, nullptr, 2, pushConstants);
-    layout = device.createPipelineLayout(layoutInfo);
-    
-    // TODO: Bug in shader compilation with identical push constant blocks.
-    for (int i = 0; i < reflection.push_constant_block_count; i++) {
-        for (int j = 0; j < reflection.push_constant_blocks[i].member_count; j++) {
-            SpvReflectBlockVariable var = reflection.push_constant_blocks[i].members[j];
-            std::map<long long, ConstantVK*>* map;
-            if (pushConstants[i].stageFlags == vk::ShaderStageFlagBits::eVertex) {
-                map = &vertexConstantMap;
-            } else {
-                map = &fragmentConstantMap;
-            }
-            map->emplace(String(var.name).getHashCode(), new ConstantVK(graphics, layout, pushConstants[i].stageFlags, var.offset));
+    // Push constants.
+    // Members are supposed to begin with the vertex constants and not meant to be mixed.
+    vertexConstantMap = destructor.getReference<std::map<long long, ShaderVK::ConstantVK*>>(clearMap);
+    fragmentConstantMap = destructor.getReference<std::map<long long, ShaderVK::ConstantVK*>>(clearMap);
+
+    std::vector<vk::PushConstantRange> ranges;
+    if (reflection.push_constant_block_count != 0) {
+        if (reflection.push_constant_block_count > 1) {
+            throw Exception("ShaderVK::ShaderVK", "Too many push constants (" + String::fromInt(reflection.push_constant_block_count) + ") in shader " + path.cstr());
         }
+        auto lol = reflection.push_constant_blocks[1];
+        SpvReflectBlockVariable pushConstant = reflection.push_constant_blocks[0];
+        if (String(pushConstant.name) != "vulkanConstants") {
+            throw Exception("ShaderVK::ShaderVK", String("Invalid push constant named \"") + pushConstant.name + "\".");
+        }
+
+        ranges.reserve(2);
+        int fragmentOffset;
+        for (int j = 0; j < pushConstant.member_count; j++) {
+            String name = pushConstant.members[j].name;
+            if (name.substr(0, 4) == "vert") {
+                vertexConstantMap().emplace(name.substr(5).getHashCode(), new PGE::ShaderVK::ConstantVK(graphics, this, vk::ShaderStageFlagBits::eVertex, pushConstant.members[j].offset));
+            } else {
+                if (fragmentConstantMap().size() == 0) {
+                    fragmentOffset = pushConstant.members[j].offset;
+                }
+                fragmentConstantMap().emplace(name.substr(5).getHashCode(), new PGE::ShaderVK::ConstantVK(graphics, this, vk::ShaderStageFlagBits::eFragment, pushConstant.members[j].offset));
+            }
+        }
+        if (!vertexConstantMap().empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eVertex }, 0, fragmentOffset)); }
+        if (!fragmentConstantMap().empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eFragment }, fragmentOffset, pushConstant.size - fragmentOffset)); }
     }
+    
+    vk::PipelineLayoutCreateInfo layoutInfo({}, 0, nullptr, ranges.size(), ranges.empty() ? nullptr : &ranges[0]);
+    layout = destructor.getReference(device.createPipelineLayout(layoutInfo), device,
+        +[](const vk::PipelineLayout& l, vk::Device d) { d.destroy(l); });
     
     spvReflectDestroyShaderModule(&reflection);
 
@@ -69,68 +84,57 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
     vertexInputBinding = vk::VertexInputBindingDescription(0, vertexStride, vk::VertexInputRate::eVertex);
     vertexInputInfo = vk::PipelineVertexInputStateCreateInfo({}, 1, &vertexInputBinding, vertexInputAttributes.size(), &vertexInputAttributes[0]);
 
-    vk::PipelineShaderStageCreateInfo vertexInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eVertex, vkShader, "VS");
-    vk::PipelineShaderStageCreateInfo fragmentInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eFragment, vkShader, "PS");
+    vk::PipelineShaderStageCreateInfo vertexInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eVertex, vkShader(), "VS");
+    vk::PipelineShaderStageCreateInfo fragmentInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eFragment, vkShader(), "PS");
     shaderStageInfo[0] = vertexInfo;
     shaderStageInfo[1] = fragmentInfo;
 }
 
 Shader::Constant* ShaderVK::getVertexShaderConstant(String name) {
-    return vertexConstantMap[name.getHashCode()];
+    return vertexConstantMap()[name.getHashCode()];
 }
 
 Shader::Constant* ShaderVK::getFragmentShaderConstant(String name) {
-    return fragmentConstantMap[name.getHashCode()];
+    return fragmentConstantMap()[name.getHashCode()];
 }
 
-/*void ShaderVK::cleanup() {
-    for (std::pair<long long, ConstantVK*> constant : vertexConstantMap) {
-        delete constant.second;
-    }
-    for (std::pair<long long, ConstantVK*> constant : fragmentConstantMap) {
-        delete constant.second;
-    }
-    device.destroyShaderModule(vkShader);
-    device.destroyPipelineLayout(layout);
-}TODO*/
-
-ShaderVK::ConstantVK::ConstantVK(Graphics* gfx, vk::PipelineLayout lay, vk::ShaderStageFlags stg, int off) {
+ShaderVK::ConstantVK::ConstantVK(Graphics* gfx, ShaderVK* she, vk::ShaderStageFlags stg, int off) {
     graphics = gfx;
-    layout = lay;
+    shader = she;
     stage = stg;
     offset = off;
 }
 
 void ShaderVK::ConstantVK::setValue(Matrix4x4f value) {
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 4 * 4 * sizeof(float), &value.elements[0][0]);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), &value.elements[0][0]);
 }
 
 void ShaderVK::ConstantVK::setValue(Vector2f value) {
     float val[] = { value.x, value.y };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 2 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 2 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(Vector3f value) {
     float val[] = { value.x, value.y, value.z };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 3 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 3 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(Vector4f value) {
     float val[] = { value.x, value.y, value.z, value.w };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 4 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 4 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(Color value) {
     float val[] = { value.red, value.green, value.blue, value.alpha };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, 4 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 4 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(float value) {
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, sizeof(float), &value);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, sizeof(float), &value);
 }
 
 void ShaderVK::ConstantVK::setValue(int value) {
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(layout, stage, offset, sizeof(int), &value);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, sizeof(int), &value);
 }
 
 int ShaderVK::getVertexStride() const {

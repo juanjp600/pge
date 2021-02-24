@@ -8,6 +8,14 @@
 
 using namespace PGE;
 
+GraphicsVK::OpDeviceIdle::OpDeviceIdle(const vk::Device& device) {
+    this->device = device;
+}
+
+void GraphicsVK::OpDeviceIdle::exec() {
+    device.waitIdle();
+}
+
 GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs), MAX_FRAMES_IN_FLIGHT(3) {
     currentFrame = 0;
 

@@ -246,14 +246,159 @@ HRESULT compileShader(const wchar_t* input) {
 	return S_OK;
 }
 
+bool generateVulkan(const wchar_t* filename) {
+	std::ifstream in;
+	in.open(filename, std::ios_base::in);
+	if (!in.is_open()) {
+		return false;
+	}
+
+	std::vector<std::string> fragmentNames;
+	std::vector<std::string> vertexNames;
+	std::vector<std::string>* currVect = nullptr;
+	std::vector<char> word;
+	std::vector<char> word2;
+	bool hadFrag = false;
+	bool hadVert = false;
+	while (!in.eof()) {
+		char line[256]; in.getline(line, 256);
+		std::string lineStr = line;
+		if (currVect != nullptr) {
+			if (!lineStr.compare("};")) {
+				currVect = nullptr;
+				continue;
+			}
+			int i = 0;
+			while (line[i] == '\t' || line[i] == ' ') i++; // Before type
+			while (line[i] != '\t' && line[i] != ' ') { // Type!
+				word2.push_back(line[i]);
+				i++;
+			}
+			while (line[i] == '\t' || line[i] == ' ') i++; // After type
+			while (line[i] != ';') { // Name!
+				word.push_back(line[i]);
+				i++;
+			}
+			word.push_back('\0');
+			word2.push_back('\0');
+			currVect->push_back(std::string(&word2[0]));
+			currVect->push_back(std::string(&word[0]));
+			word.clear();
+			word2.clear();
+		} else if (hadFrag && hadVert) {
+			break;
+		}
+		// TODO: Infer shader stage from functions the vars are used in?
+		if (lineStr.find("cbuffer cbFragment") != std::string::npos) {
+			if (hadFrag) {
+				fragmentNames.clear();
+				vertexNames.clear();
+				break;
+			}
+			hadFrag = true;
+			currVect = &fragmentNames;
+		} else if (lineStr.find("cbuffer cbMatrices") != std::string::npos) {
+			if (hadVert) {
+				fragmentNames.clear();
+				vertexNames.clear();
+				break;
+			}
+			hadFrag = true;
+			currVect = &vertexNames;
+		}
+	}
+
+	if (fragmentNames.size() == 0 && vertexNames.size() == 0) {
+		in.close();
+		return false;
+	}
+
+	std::wstring outFile = filename;
+	std::ofstream out;
+	out.open(outFile.substr(0, outFile.size() - 5).append(L"_vk.hlsl").c_str(), std::ios::out);
+
+	out << "[[vk::push_constant]]" << std::endl;
+	out << "cbuffer vulkanConstants {" << std::endl;
+	for (int i = 0; i < vertexNames.size(); i += 2) {
+		out << '\t' << vertexNames[i] << ' ' << "vert_" << vertexNames[i + 1] << ';' << std::endl;
+	}
+	for (int i = 0; i < fragmentNames.size(); i += 2) {
+		out << '\t' << fragmentNames[i] << ' ' << "frag_" << fragmentNames[i + 1] << ';' << std::endl;
+	}
+	out << "};";
+
+	in.clear();
+	in.seekg(0);
+
+	// TODO: Optimize by ignoring everything outside of code blocks?
+	bool inBlock = false;
+	while (!in.eof()) {
+		char line[256]; in.getline(line, 256);
+		std::string lineStr = line;
+		if (inBlock) {
+			if (lineStr.find("};") != std::string::npos) {
+				inBlock = false;
+			}
+			continue;
+		}
+		if (lineStr.find("cbuffer") != std::string::npos) {
+			inBlock = true;
+			continue;
+		}
+		int index = 0;
+		int newIndex = 0;
+		char newLine[256];
+		std::vector<int> matchingVertex = std::vector<int>(vertexNames.size() / 2);
+		std::vector<int> matchingFragment = std::vector<int>(fragmentNames.size() / 2);
+		while (line[index] != '\0') {
+			std::vector<int>* currMatching = &matchingVertex;
+			std::vector<std::string>* currNames = &vertexNames;
+			for (int j = 0; j < 2; j++) {
+				for (int k = 0; k < currMatching->size(); k++) {
+					if ((*currMatching)[k] == -1) {
+						(*currMatching)[k] = 0;
+					} else if (line[index] == (*currNames)[k * 2 + 1][(*currMatching)[k]]) {
+						(*currMatching)[k]++;
+						if ((*currNames)[k * 2 + 1].size() == (*currMatching)[k] && !std::isalpha(line[index + 1])) {
+							newIndex -= (*currMatching)[k] - 1;
+							memcpy(&newLine[newIndex], currMatching == &matchingVertex ? "vert_" : "frag_", 5);
+							memcpy(&newLine[newIndex += 5], (*currNames)[k * 2 + 1].c_str(), (*currMatching)[k]);
+							newIndex += (*currMatching)[k] - 1;
+						}
+						// We have valid alpha chars, so we don't want to be set to -1.
+						continue;
+					}
+					// Check for . to avoid member variables of other stuff with the same name.
+					if (std::isalpha(line[index]) || line[index] == '.') {
+						(*currMatching)[k] = -1;
+					} else {
+						(*currMatching)[k] = 0;
+					}
+				}
+				currMatching = &matchingFragment;
+				currNames = &fragmentNames;
+			}
+			newLine[newIndex] = line[index];
+			newIndex++;
+			index++;
+		}
+		newLine[newIndex] = '\0';
+		out << std::string(newLine) << std::endl;
+	}
+
+	in.close();
+	out.close();
+
+	return true;
+}
+
 int main(int argc, char* argv[]) {
 	wchar_t folderName[512];
 	if (argc < 2) {
 		printf("Folder containing the shaders: ");
 		fgetws(folderName, 511, stdin);
 		folderName[lstrlenW(folderName) - 1] = '\0';
-	}
-	else {
+	} else {
 		for (int i = 0; i < 512; i++) {
 			folderName[i] = argv[1][i];
 			if (folderName[i] == '\0') {
@@ -278,6 +423,9 @@ int main(int argc, char* argv[]) {
 			compileShader(fileName.c_str());
 			// Vulkan
 			// This is fucking ugly and should probably be done properly via Win32's ShellExecute.
+			if (generateVulkan(fileName.c_str())) {
+				fileName = fileName.substr(0, fileName.size() - 5).append(L"_vk.hlsl");
+			}
 			char* cmd = new char[512];
 			wcstombs(cmd, (std::wstring(L"glslangValidator.exe -S vert -e VS -o ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/vert.spv") + L" -V -D " + fileName).c_str(), 512);
 			system(cmd);
