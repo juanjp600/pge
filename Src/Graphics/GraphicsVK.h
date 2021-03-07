@@ -3,9 +3,12 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include <Mesh/Mesh.h>
 #include "GraphicsInternal.h"
 
 namespace PGE {
+
+class ShaderVK;
 
 class GraphicsVK : public GraphicsInternal {
     public:
@@ -35,15 +38,18 @@ class GraphicsVK : public GraphicsInternal {
 
         void setViewport(Rectanglei vp) override;
 
+        void setVsync(bool isEnabled) override;
+
         vk::Device getDevice() const;
-        vk::PipelineViewportStateCreateInfo* getViewportInfo();
-        vk::PipelineColorBlendStateCreateInfo* getColorBlendInfo();
-        vk::PipelineRasterizationStateCreateInfo* getRasterizationInfo();
-        vk::PipelineMultisampleStateCreateInfo* getMultisamplerInfo();
-        vk::RenderPass* getRenderPass();
+        vk::Pipeline createPipeline(ShaderVK* shader, Primitive::TYPE primitive) const;
         vk::CommandBuffer getCurrentCommandBuffer();
 
     private:
+        // TODO: Remove.
+        uint32_t graphicsQueueIndex;
+        uint32_t presentQueueIndex;
+        uint32_t transferQueueIndex;
+
         vk::Instance vkInstance;
         vk::PhysicalDevice physicalDevice;
         vk::Device device;
@@ -68,6 +74,9 @@ class GraphicsVK : public GraphicsInternal {
         vk::PipelineRasterizationStateCreateInfo rasterizationInfo;
         vk::PipelineMultisampleStateCreateInfo multisamplerInfo;
 
+        vk::PipelineInputAssemblyStateCreateInfo inputAssemblyLines;
+        vk::PipelineInputAssemblyStateCreateInfo inputAssemblyTris;
+
         vk::RenderPass renderPass;
 
         std::vector<vk::Framebuffer> framebuffers;
@@ -86,6 +95,8 @@ class GraphicsVK : public GraphicsInternal {
         int currentFrame;
 
         uint32_t backBufferIndex;
+
+        void createSwapchain(bool vsync);
 
         void acquireNextImage();
 };

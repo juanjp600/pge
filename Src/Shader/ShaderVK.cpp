@@ -49,7 +49,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
     std::vector<vk::PushConstantRange> ranges;
     if (reflection.push_constant_block_count != 0) {
         if (reflection.push_constant_block_count > 1) {
-            throw Exception("ShaderVK::ShaderVK", "Too many push constants (" + String::fromInt(reflection.push_constant_block_count) + ") in shader " + path.cstr());
+        //    throw Exception("ShaderVK::ShaderVK", "Too many push constants (" + String::fromInt(reflection.push_constant_block_count) + ") in shader " + path.cstr());
         }
         auto lol = reflection.push_constant_blocks[1];
         SpvReflectBlockVariable pushConstant = reflection.push_constant_blocks[0];
@@ -62,16 +62,16 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
         for (int j = 0; j < pushConstant.member_count; j++) {
             String name = pushConstant.members[j].name;
             if (name.substr(0, 4) == "vert") {
-                vertexConstantMap().emplace(name.substr(5).getHashCode(), new PGE::ShaderVK::ConstantVK(graphics, this, vk::ShaderStageFlagBits::eVertex, pushConstant.members[j].offset));
+                vertexConstantMap().emplace(name.substr(5).getHashCode(), new PGE::ShaderVK::ConstantVK(graphics, this, vk::ShaderStageFlagBits::eVertex, pushConstant.members[j].absolute_offset));
             } else {
                 if (fragmentConstantMap().size() == 0) {
-                    fragmentOffset = pushConstant.members[j].offset;
+                    fragmentOffset = pushConstant.members[j].absolute_offset;
                 }
-                fragmentConstantMap().emplace(name.substr(5).getHashCode(), new PGE::ShaderVK::ConstantVK(graphics, this, vk::ShaderStageFlagBits::eFragment, pushConstant.members[j].offset));
+                fragmentConstantMap().emplace(name.substr(5).getHashCode(), new PGE::ShaderVK::ConstantVK(graphics, this, vk::ShaderStageFlagBits::eFragment, pushConstant.members[j].absolute_offset));
             }
         }
         if (!vertexConstantMap().empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eVertex }, 0, fragmentOffset)); }
-        if (!fragmentConstantMap().empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eFragment }, fragmentOffset, pushConstant.size - fragmentOffset)); }
+        if (!fragmentConstantMap().empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eFragment }, fragmentOffset, pushConstant.padded_size - fragmentOffset)); }
     }
     
     vk::PipelineLayoutCreateInfo layoutInfo({}, 0, nullptr, ranges.size(), ranges.empty() ? nullptr : &ranges[0]);

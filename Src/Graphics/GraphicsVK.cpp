@@ -6,6 +6,8 @@
 
 #include <Exception/Exception.h>
 
+#include "../Shader/ShaderVK.h"
+
 using namespace PGE;
 
 GraphicsVK::OpDeviceIdle::OpDeviceIdle(const vk::Device& device) {
@@ -51,11 +53,6 @@ GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(na
 
     // The device extensions we need.
     std::array deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
-
-    // Declaring the indices for needed queues.
-    uint32_t graphicsQueueIndex;
-    uint32_t presentQueueIndex;
-    uint32_t transferQueueIndex;
 
     // Selecting a physical device and setting up queues.
     // Currently we just pick the one that supports what we need and has the most VRAM.
@@ -157,87 +154,7 @@ GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(na
         }
     }
 
-    // TODO: Selecting the present mode.
-    // Remember: https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPresentModeKHR.html
-
-    // Setting the size of the swap chain images.
-    vk::SurfaceCapabilitiesKHR sc = physicalDevice.getSurfaceCapabilitiesKHR(vkSurface);
-    // 0xFFFFFFFF indicates to just rely on the size of the window clamped by the given maxs and mins.
-    if (sc.currentExtent.width != 0xFFFFFFFF) {
-        swapchainExtent = sc.currentExtent;
-    } else {
-        // TODO: Move MathUtil to PGE and use it here.
-        swapchainExtent = {
-            w < sc.minImageExtent.width ? sc.minImageExtent.width : w > sc.maxImageExtent.width ? sc.maxImageExtent.width : w,
-            h < sc.minImageExtent.height ? sc.minImageExtent.height : h > sc.maxImageExtent.height ? sc.maxImageExtent.height : h,
-        };
-    }
-
-    // Setting the amount of images in the swap chain.
-    uint32_t imageCount = sc.minImageCount + 1;
-    if (sc.maxImageCount > 0 && imageCount > sc.maxImageCount) {
-        imageCount = sc.maxImageCount;
-    }
-
-    // Creating the swap chain.
-    vk::SwapchainCreateInfoKHR sci = vk::SwapchainCreateInfoKHR({}, vkSurface, imageCount, swapchainFormat.format, swapchainFormat.colorSpace, swapchainExtent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive, 0, nullptr, sc.currentTransform, vk::CompositeAlphaFlagBitsKHR::eOpaque, vk::PresentModeKHR::eMailbox, VK_TRUE, nullptr);
-    // TODO: Remove.
-    if (graphicsQueueIndex != presentQueueIndex || presentQueueIndex != transferQueueIndex) {
-        sci.setImageSharingMode(vk::SharingMode::eConcurrent);
-        sci.setQueueFamilyIndices(std::vector<uint32_t> { graphicsQueueIndex, presentQueueIndex, transferQueueIndex });
-    }
-    swapchain = device.createSwapchainKHR(sci);
-
-    // Creating image views for our swapchain images to ultimately write to.
-    std::vector<vk::Image> swapchainImages = device.getSwapchainImagesKHR(swapchain);
-    swapchainImageViews = std::vector<vk::ImageView>(swapchainImages.size());
-    for (int i = 0; i < swapchainImages.size(); i++) {
-        vk::ImageViewCreateInfo ivci = vk::ImageViewCreateInfo({}, swapchainImages[i], vk::ImageViewType::e2D, swapchainFormat.format);
-        ivci.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
-        swapchainImageViews[i] = device.createImageView(ivci);
-    }
-
-    // Creating a viewport.
-    viewport = vk::Viewport(0, swapchainExtent.height, swapchainExtent.width, -(float)swapchainExtent.height, 0.f, 1.f);
-    scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
-    viewportInfo = vk::PipelineViewportStateCreateInfo({}, 1, &viewport, 1, &scissor);
-
-    // Color blending.
-    colorBlendAttachmentState = vk::PipelineColorBlendAttachmentState(false);
-    colorBlendAttachmentState.colorWriteMask = vk::ColorComponentFlagBits::eA | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG;
-    colorBlendInfo = vk::PipelineColorBlendStateCreateInfo({}, false, vk::LogicOp::eClear, 1, &colorBlendAttachmentState);
-
-    // Creating a render pass.
-    vk::AttachmentDescription colorAttachment = vk::AttachmentDescription({}, swapchainFormat.format, vk::SampleCountFlagBits::e1, vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eStore, vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR);
-    vk::AttachmentReference colorAttachmentRef = vk::AttachmentReference(0, vk::ImageLayout::eColorAttachmentOptimal);
-    vk::SubpassDescription subpass = vk::SubpassDescription({}, vk::PipelineBindPoint::eGraphics, 0, nullptr, 1, &colorAttachmentRef);
-    vk::SubpassDependency dependency = vk::SubpassDependency(VK_SUBPASS_EXTERNAL, 0, vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput, {}, vk::AccessFlagBits::eColorAttachmentWrite);
-    vk::RenderPassCreateInfo renderPassInfo = vk::RenderPassCreateInfo({}, 1, &colorAttachment, 1, &subpass, 1, &dependency);
-    renderPass = device.createRenderPass(renderPassInfo);
-
-    rasterizationInfo = vk::PipelineRasterizationStateCreateInfo({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack, vk::FrontFace::eCounterClockwise, false, 0.f, 0.f, 0.f, 1.f);
-    multisamplerInfo = vk::PipelineMultisampleStateCreateInfo({}, vk::SampleCountFlagBits::e1, false, 0.f, nullptr, false, false);
-
-    framebuffers = std::vector<vk::Framebuffer>(swapchainImageViews.size());
-    for (int i = 0; i < swapchainImageViews.size(); i++) {
-        vk::FramebufferCreateInfo framebufferInfo = vk::FramebufferCreateInfo({}, renderPass, 1, &swapchainImageViews[i], swapchainExtent.width, swapchainExtent.height, 1);
-        framebuffers[i] = device.createFramebuffer(framebufferInfo);
-    }
-
-    comPools = std::vector<vk::CommandPool>(framebuffers.size());
-    comBuffers = std::vector<vk::CommandBuffer>(framebuffers.size());
-    for (int i = 0; i < framebuffers.size(); i++) {
-        vk::CommandPoolCreateInfo commandPoolInfo = vk::CommandPoolCreateInfo({}, graphicsQueueIndex);
-        comPools[i] = device.createCommandPool(commandPoolInfo);
-        vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPools[i], vk::CommandBufferLevel::ePrimary, 1);
-        device.allocateCommandBuffers(&comBufAllInfo, &comBuffers[i]);
-    }
-
-    vk::CommandPoolCreateInfo transferComPoolInfo = vk::CommandPoolCreateInfo({}, graphicsQueueIndex);
-    transferComPool = device.createCommandPool(transferComPoolInfo);
-    // TODO: How many buffers should we have?
-    vk::CommandBufferAllocateInfo transferComBufferInfo = vk::CommandBufferAllocateInfo(transferComPool, vk::CommandBufferLevel::ePrimary, 1);
-    device.allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer);
+    createSwapchain(true);
 
     imageAvailableSemaphores = std::vector<vk::Semaphore>(MAX_FRAMES_IN_FLIGHT);
     renderFinishedSemaphores = std::vector<vk::Semaphore>(MAX_FRAMES_IN_FLIGHT);
@@ -247,7 +164,7 @@ GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(na
         renderFinishedSemaphores[i] = device.createSemaphore(vk::SemaphoreCreateInfo({}));
         inFlightFences[i] = device.createFence(vk::FenceCreateInfo({ i != 0 ? vk::FenceCreateFlagBits::eSignaled : (vk::FenceCreateFlags)0 }));
     }
-    imagesInFlight = std::vector<vk::Fence>(swapchainImages.size(), vk::Fence(nullptr));
+    imagesInFlight = std::vector<vk::Fence>(swapchainImageViews.size(), vk::Fence(nullptr));
     acquireNextImage();
 
     open = true;
@@ -328,6 +245,90 @@ void GraphicsVK::transfer(const vk::Buffer& src, const vk::Buffer& dst, int size
     transferQueue.waitIdle();
 }
 
+void GraphicsVK::createSwapchain(bool vsync) {
+    // Setting the size of the swap chain images.
+    vk::SurfaceCapabilitiesKHR sc = physicalDevice.getSurfaceCapabilitiesKHR(vkSurface);
+    // 0xFFFFFFFF indicates to just rely on the size of the window clamped by the given maxs and mins.
+    if (sc.currentExtent.width != 0xFFFFFFFF) {
+        swapchainExtent = sc.currentExtent;
+    } else {
+        // TODO: Move MathUtil to PGE and use it here.
+        swapchainExtent = vk::Extent2D {
+            width < sc.minImageExtent.width ? sc.minImageExtent.width : width > sc.maxImageExtent.width ? sc.maxImageExtent.width : width,
+            height < sc.minImageExtent.height ? sc.minImageExtent.height : height > sc.maxImageExtent.height ? sc.maxImageExtent.height : height,
+        };
+    }
+
+    // Setting the amount of images in the swap chain.
+    uint32_t imageCount = sc.minImageCount + 1;
+    if (sc.maxImageCount > 0 && imageCount > sc.maxImageCount) {
+        imageCount = sc.maxImageCount;
+    }
+
+    // Creating the swap chain.
+    vk::SwapchainCreateInfoKHR sci = vk::SwapchainCreateInfoKHR({}, vkSurface, imageCount, swapchainFormat.format, swapchainFormat.colorSpace, swapchainExtent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive, 0, nullptr, sc.currentTransform, vk::CompositeAlphaFlagBitsKHR::eOpaque, vsync ? vk::PresentModeKHR::eFifoRelaxed : vk::PresentModeKHR::eMailbox, VK_TRUE, nullptr);
+    // TODO: Remove.
+    if (graphicsQueueIndex != presentQueueIndex || presentQueueIndex != transferQueueIndex) {
+        sci.setImageSharingMode(vk::SharingMode::eConcurrent);
+        sci.setQueueFamilyIndices(std::vector<uint32_t> { graphicsQueueIndex, presentQueueIndex, transferQueueIndex });
+    }
+    swapchain = device.createSwapchainKHR(sci);
+
+    // Creating image views for our swapchain images to ultimately write to.
+    std::vector<vk::Image> swapchainImages = device.getSwapchainImagesKHR(swapchain);
+    swapchainImageViews = std::vector<vk::ImageView>(swapchainImages.size());
+    for (int i = 0; i < swapchainImages.size(); i++) {
+        vk::ImageViewCreateInfo ivci = vk::ImageViewCreateInfo({}, swapchainImages[i], vk::ImageViewType::e2D, swapchainFormat.format);
+        ivci.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
+        swapchainImageViews[i] = device.createImageView(ivci);
+    }
+
+    // Creating a viewport.
+    viewport = vk::Viewport(0, swapchainExtent.height, swapchainExtent.width, -(float)swapchainExtent.height, 0.f, 1.f);
+    scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
+    viewportInfo = vk::PipelineViewportStateCreateInfo({}, 1, &viewport, 1, &scissor);
+
+    // Color blending.
+    colorBlendAttachmentState = vk::PipelineColorBlendAttachmentState(false);
+    colorBlendAttachmentState.colorWriteMask = vk::ColorComponentFlagBits::eA | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG;
+    colorBlendInfo = vk::PipelineColorBlendStateCreateInfo({}, false, vk::LogicOp::eClear, 1, &colorBlendAttachmentState);
+
+    // Creating a render pass.
+    vk::AttachmentDescription colorAttachment = vk::AttachmentDescription({}, swapchainFormat.format, vk::SampleCountFlagBits::e1, vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eStore, vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR);
+    vk::AttachmentReference colorAttachmentRef = vk::AttachmentReference(0, vk::ImageLayout::eColorAttachmentOptimal);
+    vk::SubpassDescription subpass = vk::SubpassDescription({}, vk::PipelineBindPoint::eGraphics, 0, nullptr, 1, &colorAttachmentRef);
+    vk::SubpassDependency dependency = vk::SubpassDependency(VK_SUBPASS_EXTERNAL, 0, vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput, {}, vk::AccessFlagBits::eColorAttachmentWrite);
+    vk::RenderPassCreateInfo renderPassInfo = vk::RenderPassCreateInfo({}, 1, &colorAttachment, 1, &subpass, 1, &dependency);
+    renderPass = device.createRenderPass(renderPassInfo);
+
+    rasterizationInfo = vk::PipelineRasterizationStateCreateInfo({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack, vk::FrontFace::eCounterClockwise, false, 0.f, 0.f, 0.f, 1.f);
+    multisamplerInfo = vk::PipelineMultisampleStateCreateInfo({}, vk::SampleCountFlagBits::e1, false, 0.f, nullptr, false, false);
+
+    inputAssemblyLines = vk::PipelineInputAssemblyStateCreateInfo({}, vk::PrimitiveTopology::eLineList, false);
+    inputAssemblyTris = vk::PipelineInputAssemblyStateCreateInfo({}, vk::PrimitiveTopology::eTriangleList, false);
+
+    framebuffers = std::vector<vk::Framebuffer>(swapchainImageViews.size());
+    for (int i = 0; i < swapchainImageViews.size(); i++) {
+        vk::FramebufferCreateInfo framebufferInfo = vk::FramebufferCreateInfo({}, renderPass, 1, &swapchainImageViews[i], swapchainExtent.width, swapchainExtent.height, 1);
+        framebuffers[i] = device.createFramebuffer(framebufferInfo);
+    }
+
+    comPools = std::vector<vk::CommandPool>(framebuffers.size());
+    comBuffers = std::vector<vk::CommandBuffer>(framebuffers.size());
+    for (int i = 0; i < framebuffers.size(); i++) {
+        vk::CommandPoolCreateInfo commandPoolInfo = vk::CommandPoolCreateInfo({}, graphicsQueueIndex);
+        comPools[i] = device.createCommandPool(commandPoolInfo);
+        vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPools[i], vk::CommandBufferLevel::ePrimary, 1);
+        device.allocateCommandBuffers(&comBufAllInfo, &comBuffers[i]);
+    }
+
+    vk::CommandPoolCreateInfo transferComPoolInfo = vk::CommandPoolCreateInfo({}, transferQueueIndex);
+    transferComPool = device.createCommandPool(transferComPoolInfo);
+    // TODO: How many buffers should we have?
+    vk::CommandBufferAllocateInfo transferComBufferInfo = vk::CommandBufferAllocateInfo(transferComPool, vk::CommandBufferLevel::ePrimary, 1);
+    device.allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer);
+}
+
 void GraphicsVK::setRenderTarget(Texture* renderTarget) {
 
 }
@@ -344,28 +345,21 @@ void GraphicsVK::setViewport(Rectanglei vp) {
 
 }
 
+void GraphicsVK::setVsync(bool isEnabled) {
+    Graphics::setVsync(isEnabled);
+    swap();
+    // TODO: Clean.
+    createSwapchain(isEnabled);
+    acquireNextImage();
+}
+
+vk::Pipeline GraphicsVK::createPipeline(ShaderVK* shader, Primitive::TYPE primitive) const {
+    vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shader->getShaderStageInfo(), shader->getVertexInputInfo(), primitive == Primitive::TYPE::LINE ? &inputAssemblyLines : &inputAssemblyTris, nullptr, &viewportInfo, &rasterizationInfo, &multisamplerInfo, nullptr, &colorBlendInfo, nullptr, *shader->getLayout(), renderPass, 0, {}, -1);
+    return device.createGraphicsPipeline(nullptr, pipelineInfo).value;
+}
+
 vk::Device GraphicsVK::getDevice() const {
     return device;
-}
-
-vk::PipelineViewportStateCreateInfo* GraphicsVK::getViewportInfo() {
-    return &viewportInfo;
-}
-
-vk::PipelineColorBlendStateCreateInfo* GraphicsVK::getColorBlendInfo() {
-    return &colorBlendInfo;
-}
-
-vk::PipelineRasterizationStateCreateInfo* GraphicsVK::getRasterizationInfo() {
-    return &rasterizationInfo;
-}
-
-vk::PipelineMultisampleStateCreateInfo* GraphicsVK::getMultisamplerInfo() {
-    return &multisamplerInfo;
-}
-
-vk::RenderPass* GraphicsVK::getRenderPass() {
-    return &renderPass;
 }
 
 vk::CommandBuffer GraphicsVK::getCurrentCommandBuffer() {

@@ -21,18 +21,6 @@ MeshVK::MeshVK(Graphics* gfx, Primitive::TYPE pt) {
 		+[](const vk::Buffer& b, vk::Device d) { if (b != VK_NULL_HANDLE) { d.destroy(b); } });
 	dataMemory = destructor.getReference(vk::DeviceMemory(nullptr), ((GraphicsVK*)gfx)->getDevice(),
 		+[](const vk::DeviceMemory& m, vk::Device d) { if (m != VK_NULL_HANDLE) { d.free(m); } });
-
-	vk::PrimitiveTopology vkPrim;
-	switch (pt) {
-		case Primitive::TYPE::TRIANGLE: {
-			vkPrim = vk::PrimitiveTopology::eTriangleList;
-		} break;
-		case Primitive::TYPE::LINE: {
-			vkPrim = vk::PrimitiveTopology::eLineList;
-		} break;
-	}
-	
-	inputAssemblyInfo = vk::PipelineInputAssemblyStateCreateInfo({}, vkPrim, false);
 }
 
 // TODO: Crash when no vertices.
@@ -131,8 +119,7 @@ void MeshVK::updateInternalData() {
 	device.destroyBuffer(stagingBuffer);
 	device.freeMemory(stagingMemory);
 
-	vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shader->getShaderStageInfo(), shader->getVertexInputInfo(), &inputAssemblyInfo, nullptr, graphics->getViewportInfo(), graphics->getRasterizationInfo(), graphics->getMultisamplerInfo(), nullptr, graphics->getColorBlendInfo(), nullptr, *shader->getLayout(), *graphics->getRenderPass(), 0, {}, -1);
-	pipeline = device.createGraphicsPipeline(nullptr, pipelineInfo).value;
+	pipeline = graphics->createPipeline(shader, primitiveType);
 
 	mustUpdateInternalData = false;
 }

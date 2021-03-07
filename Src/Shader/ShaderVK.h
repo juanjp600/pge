@@ -1,3 +1,6 @@
+#ifndef PGEINTERNAL_SHADER_VK_H_INCLUDED
+#define PGEINTERNAL_SHADER_VK_H_INCLUDED
+
 #include <Shader/Shader.h>
 
 #include <map>
@@ -66,3 +69,5 @@ namespace PGE {
     };
 
 }
+
+#endif // PGEINTERNAL_SHADER_VK_H_INCLUDED
