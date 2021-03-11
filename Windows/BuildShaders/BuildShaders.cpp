@@ -269,20 +269,23 @@ bool generateVulkan(const wchar_t* filename) {
 				continue;
 			}
 			int i = 0;
-			while (line[i] == '\t' || line[i] == ' ') i++; // Before type
+			while (line[i] == '\t' || line[i] == ' ') { i++; } // Before type
+			if (line[i] == '/' && line[i + 1] == '/') { // It's commented out!
+				continue;
+			}
 			while (line[i] != '\t' && line[i] != ' ') { // Type!
 				word2.push_back(line[i]);
 				i++;
 			}
-			while (line[i] == '\t' || line[i] == ' ') i++; // After type
+			while (line[i] == '\t' || line[i] == ' ') { i++; } // After type
 			while (line[i] != ';') { // Name!
 				word.push_back(line[i]);
 				i++;
 			}
 			word.push_back('\0');
 			word2.push_back('\0');
-			currVect->push_back(std::string(&word2[0]));
-			currVect->push_back(std::string(&word[0]));
+			currVect->push_back(std::string(word2.data()));
+			currVect->push_back(std::string(word.data()));
 			word.clear();
 			word2.clear();
 		} else if (hadFrag && hadVert) {

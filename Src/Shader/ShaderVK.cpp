@@ -22,21 +22,25 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
     destructor.setPreop(new GraphicsVK::OpDeviceIdle(device));
 
     // Shader.
-    std::vector<uint8_t> shaderFile = FileUtil::readBytes(path + "shader.spv");
-    vk::ShaderModuleCreateInfo shaderCreateInfo = vk::ShaderModuleCreateInfo({}, shaderFile.size(), (uint32_t*)&shaderFile[0]);
+    std::vector<uint8_t> shaderBinary = FileUtil::readBytes(path + "shader.spv");
+    vk::ShaderModuleCreateInfo shaderCreateInfo = vk::ShaderModuleCreateInfo({}, shaderBinary.size(), (uint32_t*)shaderBinary.data());
     vkShader = destructor.getReference(device.createShaderModule(shaderCreateInfo), device,
         +[](const vk::ShaderModule& s, vk::Device d) { d.destroy(s); });
 
     // Reflect.
-    SpvReflectShaderModule reflection; SpvReflectResult res = spvReflectCreateShaderModule(shaderFile.size(), &shaderFile[0], &reflection);
+    SpvReflectShaderModule reflection; SpvReflectResult res = spvReflectCreateShaderModule(shaderBinary.size(), shaderBinary.data(), &reflection);
     // Vertex input.
-    vertexInputNames.resize(reflection.input_variable_count);
-    vertexInputAttributes = std::vector<vk::VertexInputAttributeDescription>(reflection.input_variable_count);
+    vertexInputNames.reserve(reflection.input_variable_count);
+    vertexInputAttributes.reserve(reflection.input_variable_count);
     vertexStride = 0;
     for (int i = 0; i < reflection.input_variable_count; i++) {
+        // We don't want built in variables.
+        if (reflection.input_variables[0][i].built_in != -1) {
+            continue;
+        }
         // Strip the "input.".
-        vertexInputNames[i] = String(reflection.input_variables[0][i].name).substr(6);
-        vertexInputAttributes[i] = vk::VertexInputAttributeDescription(reflection.input_variables[0][i].location, 0, (vk::Format)reflection.input_variables[0][i].format, vertexStride);
+        vertexInputNames.push_back(String(reflection.input_variables[0][i].name).substr(6));
+        vertexInputAttributes.push_back(vk::VertexInputAttributeDescription(reflection.input_variables[0][i].location, 0, (vk::Format)reflection.input_variables[0][i].format, vertexStride));
         // TODO: Better way to get vertex input size?
         vertexStride += 4 * (reflection.input_variables[0][i].numeric.vector.component_count > 0 ? reflection.input_variables[0][i].numeric.vector.component_count : 1);
     }
@@ -50,7 +54,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
     if (reflection.push_constant_block_count != 0) {
         if (reflection.push_constant_block_count > 1) {
         //    throw Exception("ShaderVK::ShaderVK", "Too many push constants (" + String::fromInt(reflection.push_constant_block_count) + ") in shader " + path.cstr());
-        }
+        } // TODO: Clean.
         auto lol = reflection.push_constant_blocks[1];
         SpvReflectBlockVariable pushConstant = reflection.push_constant_blocks[0];
         if (String(pushConstant.name) != "vulkanConstants") {
@@ -74,7 +78,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
         if (!fragmentConstantMap().empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eFragment }, fragmentOffset, pushConstant.padded_size - fragmentOffset)); }
     }
     
-    vk::PipelineLayoutCreateInfo layoutInfo({}, 0, nullptr, ranges.size(), ranges.empty() ? nullptr : &ranges[0]);
+    vk::PipelineLayoutCreateInfo layoutInfo({}, 0, nullptr, ranges.size(), ranges.data());
     layout = destructor.getReference(device.createPipelineLayout(layoutInfo), device,
         +[](const vk::PipelineLayout& l, vk::Device d) { d.destroy(l); });
     
@@ -82,7 +86,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
 
     // Both constructor values need to remain in memory!
     vertexInputBinding = vk::VertexInputBindingDescription(0, vertexStride, vk::VertexInputRate::eVertex);
-    vertexInputInfo = vk::PipelineVertexInputStateCreateInfo({}, 1, &vertexInputBinding, vertexInputAttributes.size(), &vertexInputAttributes[0]);
+    vertexInputInfo = vk::PipelineVertexInputStateCreateInfo({}, 1, &vertexInputBinding, vertexInputAttributes.size(), vertexInputAttributes.data());
 
     vk::PipelineShaderStageCreateInfo vertexInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eVertex, vkShader(), "VS");
     vk::PipelineShaderStageCreateInfo fragmentInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eFragment, vkShader(), "PS");
@@ -106,7 +110,7 @@ ShaderVK::ConstantVK::ConstantVK(Graphics* gfx, ShaderVK* she, vk::ShaderStageFl
 }
 
 void ShaderVK::ConstantVK::setValue(Matrix4x4f value) {
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), &value.elements[0][0]);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), value.elements);
 }
 
 void ShaderVK::ConstantVK::setValue(Vector2f value) {
@@ -146,7 +150,7 @@ std::vector<String> ShaderVK::getVertexInputNames() const {
 }
 
 vk::PipelineShaderStageCreateInfo* ShaderVK::getShaderStageInfo() {
-    return &shaderStageInfo[0];
+    return shaderStageInfo;
 }
 
 vk::PipelineVertexInputStateCreateInfo* ShaderVK::getVertexInputInfo() {

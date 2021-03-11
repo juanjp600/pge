@@ -29,7 +29,7 @@ class ShaderOGL3 : public Shader {
     private:
         class ConstantOGL3 : public Constant {
             public:
-                ConstantOGL3(Graphics* gfx,String nm, int loc);
+                ConstantOGL3(String nm, void* loc);
 
                 void setValue(Matrix4x4f value) override;
                 void setValue(Vector2f value) override;
@@ -39,39 +39,17 @@ class ShaderOGL3 : public Shader {
                 void setValue(float value) override;
                 void setValue(int value) override;
 
-                void setUniform();
-
                 String getName() const;
 
             private:
-                enum class VALUE_TYPE {
-                    MATRIX,
-                    VECTOR2F,
-                    VECTOR3F,
-                    VECTOR4F,
-                    COLOR,
-                    FLOAT,
-                    INT
-                };
-                union Value {
-                    Value();
-                    Matrix4x4f matrixVal;
-                    Vector2f vector2fVal;
-                    Vector3f vector3fVal;
-                    Vector4f vector4fVal;
-                    Color colorVal;
-                    float floatVal;
-                    int intVal;
-                } val;
-                VALUE_TYPE valueType;
-                Graphics* graphics;
                 String name;
-                int location;
+                void* location;
         };
 
+        SmartRef<GLuint> uniformBufferObject;
+        std::vector<uint8_t> constantBuffer;
         std::vector<ConstantOGL3> vertexShaderConstants;
         std::vector<ConstantOGL3> fragmentShaderConstants;
-        std::vector<ConstantOGL3> samplerConstants;
 
         struct VertexAttrib {
             String name;
@@ -84,17 +62,11 @@ class ShaderOGL3 : public Shader {
         std::vector<String> vertexInputElems;
         std::vector<VertexAttrib> vertexAttribs;
 
-        struct ShaderVar {
-            String type;
-            String name;
-        };
-        void extractShaderVars(const String& src,String varKind,std::vector<ShaderVar>& varList);
-
         SmartRef<GLuint> glVertexShader;
         SmartRef<GLuint> glFragmentShader;
         SmartRef<GLuint> glShaderProgram;
 
-        SmartOrderedDestructor destructor = 3;
+        SmartOrderedDestructor destructor = 4;
 
         Graphics* graphics;
 };
