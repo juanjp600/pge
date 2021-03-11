@@ -71,6 +71,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     }
     delete[] errorCStr;
 
+    // TODO: Memleak! Shaders are not being detached. Fixed on Vulkan branch.
     glShaderProgram = glCreateProgram();
     glAttachShader(glShaderProgram,glVertexShader);
     glAttachShader(glShaderProgram,glFragmentShader);

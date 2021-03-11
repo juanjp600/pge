@@ -1,7 +1,6 @@
 #include <Math/Random.h>
 
 #include <chrono>
-#include <iostream>
 
 static const float size32Bit = UINT32_MAX + 1.f;
 static const double size64Bit = UINT64_MAX + 1.0;
@@ -42,10 +41,6 @@ namespace PGE {
                 } while ((newSeed & j) == 0);
             }
         }
-
-        std::cout << (std::chrono::steady_clock::now() - lol).count() << std::endl;
-
-        std::printf("Seed: %llx\n", newSeed);
 
         state = newSeed;
         weyl = newSeed;
