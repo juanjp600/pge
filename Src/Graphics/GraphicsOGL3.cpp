@@ -140,7 +140,7 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
     takeGlContext();
 
     TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
-    for (int i=0;i<renderTargets.size();i++) {
+    for (int i=1;i<renderTargets.size();i++) {
         if (!renderTargets[i]->isRenderTarget()) {
             throw Exception("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
         }

@@ -56,7 +56,7 @@ String BinaryReader::readNullTerminatedString() {
         chars.push_back(c);
     }
     chars.push_back(0);
-    return String(&chars[0]);
+    return String(chars.data());
 }
 
 String BinaryReader::readFixedLengthString(int length) {

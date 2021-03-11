@@ -239,7 +239,7 @@ std::vector<uint8_t> FileUtil::readBytes(const FilePath& path) {
     size_t vertSize = file.tellg();
     std::vector<uint8_t> ret = std::vector<uint8_t>(vertSize);
     file.seekg(0);
-    file.read((char*)&ret[0], vertSize);
+    file.read((char*)ret.data(), vertSize);
     file.close();
     return ret;
 }
