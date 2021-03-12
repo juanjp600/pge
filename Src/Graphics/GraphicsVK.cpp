@@ -270,7 +270,8 @@ void GraphicsVK::createSwapchain(bool vsync) {
     // TODO: Remove.
     if (graphicsQueueIndex != presentQueueIndex || presentQueueIndex != transferQueueIndex) {
         sci.setImageSharingMode(vk::SharingMode::eConcurrent);
-        sci.setQueueFamilyIndices(std::vector<uint32_t> { graphicsQueueIndex, presentQueueIndex, transferQueueIndex });
+        std::vector<uint32_t> queueIndices = std::vector<uint32_t>{ graphicsQueueIndex, presentQueueIndex, transferQueueIndex };
+        sci.setQueueFamilyIndices(queueIndices);
     }
     swapchain = device.createSwapchainKHR(sci);
 
