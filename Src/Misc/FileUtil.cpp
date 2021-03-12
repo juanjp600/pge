@@ -233,6 +233,7 @@ std::vector<String> FileUtil::readLines(const FilePath& path, bool includeEmptyL
     return retVal;
 }
 
+// TODO: Avoid copying?
 std::vector<uint8_t> FileUtil::readBytes(const FilePath& path) {
     std::ifstream file;
     file.open(path.cstr(), std::ios::ate | std::ios::binary);

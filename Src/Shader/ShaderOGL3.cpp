@@ -28,7 +28,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     glFragmentShader = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteShader(i); }, glCreateShader(GL_FRAGMENT_SHADER));
     GLuint shaders[2] = { glVertexShader(), glFragmentShader() };
 
-    int errorCode = 0;
+    int errorCode = GL_NO_ERROR;
 
     std::vector<uint8_t> shaderBinary = FileUtil::readBytes(path + "shader.spv");
     glShaderBinary(2, shaders, GL_SHADER_BINARY_FORMAT_SPIR_V, shaderBinary.data(), shaderBinary.size());
@@ -89,7 +89,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
         for (int i = 0; i < pushConstant.member_count; i++) {
             constantSize += pushConstant.members[i].padded_size;
         }
-        constantBuffer = std::vector<uint8_t>(constantSize);
+        constantBuffer.resize(constantSize);
         for (int i = 0; i < pushConstant.member_count; i++) {
             SpvReflectBlockVariable var = pushConstant.members[i];
             String name = var.name;

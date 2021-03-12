@@ -156,15 +156,15 @@ GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(na
 
     createSwapchain(true);
 
-    imageAvailableSemaphores = std::vector<vk::Semaphore>(MAX_FRAMES_IN_FLIGHT);
-    renderFinishedSemaphores = std::vector<vk::Semaphore>(MAX_FRAMES_IN_FLIGHT);
-    inFlightFences = std::vector<vk::Fence>(MAX_FRAMES_IN_FLIGHT);
+    imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+    renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+    inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         imageAvailableSemaphores[i] = device.createSemaphore(vk::SemaphoreCreateInfo({}));
         renderFinishedSemaphores[i] = device.createSemaphore(vk::SemaphoreCreateInfo({}));
         inFlightFences[i] = device.createFence(vk::FenceCreateInfo({ i != 0 ? vk::FenceCreateFlagBits::eSignaled : (vk::FenceCreateFlags)0 }));
     }
-    imagesInFlight = std::vector<vk::Fence>(swapchainImageViews.size(), vk::Fence(nullptr));
+    imagesInFlight.resize(swapchainImageViews.size());
     acquireNextImage();
 
     open = true;
@@ -308,14 +308,14 @@ void GraphicsVK::createSwapchain(bool vsync) {
     inputAssemblyLines = vk::PipelineInputAssemblyStateCreateInfo({}, vk::PrimitiveTopology::eLineList, false);
     inputAssemblyTris = vk::PipelineInputAssemblyStateCreateInfo({}, vk::PrimitiveTopology::eTriangleList, false);
 
-    framebuffers = std::vector<vk::Framebuffer>(swapchainImageViews.size());
+    framebuffers.resize(swapchainImageViews.size());
     for (int i = 0; i < swapchainImageViews.size(); i++) {
         vk::FramebufferCreateInfo framebufferInfo = vk::FramebufferCreateInfo({}, renderPass, 1, &swapchainImageViews[i], swapchainExtent.width, swapchainExtent.height, 1);
         framebuffers[i] = device.createFramebuffer(framebufferInfo);
     }
 
-    comPools = std::vector<vk::CommandPool>(framebuffers.size());
-    comBuffers = std::vector<vk::CommandBuffer>(framebuffers.size());
+    comPools.resize(framebuffers.size());
+    comBuffers.resize(framebuffers.size());
     for (int i = 0; i < framebuffers.size(); i++) {
         vk::CommandPoolCreateInfo commandPoolInfo = vk::CommandPoolCreateInfo({}, graphicsQueueIndex);
         comPools[i] = device.createCommandPool(commandPoolInfo);
