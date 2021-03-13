@@ -97,12 +97,6 @@ void GraphicsOGL3::takeGlContext() {
     if (SDL_GL_GetCurrentContext()!=glContext()) {
         SDL_GL_MakeCurrent(sdlWindow(),glContext());
     }
-
-    int errorCode = glGetError();
-    if (errorCode != GL_NO_ERROR)
-    {
-        throw Exception("GraphicsOGL3", "FFS");
-    }
 }
 
 SDL_GLContext GraphicsOGL3::getGlContext() const {
@@ -112,27 +106,10 @@ SDL_GLContext GraphicsOGL3::getGlContext() const {
 void GraphicsOGL3::clear(Color color) {
     takeGlContext();
 
-    int errorCode = glGetError();
-    if (errorCode != GL_NO_ERROR)
-    {
-        throw Exception("GraphicsOGL3", "FFS");
-    }
-
     glDepthMask(GL_TRUE);
     glColorMask(true,true,true,true);
     glClearColor(color.red,color.green,color.blue,color.alpha);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    errorCode = glGetError();
-    if (errorCode != GL_NO_ERROR)
-    {
-        throw Exception("GraphicsOGL3", "Failed to clear the current render target. (color: " +
-            String::fromFloat(color.red) + ", " +
-            String::fromFloat(color.green) + ", " +
-            String::fromFloat(color.blue) + ", " +
-            String::fromFloat(color.alpha) + ", " +
-            ", error code" + String::fromInt(errorCode) + ")");
-    }
 }
 
 void GraphicsOGL3::setDepthTest(bool isEnabled) {
@@ -163,7 +140,7 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
     takeGlContext();
 
     TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
-    for (int i=1;i<renderTargets.size();i++) {
+    for (int i=0;i<renderTargets.size();i++) {
         if (!renderTargets[i]->isRenderTarget()) {
             throw Exception("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
         }
@@ -199,14 +176,6 @@ void GraphicsOGL3::resetRenderTarget() {
 }
 
 void GraphicsOGL3::setViewport(Rectanglei vp) {
-    takeGlContext();
-
-    int errorCode = glGetError();
-    if (errorCode != GL_NO_ERROR)
-    {
-        throw Exception("GraphicsOGL3", "FFS");
-    }
-
     if (vp != viewport) {
         viewport = vp;
         glViewport(vp.topLeftCorner().x, vp.topLeftCorner().y, vp.width(), vp.height());
@@ -214,14 +183,6 @@ void GraphicsOGL3::setViewport(Rectanglei vp) {
 }
 
 void GraphicsOGL3::setVsync(bool isEnabled) {
-    takeGlContext();
-
-    int errorCode = glGetError();
-    if (errorCode != GL_NO_ERROR)
-    {
-        throw Exception("GraphicsOGL3", "FFS");
-    }
-
     if (isEnabled != vsync) {
         vsync = isEnabled;
         SDL_GL_SetSwapInterval(vsync ? 1 : 0);

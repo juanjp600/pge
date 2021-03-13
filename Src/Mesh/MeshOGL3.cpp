@@ -111,14 +111,6 @@ void MeshOGL3::uploadInternalData() {
     if (!mustReuploadInternalData) { return; }
 
     GLuint glError = GL_NO_ERROR;
-    glError = glGetError();
-    if (glError != GL_NO_ERROR) {
-        throw Exception("uploadInternalData", "FFS");
-    }
-    glError = glGetError();
-    if (glError != GL_NO_ERROR) {
-        throw Exception("uploadInternalData", "FFS2");
-    }
 
     //TODO: determine when we should use GL_DYNAMIC_DRAW
     glBufferData(GL_ARRAY_BUFFER, glVertexData.size(),glVertexData.data(),GL_STATIC_DRAW);
