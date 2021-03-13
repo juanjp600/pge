@@ -177,6 +177,8 @@ void GraphicsOGL3::resetRenderTarget() {
 
 void GraphicsOGL3::setViewport(Rectanglei vp) {
     if (vp != viewport) {
+        takeGlContext();
+
         viewport = vp;
         glViewport(vp.topLeftCorner().x, vp.topLeftCorner().y, vp.width(), vp.height());
     }
@@ -184,6 +186,8 @@ void GraphicsOGL3::setViewport(Rectanglei vp) {
 
 void GraphicsOGL3::setVsync(bool isEnabled) {
     if (isEnabled != vsync) {
+        takeGlContext();
+
         vsync = isEnabled;
         SDL_GL_SetSwapInterval(vsync ? 1 : 0);
     }
