@@ -220,7 +220,7 @@ Shader::Constant* ShaderOGL3::getFragmentShaderConstant(String name) {
 void ShaderOGL3::extractShaderVars(const String& src,String varKind,std::vector<ShaderVar>& varList) {
     String line = "";
     varKind = String(varKind," ");
-    for (int i=0;i<src.length();i++) {
+    for (int i=0; i < src.length(); i++) {
         PGE::wchar chr = src.charAt(i);
         if (chr!='\r' && chr!='\n') {
             line = String(line,chr);
