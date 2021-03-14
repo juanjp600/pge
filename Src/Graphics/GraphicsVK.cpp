@@ -22,7 +22,7 @@ GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(na
     currentFrame = 0;
 
     // SDL window creation.
-    sdlWindow = destructor.getReference<SDL_Window*>([](SDL_Window* const& w) { SDL_DestroyWindow(w); }, SDL_CreateWindow(name.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI));
+    sdlWindow = SDL_CreateWindow(name.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI);
     if (sdlWindow() == nullptr) {
         throw Exception("WindowVK", "Failed to create SDL window: " + String(SDL_GetError()));
     }
@@ -115,7 +115,7 @@ GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(na
         // Calculate complete VRAM size.
         vk::DeviceSize pdSize = 0;
         vk::PhysicalDeviceMemoryProperties pdmp = pd.getMemoryProperties();
-        for (int i = 0; i < pdmp.memoryHeapCount; i++) {
+        for (int i = 0; i < (int)pdmp.memoryHeapCount; i++) {
             pdSize += pdmp.memoryHeaps.at(i).size;
         }
 
@@ -185,24 +185,34 @@ void GraphicsVK::endRender() {
 
     device.resetFences(inFlightFences[currentFrame]);
     vk::SubmitInfo submitInfo = vk::SubmitInfo(1, &imageAvailableSemaphores[currentFrame], &waitStages, 1, &comBuffers[backBufferIndex], 1, &renderFinishedSemaphores[currentFrame]);
-    graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
+    vk::Result result;
+    if ((result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame])) != vk::Result::eSuccess) {
+        throw Exception("GraphicsVK::endRender", "Failed to submit to graphics queue with error: " + String::fromInt((int)result));
+    }
 
     vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, &backBufferIndex, nullptr);
-    presentQueue.presentKHR(presentInfo);
+    if ((result = presentQueue.presentKHR(presentInfo)) != vk::Result::eSuccess) {
+        throw Exception("GraphicsVK::endRender", "Failed to submit to present queue with error: " + String::fromInt((int)result));
+    }
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
     // Wait until the current frames in flight are less than the max.
-    device.waitForFences(inFlightFences[currentFrame], false, UINT64_MAX);
+    if ((result = device.waitForFences(inFlightFences[currentFrame], false, UINT64_MAX)) != vk::Result::eSuccess) {
+        throw Exception("GraphicsVK::endRender", "Failed to wait for fences with error: " + String::fromInt((int)result));
+    }
 }
 
 void GraphicsVK::acquireNextImage() {
     backBufferIndex = device.acquireNextImageKHR(swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame], nullptr).value;
 
     // Is the image we just acquired currently still being submitted?
+    vk::Result result;
     if (imagesInFlight[backBufferIndex] != VK_NULL_HANDLE) {
         // If so, wait on it!
-        device.waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX);
+        if ((result = device.waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX)) != vk::Result::eSuccess) {
+            throw Exception("GraphicsVK::acquireNextImage", "Failed to wait for fences with error: " + String::fromInt((int)result));
+        }
         imagesInFlight[backBufferIndex] = vk::Fence(nullptr);
     }
     imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
@@ -222,14 +232,14 @@ void GraphicsVK::clear(Color color) {
 
 // TODO: Remove if unneeded.
 int GraphicsVK::validNextHighestMemoryRange(int input) {
-    int sizeMultiplier = physicalDevice.getProperties().limits.nonCoherentAtomSize;
-    return std::ceil((double)input / sizeMultiplier) * sizeMultiplier;
+    vk::DeviceSize sizeMultiplier = physicalDevice.getProperties().limits.nonCoherentAtomSize;
+    return (int) (std::ceil((double)input / sizeMultiplier) * sizeMultiplier);
 }
 
 // TODO: Move?
 int GraphicsVK::findMemoryType(int typeFilter, vk::MemoryPropertyFlags memPropFlags) {
     vk::PhysicalDeviceMemoryProperties memProps = physicalDevice.getMemoryProperties();
-    for (int i = 0; i < memProps.memoryTypeCount; i++) {
+    for (int i = 0; i < (int)memProps.memoryTypeCount; i++) {
         if ((typeFilter & (1 << i)) && (memProps.memoryTypes[i].propertyFlags & memPropFlags) == memPropFlags) {
             return i;
         }
@@ -258,8 +268,8 @@ void GraphicsVK::createSwapchain(bool vsync) {
     } else {
         // TODO: Move MathUtil to PGE and use it here.
         swapchainExtent = vk::Extent2D {
-            width < sc.minImageExtent.width ? sc.minImageExtent.width : width > sc.maxImageExtent.width ? sc.maxImageExtent.width : width,
-            height < sc.minImageExtent.height ? sc.minImageExtent.height : height > sc.maxImageExtent.height ? sc.maxImageExtent.height : height,
+            (uint32_t)width < sc.minImageExtent.width ? sc.minImageExtent.width : (uint32_t)width > sc.maxImageExtent.width ? sc.maxImageExtent.width : (uint32_t)width,
+            (uint32_t)height < sc.minImageExtent.height ? sc.minImageExtent.height : (uint32_t)height > sc.maxImageExtent.height ? sc.maxImageExtent.height : (uint32_t)height,
         };
     }
 
@@ -282,14 +292,14 @@ void GraphicsVK::createSwapchain(bool vsync) {
     // Creating image views for our swapchain images to ultimately write to.
     std::vector<vk::Image> swapchainImages = device.getSwapchainImagesKHR(swapchain);
     swapchainImageViews = std::vector<vk::ImageView>(swapchainImages.size());
-    for (int i = 0; i < swapchainImages.size(); i++) {
+    for (int i = 0; i < (int)swapchainImages.size(); i++) {
         vk::ImageViewCreateInfo ivci = vk::ImageViewCreateInfo({}, swapchainImages[i], vk::ImageViewType::e2D, swapchainFormat.format);
         ivci.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
         swapchainImageViews[i] = device.createImageView(ivci);
     }
 
     // Creating a viewport.
-    viewport = vk::Viewport(0, swapchainExtent.height, swapchainExtent.width, -(float)swapchainExtent.height, 0.f, 1.f);
+    viewport = vk::Viewport(0.f, (float)swapchainExtent.height, (float)swapchainExtent.width, -(float)swapchainExtent.height, 0.f, 1.f);
     scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
     viewportInfo = vk::PipelineViewportStateCreateInfo({}, 1, &viewport, 1, &scissor);
 
@@ -313,25 +323,30 @@ void GraphicsVK::createSwapchain(bool vsync) {
     inputAssemblyTris = vk::PipelineInputAssemblyStateCreateInfo({}, vk::PrimitiveTopology::eTriangleList, false);
 
     framebuffers.resize(swapchainImageViews.size());
-    for (int i = 0; i < swapchainImageViews.size(); i++) {
+    for (int i = 0; i < (int)swapchainImageViews.size(); i++) {
         vk::FramebufferCreateInfo framebufferInfo = vk::FramebufferCreateInfo({}, renderPass, 1, &swapchainImageViews[i], swapchainExtent.width, swapchainExtent.height, 1);
         framebuffers[i] = device.createFramebuffer(framebufferInfo);
     }
 
     comPools.resize(framebuffers.size());
     comBuffers.resize(framebuffers.size());
-    for (int i = 0; i < framebuffers.size(); i++) {
+    vk::Result result;
+    for (int i = 0; i < (int)framebuffers.size(); i++) {
         vk::CommandPoolCreateInfo commandPoolInfo = vk::CommandPoolCreateInfo({}, graphicsQueueIndex);
         comPools[i] = device.createCommandPool(commandPoolInfo);
         vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPools[i], vk::CommandBufferLevel::ePrimary, 1);
-        device.allocateCommandBuffers(&comBufAllInfo, &comBuffers[i]);
+        if ((result = device.allocateCommandBuffers(&comBufAllInfo, &comBuffers[i])) != vk::Result::eSuccess) {
+            throw Exception("GraphicsVK::createSwapchain", "Failed to allocate command buffers with error: " + String::fromInt((int)result));
+        }
     }
 
     vk::CommandPoolCreateInfo transferComPoolInfo = vk::CommandPoolCreateInfo({}, transferQueueIndex);
     transferComPool = device.createCommandPool(transferComPoolInfo);
     // TODO: How many buffers should we have?
     vk::CommandBufferAllocateInfo transferComBufferInfo = vk::CommandBufferAllocateInfo(transferComPool, vk::CommandBufferLevel::ePrimary, 1);
-    device.allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer);
+    if ((result = device.allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer)) != vk::Result::eSuccess) {
+        throw Exception("GraphicsVK::createSwapchain", "Failed to allocate transfer command buffers with error: " + String::fromInt((int)result));
+    }
 }
 
 void GraphicsVK::setRenderTarget(Texture* renderTarget) {

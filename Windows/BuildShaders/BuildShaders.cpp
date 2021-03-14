@@ -23,7 +23,8 @@ DXGI_FORMAT computeDxgiFormat(const D3D11_SIGNATURE_PARAMETER_DESC& paramDesc) {
         if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) { return DXGI_FORMAT_R32G32B32A32_UINT; }
         else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) { return DXGI_FORMAT_R32G32B32A32_SINT; }
         else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) { return DXGI_FORMAT_R32G32B32A32_FLOAT; }
-    }
+	}
+	return DXGI_FORMAT_UNKNOWN;
 }
 
 HRESULT compileShader(const wchar_t* input) {
@@ -38,7 +39,7 @@ HRESULT compileShader(const wchar_t* input) {
 
 	if (FAILED(hr)) {
 		if (errorBlob) {
-			printf("%s\n", errorBlob->GetBufferPointer());
+			printf("%s\n", (char*)errorBlob->GetBufferPointer());
 		}
 		printf("FAILED TO COMPILE %ls:\n%d\n", input, hr);
 		return hr;
@@ -78,7 +79,7 @@ HRESULT compileShader(const wchar_t* input) {
 						memberName = lineStr[i] + memberName;
 						capturingName = true;
 					}
-					for (int i = colonPos + 1; i < lineStr.size(); i++) {
+					for (int i = colonPos + 1; i < (int)lineStr.size(); i++) {
 						if (lineStr[i] != ' ' && lineStr[i] != '\t') {
 							if (lineStr[i] >= '0' && lineStr[i] <= '9') {
 								insr.memberName = memberName;
@@ -89,7 +90,7 @@ HRESULT compileShader(const wchar_t* input) {
 								break;
 							}
 							semanticName = semanticName + lineStr[i];
-							if (i >= lineStr.size() - 1) {
+							if (i >= (int)lineStr.size() - 1) {
 								insr.memberName = memberName;
 								insr.semanticName = semanticName;
 								insr.semanticIndex = 0;
@@ -112,7 +113,7 @@ HRESULT compileShader(const wchar_t* input) {
 	std::wstring riOutFn = input;
 	riOutFn = riOutFn.replace(riOutFn.find(L"shader.hlsl"), strlen("shader.hlsl"), L"reflection.dxri");
 
-	FILE* riOutFile = _wfopen(riOutFn.c_str(), L"wb");
+	FILE* riOutFile; _wfopen_s(&riOutFile, riOutFn.c_str(), L"wb");
 
 	ID3D11ShaderReflection* vsReflectionInterface = NULL;
 	D3DReflect(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&vsReflectionInterface);
@@ -122,7 +123,7 @@ HRESULT compileShader(const wchar_t* input) {
 
 	unsigned char vsCBufferCount = vsShaderDesc.ConstantBuffers;
 	fwrite(&vsCBufferCount, 1, 1, riOutFile);
-	for (int i = 0; i < vsShaderDesc.ConstantBuffers; i++) {
+	for (int i = 0; i < (int)vsShaderDesc.ConstantBuffers; i++) {
 		ID3D11ShaderReflectionConstantBuffer* cBuffer = vsReflectionInterface->GetConstantBufferByIndex(i);
 		D3D11_SHADER_BUFFER_DESC cBufferDesc;
 		cBuffer->GetDesc(&cBufferDesc);
@@ -131,7 +132,7 @@ HRESULT compileShader(const wchar_t* input) {
 		fwrite(&cBufferSize, 1, 1, riOutFile);
 		unsigned char cBufferVars = cBufferDesc.Variables;
 		fwrite(&cBufferVars, 1, 1, riOutFile);
-		for (int j = 0; j < cBufferDesc.Variables; j++) {
+		for (int j = 0; j < (int)cBufferDesc.Variables; j++) {
 			ID3D11ShaderReflectionVariable* cBufferVar = cBuffer->GetVariableByIndex(j);
 			D3D11_SHADER_VARIABLE_DESC cBufferVarDesc;
 			cBufferVar->GetDesc(&cBufferVarDesc);
@@ -146,12 +147,12 @@ HRESULT compileShader(const wchar_t* input) {
 	unsigned char inputParamCount = vsShaderDesc.InputParameters;
 	fwrite(&inputParamCount, 1, 1, riOutFile);
 
-	for (int i = 0; i < vsShaderDesc.InputParameters; i++) {
+	for (int i = 0; i < (int)vsShaderDesc.InputParameters; i++) {
 		D3D11_SIGNATURE_PARAMETER_DESC vsSignatureParameterDesc;
 		vsReflectionInterface->GetInputParameterDesc(i, &vsSignatureParameterDesc);
 
 		std::string memberName = "unknown";
-		for (int j = 0; j < inputNameSemanticRelations.size(); j++) {
+		for (int j = 0; j < (int)inputNameSemanticRelations.size(); j++) {
 			if (inputNameSemanticRelations[j].semanticName == vsSignatureParameterDesc.SemanticName &&
 				inputNameSemanticRelations[j].semanticIndex == vsSignatureParameterDesc.SemanticIndex) {
 				memberName = inputNameSemanticRelations[j].memberName;
@@ -176,7 +177,7 @@ HRESULT compileShader(const wchar_t* input) {
 	std::wstring vsOutFn = input;
 	vsOutFn = vsOutFn.replace(vsOutFn.find(L"shader.hlsl"), strlen("shader.hlsl"), L"vertex.dxbc");
 
-	FILE* vsOutFile = _wfopen(vsOutFn.c_str(), L"wb");
+	FILE* vsOutFile; _wfopen_s(&vsOutFile, vsOutFn.c_str(), L"wb");
 
 	fwrite(vsBlob->GetBufferPointer(), 1, vsBlob->GetBufferSize(), vsOutFile);
 	fclose(vsOutFile);
@@ -186,7 +187,7 @@ HRESULT compileShader(const wchar_t* input) {
 
 	if (FAILED(hr)) {
 		if (errorBlob) {
-			printf("%s\n", errorBlob->GetBufferPointer());
+			printf("%s\n", (char*)errorBlob->GetBufferPointer());
 		}
 		printf("FAILED TO COMPILE %ls:\n%d\n", input, hr);
 		return hr;
@@ -200,7 +201,7 @@ HRESULT compileShader(const wchar_t* input) {
 
 	unsigned char psCBufferCount = psShaderDesc.ConstantBuffers;
 	fwrite(&psCBufferCount, 1, 1, riOutFile);
-	for (int i = 0; i < psShaderDesc.ConstantBuffers; i++) {
+	for (int i = 0; i < (int)psShaderDesc.ConstantBuffers; i++) {
 		ID3D11ShaderReflectionConstantBuffer* cBuffer = psReflectionInterface->GetConstantBufferByIndex(i);
 		D3D11_SHADER_BUFFER_DESC cBufferDesc;
 		cBuffer->GetDesc(&cBufferDesc);
@@ -209,7 +210,7 @@ HRESULT compileShader(const wchar_t* input) {
 		fwrite(&cBufferSize, 1, 1, riOutFile);
 		unsigned char cBufferVars = cBufferDesc.Variables;
 		fwrite(&cBufferVars, 1, 1, riOutFile);
-		for (int j = 0; j < cBufferDesc.Variables; j++) {
+		for (int j = 0; j < (int)cBufferDesc.Variables; j++) {
 			ID3D11ShaderReflectionVariable* cBufferVar = cBuffer->GetVariableByIndex(j);
 			D3D11_SHADER_VARIABLE_DESC cBufferVarDesc;
 			cBufferVar->GetDesc(&cBufferVarDesc);
@@ -223,7 +224,7 @@ HRESULT compileShader(const wchar_t* input) {
 
 	unsigned char samplerCount = 0;
 
-	for (int i = 0; i < psShaderDesc.BoundResources; i++) {
+	for (int i = 0; i < (int)psShaderDesc.BoundResources; i++) {
 		D3D11_SHADER_INPUT_BIND_DESC psInputBindDesc;
 		psReflectionInterface->GetResourceBindingDesc(i, &psInputBindDesc);
 		if (psInputBindDesc.Type == D3D_SIT_SAMPLER) {
@@ -239,7 +240,7 @@ HRESULT compileShader(const wchar_t* input) {
 	std::wstring psOutFn = input;
 	psOutFn = psOutFn.replace(psOutFn.find(L"shader.hlsl"), strlen("shader.hlsl"), L"fragment.dxbc");
 
-	FILE* psOutFile = _wfopen(psOutFn.c_str(), L"wb");
+	FILE* psOutFile; _wfopen_s(&psOutFile, psOutFn.c_str(), L"wb");
 	fwrite(psBlob->GetBufferPointer(), 1, psBlob->GetBufferSize(), psOutFile);
 	fclose(psOutFile);
 
@@ -322,10 +323,10 @@ bool generateVulkan(const wchar_t* filename) {
 
 	out << "[[vk::push_constant]]" << std::endl;
 	out << "cbuffer vulkanConstants {" << std::endl;
-	for (int i = 0; i < vertexNames.size(); i += 2) {
+	for (int i = 0; i < (int)vertexNames.size(); i += 2) {
 		out << '\t' << vertexNames[i] << ' ' << "vert_" << vertexNames[i + 1] << ';' << std::endl;
 	}
-	for (int i = 0; i < fragmentNames.size(); i += 2) {
+	for (int i = 0; i < (int)fragmentNames.size(); i += 2) {
 		out << '\t' << fragmentNames[i] << ' ' << "frag_" << fragmentNames[i + 1] << ';' << std::endl;
 	}
 	out << "};";
@@ -357,7 +358,7 @@ bool generateVulkan(const wchar_t* filename) {
 			std::vector<int>* currMatching = &matchingVertex;
 			std::vector<std::string>* currNames = &vertexNames;
 			for (int j = 0; j < 2; j++) {
-				for (int k = 0; k < currMatching->size(); k++) {
+				for (int k = 0; k < (int)currMatching->size(); k++) {
 					if ((*currMatching)[k] == -1) {
 						(*currMatching)[k] = 0;
 					} else if (line[index] == (*currNames)[k * 2 + 1][(*currMatching)[k]]) {
@@ -430,11 +431,11 @@ int main(int argc, char* argv[]) {
 				fileName = fileName.substr(0, fileName.size() - 5).append(L"_vk.hlsl");
 			}
 			char* cmd = new char[512];
-			wcstombs(cmd, (std::wstring(L"glslangValidator.exe -S vert -e VS -o ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/vert.spv") + L" -V -D " + fileName).c_str(), 512);
+			wcstombs_s(nullptr, cmd, 512, (std::wstring(L"glslangValidator.exe -S vert -e VS -o ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/vert.spv") + L" -V -D " + fileName).c_str(), 512);
 			system(cmd);
-			wcstombs(cmd, (std::wstring(L"glslangValidator.exe -S frag -e PS -o ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/frag.spv") + L" -V -D " + fileName).c_str(), 512);
+			wcstombs_s(nullptr, cmd, 512, (std::wstring(L"glslangValidator.exe -S frag -e PS -o ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/frag.spv") + L" -V -D " + fileName).c_str(), 512);
 			system(cmd);
-			wcstombs(cmd, (std::wstring(L"spirv-link ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/vert.spv ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/frag.spv") + (L" -o " + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/shader.spv"))).c_str(), 512);
+			wcstombs_s(nullptr, cmd, 512, (std::wstring(L"spirv-link ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/vert.spv ") + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/frag.spv") + (L" -o " + (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/shader.spv"))).c_str(), 512);
 			system(cmd);
 		}
 	} while (FindNextFileW(fHandle, &findData) != 0);

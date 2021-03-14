@@ -33,7 +33,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
     vertexInputNames.reserve(reflection.input_variable_count);
     vertexInputAttributes.reserve(reflection.input_variable_count);
     vertexStride = 0;
-    for (int i = 0; i < reflection.input_variable_count; i++) {
+    for (int i = 0; i < (int)reflection.input_variable_count; i++) {
         // We don't want built in variables.
         if (reflection.input_variables[0][i].built_in != -1) {
             continue;
@@ -63,7 +63,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
 
         ranges.reserve(2);
         int fragmentOffset;
-        for (int j = 0; j < pushConstant.member_count; j++) {
+        for (int j = 0; j < (int)pushConstant.member_count; j++) {
             String name = pushConstant.members[j].name;
             if (name.substr(0, 4) == "vert") {
                 vertexConstantMap().emplace(name.substr(5).getHashCode(), new PGE::ShaderVK::ConstantVK(graphics, this, vk::ShaderStageFlagBits::eVertex, pushConstant.members[j].absolute_offset));

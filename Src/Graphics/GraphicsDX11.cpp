@@ -221,14 +221,14 @@ void GraphicsDX11::swap() {
 
 void GraphicsDX11::clear(Color color) {
     float clearColor[4] = {color.red,color.green,color.blue,color.alpha};
-    for (int i=0;i<currentRenderTargetViews.size();i++) {
+    for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         dxContext->ClearRenderTargetView( currentRenderTargetViews[i], clearColor );
     }
     dxContext->ClearDepthStencilView( currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
 }
 
 void GraphicsDX11::setRenderTarget(Texture* renderTarget) {
-    for (int i=0;i<currentRenderTargetViews.size();i++) {
+    for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
     dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
@@ -239,14 +239,14 @@ void GraphicsDX11::setRenderTarget(Texture* renderTarget) {
 }
 
 void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
-    for (int i=0;i<currentRenderTargetViews.size();i++) {
+    for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
     dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
     currentRenderTargetViews.clear();
     TextureDX11* maxSizeTexture = (TextureDX11*)renderTargets[0];
-    for (int i=0;i<renderTargets.size();i++) {
+    for (int i = 0; i < (int)renderTargets.size(); i++) {
         if (!renderTargets[i]->isRenderTarget()) {
             throw Exception("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
         }
@@ -255,7 +255,7 @@ void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
             maxSizeTexture = (TextureDX11*)renderTargets[i];
         }
     }
-    for (int i=0;i<renderTargets.size();i++) {
+    for (int i = 0; i < (int)renderTargets.size(); i++) {
         if (renderTargets[i]->getWidth()>maxSizeTexture->getWidth() || renderTargets[i]->getHeight()>maxSizeTexture->getHeight()) {
             throw Exception("setRenderTargets",
                 "Render target sizes are incompatible ("+String::fromInt(maxSizeTexture->getWidth())+","+String::fromInt(maxSizeTexture->getHeight())+" vs "+
@@ -267,7 +267,7 @@ void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
 }
 
 void GraphicsDX11::resetRenderTarget() {
-    for (int i=0;i<currentRenderTargetViews.size();i++) {
+    for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
     dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
@@ -285,8 +285,8 @@ void GraphicsDX11::setViewport(Rectanglei vp) {
         dxViewport.Height = (FLOAT)viewport.height();
         dxViewport.MinDepth = 0.0f;
         dxViewport.MaxDepth = 1.0f;
-        dxViewport.TopLeftX = viewport.topLeftCorner().x;
-        dxViewport.TopLeftY = viewport.topLeftCorner().y;
+        dxViewport.TopLeftX = (FLOAT)viewport.topLeftCorner().x;
+        dxViewport.TopLeftY = (FLOAT)viewport.topLeftCorner().y;
         dxContext->RSSetViewports( 1, &dxViewport );
     }
 }

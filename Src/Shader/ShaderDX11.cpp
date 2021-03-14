@@ -143,9 +143,9 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, SmartRef<std
 }
 
 Shader::Constant* ShaderDX11::getVertexShaderConstant(String name) {
-    for (int i=0;i<vertexConstantBuffers().size();i++) {
+    for (int i = 0; i < (int)vertexConstantBuffers().size(); i++) {
         std::vector<ConstantDX11>& vars = vertexConstantBuffers()[i]->getConstants(); 
-        for (int j=0;j<vars.size();j++) {
+        for (int j = 0; j < (int)vars.size(); j++) {
             if (name.equals(vars[j].getName())) {
                 return &vars[j];
             }
@@ -155,9 +155,9 @@ Shader::Constant* ShaderDX11::getVertexShaderConstant(String name) {
 }
 
 Shader::Constant* ShaderDX11::getFragmentShaderConstant(String name) {
-    for (int i=0;i<fragmentConstantBuffers().size();i++) {
+    for (int i = 0; i < (int)fragmentConstantBuffers().size(); i++) {
         std::vector<ConstantDX11>& vars = fragmentConstantBuffers()[i]->getConstants(); 
-        for (int j=0;j<vars.size();j++) {
+        for (int j = 0; j < (int)vars.size(); j++) {
             if (name.equals(vars[j].getName())) {
                 return &vars[j];
             }
@@ -189,13 +189,13 @@ const std::vector<String>& ShaderDX11::getVertexInputElems() const {
 void ShaderDX11::useShader() {
     ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
-    for (int i=0;i<vertexConstantBuffers().size();i++) {
+    for (int i = 0; i < (int)vertexConstantBuffers().size(); i++) {
         vertexConstantBuffers()[i]->update();
         ID3D11Buffer* dxCBuffer = vertexConstantBuffers()[i]->getDxCBuffer();
         dxContext->VSSetConstantBuffers(i,1,&dxCBuffer);
     }
 
-    for (int i=0;i<fragmentConstantBuffers().size();i++) {
+    for (int i = 0; i < (int)fragmentConstantBuffers().size(); i++) {
         fragmentConstantBuffers()[i]->update();
         ID3D11Buffer* dxCBuffer = fragmentConstantBuffers()[i]->getDxCBuffer();
         dxContext->PSSetConstantBuffers(i,1,&dxCBuffer);

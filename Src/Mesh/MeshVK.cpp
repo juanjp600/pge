@@ -50,7 +50,7 @@ void MeshVK::updateInternalData() {
 	std::vector<int> hintIndices(vertexInputNames.size());
 	float* vertexCursor = (float*)device.mapMemory(stagingMemory, 0, finalTotalSize);
 	for (int i = 0; i < vertexCount; i++) {
-		for (int j = 0; j < vertexInputNames.size(); j++) {
+		for (int j = 0; j < (int)vertexInputNames.size(); j++) {
 			const Vertex::Property& prop = vertices[i].getProperty(vertexInputNames[j], hintIndices[j]);
 			switch (prop.type) {
 				case Vertex::PROPERTY_TYPE::FLOAT: {
@@ -101,12 +101,12 @@ void MeshVK::updateInternalData() {
 
 	uint16_t* indexCursor = (uint16_t*)vertexCursor;
 	for (int i = 0; i < primitiveCount; i++) {
-		*indexCursor = primitives[i].a;
+		*indexCursor = (uint16_t)primitives[i].a;
 		indexCursor++;
-		*indexCursor = primitives[i].b;
+		*indexCursor = (uint16_t)primitives[i].b;
 		indexCursor++;
 		if (primitiveType == Primitive::TYPE::TRIANGLE) {
-			*indexCursor = primitives[i].c;
+			*indexCursor = (uint16_t)primitives[i].c;
 			indexCursor++;
 		}
 	}

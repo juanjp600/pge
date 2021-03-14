@@ -139,10 +139,12 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
     takeGlContext();
 
     TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
-    for (int i=0;i<renderTargets.size();i++) {
+    for (int i = 0; i < (int)renderTargets.size(); i++) {
         if (!renderTargets[i]->isRenderTarget()) {
             throw Exception("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
         }
+
+        if (i == 0) { continue; }
 
         if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i]->getWidth()+renderTargets[i]->getHeight())) {
             largestTarget = (TextureOGL3*)renderTargets[i];
@@ -160,7 +162,7 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
     };
     glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer());
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, largestTarget->getGlDepthbuffer());
-    for (int i=0;i<renderTargets.size();i++) {
+    for (int i = 0; i < (int)renderTargets.size(); i++) {
         glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3*)renderTargets[i])->getGlTexture(), 0);
     }
     glDrawBuffers((GLsizei)renderTargets.size(), glAttachments);
