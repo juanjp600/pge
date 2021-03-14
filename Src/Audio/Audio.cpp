@@ -77,7 +77,7 @@ Audio::ERROR_STATE Audio::getErrorState() const {
 
 void AudioInternal::registerSound(SoundInternal* snd) {
     if (getErrorState() != ERROR_STATE::NONE) { return; }
-    for (int i=0;i<loadedSounds.size();i++) {
+    for (int i = 0; i < (int)loadedSounds.size(); i++) {
         if (loadedSounds[i] == snd) {
             return;
         }
@@ -87,7 +87,7 @@ void AudioInternal::registerSound(SoundInternal* snd) {
 
 void AudioInternal::unregisterSound(SoundInternal* snd) {
     if (getErrorState() != ERROR_STATE::NONE) { return; }
-    for (int i=0;i<loadedSounds.size();i++) {
+    for (int i = 0; i < (int)loadedSounds.size(); i++) {
         if (loadedSounds[i] == snd) {
             loadedSounds.erase(loadedSounds.begin()+i);
             return;

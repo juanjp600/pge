@@ -10,16 +10,16 @@ const Vertex::Property Vertex::Property::def = Vertex::Property();
 Vertex::Vertex() { }
 
 Vertex::Vertex(const Vertex& other) {
-    for (int i=0;i<other.properties.size();i++) {
+    for (int i = 0; i < (int)other.properties.size(); i++) {
         properties.push_back(Property(other.properties[i]));
     }
 }
 
 Vertex& Vertex::operator=(const Vertex& other) {
-    for (int i = 0; i < other.properties.size(); i++) {
+    for (int i = 0; i < (int)other.properties.size(); i++) {
         bool found = false;
         insertProperty(other.properties[i].hashCode);
-        for (int j = 0; j < properties.size(); j++) {
+        for (int j = 0; j < (int)properties.size(); j++) {
             if (properties[j].hashCode == other.properties[i].hashCode) {
                 properties[j].copyOtherValue(other.properties[i]);
                 found = true;
@@ -71,10 +71,10 @@ void Vertex::Property::copyOtherValue(const Vertex::Property& other) {
 }
 
 const Vertex::Property& Vertex::getProperty(const String& name,int& indexHint) {
-    if ((indexHint < properties.size()) && properties[indexHint].hashCode == name.getHashCode()) {
+    if ((indexHint < (int)properties.size()) && properties[indexHint].hashCode == name.getHashCode()) {
         return properties[indexHint];
     }
-    for (int i=0;i<properties.size();i++) {
+    for (int i = 0; i < (int)properties.size(); i++) {
         if (properties[i].hashCode>name.getHashCode()) { break; }
         if (properties[i].hashCode == name.getHashCode()) {
             indexHint = i;
@@ -86,7 +86,7 @@ const Vertex::Property& Vertex::getProperty(const String& name,int& indexHint) {
 
 Vertex::Property& Vertex::insertProperty(long long hashCode) {
     int insertPos = 0;
-    for (int i=0;i<properties.size();i++) {
+    for (int i = 0; i < (int)properties.size(); i++) {
         if (properties[i].hashCode>hashCode) { break; }
         if (properties[i].hashCode == hashCode) {
             return properties[i];
@@ -97,7 +97,7 @@ Vertex::Property& Vertex::insertProperty(long long hashCode) {
     prop.hashCode = hashCode;
     properties.insert(properties.begin()+insertPos,prop);
 
-    for (int i=0;i<properties.size()-1;i++) {
+    for (int i = 0; i < (int)properties.size()-1; i++) {
         if (properties[i].hashCode > properties[i+1].hashCode) {
             throw PGE::Exception("Vertex::insertProperty", "Incorrect vertex property order");
         }
@@ -161,7 +161,7 @@ void Mesh::setGeometry(int vertCount, const std::vector<Vertex>& verts, int prim
     mustUpdateInternalData = true; mustReuploadInternalData = true;
     //TODO: check for property mismatches?
     for (int i = 0; i < vertCount; i++) {
-        if (i >= vertices.size()) {
+        if (i >= (int)vertices.size()) {
             vertices.push_back(verts[i]);
         } else {
             vertices[i] = verts[i];

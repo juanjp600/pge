@@ -101,13 +101,13 @@ void ThreadManager::requestExecutionOnNewThread(NewThreadRequest* request) {
 
 void ThreadManager::update() {
     requestMutex.lock();
-    for (int i=0;i<newThreadRequests.size();i++) {
+    for (int i = 0; i < (int)newThreadRequests.size(); i++) {
         if (newThreadRequests[i]->isWaitingForMainThread()) {
             newThreadRequests[i]->executeMainThreadRequest();
         }
         if (newThreadRequests[i]->wasExceptionThrown()) {
             exceptionMutex.lock();
-            for (int j = 0; j < thrownExceptions.size(); j++) {
+            for (int j = 0; j < (int)thrownExceptions.size(); j++) {
                 if (thrownExceptions[j].request == newThreadRequests[i]) {
                     delete newThreadRequests[i];
                     newThreadRequests.erase(newThreadRequests.begin() + i);

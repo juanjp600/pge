@@ -1,7 +1,6 @@
 #include <Math/Random.h>
 
 #include <chrono>
-#include <iostream>
 
 static const float size32Bit = UINT32_MAX + 1.f;
 static const double size64Bit = UINT64_MAX + 1.0;
@@ -43,10 +42,6 @@ namespace PGE {
             }
         }
 
-        std::cout << (std::chrono::steady_clock::now() - lol).count() << std::endl;
-
-        std::printf("Seed: %llx\n", newSeed);
-
         state = newSeed;
         weyl = newSeed;
         this->seed = newSeed | 1;
@@ -55,7 +50,7 @@ namespace PGE {
     uint32_t Random::next() {
         state *= state;
         state += (weyl += seed);
-        return state = (state >> 32) | (state << 32);
+        return (uint32_t) (state = (state >> 32) | (state << 32));
     }
 
     // true | false
@@ -75,12 +70,12 @@ namespace PGE {
 
     // [0, max]
     uint32_t Random::nextInt(uint32_t max) {
-        return nextFloat() * max;
+        return (uint32_t) (nextFloat() * max);
     }
 
     // [min, max)
     uint32_t Random::nextInt(uint32_t min, uint32_t max) {
-        return nextFloat() * (max - min) + min;
+        return (uint32_t) (nextFloat() * (max - min)) + min;
     }
 
 }

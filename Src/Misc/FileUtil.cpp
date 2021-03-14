@@ -165,7 +165,7 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
         FilePath newPath = FilePath(filePath, fileName);
         if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
             std::vector<FilePath> nestedFiles = enumerateFiles(newPath);
-            for (int i = 0; i < nestedFiles.size(); i++) {
+            for (int i = 0; i < (int)nestedFiles.size(); i++) {
                 files.push_back(nestedFiles[i]);
             }
         } else {
@@ -236,10 +236,10 @@ std::vector<String> FileUtil::readLines(const FilePath& path, bool includeEmptyL
 std::vector<uint8_t> FileUtil::readBytes(const FilePath& path) {
     std::ifstream file;
     file.open(path.cstr(), std::ios::ate | std::ios::binary);
-    size_t vertSize = file.tellg();
+    size_t vertSize = (size_t)file.tellg();
     std::vector<uint8_t> ret = std::vector<uint8_t>(vertSize);
     file.seekg(0);
-    file.read((char*)&ret[0], vertSize);
+    file.read((char*)ret.data(), vertSize);
     file.close();
     return ret;
 }
