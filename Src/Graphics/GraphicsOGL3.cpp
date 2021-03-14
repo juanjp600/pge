@@ -80,7 +80,6 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
         throw Exception("GraphicsOGL3", "Failed to generate frame buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
     }
 
-    vsync = true;
     SDL_GL_SetSwapInterval(1);
 }
 

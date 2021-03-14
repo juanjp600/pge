@@ -213,7 +213,6 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     currentDepthStencilView = dxZBufferView();
 
     depthTest = true;
-    vsync = true;
 }
 
 void GraphicsDX11::swap() {

@@ -10,7 +10,7 @@
 
 using namespace PGE;
 
-GraphicsVK::OpDeviceIdle::OpDeviceIdle(const vk::Device& device) {
+GraphicsVK::OpDeviceIdle::OpDeviceIdle(vk::Device device) {
     this->device = device;
 }
 
@@ -22,7 +22,7 @@ GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(na
     currentFrame = 0;
 
     // SDL window creation.
-    sdlWindow = SDL_CreateWindow(name.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI);
+    sdlWindow = destructor.getReference<SDL_Window*>([](SDL_Window* const& w) { SDL_DestroyWindow(w); }, SDL_CreateWindow(name.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI));
     if (sdlWindow() == nullptr) {
         throw Exception("WindowVK", "Failed to create SDL window: " + String(SDL_GetError()));
     }
@@ -36,12 +36,12 @@ GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(na
     // Extensions (currently only SDL required ones).
     unsigned int extensionCount = 0;
     SDL_Vulkan_GetInstanceExtensions(sdlWindow(), &extensionCount, nullptr);
-    const char** extensionData = (const char**)malloc(extensionCount * sizeof(const char*));
+    const char** extensionData = new const char*[extensionCount];
     SDL_Vulkan_GetInstanceExtensions(sdlWindow(), &extensionCount, extensionData);
     std::vector<const char*> extensions = std::vector<const char*>(extensionData, extensionData + extensionCount);
-    free(extensionData);
+    delete[] extensionData;
 
-    vk::ApplicationInfo vkAppInfo = vk::ApplicationInfo(name.cstr(), VK_MAKE_VERSION(0, 0, 0), "Pulse-Gun Engine", VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_1);
+    vk::ApplicationInfo vkAppInfo = vk::ApplicationInfo(name.cstr(), VK_MAKE_VERSION(0, 0, 0), "pulsegun engine", VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_1);
     vkInstance = vk::createInstance(vk::InstanceCreateInfo({}, &vkAppInfo, layers, extensions));
 
     // Creating the window's surface via SDL.
@@ -172,6 +172,12 @@ GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(na
 }
 
 void GraphicsVK::swap() {
+    endRender();
+    
+    acquireNextImage();
+}
+
+void GraphicsVK::endRender() {
     comBuffers[backBufferIndex].endRenderPass();
     comBuffers[backBufferIndex].end();
 
@@ -188,8 +194,6 @@ void GraphicsVK::swap() {
 
     // Wait until the current frames in flight are less than the max.
     device.waitForFences(inFlightFences[currentFrame], false, UINT64_MAX);
-
-    acquireNextImage();
 }
 
 void GraphicsVK::acquireNextImage() {
@@ -347,15 +351,29 @@ void GraphicsVK::setViewport(Rectanglei vp) {
 }
 
 void GraphicsVK::setVsync(bool isEnabled) {
-    Graphics::setVsync(isEnabled);
-    swap();
-    // TODO: Clean.
-    createSwapchain(isEnabled);
-    acquireNextImage();
+    if (isEnabled != vsync) {
+        vsync = isEnabled;
+        endRender();
+        device.waitIdle();
+        // TODO: Clean.
+        // Don't when ending.
+        createSwapchain(isEnabled);
+        acquireNextImage();
+    }
 }
 
 vk::Pipeline GraphicsVK::createPipeline(ShaderVK* shader, Primitive::TYPE primitive) const {
-    vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shader->getShaderStageInfo(), shader->getVertexInputInfo(), primitive == Primitive::TYPE::LINE ? &inputAssemblyLines : &inputAssemblyTris, nullptr, &viewportInfo, &rasterizationInfo, &multisamplerInfo, nullptr, &colorBlendInfo, nullptr, *shader->getLayout(), renderPass, 0, {}, -1);
+    const vk::PipelineInputAssemblyStateCreateInfo* inputInfo;
+    switch (primitive) {
+        case Primitive::TYPE::LINE: {
+            inputInfo = &inputAssemblyLines;
+        } break;
+        default:
+        case Primitive::TYPE::TRIANGLE: {
+            inputInfo = &inputAssemblyTris;
+        } break;
+    }
+    vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shader->getShaderStageInfo(), shader->getVertexInputInfo(), inputInfo, nullptr, &viewportInfo, &rasterizationInfo, &multisamplerInfo, nullptr, &colorBlendInfo, nullptr, *shader->getLayout(), renderPass, 0, {}, -1);
     return device.createGraphicsPipeline(nullptr, pipelineInfo).value;
 }
 

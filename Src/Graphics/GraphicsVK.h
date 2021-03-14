@@ -14,8 +14,8 @@ class GraphicsVK : public GraphicsInternal {
     public:
         class OpDeviceIdle : public OpContainer {
             public:
-                OpDeviceIdle(const vk::Device& device);
-                virtual void exec() override;
+                OpDeviceIdle(vk::Device device);
+                void exec() override;
 
             private:
                 vk::Device device;
@@ -98,6 +98,7 @@ class GraphicsVK : public GraphicsInternal {
 
         void createSwapchain(bool vsync);
 
+        void endRender();
         void acquireNextImage();
 };
 

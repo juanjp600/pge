@@ -18,6 +18,8 @@ Graphics::Graphics(String name, int w, int h, bool fs) {
 
     open = true;
     focused = true;
+
+    vsync = true;
 }
 
 void Graphics::update() {
