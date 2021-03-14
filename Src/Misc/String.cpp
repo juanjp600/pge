@@ -566,7 +566,7 @@ std::vector<String> String::split(const String& needle, bool removeEmptyEntries)
     retVal.push_back(haystack);
 
     if (removeEmptyEntries) {
-        for (int i = 0; i < retVal.size(); i++) {
+        for (int i = 0; i < (int)retVal.size(); i++) {
             if (retVal[i].isEmpty()) {
                 retVal.erase(retVal.begin() + i);
                 i--;
@@ -583,7 +583,7 @@ String String::join(const std::vector<String>& vect, const String& separator) {
     }
 
     String retVal = vect[0];
-    for (int i = 1; i < vect.size(); i++) {
+    for (int i = 1; i < (int)vect.size(); i++) {
         retVal = retVal + separator + vect[i];
     }
 

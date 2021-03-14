@@ -36,7 +36,7 @@ IOInternal::IOInternal(Graphics* gfx) {
 }
 
 IOInternal::~IOInternal() {
-    for (int i=0;i<openControllers.size();i++) {
+    for (int i = 0; i < (int)openControllers.size(); i++) {
         delete openControllers[i];
     }
     openControllers.clear();
@@ -88,8 +88,8 @@ String ControllerInternal::getName() const {
 }
 
 void ControllerInternal::rumble(float lowFreqIntensity,float highFreqIntensity,int durationMs) {
-    int lfiUshort = (lowFreqIntensity*((float)0xffff));
-    int hfiUshort = (highFreqIntensity*((float)0xffff));
+    int lfiUshort = (int)(lowFreqIntensity*((float)0xffff));
+    int hfiUshort = (int)(highFreqIntensity*((float)0xffff));
     SDL_GameControllerRumble(sdlController, lfiUshort>0xffff ? 0xffff : lfiUshort, hfiUshort>0xffff ? 0xffff : hfiUshort, durationMs);
 }
 
@@ -203,7 +203,7 @@ void IOInternal::update() {
         } else if (event.type == SDL_CONTROLLERDEVICEREMAPPED) {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
             SDL_GameController* sdlController = SDL_GameControllerOpen(deviceEvent.which);
-            for (int i=0; i<openControllers.size(); i++) {
+            for (int i = 0; i < (int)openControllers.size(); i++) {
                 if (openControllers[i]->getSdlController() == sdlController) {
                     openControllers[i]->setName(SDL_GameControllerName(sdlController));
                     break;
@@ -212,7 +212,7 @@ void IOInternal::update() {
         } else if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(deviceEvent.which);
-            for (int i=0; i<openControllers.size(); i++) {
+            for (int i = 0; i < (int)openControllers.size(); i++) {
                 if (openControllers[i]->getSdlController() == sdlController) {
                     for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
                         UserInput* input = (*it);
@@ -379,7 +379,7 @@ void IOInternal::setMousePosition(Vector2f position) {
     // For some reason updating the mouse position this way doesn't update the cursor position, so we need to tell Cocoa to sync that.
     CGAssociateMouseAndMouseCursorPosition(true);
 #else
-    SDL_WarpMouseInWindow(((GraphicsInternal*)graphics)->getSdlWindow(), position.x, position.y);
+    SDL_WarpMouseInWindow(((GraphicsInternal*)graphics)->getSdlWindow(), (int)position.x, (int)position.y);
 #endif
 }
 
@@ -410,11 +410,11 @@ int IOInternal::getControllerCount() const {
 }
 
 Controller* IOInternal::getController(int index) const {
-    return index >=0 && index<openControllers.size() ? openControllers[index] : nullptr;
+    return index >= 0 && index < (int)openControllers.size() ? openControllers[index] : nullptr;
 }
 
 bool IOInternal::isControllerValid(Controller* controller) const {
-    for (int i=0; i<openControllers.size(); i++) {
+    for (int i = 0; i < (int)openControllers.size(); i++) {
         if (openControllers[i]==controller) { return true; }
     }
     return false;

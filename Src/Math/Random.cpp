@@ -50,7 +50,7 @@ namespace PGE {
     uint32_t Random::next() {
         state *= state;
         state += (weyl += seed);
-        return state = (state >> 32) | (state << 32);
+        return (uint32_t) (state = (state >> 32) | (state << 32));
     }
 
     // true | false
@@ -70,12 +70,12 @@ namespace PGE {
 
     // [0, max]
     uint32_t Random::nextInt(uint32_t max) {
-        return nextFloat() * max;
+        return (uint32_t) (nextFloat() * max);
     }
 
     // [min, max)
     uint32_t Random::nextInt(uint32_t min, uint32_t max) {
-        return nextFloat() * (max - min) + min;
+        return (uint32_t) (nextFloat() * (max - min)) + min;
     }
 
 }

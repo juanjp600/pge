@@ -78,11 +78,11 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
 
     glLinkProgram(glShaderProgram);
 
-    for (int i=0;i<vertexUniforms.size();i++) {
+    for (int i = 0; i < (int)vertexUniforms.size(); i++) {
         vertexShaderConstants.push_back(ConstantOGL3(graphics,vertexUniforms[i].name,glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr())));
     }
 
-    for (int i=0;i<fragmentUniforms.size();i++) {
+    for (int i = 0; i < (int)fragmentUniforms.size(); i++) {
         ConstantOGL3 constant = ConstantOGL3(graphics,fragmentUniforms[i].name,glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr()));
         if (fragmentUniforms[i].type.equals("sampler2D")) {
             constant.setValue((int)samplerConstants.size());
@@ -95,7 +95,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
     std::vector<ShaderVar> vertexInput;
     extractShaderVars(vertexSource,"in",vertexInput);
     stride = 0;
-    for (int i=0;i<vertexInput.size();i++) {
+    for (int i = 0; i < (int)vertexInput.size(); i++) {
         VertexAttrib attrib;
         attrib.name = vertexInput[i].name;
         attrib.location = glGetAttribLocation(glShaderProgram, vertexInput[i].name.cstr());
@@ -126,7 +126,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
 
     std::vector<ShaderVar> fragmentOutputs;
     extractShaderVars(fragmentSource,"out",fragmentOutputs);
-    for (int i=0;i<fragmentOutputs.size();i++) {
+    for (int i = 0; i < (int)fragmentOutputs.size(); i++) {
         glBindFragDataLocation(glShaderProgram,i,fragmentOutputs[i].name.cstr());
     }
 }
@@ -143,7 +143,7 @@ void ShaderOGL3::useShader() {
     glUseProgram(glShaderProgram);
 
     uint8_t* ptr = nullptr;
-    for (int i=0;i<vertexAttribs.size();i++) {
+    for (int i = 0; i < (int)vertexAttribs.size(); i++) {
         glEnableVertexAttribArray(vertexAttribs[i].location);
         switch (vertexAttribs[i].type) {
             case GL_FLOAT: {
@@ -161,15 +161,15 @@ void ShaderOGL3::useShader() {
         }
     }
 
-    for (int i=0;i<vertexShaderConstants.size();i++) {
+    for (int i = 0; i < (int)vertexShaderConstants.size(); i++) {
         vertexShaderConstants[i].setUniform();
     }
 
-    for (int i=0;i<fragmentShaderConstants.size();i++) {
+    for (int i = 0; i < (int)fragmentShaderConstants.size(); i++) {
         fragmentShaderConstants[i].setUniform();
     }
 
-    for (int i=0;i<samplerConstants.size();i++) {
+    for (int i = 0; i < (int)samplerConstants.size(); i++) {
         samplerConstants[i].setUniform();
     }
 }
@@ -177,7 +177,7 @@ void ShaderOGL3::useShader() {
 void ShaderOGL3::unbindGLAttribs() {
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
-    for (int i=0;i<vertexAttribs.size();i++) {
+    for (int i = 0; i < (int)vertexAttribs.size(); i++) {
         glDisableVertexAttribArray(vertexAttribs[i].location);
     }
 }
@@ -200,7 +200,7 @@ void ShaderOGL3::cleanup() {
 }
 
 Shader::Constant* ShaderOGL3::getVertexShaderConstant(String name) {
-    for (int i=0;i<vertexShaderConstants.size();i++) {
+    for (int i = 0; i < (int)vertexShaderConstants.size(); i++) {
         if (vertexShaderConstants[i].getName().equals(name)) {
             return &vertexShaderConstants[i];
         }
@@ -209,7 +209,7 @@ Shader::Constant* ShaderOGL3::getVertexShaderConstant(String name) {
 }
 
 Shader::Constant* ShaderOGL3::getFragmentShaderConstant(String name) {
-    for (int i=0;i<fragmentShaderConstants.size();i++) {
+    for (int i = 0; i < (int)fragmentShaderConstants.size(); i++) {
         if (fragmentShaderConstants[i].getName().equals(name)) {
             return &fragmentShaderConstants[i];
         }
@@ -221,7 +221,7 @@ void ShaderOGL3::extractShaderVars(const String& src,String varKind,std::vector<
     String line = "";
     varKind = String(varKind," ");
     for (int i=0;i<src.length();i++) {
-        char chr = src.charAt(i);
+        PGE::wchar chr = src.charAt(i);
         if (chr!='\r' && chr!='\n') {
             line = String(line,chr);
         } else {
