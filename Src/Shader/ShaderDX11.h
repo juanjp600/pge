@@ -34,15 +34,17 @@ class ShaderDX11 : public Shader {
         std::vector<uint8_t> vertexShaderBytecode;
         std::vector<uint8_t> fragmentShaderBytecode;
 
-        SmartRef<std::vector<D3D11_INPUT_ELEMENT_DESC>> dxVertexInputElemDesc;
-        SmartRef<ID3D11InputLayout*> dxVertexInputLayout;
+        std::vector<String> vertexInputElemSemanticNames;
+        std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc;
+        D3D11InputLayoutRef dxVertexInputLayout;
 
         std::vector<String> vertexInputElems;
 
         class CBufferInfo;
+        typedef ResourceReference<CBufferInfo*> CBufferInfoRef;
         class ConstantDX11 : public Constant {
             public:
-                ConstantDX11(CBufferInfo* cBuffer, String nm, int offst, int sz);
+                ConstantDX11(CBufferInfoRef cBuffer, String nm, int offst, int sz);
                 ~ConstantDX11(){};
 
                 void setValue(Matrix4x4f value) override;
@@ -56,7 +58,7 @@ class ShaderDX11 : public Shader {
                 String getName() const;
 
             private:
-                CBufferInfo* constantBuffer;
+                CBufferInfoRef constantBuffer;
                 String name;
                 int offset;
                 int size;
@@ -64,7 +66,8 @@ class ShaderDX11 : public Shader {
 
         class CBufferInfo {
             public:
-                CBufferInfo(Graphics* graphics, String nm,int sz);
+                CBufferInfo();
+                CBufferInfo(Graphics* graphics, String nm, int sz, ResourceManager& resourceManager);
                 ~CBufferInfo();
 
                 uint8_t* getData();
@@ -73,30 +76,41 @@ class ShaderDX11 : public Shader {
                 bool isDirty() const;
                 void markAsDirty();
                 void update();
-                ID3D11Buffer* getDxCBuffer();
+                D3D11BufferRef getDxCBuffer();
 
             private:
                 String name;
                 uint8_t* data;
                 int size;
                 std::vector<ConstantDX11> constants;
-                ID3D11DeviceContext* dxContext;
-                ID3D11Buffer* dxCBuffer;
+                D3D11DeviceContextRef dxContext;
+                D3D11BufferRef dxCBuffer;
                 bool dirty;
         };
+        
+        class CBufferInfoOwner : ResourceOwner<CBufferInfo*> {
+            private:
+                Graphics* graphics; String name; int size; ResourceManager* resourceManager;
+            protected:
+                virtual void initInternal() override;
+            public:
+                CBufferInfoOwner(Graphics* gfx, String nm, int sz, ResourceManager& rm);
 
-        SmartRef<std::vector<CBufferInfo*>> vertexConstantBuffers;
-        SmartRef<std::vector<CBufferInfo*>> fragmentConstantBuffers;
-        void readConstantBuffers(std::ifstream& reflectionInfo, SmartRef<std::vector<CBufferInfo*>>& constantBuffers);
+                static CBufferInfoRef createRef(Graphics* graphics, String nm, int sz, ResourceManager& rm);
+        };
 
-        SmartRef<std::vector<ID3D11SamplerState*>> dxSamplerState;
+        ResourceRefVector<CBufferInfo*> vertexConstantBuffers;
+        ResourceRefVector<CBufferInfo*> fragmentConstantBuffers;
+        void readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefVector<CBufferInfo*>& constantBuffers);
 
-        SmartRef<ID3D11VertexShader*> dxVertexShader;
-        SmartRef<ID3D11PixelShader*> dxFragmentShader;
+        ResourceRefVector<ID3D11SamplerState*> dxSamplerState;
 
-        SmartOrderedDestructor destructor = 7;
+        D3D11VertexShaderRef dxVertexShader;
+        D3D11PixelShaderRef dxFragmentShader;
 
         Graphics* graphics;
+
+        ResourceManager resourceManager;
 };
 
 }

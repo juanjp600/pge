@@ -7,7 +7,11 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 
-#include "../Misc/SmartPrimitive.h"
+#include <ResourceManagement/ResourceReference.h>
+#include <ResourceManagement/ResourceManager.h>
+#include <ResourceManagement/ResourceOwner.h>
+
+#include "../ResourceManagement/DX11.h"
 
 namespace PGE {
 
@@ -25,10 +29,10 @@ class GraphicsDX11 : public GraphicsInternal {
 
         virtual void setViewport(Rectanglei vp) override;
 
-        ID3D11Device* getDxDevice() const;
-        ID3D11DeviceContext* getDxContext() const;
-        ID3D11RenderTargetView* getBackBufferRtv() const;
-        ID3D11DepthStencilView* getZBufferView() const;
+        D3D11DeviceRef getDxDevice() const;
+        D3D11DeviceContextRef getDxContext() const;
+        D3D11RenderTargetViewRef getBackBufferRtv() const;
+        D3D11DepthStencilViewRef getZBufferView() const;
 
         enum class ZBUFFER_STATE_INDEX {
             ENABLED_WRITE = 0,
@@ -38,42 +42,32 @@ class GraphicsDX11 : public GraphicsInternal {
 
         void setZBufferState(ZBUFFER_STATE_INDEX index);
 
-        static void destroyChild(ID3D11DeviceChild* const& child) {
-            child->Release();
-        }
-
-        static void destroyChildren(std::vector<ID3D11DeviceChild*> const& children) {
-            for (auto& c : children) {
-                c->Release();
-            }
-        }
-
     private:
-        SmartRef<IDXGIFactory1*> dxgiFactory;
+        DXGIFactory1Ref dxgiFactory;
 
         DXGI_SWAP_CHAIN_DESC dxSwapChainDesc;
-        SmartRef<IDXGISwapChain*> dxSwapChain;
+        DXGISwapChainRef dxSwapChain;
 
-        SmartRef<ID3D11Device*> dxDevice;
-        SmartRef<ID3D11DeviceContext*> dxContext;
+        D3D11DeviceRef dxDevice;
+        D3D11DeviceContextRef dxContext;
 
-        SmartRef<ID3D11RenderTargetView*> dxBackBufferRtv;
-        SmartRef<ID3D11Texture2D*> dxZBufferTexture;
-        SmartRef<ID3D11DepthStencilView*> dxZBufferView;
-        SmartRef<std::vector<ID3D11DepthStencilState*>> dxDepthStencilState;
+        D3D11RenderTargetViewRef dxBackBufferRtv;
+        D3D11Texture2DRef dxZBufferTexture;
+        D3D11DepthStencilViewRef dxZBufferView;
+        ResourceRefVector<ID3D11DepthStencilState*> dxDepthStencilState;
 
         D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
-        SmartRef<ID3D11RasterizerState*> dxRasterizerState;
+        D3D11RasterizerStateRef dxRasterizerState;
 
         D3D11_BLEND_DESC dxBlendStateDesc;
-        SmartRef<ID3D11BlendState*> dxBlendState;
-
-        SmartOrderedDestructor destructor = 10;
+        D3D11BlendStateRef dxBlendState;
 
         D3D11_VIEWPORT dxViewport;
 
-        std::vector<ID3D11RenderTargetView*> currentRenderTargetViews;
-        ID3D11DepthStencilView* currentDepthStencilView;
+        ResourceRefVector<ID3D11RenderTargetView*> currentRenderTargetViews;
+        D3D11DepthStencilViewRef currentDepthStencilView;
+
+        ResourceManager resourceManager;
 };
 
 }

@@ -10,7 +10,7 @@
 #include <Windows.h>
 #include <Mesh/Mesh.h>
 
-#include "../Misc/SmartPrimitive.h"
+#include "../ResourceManagement/DX11.h"
 
 namespace PGE {
 
@@ -29,13 +29,13 @@ class MeshDX11 : public Mesh {
 
         D3D11_BUFFER_DESC dxVertexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxVertexBufferData;
-        SmartRef<ID3D11Buffer*> dxVertexBuffer;
+        D3D11BufferOwner dxVertexBuffer;
 
         D3D11_BUFFER_DESC dxIndexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxIndexBufferData;
-        SmartRef<ID3D11Buffer*> dxIndexBuffer;
+        D3D11BufferOwner dxIndexBuffer;
 
-        SmartOrderedDestructor destructor = 2;
+        ResourceManager resourceManager;
 
         virtual void uploadInternalData();
 };
