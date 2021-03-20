@@ -20,7 +20,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
 
     filepath = path;
 
-    std::vector<uint8_t> vertexFile = FileUtil::readBytes(path + "vertex.glsl");
+    std::vector<uint8_t> vertexFile; FileUtil::readBytes(path + "vertex.glsl", vertexFile);
     if (vertexFile.empty()) {
         throw Exception("ShaderOGL3", "Failed to find vertex.glsl. (filepath: " + path.str() + ")");
     }
@@ -49,7 +49,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx,const FilePath& path) {
         throw Exception("ShaderOGL3", "Failed to create vertex shader. (filepath: " + path.str() + ")\n" + errorStr);
     }
 
-    std::vector<uint8_t> fragmentFile = FileUtil::readBytes(path + "fragment.glsl");
+    std::vector<uint8_t> fragmentFile; FileUtil::readBytes(path + "fragment.glsl", fragmentFile);
     if (fragmentFile.empty()) {
         throw Exception("ShaderOGL3", "Failed to find fragment shader. (filepath: " + path.str() + ")");
     }
