@@ -23,16 +23,16 @@ class FileUtil {
         static String getDataFolder();
 
         // Returns all direct subdirectories.
-        static std::vector<FilePath> enumerateFolders(const FilePath& path);
+        static void enumerateFolders(const FilePath& path, std::vector<FilePath>& folders);
 
         // Enumerates subdirectories.
-        static std::vector<FilePath> enumerateFiles(const FilePath& path);
+        static void enumerateFiles(const FilePath& path, std::vector<FilePath>& files);
 
         // Returns all lines from a file.
-        static std::vector<String> readLines(const FilePath& path, bool includeEmptyLines=false);
+        static void readLines(const FilePath& path, std::vector<String>& lines, bool includeEmptyLines=false);
 
         // Returns all bytes in a file.
-        static std::vector<uint8_t> readBytes(const FilePath& path);
+        static void readBytes(const FilePath& path, std::vector<uint8_t>& bytes);
 };
     
 }
