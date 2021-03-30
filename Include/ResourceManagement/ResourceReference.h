@@ -13,10 +13,8 @@ class ResourceReference : public ResourceReferenceBase {
     public:
         ResourceReference() { }
         ResourceReference(T res) { internalResource = res; holdsResource = true; }
-        T& operator->() { return internalResource; }
-        T& get() { return internalResource; }
+        operator const T&() const { return internalResource; }
         const T& operator->() const { return internalResource; }
-        const T& get() const { return internalResource; }
         bool isHoldingResource() const { return holdsResource; }
 };
 
@@ -38,7 +36,7 @@ class ResourceRefVector {
                 }
 
                 void operator=(const ResourceReference<T>& other) {
-                    *elementPtr = other.get();
+                    *elementPtr = other;
                 }
 
                 operator ResourceReference<T>() {
@@ -60,7 +58,7 @@ class ResourceRefVector {
         }
 
         void add(ResourceReference<T> element) {
-            elements.push_back(element.get());
+            elements.push_back(element);
         }
 
         T* data() {

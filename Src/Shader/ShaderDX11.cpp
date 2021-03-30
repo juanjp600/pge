@@ -8,7 +8,7 @@
 
 using namespace PGE;
 
-ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
+ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) {
     graphics = gfx;
 
     filepath = path;
@@ -73,7 +73,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     D3D11DeviceRef dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     dxSamplerState = ResourceRefVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < samplerCount; i++) {
-        dxSamplerState[i] = D3D11SamplerStateOwner::createRef(dxDevice, samplerDesc, resourceManager);
+        dxSamplerState[i] = D3D11SamplerStateOwner::createRef(resourceManager, dxDevice, samplerDesc);
     }
 
     reflectionInfo.close();
@@ -88,13 +88,14 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
         throw Exception("ShaderDX11","Fragment shader is empty (filename: "+path.str()+")");
     }
 
-    dxVertexShader = D3D11VertexShaderOwner::createRef(dxDevice, vertexShaderBytecode, resourceManager);
-    dxFragmentShader = D3D11PixelShaderOwner::createRef(dxDevice, fragmentShaderBytecode, resourceManager);
-    dxVertexInputLayout = D3D11InputLayoutOwner::createRef(dxDevice, dxVertexInputElemDesc, vertexShaderBytecode, resourceManager);
+    dxVertexShader = D3D11VertexShaderOwner::createRef(resourceManager, dxDevice, vertexShaderBytecode);
+    dxFragmentShader = D3D11PixelShaderOwner::createRef(resourceManager, dxDevice, fragmentShaderBytecode);
+    dxVertexInputLayout = D3D11InputLayoutOwner::createRef(resourceManager, dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
 }
 
 void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefVector<CBufferInfo*>& constantBuffers) {
     int cBufferCount = 0; reflectionInfo.read((char*)(void*)&cBufferCount, 1);
+    resourceManager.increaseSize(cBufferCount * 2);
     for (int i = 0; i < cBufferCount; i++) {
         String cBufferName = "";
         char chr; reflectionInfo.read(&chr, 1);
@@ -104,7 +105,7 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefV
         }
         int cBufferSize = 0; reflectionInfo.read((char*)(void*)&cBufferSize, 1);
         
-        CBufferInfoRef constantBuffer = CBufferInfoOwner::createRef(graphics,cBufferName,cBufferSize,resourceManager);
+        CBufferInfoRef constantBuffer = CBufferInfoOwner::createRef(resourceManager, graphics, cBufferName, cBufferSize, &resourceManager);
         constantBuffers.add(constantBuffer);
 
 
@@ -172,23 +173,23 @@ void ShaderDX11::useShader() {
 
     for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
         vertexConstantBuffers[i].get()->update();
-        ID3D11Buffer* dxCBuffers[] = { vertexConstantBuffers[i]->getDxCBuffer().get() };
+        ID3D11Buffer* dxCBuffers[] = { vertexConstantBuffers[i]->getDxCBuffer() };
         dxContext->VSSetConstantBuffers(i,1,dxCBuffers);
     }
 
     for (int i = 0; i < (int)fragmentConstantBuffers.size(); i++) {
         fragmentConstantBuffers[i].get()->update();
-        ID3D11Buffer* dxCBuffers[] = { fragmentConstantBuffers[i]->getDxCBuffer().get() };
+        ID3D11Buffer* dxCBuffers[] = { fragmentConstantBuffers[i]->getDxCBuffer() };
         dxContext->PSSetConstantBuffers(i,1,dxCBuffers);
     }
     
-    dxContext->VSSetShader(dxVertexShader.get(),NULL,0);
-    dxContext->PSSetShader(dxFragmentShader.get(),NULL,0);
+    dxContext->VSSetShader(dxVertexShader,NULL,0);
+    dxContext->PSSetShader(dxFragmentShader,NULL,0);
 }
 
 void ShaderDX11::useVertexInputLayout() {
     D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
-    dxContext->IASetInputLayout(dxVertexInputLayout.get());
+    dxContext->IASetInputLayout(dxVertexInputLayout);
 }
 
 void ShaderDX11::useSamplers() {
@@ -196,24 +197,11 @@ void ShaderDX11::useSamplers() {
     dxContext->PSSetSamplers(0, (UINT)dxSamplerState.size(), dxSamplerState.data());
 }
 
-ShaderDX11::CBufferInfoOwner::CBufferInfoOwner(Graphics* gfx, String nm, int sz, ResourceManager& rm) {
-    graphics = gfx; name = nm; size = sz; resourceManager = &rm;
+ShaderDX11::CBufferInfoOwner::CBufferInfoOwner(Graphics* gfx, String nm, int sz, ResourceManager* rm) {
+    resource = new ShaderDX11::CBufferInfo(gfx, nm, sz, rm);
 }
 
-void ShaderDX11::CBufferInfoOwner::initInternal() {
-    resource = new ShaderDX11::CBufferInfo(graphics, name, size, *resourceManager);
-}
-
-ShaderDX11::CBufferInfoRef ShaderDX11::CBufferInfoOwner::createRef(Graphics* gfx, String nm, int sz, ResourceManager& rm) {
-    ShaderDX11::CBufferInfoOwner* owner = new ShaderDX11::CBufferInfoOwner(gfx, nm, sz, rm);
-    rm.addResource(owner);
-    owner->init();
-    return ShaderDX11::CBufferInfoRef(owner->get());
-}
-
-ShaderDX11::CBufferInfo::CBufferInfo() { }
-
-ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, String nm, int sz, ResourceManager& resourceManager) {
+ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, String nm, int sz, ResourceManager* resourceManager) {
     name = nm;
     size = sz;
     data = new uint8_t[size];
@@ -232,7 +220,7 @@ ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, String nm, int sz, Reso
 
     HRESULT hResult = 0;
 
-    dxCBuffer = D3D11BufferOwner::createRef(((GraphicsDX11*)graphics)->getDxDevice(), cBufferDesc, cBufferSubresourceData, resourceManager);
+    dxCBuffer = D3D11BufferOwner::createRef(*resourceManager, ((GraphicsDX11*)graphics)->getDxDevice(), cBufferDesc, cBufferSubresourceData);
 
     dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
@@ -265,12 +253,12 @@ void ShaderDX11::CBufferInfo::markAsDirty() {
 
 void ShaderDX11::CBufferInfo::update() {
     if (!dirty) { return; }
-    dxContext->UpdateSubresource(dxCBuffer.get(),0,NULL,data,0,0);
+    dxContext->UpdateSubresource(dxCBuffer,0,NULL,data,0,0);
     dirty = false;
 }
 
 D3D11BufferRef ShaderDX11::CBufferInfo::getDxCBuffer() {
-    return D3D11BufferRef(dxCBuffer.get());
+    return D3D11BufferRef(dxCBuffer);
 }
 
 ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoRef cBuffer, String nm, int offst, int sz) {

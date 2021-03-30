@@ -9,7 +9,7 @@ using namespace PGE;
 
 //REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
 
-GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(name, w, h, fs) {
+GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(name, w, h, fs), resourceManager(12) {
     HRESULT hResult = 0;
     int errorCode = 0;
 
@@ -59,9 +59,9 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     dxSwapChainDesc.Windowed = TRUE;
 
     dxDevice = D3D11DeviceOwner::createRef(resourceManager);
-    dxContext = D3D11ImmediateContextOwner::createRef(dxDevice, resourceManager);
-    dxSwapChain = DXGISwapChainOwner::createRef(dxgiFactory, dxDevice, dxSwapChainDesc, resourceManager);
-    dxBackBufferRtv = D3D11BackBufferRtvOwner::createRef(dxDevice, dxSwapChain, resourceManager);
+    dxContext = D3D11ImmediateContextOwner::createRef(resourceManager, dxDevice);
+    dxSwapChain = DXGISwapChainOwner::createRef(resourceManager, dxgiFactory, dxDevice, dxSwapChainDesc);
+    dxBackBufferRtv = D3D11BackBufferRtvOwner::createRef(resourceManager, dxDevice, dxSwapChain);
 
     // Create depth stencil texture
     D3D11_TEXTURE2D_DESC descDepth;
@@ -77,7 +77,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     descDepth.CPUAccessFlags = 0;
     descDepth.MiscFlags = 0;
-    dxZBufferTexture = D3D11Texture2DOwner::createRef(dxDevice, descDepth, resourceManager);
+    dxZBufferTexture = D3D11Texture2DOwner::createRef(resourceManager, dxDevice, descDepth);
 
     // Create the depth stencil view
     D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
@@ -85,10 +85,10 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     descDSV.Format = descDepth.Format;
     descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     descDSV.Texture2D.MipSlice = 0;
-    dxZBufferView = D3D11DepthStencilViewOwner::createRef(dxDevice, dxZBufferTexture, descDSV, resourceManager);
+    dxZBufferView = D3D11DepthStencilViewOwner::createRef(resourceManager, dxDevice, dxZBufferTexture, descDSV);
 
-    ID3D11RenderTargetView* rtvArr[] = { dxBackBufferRtv.get() };
-    dxContext->OMSetRenderTargets(1, rtvArr, dxZBufferView.get());
+    ID3D11RenderTargetView* rtvArr[] = { dxBackBufferRtv };
+    dxContext->OMSetRenderTargets(1, rtvArr, dxZBufferView);
 
     ZeroMemory(&dxRasterizerStateDesc, sizeof(D3D11_RASTERIZER_DESC));
     dxRasterizerStateDesc.AntialiasedLineEnable = false;
@@ -98,9 +98,9 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     dxRasterizerStateDesc.ScissorEnable = false;
     dxRasterizerStateDesc.MultisampleEnable = false;
     dxRasterizerStateDesc.FrontCounterClockwise = true;
-    dxRasterizerState = D3D11RasterizerStateOwner::createRef(dxDevice, dxRasterizerStateDesc, resourceManager);
+    dxRasterizerState = D3D11RasterizerStateOwner::createRef(resourceManager, dxDevice, dxRasterizerStateDesc);
     
-    dxContext->RSSetState(dxRasterizerState.get());
+    dxContext->RSSetState(dxRasterizerState);
 
     ZeroMemory(&dxBlendStateDesc, sizeof(D3D11_BLEND_DESC));
     dxBlendStateDesc.RenderTarget[0].BlendEnable = true;
@@ -111,9 +111,9 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     dxBlendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
     dxBlendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     dxBlendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    dxBlendState = D3D11BlendStateOwner::createRef(dxDevice, dxBlendStateDesc, resourceManager);
+    dxBlendState = D3D11BlendStateOwner::createRef(resourceManager, dxDevice, dxBlendStateDesc);
 
-    dxContext->OMSetBlendState(dxBlendState.get(), 0, 0xffffffff);
+    dxContext->OMSetBlendState(dxBlendState, 0, 0xffffffff);
 
     dxDepthStencilState = ResourceRefVector<ID3D11DepthStencilState*>::withSize(3);
 
@@ -137,14 +137,14 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE] = D3D11DepthStencilStateOwner::createRef(dxDevice, depthStencilDesc, resourceManager);
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE] = D3D11DepthStencilStateOwner::createRef(resourceManager, dxDevice, depthStencilDesc);
     dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE].get(), 0);
 
     depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] = D3D11DepthStencilStateOwner::createRef(dxDevice, depthStencilDesc, resourceManager);
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] = D3D11DepthStencilStateOwner::createRef(resourceManager, dxDevice, depthStencilDesc);
 
     depthStencilDesc.DepthEnable = FALSE;
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] = D3D11DepthStencilStateOwner::createRef(dxDevice, depthStencilDesc, resourceManager);
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] = D3D11DepthStencilStateOwner::createRef(resourceManager, dxDevice, depthStencilDesc);
 
     setViewport(Rectanglei(0,0,w,h));
     currentRenderTargetViews.add(dxBackBufferRtv);
@@ -163,7 +163,7 @@ void GraphicsDX11::clear(Color color) {
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         dxContext->ClearRenderTargetView( currentRenderTargetViews[i].get(), clearColor );
     }
-    dxContext->ClearDepthStencilView( currentDepthStencilView.get(), D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
+    dxContext->ClearDepthStencilView( currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
 }
 
 void GraphicsDX11::setRenderTarget(Texture* renderTarget) {
@@ -174,7 +174,7 @@ void GraphicsDX11::setRenderTarget(Texture* renderTarget) {
 
     currentRenderTargetViews.clear(); currentRenderTargetViews.add(((TextureDX11*)renderTarget)->getRtv());
     currentDepthStencilView = ((TextureDX11*)renderTarget)->getZBufferView();
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView.get() );
+    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
@@ -202,7 +202,7 @@ void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
         }
     }
     currentDepthStencilView = maxSizeTexture->getZBufferView();
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView.get() );
+    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::resetRenderTarget() {
@@ -213,7 +213,7 @@ void GraphicsDX11::resetRenderTarget() {
 
     currentRenderTargetViews.clear(); currentRenderTargetViews.add(dxBackBufferRtv);
     currentDepthStencilView = dxZBufferView;
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView.get() );
+    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::setViewport(Rectanglei vp) {

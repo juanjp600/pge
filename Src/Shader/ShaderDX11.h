@@ -67,7 +67,7 @@ class ShaderDX11 : public Shader {
         class CBufferInfo {
             public:
                 CBufferInfo();
-                CBufferInfo(Graphics* graphics, String nm, int sz, ResourceManager& resourceManager);
+                CBufferInfo(Graphics* graphics, String nm, int sz, ResourceManager* resourceManager);
                 ~CBufferInfo();
 
                 uint8_t* getData();
@@ -89,14 +89,10 @@ class ShaderDX11 : public Shader {
         };
         
         class CBufferInfoOwner : ResourceOwner<CBufferInfo*> {
-            private:
-                Graphics* graphics; String name; int size; ResourceManager* resourceManager;
-            protected:
-                virtual void initInternal() override;
             public:
-                CBufferInfoOwner(Graphics* gfx, String nm, int sz, ResourceManager& rm);
+                CBufferInfoOwner(Graphics* gfx, String nm, int sz, ResourceManager* rm);
 
-                static CBufferInfoRef createRef(Graphics* graphics, String nm, int sz, ResourceManager& rm);
+                __RES_MNGMT__REF_METH(CBufferInfoOwner, CBufferInfoRef)
         };
 
         ResourceRefVector<CBufferInfo*> vertexConstantBuffers;

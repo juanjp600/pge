@@ -1,20 +1,35 @@
 #ifndef PGE_RESOURCEOWNER_H_INCLUDED
 #define PGE_RESOURCEOWNER_H_INCLUDED
 
+#include <type_traits>
+
+#define __RES_MNGMT__REF_METH__NO_DFT_CTOR(Owner, Ref) \
+template <class... Args> \
+static Ref createRef(ResourceManager& resMngr, Args... args) { \
+    static_assert(std::is_default_constructible<Owner>::value); \
+    static_assert(std::is_base_of<ResourceReferenceBase, Ref>::value); \
+    Owner* owner = new Owner(args...); \
+    resMngr.addResource(owner); \
+    return Ref(*owner); \
+}
+
+#define __RES_MNGMT__REF_METH(Owner, Ref) \
+__RES_MNGMT__REF_METH__NO_DFT_CTOR(Owner, Ref) \
+\
+Owner() { \
+    holdsResource = false; \
+}
+
 namespace PGE {
 
 class ResourceOwnerBase {
     protected:
-        bool holdsResource = false;
-        virtual void initInternal() = 0;
+        bool holdsResource;
     public:
-        ResourceOwnerBase() { }
+        // True by DEFAULT!
+        // Macro should be used.
+        ResourceOwnerBase() { holdsResource = true; }
         virtual ~ResourceOwnerBase() { }
-
-        void init() {
-            initInternal();
-            holdsResource = true;
-        }
 
         bool isHoldingResource() const { return holdsResource; }
 };
@@ -24,9 +39,10 @@ class ResourceOwner : public ResourceOwnerBase {
     protected:
         T resource;
     public:
-        T get() const { return resource; }
+        operator const T& () const { return resource; }
+        const T& operator->() const { return resource; }
 };
 
 }
 
-#endif
+#endif // PGE_RESOURCEOWNER_H_INCLUDED

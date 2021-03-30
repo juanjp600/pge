@@ -9,7 +9,7 @@
 
 using namespace PGE;
 
-TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,FORMAT fmt) {
+TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,FORMAT fmt) : resourceManager(2) {
     isRT = renderTarget;
 
     graphics = gfx;
@@ -65,17 +65,17 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     dxTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
     dxTextureDesc.CPUAccessFlags = 0;
 
-    dxTexture = D3D11Texture2DOwner::createRef(dxDevice, dxTextureDesc, resourceManager);
-    if (buffer != nullptr) { dxContext->UpdateSubresource(dxTexture.get(),0,NULL,buffer,realWidth*4,0); }
+    dxTexture = D3D11Texture2DOwner::createRef(resourceManager, dxDevice, dxTextureDesc);
+    if (buffer != nullptr) { dxContext->UpdateSubresource(dxTexture,0,NULL,buffer,realWidth*4,0); }
 
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = dxFormat;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     dxShaderResourceViewDesc.Texture2D.MipLevels = 1;
-    dxShaderResourceView = D3D11ShaderResourceViewOwner::createRef(dxDevice, dxTexture, dxShaderResourceViewDesc, resourceManager);
+    dxShaderResourceView = D3D11ShaderResourceViewOwner::createRef(resourceManager, dxDevice, dxTexture, dxShaderResourceViewDesc);
 
     if (isRT) {
-        dxRtv = D3D11RenderTargetViewOwner::createRef(dxDevice, dxTexture, resourceManager);
+        dxRtv = D3D11RenderTargetViewOwner::createRef(resourceManager, dxDevice, dxTexture);
 
         // Create depth stencil texture
         D3D11_TEXTURE2D_DESC descDepth;
@@ -91,7 +91,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
         descDepth.CPUAccessFlags = 0;
         descDepth.MiscFlags = 0;
-        dxZBufferTexture = D3D11Texture2DOwner::createRef(dxDevice, descDepth, resourceManager);
+        dxZBufferTexture = D3D11Texture2DOwner::createRef(resourceManager, dxDevice, descDepth);
 
         // Create the depth stencil view
         D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
@@ -99,13 +99,13 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         descDSV.Format = descDepth.Format;
         descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
         descDSV.Texture2D.MipSlice = 0;
-        dxZBufferView = D3D11DepthStencilViewOwner::createRef(dxDevice, dxZBufferTexture, descDSV, resourceManager);
+        dxZBufferView = D3D11DepthStencilViewOwner::createRef(resourceManager, dxDevice, dxZBufferTexture, descDSV);
     }
 
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 }
 
-TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn) {
+TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn) : resourceManager(2) {
     graphics = gfx;
     width = w;
     height = h;
@@ -134,28 +134,28 @@ TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
 
     HRESULT hResult = 0;
 
-    dxTexture = D3D11Texture2DOwner::createRef(dxDevice, dxTextureDesc, resourceManager);
-    dxContext->UpdateSubresource(dxTexture.get(),0,NULL,fiBuffer,realWidth*4,0);
+    dxTexture = D3D11Texture2DOwner::createRef(resourceManager, dxDevice, dxTextureDesc);
+    dxContext->UpdateSubresource(dxTexture,0,NULL,fiBuffer,realWidth*4,0);
 
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     dxShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
     dxShaderResourceViewDesc.Texture2D.MipLevels = -1;
-    dxShaderResourceView = D3D11ShaderResourceViewOwner::createRef(dxDevice, dxTexture, dxShaderResourceViewDesc, resourceManager);
+    dxShaderResourceView = D3D11ShaderResourceViewOwner::createRef(resourceManager, dxDevice, dxTexture, dxShaderResourceViewDesc);
 
-    dxContext->GenerateMips(dxShaderResourceView.get());
+    dxContext->GenerateMips(dxShaderResourceView);
 
     isRT = false;
 }
 
-TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager) {
-    throw Exception("TextureDX11", "TODO: refactor, then reimplement");
+TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager) : resourceManager(0) {
+    throw Exception("TextureDX11", "TODO: refactor, then reimplement"); // TODO
 }
 
 void TextureDX11::useTexture(int index) {
     D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
-    ID3D11ShaderResourceView* srvArr[] { dxShaderResourceView.get() };
+    ID3D11ShaderResourceView* srvArr[] { dxShaderResourceView };
     dxContext->PSSetShaderResources(index,1,srvArr);
 }
 
@@ -165,7 +165,7 @@ Texture* TextureDX11::copy() const {
     TextureDX11* copy = new TextureDX11(graphics, getWidth(), getHeight(), false, nullptr, format);
     copy->name = String(name, "_Copy");
 
-    dxContext->CopyResource(copy->dxTexture.get(), dxTexture.get());
+    dxContext->CopyResource(copy->dxTexture, dxTexture);
 
     // TODO: Check MipLevels, might have to regenerate dxShaderResourceView.
 
@@ -181,5 +181,5 @@ D3D11DepthStencilViewRef TextureDX11::getZBufferView() const {
 }
 
 void* TextureDX11::getNative() const {
-    return dxTexture.get();
+    return dxTexture;
 }

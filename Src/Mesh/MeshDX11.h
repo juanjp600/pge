@@ -35,8 +35,6 @@ class MeshDX11 : public Mesh {
         D3D11_SUBRESOURCE_DATA dxIndexBufferData;
         D3D11BufferOwner dxIndexBuffer;
 
-        ResourceManager resourceManager;
-
         virtual void uploadInternalData();
 };
 
