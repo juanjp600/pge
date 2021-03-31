@@ -6,6 +6,7 @@
 #include <ResourceManagement/ResourceManager.h>
 #include <ResourceManagement/Resource.h>
 #include <ResourceManagement/ResourceReference.h>
+#include "DX11/DX11Resource.h"
 
 namespace PGE {
 
@@ -28,16 +29,6 @@ typedef ResourceReference<ID3D11PixelShader*> D3D11PixelShaderRef;
 typedef ResourceReference<ID3D11InputLayout*> D3D11InputLayoutRef;
 typedef ResourceReference<ID3D11ShaderResourceView*> D3D11ShaderResourceViewRef;
 
-template <class T>
-class DX11Resource : public Resource<T> {
-    protected:
-        virtual ~DX11Resource() override {
-            static_assert(std::is_pointer<T>::value);
-            static_assert(std::is_convertible<T, IUnknown*>::value);
-            ((IUnknown*)this->resource)->Release();
-        }
-};
-
 class DXGIFactory1 : public DX11Resource<IDXGIFactory1*> {
     public:
         DXGIFactory1() {
@@ -47,7 +38,7 @@ class DXGIFactory1 : public DX11Resource<IDXGIFactory1*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(DXGIFactory1, DXGIFactory1Ref)
+        __RES_MNGMT__REF_FACT_METH(DXGIFactory1, DXGIFactory1Ref)
 };
 
 class D3D11Device : public DX11Resource<ID3D11Device*> {
@@ -65,7 +56,7 @@ class D3D11Device : public DX11Resource<ID3D11Device*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11Device, D3D11DeviceRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11Device, D3D11DeviceRef)
 };
 
 class D3D11ImmediateContext : public DX11Resource<ID3D11DeviceContext*> {
@@ -74,7 +65,7 @@ class D3D11ImmediateContext : public DX11Resource<ID3D11DeviceContext*> {
             device->GetImmediateContext(&resource);
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11ImmediateContext, D3D11DeviceContextRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11ImmediateContext, D3D11DeviceContextRef)
 };
 
 class DXGISwapChain : public DX11Resource<IDXGISwapChain*> {
@@ -93,7 +84,7 @@ class DXGISwapChain : public DX11Resource<IDXGISwapChain*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(DXGISwapChain, DXGISwapChainRef)
+        __RES_MNGMT__REF_FACT_METH(DXGISwapChain, DXGISwapChainRef)
 };
 
 class D3D11RenderTargetView : public DX11Resource<ID3D11RenderTargetView*> {
@@ -112,7 +103,7 @@ class D3D11RenderTargetView : public DX11Resource<ID3D11RenderTargetView*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11RenderTargetView, D3D11RenderTargetViewRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11RenderTargetView, D3D11RenderTargetViewRef)
 };
 
 class D3D11BackBufferRtv : public DX11Resource<ID3D11RenderTargetView*> {
@@ -130,7 +121,7 @@ class D3D11BackBufferRtv : public DX11Resource<ID3D11RenderTargetView*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11BackBufferRtv, D3D11RenderTargetViewRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11BackBufferRtv, D3D11RenderTargetViewRef)
 };
 
 class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
@@ -142,7 +133,7 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11Texture2D, D3D11Texture2DRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11Texture2D, D3D11Texture2DRef)
 };
 
 class D3D11DepthStencilView : public DX11Resource<ID3D11DepthStencilView*> {
@@ -154,7 +145,7 @@ class D3D11DepthStencilView : public DX11Resource<ID3D11DepthStencilView*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11DepthStencilView, D3D11DepthStencilViewRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11DepthStencilView, D3D11DepthStencilViewRef)
 };
 
 class D3D11ShaderResourceView : public DX11Resource<ID3D11ShaderResourceView*> {
@@ -166,7 +157,7 @@ class D3D11ShaderResourceView : public DX11Resource<ID3D11ShaderResourceView*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11ShaderResourceView, D3D11ShaderResourceViewRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11ShaderResourceView, D3D11ShaderResourceViewRef)
 };
 
 class D3D11RasterizerState : public DX11Resource<ID3D11RasterizerState*> {
@@ -178,7 +169,7 @@ class D3D11RasterizerState : public DX11Resource<ID3D11RasterizerState*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11RasterizerState, D3D11RasterizerStateRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11RasterizerState, D3D11RasterizerStateRef)
 };
 
 class D3D11BlendState : public DX11Resource<ID3D11BlendState*> {
@@ -190,7 +181,7 @@ class D3D11BlendState : public DX11Resource<ID3D11BlendState*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11BlendState, D3D11BlendStateRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11BlendState, D3D11BlendStateRef)
 };
 
 class D3D11SamplerState : public DX11Resource<ID3D11SamplerState*> {
@@ -202,7 +193,7 @@ class D3D11SamplerState : public DX11Resource<ID3D11SamplerState*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11SamplerState, D3D11SamplerStateRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11SamplerState, D3D11SamplerStateRef)
 };
 
 class D3D11DepthStencilState : public DX11Resource<ID3D11DepthStencilState*> {
@@ -214,7 +205,7 @@ class D3D11DepthStencilState : public DX11Resource<ID3D11DepthStencilState*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11DepthStencilState, D3D11DepthStencilStateRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11DepthStencilState, D3D11DepthStencilStateRef)
 };
 
 class D3D11Buffer : public DX11Resource<ID3D11Buffer*> {
@@ -226,7 +217,7 @@ class D3D11Buffer : public DX11Resource<ID3D11Buffer*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11Buffer, D3D11BufferRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11Buffer, D3D11BufferRef)
 };
 
 class D3D11VertexShader : public DX11Resource<ID3D11VertexShader*> {
@@ -238,7 +229,7 @@ class D3D11VertexShader : public DX11Resource<ID3D11VertexShader*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11VertexShader, D3D11VertexShaderRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11VertexShader, D3D11VertexShaderRef)
 };
 
 class D3D11PixelShader : public DX11Resource<ID3D11PixelShader*> {
@@ -250,7 +241,7 @@ class D3D11PixelShader : public DX11Resource<ID3D11PixelShader*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11PixelShader, D3D11PixelShaderRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11PixelShader, D3D11PixelShaderRef)
 };
 
 class D3D11InputLayout : public DX11Resource<ID3D11InputLayout*> {
@@ -262,7 +253,7 @@ class D3D11InputLayout : public DX11Resource<ID3D11InputLayout*> {
             }
         }
 
-        __RES_MNGMT__REF_FACTORY_METHOD(D3D11InputLayout, D3D11InputLayoutRef)
+        __RES_MNGMT__REF_FACT_METH(D3D11InputLayout, D3D11InputLayoutRef)
 };
 
 }

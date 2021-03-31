@@ -71,7 +71,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     samplerDesc.MipLODBias = -0.1f;
 
     D3D11DeviceRef dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
-    dxSamplerState = ResourceRefVector<ID3D11SamplerState*>::withSize(samplerCount);
+    dxSamplerState = ResourceReferenceVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < samplerCount; i++) {
         dxSamplerState[i] = D3D11SamplerState::createRef(resourceManager, dxDevice, samplerDesc);
     }
@@ -93,7 +93,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     dxVertexInputLayout = D3D11InputLayout::createRef(resourceManager, dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
 }
 
-void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefVector<CBufferInfo*>& constantBuffers) {
+void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceReferenceVector<CBufferInfo*>& constantBuffers) {
     int cBufferCount = 0; reflectionInfo.read((char*)(void*)&cBufferCount, 1);
     resourceManager.increaseSize(cBufferCount * 2);
     for (int i = 0; i < cBufferCount; i++) {
@@ -171,15 +171,13 @@ void ShaderDX11::useShader() {
     D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
-        vertexConstantBuffers[i].get()->update();
-        ID3D11Buffer* dxCBuffers[] = { vertexConstantBuffers[i]->getDxCBuffer() };
-        dxContext->VSSetConstantBuffers(i,1,dxCBuffers);
+        vertexConstantBuffers[i]->update();
+        dxContext->VSSetConstantBuffers(i,1,&vertexConstantBuffers[i]->getDxCBuffer());
     }
 
     for (int i = 0; i < (int)fragmentConstantBuffers.size(); i++) {
-        fragmentConstantBuffers[i].get()->update();
-        ID3D11Buffer* dxCBuffers[] = { fragmentConstantBuffers[i]->getDxCBuffer() };
-        dxContext->PSSetConstantBuffers(i,1,dxCBuffers);
+        fragmentConstantBuffers[i]->update();
+        dxContext->PSSetConstantBuffers(i,1,&fragmentConstantBuffers[i]->getDxCBuffer());
     }
     
     dxContext->VSSetShader(dxVertexShader,NULL,0);

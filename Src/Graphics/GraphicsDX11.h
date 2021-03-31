@@ -7,6 +7,7 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 
+#include <ResourceManagement/ResourceReferenceVector.h>
 #include <ResourceManagement/ResourceReference.h>
 #include <ResourceManagement/ResourceManager.h>
 #include <ResourceManagement/Resource.h>
@@ -54,7 +55,7 @@ class GraphicsDX11 : public GraphicsInternal {
         D3D11RenderTargetViewRef dxBackBufferRtv;
         D3D11Texture2DRef dxZBufferTexture;
         D3D11DepthStencilViewRef dxZBufferView;
-        ResourceRefVector<ID3D11DepthStencilState*> dxDepthStencilState;
+        ResourceReferenceVector<ID3D11DepthStencilState*> dxDepthStencilState;
 
         D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
         D3D11RasterizerStateRef dxRasterizerState;
@@ -64,7 +65,7 @@ class GraphicsDX11 : public GraphicsInternal {
 
         D3D11_VIEWPORT dxViewport;
 
-        ResourceRefVector<ID3D11RenderTargetView*> currentRenderTargetViews;
+        ResourceReferenceVector<ID3D11RenderTargetView*> currentRenderTargetViews;
         D3D11DepthStencilViewRef currentDepthStencilView;
 
         ResourceManager resourceManager;

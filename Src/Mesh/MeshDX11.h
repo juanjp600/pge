@@ -2,7 +2,6 @@
 #define PGEINTERNAL_MESH_DX11_H_INCLUDED
 
 #include <vector>
-#include <memory>
 
 #include <dxgi.h>
 #include <d3dcommon.h>

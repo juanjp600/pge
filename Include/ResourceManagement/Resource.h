@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-#define __RES_MNGMT__REF_FACTORY_METHOD(Res, Ref) \
+#define __RES_MNGMT__REF_FACT_METH(Res, Ref) \
 template <class... Args> \
 static Ref createRef(ResourceManager& resMngr, Args... args) { \
     static_assert(std::is_base_of<ResourceReferenceBase, Ref>::value); \
@@ -16,7 +16,6 @@ namespace PGE {
 
 class ResourceBase {
     public:
-        ResourceBase() { }
         virtual ~ResourceBase() { }
 };
 
@@ -27,9 +26,10 @@ class Resource : public ResourceBase {
     public:
         operator const T& () const { return resource; }
         const T& operator->() const { return resource; }
+        const T* operator&() const { return &resource; }
         Resource<T>& operator=(const Resource<T>& other) = delete;
 };
 
 }
 
-#endif // PGE_RESOURCEOWNER_H_INCLUDED
+#endif // PGE_RESOURCE_H_INCLUDED

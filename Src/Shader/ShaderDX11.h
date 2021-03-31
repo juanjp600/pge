@@ -7,6 +7,7 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 
+#include <ResourceManagement/ResourceReference.h>
 #include <Shader/Shader.h>
 #include <Misc/String.h>
 
@@ -92,14 +93,14 @@ class ShaderDX11 : public Shader {
             public:
                 CBufferInfoOwner(Graphics* gfx, String nm, int sz, ResourceManager* rm);
 
-                __RES_MNGMT__REF_FACTORY_METHOD(CBufferInfoOwner, CBufferInfoRef)
+                __RES_MNGMT__REF_FACT_METH(CBufferInfoOwner, CBufferInfoRef)
         };
 
-        ResourceRefVector<CBufferInfo*> vertexConstantBuffers;
-        ResourceRefVector<CBufferInfo*> fragmentConstantBuffers;
-        void readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefVector<CBufferInfo*>& constantBuffers);
+        ResourceReferenceVector<CBufferInfo*> vertexConstantBuffers;
+        ResourceReferenceVector<CBufferInfo*> fragmentConstantBuffers;
+        void readConstantBuffers(std::ifstream& reflectionInfo, ResourceReferenceVector<CBufferInfo*>& constantBuffers);
 
-        ResourceRefVector<ID3D11SamplerState*> dxSamplerState;
+        ResourceReferenceVector<ID3D11SamplerState*> dxSamplerState;
 
         D3D11VertexShaderRef dxVertexShader;
         D3D11PixelShaderRef dxFragmentShader;

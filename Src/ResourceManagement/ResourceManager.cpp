@@ -19,9 +19,9 @@ ResourceManager::~ResourceManager() {
     delete[] resources;
 }
 
-void ResourceManager::addResource(ResourceBase* resourceOwner) {
+void ResourceManager::addResource(ResourceBase* resource) {
     assert(lastIndex < size);
-    resources[lastIndex] = resourceOwner;
+    resources[lastIndex] = resource;
     lastIndex++;
 }
 

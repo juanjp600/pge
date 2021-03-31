@@ -109,6 +109,9 @@
     <Filter Include="Src\ResourceManagement">
       <UniqueIdentifier>{952e82de-03b6-4eb2-8ce4-e74c2c587921}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\ResourceManagement\DX11">
+      <UniqueIdentifier>{20071f67-df9a-4830-b8ae-0bf3ebdbe06e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -348,6 +351,12 @@
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceOwner.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\ResourceManagement\DX11\DX11Resource.h">
+      <Filter>Src\ResourceManagement\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceReferenceVector.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
   </ItemGroup>

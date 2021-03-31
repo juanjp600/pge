@@ -7,8 +7,6 @@
 #include "../Texture/TextureDX11.h"
 #include <Exception/Exception.h>
 
-#include <inttypes.h>
-
 using namespace PGE;
 
 MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) {
@@ -120,7 +118,7 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxVertexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxVertexBufferData.pSysMem = dxVertexData.data();
 
-        dxVertexBuffer = new D3D11Buffer(dxDevice, dxVertexBufferDesc, dxVertexBufferData);
+        dxVertexBuffer.set(new D3D11Buffer(dxDevice, dxVertexBufferDesc, dxVertexBufferData));
     }
 
     if (dxIndexData.size() > 0) {
@@ -133,7 +131,7 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxIndexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxIndexBufferData.pSysMem = dxIndexData.data();
 
-        dxIndexBuffer = new D3D11Buffer(dxDevice, dxIndexBufferDesc, dxIndexBufferData);
+        dxIndexBuffer.set(new D3D11Buffer(dxDevice, dxIndexBufferDesc, dxIndexBufferData));
     }
 
     mustReuploadInternalData = false;

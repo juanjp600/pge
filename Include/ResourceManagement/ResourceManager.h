@@ -11,8 +11,6 @@ class ResourceManager {
         int size;
 
     public:
-        ResourceManager(const ResourceManager&) = delete;
-        ResourceManager& operator=(ResourceManager const&) = delete;
         ResourceManager(int sz);
         ~ResourceManager();
 
