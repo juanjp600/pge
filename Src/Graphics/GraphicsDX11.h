@@ -9,7 +9,7 @@
 
 #include <ResourceManagement/ResourceReference.h>
 #include <ResourceManagement/ResourceManager.h>
-#include <ResourceManagement/ResourceOwner.h>
+#include <ResourceManagement/Resource.h>
 
 #include "../ResourceManagement/DX11.h"
 

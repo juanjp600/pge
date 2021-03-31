@@ -36,7 +36,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
         SDL_SetWindowPosition(sdlWindow(), 0, 0);
     }
 
-    dxgiFactory = DXGIFactory1Owner::createRef(resourceManager);
+    dxgiFactory = DXGIFactory1::createRef(resourceManager);
 
     SDL_SysWMinfo sysWMinfo;
     SDL_VERSION(&sysWMinfo.version); //REMINDER: THIS LINE IS VERY IMPORTANT
@@ -58,10 +58,10 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     dxSwapChainDesc.SampleDesc.Quality = 0;
     dxSwapChainDesc.Windowed = TRUE;
 
-    dxDevice = D3D11DeviceOwner::createRef(resourceManager);
-    dxContext = D3D11ImmediateContextOwner::createRef(resourceManager, dxDevice);
-    dxSwapChain = DXGISwapChainOwner::createRef(resourceManager, dxgiFactory, dxDevice, dxSwapChainDesc);
-    dxBackBufferRtv = D3D11BackBufferRtvOwner::createRef(resourceManager, dxDevice, dxSwapChain);
+    dxDevice = D3D11Device::createRef(resourceManager);
+    dxContext = D3D11ImmediateContext::createRef(resourceManager, dxDevice);
+    dxSwapChain = DXGISwapChain::createRef(resourceManager, dxgiFactory, dxDevice, dxSwapChainDesc);
+    dxBackBufferRtv = D3D11BackBufferRtv::createRef(resourceManager, dxDevice, dxSwapChain);
 
     // Create depth stencil texture
     D3D11_TEXTURE2D_DESC descDepth;
@@ -77,7 +77,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     descDepth.CPUAccessFlags = 0;
     descDepth.MiscFlags = 0;
-    dxZBufferTexture = D3D11Texture2DOwner::createRef(resourceManager, dxDevice, descDepth);
+    dxZBufferTexture = D3D11Texture2D::createRef(resourceManager, dxDevice, descDepth);
 
     // Create the depth stencil view
     D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
@@ -85,7 +85,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     descDSV.Format = descDepth.Format;
     descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     descDSV.Texture2D.MipSlice = 0;
-    dxZBufferView = D3D11DepthStencilViewOwner::createRef(resourceManager, dxDevice, dxZBufferTexture, descDSV);
+    dxZBufferView = D3D11DepthStencilView::createRef(resourceManager, dxDevice, dxZBufferTexture, descDSV);
 
     ID3D11RenderTargetView* rtvArr[] = { dxBackBufferRtv };
     dxContext->OMSetRenderTargets(1, rtvArr, dxZBufferView);
@@ -98,7 +98,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     dxRasterizerStateDesc.ScissorEnable = false;
     dxRasterizerStateDesc.MultisampleEnable = false;
     dxRasterizerStateDesc.FrontCounterClockwise = true;
-    dxRasterizerState = D3D11RasterizerStateOwner::createRef(resourceManager, dxDevice, dxRasterizerStateDesc);
+    dxRasterizerState = D3D11RasterizerState::createRef(resourceManager, dxDevice, dxRasterizerStateDesc);
     
     dxContext->RSSetState(dxRasterizerState);
 
@@ -111,7 +111,7 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     dxBlendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
     dxBlendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     dxBlendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    dxBlendState = D3D11BlendStateOwner::createRef(resourceManager, dxDevice, dxBlendStateDesc);
+    dxBlendState = D3D11BlendState::createRef(resourceManager, dxDevice, dxBlendStateDesc);
 
     dxContext->OMSetBlendState(dxBlendState, 0, 0xffffffff);
 
@@ -137,14 +137,14 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE] = D3D11DepthStencilStateOwner::createRef(resourceManager, dxDevice, depthStencilDesc);
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE] = D3D11DepthStencilState::createRef(resourceManager, dxDevice, depthStencilDesc);
     dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE].get(), 0);
 
     depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] = D3D11DepthStencilStateOwner::createRef(resourceManager, dxDevice, depthStencilDesc);
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] = D3D11DepthStencilState::createRef(resourceManager, dxDevice, depthStencilDesc);
 
     depthStencilDesc.DepthEnable = FALSE;
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] = D3D11DepthStencilStateOwner::createRef(resourceManager, dxDevice, depthStencilDesc);
+    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] = D3D11DepthStencilState::createRef(resourceManager, dxDevice, depthStencilDesc);
 
     setViewport(Rectanglei(0,0,w,h));
     currentRenderTargetViews.add(dxBackBufferRtv);

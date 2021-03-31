@@ -76,6 +76,7 @@
     <ClInclude Include="..\..\Include\Misc\FileUtil.h" />
     <ClInclude Include="..\..\Include\Misc\String.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h" />
+    <ClInclude Include="..\..\Include\ResourceManagement\Resource.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceOwner.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceReference.h" />
     <ClInclude Include="..\..\Include\Shader\Shader.h" />

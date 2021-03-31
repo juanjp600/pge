@@ -120,7 +120,7 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxVertexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxVertexBufferData.pSysMem = dxVertexData.data();
 
-        dxVertexBuffer = D3D11BufferOwner(dxDevice, dxVertexBufferDesc, dxVertexBufferData);
+        dxVertexBuffer = new D3D11Buffer(dxDevice, dxVertexBufferDesc, dxVertexBufferData);
     }
 
     if (dxIndexData.size() > 0) {
@@ -133,7 +133,7 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxIndexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxIndexBufferData.pSysMem = dxIndexData.data();
 
-        dxIndexBuffer = D3D11BufferOwner(dxDevice, dxIndexBufferDesc, dxIndexBufferData);
+        dxIndexBuffer = new D3D11Buffer(dxDevice, dxIndexBufferDesc, dxIndexBufferData);
     }
 
     mustReuploadInternalData = false;
@@ -150,10 +150,10 @@ void MeshDX11::render() {
     ((ShaderDX11*)material->getShader())->useVertexInputLayout();
 
     UINT offset = 0;
-    ID3D11Buffer* bufArr[] = { dxVertexBuffer };
+    ID3D11Buffer* bufArr[] = { *dxVertexBuffer };
 
     dxContext->IASetVertexBuffers(0,1,bufArr,&stride,&offset);
-    dxContext->IASetIndexBuffer(dxIndexBuffer,DXGI_FORMAT_R16_UINT,0);
+    dxContext->IASetIndexBuffer(*dxIndexBuffer,DXGI_FORMAT_R16_UINT,0);
 
     D3D11_PRIMITIVE_TOPOLOGY dxPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     int dxIndexMultiplier = 3;

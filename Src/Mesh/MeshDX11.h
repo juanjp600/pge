@@ -2,6 +2,7 @@
 #define PGEINTERNAL_MESH_DX11_H_INCLUDED
 
 #include <vector>
+#include <memory>
 
 #include <dxgi.h>
 #include <d3dcommon.h>
@@ -11,6 +12,7 @@
 #include <Mesh/Mesh.h>
 
 #include "../ResourceManagement/DX11.h"
+#include <ResourceManagement/ResourceOwner.h>
 
 namespace PGE {
 
@@ -29,11 +31,11 @@ class MeshDX11 : public Mesh {
 
         D3D11_BUFFER_DESC dxVertexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxVertexBufferData;
-        D3D11BufferOwner dxVertexBuffer;
+        ResourceOwner<D3D11Buffer> dxVertexBuffer;
 
         D3D11_BUFFER_DESC dxIndexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxIndexBufferData;
-        D3D11BufferOwner dxIndexBuffer;
+        ResourceOwner<D3D11Buffer> dxIndexBuffer;
 
         virtual void uploadInternalData();
 };

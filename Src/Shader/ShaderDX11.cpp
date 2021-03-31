@@ -73,7 +73,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     D3D11DeviceRef dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     dxSamplerState = ResourceRefVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < samplerCount; i++) {
-        dxSamplerState[i] = D3D11SamplerStateOwner::createRef(resourceManager, dxDevice, samplerDesc);
+        dxSamplerState[i] = D3D11SamplerState::createRef(resourceManager, dxDevice, samplerDesc);
     }
 
     reflectionInfo.close();
@@ -88,9 +88,9 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
         throw Exception("ShaderDX11","Fragment shader is empty (filename: "+path.str()+")");
     }
 
-    dxVertexShader = D3D11VertexShaderOwner::createRef(resourceManager, dxDevice, vertexShaderBytecode);
-    dxFragmentShader = D3D11PixelShaderOwner::createRef(resourceManager, dxDevice, fragmentShaderBytecode);
-    dxVertexInputLayout = D3D11InputLayoutOwner::createRef(resourceManager, dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
+    dxVertexShader = D3D11VertexShader::createRef(resourceManager, dxDevice, vertexShaderBytecode);
+    dxFragmentShader = D3D11PixelShader::createRef(resourceManager, dxDevice, fragmentShaderBytecode);
+    dxVertexInputLayout = D3D11InputLayout::createRef(resourceManager, dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
 }
 
 void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefVector<CBufferInfo*>& constantBuffers) {
@@ -107,7 +107,6 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefV
         
         CBufferInfoRef constantBuffer = CBufferInfoOwner::createRef(resourceManager, graphics, cBufferName, cBufferSize, &resourceManager);
         constantBuffers.add(constantBuffer);
-
 
         int varCount = 0; reflectionInfo.read((char*)(void*)&varCount, 1);
         for (int j = 0; j < varCount; j++) {
@@ -220,7 +219,7 @@ ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, String nm, int sz, Reso
 
     HRESULT hResult = 0;
 
-    dxCBuffer = D3D11BufferOwner::createRef(*resourceManager, ((GraphicsDX11*)graphics)->getDxDevice(), cBufferDesc, cBufferSubresourceData);
+    dxCBuffer = D3D11Buffer::createRef(*resourceManager, ((GraphicsDX11*)graphics)->getDxDevice(), cBufferDesc, cBufferSubresourceData);
 
     dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 

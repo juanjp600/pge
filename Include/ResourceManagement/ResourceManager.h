@@ -3,10 +3,10 @@
 
 namespace PGE {
 
-class ResourceOwnerBase;
+class ResourceBase;
 class ResourceManager {
     private:
-        ResourceOwnerBase** resourceOwners;
+        ResourceBase** resources;
         int lastIndex;
         int size;
 
@@ -16,7 +16,7 @@ class ResourceManager {
         ResourceManager(int sz);
         ~ResourceManager();
 
-        void addResource(ResourceOwnerBase* resourceOwner);
+        void addResource(ResourceBase* resource);
 
         void increaseSize(int count);
 };

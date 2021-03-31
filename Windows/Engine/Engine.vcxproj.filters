@@ -338,14 +338,17 @@
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ResourceManagement\ResourceOwner.h">
-      <Filter>Include\ResourceManagement</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceReference.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\DX11.h">
       <Filter>Src\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\ResourceManagement\Resource.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceOwner.h">
+      <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
