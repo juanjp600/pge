@@ -94,7 +94,6 @@
     <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h" />
     <ClInclude Include="..\..\Src\Misc\SmartPrimitive.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\DX11.h" />
-    <ClInclude Include="..\..\Src\ResourceManagement\DX11\DX11Resource.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h" />
     <ClInclude Include="..\..\Src\Sound\SoundInternal.h" />

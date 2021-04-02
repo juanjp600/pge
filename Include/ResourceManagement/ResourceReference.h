@@ -3,11 +3,8 @@
 
 namespace PGE {
 
-// TODO: Remove?
-class ResourceReferenceBase { };
-
 template <class T>
-class ResourceReference : ResourceReferenceBase {
+class ResourceReference {
     private:
         T internalResource;
         bool holdsResource = false;

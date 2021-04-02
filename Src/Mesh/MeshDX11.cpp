@@ -148,10 +148,8 @@ void MeshDX11::render() {
     ((ShaderDX11*)material->getShader())->useVertexInputLayout();
 
     UINT offset = 0;
-    ID3D11Buffer* bufArr[] = { *dxVertexBuffer };
-
-    dxContext->IASetVertexBuffers(0,1,bufArr,&stride,&offset);
-    dxContext->IASetIndexBuffer(*dxIndexBuffer,DXGI_FORMAT_R16_UINT,0);
+    dxContext->IASetVertexBuffers(0,1,&dxVertexBuffer,&stride,&offset);
+    dxContext->IASetIndexBuffer(dxIndexBuffer,DXGI_FORMAT_R16_UINT,0);
 
     D3D11_PRIMITIVE_TOPOLOGY dxPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     int dxIndexMultiplier = 3;

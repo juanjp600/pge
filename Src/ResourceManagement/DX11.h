@@ -6,7 +6,6 @@
 #include <ResourceManagement/ResourceManager.h>
 #include <ResourceManagement/Resource.h>
 #include <ResourceManagement/ResourceReference.h>
-#include "DX11/DX11Resource.h"
 
 namespace PGE {
 
@@ -28,6 +27,16 @@ typedef ResourceReference<ID3D11VertexShader*> D3D11VertexShaderRef;
 typedef ResourceReference<ID3D11PixelShader*> D3D11PixelShaderRef;
 typedef ResourceReference<ID3D11InputLayout*> D3D11InputLayoutRef;
 typedef ResourceReference<ID3D11ShaderResourceView*> D3D11ShaderResourceViewRef;
+
+template <class T>
+class DX11Resource : public Resource<T> {
+    protected:
+    virtual ~DX11Resource() override {
+        static_assert(std::is_pointer<T>::value);
+        static_assert(std::is_convertible<T, IUnknown*>::value);
+        ((IUnknown*)this->resource)->Release();
+    }
+};
 
 class DXGIFactory1 : public DX11Resource<IDXGIFactory1*> {
     public:

@@ -30,11 +30,11 @@ class MeshDX11 : public Mesh {
 
         D3D11_BUFFER_DESC dxVertexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxVertexBufferData;
-        ResourceOwner<D3D11Buffer> dxVertexBuffer;
+        ResourceOwner<ID3D11Buffer*> dxVertexBuffer;
 
         D3D11_BUFFER_DESC dxIndexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxIndexBufferData;
-        ResourceOwner<D3D11Buffer> dxIndexBuffer;
+        ResourceOwner<ID3D11Buffer*> dxIndexBuffer;
 
         virtual void uploadInternalData();
 };
