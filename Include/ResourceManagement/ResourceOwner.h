@@ -3,7 +3,7 @@
 
 namespace PGE {
 
-template <typename Internal, typename ResourceChild>
+template <class Internal, class ResourceChild>
 class ResourceOwner {
     private:
         ResourceChild* resource = nullptr;
@@ -21,7 +21,7 @@ class ResourceOwner {
         const Internal& operator->() const { return resource->getResource(); }
         const Internal* operator&() const { return resource->getResourcePointer(); }
         bool isHoldingResource() const { return resource != nullptr; }
-        template <typename... Args>
+        template <class... Args>
         void fillNew(Args... args) {
             clean();
             resource = new ResourceChild(args...);

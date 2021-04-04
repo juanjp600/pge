@@ -15,12 +15,12 @@ namespace PGE {
 
 class Graphics;
 
-class WindowSubscriber : public Resource<SysEvents::Subscriber*> {
+class WindowEventSubscriber : public Resource<SysEvents::Subscriber*> {
     public:
-        WindowSubscriber(Graphics* gfx);
-        ~WindowSubscriber();
+        WindowEventSubscriber(Graphics* gfx);
+        ~WindowEventSubscriber();
 
-        __RES_MNGMT__REF_FACT_METH(WindowSubscriber, SysEvents::Subscriber*)
+        __RES_MNGMT__REF_FACT_METH(WindowEventSubscriber, SysEvents::Subscriber*)
 };
 
 class SDLWindow : public Resource<SDL_Window*> {

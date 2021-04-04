@@ -68,7 +68,7 @@ class Graphics {
         bool vsync;
 
         // Base class always automatically takes care of SysEvents.
-        WindowSubscriber::Owner eventSubscriber;
+        WindowEventSubscriber::Owner eventSubscriber;
 
         SDLWindow::Owner sdlWindow;
 };
