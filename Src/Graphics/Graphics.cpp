@@ -7,13 +7,13 @@
 
 using namespace PGE;
 
-Graphics::Graphics(String name, int w, int h, bool fs, uint32_t windowFlags) {
+Graphics::Graphics(String name, int w, int h, bool fs, uint32_t windowFlags) : resourceManager(2) {
     caption = name;
     width = w; height = h; fullscreen = fs;
 
-    eventSubscriber.fillNew(this);
+    eventSubscriber = WindowEventSubscriber::createRef(resourceManager, this);
 
-    sdlWindow.fillNew(name, w, h, windowFlags);
+    sdlWindow = SDLWindow::createRef(resourceManager, name, w, h, windowFlags);
 
     open = true;
     focused = true;

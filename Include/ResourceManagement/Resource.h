@@ -4,13 +4,11 @@
 #include <type_traits>
 
 #include "ResourceReference.h"
-#include "ResourceOwner.h"
 
 namespace PGE {
 
 #define __RES_MNGMT__REF_FACT_METH(Res, Int) \
 typedef ResourceReference<Int> Ref; \
-typedef ResourceOwner<Int, Res> Owner; \
 \
 template <class... Args> \
 static Ref createRef(ResourceManager& resMngr, Args... args) { \
