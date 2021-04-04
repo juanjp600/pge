@@ -1,8 +1,6 @@
 #ifndef PGE_RESOURCEREFERENCEVECTOR_H_INCLUDED
 #define PGE_RESOURCEREFERENCEVECTOR_H_INCLUDED
 
-#include <ResourceManagement/ResourceReference.h>
-
 namespace PGE {
 
 template <class T>

@@ -8,27 +8,27 @@ using namespace PGE;
 
 ResourceManager::ResourceManager(int sz) {
     resources = new ResourceBase*[sz];
-    lastIndex = 0;
+    nextIndex = 0;
     size = sz;
 }
 
 ResourceManager::~ResourceManager() {
-    for (int i = lastIndex - 1; i >= 0; i--) {
+    for (int i = nextIndex - 1; i >= 0; i--) {
         delete resources[i];
     }
     delete[] resources;
 }
 
 void ResourceManager::addResource(ResourceBase* resource) {
-    assert(lastIndex < size);
-    resources[lastIndex] = resource;
-    lastIndex++;
+    assert(nextIndex < size);
+    resources[nextIndex] = resource;
+    nextIndex++;
 }
 
 void ResourceManager::increaseSize(int count) {
     size += count;
     ResourceBase** newArr = new ResourceBase*[size];
-    memcpy(newArr, resources, lastIndex * sizeof(ResourceBase*));
+    memcpy(newArr, resources, nextIndex * sizeof(ResourceBase*));
     delete[] resources;
     resources = newArr;
 }

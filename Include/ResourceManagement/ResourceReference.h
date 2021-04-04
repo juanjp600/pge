@@ -12,6 +12,8 @@ class ResourceReference {
         ResourceReference() { }
         ResourceReference(T res) { internalResource = res; holdsResource = true; }
         operator const T&() const { return internalResource; }
+        // Force cast.
+        const T& operator()() const { return internalResource; }
         const T& operator->() const { return internalResource; }
         const T* operator&() const { return &internalResource; }
         bool isHoldingResource() const { return holdsResource; }

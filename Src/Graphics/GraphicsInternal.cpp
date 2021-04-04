@@ -16,7 +16,7 @@
 
 using namespace PGE;
 
-GraphicsInternal::GraphicsInternal(String name, int w, int h, bool fs) : Graphics(name, w, h, fs) {}
+GraphicsInternal::GraphicsInternal(String name, int w, int h, bool fs, uint32_t windowFlags) : Graphics(name, w, h, fs, windowFlags) {}
 
 void GraphicsInternal::setRenderer(Renderer r) {
     renderer = r;
@@ -27,7 +27,7 @@ Graphics::Renderer GraphicsInternal::getRenderer() {
 }
 
 SDL_Window* GraphicsInternal::getSdlWindow() const {
-    return sdlWindow();
+    return sdlWindow;
 }
 
 #if defined(__APPLE__) && defined(__OBJC__)

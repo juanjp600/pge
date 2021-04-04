@@ -13,8 +13,8 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     isRT = renderTarget;
 
     graphics = gfx;
-    D3D11DeviceRef dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
-    D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
+    ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     // filename = "<n/a>";
 
@@ -114,8 +114,8 @@ TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
     filename = fn;
     name = fn.str();
     
-    D3D11DeviceRef dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
-    D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
+    ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     format = FORMAT::RGBA32;
 
@@ -154,13 +154,13 @@ TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
 }
 
 void TextureDX11::useTexture(int index) {
-    D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
     ID3D11ShaderResourceView* srvArr[] { dxShaderResourceView };
     dxContext->PSSetShaderResources(index,1,srvArr);
 }
 
 Texture* TextureDX11::copy() const {
-    D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     TextureDX11* copy = new TextureDX11(graphics, getWidth(), getHeight(), false, nullptr, format);
     copy->name = String(name, "_Copy");
@@ -172,11 +172,11 @@ Texture* TextureDX11::copy() const {
     return copy;
 }
 
-D3D11RenderTargetViewRef TextureDX11::getRtv() const {
+ID3D11RenderTargetView* TextureDX11::getRtv() const {
     return dxRtv;
 }
 
-D3D11DepthStencilViewRef TextureDX11::getZBufferView() const {
+ID3D11DepthStencilView* TextureDX11::getZBufferView() const {
     return dxZBufferView;
 }
 

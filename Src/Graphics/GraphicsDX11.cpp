@@ -9,19 +9,14 @@ using namespace PGE;
 
 //REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
 
-GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(name, w, h, fs), resourceManager(12) {
+GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_SHOWN), resourceManager(12) {
     HRESULT hResult = 0;
     int errorCode = 0;
 
-    sdlWindow = SDL_CreateWindow(name.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN);
-    if (sdlWindow() == nullptr) {
-        throw Exception("GraphicsDX11", "Failed to create SDL window: " + String(SDL_GetError()));
-    }
-
     if (fullscreen) {
-        SDL_SetWindowBordered(sdlWindow(), SDL_bool::SDL_FALSE);
+        SDL_SetWindowBordered(sdlWindow, SDL_bool::SDL_FALSE);
         SDL_Rect displayBounds;
-        int displayIndex = SDL_GetWindowDisplayIndex(sdlWindow());
+        int displayIndex = SDL_GetWindowDisplayIndex(sdlWindow);
         if (displayIndex < 0) {
             throw Exception("GraphicsDX11", "Failed to determine display index: " + String(SDL_GetError()));
         }
@@ -32,15 +27,15 @@ GraphicsDX11::GraphicsDX11(String name,int w,int h,bool fs) : GraphicsInternal(n
         if (displayBounds.w <= 0 || displayBounds.h <= 0) {
             throw Exception("GraphicsDX11", "Display bounds are invalid (" + String::fromInt(displayBounds.w) + ", " + String::fromInt(displayBounds.h) + ")");
         }
-        SDL_SetWindowSize(sdlWindow(), displayBounds.w, displayBounds.h);
-        SDL_SetWindowPosition(sdlWindow(), 0, 0);
+        SDL_SetWindowSize(sdlWindow, displayBounds.w, displayBounds.h);
+        SDL_SetWindowPosition(sdlWindow, 0, 0);
     }
 
     dxgiFactory = DXGIFactory1::createRef(resourceManager);
 
     SDL_SysWMinfo sysWMinfo;
     SDL_VERSION(&sysWMinfo.version); //REMINDER: THIS LINE IS VERY IMPORTANT
-    bool validInfo = SDL_GetWindowWMInfo(sdlWindow(), &sysWMinfo);
+    bool validInfo = SDL_GetWindowWMInfo(sdlWindow, &sysWMinfo);
     if (!validInfo) {
         throw Exception("GraphicsDX11", "Failed to initialize SDL version info: " + String(SDL_GetError()));
     }
@@ -229,19 +224,19 @@ void GraphicsDX11::setViewport(Rectanglei vp) {
     }
 }
 
-D3D11DeviceRef GraphicsDX11::getDxDevice() const {
+ID3D11Device* GraphicsDX11::getDxDevice() const {
     return dxDevice;
 }
 
-D3D11DeviceContextRef GraphicsDX11::getDxContext() const {
+ID3D11DeviceContext* GraphicsDX11::getDxContext() const {
     return dxContext;
 }
 
-D3D11RenderTargetViewRef GraphicsDX11::getBackBufferRtv() const {
+ID3D11RenderTargetView* GraphicsDX11::getBackBufferRtv() const {
     return dxBackBufferRtv;
 }
 
-D3D11DepthStencilViewRef GraphicsDX11::getZBufferView() const {
+ID3D11DepthStencilView* GraphicsDX11::getZBufferView() const {
     return dxZBufferView;
 }
 

@@ -22,19 +22,19 @@ class TextureDX11 : public Texture {
 
         virtual Texture* copy() const override;
 
-        D3D11RenderTargetViewRef getRtv() const;
-        D3D11DepthStencilViewRef getZBufferView() const;
+        ID3D11RenderTargetView* getRtv() const;
+        ID3D11DepthStencilView* getZBufferView() const;
         virtual void* getNative() const;
 
     private:
         D3D11_TEXTURE2D_DESC dxTextureDesc;
-        D3D11Texture2DRef dxTexture;
+        D3D11Texture2D::Ref dxTexture;
         D3D11_SHADER_RESOURCE_VIEW_DESC dxShaderResourceViewDesc;
-        D3D11ShaderResourceViewRef dxShaderResourceView;
+        D3D11ShaderResourceView::Ref dxShaderResourceView;
 
-        D3D11RenderTargetViewRef dxRtv;
-        D3D11Texture2DRef dxZBufferTexture;
-        D3D11DepthStencilViewRef dxZBufferView;
+        D3D11RenderTargetView::Ref dxRtv;
+        D3D11Texture2D::Ref dxZBufferTexture;
+        D3D11DepthStencilView::Ref dxZBufferView;
 
         ResourceManager resourceManager;
 };

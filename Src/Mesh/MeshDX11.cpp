@@ -105,8 +105,8 @@ void MeshDX11::uploadInternalData() {
     if (mustUpdateInternalData) { updateInternalData(); }
     if (!mustReuploadInternalData) { return; }
 
-    D3D11DeviceRef dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
-    D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
+    ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     if (dxVertexData.size() > 0) {
         ZeroMemory(&dxVertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
@@ -118,7 +118,7 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxVertexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxVertexBufferData.pSysMem = dxVertexData.data();
 
-        dxVertexBuffer.set(new D3D11Buffer(dxDevice, dxVertexBufferDesc, dxVertexBufferData));
+        dxVertexBuffer.fillNew(dxDevice, dxVertexBufferDesc, dxVertexBufferData);
     }
 
     if (dxIndexData.size() > 0) {
@@ -131,14 +131,14 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxIndexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxIndexBufferData.pSysMem = dxIndexData.data();
 
-        dxIndexBuffer.set(new D3D11Buffer(dxDevice, dxIndexBufferDesc, dxIndexBufferData));
+        dxIndexBuffer.fillNew(dxDevice, dxIndexBufferDesc, dxIndexBufferData);
     }
 
     mustReuploadInternalData = false;
 }
 
 void MeshDX11::render() {
-    D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     updateInternalData();
     uploadInternalData();

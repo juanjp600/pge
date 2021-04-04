@@ -30,10 +30,10 @@ class GraphicsDX11 : public GraphicsInternal {
 
         virtual void setViewport(Rectanglei vp) override;
 
-        D3D11DeviceRef getDxDevice() const;
-        D3D11DeviceContextRef getDxContext() const;
-        D3D11RenderTargetViewRef getBackBufferRtv() const;
-        D3D11DepthStencilViewRef getZBufferView() const;
+        ID3D11Device* getDxDevice() const;
+        ID3D11DeviceContext* getDxContext() const;
+        ID3D11RenderTargetView* getBackBufferRtv() const;
+        ID3D11DepthStencilView* getZBufferView() const;
 
         enum class ZBUFFER_STATE_INDEX {
             ENABLED_WRITE = 0,
@@ -44,29 +44,29 @@ class GraphicsDX11 : public GraphicsInternal {
         void setZBufferState(ZBUFFER_STATE_INDEX index);
 
     private:
-        DXGIFactory1Ref dxgiFactory;
+        DXGIFactory1::Ref dxgiFactory;
 
         DXGI_SWAP_CHAIN_DESC dxSwapChainDesc;
-        DXGISwapChainRef dxSwapChain;
+        DXGISwapChain::Ref dxSwapChain;
 
-        D3D11DeviceRef dxDevice;
-        D3D11DeviceContextRef dxContext;
+        D3D11Device::Ref dxDevice;
+        D3D11ImmediateContext::Ref dxContext;
 
-        D3D11RenderTargetViewRef dxBackBufferRtv;
-        D3D11Texture2DRef dxZBufferTexture;
-        D3D11DepthStencilViewRef dxZBufferView;
+        D3D11RenderTargetView::Ref dxBackBufferRtv;
+        D3D11Texture2D::Ref dxZBufferTexture;
+        D3D11DepthStencilView::Ref dxZBufferView;
         ResourceReferenceVector<ID3D11DepthStencilState*> dxDepthStencilState;
 
         D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
-        D3D11RasterizerStateRef dxRasterizerState;
+        D3D11RasterizerState::Ref dxRasterizerState;
 
         D3D11_BLEND_DESC dxBlendStateDesc;
-        D3D11BlendStateRef dxBlendState;
+        D3D11BlendState::Ref dxBlendState;
 
         D3D11_VIEWPORT dxViewport;
 
         ResourceReferenceVector<ID3D11RenderTargetView*> currentRenderTargetViews;
-        D3D11DepthStencilViewRef currentDepthStencilView;
+        D3D11DepthStencilView::Ref currentDepthStencilView;
 
         ResourceManager resourceManager;
 };

@@ -3,11 +3,11 @@
 
 #include <vector>
 
+#include "../../Src/ResourceManagement/Misc.h"
+
 #include <Math/Rectangle.h>
 #include <Color/Color.h>
 #include <SysEvents/SysEvents.h>
-
-#include "../../Src/Misc/SmartPrimitive.h"
 
 struct SDL_Window;
 
@@ -25,7 +25,7 @@ class Graphics {
 
         static Graphics* create(String name="PGE Application", int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default);
 
-        Graphics(String name, int w, int h, bool fs);
+        Graphics(String name, int w, int h, bool fs, uint32_t windowFlags);
         virtual ~Graphics() {};
         
         virtual void update();
@@ -68,12 +68,9 @@ class Graphics {
         bool vsync;
 
         // Base class always automatically takes care of SysEvents.
-        SmartRef<SysEvents::Subscriber*> eventSubscriber;
+        WindowSubscriber::Owner eventSubscriber;
 
-        SmartRef<SDL_Window*> sdlWindow;
-
-    private:
-        SmartOrderedDestructor destructor = 2;
+        SDLWindow::Owner sdlWindow;
 };
 
 }

@@ -44,7 +44,9 @@
     <ClCompile Include="..\..\Src\Misc\FilePath.cpp" />
     <ClCompile Include="..\..\Src\Misc\FileUtil.cpp" />
     <ClCompile Include="..\..\Src\Misc\String.cpp" />
+    <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp" />
+    <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp" />
     <ClCompile Include="..\..\Src\Sound\Sound.cpp" />
@@ -92,8 +94,10 @@
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h" />
-    <ClInclude Include="..\..\Src\Misc\SmartPrimitive.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\DX11.h" />
+    <ClInclude Include="..\..\Src\ResourceManagement\OGL3.h" />
+    <ClInclude Include="..\..\Src\ResourceManagement\Misc.h" />
+    <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h" />
     <ClInclude Include="..\..\Src\Sound\SoundInternal.h" />

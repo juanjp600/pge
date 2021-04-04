@@ -70,7 +70,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
     samplerDesc.MipLODBias = -0.1f;
 
-    D3D11DeviceRef dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
+    ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     dxSamplerState = ResourceReferenceVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < samplerCount; i++) {
         dxSamplerState[i] = D3D11SamplerState::createRef(resourceManager, dxDevice, samplerDesc);
@@ -168,7 +168,7 @@ const std::vector<String>& ShaderDX11::getVertexInputElems() const {
 }
 
 void ShaderDX11::useShader() {
-    D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
         vertexConstantBuffers[i]->update();
@@ -185,12 +185,12 @@ void ShaderDX11::useShader() {
 }
 
 void ShaderDX11::useVertexInputLayout() {
-    D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
     dxContext->IASetInputLayout(dxVertexInputLayout);
 }
 
 void ShaderDX11::useSamplers() {
-    D3D11DeviceContextRef dxContext = ((GraphicsDX11*)graphics)->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
     dxContext->PSSetSamplers(0, (UINT)dxSamplerState.size(), dxSamplerState.data());
 }
 
@@ -254,8 +254,8 @@ void ShaderDX11::CBufferInfo::update() {
     dirty = false;
 }
 
-D3D11BufferRef ShaderDX11::CBufferInfo::getDxCBuffer() {
-    return D3D11BufferRef(dxCBuffer);
+D3D11Buffer::Ref ShaderDX11::CBufferInfo::getDxCBuffer() {
+    return dxCBuffer;
 }
 
 ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoRef cBuffer, String nm, int offst, int sz) {

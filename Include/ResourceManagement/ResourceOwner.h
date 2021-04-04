@@ -1,27 +1,30 @@
 #ifndef PGE_RESOURCEOWNER_H_INCLUDED
 #define PGE_RESOURCEOWNER_H_INCLUDED
 
-#include "Resource.h"
-
 namespace PGE {
 
-template <class T>
+template <typename Internal, typename ResourceChild>
 class ResourceOwner {
     private:
-        Resource<T>* resource = nullptr;
+        ResourceChild* resource = nullptr;
         void clean() {
             if (resource != nullptr) { delete resource; }
         }
     public:
+        ResourceOwner() { }
+        ResourceOwner(const ResourceOwner<Internal, ResourceChild>& other) = delete;
+        ResourceOwner<Internal, ResourceChild>& operator=(const ResourceOwner<Internal, ResourceChild>& other) = delete;
         ~ResourceOwner() { clean(); }
-        ResourceOwner<T>& operator=(const ResourceOwner<T>& other) = delete;
-        operator const T&() const { return resource->getResource(); }
-        const T& operator->() const { return resource->getResource(); }
-        const T* operator&() const { return resource->getResourcePointer(); }
+        operator const Internal&() const { return resource->getResource(); }
+        // Force cast.
+        const Internal& operator()() const { return resource->getResource(); }
+        const Internal& operator->() const { return resource->getResource(); }
+        const Internal* operator&() const { return resource->getResourcePointer(); }
         bool isHoldingResource() const { return resource != nullptr; }
-        void set(Resource<T>* newResource) {
+        template <typename... Args>
+        void fillNew(Args... args) {
             clean();
-            resource = newResource;
+            resource = new ResourceChild(args...);
         }
 };
 

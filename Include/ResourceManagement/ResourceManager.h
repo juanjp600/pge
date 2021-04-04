@@ -7,12 +7,12 @@ class ResourceBase;
 class ResourceManager {
     private:
         ResourceBase** resources;
-        int lastIndex;
+        int nextIndex;
         int size;
 
     public:
         ResourceManager(int sz);
-        ~ResourceManager();
+        virtual ~ResourceManager();
 
         void addResource(ResourceBase* resource);
 

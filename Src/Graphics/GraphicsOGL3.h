@@ -4,7 +4,8 @@
 #include <Graphics/Graphics.h>
 #include "GraphicsInternal.h"
 
-#include "../Misc/SmartPrimitive.h"
+#include "../ResourceManagement/OGL3.h"
+#include "../ResourceManagement/ResourceManagerOGL3.h"
 
 #include <SDL.h>
 #include <GL/glew.h>
@@ -24,16 +25,6 @@ class Texture;
 
 class GraphicsOGL3 : public GraphicsInternal {
     public:
-        class OpTakeContext : public OpContainer {
-            public:
-                OpTakeContext(GraphicsOGL3* gfx);
-
-                virtual void exec() override;
-
-            private:
-                GraphicsOGL3* graphics;
-        };
-
         GraphicsOGL3(String name,int w,int h,bool fs);
 
         virtual void update() override;
@@ -55,11 +46,10 @@ class GraphicsOGL3 : public GraphicsInternal {
         SDL_GLContext getGlContext() const;
 
     private:
-        SmartRef<SDL_GLContext> glContext;
+        GLContext::Ref glContext;
+        GLFramebuffer::Ref glFramebuffer;
 
-        SmartRef<GLuint> glFramebuffer;
-
-        SmartOrderedDestructor destructor = 2;
+        ResourceManagerOGL3 resourceManager;
 };
 
 }
