@@ -1,34 +1,34 @@
 #include <ResourceManagement/ResourceManager.h>
-#include <ResourceManagement/Resource.h>
 
+#ifdef DEBUG
 #include <cassert>
-#include <cstring>
+#endif
 
 using namespace PGE;
 
 ResourceManager::ResourceManager(int sz) {
-    resources = new ResourceBase*[sz];
-    nextIndex = 0;
+    resources.reserve(sz);
+#ifdef DEBUG
     size = sz;
+#endif
 }
 
 ResourceManager::~ResourceManager() {
-    for (int i = nextIndex - 1; i >= 0; i--) {
+    for (int i = resources.size() - 1; i >= 0; i--) {
         delete resources[i];
     }
-    delete[] resources;
 }
 
 void ResourceManager::addResource(ResourceBase* resource) {
-    assert(nextIndex < size);
-    resources[nextIndex] = resource;
-    nextIndex++;
+#ifdef DEBUG
+    assert(size > resources.size());
+#endif
+    resources.push_back(resource);
 }
 
 void ResourceManager::increaseSize(int count) {
+#ifdef DEBUG
     size += count;
-    ResourceBase** newArr = new ResourceBase*[size];
-    memcpy(newArr, resources, nextIndex * sizeof(ResourceBase*));
-    delete[] resources;
-    resources = newArr;
+#endif
+    resources.reserve(resources.capacity() + count);
 }

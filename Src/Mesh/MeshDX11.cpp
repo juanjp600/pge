@@ -9,7 +9,7 @@
 
 using namespace PGE;
 
-MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) {
+MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) : resourceManager(2) {
     graphics = gfx;
 
     primitiveType = pt;
@@ -118,7 +118,8 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxVertexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxVertexBufferData.pSysMem = dxVertexData.data();
 
-        dxVertexBuffer.fillNew(dxDevice, dxVertexBufferDesc, dxVertexBufferData);
+        resourceManager.deleteResource(dxVertexBuffer);
+        dxVertexBuffer = D3D11Buffer::createRef(resourceManager, dxDevice, dxVertexBufferDesc, dxVertexBufferData);
     }
 
     if (dxIndexData.size() > 0) {
@@ -131,7 +132,8 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxIndexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxIndexBufferData.pSysMem = dxIndexData.data();
 
-        dxIndexBuffer.fillNew(dxDevice, dxIndexBufferDesc, dxIndexBufferData);
+        resourceManager.deleteResource(dxIndexBuffer);
+        dxIndexBuffer = D3D11Buffer::createRef(resourceManager, dxDevice, dxIndexBufferDesc, dxIndexBufferData);
     }
 
     mustReuploadInternalData = false;
