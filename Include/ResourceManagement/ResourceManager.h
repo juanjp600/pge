@@ -35,9 +35,9 @@ class ResourceManager {
             T internalResource = reference;
             for (auto it = resources.end(); it > resources.begin();) {
                 it--;
-                Resource<T>* resType = dynamic_cast<Resource<T>*>(*it);
-                if (resType != nullptr && resType->getResource() == internalResource) {
-                    delete resType;
+                Resource<T>* specifiedResource = dynamic_cast<Resource<T>*>(*it);
+                if (specifiedResource != nullptr && specifiedResource->getResource() == internalResource) {
+                    delete specifiedResource;
                     resources.erase(it);
                     reference.invalidate();
                     return;
