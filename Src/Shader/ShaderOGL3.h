@@ -13,12 +13,14 @@
 #include <OpenGL/GL.h>
 #endif
 
+#include "../ResourceManagement/OGL3.h"
+#include "../ResourceManagement/ResourceManagerOGL3.h"
+
 namespace PGE {
 
 class ShaderOGL3 : public Shader {
     public:
-        ShaderOGL3(Graphics* gfx,const FilePath& path);
-        virtual ~ShaderOGL3();
+        ShaderOGL3(Graphics* gfx, const FilePath& path);
 
         Constant* getVertexShaderConstant(String name) override;
         Constant* getFragmentShaderConstant(String name) override;
@@ -28,15 +30,9 @@ class ShaderOGL3 : public Shader {
         void useShader();
         void unbindGLAttribs();
     private:
-        ShaderOGL3(){};
-
-        void cleanup() override;
-        void throwException(String func, String details) override;
-
         class ConstantOGL3 : public Constant {
             public:
-                ConstantOGL3(Graphics* gfx,String nm, int loc);
-                ~ConstantOGL3(){};
+                ConstantOGL3(Graphics* gfx, String nm, int loc);
 
                 void setValue(Matrix4x4f value) override;
                 void setValue(Vector2f value) override;
@@ -49,9 +45,6 @@ class ShaderOGL3 : public Shader {
                 void setUniform();
 
                 String getName() const;
-
-            protected:
-                void throwException(String func, String details) override;
 
             private:
                 enum class VALUE_TYPE {
@@ -100,13 +93,15 @@ class ShaderOGL3 : public Shader {
         };
         void extractShaderVars(const String& src,String varKind,std::vector<ShaderVar>& varList);
 
-        GLuint glVertexShader;
-        GLuint glFragmentShader;
-        GLuint glShaderProgram;
+        GLShader::Ref glVertexShader;
+        GLShader::Ref glFragmentShader;
+        GLProgram::Ref glShaderProgram;
+
+        ResourceManagerOGL3 resourceManager;
 
         Graphics* graphics;
 };
 
 }
 
-#endif
+#endif // PGEINTERNAL_SHADEROGL3_H_INCLUDED

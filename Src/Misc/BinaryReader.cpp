@@ -12,7 +12,7 @@ BinaryReader::~BinaryReader() {
     stream.close();
 }
 
-template <typename T>
+template <class T>
 T BinaryReader::read() {
     T val;
     stream.read((char*)&val, sizeof(T));

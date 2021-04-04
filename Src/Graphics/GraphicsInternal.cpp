@@ -16,14 +16,10 @@
 
 using namespace PGE;
 
-GraphicsInternal::GraphicsInternal(String name, int w, int h, bool fs) : Graphics(name, w, h, fs) {}
+GraphicsInternal::GraphicsInternal(String name, int w, int h, bool fs, uint32_t windowFlags) : Graphics(name, w, h, fs, windowFlags) {}
 
 void GraphicsInternal::setRenderer(Renderer r) {
     renderer = r;
-}
-
-void GraphicsInternal::setRendererName(String name) {
-    rendererName = name;
 }
 
 Graphics::Renderer GraphicsInternal::getRenderer() {
@@ -56,11 +52,9 @@ Graphics* Graphics::create(String name, int w, int h, bool fs, Renderer r) {
     switch (r) {
         case Renderer::DirectX11: {
             gfx = new GraphicsDX11(name, w, h, fs);
-            gfx->setRendererName("GraphicsDX11");
         } break;
         case Renderer::OpenGL: {
             gfx = new GraphicsOGL3(name, w, h, fs);
-            gfx->setRendererName("GraphicsOGL3");
         } break;
         default: {
             gfx = nullptr;
@@ -122,6 +116,7 @@ Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
             return nullptr;
         }
     }
+    // TODO: lol
     delete[] fiBuffer;
 }
 

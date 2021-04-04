@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "../../Src/ResourceManagement/Misc.h"
+
 #include <Math/Rectangle.h>
 #include <Color/Color.h>
 #include <SysEvents/SysEvents.h>
@@ -23,9 +25,8 @@ class Graphics {
 
         static Graphics* create(String name="PGE Application", int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default);
 
-        Graphics(String name, int w, int h, bool fs);
-        // Destructor should only be overriden to call cleanup which should deal with all cleanup!
-        virtual ~Graphics() = 0;
+        Graphics(String name, int w, int h, bool fs, uint32_t windowFlags);
+        virtual ~Graphics() {};
         
         virtual void update();
         virtual void swap() = 0;
@@ -53,7 +54,6 @@ class Graphics {
 
     protected:
         Renderer renderer;
-        String rendererName;
 
         String caption;
 
@@ -67,15 +67,10 @@ class Graphics {
         bool depthTest;
         bool vsync;
 
-        SysEvents::Subscriber* eventSubscriber;
+        // Base class always automatically takes care of SysEvents.
+        WindowEventSubscriber::Owner eventSubscriber;
 
-        SDL_Window* sdlWindow;
-
-        // TODO: Model all graphics classes in this way?
-        // Should be designed to allow for multiple calls.
-        // Base class always automatically takes care of sdlWindow and SysEvents.
-        virtual void cleanup();
-        void throwException(String func, String details);
+        SDLWindow::Owner sdlWindow;
 };
 
 }

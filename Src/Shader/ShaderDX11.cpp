@@ -8,20 +8,17 @@
 
 using namespace PGE;
 
-ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
-    dxVertexInputLayout = nullptr;
-    dxVertexShader = nullptr;
-    dxFragmentShader = nullptr;
-
+ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) {
     graphics = gfx;
 
     filepath = path;
 
     std::ifstream reflectionInfo; reflectionInfo.open(String(path.str(),"reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
-    
+
     readConstantBuffers(reflectionInfo,vertexConstantBuffers);
 
     int inputParamCount = 0; reflectionInfo.read((char*)(void*)&inputParamCount,1);
+    vertexInputElemSemanticNames.resize(inputParamCount);
     for (int i=0;i<inputParamCount;i++) {
         String propertyName = "";
         char chr; reflectionInfo.read(&chr,1);
@@ -37,8 +34,8 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
             semanticName = String(semanticName,chr);
             reflectionInfo.read(&chr, 1);
         }
-        char* nameBuf = new char[semanticName.byteLength() + (size_t)1];
-        memcpy(nameBuf,semanticName.cstr(),(semanticName.byteLength()+(size_t)1)*sizeof(char));
+        vertexInputElemSemanticNames[i] = semanticName;
+        const char* nameBuf = vertexInputElemSemanticNames[i].cstr();
         int index = 0;
         reflectionInfo.read((char*)(void*)&index,1);
         DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN;
@@ -74,82 +71,31 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     samplerDesc.MipLODBias = -0.1f;
 
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
+    dxSamplerState = ResourceReferenceVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < samplerCount; i++) {
-        ID3D11SamplerState* samplerState = NULL;
-        dxDevice->CreateSamplerState(&samplerDesc, &samplerState);
-        dxSamplerState.push_back(samplerState);
+        dxSamplerState[i] = D3D11SamplerState::createRef(resourceManager, dxDevice, samplerDesc);
     }
 
     reflectionInfo.close();
 
     FileUtil::readBytes(path + "vertex.dxbc", vertexShaderBytecode);
     if (vertexShaderBytecode.size() <= 0) {
-        throwException("ShaderDX11","Vertex shader is empty (filename: "+path.str() +")");
+        throw Exception("ShaderDX11","Vertex shader is empty (filename: "+path.str() +")");
     }
 
     FileUtil::readBytes(path + "fragment.dxbc", fragmentShaderBytecode);
     if (fragmentShaderBytecode.size() <= 0) {
-        throwException("ShaderDX11","Fragment shader is empty (filename: "+path.str()+")");
+        throw Exception("ShaderDX11","Fragment shader is empty (filename: "+path.str()+")");
     }
 
-    HRESULT hResult = 0;
-
-    hResult = dxDevice->CreateVertexShader(vertexShaderBytecode.data(),sizeof(uint8_t)*vertexShaderBytecode.size(),NULL,&dxVertexShader);
-    if (FAILED(hResult)) {
-        throwException("ShaderDX11","Failed to create vertex shader (filename: "+path.str()+"; HRESULT "+String::fromInt(hResult)+")");
-    }
-
-    hResult = dxDevice->CreatePixelShader(fragmentShaderBytecode.data(),sizeof(uint8_t)*fragmentShaderBytecode.size(),NULL,&dxFragmentShader);
-    if (FAILED(hResult)) {
-        throwException("ShaderDX11", "Failed to create fragment shader (filename: "+path.str()+"; HRESULT "+String::fromInt(hResult)+")");
-    }
-
-    hResult = dxDevice->CreateInputLayout(dxVertexInputElemDesc.data(), (UINT)dxVertexInputElemDesc.size(), getDxVsCode(), getDxVsCodeLen() * sizeof(uint8_t), &dxVertexInputLayout);
-    if (FAILED(hResult)) {
-        throwException("ShaderDX11", "Failed to create input layout (filename: "+path.str()+"; HRESULT "+String::fromInt(hResult)+")");
-    }
+    dxVertexShader = D3D11VertexShader::createRef(resourceManager, dxDevice, vertexShaderBytecode);
+    dxFragmentShader = D3D11PixelShader::createRef(resourceManager, dxDevice, fragmentShaderBytecode);
+    dxVertexInputLayout = D3D11InputLayout::createRef(resourceManager, dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
 }
 
-ShaderDX11::~ShaderDX11() {
-    cleanup();
-}
-
-
-void ShaderDX11::throwException(String func, String details) {
-    cleanup();
-    throw Exception("ShaderDX11::" + func, details);
-}
-
-void ShaderDX11::cleanup() {
-    for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
-        delete vertexConstantBuffers[i];
-    }
-    vertexConstantBuffers.clear();
-
-    for (int i = 0; i < (int)fragmentConstantBuffers.size(); i++) {
-        delete fragmentConstantBuffers[i];
-    }
-    fragmentConstantBuffers.clear();
-
-    for (int i = 0; i < (int)dxVertexInputElemDesc.size(); i++) {
-        delete[] dxVertexInputElemDesc[i].SemanticName;
-    }
-    dxVertexInputElemDesc.clear();
-    for (int i = 0; i < (int)dxSamplerState.size(); i++) {
-        dxSamplerState[i]->Release();
-    }
-    dxSamplerState.clear();
-
-    if (dxVertexInputLayout != nullptr) { dxVertexInputLayout->Release(); }
-    if (dxVertexShader != nullptr) { dxVertexShader->Release(); }
-    if (dxFragmentShader != nullptr) { dxFragmentShader->Release(); }
-    dxVertexInputLayout = nullptr;
-    dxVertexShader = nullptr;
-    dxFragmentShader = nullptr;
-}
-
-void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, std::vector<CBufferInfo*>& constantBuffers) {
+void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceReferenceVector<CBufferInfo*>& constantBuffers) {
     int cBufferCount = 0; reflectionInfo.read((char*)(void*)&cBufferCount, 1);
+    resourceManager.increaseSize(cBufferCount * 2);
     for (int i = 0; i < cBufferCount; i++) {
         String cBufferName = "";
         char chr; reflectionInfo.read(&chr, 1);
@@ -159,7 +105,8 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, std::vector<
         }
         int cBufferSize = 0; reflectionInfo.read((char*)(void*)&cBufferSize, 1);
         
-        CBufferInfo* constantBuffer = new CBufferInfo(graphics,cBufferName,cBufferSize);
+        CBufferInfoRef constantBuffer = CBufferInfoOwner::createRef(resourceManager, graphics, cBufferName, cBufferSize, &resourceManager);
+        constantBuffers.add(constantBuffer);
 
         int varCount = 0; reflectionInfo.read((char*)(void*)&varCount, 1);
         for (int j = 0; j < varCount; j++) {
@@ -173,7 +120,6 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, std::vector<
             int varSize = 0; reflectionInfo.read((char*)(void*)&varSize, 1);
             constantBuffer->addConstant(ConstantDX11(constantBuffer,varName,varOffset,varSize));
         }
-        constantBuffers.push_back(constantBuffer);
     }
 }
 
@@ -226,14 +172,12 @@ void ShaderDX11::useShader() {
 
     for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
         vertexConstantBuffers[i]->update();
-        ID3D11Buffer* dxCBuffer = vertexConstantBuffers[i]->getDxCBuffer();
-        dxContext->VSSetConstantBuffers(i,1,&dxCBuffer);
+        dxContext->VSSetConstantBuffers(i,1,&vertexConstantBuffers[i]->getDxCBuffer());
     }
 
     for (int i = 0; i < (int)fragmentConstantBuffers.size(); i++) {
         fragmentConstantBuffers[i]->update();
-        ID3D11Buffer* dxCBuffer = fragmentConstantBuffers[i]->getDxCBuffer();
-        dxContext->PSSetConstantBuffers(i,1,&dxCBuffer);
+        dxContext->PSSetConstantBuffers(i,1,&fragmentConstantBuffers[i]->getDxCBuffer());
     }
     
     dxContext->VSSetShader(dxVertexShader,NULL,0);
@@ -250,12 +194,14 @@ void ShaderDX11::useSamplers() {
     dxContext->PSSetSamplers(0, (UINT)dxSamplerState.size(), dxSamplerState.data());
 }
 
-ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics,String nm,int sz) {
+ShaderDX11::CBufferInfoOwner::CBufferInfoOwner(Graphics* gfx, String nm, int sz, ResourceManager* rm) {
+    resource = new ShaderDX11::CBufferInfo(gfx, nm, sz, rm);
+}
+
+ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, String nm, int sz, ResourceManager* resourceManager) {
     name = nm;
     size = sz;
     data = new uint8_t[size];
-
-    dxCBuffer = nullptr;
 
     D3D11_BUFFER_DESC cBufferDesc;
     D3D11_SUBRESOURCE_DATA cBufferSubresourceData;
@@ -271,10 +217,7 @@ ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics,String nm,int sz) {
 
     HRESULT hResult = 0;
 
-    hResult = ((GraphicsDX11*)graphics)->getDxDevice()->CreateBuffer(&cBufferDesc,&cBufferSubresourceData,&dxCBuffer);
-    if (FAILED(hResult)) {
-        throw Exception("ShaderDX11::ShaderDX11","Failed to create CBuffer (name: "+nm+", size: "+String::fromInt(sz)+")");
-    }
+    dxCBuffer = D3D11Buffer::createRef(*resourceManager, ((GraphicsDX11*)graphics)->getDxDevice(), cBufferDesc, cBufferSubresourceData);
 
     dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
@@ -283,7 +226,6 @@ ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics,String nm,int sz) {
 
 ShaderDX11::CBufferInfo::~CBufferInfo() {
     delete[] data;
-    dxCBuffer->Release();
 }
 
 uint8_t* ShaderDX11::CBufferInfo::getData() {
@@ -312,11 +254,11 @@ void ShaderDX11::CBufferInfo::update() {
     dirty = false;
 }
 
-ID3D11Buffer* ShaderDX11::CBufferInfo::getDxCBuffer() {
+D3D11Buffer::Ref ShaderDX11::CBufferInfo::getDxCBuffer() {
     return dxCBuffer;
 }
 
-ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfo* cBuffer, String nm, int offst, int sz) {
+ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoRef cBuffer, String nm, int offst, int sz) {
     constantBuffer = cBuffer;
     name = nm;
     offset = offst;
@@ -369,9 +311,5 @@ void ShaderDX11::ConstantDX11::setValue(int value) {
 
 String ShaderDX11::ConstantDX11::getName() const {
     return name;
-}
-
-void ShaderDX11::ConstantDX11::throwException(String func, String details) {
-    throw Exception("ConstantDX11::" + func, details);
 }
 

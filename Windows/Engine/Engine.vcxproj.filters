@@ -103,6 +103,12 @@
     <Filter Include="Include\Exception">
       <UniqueIdentifier>{8c846813-6460-4d7e-a17f-74257cca942a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\ResourceManagement">
+      <UniqueIdentifier>{b61913bd-d65a-4d10-8902-281bb365f54e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ResourceManagement">
+      <UniqueIdentifier>{952e82de-03b6-4eb2-8ce4-e74c2c587921}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -206,6 +212,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp">
       <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp">
+      <Filter>Src\ResourceManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp">
+      <Filter>Src\ResourceManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp">
+      <Filter>Src\ResourceManagement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +337,33 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h">
       <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceReference.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\ResourceManagement\DX11.h">
+      <Filter>Src\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\ResourceManagement\Resource.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceOwner.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceReferenceVector.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\ResourceManagement\OGL3.h">
+      <Filter>Src\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\ResourceManagement\Misc.h">
+      <Filter>Src\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h">
+      <Filter>Src\ResourceManagement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

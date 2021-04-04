@@ -13,10 +13,9 @@ namespace PGE {
 
 class GraphicsInternal : public Graphics {
     public:
-        GraphicsInternal(String name, int w, int h, bool fs);
+        GraphicsInternal(String name, int w, int h, bool fs, uint32_t windowFlags);
 
         void setRenderer(Renderer r);
-        void setRendererName(String name);
         Renderer getRenderer();
 
         SDL_Window* getSdlWindow() const;
@@ -27,7 +26,6 @@ class GraphicsInternal : public Graphics {
     private:
         // Hiding.
         using Graphics::renderer;
-        using Graphics::rendererName;
 };
 
 }

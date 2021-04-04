@@ -4,9 +4,7 @@
 
 using namespace PGE;
 
-GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs) {
-    GLenum glError = GL_NO_ERROR;
-
+GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/), resourceManager(this, 2) {
 #if defined(__APPLE__) && defined(__OBJC__)
     // Figure out the de-scaled window size.
     NSRect rect = NSMakeRect(0, 0, w, h);
@@ -17,13 +15,6 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     h = NSHeight(rect);
 #endif
 
-    sdlWindow = nullptr;
-    sdlWindow = SDL_CreateWindow(caption.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/);
-
-    if (sdlWindow == nullptr) {
-        throwException("GraphicsOGL3", "Failed to create SDL window: " + String(SDL_GetError()));
-    }
-
     //    if (fullscreen) {
     //        SDL_SetWindowBordered(sdlWindow,SDL_bool::SDL_FALSE);
     //        SDL_Rect displayBounds;
@@ -33,14 +24,11 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     //        SDL_SetWindowPosition(sdlWindow,0,0);
     //    }
 
-    glContext = SDL_GL_CreateContext(sdlWindow);
-    // And make it later in the day.
-    SDL_GL_MakeCurrent(sdlWindow, glContext);
+    glContext = GLContext::createRef(resourceManager, sdlWindow());
 
     glewExperimental = true;
-    glError = glewInit();
-    if (glError != GL_NO_ERROR) {
-        throwException("GraphicsOGL3", "Failed to initialize GLEW (GLERROR: " + String::format(glError, "%u") + ")");
+    if (glewInit() != GL_NO_ERROR) {
+        throw Exception("GraphicsOGL3", "Failed to initialize GLEW (GLERROR: " + String::format(glGetError(), "%u") + ")");
     }
 
     depthTest = true;
@@ -53,39 +41,19 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glError = glGetError();
+    GLenum glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        throwException("GraphicsOGL3", "Failed to initialize window data post-GLEW initialization. (GL_ERROR: " + String::format(glError, "%u") + ")");
+        throw Exception("GraphicsOGL3", "Failed to initialize window data post-GLEW initialization. (GL_ERROR: " + String::format(glError, "%u") + ")");
     }
 
     SDL_GL_SwapWindow(sdlWindow);
 
     setViewport(Rectanglei(0,0,w,h));
 
-    glGenFramebuffers(1,&glFramebuffer);
-    glError = glGetError();
-    if (glError != GL_NO_ERROR) {
-        glFramebuffer = 0;
-        throwException("GraphicsOGL3", "Failed to generate frame buffer. (GL_ERROR: " + String::format(glError, "%u") + ")");
-    }
+    glFramebuffer = GLFramebuffer::createRef(resourceManager);
 
     vsync = true;
     SDL_GL_SetSwapInterval(1);
-}
-
-GraphicsOGL3::~GraphicsOGL3() {
-    cleanup();
-}
-void GraphicsOGL3::cleanup() {
-    takeGlContext();
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    if (glFramebuffer != 0) { glDeleteFramebuffers(1,&glFramebuffer); }
-
-    if (glContext != 0) { SDL_GL_DeleteContext(glContext); };
-
-    glFramebuffer = 0;
-    glContext = 0;
 }
 
 void GraphicsOGL3::update() {
@@ -146,7 +114,7 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
     TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
     for (int i = 0; i < (int)renderTargets.size(); i++) {
         if (!renderTargets[i]->isRenderTarget()) {
-            throwException("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
+            throw Exception("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
         }
 
         if (i == 0) { continue; }
@@ -183,6 +151,8 @@ void GraphicsOGL3::resetRenderTarget() {
 
 void GraphicsOGL3::setViewport(Rectanglei vp) {
     if (vp != viewport) {
+        takeGlContext();
+
         viewport = vp;
         glViewport(vp.topLeftCorner().x, vp.topLeftCorner().y, vp.width(), vp.height());
     }
@@ -190,6 +160,8 @@ void GraphicsOGL3::setViewport(Rectanglei vp) {
 
 void GraphicsOGL3::setVsync(bool isEnabled) {
     if (isEnabled != vsync) {
+        takeGlContext();
+
         vsync = isEnabled;
         SDL_GL_SetSwapInterval(vsync ? 1 : 0);
     }
