@@ -350,9 +350,6 @@
     <ClInclude Include="..\..\Include\ResourceManagement\Resource.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ResourceManagement\ResourceOwner.h">
-      <Filter>Include\ResourceManagement</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceReferenceVector.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>

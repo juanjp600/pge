@@ -20,7 +20,7 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) : resourceManager(gfx, 3) {
     glVertexData.clear(); glIndexData.clear();
 
     vertices.clear(); vertexCount = 0;
-	primitives.clear(); primitiveCount = 0;
+    primitives.clear(); primitiveCount = 0;
 
     glVertexBufferObject = GLBuffer::createRef(resourceManager);
     glIndexBufferObject = GLBuffer::createRef(resourceManager);

@@ -67,10 +67,12 @@ class Graphics {
         bool depthTest;
         bool vsync;
 
-        // Base class always automatically takes care of SysEvents.
-        WindowEventSubscriber::Owner eventSubscriber;
+        // Base class always automatically takes care of SysEvents and the window.
+        WindowEventSubscriber::Ref eventSubscriber;
+        SDLWindow::Ref sdlWindow;
 
-        SDLWindow::Owner sdlWindow;
+    private:
+        ResourceManager resourceManager;
 };
 
 }
