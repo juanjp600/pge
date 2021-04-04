@@ -20,7 +20,7 @@
 
 using namespace PGE;
 
-GraphicsInternal::GraphicsInternal(String name, int w, int h, bool fs) : Graphics(name, w, h, fs) {}
+GraphicsInternal::GraphicsInternal(String name, int w, int h, bool fs, uint32_t windowFlags) : Graphics(name, w, h, fs, windowFlags) {}
 
 void GraphicsInternal::setRenderer(Renderer r) {
     renderer = r;
@@ -31,7 +31,7 @@ Graphics::Renderer GraphicsInternal::getRenderer() {
 }
 
 SDL_Window* GraphicsInternal::getSdlWindow() const {
-    return sdlWindow();
+    return sdlWindow;
 }
 
 #if defined(__APPLE__) && defined(__OBJC__)
@@ -106,24 +106,22 @@ Mesh* Mesh::create(Graphics* gfx, Primitive::TYPE pt) {
 }
 
 Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
-    BYTE* fiBuffer = nullptr;
+    std::unique_ptr<BYTE> fiBuffer;
     int width; int height;
     int realWidth; int realHeight;
     try {
-        fiBuffer = loadFIBufferFromMemory(buffer, size, width, height, realWidth, realHeight);
+        fiBuffer = std::unique_ptr<BYTE>(loadFIBufferFromMemory(buffer, size, width, height, realWidth, realHeight));
     } catch (Exception& e) {
-        delete[] fiBuffer;
         throw e;
     } catch (std::exception& e) {
-        delete[] fiBuffer;
         throw e;
     }
     switch (((GraphicsInternal*)gfx)->getRenderer()) {
         case Graphics::Renderer::DirectX11: {
-            return new TextureDX11(gfx, fiBuffer, width, height, realWidth, realHeight);
+            return new TextureDX11(gfx, fiBuffer.get(), width, height, realWidth, realHeight);
         }
         case Graphics::Renderer::OpenGL: {
-            return new TextureOGL3(gfx, fiBuffer, width, height, realWidth, realHeight);
+            return new TextureOGL3(gfx, fiBuffer.get(), width, height, realWidth, realHeight);
         }
         case Graphics::Renderer::Vulkan: {
             return new TextureVK(gfx, fiBuffer, width, height, realWidth, realHeight);
@@ -132,8 +130,6 @@ Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
             return nullptr;
         }
     }
-    // TODO: lol
-    delete[] fiBuffer;
 }
 
 Texture* Texture::load(Graphics* gfx, const FilePath& filename) {

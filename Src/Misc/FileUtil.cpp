@@ -79,9 +79,7 @@ String FileUtil::getDataFolder() {
     return PGE::String();
 }
 
-std::vector<FilePath> FileUtil::enumerateFolders(const FilePath& path) {
-    std::vector<FilePath> folders;
-
+void FileUtil::enumerateFolders(const FilePath& path, std::vector<FilePath>& folders) {
 #if WINDOWS
     HANDLE hFind;
     WIN32_FIND_DATAW ffd;
@@ -92,7 +90,7 @@ std::vector<FilePath> FileUtil::enumerateFolders(const FilePath& path) {
     wchar* wstr = new wchar[anyPath.length() + 1];
     anyPath.wstr(wstr);
     hFind = FindFirstFileW(wstr, &ffd);
-    //delete[] wstr; // TODO Memleak
+    delete[] wstr;
 
     if (hFind == INVALID_HANDLE_VALUE) {
         throw std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
@@ -125,7 +123,7 @@ std::vector<FilePath> FileUtil::enumerateFolders(const FilePath& path) {
         if (currentEntry->d_type == DT_DIR) {
             // Skip '.' and '..'.
             if ((strcmp(currentEntry->d_name, ".")) != 0 && strcmp(currentEntry->d_name, "..") != 0) {
-                folders.push_back(FilePath(path, currentEntry->d_name).validateAsDirectory());
+                folder.push_back(FilePath(path, currentEntry->d_name).validateAsDirectory());
             } else {
                 continue;
             }
@@ -133,13 +131,9 @@ std::vector<FilePath> FileUtil::enumerateFolders(const FilePath& path) {
     }
     closedir(dir);
 #endif
-
-    return folders;
 }
 
-std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
-    std::vector<FilePath> files;
-    
+void FileUtil::enumerateFiles(const FilePath& path, std::vector<FilePath>& files) {
 #if WINDOWS
     HANDLE hFind;
     WIN32_FIND_DATAW ffd;
@@ -164,10 +158,7 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
 
         FilePath newPath = FilePath(filePath, fileName);
         if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
-            std::vector<FilePath> nestedFiles = enumerateFiles(newPath);
-            for (int i = 0; i < (int)nestedFiles.size(); i++) {
-                files.push_back(nestedFiles[i]);
-            }
+            enumerateFiles(newPath, files);
         } else {
             files.push_back(newPath);
         }
@@ -192,10 +183,7 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
 //                printf("[%s]\n","", currentEntry->d_name);
                 FilePath newPath = FilePath(path);
                 newPath = FilePath(newPath, currentEntry->d_name);
-                std::vector<FilePath> nestedFiles = enumerateFiles(newPath);
-                for (int i = 0; i < nestedFiles.size(); i++) {
-                    files.push_back(nestedFiles[i]);
-                }
+                enumerateFiles(newPath, files);
             } else {
                 continue;
             }
@@ -205,13 +193,9 @@ std::vector<FilePath> FileUtil::enumerateFiles(const FilePath& path) {
     }
     closedir(dir);
 #endif
-
-    return files;
 }
 
-std::vector<String> FileUtil::readLines(const FilePath& path, bool includeEmptyLines) {
-    std::vector<String> retVal;
-
+void FileUtil::readLines(const FilePath& path, std::vector<String>& lines, bool includeEmptyLines) {
     std::ifstream file; file.open(path.cstr(), std::ios_base::in);
 
     char* tempBuf = new char[1024];
@@ -223,24 +207,20 @@ std::vector<String> FileUtil::readLines(const FilePath& path, bool includeEmptyL
         str = str.replace("\n", "").replace("\r", "");
         file.getline(tempBuf, sizeof(char) * 1024);
         if ((!includeEmptyLines) && (str.length() <= 0)) { continue; }
-        retVal.push_back(str);
+        lines.push_back(str);
     }
 
     delete[] tempBuf;
 
     file.close();
-
-    return retVal;
 }
 
-// TODO: Avoid copying?
-std::vector<uint8_t> FileUtil::readBytes(const FilePath& path) {
+void FileUtil::readBytes(const FilePath& path, std::vector<uint8_t>& bytes) {
     std::ifstream file;
     file.open(path.cstr(), std::ios::ate | std::ios::binary);
     size_t vertSize = (size_t)file.tellg();
-    std::vector<uint8_t> ret = std::vector<uint8_t>(vertSize);
+    bytes.resize(bytes.size() + vertSize);
     file.seekg(0);
-    file.read((char*)ret.data(), vertSize);
+    file.read((char*)bytes.data(), vertSize);
     file.close();
-    return ret;
 }

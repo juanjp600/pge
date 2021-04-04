@@ -7,8 +7,6 @@
 #include "../Texture/TextureDX11.h"
 #include <Exception/Exception.h>
 
-#include <inttypes.h>
-
 using namespace PGE;
 
 MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) {
@@ -20,9 +18,6 @@ MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) {
     dxIndexData.clear();
     vertices.clear(); vertexCount = 0;
     primitives.clear(); primitiveCount = 0;
-
-    dxVertexBuffer = destructor.getReferenceDifferentDestructor<ID3D11Buffer*>(GraphicsDX11::destroyChild);
-    dxIndexBuffer = destructor.getReferenceDifferentDestructor<ID3D11Buffer*>(GraphicsDX11::destroyChild);
 }
 
 void MeshDX11::updateInternalData() {
@@ -113,16 +108,6 @@ void MeshDX11::uploadInternalData() {
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
-    if (dxVertexBuffer()!=nullptr) {
-        String s;
-        dxVertexBuffer()->Release(); dxVertexBuffer = nullptr;
-    }
-    if (dxIndexBuffer()!=nullptr) {
-        dxIndexBuffer()->Release(); dxIndexBuffer = nullptr;
-    }
-
-    HRESULT hResult = 0;
-
     if (dxVertexData.size() > 0) {
         ZeroMemory(&dxVertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
         dxVertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -133,10 +118,7 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxVertexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxVertexBufferData.pSysMem = dxVertexData.data();
 
-        hResult = dxDevice->CreateBuffer(&dxVertexBufferDesc, &dxVertexBufferData, &dxVertexBuffer);
-        if (FAILED(hResult)) {
-            throw Exception("uploadInternalData", "Failed to create vertex buffer (vertex count: " + String::fromInt(vertices.size()) + "; vertex data size: " + String::fromInt(dxVertexData.size()) + "; HRESULT " + String::fromInt(hResult) + ")");
-        }
+        dxVertexBuffer.fillNew(dxDevice, dxVertexBufferDesc, dxVertexBufferData);
     }
 
     if (dxIndexData.size() > 0) {
@@ -149,10 +131,7 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxIndexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxIndexBufferData.pSysMem = dxIndexData.data();
 
-        hResult = dxDevice->CreateBuffer(&dxIndexBufferDesc, &dxIndexBufferData, &dxIndexBuffer);
-        if (FAILED(hResult)) {
-            throw Exception("uploadInternalData", "Failed to create index buffer (index count: " + String::fromInt(dxIndexData.size()) + "; HRESULT " + String::fromInt(hResult) + ")");
-        }
+        dxIndexBuffer.fillNew(dxDevice, dxIndexBufferDesc, dxIndexBufferData);
     }
 
     mustReuploadInternalData = false;
@@ -164,13 +143,13 @@ void MeshDX11::render() {
     updateInternalData();
     uploadInternalData();
 
-    if (dxVertexBuffer() == nullptr || dxIndexBuffer() == nullptr) { return; }
+    if (!dxVertexBuffer.isHoldingResource() || !dxIndexBuffer.isHoldingResource()) { return; }
 
     ((ShaderDX11*)material->getShader())->useVertexInputLayout();
 
     UINT offset = 0;
     dxContext->IASetVertexBuffers(0,1,&dxVertexBuffer,&stride,&offset);
-    dxContext->IASetIndexBuffer(dxIndexBuffer(),DXGI_FORMAT_R16_UINT,0);
+    dxContext->IASetIndexBuffer(dxIndexBuffer,DXGI_FORMAT_R16_UINT,0);
 
     D3D11_PRIMITIVE_TOPOLOGY dxPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     int dxIndexMultiplier = 3;

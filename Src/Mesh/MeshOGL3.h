@@ -13,7 +13,8 @@
 #include <OpenGL/GL.h>
 #endif
 
-#include "../Misc/SmartPrimitive.h"
+#include "../ResourceManagement/OGL3.h"
+#include "../ResourceManagement/ResourceManagerOGL3.h"
 
 namespace PGE {
 
@@ -24,15 +25,16 @@ class MeshOGL3 : public Mesh {
         virtual void updateInternalData() override;
 
         virtual void render() override;
+
     private:
         virtual void uploadInternalData() override;
 
-        SmartRef<GLuint> glVertexBufferObject;
-        SmartRef<GLuint> glIndexBufferObject;
+        GLBuffer::Ref glVertexBufferObject;
+        GLBuffer::Ref glIndexBufferObject;
 
-        SmartRef<GLuint> glVertexArrayObject;
+        GLVertexArray::Ref glVertexArrayObject;
 
-        SmartOrderedDestructor destructor = 3;
+        ResourceManagerOGL3 resourceManager;
 
         std::vector<uint8_t> glVertexData;
         std::vector<GLuint> glIndexData;

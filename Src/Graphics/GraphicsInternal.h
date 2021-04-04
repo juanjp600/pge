@@ -13,7 +13,7 @@ namespace PGE {
 
 class GraphicsInternal : public Graphics {
     public:
-        GraphicsInternal(String name, int w, int h, bool fs);
+        GraphicsInternal(String name, int w, int h, bool fs, uint32_t windowFlags);
 
         void setRenderer(Renderer r);
         Renderer getRenderer();

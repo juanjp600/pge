@@ -5,16 +5,9 @@
 #include "TextureOGL3.h"
 #include <Exception/Exception.h>
 
-#include <stdlib.h>
-#include <inttypes.h>
-
 using namespace PGE;
 
-static void destroyTexture(const GLuint& texture) {
-    glDeleteTextures(1, &texture);
-}
-
-TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,Texture::FORMAT fmt) {
+TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,Texture::FORMAT fmt) : resourceManager(gfx, 2) {
     GLuint glError = GL_NO_ERROR;
 
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
@@ -43,12 +36,9 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
         }
     }
 
-    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
-
-    glTexture = destructor.getReference<GLuint>(destroyTexture);
-    glGenTextures(1,&glTexture);
+    glTexture = GLTexture::createRef(resourceManager);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,glTexture());
+    glBindTexture(GL_TEXTURE_2D,glTexture);
 
     GLint glInternalFormat;
     GLenum glFormat;
@@ -82,18 +72,14 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
         /*glGenFramebuffers(1,&glFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);*/
 
-        glDepthbuffer = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteRenderbuffers(1, &i); });
-        glGenRenderbuffers(1, &glDepthbuffer);
-        glBindRenderbuffer(GL_RENDERBUFFER, glDepthbuffer());
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        glDepthbuffer = GLDepthBuffer::createRef(resourceManager, w, h);
         //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, glDepthbuffer);
     }
 
     if (newBuffer!=nullptr) { delete[] newBuffer; }
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn) {
+TextureOGL3::TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn) : resourceManager(gfx, 1) {
     graphics = gfx;
     width = w;
     height = h;
@@ -106,12 +92,9 @@ TextureOGL3::TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
 
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
-    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
-
-    glTexture = destructor.getReference<GLuint>(destroyTexture);
-    glGenTextures(1,&glTexture);
+    glTexture = GLTexture::createRef(resourceManager);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,glTexture());
+    glBindTexture(GL_TEXTURE_2D,glTexture);
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,fiBuffer);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
@@ -129,7 +112,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
     isRT = false;
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager) {
+TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager) : resourceManager(gfx, 1) {
     GLuint glError = GL_NO_ERROR;
 
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
@@ -137,12 +120,9 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     filename = fn;
     name = fn.str();
 
-    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
-
-    glTexture = destructor.getReference<GLuint>(destroyTexture);
-    glGenTextures(1,&glTexture);
+    glTexture = GLTexture::createRef(resourceManager);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,glTexture());
+    glBindTexture(GL_TEXTURE_2D,glTexture);
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,nullptr);
     glError = glGetError();
     if (glError != GL_NO_ERROR) {
@@ -184,7 +164,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     } mainThreadRequest;
     mainThreadRequest.filename = filename;
     mainThreadRequest.graphics = (GraphicsOGL3*)graphics;
-    mainThreadRequest.glTexture = glTexture();
+    mainThreadRequest.glTexture = glTexture;
 
     class TextureLoadRequest : public ThreadManager::NewThreadRequest {
         public:
@@ -227,7 +207,7 @@ Texture* TextureOGL3::copy() const {
 }
 
 GLuint TextureOGL3::getGlTexture() const {
-    return glTexture();
+    return glTexture;
 }
 
 /*GLuint TextureOGL3::getGlFramebuffer() const {
@@ -235,7 +215,7 @@ GLuint TextureOGL3::getGlTexture() const {
 }*/
 
 GLuint TextureOGL3::getGlDepthbuffer() const {
-    return glDepthbuffer();
+    return glDepthbuffer;
 }
 
 void* TextureOGL3::getNative() const {

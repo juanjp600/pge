@@ -12,7 +12,7 @@ class BinaryReader {
     private:
         std::ifstream stream;
 
-        template <typename T>
+        template <class T>
         T read();
 
     public:

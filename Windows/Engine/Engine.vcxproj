@@ -46,6 +46,9 @@
     <ClCompile Include="..\..\Src\Misc\FilePath.cpp" />
     <ClCompile Include="..\..\Src\Misc\FileUtil.cpp" />
     <ClCompile Include="..\..\Src\Misc\String.cpp" />
+    <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp" />
+    <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp" />
+    <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderVK.cpp" />
@@ -78,6 +81,11 @@
     <ClInclude Include="..\..\Include\Misc\FilePath.h" />
     <ClInclude Include="..\..\Include\Misc\FileUtil.h" />
     <ClInclude Include="..\..\Include\Misc\String.h" />
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h" />
+    <ClInclude Include="..\..\Include\ResourceManagement\Resource.h" />
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceOwner.h" />
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceReference.h" />
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceReferenceVector.h" />
     <ClInclude Include="..\..\Include\Shader\Shader.h" />
     <ClInclude Include="..\..\Include\Sound\Sound.h" />
     <ClInclude Include="..\..\Include\SysEvents\SysEvents.h" />
@@ -92,7 +100,10 @@
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshVK.h" />
-    <ClInclude Include="..\..\Src\Misc\SmartPrimitive.h" />
+    <ClInclude Include="..\..\Src\ResourceManagement\DX11.h" />
+    <ClInclude Include="..\..\Src\ResourceManagement\OGL3.h" />
+    <ClInclude Include="..\..\Src\ResourceManagement\Misc.h" />
+    <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderVK.h" />

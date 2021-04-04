@@ -13,6 +13,9 @@
 #include <OpenGL/GL.h>
 #endif
 
+#include "../ResourceManagement/OGL3.h"
+#include "../ResourceManagement/ResourceManagerOGL3.h"
+
 namespace PGE {
 
 class ShaderOGL3 : public Shader {
@@ -90,11 +93,11 @@ class ShaderOGL3 : public Shader {
         };
         void extractShaderVars(const String& src,String varKind,std::vector<ShaderVar>& varList);
 
-        SmartRef<GLuint> glVertexShader;
-        SmartRef<GLuint> glFragmentShader;
-        SmartRef<GLuint> glShaderProgram;
+        GLShader::Ref glVertexShader;
+        GLShader::Ref glFragmentShader;
+        GLProgram::Ref glShaderProgram;
 
-        SmartOrderedDestructor destructor = 3;
+        ResourceManagerOGL3 resourceManager;
 
         Graphics* graphics;
 };

@@ -11,6 +11,9 @@
 #include <Texture/Texture.h>
 #include <Threading/ThreadManager.h>
 
+#include "../ResourceManagement/OGL3.h"
+#include "../ResourceManagement/ResourceManagerOGL3.h"
+
 namespace PGE {
 
 class TextureOGL3 : public Texture {
@@ -27,11 +30,11 @@ class TextureOGL3 : public Texture {
         virtual void* getNative() const;
 
     private:
-        SmartRef<GLuint> glTexture;
+        GLTexture::Ref glTexture;
         //GLuint glFramebuffer;
-        SmartRef<GLuint> glDepthbuffer;
+        GLDepthBuffer::Ref glDepthbuffer;
 
-        SmartOrderedDestructor destructor = 2;
+        ResourceManagerOGL3 resourceManager;
 };
 
 }

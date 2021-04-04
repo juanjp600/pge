@@ -10,9 +10,7 @@
 
 using namespace PGE;
 
-#include <iostream>
-
-MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
+MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) : resourceManager(gfx, 3) {
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     primitiveType = pt;
@@ -24,15 +22,10 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) {
     vertices.clear(); vertexCount = 0;
 	primitives.clear(); primitiveCount = 0;
 
-    destructor.setPreop(new GraphicsOGL3::OpTakeContext((GraphicsOGL3*)gfx));
+    glVertexBufferObject = GLBuffer::createRef(resourceManager);
+    glIndexBufferObject = GLBuffer::createRef(resourceManager);
 
-    glVertexBufferObject = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteBuffers(1, &i); });
-    glIndexBufferObject = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteBuffers(1, &i); });
-    glGenBuffers(1, &glVertexBufferObject);
-    glGenBuffers(1, &glIndexBufferObject);
-
-    glVertexArrayObject = destructor.getReference<GLuint>([](const GLuint& i) { glDeleteVertexArrays(1, &i); });
-    glGenVertexArrays(1, &glVertexArrayObject);
+    glVertexArrayObject = GLVertexArray::createRef(resourceManager);
 }
 
 void MeshOGL3::updateInternalData() {
@@ -130,9 +123,9 @@ void MeshOGL3::uploadInternalData() {
 void MeshOGL3::render() {
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
-    glBindVertexArray(glVertexArrayObject());
-    glBindBuffer(GL_ARRAY_BUFFER,glVertexBufferObject());
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,glIndexBufferObject());
+    glBindVertexArray(glVertexArrayObject);
+    glBindBuffer(GL_ARRAY_BUFFER,glVertexBufferObject);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,glIndexBufferObject);
 
     updateInternalData();
     uploadInternalData();

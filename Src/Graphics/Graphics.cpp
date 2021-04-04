@@ -7,14 +7,13 @@
 
 using namespace PGE;
 
-Graphics::Graphics(String name, int w, int h, bool fs) {
+Graphics::Graphics(String name, int w, int h, bool fs, uint32_t windowFlags) {
     caption = name;
     width = w; height = h; fullscreen = fs;
 
-    eventSubscriber = destructor.getReference<SysEvents::Subscriber*>([](SysEvents::Subscriber* const& s) { SysEventsInternal::unsubscribe(s); }, new SysEventsInternal::SubscriberInternal(this, SysEventsInternal::SubscriberInternal::EventType::WINDOW));
-    SysEventsInternal::subscribe(eventSubscriber());
+    eventSubscriber.fillNew(this);
 
-    sdlWindow = destructor.getReference<SDL_Window*>([](SDL_Window* const& w) { SDL_DestroyWindow(w); }, nullptr);
+    sdlWindow.fillNew(name, w, h, windowFlags);
 
     open = true;
     focused = true;
