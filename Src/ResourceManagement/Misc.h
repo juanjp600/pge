@@ -4,7 +4,6 @@
 #include <Misc/String.h>
 #include <Exception/Exception.h>
 
-#include <ResourceManagement/Resource.h>
 #include <ResourceManagement/ResourceManager.h>
 
 #include <SysEvents/SysEvents.h>

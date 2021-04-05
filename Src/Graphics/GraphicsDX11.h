@@ -8,10 +8,6 @@
 #include <d3d11.h>
 
 #include <ResourceManagement/ResourceReferenceVector.h>
-#include <ResourceManagement/ResourceReference.h>
-#include <ResourceManagement/ResourceManager.h>
-#include <ResourceManagement/Resource.h>
-
 #include "../ResourceManagement/DX11.h"
 
 namespace PGE {
