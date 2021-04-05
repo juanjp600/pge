@@ -71,7 +71,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
 
     // Both constructor values need to remain in memory!
     vertexInputBinding = vk::VertexInputBindingDescription(0, vertexStride, vk::VertexInputRate::eVertex);
-    vertexInputInfo = vk::PipelineVertexInputStateCreateInfo({}, 1, &vertexInputBinding, vertexInputAttributes.size(), vertexInputAttributes.data());
+    vertexInputInfo = vk::PipelineVertexInputStateCreateInfo({}, 1, &vertexInputBinding, (uint32_t)vertexInputAttributes.size(), vertexInputAttributes.data());
 
     vk::PipelineShaderStageCreateInfo vertexInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eVertex, vkShader(), "VS");
     vk::PipelineShaderStageCreateInfo fragmentInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eFragment, vkShader(), "PS");

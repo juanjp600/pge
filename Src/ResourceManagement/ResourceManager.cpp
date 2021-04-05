@@ -14,7 +14,7 @@ ResourceManager::ResourceManager(int sz) {
 }
 
 ResourceManager::~ResourceManager() {
-    for (int i = resources.size() - 1; i >= 0; i--) {
+    for (int i = (int)resources.size() - 1; i >= 0; i--) {
         delete resources[i];
     }
 }

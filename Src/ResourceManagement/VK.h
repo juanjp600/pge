@@ -93,7 +93,7 @@ class VKPipelineLayout : public Resource<vk::PipelineLayout> {
 		VKPipelineLayout(vk::Device dev, const std::vector<vk::PushConstantRange>& ranges) {
 			device = dev;
 
-			vk::PipelineLayoutCreateInfo layoutInfo({}, 0, nullptr, ranges.size(), ranges.data());
+			vk::PipelineLayoutCreateInfo layoutInfo({}, 0, nullptr, (uint32_t)ranges.size(), ranges.data());
 			resource = device.createPipelineLayout(layoutInfo);
 		}
 

@@ -280,7 +280,7 @@ static int convertWCharToUtf8(wchar chr, char* result) {
 void String::recalculateHashAndLength() {
     hashCode = 5381;
     const char* buf = cstrNoConst();
-    strByteLength = strlen(buf);
+    strByteLength = (int)strlen(buf);
     strLength = 0;
     int capacity = cCapacity > 0 ? cCapacity : shortStrCapacity;
     for (int i = 0; i < capacity; i += measureCodepoint(buf[i])) {

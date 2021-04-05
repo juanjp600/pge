@@ -176,7 +176,7 @@ void Mesh::setGeometry(int vertCount, const std::vector<Vertex>& verts, int prim
 }
 
 void Mesh::setGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims) {
-    setGeometry(verts.size(), verts, prims.size(), prims);
+    setGeometry((int)verts.size(), verts, (int)prims.size(), prims);
 }
 
 void Mesh::clearGeometry() {

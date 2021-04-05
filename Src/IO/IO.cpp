@@ -406,7 +406,7 @@ void IOInternal::untrackInput(UserInput* input) {
 }
 
 int IOInternal::getControllerCount() const {
-    return openControllers.size();
+    return (int)openControllers.size();
 }
 
 Controller* IOInternal::getController(int index) const {
