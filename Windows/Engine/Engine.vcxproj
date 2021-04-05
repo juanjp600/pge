@@ -49,6 +49,7 @@
     <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
+    <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerVK.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderVK.cpp" />
@@ -103,6 +104,8 @@
     <ClInclude Include="..\..\Src\ResourceManagement\OGL3.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\Misc.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h" />
+    <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerVK.h" />
+    <ClInclude Include="..\..\Src\ResourceManagement\VK.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderVK.h" />

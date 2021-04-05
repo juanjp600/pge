@@ -7,6 +7,9 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include "../ResourceManagement/ResourceManagerVK.h"
+#include "../ResourceManagement/VK.h"
+
 #include "../Graphics/GraphicsVK.h"
 
 namespace PGE {
@@ -23,7 +26,7 @@ namespace PGE {
 
             vk::PipelineShaderStageCreateInfo* getShaderStageInfo();
             vk::PipelineVertexInputStateCreateInfo* getVertexInputInfo();
-            vk::PipelineLayout* getLayout();
+            const vk::PipelineLayout* getLayout();
 
         private:
             GraphicsVK* graphics;
@@ -31,7 +34,7 @@ namespace PGE {
             int vertexStride;
             std::vector<String> vertexInputNames;
 
-            SmartRef<vk::ShaderModule> vkShader;
+            VKShader::Ref vkShader;
 
             vk::PipelineShaderStageCreateInfo shaderStageInfo[2];
 
@@ -39,7 +42,7 @@ namespace PGE {
             std::vector<vk::VertexInputAttributeDescription> vertexInputAttributes;
             vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
 
-            SmartRef<vk::PipelineLayout> layout;
+            VKPipelineLayout::Ref layout;
 
             class ConstantVK : public Constant {
                 public:
@@ -59,13 +62,10 @@ namespace PGE {
                     vk::ShaderStageFlags stage;
                     int offset;
             };
-            SmartRef<std::map<long long, ConstantVK*>> vertexConstantMap;
-            SmartRef<std::map<long long, ConstantVK*>> fragmentConstantMap;
+            std::map<long long, std::unique_ptr<ConstantVK>> vertexConstantMap;
+            std::map<long long, std::unique_ptr<ConstantVK>> fragmentConstantMap;
 
-            // Static class member because ConstantVK is private.
-            static void clearMap(const std::map<long long, PGE::ShaderVK::ConstantVK*>& m);
-
-            SmartOrderedDestructor destructor = 4;
+            ResourceManagerVK resourceManager;
     };
 
 }

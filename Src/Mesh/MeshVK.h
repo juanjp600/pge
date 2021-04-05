@@ -1,11 +1,12 @@
 #ifndef PGEINTERNAL_MESH_VK_H_INCLUDED
 #define PGEINTERNAL_MESH_VK_H_INCLUDED
 
-#include <vulkan/vulkan.hpp>
-
 #include <Mesh/Mesh.h>
 
-#include "../Misc/SmartPrimitive.h"
+#include <vulkan/vulkan.hpp>
+
+#include "../ResourceManagement/ResourceManagerVK.h"
+#include "../ResourceManagement/VK.h"
 
 namespace PGE {
 
@@ -17,20 +18,18 @@ class MeshVK : public Mesh {
         void render() override;
 
     private:
-        SmartRef<vk::Pipeline> pipeline;
+        VKPipeline::Ref pipeline;
 
         vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 
         // TODO: Combine buffers??
-        SmartRef<vk::Buffer> dataBuffer;
-        SmartRef<vk::DeviceMemory> dataMemory;
+        VKBuffer::Ref dataBuffer;
+        VKMemory::Ref dataMemory;
 
-        SmartOrderedDestructor destructor = 3;
+        ResourceManagerVK resourceManager;
 
         int totalVertexSize;
         int indicesCount;
-
-        void createBuffer(int size, vk::BufferUsageFlags bufferUsage, vk::MemoryPropertyFlags memProps, vk::Buffer& buffer, vk::DeviceMemory& memory);
 
         void uploadInternalData() override;
 };

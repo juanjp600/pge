@@ -9,23 +9,13 @@
 
 using namespace PGE;
 
-void ShaderVK::clearMap(const std::map<long long, PGE::ShaderVK::ConstantVK*>& m) {
-    for (std::pair<long long, ConstantVK*> constant : m) {
-        delete constant.second;
-    }
-}
-
-ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
+ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2) {
     graphics = (GraphicsVK*)gfx;
     vk::Device device = ((GraphicsVK*)gfx)->getDevice();
 
-    destructor.setPreop(new GraphicsVK::OpDeviceIdle(device));
-
     // Shader.
-    std::vector<uint8_t> shaderBinary = FileUtil::readBytes(path + "shader.spv");
-    vk::ShaderModuleCreateInfo shaderCreateInfo = vk::ShaderModuleCreateInfo({}, shaderBinary.size(), (uint32_t*)shaderBinary.data());
-    vkShader = destructor.getReference(device.createShaderModule(shaderCreateInfo), device,
-        +[](const vk::ShaderModule& s, vk::Device d) { d.destroy(s); });
+    std::vector<uint8_t> shaderBinary; FileUtil::readBytes(path + "shader.spv", shaderBinary);
+    vkShader = VKShader::createRef(resourceManager, device, shaderBinary);
 
     // Reflect.
     SpvReflectShaderModule reflection; SpvReflectResult res = spvReflectCreateShaderModule(shaderBinary.size(), shaderBinary.data(), &reflection);
@@ -47,9 +37,6 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
 
     // Push constants.
     // Members are supposed to begin with the vertex constants and not meant to be mixed.
-    vertexConstantMap = destructor.getReference<std::map<long long, ShaderVK::ConstantVK*>>(clearMap);
-    fragmentConstantMap = destructor.getReference<std::map<long long, ShaderVK::ConstantVK*>>(clearMap);
-
     std::vector<vk::PushConstantRange> ranges;
     if (reflection.push_constant_block_count != 0) {
         if (reflection.push_constant_block_count > 1) {
@@ -66,21 +53,19 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
         for (int j = 0; j < (int)pushConstant.member_count; j++) {
             String name = pushConstant.members[j].name;
             if (name.substr(0, 4) == "vert") {
-                vertexConstantMap().emplace(name.substr(5).getHashCode(), new PGE::ShaderVK::ConstantVK(graphics, this, vk::ShaderStageFlagBits::eVertex, pushConstant.members[j].absolute_offset));
+                vertexConstantMap.emplace(name.substr(5).getHashCode(), std::make_unique<PGE::ShaderVK::ConstantVK>(graphics, this, vk::ShaderStageFlagBits::eVertex, pushConstant.members[j].absolute_offset));
             } else {
-                if (fragmentConstantMap().size() == 0) {
+                if (fragmentConstantMap.size() == 0) {
                     fragmentOffset = pushConstant.members[j].absolute_offset;
                 }
-                fragmentConstantMap().emplace(name.substr(5).getHashCode(), new PGE::ShaderVK::ConstantVK(graphics, this, vk::ShaderStageFlagBits::eFragment, pushConstant.members[j].absolute_offset));
+                fragmentConstantMap.emplace(name.substr(5).getHashCode(), std::make_unique<PGE::ShaderVK::ConstantVK>(graphics, this, vk::ShaderStageFlagBits::eFragment, pushConstant.members[j].absolute_offset));
             }
         }
-        if (!vertexConstantMap().empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eVertex }, 0, fragmentOffset)); }
-        if (!fragmentConstantMap().empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eFragment }, fragmentOffset, pushConstant.padded_size - fragmentOffset)); }
+        if (!vertexConstantMap.empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eVertex }, 0, fragmentOffset)); }
+        if (!fragmentConstantMap.empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eFragment }, fragmentOffset, pushConstant.padded_size - fragmentOffset)); }
     }
-    
-    vk::PipelineLayoutCreateInfo layoutInfo({}, 0, nullptr, ranges.size(), ranges.data());
-    layout = destructor.getReference(device.createPipelineLayout(layoutInfo), device,
-        +[](const vk::PipelineLayout& l, vk::Device d) { d.destroy(l); });
+
+    layout = VKPipelineLayout::createRef(resourceManager, device, ranges);
     
     spvReflectDestroyShaderModule(&reflection);
 
@@ -95,11 +80,11 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) {
 }
 
 Shader::Constant* ShaderVK::getVertexShaderConstant(String name) {
-    return vertexConstantMap()[name.getHashCode()];
+    return vertexConstantMap[name.getHashCode()].get();
 }
 
 Shader::Constant* ShaderVK::getFragmentShaderConstant(String name) {
-    return fragmentConstantMap()[name.getHashCode()];
+    return fragmentConstantMap[name.getHashCode()].get();
 }
 
 ShaderVK::ConstantVK::ConstantVK(Graphics* gfx, ShaderVK* she, vk::ShaderStageFlags stg, int off) {
@@ -157,6 +142,7 @@ vk::PipelineVertexInputStateCreateInfo* ShaderVK::getVertexInputInfo() {
     return &vertexInputInfo;
 }
 
-vk::PipelineLayout* ShaderVK::getLayout() {
+// TODO: Why.
+const vk::PipelineLayout* ShaderVK::getLayout() {
     return &layout;
 }

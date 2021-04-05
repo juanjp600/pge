@@ -10,22 +10,8 @@
 
 using namespace PGE;
 
-GraphicsVK::OpDeviceIdle::OpDeviceIdle(vk::Device device) {
-    this->device = device;
-}
-
-void GraphicsVK::OpDeviceIdle::exec() {
-    device.waitIdle();
-}
-
-GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs), MAX_FRAMES_IN_FLIGHT(3) {
+GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI), MAX_FRAMES_IN_FLIGHT(3) {
     currentFrame = 0;
-
-    // SDL window creation.
-    sdlWindow = SDL_CreateWindow(name.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI);
-    if (sdlWindow() == nullptr) {
-        throw Exception("WindowVK", "Failed to create SDL window: " + String(SDL_GetError()));
-    }
 
     // Layers.
     std::vector<const char*> layers;
@@ -319,9 +305,6 @@ void GraphicsVK::createSwapchain(bool vsync) {
     rasterizationInfo = vk::PipelineRasterizationStateCreateInfo({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack, vk::FrontFace::eCounterClockwise, false, 0.f, 0.f, 0.f, 1.f);
     multisamplerInfo = vk::PipelineMultisampleStateCreateInfo({}, vk::SampleCountFlagBits::e1, false, 0.f, nullptr, false, false);
 
-    inputAssemblyLines = vk::PipelineInputAssemblyStateCreateInfo({}, vk::PrimitiveTopology::eLineList, false);
-    inputAssemblyTris = vk::PipelineInputAssemblyStateCreateInfo({}, vk::PrimitiveTopology::eTriangleList, false);
-
     framebuffers.resize(swapchainImageViews.size());
     for (int i = 0; i < (int)swapchainImageViews.size(); i++) {
         vk::FramebufferCreateInfo framebufferInfo = vk::FramebufferCreateInfo({}, renderPass, 1, &swapchainImageViews[i], swapchainExtent.width, swapchainExtent.height, 1);
@@ -377,17 +360,7 @@ void GraphicsVK::setVsync(bool isEnabled) {
     }
 }
 
-vk::Pipeline GraphicsVK::createPipeline(ShaderVK* shader, Primitive::TYPE primitive) const {
-    const vk::PipelineInputAssemblyStateCreateInfo* inputInfo;
-    switch (primitive) {
-        case Primitive::TYPE::LINE: {
-            inputInfo = &inputAssemblyLines;
-        } break;
-        default:
-        case Primitive::TYPE::TRIANGLE: {
-            inputInfo = &inputAssemblyTris;
-        } break;
-    }
+vk::Pipeline GraphicsVK::createPipeline(ShaderVK* shader, const vk::PipelineInputAssemblyStateCreateInfo* inputInfo) const {
     vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shader->getShaderStageInfo(), shader->getVertexInputInfo(), inputInfo, nullptr, &viewportInfo, &rasterizationInfo, &multisamplerInfo, nullptr, &colorBlendInfo, nullptr, *shader->getLayout(), renderPass, 0, {}, -1);
     return device.createGraphicsPipeline(nullptr, pipelineInfo).value;
 }

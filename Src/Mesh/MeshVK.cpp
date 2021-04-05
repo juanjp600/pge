@@ -8,19 +8,11 @@
 
 using namespace PGE;
 
-MeshVK::MeshVK(Graphics* gfx, Primitive::TYPE pt) {
+MeshVK::MeshVK(Graphics* gfx, Primitive::TYPE pt) : resourceManager(gfx, 3) {
 	graphics = gfx;
 	primitiveType = pt;
 
-	destructor.setPreop(new GraphicsVK::OpDeviceIdle(((GraphicsVK*)graphics)->getDevice()));
-
 	// TODO test over frames in flight.
-	pipeline = destructor.getReference(vk::Pipeline(nullptr), ((GraphicsVK*)gfx)->getDevice(),
-		+[](const vk::Pipeline& p, vk::Device d) { if (p != VK_NULL_HANDLE) { d.destroy(p); } });
-	dataBuffer = destructor.getReference(vk::Buffer(nullptr), ((GraphicsVK*)gfx)->getDevice(),
-		+[](const vk::Buffer& b, vk::Device d) { if (b != VK_NULL_HANDLE) { d.destroy(b); } });
-	dataMemory = destructor.getReference(vk::DeviceMemory(nullptr), ((GraphicsVK*)gfx)->getDevice(),
-		+[](const vk::DeviceMemory& m, vk::Device d) { if (m != VK_NULL_HANDLE) { d.free(m); } });
 }
 
 // TODO: Crash when no vertices.
@@ -31,20 +23,16 @@ void MeshVK::updateInternalData() {
 	vk::Device device = graphics->getDevice();
 	ShaderVK* shader = (ShaderVK*)material->getShader();
 
-	// TODO: Own function?
-	if (pipeline() != VK_NULL_HANDLE) {
-		device.destroyPipeline(pipeline());
-		device.destroyBuffer(dataBuffer());
-		device.freeMemory(dataMemory());
-	}
+	resourceManager.deleteResource(pipeline);
+	resourceManager.deleteResource(dataMemory);
+	resourceManager.deleteResource(dataBuffer);
 
 	totalVertexSize = shader->getVertexStride() * vertexCount;
 	indicesCount = primitiveCount * (primitiveType == Primitive::TYPE::TRIANGLE ? 3 : 2);
 	int finalTotalSize = totalVertexSize + sizeof(uint16_t) * indicesCount;
 
-	vk::Buffer stagingBuffer;
-	vk::DeviceMemory stagingMemory;
-	createBuffer(finalTotalSize, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible, stagingBuffer, stagingMemory);
+	VKBuffer stagingBuffer = VKBuffer(device, finalTotalSize, vk::BufferUsageFlagBits::eTransferSrc);
+	VKMemory stagingMemory = VKMemory(graphics, stagingBuffer, vk::MemoryPropertyFlagBits::eHostVisible);
 
 	std::vector<String> vertexInputNames = shader->getVertexInputNames();
 	std::vector<int> hintIndices(vertexInputNames.size());
@@ -113,30 +101,13 @@ void MeshVK::updateInternalData() {
 	device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, VK_WHOLE_SIZE));
 	device.unmapMemory(stagingMemory);
 
-	createBuffer(finalTotalSize, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, dataBuffer(), dataMemory());
-	graphics->transfer(stagingBuffer, dataBuffer(), finalTotalSize);
+	dataBuffer = VKBuffer::createRef(resourceManager, device, finalTotalSize, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer);
+	dataMemory = VKMemory::createRef(resourceManager, graphics, dataBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal);
+	graphics->transfer(stagingBuffer, dataBuffer, finalTotalSize);
 
-	device.destroyBuffer(stagingBuffer);
-	device.freeMemory(stagingMemory);
-
-	pipeline = graphics->createPipeline(shader, primitiveType);
+	pipeline = VKPipeline::createRef(resourceManager, graphics, shader, primitiveType);
 
 	mustUpdateInternalData = false;
-}
-
-void MeshVK::createBuffer(int size, vk::BufferUsageFlags bufferUsage, vk::MemoryPropertyFlags memProps, vk::Buffer& buffer, vk::DeviceMemory& memory) {
-	GraphicsVK* graphics = (GraphicsVK*)this->graphics;
-	const vk::Device& device = graphics->getDevice();
-
-	vk::BufferCreateInfo indexBufferInfo = vk::BufferCreateInfo({}, size, bufferUsage, vk::SharingMode::eExclusive);
-	buffer = device.createBuffer(indexBufferInfo);
-
-	vk::MemoryRequirements memReq = device.getBufferMemoryRequirements(buffer);
-	int memType = graphics->findMemoryType(memReq.memoryTypeBits, memProps);
-	vk::MemoryAllocateInfo memoryInfo = vk::MemoryAllocateInfo(memReq.size, memType);
-
-	memory = device.allocateMemory(memoryInfo);
-	device.bindBufferMemory(buffer, memory, 0);
 }
 
 void MeshVK::render() {
@@ -147,8 +118,8 @@ void MeshVK::render() {
 	vk::CommandBuffer comBuffer = ((GraphicsVK*)graphics)->getCurrentCommandBuffer();
 	// TODO: How the fuck does the buffer know how much vertex data there is???
 	comBuffer.bindVertexBuffers(0, dataBuffer(), (vk::DeviceSize)0);
-	comBuffer.bindIndexBuffer(dataBuffer(), totalVertexSize, vk::IndexType::eUint16);
-	comBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline());
+	comBuffer.bindIndexBuffer(dataBuffer, totalVertexSize, vk::IndexType::eUint16);
+	comBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
 	comBuffer.drawIndexed(indicesCount, 1, 0, 0, 0);
 }
 

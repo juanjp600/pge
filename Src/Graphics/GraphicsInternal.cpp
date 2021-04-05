@@ -124,7 +124,7 @@ Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
             return new TextureOGL3(gfx, fiBuffer.get(), width, height, realWidth, realHeight);
         }
         case Graphics::Renderer::Vulkan: {
-            return new TextureVK(gfx, fiBuffer, width, height, realWidth, realHeight);
+            return new TextureVK(gfx, fiBuffer.get(), width, height, realWidth, realHeight);
         }
         default: {
             return nullptr;

@@ -12,15 +12,6 @@ class ShaderVK;
 
 class GraphicsVK : public GraphicsInternal {
     public:
-        class OpDeviceIdle : public OpContainer {
-            public:
-                OpDeviceIdle(vk::Device device);
-                void exec() override;
-
-            private:
-                vk::Device device;
-        };
-
         GraphicsVK(String name, int w = 1280, int h = 720, bool fs = false);
 
         void swap() override;
@@ -41,7 +32,7 @@ class GraphicsVK : public GraphicsInternal {
         void setVsync(bool isEnabled) override;
 
         vk::Device getDevice() const;
-        vk::Pipeline createPipeline(ShaderVK* shader, Primitive::TYPE primitive) const;
+        vk::Pipeline createPipeline(ShaderVK* shader, const vk::PipelineInputAssemblyStateCreateInfo* inputInfo) const;
         vk::CommandBuffer getCurrentCommandBuffer();
 
     private:
@@ -74,9 +65,6 @@ class GraphicsVK : public GraphicsInternal {
         vk::PipelineRasterizationStateCreateInfo rasterizationInfo;
         vk::PipelineMultisampleStateCreateInfo multisamplerInfo;
 
-        vk::PipelineInputAssemblyStateCreateInfo inputAssemblyLines;
-        vk::PipelineInputAssemblyStateCreateInfo inputAssemblyTris;
-
         vk::RenderPass renderPass;
 
         std::vector<vk::Framebuffer> framebuffers;
@@ -92,7 +80,7 @@ class GraphicsVK : public GraphicsInternal {
         std::vector<vk::Fence> imagesInFlight;
 
         const int MAX_FRAMES_IN_FLIGHT;
-        int currentFrame = 0;
+        int currentFrame;
 
         uint32_t backBufferIndex;
 
