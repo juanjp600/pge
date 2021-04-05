@@ -6,7 +6,6 @@
 #include <Exception/Exception.h>
 
 #include "Resource.h"
-#include "ResourceReference.h"
 
 namespace PGE {
 
@@ -36,7 +35,7 @@ class ResourceManager {
             for (auto it = resources.end(); it > resources.begin();) {
                 it--;
                 Resource<T>* specifiedResource = dynamic_cast<Resource<T>*>(*it);
-                if (specifiedResource != nullptr && specifiedResource->getResource() == internalResource) {
+                if (specifiedResource != nullptr && (*specifiedResource)() == internalResource) {
                     delete specifiedResource;
                     resources.erase(it);
                     reference.invalidate();

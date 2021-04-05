@@ -3,7 +3,6 @@
 
 #include <Exception/Exception.h>
 
-#include <ResourceManagement/Resource.h>
 #include <ResourceManagement/ResourceManager.h>
 
 #include <d3d11.h>
