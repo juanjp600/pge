@@ -41,7 +41,7 @@ class VKMemory : public Resource<vk::DeviceMemory> {
 			int memType = graphics->findMemoryType(memReq.memoryTypeBits, memProps);
 
 			vk::MemoryAllocateInfo memoryInfo = vk::MemoryAllocateInfo(memReq.size, memType);
-			vk::Result lol = device.allocateMemory(&memoryInfo, nullptr, &resource);
+			resource = device.allocateMemory(memoryInfo);
 
 			device.bindBufferMemory(buffer, resource, 0);
 		}
