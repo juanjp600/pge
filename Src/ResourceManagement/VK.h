@@ -25,7 +25,7 @@ class VKBuffer : public Resource<vk::Buffer> {
 			device.destroy(resource);
 		}
 
-		__RES_MNGMT__REF_FACT_METH(VKBuffer, vk::Buffer)
+		__RES_MNGMT__REF_FACT_METH(VKBuffer)
 };
 
 class VKMemory : public Resource<vk::DeviceMemory> {
@@ -50,7 +50,7 @@ class VKMemory : public Resource<vk::DeviceMemory> {
 			device.free(resource);
 		}
 
-		__RES_MNGMT__REF_FACT_METH(VKMemory, vk::DeviceMemory)
+		__RES_MNGMT__REF_FACT_METH(VKMemory)
 };
 
 class VKPipeline : public Resource<vk::Pipeline> {
@@ -82,7 +82,7 @@ class VKPipeline : public Resource<vk::Pipeline> {
 			device.destroy(resource);
 		}
 
-		__RES_MNGMT__REF_FACT_METH(VKPipeline, vk::Pipeline)
+		__RES_MNGMT__REF_FACT_METH(VKPipeline)
 };
 
 class VKPipelineLayout : public Resource<vk::PipelineLayout> {
@@ -101,7 +101,7 @@ class VKPipelineLayout : public Resource<vk::PipelineLayout> {
 			device.destroy(resource);
 		}
 
-		__RES_MNGMT__REF_FACT_METH(VKPipelineLayout, vk::PipelineLayout)
+		__RES_MNGMT__REF_FACT_METH(VKPipelineLayout)
 };
 
 class VKShader : public Resource<vk::ShaderModule> {
@@ -120,7 +120,7 @@ class VKShader : public Resource<vk::ShaderModule> {
 			device.destroy(resource);
 		}
 
-		__RES_MNGMT__REF_FACT_METH(VKShader, vk::ShaderModule)
+		__RES_MNGMT__REF_FACT_METH(VKShader)
 };
 
 }
