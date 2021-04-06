@@ -24,7 +24,7 @@ class GLContext : public Resource<SDL_GLContext> {
             SDL_GL_DeleteContext(resource);
         }
 
-        __RES_MNGMT__REF_FACT_METH(GLContext, SDL_GLContext)
+        __RES_MNGMT__REF_FACT_METH(GLContext)
 };
 
 class GLFramebuffer : public Resource<GLuint> {
@@ -42,7 +42,7 @@ class GLFramebuffer : public Resource<GLuint> {
             glDeleteFramebuffers(1, &resource);
         }
 
-        __RES_MNGMT__REF_FACT_METH(GLFramebuffer, GLuint)
+        __RES_MNGMT__REF_FACT_METH(GLFramebuffer)
 };
 
 class GLBuffer : public Resource<GLuint> {
@@ -55,7 +55,7 @@ class GLBuffer : public Resource<GLuint> {
             glDeleteBuffers(1, &resource);
         }
 
-        __RES_MNGMT__REF_FACT_METH(GLBuffer, GLuint)
+        __RES_MNGMT__REF_FACT_METH(GLBuffer)
 };
 
 class GLVertexArray : public Resource<GLuint> {
@@ -68,7 +68,7 @@ class GLVertexArray : public Resource<GLuint> {
             glDeleteVertexArrays(1, &resource);
         }
 
-        __RES_MNGMT__REF_FACT_METH(GLVertexArray, GLuint)
+        __RES_MNGMT__REF_FACT_METH(GLVertexArray)
 };
 
 class GLTexture : public Resource<GLuint> {
@@ -81,7 +81,7 @@ class GLTexture : public Resource<GLuint> {
             glDeleteTextures(1, &resource);
         }
 
-        __RES_MNGMT__REF_FACT_METH(GLTexture, GLuint)
+        __RES_MNGMT__REF_FACT_METH(GLTexture)
 };
 
 class GLDepthBuffer : public Resource<GLuint> {
@@ -97,7 +97,7 @@ class GLDepthBuffer : public Resource<GLuint> {
             glDeleteRenderbuffers(1, &resource);
         }
 
-        __RES_MNGMT__REF_FACT_METH(GLDepthBuffer, GLuint)
+        __RES_MNGMT__REF_FACT_METH(GLDepthBuffer)
 };
 
 class GLShader : public Resource<GLuint> {
@@ -122,7 +122,7 @@ class GLShader : public Resource<GLuint> {
             glDeleteShader(resource);
         }
 
-        __RES_MNGMT__REF_FACT_METH(GLShader, GLuint)
+        __RES_MNGMT__REF_FACT_METH(GLShader)
 };
 
 class GLProgram : public Resource<GLuint> {
@@ -144,7 +144,7 @@ class GLProgram : public Resource<GLuint> {
             glDeleteProgram(resource);
         }
 
-        __RES_MNGMT__REF_FACT_METH(GLProgram, GLuint)
+        __RES_MNGMT__REF_FACT_METH(GLProgram)
 };
 
 }

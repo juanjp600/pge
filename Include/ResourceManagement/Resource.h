@@ -7,8 +7,8 @@
 
 namespace PGE {
 
-#define __RES_MNGMT__REF_FACT_METH(Res, Int) \
-typedef ResourceReference<Int> Ref; \
+#define __RES_MNGMT__REF_FACT_METH(Res) \
+typedef ResourceReference<decltype(resource)> Ref; \
 \
 template <class... Args> \
 static Ref createRef(ResourceManager& resMngr, Args... args) { \
@@ -23,7 +23,7 @@ class ResourceBase {
         virtual ~ResourceBase() { }
 };
 
-// Derivatives of this should only ever be accessed via a ResourceOwner or ResourceReference with a ResourceManager!!!
+// Only inherit publicly and use the designated macro.
 template <class T>
 class Resource : public ResourceBase {
     protected:
