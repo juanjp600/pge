@@ -19,7 +19,7 @@ class WindowEventSubscriber : public Resource<SysEvents::Subscriber*> {
         WindowEventSubscriber(Graphics* gfx);
         ~WindowEventSubscriber();
 
-        __RES_MNGMT__REF_FACT_METH(WindowEventSubscriber, SysEvents::Subscriber*)
+        __RES_MNGMT__REF_FACT_METH(WindowEventSubscriber)
 };
 
 class SDLWindow : public Resource<SDL_Window*> {
@@ -27,7 +27,7 @@ class SDLWindow : public Resource<SDL_Window*> {
         SDLWindow(const String& title, int width, int height, uint32_t flags);
         ~SDLWindow();
 
-        __RES_MNGMT__REF_FACT_METH(SDLWindow, SDL_Window*)
+        __RES_MNGMT__REF_FACT_METH(SDLWindow)
 };
 
 }
