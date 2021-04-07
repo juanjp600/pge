@@ -80,9 +80,9 @@ class GraphicsVK : public GraphicsInternal {
         std::vector<vk::Fence> imagesInFlight;
 
         const int MAX_FRAMES_IN_FLIGHT;
-        int currentFrame;
+        int currentFrame = 0;
 
-        uint32_t backBufferIndex;
+        int backBufferIndex;
 
         void createSwapchain(bool vsync);
 

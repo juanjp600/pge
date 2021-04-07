@@ -11,8 +11,6 @@
 using namespace PGE;
 
 GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI), MAX_FRAMES_IN_FLIGHT(3) {
-    currentFrame = 0;
-
     // Layers.
     std::vector<const char*> layers;
 #ifdef DEBUG
@@ -176,7 +174,7 @@ void GraphicsVK::endRender() {
         throw Exception("GraphicsVK::endRender", "Failed to submit to graphics queue with error: " + String::fromInt((int)result));
     }
 
-    vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, &backBufferIndex, nullptr);
+    vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, (uint32_t*)&backBufferIndex, nullptr);
     if ((result = presentQueue.presentKHR(presentInfo)) != vk::Result::eSuccess) {
         throw Exception("GraphicsVK::endRender", "Failed to submit to present queue with error: " + String::fromInt((int)result));
     }
