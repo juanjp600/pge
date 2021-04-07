@@ -1,9 +1,11 @@
 #include "GraphicsDX11.h"
 
-#include "../Texture/TextureDX11.h"
-
 #include <SDL_syswm.h>
 #include <stdlib.h>
+
+#include "../Shader/ShaderDX11.h"
+#include "../Mesh/MeshDX11.h"
+#include "../Texture/TextureDX11.h"
 
 using namespace PGE;
 
@@ -242,3 +244,5 @@ ID3D11DepthStencilView* GraphicsDX11::getZBufferView() const {
 void GraphicsDX11::setZBufferState(GraphicsDX11::ZBUFFER_STATE_INDEX index) {
     dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)index], 0);
 }
+
+__GFX_OBJ_DEF(DX11)

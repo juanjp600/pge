@@ -1,7 +1,6 @@
 #ifndef PGEINTERNAL_GRAPHICSOGL3_H_INCLUDED
 #define PGEINTERNAL_GRAPHICSOGL3_H_INCLUDED
 
-#include <Graphics/Graphics.h>
 #include "GraphicsInternal.h"
 
 #include "../ResourceManagement/OGL3.h"
@@ -44,6 +43,8 @@ class GraphicsOGL3 : public GraphicsInternal {
 
         void takeGlContext();
         SDL_GLContext getGlContext() const;
+
+        __GFX_OBJ_DEC
 
     private:
         GLContext::Ref glContext;

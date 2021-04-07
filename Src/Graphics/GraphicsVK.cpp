@@ -7,6 +7,8 @@
 #include <Exception/Exception.h>
 
 #include "../Shader/ShaderVK.h"
+#include "../Mesh/MeshVK.h"
+#include "../Texture/TextureVK.h"
 
 using namespace PGE;
 
@@ -370,3 +372,5 @@ vk::Device GraphicsVK::getDevice() const {
 vk::CommandBuffer GraphicsVK::getCurrentCommandBuffer() {
     return comBuffers[backBufferIndex];
 }
+
+__GFX_OBJ_DEF(VK)

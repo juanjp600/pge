@@ -3,7 +3,6 @@
 
 #include <vulkan/vulkan.hpp>
 
-#include <Mesh/Mesh.h>
 #include "GraphicsInternal.h"
 
 namespace PGE {
@@ -34,6 +33,8 @@ class GraphicsVK : public GraphicsInternal {
         vk::Device getDevice() const;
         vk::Pipeline createPipeline(ShaderVK* shader, const vk::PipelineInputAssemblyStateCreateInfo* inputInfo) const;
         vk::CommandBuffer getCurrentCommandBuffer();
+
+        __GFX_OBJ_DEC
 
     private:
         // TODO: Remove.

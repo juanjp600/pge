@@ -3,9 +3,9 @@
 
 #include <ResourceManagement/ResourceManager.h>
 
-#include "../Graphics/GraphicsVK.h"
-
 #include <vulkan/vulkan.hpp>
+
+#include "../Graphics/GraphicsVK.h"
 
 namespace PGE {
 
