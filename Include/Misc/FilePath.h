@@ -8,6 +8,7 @@ namespace PGE {
 class FilePath {
     private:
         String name;
+        bool valid;
     
         static String getResourcePath();
 
@@ -29,11 +30,9 @@ class FilePath {
 
         bool exists() const;
 
-        FilePath& operator=(const FilePath& other);
-
         long long getHashCode() const;
         bool equals(const FilePath& other) const;
-        bool isEmpty() const;
+        bool isValid() const;
 };
 
 const FilePath operator+(const FilePath& a, const String& b);

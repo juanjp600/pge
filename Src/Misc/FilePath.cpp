@@ -4,13 +4,17 @@
 #include <filesystem>
 #endif
 
+#include <cassert>
+
 #include <Misc/FilePath.h>
 #include <Misc/FileUtil.h>
+#include <Exception/Exception.h>
 
 using namespace PGE;
 
 FilePath::FilePath() {
-    name = "";
+    name = "<n/a>";
+    valid = false;
 }
 
 String FilePath::getResourcePath() {
@@ -23,20 +27,26 @@ String FilePath::getResourcePath() {
 
 FilePath FilePath::fromStr(const String& str) {
     FilePath fn;
-    if (str.charAt(1) == ':') {
-        fn.name = str;
-    } else {
-        fn.name = getResourcePath().replace("\\", "/") + str;
+    std::error_code err;
+    fn.name = String(std::filesystem::absolute(str.cstr(), err).c_str()).replace("\\", "/");
+
+    if (err.value() != 0) {
+        throw Exception("FilePath::fromStr", "Failed to create path from: \"" + str + "\", error code: " + String::fromInt(err.value()));
     }
+
+    fn.valid = true;
     
     return fn;
 }
 
 FilePath::FilePath(const FilePath& a, const String& b) {
+    assert(a.valid);
     name = a.str() + b;
+    valid = true;
 }
 
 FilePath FilePath::validateAsDirectory() const {
+    assert(valid);
     if (str().charAt(length() - 1) != '/') {
         return *this + "/";
     }
@@ -56,6 +66,7 @@ void FilePath::wstr(wchar* buffer) const {
 }
 
 String FilePath::getExtension() const {
+    assert(valid);
     int startIndex = name.findLast(".");
     if (startIndex < 0) { return ""; }
     return name.substr(startIndex+1);
@@ -70,15 +81,8 @@ int FilePath::length() const {
 }
 
 bool FilePath::exists() const {
+    assert(valid);
     return FileUtil::exists(*this);
-}
-
-FilePath& FilePath::operator=(const FilePath& other) {
-    if (!equals(other)) {
-        name = other.name;
-    }
-    
-    return *this;
 }
 
 long long FilePath::getHashCode() const {
@@ -86,11 +90,11 @@ long long FilePath::getHashCode() const {
 }
 
 bool FilePath::equals(const FilePath& other) const {
-    return name.equals(other.name);
+    return name.equals(other.name) && valid == other.valid;
 }
 
-bool FilePath::isEmpty() const {
-    return name.isEmpty();
+bool FilePath::isValid() const {
+    return valid;
 }
 
 const FilePath PGE::operator+(const FilePath& a, const String& b) {

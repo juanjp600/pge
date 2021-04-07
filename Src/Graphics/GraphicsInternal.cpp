@@ -65,7 +65,7 @@ Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
     int width; int height;
     int realWidth; int realHeight;
     std::unique_ptr<BYTE> fiBuffer = std::unique_ptr<BYTE>(loadFIBufferFromMemory(buffer, size, width, height, realWidth, realHeight));
-    return ((GraphicsInternal*)gfx)->loadTexture(fiBuffer.get(), width, height, realWidth, realHeight, FilePath::fromStr("_:memory")); // TODO: Better solution for path
+    return ((GraphicsInternal*)gfx)->loadTexture(fiBuffer.get(), width, height, realWidth, realHeight, FilePath());
 }
 
 Texture* Texture::load(Graphics* gfx, const FilePath& filename) {

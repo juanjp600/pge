@@ -133,7 +133,7 @@ String String::fromFloat(float f) {
 }
 
 String& String::operator=(const String& other) {
-    if (&other == this) return *this;
+    if (&other == this || other == *this) { return *this; }
     reallocate(other.byteLength());
     memcpy(cstrNoConst(),other.cstr(),(other.byteLength()+1)*sizeof(char));
     strByteLength = other.byteLength();
