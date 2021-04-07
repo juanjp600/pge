@@ -53,8 +53,6 @@ class Graphics {
         virtual bool getVsync() const;
 
     protected:
-        Renderer renderer;
-
         String caption;
 
         Rectanglei viewport;

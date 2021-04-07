@@ -1,5 +1,7 @@
 #include "GraphicsOGL3.h"
 
+#include "../Shader/ShaderOGL3.h"
+#include "../Mesh/MeshOGL3.h"
 #include "../Texture/TextureOGL3.h"
 
 using namespace PGE;
@@ -166,3 +168,5 @@ void GraphicsOGL3::setVsync(bool isEnabled) {
         SDL_GL_SetSwapInterval(vsync ? 1 : 0);
     }
 }
+
+__GFX_OBJ_DEF(OGL3)

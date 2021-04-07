@@ -16,7 +16,7 @@ class TextureDX11 : public Texture {
     public:
         TextureDX11(Graphics* gfx, int width, int height, bool renderTarget, const void* buffer, FORMAT fmt);
         TextureDX11(Graphics* gfx, const FilePath& fn, ThreadManager* threadManager);
-        TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn = FilePath::fromStr(""));
+        TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn);
 
         void useTexture(int index);
 
