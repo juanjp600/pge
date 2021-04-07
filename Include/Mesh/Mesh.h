@@ -85,6 +85,7 @@ class Mesh {
         const std::vector<Primitive>& getPrimitives(int& primCount) const;
         bool isOpaque() const;
 
+        // Must be threadsafe.
         virtual void updateInternalData() = 0;
 
         virtual void render() = 0;
@@ -94,6 +95,8 @@ class Mesh {
         bool mustUpdateInternalData = true;
         bool mustReuploadInternalData = true;
 
+        // Doesn't have to be threadsafe.
+        // The idea is to update a large mesh in parallel and then only doing a low cost upload on the main thread.
         virtual void uploadInternalData() = 0;
 
         Material* material;
