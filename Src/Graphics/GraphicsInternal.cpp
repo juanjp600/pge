@@ -96,13 +96,7 @@ Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
     std::unique_ptr<BYTE> fiBuffer;
     int width; int height;
     int realWidth; int realHeight;
-    try {
-        fiBuffer = std::unique_ptr<BYTE>(loadFIBufferFromMemory(buffer, size, width, height, realWidth, realHeight));
-    } catch (Exception& e) {
-        throw e;
-    } catch (std::exception& e) {
-        throw e;
-    }
+    fiBuffer = std::unique_ptr<BYTE>(loadFIBufferFromMemory(buffer, size, width, height, realWidth, realHeight));
     switch (((GraphicsInternal*)gfx)->getRenderer()) {
         case Graphics::Renderer::DirectX11: {
             return new TextureDX11(gfx, fiBuffer.get(), width, height, realWidth, realHeight);
@@ -117,30 +111,24 @@ Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
 }
 
 Texture* Texture::load(Graphics* gfx, const FilePath& filename) {
-    BYTE* fiBuffer = nullptr;
+    std::unique_ptr<BYTE> fiBuffer;
     int width; int height;
     int realWidth; int realHeight;
-    try {
-        fiBuffer = loadFIBufferFromFile(filename, width, height, realWidth, realHeight);
-    } catch (Exception& e) {
-        delete[] fiBuffer;
-        throw e;
-    } catch (std::exception& e) {
-        delete[] fiBuffer;
-        throw e;
-    }
+    fiBuffer = std::unique_ptr<BYTE>(loadFIBufferFromFile(filename, width, height, realWidth, realHeight));
     switch (((GraphicsInternal*)gfx)->getRenderer()) {
         case Graphics::Renderer::DirectX11: {
-            return new TextureDX11(gfx, fiBuffer, width, height, realWidth, realHeight);
+            return new TextureDX11(gfx, fiBuffer.get(), width, height, realWidth, realHeight);
         }
         case Graphics::Renderer::OpenGL: {
-            return new TextureOGL3(gfx, fiBuffer, width, height, realWidth, realHeight);
+            return new TextureOGL3(gfx, fiBuffer.get(), width, height, realWidth, realHeight);
+        }
+        case Graphics::Renderer::Vulkan: {
+            return new TextureVK(gfx, fiBuffer.get(), width, height, realWidth, realHeight);
         }
         default: {
             return nullptr;
         }
     }
-    delete[] fiBuffer;
 }
 
 Texture* Texture::load(Graphics* gfx, const FilePath& filename, ThreadManager* threadManager) {
