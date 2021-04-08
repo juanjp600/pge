@@ -23,9 +23,9 @@ class SoundInternal : public Sound {
         SoundInternal(Audio* a, const FilePath& fn, bool forcePanning = false, bool strm = false);
         ~SoundInternal();
 
-        bool isStream() const;
-        bool isStereo() const;
-        int getFrequency() const;
+        bool isStream() const override;
+        bool isStereo() const override;
+        int getFrequency() const override;
         void fillStreamBuffer(int seekPos, uint8_t* buf, int maxSize, int& outSamples, bool& outEof);
         ALuint getALBuffer() const;
 
@@ -34,10 +34,10 @@ class SoundInternal : public Sound {
                 ChannelInternal(Audio* a, SoundInternal* snd, bool lp);
                 ~ChannelInternal();
 
-                virtual bool isPlaying() const;
-                virtual bool isStream() const;
-                virtual bool isStreamReady() const;
-                virtual void updateStream();
+                bool isPlaying() const override;
+                bool isStream() const override;
+                bool isStreamReady() const override;
+                void updateStream() override;
 
             private:
                 Audio* audio;
@@ -55,7 +55,7 @@ class SoundInternal : public Sound {
                 std::atomic<bool> streamReady;
         };
 
-        virtual Channel* play(bool loop = false);
+        Channel* play(bool loop = false) override;
         void removeChannel(ChannelInternal* channel);
 
     private:

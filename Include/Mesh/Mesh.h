@@ -74,7 +74,7 @@ class Mesh {
     public:
         static Mesh* create(Graphics* gfx, Primitive::TYPE pt);
         Mesh* clone();
-        virtual ~Mesh(){};
+        virtual ~Mesh() { };
 
         void setGeometry(int vertexCount, const std::vector<Vertex>& verts, int primCount, const std::vector<Primitive>& prims);
         void setGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims);

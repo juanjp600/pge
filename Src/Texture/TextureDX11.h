@@ -20,11 +20,11 @@ class TextureDX11 : public Texture {
 
         void useTexture(int index);
 
-        virtual Texture* copy() const override;
+        Texture* copy() const override;
 
         ID3D11RenderTargetView* getRtv() const;
         ID3D11DepthStencilView* getZBufferView() const;
-        virtual void* getNative() const;
+        void* getNative() const override;
 
     private:
         D3D11_TEXTURE2D_DESC dxTextureDesc;

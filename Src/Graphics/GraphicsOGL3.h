@@ -26,20 +26,20 @@ class GraphicsOGL3 : public GraphicsInternal {
     public:
         GraphicsOGL3(String name,int w,int h,bool fs);
 
-        virtual void update() override;
-        virtual void swap() override;
+        void update() override;
+        void swap() override;
 
-        virtual void clear(Color color) override;
+        void clear(Color color) override;
     
-        virtual void setDepthTest(bool enabled) override;
+        void setDepthTest(bool enabled) override;
 
-        virtual void setRenderTarget(Texture* renderTarget) override;
-        virtual void setRenderTargets(std::vector<Texture*> renderTargets) override;
-        virtual void resetRenderTarget() override;
+        void setRenderTarget(Texture* renderTarget) override;
+        void setRenderTargets(std::vector<Texture*> renderTargets) override;
+        void resetRenderTarget() override;
 
-        virtual void setViewport(Rectanglei vp) override;
+        void setViewport(Rectanglei vp) override;
 
-        virtual void setVsync(bool isEnabled) override;
+        void setVsync(bool isEnabled) override;
 
         void takeGlContext();
         SDL_GLContext getGlContext() const;

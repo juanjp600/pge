@@ -8,7 +8,7 @@ namespace PGE {
 class Audio {
     public:
         static Audio* create(ThreadManager* threadManager);
-        virtual ~Audio(){}
+        virtual ~Audio() { }
 
         enum class ERROR_STATE {
             NONE = 0,

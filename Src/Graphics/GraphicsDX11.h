@@ -16,15 +16,15 @@ class GraphicsDX11 : public GraphicsInternal {
     public:
         GraphicsDX11(String name,int w,int h,bool fs);
 
-        virtual void swap() override;
+        void swap() override;
 
-        virtual void clear(Color color) override;
+        void clear(Color color) override;
 
-        virtual void setRenderTarget(Texture* renderTarget) override;
-        virtual void setRenderTargets(std::vector<Texture*> renderTargets) override;
-        virtual void resetRenderTarget() override;
+        void setRenderTarget(Texture* renderTarget) override;
+        void setRenderTargets(std::vector<Texture*> renderTargets) override;
+        void resetRenderTarget() override;
 
-        virtual void setViewport(Rectanglei vp) override;
+        void setViewport(Rectanglei vp) override;
 
         ID3D11Device* getDxDevice() const;
         ID3D11DeviceContext* getDxContext() const;

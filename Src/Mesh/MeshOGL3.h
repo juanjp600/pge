@@ -22,12 +22,12 @@ class MeshOGL3 : public Mesh {
     public:
         MeshOGL3(Graphics* gfx, Primitive::TYPE pt);
 
-        virtual void updateInternalData() override;
+        void updateInternalData() override;
 
-        virtual void render() override;
+        void render() override;
 
     private:
-        virtual void uploadInternalData() override;
+        void uploadInternalData() override;
 
         GLBuffer::Ref glVertexBufferObject;
         GLBuffer::Ref glIndexBufferObject;
