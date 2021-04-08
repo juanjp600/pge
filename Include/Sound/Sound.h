@@ -18,7 +18,7 @@ class Sound {
         
         class Channel {
             public:
-                virtual ~Channel(){}
+                virtual ~Channel() { }
 
                 virtual bool isPlaying() const = 0;
                 virtual bool isStream() const = 0;

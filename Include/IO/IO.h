@@ -14,7 +14,7 @@ class Graphics;
 class IO {
     public:
         static IO* create(Graphics* gfx);
-        virtual ~IO() {}
+        virtual ~IO() { }
 
         virtual void update() = 0;
 

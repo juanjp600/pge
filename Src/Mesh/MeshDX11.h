@@ -18,9 +18,9 @@ class MeshDX11 : public Mesh {
     public:
         MeshDX11(Graphics* gfx, Primitive::TYPE pt);
 
-        virtual void updateInternalData();
+        void updateInternalData() override;
 
-        virtual void render();
+        void render() override;
 
     private:
         std::vector<uint8_t> dxVertexData;
@@ -37,7 +37,7 @@ class MeshDX11 : public Mesh {
 
         ResourceManager resourceManager;
 
-        virtual void uploadInternalData();
+        void uploadInternalData() override;
 };
 
 }

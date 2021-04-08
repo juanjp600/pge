@@ -22,12 +22,12 @@ class TextureOGL3 : public Texture {
         TextureOGL3(Graphics* gfx, const FilePath& fn, ThreadManager* threadManager);
         TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn);
 
-        virtual Texture* copy() const override;
+        Texture* copy() const override;
 
         GLuint getGlTexture() const;
         //GLuint getGlFramebuffer() const;
         GLuint getGlDepthbuffer() const;
-        virtual void* getNative() const;
+        void* getNative() const override;
 
     private:
         GLTexture::Ref glTexture;
