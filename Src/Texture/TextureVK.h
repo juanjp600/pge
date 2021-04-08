@@ -12,7 +12,7 @@ class TextureVK : public Texture {
         TextureVK(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn);
         ~TextureVK();
 
-        virtual Texture* copy() const override;
+        Texture* copy() const override;
 
         void* getNative() const override;
 };
