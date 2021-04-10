@@ -43,6 +43,7 @@
     <ClCompile Include="..\..\Src\Misc\BinaryReader.cpp" />
     <ClCompile Include="..\..\Src\Misc\FilePath.cpp" />
     <ClCompile Include="..\..\Src\Misc\FileUtil.cpp" />
+    <ClCompile Include="..\..\Src\Misc\FileWriter.cpp" />
     <ClCompile Include="..\..\Src\Misc\String.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp" />
@@ -76,6 +77,7 @@
     <ClInclude Include="..\..\Include\Misc\BinaryReader.h" />
     <ClInclude Include="..\..\Include\Misc\FilePath.h" />
     <ClInclude Include="..\..\Include\Misc\FileUtil.h" />
+    <ClInclude Include="..\..\Include\Misc\FileWriter.h" />
     <ClInclude Include="..\..\Include\Misc\String.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\Resource.h" />

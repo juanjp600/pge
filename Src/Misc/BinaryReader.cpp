@@ -1,7 +1,5 @@
 #include <Misc/BinaryReader.h>
 
-#include <Misc/FilePath.h>
-
 namespace PGE {
 
 BinaryReader::BinaryReader(const FilePath& file) {

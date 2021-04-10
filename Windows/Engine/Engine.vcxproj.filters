@@ -222,6 +222,9 @@
     <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp">
       <Filter>Src\ResourceManagement</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Misc\FileWriter.cpp">
+      <Filter>Src\Misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -361,6 +364,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h">
       <Filter>Src\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Misc\FileWriter.h">
+      <Filter>Include\Misc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
