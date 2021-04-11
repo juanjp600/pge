@@ -6,6 +6,10 @@
 
 using namespace PGE;
 
+Exception::Exception() {
+    info = ">>> INVALID EXCEPTION <<<";
+}
+
 Exception::Exception(const char* file, int line, const String& extra) {
     info = file;
     info += ':';

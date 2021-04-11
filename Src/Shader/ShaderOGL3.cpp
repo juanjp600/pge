@@ -21,9 +21,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
     filepath = path;
 
     std::vector<uint8_t> vertexFile; FileUtil::readBytes(path + "vertex.glsl", vertexFile);
-    if (vertexFile.empty()) {
-        throw Exception("ShaderOGL3", "Failed to find vertex.glsl (filepath: " + path.str() + ")");
-    }
+    __ASSERT(!vertexFile.empty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
     vertexFile.push_back(0);
     String vertexSource = String((char*)vertexFile.data());
     std::vector<ShaderVar> vertexUniforms;
@@ -31,9 +29,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
     glVertexShader = GLShader::createRef(resourceManager, GL_VERTEX_SHADER, vertexSource);
 
     std::vector<uint8_t> fragmentFile; FileUtil::readBytes(path + "fragment.glsl", fragmentFile);
-    if (fragmentFile.empty()) {
-        throw Exception("ShaderOGL3", "Failed to find fragment shader (filepath: " + path.str() + ")");
-    }
+    __ASSERT(!fragmentFile.empty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
     fragmentFile.push_back(0);
     String fragmentSource = String((char*)fragmentFile.data());
     std::vector<ShaderVar> fragmentUniforms;
@@ -120,9 +116,7 @@ void ShaderOGL3::useShader() {
             } break;
         }
         glError = glGetError();
-        if (glError != GL_NO_ERROR) {
-            throw Exception("useShader", "Failed to set vertex attribute. (Attrib: " + vertexAttribs[i].name + ", filepath: " + filepath.str() + ")");
-        }
+        __ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + vertexAttribs[i].name + ")");
     }
 
     for (int i = 0; i < (int)vertexShaderConstants.size(); i++) {
@@ -270,9 +264,7 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
     }
 
     glError = glGetError();
-    if (glError != GL_NO_ERROR) {
-        throw Exception("setUniform", "Failed to set uniform value. (Constant Name: " + getName() + ")");
-    }
+    __ASSERT(glError == GL_NO_ERROR, "Failed to set uniform value (constant: " + getName() + "; GLERROR: " + String::fromInt(glError) +")");
 }
 
 String ShaderOGL3::ConstantOGL3::getName() const {

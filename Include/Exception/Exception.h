@@ -7,12 +7,11 @@ namespace PGE {
 
 class Exception {
     public:
-        // TODO: Remove.
-        Exception(const String&, const String&) { }
-        Exception() { }
-        //
+        // Invalid exception.
+        Exception();
 
-        Exception(const char* file, int line, const String& extra = "");
+        // Never use this directly.
+        Exception(const char* file, int line, const String& extra);
 
         const String& what() const;
 
@@ -22,9 +21,8 @@ class Exception {
 
 }
 
-#define __EX_THRW throw PGE::Exception(__FILE__, __LINE__)
-#define __EX_THRW_INFO(INFO) throw PGE::Exception(__FILE__, __LINE__, INFO)
+#define __CREATE_EX(INFO) PGE::Exception(__FILE__, __LINE__, INFO)
 
-#define __PGE_ASSERT(COND) if (!COND) __EX_THRW
+#define __ASSERT(COND, INFO) if (!(COND)) throw __CREATE_EX(INFO);
 
 #endif // PGE_EXCEPTION_H_INCLUDED

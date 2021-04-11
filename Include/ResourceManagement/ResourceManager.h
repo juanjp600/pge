@@ -3,8 +3,6 @@
 
 #include <vector>
 
-#include <Exception/Exception.h>
-
 #include "Resource.h"
 
 namespace PGE {
