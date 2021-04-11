@@ -6,6 +6,7 @@
 
 using namespace PGE;
 
+// TODO: Remove after ThreadManager refactor.
 Exception::Exception() {
     info = ">>> INVALID EXCEPTION <<<";
 }
