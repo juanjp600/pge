@@ -32,9 +32,7 @@ class GLFramebuffer : public Resource<GLuint> {
         GLFramebuffer() {
             glGenFramebuffers(1, &resource);
             GLenum glError = glGetError();
-            if (glError != GL_NO_ERROR) {
-                throw Exception("GLFramebuffer", "Failed to generate frame buffer (GL_ERROR: " + String::format(glError, "%u") + ")");
-            }
+            __ASSERT(glError == GL_NO_ERROR, "Failed to generate frame buffer (GLERROR: " + String::format(glError, "%u") + ")");
         }
         
         ~GLFramebuffer() {
@@ -113,9 +111,7 @@ class GLShader : public Resource<GLuint> {
 
             int result;
             glGetShaderiv(resource, GL_COMPILE_STATUS, &result);
-            if (result != GL_TRUE) {
-                throw Exception("GLShader", "Failed to create shader for stage " + String::format(stage, "%u") + ":\n" + err);
-            }
+            __ASSERT(result == GL_TRUE, "Failed to create shader (stage: " + String::format(stage, "%u") + "; error:" + err + ")");
         }
 
         ~GLShader() {
@@ -135,9 +131,7 @@ class GLProgram : public Resource<GLuint> {
             glLinkProgram(resource);
             GLint result;
             glGetProgramiv(resource, GL_LINK_STATUS, &result);
-            if (result != GL_TRUE) {
-                throw Exception("GLProgram", "Failed to link shader (" + String::format(glGetError(), "%u") + ")");
-            }
+            __ASSERT(result == GL_TRUE, "Failed to link shader (GLERROR:" + String::format(glGetError(), "%u") + ")");
         }
 
         ~GLProgram() {

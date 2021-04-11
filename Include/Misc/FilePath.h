@@ -12,6 +12,8 @@ class FilePath {
     
         static String getResourcePath();
 
+        static const String INVALID_STR;
+
     public:
         FilePath();
         static FilePath fromStr(const String& str);

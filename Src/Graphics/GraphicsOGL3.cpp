@@ -29,9 +29,7 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     glContext = GLContext::createRef(resourceManager, sdlWindow());
 
     glewExperimental = true;
-    if (glewInit() != GL_NO_ERROR) {
-        throw Exception("GraphicsOGL3", "Failed to initialize GLEW (GLERROR: " + String::format(glGetError(), "%u") + ")");
-    }
+    __ASSERT(glewInit() == GL_NO_ERROR, "Failed to initialize GLEW (GLERROR: " + String::format(glGetError(), "%u") + ")");
 
     depthTest = true;
     glEnable(GL_DEPTH_TEST);
@@ -44,9 +42,7 @@ GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInterna
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     GLenum glError = glGetError();
-    if (glError != GL_NO_ERROR) {
-        throw Exception("GraphicsOGL3", "Failed to initialize window data post-GLEW initialization. (GL_ERROR: " + String::format(glError, "%u") + ")");
-    }
+    __ASSERT(glError == GL_NO_ERROR, "Failed to initialize window data post-GLEW initialization (GLERROR: " + String::format(glError, "%u") + ")");
 
     SDL_GL_SwapWindow(sdlWindow);
 
@@ -115,9 +111,7 @@ void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
 
     TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        if (!renderTargets[i]->isRenderTarget()) {
-            throw Exception("setRenderTargets","renderTargets["+String::fromInt(i)+"] is not a valid render target");
-        }
+        __ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets["+String::fromInt(i)+"] is not a valid render target");
 
         if (i == 0) { continue; }
 

@@ -7,17 +7,22 @@ namespace PGE {
 
 class Exception {
     public:
+        // Invalid exception.
         Exception();
-        Exception(const Exception& ex);
-        Exception(String src, String detail);
-        String getSource() const;
-        String getDetails() const;
+
+        // Never use this directly.
+        Exception(const char* file, int line, const String& extra);
+
+        const String& what() const;
 
     private:
-        String source;
-        String details;
+        String info;
 };
 
 }
+
+#define __CREATE_EX(INFO) PGE::Exception(__FILE__, __LINE__, INFO)
+
+#define __ASSERT(COND, INFO) if (!(COND)) throw __CREATE_EX(INFO);
 
 #endif // PGE_EXCEPTION_H_INCLUDED

@@ -4,13 +4,13 @@
 #include <filesystem>
 #endif
 
-#include <cassert>
-
 #include <Misc/FilePath.h>
 #include <Misc/FileUtil.h>
 #include <Exception/Exception.h>
 
 using namespace PGE;
+
+const String FilePath::INVALID_STR = "Tried using an invalid path";
 
 FilePath::FilePath() {
     name = "<n/a>";
@@ -30,9 +30,8 @@ FilePath FilePath::fromStr(const String& str) {
     std::error_code err;
     fn.name = String(std::filesystem::absolute(str.cstr(), err).c_str()).replace("\\", "/");
 
-    if (err.value() != 0) {
-        throw Exception("FilePath::fromStr", "Failed to create path from: \"" + str + "\", error code: " + String::fromInt(err.value()));
-    }
+    int errValue = err.value();
+    __ASSERT(errValue == 0, "Failed to create path (str: " + str + "; ERRORCODE: " + String::fromInt(errValue) + ")");
 
     fn.valid = true;
     
@@ -40,13 +39,13 @@ FilePath FilePath::fromStr(const String& str) {
 }
 
 FilePath::FilePath(const FilePath& a, const String& b) {
-    assert(a.valid);
+    __ASSERT(a.valid, INVALID_STR);
     name = a.str() + b;
     valid = true;
 }
 
 FilePath FilePath::validateAsDirectory() const {
-    assert(valid);
+    __ASSERT(valid, INVALID_STR);
     if (str().charAt(length() - 1) != '/') {
         return *this + "/";
     }
@@ -66,7 +65,7 @@ void FilePath::wstr(wchar* buffer) const {
 }
 
 String FilePath::getExtension() const {
-    assert(valid);
+    __ASSERT(valid, INVALID_STR);
     int startIndex = name.findLast(".");
     if (startIndex < 0) { return ""; }
     return name.substr(startIndex+1);
@@ -81,7 +80,7 @@ int FilePath::length() const {
 }
 
 bool FilePath::exists() const {
-    assert(valid);
+    __ASSERT(valid, INVALID_STR);
     return FileUtil::exists(*this);
 }
 

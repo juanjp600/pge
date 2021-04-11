@@ -5,8 +5,6 @@
 
 #include "ResourceReference.h"
 
-namespace PGE {
-
 #define __RES_MNGMT__REF_FACT_METH(Res) \
 typedef ResourceReference<decltype(resource)> Ref; \
 \
@@ -17,6 +15,8 @@ static Ref createRef(ResourceManager& resMngr, Args... args) { \
     resMngr.addResource(res); \
     return Ref(*res); \
 }
+
+namespace PGE {
 
 class ResourceBase {
     public:
