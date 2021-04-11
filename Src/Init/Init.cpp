@@ -1,8 +1,21 @@
 #include <SDL.h>
 #include <Init/Init.h>
 #include <Exception/Exception.h>
-#include <fstream>
+#include <Misc/FileWriter.h>
+#include <Misc/Info.h>
 #include <wtypes.h>
+
+using namespace PGE;
+
+static void showError(const String& exceptionType, const String& what) {
+    FileWriter writer = FileWriter(FilePath::fromStr("exception.txt"));
+    writer.writeLine(Info::REPO_LINK);
+    writer.writeLine(Info::BRANCH + " - " + Info::COMMIT);
+    writer.writeLine(exceptionType);
+    writer.writeLine(what);
+    SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags::SDL_MESSAGEBOX_ERROR, "Fatal Error",
+        "An exception has been thrown, please send \"exception.txt\" to a developer.", NULL);
+}
 
 #ifdef DEBUG
 int main(int argc, char** argv) {
@@ -26,33 +39,13 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nC
         SDL_Quit();
         return retVal;
 #ifndef DEBUG
-    } catch (PGE::Exception& e) {
-        std::ofstream exceptionLog;
-        exceptionLog.open("exception.txt", std::ofstream::out | std::ofstream::trunc);
-        PGE::String exceptionType = "PGE::Exception";
-        exceptionLog.write(exceptionType.cstr(), exceptionType.byteLength());
-        exceptionLog.write("\n", 1);
-        exceptionLog.write(e.getSource().cstr(), e.getSource().byteLength());
-        exceptionLog.write("\n", 1);
-        exceptionLog.write(e.getDetails().cstr(), e.getDetails().byteLength());
-        exceptionLog.write("\n", 1);
-        exceptionLog.close();
-        SDL_ShowSimpleMessageBox(0, "Fatal Error",
-            (PGE::String("An exception has been thrown, please send \"exception.txt\" to a developer.\nException source: ") + e.getSource()).cstr(), nullptr);
-        return -1;
+    } catch (Exception& e) {
+        showError("PGE::Exception", e.what());
     } catch (std::exception& e) {
-        std::ofstream exceptionLog;
-        exceptionLog.open("exception.txt", std::ofstream::out | std::ofstream::trunc);
-        PGE::String exceptionType = "std::exception";
-        exceptionLog.write(exceptionType.cstr(), exceptionType.byteLength());
-        exceptionLog.write("\n", 1);
-        PGE::String details = e.what();
-        exceptionLog.write(details.cstr(), details.byteLength());
-        exceptionLog.write("\n", 1);
-        exceptionLog.close();
-        SDL_ShowSimpleMessageBox(0, "Fatal Error",
-            "An exception has been thrown, please send \"exception.txt\" to a developer.\nException was std::exception", nullptr);
-        return -1;
+        showError("std::exception", e.what());
+    } catch (...) {
+        showError("Unknown", "???");
     }
+    return -1;
 #endif
 }

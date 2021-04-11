@@ -237,6 +237,12 @@
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerVK.cpp">
       <Filter>Src\ResourceManagement</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Misc\Info.cpp">
+      <Filter>Src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Misc\FileWriter.cpp">
+      <Filter>Src\Misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -394,6 +400,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\VK.h">
       <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Misc\Info.h">
+      <Filter>Include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Misc\Info.h">
+      <Filter>Include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Misc\FileWriter.h">
+      <Filter>Include\Misc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

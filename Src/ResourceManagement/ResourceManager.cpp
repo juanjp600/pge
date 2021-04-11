@@ -1,7 +1,7 @@
 #include <ResourceManagement/ResourceManager.h>
 
 #ifdef DEBUG
-#include <cassert>
+#include <Exception/Exception.h>
 #endif
 
 using namespace PGE;
@@ -21,7 +21,7 @@ ResourceManager::~ResourceManager() {
 
 void ResourceManager::addResource(ResourceBase* resource) {
 #ifdef DEBUG
-    assert(size > resources.size());
+    __ASSERT(size > resources.size(), "Tried to add resource to full ResourceManager");
 #endif
     resources.push_back(resource);
 }

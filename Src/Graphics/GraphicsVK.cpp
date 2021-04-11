@@ -32,9 +32,8 @@ GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(na
 
     // Creating the window's surface via SDL.
     VkSurfaceKHR tmpSurface;
-    if (!SDL_Vulkan_CreateSurface(sdlWindow(), (VkInstance)vkInstance, &tmpSurface)) {
-        throw Exception("WindowVK", "Failed to create Vulkan surface: " + String(SDL_GetError()));
-    }
+    bool success = SDL_Vulkan_CreateSurface(sdlWindow(), (VkInstance)vkInstance, &tmpSurface);
+    __ASSERT(success, "Failed to create Vulkan surface (SDLERROR: " + String(SDL_GetError()) + ")");
     vkSurface = vk::SurfaceKHR(tmpSurface);
 
     // The device extensions we need.
@@ -113,9 +112,7 @@ GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(na
             selectedPdSize = pdSize;
         }
     }
-    if (!foundCompatibleDevice) {
-        throw Exception("WindowVK", "No Vulkan compatible GPU found!");
-    }
+    __ASSERT(foundCompatibleDevice, "No Vulkan compatible GPU found");
 
     // Creating the logical device.
     float queuePriority = 1.f;
@@ -172,21 +169,18 @@ void GraphicsVK::endRender() {
     device.resetFences(inFlightFences[currentFrame]);
     vk::SubmitInfo submitInfo = vk::SubmitInfo(1, &imageAvailableSemaphores[currentFrame], &waitStages, 1, &comBuffers[backBufferIndex], 1, &renderFinishedSemaphores[currentFrame]);
     vk::Result result;
-    if ((result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame])) != vk::Result::eSuccess) {
-        throw Exception("GraphicsVK::endRender", "Failed to submit to graphics queue with error: " + String::fromInt((int)result));
-    }
+    result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
+    __ASSERT(result == vk::Result::eSuccess, "Failed to submit to graphics queue (VKERROR: " + String::fromInt((int)result) + ")");
 
     vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, (uint32_t*)&backBufferIndex, nullptr);
-    if ((result = presentQueue.presentKHR(presentInfo)) != vk::Result::eSuccess) {
-        throw Exception("GraphicsVK::endRender", "Failed to submit to present queue with error: " + String::fromInt((int)result));
-    }
+    result = presentQueue.presentKHR(presentInfo);
+    __ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::fromInt((int)result) + ")");
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
     // Wait until the current frames in flight are less than the max.
-    if ((result = device.waitForFences(inFlightFences[currentFrame], false, UINT64_MAX)) != vk::Result::eSuccess) {
-        throw Exception("GraphicsVK::endRender", "Failed to wait for fences with error: " + String::fromInt((int)result));
-    }
+    result = device.waitForFences(inFlightFences[currentFrame], false, UINT64_MAX);
+    __ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::fromInt((int)result) + ")");
 }
 
 void GraphicsVK::acquireNextImage() {
@@ -196,9 +190,8 @@ void GraphicsVK::acquireNextImage() {
     vk::Result result;
     if (imagesInFlight[backBufferIndex] != VK_NULL_HANDLE) {
         // If so, wait on it!
-        if ((result = device.waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX)) != vk::Result::eSuccess) {
-            throw Exception("GraphicsVK::acquireNextImage", "Failed to wait for fences with error: " + String::fromInt((int)result));
-        }
+        result = device.waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX);
+        __ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::fromInt((int)result) + ")");
         imagesInFlight[backBufferIndex] = vk::Fence(nullptr);
     }
     imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
@@ -230,7 +223,7 @@ int GraphicsVK::findMemoryType(int typeFilter, vk::MemoryPropertyFlags memPropFl
             return i;
         }
     }
-    throw Exception("findMemoryType", "Found no suitable memory type!");
+    throw __CREATE_EX("Found no suitable memory type");
 }
 
 // TODO: Optimize.
@@ -318,18 +311,16 @@ void GraphicsVK::createSwapchain(bool vsync) {
         vk::CommandPoolCreateInfo commandPoolInfo = vk::CommandPoolCreateInfo({}, graphicsQueueIndex);
         comPools[i] = device.createCommandPool(commandPoolInfo);
         vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPools[i], vk::CommandBufferLevel::ePrimary, 1);
-        if ((result = device.allocateCommandBuffers(&comBufAllInfo, &comBuffers[i])) != vk::Result::eSuccess) {
-            throw Exception("GraphicsVK::createSwapchain", "Failed to allocate command buffers with error: " + String::fromInt((int)result));
-        }
+        result = device.allocateCommandBuffers(&comBufAllInfo, &comBuffers[i]);
+        __ASSERT(result == vk::Result::eSuccess, "Failed to allocate command buffers (VKERROR: " + String::fromInt((int)result) + ")");
     }
 
     vk::CommandPoolCreateInfo transferComPoolInfo = vk::CommandPoolCreateInfo({}, transferQueueIndex);
     transferComPool = device.createCommandPool(transferComPoolInfo);
     // TODO: How many buffers should we have?
     vk::CommandBufferAllocateInfo transferComBufferInfo = vk::CommandBufferAllocateInfo(transferComPool, vk::CommandBufferLevel::ePrimary, 1);
-    if ((result = device.allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer)) != vk::Result::eSuccess) {
-        throw Exception("GraphicsVK::createSwapchain", "Failed to allocate transfer command buffers with error: " + String::fromInt((int)result));
-    }
+    result = device.allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer);
+    __ASSERT(result == vk::Result::eSuccess, "Failed to allocate transfer command buffers (VKERROR: " + String::fromInt((int)result) + ")");
 }
 
 void GraphicsVK::setRenderTarget(Texture* renderTarget) {

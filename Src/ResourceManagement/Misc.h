@@ -2,7 +2,6 @@
 #define PGEINTERNAL_RESOURCEMANAGEMENT_SDL
 
 #include <Misc/String.h>
-#include <Exception/Exception.h>
 
 #include <ResourceManagement/ResourceManager.h>
 

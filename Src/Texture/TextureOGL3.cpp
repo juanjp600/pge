@@ -7,8 +7,16 @@
 
 using namespace PGE;
 
+static String getTextureFailStr(const PGE::FilePath& filename, GLuint glError) {
+    return "Failed to create texture (filename: " + filename.str() + "; GLERROR: " + String::format(glError, "%u") + ")";
+}
+
+static String getTextureFailStr(int realWidth, int realHeight, GLuint glError) {
+    return "Failed to create texture (" + String::fromInt(realWidth) + "x" + String::fromInt(realHeight) + "; GLERROR: " + String::format(glError, "%u") + ")";
+}
+
 TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,Texture::FORMAT fmt) : resourceManager(gfx, 2) {
-    GLuint glError = GL_NO_ERROR;
+    GLuint glError;
 
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
@@ -58,9 +66,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
 
     glTexImage2D(GL_TEXTURE_2D,0,glInternalFormat,realWidth,realHeight,0,glFormat,glPixelType,buffer);
     glError = glGetError();
-    if (glError != GL_NO_ERROR) {
-        throw Exception("TextureOGL3(w,h,rt)", "Failed to create texture ("+String::fromInt(realWidth)+","+String::fromInt(realHeight)+"; GLERROR "+String::format(glError, "%u")+")");
-    }
+    __ASSERT(glError == GL_NO_ERROR, getTextureFailStr(realWidth, realHeight, glError));
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -97,9 +103,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
     glBindTexture(GL_TEXTURE_2D,glTexture);
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,fiBuffer);
     glError = glGetError();
-    if (glError != GL_NO_ERROR) {
-        throw Exception("TextureOGL3(fn)", "Failed to create texture (filename: "+filename.str()+"; GLERROR "+String::format(glError, "%u")+")");
-    }
+    __ASSERT(glError == GL_NO_ERROR, getTextureFailStr(filename, glError));
 
     glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -125,9 +129,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     glBindTexture(GL_TEXTURE_2D,glTexture);
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,nullptr);
     glError = glGetError();
-    if (glError != GL_NO_ERROR) {
-        throw Exception("TextureOGL3(fn,threadMgr)", "Failed to create texture (filename: "+filename.str()+"; GLERROR "+String::format(glError, "%u")+")");
-    }
+    __ASSERT(glError == GL_NO_ERROR, getTextureFailStr(filename, glError));
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -155,9 +157,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
                 glBindTexture(GL_TEXTURE_2D,glTexture);
                 glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,buffer);
                 glError = glGetError();
-                if (glError != GL_NO_ERROR) {
-                    throw Exception("TextureReassignRequest (OGL3)", "Failed to create texture (filename: "+filename.str()+"; GLERROR "+String::format(glError, "%u")+")");
-                }
+                __ASSERT(glError == GL_NO_ERROR, getTextureFailStr(filename, glError));
 
                 glGenerateMipmap(GL_TEXTURE_2D);
             }

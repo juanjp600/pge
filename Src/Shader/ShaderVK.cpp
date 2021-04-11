@@ -44,9 +44,8 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
         } // TODO: Clean.
         auto lol = reflection.push_constant_blocks[1];
         SpvReflectBlockVariable pushConstant = reflection.push_constant_blocks[0];
-        if (String(pushConstant.name) != "vulkanConstants") {
-            throw Exception("ShaderVK::ShaderVK", String("Invalid push constant named \"") + pushConstant.name + "\".");
-        }
+        String blockName = pushConstant.name;
+        __ASSERT(blockName == "vulkanConstants", "Invalid push constant (\"" + blockName + "\")");
 
         ranges.reserve(2);
         int fragmentOffset;

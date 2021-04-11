@@ -1,33 +1,29 @@
 #include <Exception/Exception.h>
 
-using namespace PGE;
-
 #ifdef DEBUG
 #include <iostream>
 #endif
 
+using namespace PGE;
+
+// TODO: Remove after ThreadManager refactor.
 Exception::Exception() {
-    source = "N/A";
-    details = "Improperly constructed exception";
+    info = ">>> INVALID EXCEPTION <<<";
 }
 
-Exception::Exception(const Exception& ex) {
-    source = ex.getSource();
-    details = ex.getDetails();
-}
-
-Exception::Exception(String src,String detail) {
-    source = src;
-    details = detail;
+Exception::Exception(const char* file, int line, const String& extra) {
+    info = file;
+    info += ':';
+    info += String::fromInt(line);
+    if (extra != "") {
+        info += '\n';
+        info += extra;
+    }
 #ifdef DEBUG
-    std::cout << src << ": " << detail << std::endl;
+    std::cout << what() << std::endl;
 #endif
 }
 
-String Exception::getSource() const {
-    return source;
-}
-
-String Exception::getDetails() const {
-    return details;
+const String& Exception::what() const {
+    return info;
 }

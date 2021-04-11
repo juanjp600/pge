@@ -4,9 +4,6 @@
 #include <Threading/ThreadManager.h>
 #include "../Graphics/GraphicsDX11.h"
 
-#include <stdlib.h>
-#include <inttypes.h>
-
 using namespace PGE;
 
 TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,FORMAT fmt) : resourceManager(2) {
@@ -15,8 +12,6 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     graphics = gfx;
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
-
-    // filename = "<n/a>";
 
     void* newBuffer = nullptr;
 
@@ -150,7 +145,7 @@ TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
 }
 
 TextureDX11::TextureDX11(Graphics* gfx,const FilePath& fn,ThreadManager* threadManager) : resourceManager(0) {
-    throw Exception("TextureDX11", "TODO: refactor, then reimplement"); // TODO
+    __ASSERT(false, "Refactor me!"); // TODO
 }
 
 void TextureDX11::useTexture(int index) {

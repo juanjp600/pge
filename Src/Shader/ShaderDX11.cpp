@@ -79,14 +79,10 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     reflectionInfo.close();
 
     FileUtil::readBytes(path + "vertex.dxbc", vertexShaderBytecode);
-    if (vertexShaderBytecode.size() <= 0) {
-        throw Exception("ShaderDX11","Vertex shader is empty (filename: "+path.str() +")");
-    }
+    __ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
 
     FileUtil::readBytes(path + "fragment.dxbc", fragmentShaderBytecode);
-    if (fragmentShaderBytecode.size() <= 0) {
-        throw Exception("ShaderDX11","Fragment shader is empty (filename: "+path.str()+")");
-    }
+    __ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: "+path.str()+")");
 
     dxVertexShader = D3D11VertexShader::createRef(resourceManager, dxDevice, vertexShaderBytecode);
     dxFragmentShader = D3D11PixelShader::createRef(resourceManager, dxDevice, fragmentShaderBytecode);
