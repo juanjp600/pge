@@ -1,9 +1,11 @@
 #ifndef PGEINTERNAL_GRAPHICS_VK_H_INCLUDED
 #define PGEINTERNAL_GRAPHICS_VK_H_INCLUDED
 
-#include <vulkan/vulkan.hpp>
-
 #include "GraphicsInternal.h"
+
+#include <ResourceManagement/ResourceReferenceVector.h>
+#include "../ResourceManagement/ResourceManagerVK.h"
+#include "../ResourceManagement/VK.h"
 
 namespace PGE {
 
@@ -17,9 +19,6 @@ class GraphicsVK : public GraphicsInternal {
 
         void clear(Color color) override;
 
-        int validNextHighestMemoryRange(int input);
-        int findMemoryType(int typeFilter, vk::MemoryPropertyFlags memPropFlags);
-
         void transfer(const vk::Buffer& src, const vk::Buffer& dst, int size);
 
         void setRenderTarget(Texture* renderTarget) override;
@@ -31,8 +30,10 @@ class GraphicsVK : public GraphicsInternal {
         void setVsync(bool isEnabled) override;
 
         vk::Device getDevice() const;
-        vk::Pipeline createPipeline(ShaderVK* shader, const vk::PipelineInputAssemblyStateCreateInfo* inputInfo) const;
-        vk::CommandBuffer getCurrentCommandBuffer();
+        vk::PhysicalDevice getPhysicalDevice() const;
+        VKPipelineInfo& getPipelineInfo();
+        vk::RenderPass getRenderPass() const;
+        vk::CommandBuffer getCurrentCommandBuffer() const;
 
         __GFX_OBJ_DEC
 
@@ -42,48 +43,46 @@ class GraphicsVK : public GraphicsInternal {
         uint32_t presentQueueIndex;
         uint32_t transferQueueIndex;
 
-        vk::Instance vkInstance;
+        VKInstance::Ref instance;
         vk::PhysicalDevice physicalDevice;
-        vk::Device device;
-        vk::SurfaceKHR vkSurface;
+        VKDevice::Ref device;
+        VKSurface::Ref surface;
 
         vk::Queue graphicsQueue;
         vk::Queue presentQueue;
         vk::Queue transferQueue;
 
-        vk::SwapchainKHR swapchain;
+        // TODO: Wrap this?
+        VKSwapchain::Ref swapchain;
         vk::Extent2D swapchainExtent;
         vk::SurfaceFormatKHR swapchainFormat;
-        std::vector<vk::ImageView> swapchainImageViews;
+        ResourceReferenceVector<vk::ImageView> swapchainImageViews;
 
-        vk::Viewport viewport;
         vk::Rect2D scissor;
-        vk::PipelineViewportStateCreateInfo viewportInfo;
 
-        vk::PipelineColorBlendAttachmentState colorBlendAttachmentState;
-        vk::PipelineColorBlendStateCreateInfo colorBlendInfo;
+        VKPipelineInfo pipelineInfo;
 
-        vk::PipelineRasterizationStateCreateInfo rasterizationInfo;
-        vk::PipelineMultisampleStateCreateInfo multisamplerInfo;
+        VKRenderPass::Ref renderPass;
 
-        vk::RenderPass renderPass;
+        ResourceReferenceVector<vk::Framebuffer> framebuffers;
 
-        std::vector<vk::Framebuffer> framebuffers;
-
-        std::vector<vk::CommandPool> comPools;
+        ResourceReferenceVector<vk::CommandPool> comPools;
         std::vector<vk::CommandBuffer> comBuffers;
-        vk::CommandPool transferComPool;
+        VKCommandPool::Ref transferComPool;
         vk::CommandBuffer transferComBuffer;
 
-        std::vector<vk::Semaphore> imageAvailableSemaphores;
-        std::vector<vk::Semaphore> renderFinishedSemaphores;
-        std::vector<vk::Fence> inFlightFences;
+        ResourceReferenceVector<vk::Semaphore> imageAvailableSemaphores;
+        ResourceReferenceVector<vk::Semaphore> renderFinishedSemaphores;
+        ResourceReferenceVector<vk::Fence> inFlightFences;
+        // We don't actually own any resource here.
         std::vector<vk::Fence> imagesInFlight;
 
-        const int MAX_FRAMES_IN_FLIGHT;
+        const int MAX_FRAMES_IN_FLIGHT = 3;
         int currentFrame = 0;
 
         int backBufferIndex;
+
+        ResourceManagerVK resourceManager;
 
         void createSwapchain(bool vsync);
 

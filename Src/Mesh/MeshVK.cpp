@@ -21,6 +21,7 @@ void MeshVK::updateInternalData() {
 
 	GraphicsVK* graphics = (GraphicsVK*)this->graphics;
 	vk::Device device = graphics->getDevice();
+	vk::PhysicalDevice physicalDevice = graphics->getPhysicalDevice();
 	ShaderVK* shader = (ShaderVK*)material->getShader();
 
 	resourceManager.deleteResource(pipeline);
@@ -32,7 +33,7 @@ void MeshVK::updateInternalData() {
 	int finalTotalSize = totalVertexSize + sizeof(uint16_t) * indicesCount;
 
 	VKBuffer stagingBuffer = VKBuffer(device, finalTotalSize, vk::BufferUsageFlagBits::eTransferSrc);
-	VKMemory stagingMemory = VKMemory(graphics, stagingBuffer, vk::MemoryPropertyFlagBits::eHostVisible);
+	VKMemory stagingMemory = VKMemory(device, physicalDevice, stagingBuffer, vk::MemoryPropertyFlagBits::eHostVisible);
 
 	std::vector<String> vertexInputNames = shader->getVertexInputNames();
 	std::vector<int> hintIndices(vertexInputNames.size());
@@ -102,10 +103,10 @@ void MeshVK::updateInternalData() {
 	device.unmapMemory(stagingMemory);
 
 	dataBuffer = VKBuffer::createRef(resourceManager, device, finalTotalSize, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer);
-	dataMemory = VKMemory::createRef(resourceManager, graphics, dataBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal);
+	dataMemory = VKMemory::createRef(resourceManager, device, physicalDevice, dataBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal);
 	graphics->transfer(stagingBuffer, dataBuffer, finalTotalSize);
 
-	pipeline = VKPipeline::createRef(resourceManager, graphics, shader, primitiveType);
+	pipeline = VKPipeline::createRef(resourceManager, device, shader->getShaderStageInfo(), shader->getVertexInputInfo(), shader->getLayout(), &graphics->getPipelineInfo(), graphics->getRenderPass(), primitiveType);
 
 	mustUpdateInternalData = false;
 }
