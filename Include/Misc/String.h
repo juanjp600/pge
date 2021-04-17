@@ -49,7 +49,7 @@ class String {
 
         String substr(int start, int cnt = -1) const;
         wchar charAt(int pos) const;
-        String replace(const String& fnd, const String& rplace) const;
+        [[nodiscard]] String replace(const String& fnd, const String& rplace) const;
         String toUpper() const;
         String toLower() const;
         String trim() const;

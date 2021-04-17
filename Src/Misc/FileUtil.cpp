@@ -59,24 +59,27 @@ int FileUtil::createDirectoryIfNotExists(const FilePath& path) {
     }
 }
 
-String FileUtil::getDataFolder() {
-    // TODO: Linux.
+static FilePath dataPath;
+
+const FilePath& FileUtil::getDataPath() {
+    if (!dataPath.isValid()) {
+        // TODO: Linux.
 #if defined(__APPLE__) && defined(__OBJC__)
     // Volumes/User/*user*/Library/Application Support/
-    NSArray* filePaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString* appSupportDir = [filePaths firstObject];
+        NSArray* filePaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString* appSupportDir = [filePaths firstObject];
 
-    return String([appSupportDir cStringUsingEncoding: NSUTF8StringEncoding]) + "/";
+        return String([appSupportDir cStringUsingEncoding : NSUTF8StringEncoding]) + "/";
 #elif defined(WINDOWS)
     // Users/*user*/AppData/Roaming/ 
-    PWSTR filePath;
-    SHGetKnownFolderPath(FOLDERID_RoamingAppData, KF_FLAG_DEFAULT, NULL, &filePath);
-    PGE::String path = filePath;
-    CoTaskMemFree(filePath);
-    return path.replace('\\', '/') + '/';
+        PWSTR filePath;
+        SHGetKnownFolderPath(FOLDERID_RoamingAppData, KF_FLAG_DEFAULT, NULL, &filePath);
+        PGE::String path = filePath;
+        CoTaskMemFree(filePath);
+        dataPath = FilePath::fromStr(path);
 #endif
-
-    return PGE::String();
+    }
+    return dataPath;
 }
 
 void FileUtil::enumerateFolders(const FilePath& path, std::vector<FilePath>& folders) {
@@ -84,7 +87,7 @@ void FileUtil::enumerateFolders(const FilePath& path, std::vector<FilePath>& fol
     HANDLE hFind;
     WIN32_FIND_DATAW ffd;
 
-    FilePath filePath = path.validateAsDirectory();
+    FilePath filePath = path.makeDirectory();
 
     FilePath anyPath = filePath + "*";
     wchar* wstr = new wchar[anyPath.length() + 1];
@@ -104,7 +107,7 @@ void FileUtil::enumerateFolders(const FilePath& path, std::vector<FilePath>& fol
 
         FilePath newPath = FilePath(filePath, fileName);
         if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
-            folders.push_back(newPath.validateAsDirectory());
+            folders.push_back(newPath.makeDirectory());
         }
     } while (FindNextFileW(hFind, &ffd));
 
@@ -138,7 +141,7 @@ void FileUtil::enumerateFiles(const FilePath& path, std::vector<FilePath>& files
     HANDLE hFind;
     WIN32_FIND_DATAW ffd;
 
-    FilePath filePath = path.validateAsDirectory();
+    FilePath filePath = path.makeDirectory();
 
     FilePath anyPath = filePath + "*";
     wchar* wstr = new wchar[anyPath.length() + 1];

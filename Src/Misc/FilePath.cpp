@@ -10,41 +10,56 @@
 
 using namespace PGE;
 
-const String FilePath::INVALID_STR = "Tried using an invalid path";
+static const String INVALID_STR = "Tried using an invalid path";
+
+static String sanitizeFileSeperator(const String& str) {
+    return str.replace("\\", "//");
+}
+
+static String resourceStr;
+
+// Already sanitized.
+static String getResourceStr() {
+    if (resourceStr.byteLength() == 0) {
+#if defined(__APPLE__) && defined(__OBJC__)
+        NSBundle* bundle = [NSBundle mainBundle];
+        resourceStr = String(bundle.resourcePath);
+#else
+        resourceStr = String(std::filesystem::current_path().c_str());
+#endif
+        resourceStr = sanitizeFileSeperator(resourceStr);
+        resourceStr += "/";
+    }
+    return resourceStr;
+}
+
+FilePath::FilePath(const String& str) {
+    name = str;
+    valid = true;
+}
 
 FilePath::FilePath() {
     name = "<n/a>";
     valid = false;
 }
 
-String FilePath::getResourcePath() {
-#if defined(__APPLE__) && defined(__OBJC__)
-    NSBundle* bundle = [NSBundle mainBundle];
-    return String(bundle.resourcePath, "/");
-#endif
-    return String(std::filesystem::current_path().c_str()) + "/";
-}
-
 FilePath FilePath::fromStr(const String& str) {
-    FilePath fn;
-    std::error_code err;
-    fn.name = String(std::filesystem::absolute(str.cstr(), err).c_str()).replace("\\", "/");
-
-    int errValue = err.value();
-    __ASSERT(errValue == 0, "Failed to create path (str: " + str + "; ERRORCODE: " + String::fromInt(errValue) + ")");
-
-    fn.valid = true;
-    
-    return fn;
+    std::filesystem::path pth = str.cstr();
+    String sanitizedStr = sanitizeFileSeperator(str);
+    if (pth.is_absolute()) {
+        return FilePath(sanitizedStr);
+    } else {
+        return FilePath(getResourceStr() + sanitizedStr);
+    }
 }
 
 FilePath::FilePath(const FilePath& a, const String& b) {
     __ASSERT(a.valid, INVALID_STR);
-    name = a.str() + b;
+    name = a.str() + sanitizeFileSeperator(b);
     valid = true;
 }
 
-FilePath FilePath::validateAsDirectory() const {
+FilePath FilePath::makeDirectory() const {
     __ASSERT(valid, INVALID_STR);
     if (str().charAt(length() - 1) != '/') {
         return *this + "/";

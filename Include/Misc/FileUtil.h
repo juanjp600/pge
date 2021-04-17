@@ -20,7 +20,7 @@ class FileUtil {
         static int createDirectoryIfNotExists(const FilePath& path);
 
         // OS-dependant folder for storing external files.
-        static String getDataFolder();
+        static const FilePath& getDataPath();
 
         // Returns all direct subdirectories.
         static void enumerateFolders(const FilePath& path, std::vector<FilePath>& folders);
