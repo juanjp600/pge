@@ -326,7 +326,7 @@ Vector4f::Vector4f(float ix, float iy, float iz, float iw) {
     x = ix; y = iy; z = iz; w = iw;
 }
 
-Vector4f::Vector4f(PGE::Vector3f v3, float iw) {
+Vector4f::Vector4f(const Vector3f& v3, float iw) {
     x = v3.x; y = v3.y; z = v3.z; w = iw;
 }
 

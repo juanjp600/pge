@@ -47,10 +47,10 @@ class Vertex {
         const Property& getProperty(const String& name,int& indexHint);
         void setFloat(const String& name,float val);
         void setUInt(const String& name,unsigned int val);
-        void setVector2f(const String& name,Vector2f val);
-        void setVector3f(const String& name,Vector3f val);
-        void setVector4f(const String& name,Vector4f val);
-        void setColor(const String& name,Color val);
+        void setVector2f(const String& name, const Vector2f& val);
+        void setVector3f(const String& name, const Vector3f& val);
+        void setVector4f(const String& name, const Vector4f& val);
+        void setColor(const String& name, const Color& val);
 
     private:
         std::vector<Property> properties;

@@ -356,11 +356,11 @@ void IOInternal::update() {
     }
 }
 
-Vector2f IOInternal::getMousePosition() const {
+const Vector2f& IOInternal::getMousePosition() const {
     return mousePos;
 }
 
-void IOInternal::setMousePosition(Vector2f position) {
+void IOInternal::setMousePosition(const Vector2f& position) {
     if (!graphics->isWindowFocused()) { return; }
 
     mousePos = position;

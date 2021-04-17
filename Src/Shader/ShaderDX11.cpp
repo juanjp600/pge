@@ -261,18 +261,18 @@ ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoRef cBuffer, const
     size = sz;
 }
 
-void ShaderDX11::ConstantDX11::setValue(Matrix4x4f value) {
+void ShaderDX11::ConstantDX11::setValue(const Matrix4x4f& value) {
     memcpy(constantBuffer->getData()+offset,value.transpose().elements,16*sizeof(float));
     constantBuffer->markAsDirty();
 }
 
-void ShaderDX11::ConstantDX11::setValue(Vector2f value) {
+void ShaderDX11::ConstantDX11::setValue(const Vector2f& value) {
     float arr[2]; arr[0] = value.x; arr[1] = value.y;
     memcpy(constantBuffer->getData() + offset, arr, 2 * sizeof(float));
     constantBuffer->markAsDirty();
 }
 
-void ShaderDX11::ConstantDX11::setValue(Vector3f value) {
+void ShaderDX11::ConstantDX11::setValue(const Vector3f& value) {
     float arr[3]; arr[0] = value.x; arr[1] = value.y; arr[2] = value.z;
     memcpy(constantBuffer->getData() + offset, arr, 3 * sizeof(float));
     if (size == 4 * sizeof(float)) {
@@ -282,13 +282,13 @@ void ShaderDX11::ConstantDX11::setValue(Vector3f value) {
     constantBuffer->markAsDirty();
 }
 
-void ShaderDX11::ConstantDX11::setValue(Vector4f value) {
+void ShaderDX11::ConstantDX11::setValue(const Vector4f& value) {
     float arr[4]; arr[0] = value.x; arr[1] = value.y; arr[2] = value.z; arr[3] = value.w;
     memcpy(constantBuffer->getData()+offset,arr,4*sizeof(float));
     constantBuffer->markAsDirty();
 }
 
-void ShaderDX11::ConstantDX11::setValue(Color value) {
+void ShaderDX11::ConstantDX11::setValue(const Color& value) {
     float arr[4]; arr[0] = value.red; arr[1] = value.green; arr[2] = value.blue; arr[3] = value.alpha;
     memcpy(constantBuffer->getData()+offset,arr,4*sizeof(float));
     constantBuffer->markAsDirty();

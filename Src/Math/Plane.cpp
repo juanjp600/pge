@@ -47,7 +47,7 @@ Plane::Plane() {
     distanceFromOrigin = 0.f;
 }
 
-Plane::Plane(Vector3f p1, Vector3f p2, Vector3f p3) {
+Plane::Plane(const Vector3f& p1, const Vector3f& p2, const Vector3f& p3) {
     Vector3f ab = p2.add(p1.multiply(-1.f));
     Vector3f ac = p3.add(p1.multiply(-1.f));
 
@@ -55,24 +55,24 @@ Plane::Plane(Vector3f p1, Vector3f p2, Vector3f p3) {
     distanceFromOrigin = normal.dotProduct(p1);
 }
 
-Plane::Plane(Vector3f norm, Vector3f pointOnPlane) {
+Plane::Plane(const Vector3f& norm, const Vector3f& pointOnPlane) {
     normal = norm.normalize();
     distanceFromOrigin = normal.dotProduct(pointOnPlane);
 }
 
-Plane::Plane(Vector3f norm, float distFromOrigin) {
+Plane::Plane(const Vector3f& norm, float distFromOrigin) {
     normal = norm.normalize();
     distanceFromOrigin = distFromOrigin;
 }
 
-int Plane::onPlane(Vector3f co, float epsilon) {
+int Plane::onPlane(const Vector3f& co, float epsilon) {
     float res = evalAtPoint(co);
     if (fabs(res) < epsilon) { return 0; }
     if (res < 0) { return -1; }
     return 1;
 }
 
-bool Plane::getIntersectionPoint(Line3f line, Vector3f& intersectionPoint, float& coveredAmount, bool ignoreDirection, bool ignoreSegment) {
+bool Plane::getIntersectionPoint(const Line3f& line, Vector3f& intersectionPoint, float& coveredAmount, bool ignoreDirection, bool ignoreSegment) {
     // http://softsurfer.com/Archive/algorithm_0104/algorithm_0104B.htm#Line%20Intersections
     // http://paulbourke.net/geometry/planeline/
 
@@ -87,16 +87,16 @@ bool Plane::getIntersectionPoint(Line3f line, Vector3f& intersectionPoint, float
     return true;
 }
 
-float Plane::evalAtPoint(Vector3f co) {
+float Plane::evalAtPoint(const Vector3f& co) {
     return normal.dotProduct(co) - distanceFromOrigin;
 }
 
-bool Plane::equals(Plane other, float delta) {
+bool Plane::equals(const Plane& other, float delta) {
     return (normal.add(other.normal.multiply(-1.f)).lengthSquared()<delta*delta)
             && (fabs(distanceFromOrigin - other.distanceFromOrigin) < delta);
 }
 
-bool Plane::getPlaneIntersect(Plane p1, Plane p2, Plane p3, Vector3f& intersectionPoint) {
+bool Plane::getPlaneIntersect(const Plane& p1, const Plane& p2, const Plane& p3, Vector3f& intersectionPoint) {
     // http://paulbourke.net/geometry/3planes/
 
     Vector3f c1 = p2.normal.crossProduct(p3.normal);

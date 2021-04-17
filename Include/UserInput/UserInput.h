@@ -346,13 +346,13 @@ class ControllerInput : public UserInput {
         virtual DEVICE getDevice() const;
         int getKey() const override;
         BUTTON getButton() const;
-        Vector2f getStickPosition() const;
+        const Vector2f& getStickPosition() const;
         float getPressDepth() const;
         float getDownThreshold() const;
         Controller* getController() const;
         void removeController();
 
-        void setStickPosition(Vector2f pos);
+        void setStickPosition(const Vector2f& pos);
         void setPressDepth(float depth);
         void setDownThreshold(float threshold);
 

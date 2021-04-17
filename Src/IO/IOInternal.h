@@ -42,8 +42,8 @@ class IOInternal : public IO {
         Controller* getController(int index) const override;
         bool isControllerValid(Controller* controller) const override;
 
-        Vector2f getMousePosition() const override;
-        void setMousePosition(Vector2f position) override;
+        const Vector2f& getMousePosition() const override;
+        void setMousePosition(const Vector2f& position) override;
         void setMouseVisibility(bool visible) override;
         Vector2i getMouseWheelDelta() override;
 

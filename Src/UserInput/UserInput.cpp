@@ -84,7 +84,7 @@ ControllerInput::BUTTON ControllerInput::getButton() const {
     return controllerButton;
 }
 
-Vector2f ControllerInput::getStickPosition() const {
+const Vector2f& ControllerInput::getStickPosition() const {
     return stickPosition;
 }
 
@@ -107,7 +107,7 @@ void ControllerInput::removeController() {
     pressDepth = 0.f;
 }
 
-void ControllerInput::setStickPosition(Vector2f pos) {
+void ControllerInput::setStickPosition(const Vector2f& pos) {
     stickPosition = pos;
 }
 
