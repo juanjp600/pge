@@ -103,26 +103,26 @@ ShaderVK::ConstantVK::ConstantVK(Graphics* gfx, ShaderVK* she, vk::ShaderStageFl
     offset = off;
 }
 
-void ShaderVK::ConstantVK::setValue(Matrix4x4f value) {
+void ShaderVK::ConstantVK::setValue(const Matrix4x4f& value) {
     ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), value.elements);
 }
 
-void ShaderVK::ConstantVK::setValue(Vector2f value) {
+void ShaderVK::ConstantVK::setValue(const Vector2f& value) {
     float val[] = { value.x, value.y };
     ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 2 * sizeof(float), val);
 }
 
-void ShaderVK::ConstantVK::setValue(Vector3f value) {
+void ShaderVK::ConstantVK::setValue(const Vector3f& value) {
     float val[] = { value.x, value.y, value.z };
     ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 3 * sizeof(float), val);
 }
 
-void ShaderVK::ConstantVK::setValue(Vector4f value) {
+void ShaderVK::ConstantVK::setValue(const Vector4f& value) {
     float val[] = { value.x, value.y, value.z, value.w };
     ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 4 * sizeof(float), val);
 }
 
-void ShaderVK::ConstantVK::setValue(Color value) {
+void ShaderVK::ConstantVK::setValue(const Color& value) {
     float val[] = { value.red, value.green, value.blue, value.alpha };
     ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 4 * sizeof(float), val);
 }
