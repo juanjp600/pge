@@ -24,7 +24,7 @@ class Texture;
 
 class GraphicsOGL3 : public GraphicsInternal {
     public:
-        GraphicsOGL3(String name,int w,int h,bool fs);
+        GraphicsOGL3(const String& name,int w,int h,bool fs);
 
         void update() override;
         void swap() override;

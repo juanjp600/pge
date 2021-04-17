@@ -119,7 +119,7 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefe
     }
 }
 
-Shader::Constant* ShaderDX11::getVertexShaderConstant(String name) {
+Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
     for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
         std::vector<ConstantDX11>& vars = vertexConstantBuffers[i]->getConstants(); 
         for (int j = 0; j < (int)vars.size(); j++) {
@@ -131,7 +131,7 @@ Shader::Constant* ShaderDX11::getVertexShaderConstant(String name) {
     return nullptr;
 }
 
-Shader::Constant* ShaderDX11::getFragmentShaderConstant(String name) {
+Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
     for (int i = 0; i < (int)fragmentConstantBuffers.size(); i++) {
         std::vector<ConstantDX11>& vars = fragmentConstantBuffers[i]->getConstants(); 
         for (int j = 0; j < (int)vars.size(); j++) {
@@ -190,11 +190,11 @@ void ShaderDX11::useSamplers() {
     dxContext->PSSetSamplers(0, (UINT)dxSamplerState.size(), dxSamplerState.data());
 }
 
-ShaderDX11::CBufferInfoOwner::CBufferInfoOwner(Graphics* gfx, String nm, int sz, ResourceManager* rm) {
+ShaderDX11::CBufferInfoOwner::CBufferInfoOwner(Graphics* gfx, const String& nm, int sz, ResourceManager* rm) {
     resource = new ShaderDX11::CBufferInfo(gfx, nm, sz, rm);
 }
 
-ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, String nm, int sz, ResourceManager* resourceManager) {
+ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, const String& nm, int sz, ResourceManager* resourceManager) {
     name = nm;
     size = sz;
     data = new uint8_t[size];
@@ -254,7 +254,7 @@ D3D11Buffer::Ref ShaderDX11::CBufferInfo::getDxCBuffer() {
     return dxCBuffer;
 }
 
-ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoRef cBuffer, String nm, int offst, int sz) {
+ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoRef cBuffer, const String& nm, int offst, int sz) {
     constantBuffer = cBuffer;
     name = nm;
     offset = offst;
@@ -305,7 +305,7 @@ void ShaderDX11::ConstantDX11::setValue(int value) {
     constantBuffer->markAsDirty();
 }
 
-String ShaderDX11::ConstantDX11::getName() const {
+const String& ShaderDX11::ConstantDX11::getName() const {
     return name;
 }
 

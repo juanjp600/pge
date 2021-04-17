@@ -22,8 +22,8 @@ class ShaderOGL3 : public Shader {
     public:
         ShaderOGL3(Graphics* gfx, const FilePath& path);
 
-        Constant* getVertexShaderConstant(String name) override;
-        Constant* getFragmentShaderConstant(String name) override;
+        Constant* getVertexShaderConstant(const String& name) override;
+        Constant* getFragmentShaderConstant(const String& name) override;
 
         const std::vector<String>& getVertexInputElems() const;
 
@@ -32,7 +32,7 @@ class ShaderOGL3 : public Shader {
     private:
         class ConstantOGL3 : public Constant {
             public:
-                ConstantOGL3(Graphics* gfx, String nm, int loc);
+                ConstantOGL3(Graphics* gfx, const String& nm, int loc);
 
                 void setValue(Matrix4x4f value) override;
                 void setValue(Vector2f value) override;

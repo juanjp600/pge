@@ -30,7 +30,7 @@ NSWindow* GraphicsInternal::getCocoaWindow() const {
 }
 #endif
 
-Graphics* Graphics::create(String name, int w, int h, bool fs, Renderer r) {
+Graphics* Graphics::create(const String& name, int w, int h, bool fs, Renderer r) {
     if (r == Renderer::Default) {
 #ifdef WINDOWS
         r = Renderer::DirectX11;

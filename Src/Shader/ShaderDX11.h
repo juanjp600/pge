@@ -19,8 +19,8 @@ class ShaderDX11 : public Shader {
     public:
         ShaderDX11(Graphics* gfx, const FilePath& path);
 
-        Constant* getVertexShaderConstant(String name);
-        Constant* getFragmentShaderConstant(String name);
+        Constant* getVertexShaderConstant(const String& name);
+        Constant* getFragmentShaderConstant(const String& name);
 
         void useShader();
         void useVertexInputLayout();
@@ -45,7 +45,7 @@ class ShaderDX11 : public Shader {
         typedef ResourceReference<CBufferInfo*> CBufferInfoRef;
         class ConstantDX11 : public Constant {
             public:
-                ConstantDX11(CBufferInfoRef cBuffer, String nm, int offst, int sz);
+                ConstantDX11(CBufferInfoRef cBuffer, const String& nm, int offst, int sz);
                 ~ConstantDX11(){};
 
                 void setValue(Matrix4x4f value) override;
@@ -56,7 +56,7 @@ class ShaderDX11 : public Shader {
                 void setValue(float value) override;
                 void setValue(int value) override;
 
-                String getName() const;
+                const String& getName() const;
 
             private:
                 CBufferInfoRef constantBuffer;
@@ -67,7 +67,7 @@ class ShaderDX11 : public Shader {
 
         class CBufferInfo {
             public:
-                CBufferInfo(Graphics* graphics, String nm, int sz, ResourceManager* resourceManager);
+                CBufferInfo(Graphics* graphics, const String& nm, int sz, ResourceManager* resourceManager);
                 ~CBufferInfo();
 
                 uint8_t* getData();
@@ -90,7 +90,7 @@ class ShaderDX11 : public Shader {
         
         class CBufferInfoOwner : public Resource<CBufferInfo*> {
             public:
-                CBufferInfoOwner(Graphics* gfx, String nm, int sz, ResourceManager* rm);
+                CBufferInfoOwner(Graphics* gfx, const String& nm, int sz, ResourceManager* rm);
 
                 __RES_MNGMT__REF_FACT_METH(CBufferInfoOwner)
         };

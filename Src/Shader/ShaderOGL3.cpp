@@ -140,7 +140,7 @@ void ShaderOGL3::unbindGLAttribs() {
     }
 }
 
-Shader::Constant* ShaderOGL3::getVertexShaderConstant(String name) {
+Shader::Constant* ShaderOGL3::getVertexShaderConstant(const String& name) {
     for (int i = 0; i < (int)vertexShaderConstants.size(); i++) {
         if (vertexShaderConstants[i].getName().equals(name)) {
             return &vertexShaderConstants[i];
@@ -149,7 +149,7 @@ Shader::Constant* ShaderOGL3::getVertexShaderConstant(String name) {
     return nullptr;
 }
 
-Shader::Constant* ShaderOGL3::getFragmentShaderConstant(String name) {
+Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
     for (int i = 0; i < (int)fragmentShaderConstants.size(); i++) {
         if (fragmentShaderConstants[i].getName().equals(name)) {
             return &fragmentShaderConstants[i];
@@ -197,7 +197,7 @@ void ShaderOGL3::extractShaderVars(const String& src,String varKind,std::vector<
     }
 }
 
-ShaderOGL3::ConstantOGL3::ConstantOGL3(Graphics* gfx,String nm, int loc) {
+ShaderOGL3::ConstantOGL3::ConstantOGL3(Graphics* gfx, const String& nm, int loc) {
     graphics = gfx;
     name = nm;
     location = loc;

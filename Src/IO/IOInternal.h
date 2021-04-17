@@ -49,9 +49,9 @@ class IOInternal : public IO {
 
         void startTextInputCapture() const override;
         void stopTextInputCapture() const override;
-        String getTextInput() const override;
+        const String& getTextInput() const override;
 
-        void setClipboardText(String str) const override;
+        void setClipboardText(const String& str) const override;
         String getClipboardText() const override;
 };
 
@@ -65,7 +65,7 @@ class ControllerInternal : public Controller {
     public:
         ~ControllerInternal() override;
         ControllerInternal(const IOInternal* inIo, SDL_GameController* inSdlController);
-        String getName() const override;
+        const String& getName() const override;
         void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) override;
         SDL_GameController* getSdlController() const;
         void setName(const String& inName);

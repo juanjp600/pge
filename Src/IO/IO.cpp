@@ -60,11 +60,11 @@ void IOInternal::stopTextInputCapture() const {
     SDL_StopTextInput();
 }
 
-String IOInternal::getTextInput() const {
+const String& IOInternal::getTextInput() const {
     return textInput;
 }
 
-void IOInternal::setClipboardText(String str) const {
+void IOInternal::setClipboardText(const String& str) const {
     SDL_SetClipboardText(str.cstr());
 }
 
@@ -83,7 +83,7 @@ ControllerInternal::~ControllerInternal() {
     SDL_GameControllerClose(sdlController);
 }
 
-String ControllerInternal::getName() const {
+const String& ControllerInternal::getName() const {
     return name;
 }
 

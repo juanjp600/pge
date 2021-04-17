@@ -27,7 +27,7 @@ class Matrix4x4f {
         Vector4f transform(const Vector4f& other) const;
         Vector3f transform(const Vector3f& other) const;
         
-        const String toString() const;
+        String toString() const;
 
         static Matrix4x4f translate(const Vector3f& position);
         static Matrix4x4f scale(const Vector3f& scale);

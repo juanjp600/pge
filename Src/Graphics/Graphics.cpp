@@ -7,7 +7,7 @@
 
 using namespace PGE;
 
-Graphics::Graphics(String name, int w, int h, bool fs, uint32_t windowFlags) : resourceManager(2) {
+Graphics::Graphics(const String& name, int w, int h, bool fs, uint32_t windowFlags) : resourceManager(2) {
     caption = name;
     width = w; height = h; fullscreen = fs;
 

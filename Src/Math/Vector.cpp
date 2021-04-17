@@ -149,7 +149,7 @@ float Vector2f::dotProduct(const Vector2f& b) const {
     return x*b.x+y*b.y;
 }
 
-const String Vector2f::toString() const {
+String Vector2f::toString() const {
     return "Vector2f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ")";
 }
 
@@ -306,7 +306,7 @@ Vector3f Vector3f::crossProduct(const Vector3f& b) const {
     return Vector3f(y*b.z-z*b.y,z*b.x-x*b.z,x*b.y-y*b.x);
 }
 
-const String Vector3f::toString() const {
+String Vector3f::toString() const {
     return "Vector3f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ", " + String::fromFloat(z) + ")";
 }
 
