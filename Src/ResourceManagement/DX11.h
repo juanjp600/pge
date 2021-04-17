@@ -1,8 +1,6 @@
 #ifndef PGEINTERNAL_RESOURCEMANAGEMENT_DX11
 #define PGEINTERNAL_RESOURCEMANAGEMENT_DX11
 
-#include <Exception/Exception.h>
-
 #include <ResourceManagement/ResourceManager.h>
 
 #include <d3d11.h>
