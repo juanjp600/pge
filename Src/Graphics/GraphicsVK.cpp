@@ -10,7 +10,7 @@
 
 using namespace PGE;
 
-GraphicsVK::GraphicsVK(String name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI), resourceManager(this, 199) {
+GraphicsVK::GraphicsVK(const String& name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI), resourceManager(this, 199) {
     // Layers.
     std::vector<const char*> layers;
 #ifdef DEBUG

@@ -13,7 +13,7 @@ class ShaderVK;
 
 class GraphicsVK : public GraphicsInternal {
     public:
-        GraphicsVK(String name, int w = 1280, int h = 720, bool fs = false);
+        GraphicsVK(const String& name, int w = 1280, int h = 720, bool fs = false);
 
         void swap() override;
 

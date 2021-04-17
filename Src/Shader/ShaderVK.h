@@ -16,8 +16,8 @@ namespace PGE {
         public:
             ShaderVK(Graphics* gfx, const FilePath& path);
 
-            Constant* getVertexShaderConstant(String name) override;
-            Constant* getFragmentShaderConstant(String name) override;
+            Constant* getVertexShaderConstant(const String& name) override;
+            Constant* getFragmentShaderConstant(const String& name) override;
 
             int getVertexStride() const;
             std::vector<String> getVertexInputNames() const;
