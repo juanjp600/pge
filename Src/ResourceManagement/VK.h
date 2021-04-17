@@ -290,7 +290,7 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
         static constexpr vk::PipelineInputAssemblyStateCreateInfo inputAssemblyTris = vk::PipelineInputAssemblyStateCreateInfo({}, vk::PrimitiveTopology::eTriangleList, false);
 
     public:
-        VKPipeline(vk::Device device, vk::PipelineShaderStageCreateInfo* shaderInfo, vk::PipelineVertexInputStateCreateInfo* vertexInfo, const vk::PipelineLayout* layout, VKPipelineInfo* info, vk::RenderPass renderPass, Primitive::TYPE primitive) : VKDestroyResource(device) {
+        VKPipeline(vk::Device device, const vk::PipelineShaderStageCreateInfo* shaderInfo, const vk::PipelineVertexInputStateCreateInfo* vertexInfo, vk::PipelineLayout layout, const VKPipelineInfo* info, vk::RenderPass renderPass, Primitive::TYPE primitive) : VKDestroyResource(device) {
             const vk::PipelineInputAssemblyStateCreateInfo* inputInfo;
             switch (primitive) {
                 case Primitive::TYPE::LINE: {
@@ -301,7 +301,7 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
                     inputInfo = &inputAssemblyTris;
                 } break;
             }
-            vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shaderInfo, vertexInfo, inputInfo, nullptr, info->getViewportInfo(), info->getRasterizationInfo(), info->getMultisamplerInfo(), nullptr, info->getColorBlendInfo(), nullptr, *layout, renderPass, 0, {}, -1);
+            vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shaderInfo, vertexInfo, inputInfo, nullptr, info->getViewportInfo(), info->getRasterizationInfo(), info->getMultisamplerInfo(), nullptr, info->getColorBlendInfo(), nullptr, layout, renderPass, 0, {}, -1);
             vk::ResultValue<vk::Pipeline> creation = device.createGraphicsPipeline(nullptr, pipelineInfo);
             __ASSERT(creation.result == vk::Result::eSuccess, "Failed to create graphics pipeline (VKERROR: " + String::fromInt((int)creation.result) + ")");
             resource = creation.value;

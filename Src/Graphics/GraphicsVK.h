@@ -31,7 +31,7 @@ class GraphicsVK : public GraphicsInternal {
 
         vk::Device getDevice() const;
         vk::PhysicalDevice getPhysicalDevice() const;
-        VKPipelineInfo& getPipelineInfo();
+        const VKPipelineInfo* getPipelineInfo() const;
         vk::RenderPass getRenderPass() const;
         vk::CommandBuffer getCurrentCommandBuffer() const;
 

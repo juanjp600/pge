@@ -104,35 +104,35 @@ ShaderVK::ConstantVK::ConstantVK(Graphics* gfx, ShaderVK* she, vk::ShaderStageFl
 }
 
 void ShaderVK::ConstantVK::setValue(const Matrix4x4f& value) {
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), value.elements);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), value.elements);
 }
 
 void ShaderVK::ConstantVK::setValue(const Vector2f& value) {
     float val[] = { value.x, value.y };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 2 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 2 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(const Vector3f& value) {
     float val[] = { value.x, value.y, value.z };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 3 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 3 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(const Vector4f& value) {
     float val[] = { value.x, value.y, value.z, value.w };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 4 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(const Color& value) {
     float val[] = { value.red, value.green, value.blue, value.alpha };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, 4 * sizeof(float), val);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * sizeof(float), val);
 }
 
 void ShaderVK::ConstantVK::setValue(float value) {
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, sizeof(float), &value);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, sizeof(float), &value);
 }
 
 void ShaderVK::ConstantVK::setValue(int value) {
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(*shader->getLayout(), stage, offset, sizeof(int), &value);
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, sizeof(int), &value);
 }
 
 int ShaderVK::getVertexStride() const {
@@ -143,15 +143,14 @@ const std::vector<String>& ShaderVK::getVertexInputNames() const {
     return vertexInputNames;
 }
 
-vk::PipelineShaderStageCreateInfo* ShaderVK::getShaderStageInfo() {
+const vk::PipelineShaderStageCreateInfo* ShaderVK::getShaderStageInfo() const {
     return shaderStageInfo;
 }
 
-vk::PipelineVertexInputStateCreateInfo* ShaderVK::getVertexInputInfo() {
+const vk::PipelineVertexInputStateCreateInfo* ShaderVK::getVertexInputInfo() const {
     return &vertexInputInfo;
 }
 
-// TODO: Why.
-const vk::PipelineLayout* ShaderVK::getLayout() {
-    return &layout;
+vk::PipelineLayout ShaderVK::getLayout() const {
+    return layout;
 }

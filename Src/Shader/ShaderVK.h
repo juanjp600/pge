@@ -22,9 +22,9 @@ namespace PGE {
             int getVertexStride() const;
             const std::vector<String>& getVertexInputNames() const;
 
-            vk::PipelineShaderStageCreateInfo* getShaderStageInfo();
-            vk::PipelineVertexInputStateCreateInfo* getVertexInputInfo();
-            const vk::PipelineLayout* getLayout();
+            const vk::PipelineShaderStageCreateInfo* getShaderStageInfo() const;
+            const vk::PipelineVertexInputStateCreateInfo* getVertexInputInfo() const;
+            vk::PipelineLayout getLayout() const;
 
         private:
             GraphicsVK* graphics;

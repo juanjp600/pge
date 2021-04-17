@@ -106,7 +106,7 @@ void MeshVK::updateInternalData() {
 	dataMemory = VKMemory::createRef(resourceManager, device, physicalDevice, dataBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal);
 	graphics->transfer(stagingBuffer, dataBuffer, finalTotalSize);
 
-	pipeline = VKPipeline::createRef(resourceManager, device, shader->getShaderStageInfo(), shader->getVertexInputInfo(), shader->getLayout(), &graphics->getPipelineInfo(), graphics->getRenderPass(), primitiveType);
+	pipeline = VKPipeline::createRef(resourceManager, device, shader->getShaderStageInfo(), shader->getVertexInputInfo(), shader->getLayout(), graphics->getPipelineInfo(), graphics->getRenderPass(), primitiveType);
 
 	mustUpdateInternalData = false;
 }
