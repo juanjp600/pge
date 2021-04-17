@@ -79,11 +79,21 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
 }
 
 Shader::Constant* ShaderVK::getVertexShaderConstant(String name) {
-    return vertexConstantMap[name.getHashCode()].get();
+    auto it = vertexConstantMap.find(name.getHashCode());
+    if (it == vertexConstantMap.end()) {
+        return nullptr;
+    } else {
+        return it->second.get();
+    }
 }
 
 Shader::Constant* ShaderVK::getFragmentShaderConstant(String name) {
-    return fragmentConstantMap[name.getHashCode()].get();
+    auto it = fragmentConstantMap.find(name.getHashCode());
+    if (it == fragmentConstantMap.end()) {
+        return nullptr;
+    } else {
+        return it->second.get();
+    }
 }
 
 ShaderVK::ConstantVK::ConstantVK(Graphics* gfx, ShaderVK* she, vk::ShaderStageFlags stg, int off) {

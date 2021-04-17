@@ -10,8 +10,6 @@
 #include "../ResourceManagement/ResourceManagerVK.h"
 #include "../ResourceManagement/VK.h"
 
-#include "../Graphics/GraphicsVK.h"
-
 namespace PGE {
 
     class ShaderVK : public Shader {
