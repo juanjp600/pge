@@ -91,7 +91,7 @@ class ShaderOGL3 : public Shader {
             String type;
             String name;
         };
-        void extractShaderVars(const String& src,String varKind,std::vector<ShaderVar>& varList);
+        void extractShaderVars(const String& src,const String& varKind,std::vector<ShaderVar>& varList);
 
         GLShader::Ref glVertexShader;
         GLShader::Ref glFragmentShader;

@@ -158,20 +158,20 @@ Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
     return nullptr;
 }
 
-void ShaderOGL3::extractShaderVars(const String& src,String varKind,std::vector<ShaderVar>& varList) {
+void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::vector<ShaderVar>& varList) {
     String line = "";
-    varKind = String(varKind," ");
+    String varStr = varKind + " ";
     for (int i=0; i < src.length(); i++) {
         PGE::wchar chr = src.charAt(i);
         if (chr!='\r' && chr!='\n') {
             line = String(line,chr);
         } else {
-            if (line.substr(0,varKind.length()).equals(varKind)) {
+            if (line.substr(0, varStr.length()).equals(varStr)) {
                 bool readType = false;
                 ShaderVar var;
                 var.type = "";
                 var.name = "";
-                for (int j=varKind.length();j<line.length();j++) {
+                for (int j= varStr.length();j<line.length();j++) {
                     chr = line.charAt(j);
                     if (chr==' ') {
                         if (readType && var.name.length()>0) {
