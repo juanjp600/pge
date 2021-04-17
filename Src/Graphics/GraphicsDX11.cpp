@@ -164,7 +164,7 @@ void GraphicsDX11::setRenderTarget(Texture* renderTarget) {
     dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
-void GraphicsDX11::setRenderTargets(std::vector<Texture*> renderTargets) {
+void GraphicsDX11::setRenderTargets(const std::vector<Texture*>& renderTargets) {
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
@@ -199,7 +199,7 @@ void GraphicsDX11::resetRenderTarget() {
     dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
-void GraphicsDX11::setViewport(Rectanglei vp) {
+void GraphicsDX11::setViewport(const Rectanglei& vp) {
     if (vp != viewport) {
         viewport = vp;
 

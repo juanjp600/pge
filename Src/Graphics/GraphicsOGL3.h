@@ -34,10 +34,10 @@ class GraphicsOGL3 : public GraphicsInternal {
         void setDepthTest(bool enabled) override;
 
         void setRenderTarget(Texture* renderTarget) override;
-        void setRenderTargets(std::vector<Texture*> renderTargets) override;
+        void setRenderTargets(const std::vector<Texture*>& renderTargets) override;
         void resetRenderTarget() override;
 
-        void setViewport(Rectanglei vp) override;
+        void setViewport(const Rectanglei& vp) override;
 
         void setVsync(bool isEnabled) override;
 
