@@ -307,7 +307,7 @@ bool generateVulkan(const wchar_t* filename) {
 				vertexNames.clear();
 				break;
 			}
-			hadFrag = true;
+			hadVert = true;
 			currVect = &vertexNames;
 		}
 	}
@@ -318,8 +318,8 @@ bool generateVulkan(const wchar_t* filename) {
 	}
 
 	std::wstring outFile = filename;
-	std::ofstream out;
-	out.open(outFile.substr(0, outFile.size() - 5).append(L"_vk.hlsl").c_str(), std::ios::out);
+	outFile = outFile.substr(0, outFile.size() - 5).append(L"_vk.hlsl");
+	std::ofstream out; out.open(outFile.c_str(), std::ios::out);
 
 	out << "[[vk::push_constant]]" << std::endl;
 	out << "cbuffer vulkanConstants {" << std::endl;
