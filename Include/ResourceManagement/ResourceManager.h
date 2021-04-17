@@ -24,22 +24,26 @@ class ResourceManager {
         void addResource(ResourceBase* resource);
 
         template <class T>
-        void deleteResource(ResourceReference<T>& reference) {
-            if (!reference.isHoldingResource()) {
-                return;
-            }
-
-            T internalResource = reference;
+        void deleteResource(T internalResource) {
+            // Static assertion is likely not possible here due to ResourceReference's template.
             for (auto it = resources.end(); it > resources.begin();) {
                 it--;
                 Resource<T>* specifiedResource = dynamic_cast<Resource<T>*>(*it);
                 if (specifiedResource != nullptr && (*specifiedResource)() == internalResource) {
                     delete specifiedResource;
                     resources.erase(it);
-                    reference.invalidate();
                     return;
                 }
             }
+        }
+
+        template <class T>
+        void deleteResourcefromReference(ResourceReference<T> reference) {
+            if (!reference.isHoldingResource()) {
+                return;
+            }
+
+            deleteResource(reference());
         }
 
         void increaseSize(int count);

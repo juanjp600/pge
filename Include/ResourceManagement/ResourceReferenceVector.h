@@ -7,9 +7,7 @@ template <class T>
 class ResourceReferenceVector {
     private:
         std::vector<T> elements;
-        ResourceReferenceVector(int sz) {
-            elements.resize(sz);
-        }
+        ResourceReferenceVector(int sz) : elements(sz) { }
 
     public:
         ResourceReferenceVector() { }
@@ -23,6 +21,10 @@ class ResourceReferenceVector {
 
         void add(ResourceReference<T> element) {
             elements.push_back(element);
+        }
+
+        void resize(int newSize) {
+            elements.resize(newSize);
         }
 
         T* data() {

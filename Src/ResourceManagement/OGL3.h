@@ -3,8 +3,6 @@
 
 #include <vector>
 
-#include <Exception/Exception.h>
-
 #include <ResourceManagement/ResourceManager.h>
 
 #include <GL/glew.h>

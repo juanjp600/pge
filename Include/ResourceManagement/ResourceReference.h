@@ -36,7 +36,6 @@ class ResourceReference {
         const T* operator&() const { __ASSERT(holdsResource, "Reference not filled"); return &internalResource; }
 
         bool isHoldingResource() const { return holdsResource; }
-        void invalidate() { holdsResource = false; }
 };
 
 }
