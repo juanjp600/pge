@@ -105,7 +105,7 @@ void GraphicsOGL3::setRenderTarget(Texture* renderTarget) {
     glDrawBuffers(1, glAttachments);
 }
 
-void GraphicsOGL3::setRenderTargets(std::vector<Texture*> renderTargets) {
+void GraphicsOGL3::setRenderTargets(const std::vector<Texture*>& renderTargets) {
     takeGlContext();
 
     TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
@@ -144,7 +144,7 @@ void GraphicsOGL3::resetRenderTarget() {
     glColorMask(true,true,true,true);
 }
 
-void GraphicsOGL3::setViewport(Rectanglei vp) {
+void GraphicsOGL3::setViewport(const Rectanglei& vp) {
     if (vp != viewport) {
         takeGlContext();
 

@@ -34,7 +34,7 @@ void Graphics::update() {
     }
 }
 
-Rectanglei Graphics::getViewport() const {
+const Rectanglei& Graphics::getViewport() const {
     return viewport;
 }
 
