@@ -26,7 +26,6 @@ class ResourceReference {
             return internalResource;
         }
 
-        // TODO: Implement.
         template <class = typename std::enable_if<!std::is_pointer<T>::value>::type>
         const T* operator->() const {
             __ASSERT(holdsResource, "Reference not filled");

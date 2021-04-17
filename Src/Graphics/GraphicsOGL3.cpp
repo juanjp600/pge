@@ -6,7 +6,7 @@
 
 using namespace PGE;
 
-GraphicsOGL3::GraphicsOGL3(String name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/), resourceManager(this, 2) {
+GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/), resourceManager(this, 2) {
 #if defined(__APPLE__) && defined(__OBJC__)
     // Figure out the de-scaled window size.
     NSRect rect = NSMakeRect(0, 0, w, h);

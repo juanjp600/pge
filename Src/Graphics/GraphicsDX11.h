@@ -14,7 +14,7 @@ namespace PGE {
 
 class GraphicsDX11 : public GraphicsInternal {
     public:
-        GraphicsDX11(String name,int w,int h,bool fs);
+        GraphicsDX11(const String& name,int w,int h,bool fs);
 
         void swap() override;
 

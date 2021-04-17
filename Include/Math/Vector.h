@@ -53,7 +53,7 @@ class Vector2f {
         Vector2f reflect(const Vector2f& n) const;
         float dotProduct(const Vector2f& b) const;
 
-        const String toString() const;
+        String toString() const;
 
         static Vector2f lerp(const Vector2f& oldValue, const Vector2f& newValue, float interpolation);
 
@@ -104,7 +104,7 @@ class Vector3f {
         float dotProduct(const Vector3f& b) const;
         Vector3f crossProduct(const Vector3f& b) const;
 
-        const String toString() const;
+        String toString() const;
 
         static Vector3f lerp(const Vector3f& oldValue, const Vector3f& newValue, float interpolation);
 

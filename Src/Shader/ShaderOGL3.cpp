@@ -140,7 +140,7 @@ void ShaderOGL3::unbindGLAttribs() {
     }
 }
 
-Shader::Constant* ShaderOGL3::getVertexShaderConstant(String name) {
+Shader::Constant* ShaderOGL3::getVertexShaderConstant(const String& name) {
     for (int i = 0; i < (int)vertexShaderConstants.size(); i++) {
         if (vertexShaderConstants[i].getName().equals(name)) {
             return &vertexShaderConstants[i];
@@ -149,7 +149,7 @@ Shader::Constant* ShaderOGL3::getVertexShaderConstant(String name) {
     return nullptr;
 }
 
-Shader::Constant* ShaderOGL3::getFragmentShaderConstant(String name) {
+Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
     for (int i = 0; i < (int)fragmentShaderConstants.size(); i++) {
         if (fragmentShaderConstants[i].getName().equals(name)) {
             return &fragmentShaderConstants[i];
@@ -158,20 +158,20 @@ Shader::Constant* ShaderOGL3::getFragmentShaderConstant(String name) {
     return nullptr;
 }
 
-void ShaderOGL3::extractShaderVars(const String& src, String varKind, std::vector<ShaderVar>& varList) {
+void ShaderOGL3::extractShaderVars(const String& src, const String& varKind, std::vector<ShaderVar>& varList) {
     String line = "";
-    varKind = String(varKind," ");
+    String varStr = varKind + " ";
     for (int i = 0; i < (int)src.length(); i++) {
         PGE::wchar chr = src.charAt(i);
         if (chr!='\r' && chr!='\n') {
             line = String(line,chr);
         } else {
-            if (line.substr(0, varKind.length()).equals(varKind)) {
+            if (line.substr(0, varStr.length()).equals(varStr)) {
                 bool readType = false;
                 ShaderVar var;
                 var.type = "";
                 var.name = "";
-                for (int j = varKind.length(); j < line.length(); j++) {
+                for (int j = varStr.length(); j < line.length(); j++) {
                     chr = line.charAt(j);
                     if (chr == ' ') {
                         if (readType && var.name.length() > 0) {
@@ -197,7 +197,7 @@ void ShaderOGL3::extractShaderVars(const String& src, String varKind, std::vecto
     }
 }
 
-ShaderOGL3::ConstantOGL3::ConstantOGL3(Graphics* gfx, String nm, int loc) {
+ShaderOGL3::ConstantOGL3::ConstantOGL3(Graphics* gfx, const String& nm, int loc) {
     graphics = gfx;
     name = nm;
     location = loc;

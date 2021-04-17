@@ -30,8 +30,8 @@ class Shader {
                 Constant() { };
                 virtual ~Constant() { };
         };
-        virtual Constant* getVertexShaderConstant(String constName) = 0;
-        virtual Constant* getFragmentShaderConstant(String constName) = 0;
+        virtual Constant* getVertexShaderConstant(const String& constName) = 0;
+        virtual Constant* getFragmentShaderConstant(const String& constName) = 0;
 
     protected:
         Shader(){};

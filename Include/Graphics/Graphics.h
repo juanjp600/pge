@@ -24,9 +24,9 @@ class Graphics {
             Default
         };
 
-        static Graphics* create(String name="PGE Application", int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default);
+        static Graphics* create(const String& name="PGE Application", int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default);
 
-        Graphics(String name, int w, int h, bool fs, uint32_t windowFlags);
+        Graphics(const String& name, int w, int h, bool fs, uint32_t windowFlags);
         virtual ~Graphics() { };
         
         virtual void update();
