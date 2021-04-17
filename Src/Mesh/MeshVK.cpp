@@ -24,9 +24,9 @@ void MeshVK::updateInternalData() {
 	vk::PhysicalDevice physicalDevice = graphics->getPhysicalDevice();
 	ShaderVK* shader = (ShaderVK*)material->getShader();
 
-	resourceManager.deleteResource(pipeline);
-	resourceManager.deleteResource(dataMemory);
-	resourceManager.deleteResource(dataBuffer);
+	resourceManager.deleteResourcefromReference(pipeline);
+	resourceManager.deleteResourcefromReference(dataMemory);
+	resourceManager.deleteResourcefromReference(dataBuffer);
 
 	totalVertexSize = shader->getVertexStride() * vertexCount;
 	indicesCount = primitiveCount * (primitiveType == Primitive::TYPE::TRIANGLE ? 3 : 2);

@@ -145,7 +145,7 @@ void GraphicsVK::endRender() {
 
     vk::PipelineStageFlags waitStages = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 
-    device->resetFences(inFlightFences[currentFrame]());
+    device->resetFences(inFlightFences[currentFrame]);
     vk::SubmitInfo submitInfo = vk::SubmitInfo(1, &imageAvailableSemaphores[currentFrame], &waitStages, 1, &comBuffers[backBufferIndex], 1, &renderFinishedSemaphores[currentFrame]);
     vk::Result result;
     result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
@@ -158,7 +158,7 @@ void GraphicsVK::endRender() {
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
     // Wait until the current frames in flight are less than the max.
-    result = device->waitForFences(inFlightFences[currentFrame](), false, UINT64_MAX);
+    result = device->waitForFences(inFlightFences[currentFrame], false, UINT64_MAX);
     __ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::fromInt((int)result) + ")");
 }
 
@@ -201,7 +201,7 @@ void GraphicsVK::transfer(const vk::Buffer& src, const vk::Buffer& dst, int size
 }
 
 void GraphicsVK::createSwapchain(bool vsync) {
-    resourceManager.deleteResource(swapchain);
+    resourceManager.deleteResourcefromReference(swapchain);
     swapchain = VKSwapchain::createRef(resourceManager, device, physicalDevice, surface, &swapchainExtent, width, height, swapchainFormat,
         graphicsQueueIndex, presentQueueIndex, transferQueueIndex, vsync);
 
@@ -217,7 +217,7 @@ void GraphicsVK::createSwapchain(bool vsync) {
 
     pipelineInfo.init(swapchainExtent, &scissor);
 
-    resourceManager.deleteResource(renderPass);
+    resourceManager.deleteResourcefromReference(renderPass);
     renderPass = VKRenderPass::createRef(resourceManager, device, swapchainFormat);
 
     framebuffers.resize(swapchainImageViews.size());
@@ -237,7 +237,7 @@ void GraphicsVK::createSwapchain(bool vsync) {
         __ASSERT(result == vk::Result::eSuccess, "Failed to allocate command buffers (VKERROR: " + String::fromInt((int)result) + ")");
     }
 
-    resourceManager.deleteResource(transferComPool);
+    resourceManager.deleteResourcefromReference(transferComPool);
     transferComPool = VKCommandPool::createRef(resourceManager, device, transferQueueIndex);
     // TODO: How many buffers should we have?
     vk::CommandBufferAllocateInfo transferComBufferInfo = vk::CommandBufferAllocateInfo(transferComPool, vk::CommandBufferLevel::ePrimary, 1);
