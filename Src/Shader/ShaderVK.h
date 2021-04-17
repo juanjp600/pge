@@ -20,7 +20,7 @@ namespace PGE {
             Constant* getFragmentShaderConstant(const String& name) override;
 
             int getVertexStride() const;
-            std::vector<String> getVertexInputNames() const;
+            const std::vector<String>& getVertexInputNames() const;
 
             vk::PipelineShaderStageCreateInfo* getShaderStageInfo();
             vk::PipelineVertexInputStateCreateInfo* getVertexInputInfo();

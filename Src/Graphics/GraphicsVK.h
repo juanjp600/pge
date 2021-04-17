@@ -22,10 +22,10 @@ class GraphicsVK : public GraphicsInternal {
         void transfer(const vk::Buffer& src, const vk::Buffer& dst, int size);
 
         void setRenderTarget(Texture* renderTarget) override;
-        void setRenderTargets(std::vector<Texture*> renderTargets) override;
+        void setRenderTargets(const std::vector<Texture*>& renderTargets) override;
         void resetRenderTarget() override;
 
-        void setViewport(Rectanglei vp) override;
+        void setViewport(const Rectanglei& vp) override;
 
         void setVsync(bool isEnabled) override;
 

@@ -139,7 +139,7 @@ int ShaderVK::getVertexStride() const {
     return vertexStride;
 }
 
-std::vector<String> ShaderVK::getVertexInputNames() const {
+const std::vector<String>& ShaderVK::getVertexInputNames() const {
     return vertexInputNames;
 }
 

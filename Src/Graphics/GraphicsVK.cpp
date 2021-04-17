@@ -22,7 +22,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, bool fs) : GraphicsInte
     surface = VKSurface::createRef(resourceManager, instance, sdlWindow);
 
     // The device extensions we need.
-    const std::vector<const char*> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+    std::vector<const char*> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 
     // Selecting a physical device and setting up queues.
     // Currently we just pick the one that supports what we need and has the most VRAM.
@@ -249,7 +249,7 @@ void GraphicsVK::setRenderTarget(Texture* renderTarget) {
 
 }
 
-void GraphicsVK::setRenderTargets(std::vector<Texture*> renderTargets) {
+void GraphicsVK::setRenderTargets(const std::vector<Texture*>& renderTargets) {
 
 }
 
@@ -257,7 +257,7 @@ void GraphicsVK::resetRenderTarget() {
 
 }
 
-void GraphicsVK::setViewport(Rectanglei vp) {
+void GraphicsVK::setViewport(const Rectanglei& vp) {
 
 }
 
