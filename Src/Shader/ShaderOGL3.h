@@ -34,11 +34,11 @@ class ShaderOGL3 : public Shader {
             public:
                 ConstantOGL3(Graphics* gfx, const String& nm, int loc);
 
-                void setValue(Matrix4x4f value) override;
-                void setValue(Vector2f value) override;
-                void setValue(Vector3f value) override;
-                void setValue(Vector4f value) override;
-                void setValue(Color value) override;
+                void setValue(const Matrix4x4f& value) override;
+                void setValue(const Vector2f& value) override;
+                void setValue(const Vector3f& value) override;
+                void setValue(const Vector4f& value) override;
+                void setValue(const Color& value) override;
                 void setValue(float value) override;
                 void setValue(int value) override;
 

@@ -11,8 +11,8 @@ class AABBox {
         AABBox(const Vector3f& inPoint);
         AABBox(const Vector3f& firstPoint, const Vector3f& secondPoint);
 
-        Vector3f getMin() const;
-        Vector3f getMax() const;
+        const Vector3f& getMin() const;
+        const Vector3f& getMax() const;
         Vector3f getCenter() const;
         Vector3f getDims() const;
 

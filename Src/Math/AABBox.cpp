@@ -12,11 +12,11 @@ AABBox::AABBox(const Vector3f& firstPoint,const Vector3f& secondPoint) {
     addPoint(secondPoint);
 }
 
-Vector3f AABBox::getMin() const {
+const Vector3f& AABBox::getMin() const {
     return min;
 }
 
-Vector3f AABBox::getMax() const {
+const Vector3f& AABBox::getMax() const {
     return max;
 }
 

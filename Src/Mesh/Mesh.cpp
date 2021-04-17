@@ -116,25 +116,25 @@ void Vertex::setUInt(const String& name,unsigned int val) {
     prop.type = PROPERTY_TYPE::UINT;
 }
 
-void Vertex::setVector2f(const String& name,Vector2f val) {
+void Vertex::setVector2f(const String& name, const Vector2f& val) {
     Property& prop = insertProperty(name.getHashCode());
     prop.value.vector2fVal = val;
     prop.type = PROPERTY_TYPE::VECTOR2F;
 }
 
-void Vertex::setVector3f(const String& name,Vector3f val) {
+void Vertex::setVector3f(const String& name, const Vector3f& val) {
     Property& prop = insertProperty(name.getHashCode());
     prop.value.vector3fVal = val;
     prop.type = PROPERTY_TYPE::VECTOR3F;
 }
 
-void Vertex::setVector4f(const String& name,Vector4f val) {
+void Vertex::setVector4f(const String& name, const Vector4f& val) {
     Property& prop = insertProperty(name.getHashCode());
     prop.value.vector4fVal = val;
     prop.type = PROPERTY_TYPE::VECTOR4F;
 }
 
-void Vertex::setColor(const String& name,Color val) {
+void Vertex::setColor(const String& name, const Color& val) {
     Property& prop = insertProperty(name.getHashCode());
     prop.value.colorVal = val;
     prop.type = PROPERTY_TYPE::COLOR;

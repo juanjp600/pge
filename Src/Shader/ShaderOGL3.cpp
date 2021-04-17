@@ -207,23 +207,23 @@ ShaderOGL3::ConstantOGL3::Value::Value() {
     matrixVal = Matrix4x4f();
 }
 
-void ShaderOGL3::ConstantOGL3::setValue(Matrix4x4f value) {
+void ShaderOGL3::ConstantOGL3::setValue(const Matrix4x4f& value) {
     val.matrixVal = value; valueType = VALUE_TYPE::MATRIX;
 }
 
-void ShaderOGL3::ConstantOGL3::setValue(Vector2f value) {
+void ShaderOGL3::ConstantOGL3::setValue(const Vector2f& value) {
     val.vector2fVal = value; valueType = VALUE_TYPE::VECTOR2F;
 }
 
-void ShaderOGL3::ConstantOGL3::setValue(Vector3f value) {
+void ShaderOGL3::ConstantOGL3::setValue(const Vector3f& value) {
     val.vector3fVal = value; valueType = VALUE_TYPE::VECTOR3F;
 }
 
-void ShaderOGL3::ConstantOGL3::setValue(Vector4f value) {
+void ShaderOGL3::ConstantOGL3::setValue(const Vector4f& value) {
     val.vector4fVal = value; valueType = VALUE_TYPE::VECTOR4F;
 }
 
-void ShaderOGL3::ConstantOGL3::setValue(Color value) {
+void ShaderOGL3::ConstantOGL3::setValue(const Color& value) {
     val.colorVal = value; valueType = VALUE_TYPE::COLOR;
 }
 

@@ -25,8 +25,8 @@ class IO {
         virtual Controller* getController(int index) const = 0;
         virtual bool isControllerValid(Controller* controller) const = 0;
 
-        virtual Vector2f getMousePosition() const = 0;
-        virtual void setMousePosition(Vector2f position) = 0;
+        virtual const Vector2f& getMousePosition() const = 0;
+        virtual void setMousePosition(const Vector2f& position) = 0;
         virtual void setMouseVisibility(bool visible) = 0;
         virtual Vector2i getMouseWheelDelta() = 0;
     
