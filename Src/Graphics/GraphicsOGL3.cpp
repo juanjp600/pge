@@ -26,7 +26,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : Graphics
     //        SDL_SetWindowPosition(sdlWindow,0,0);
     //    }
 
-    glContext = GLContext::createRef(resourceManager, sdlWindow());
+    glContext = resourceManager.addNewResource<GLContext>(sdlWindow());
 
     glewExperimental = true;
     __ASSERT(glewInit() == GL_NO_ERROR, "Failed to initialize GLEW (GLERROR: " + String::format(glGetError(), "%u") + ")");
@@ -48,7 +48,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : Graphics
 
     setViewport(Rectanglei(0,0,w,h));
 
-    glFramebuffer = GLFramebuffer::createRef(resourceManager);
+    glFramebuffer = resourceManager.addNewResource<GLFramebuffer>();
 
     SDL_GL_SetSwapInterval(1);
 }

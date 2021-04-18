@@ -17,16 +17,12 @@ class WindowEventSubscriber : public Resource<SysEvents::Subscriber*> {
     public:
         WindowEventSubscriber(Graphics* gfx);
         ~WindowEventSubscriber();
-
-        __RES_MNGMT__REF_FACT_METH(WindowEventSubscriber)
 };
 
 class SDLWindow : public Resource<SDL_Window*> {
     public:
         SDLWindow(const String& title, int width, int height, uint32_t flags);
         ~SDLWindow();
-
-        __RES_MNGMT__REF_FACT_METH(SDLWindow)
 };
 
 }

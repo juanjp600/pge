@@ -22,10 +22,10 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) : resourceManager(gfx, 3) {
     vertices.clear(); vertexCount = 0;
     primitives.clear(); primitiveCount = 0;
 
-    glVertexBufferObject = GLBuffer::createRef(resourceManager);
-    glIndexBufferObject = GLBuffer::createRef(resourceManager);
+    glVertexBufferObject = resourceManager.addNewResource<GLBuffer>();
+    glIndexBufferObject = resourceManager.addNewResource<GLBuffer>();
 
-    glVertexArrayObject = GLVertexArray::createRef(resourceManager);
+    glVertexArrayObject = resourceManager.addNewResource<GLVertexArray>();
 }
 
 void MeshOGL3::updateInternalData() {

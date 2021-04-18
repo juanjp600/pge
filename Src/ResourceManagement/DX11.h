@@ -23,8 +23,6 @@ class DXGIFactory1 : public DX11Resource<IDXGIFactory1*> {
             HRESULT hResult = CreateDXGIFactory1(__uuidof(IDXGIFactory1), (LPVOID*)(&resource));
             __ASSERT(!FAILED(hResult), "Failed to create DXGI factory (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(DXGIFactory1)
 };
 
 class D3D11Device : public DX11Resource<ID3D11Device*> {
@@ -39,8 +37,6 @@ class D3D11Device : public DX11Resource<ID3D11Device*> {
                 &resource, NULL, NULL);
             __ASSERT(!FAILED(hResult), "Failed to create D3D11 device (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11Device)
 };
 
 class D3D11ImmediateContext : public DX11Resource<ID3D11DeviceContext*> {
@@ -48,8 +44,6 @@ class D3D11ImmediateContext : public DX11Resource<ID3D11DeviceContext*> {
         D3D11ImmediateContext(ID3D11Device* device) {
             device->GetImmediateContext(&resource);
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11ImmediateContext)
 };
 
 class DXGISwapChain : public DX11Resource<IDXGISwapChain*> {
@@ -63,8 +57,6 @@ class DXGISwapChain : public DX11Resource<IDXGISwapChain*> {
             dxgiDevice->Release();
             __ASSERT(!FAILED(hResult), "Failed to create DXGI swapchain (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(DXGISwapChain)
 };
 
 class D3D11RenderTargetView : public DX11Resource<ID3D11RenderTargetView*> {
@@ -78,8 +70,6 @@ class D3D11RenderTargetView : public DX11Resource<ID3D11RenderTargetView*> {
             HRESULT hResult = device->CreateRenderTargetView(texture, nullptr, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create render target view (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11RenderTargetView)
 };
 
 class D3D11BackBufferRtv : public DX11Resource<ID3D11RenderTargetView*> {
@@ -92,8 +82,6 @@ class D3D11BackBufferRtv : public DX11Resource<ID3D11RenderTargetView*> {
             backBuffer->Release();
             __ASSERT(!FAILED(hResult), "Failed to create back buffer target view (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11BackBufferRtv)
 };
 
 class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
@@ -102,8 +90,6 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
             HRESULT hResult = device->CreateTexture2D(&textureDesc, NULL, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create texture (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11Texture2D)
 };
 
 class D3D11DepthStencilView : public DX11Resource<ID3D11DepthStencilView*> {
@@ -112,8 +98,6 @@ class D3D11DepthStencilView : public DX11Resource<ID3D11DepthStencilView*> {
             HRESULT hResult = device->CreateDepthStencilView(texture, &dsvDesc, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create main depth stencil view (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11DepthStencilView)
 };
 
 class D3D11ShaderResourceView : public DX11Resource<ID3D11ShaderResourceView*> {
@@ -122,8 +106,6 @@ class D3D11ShaderResourceView : public DX11Resource<ID3D11ShaderResourceView*> {
             HRESULT hResult = device->CreateShaderResourceView(texture, &srvDesc, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create shader resource view (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11ShaderResourceView)
 };
 
 class D3D11RasterizerState : public DX11Resource<ID3D11RasterizerState*> {
@@ -132,8 +114,6 @@ class D3D11RasterizerState : public DX11Resource<ID3D11RasterizerState*> {
             HRESULT hResult = device->CreateRasterizerState(&rasterizerDesc, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create rasterizer state (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11RasterizerState)
 };
 
 class D3D11BlendState : public DX11Resource<ID3D11BlendState*> {
@@ -142,8 +122,6 @@ class D3D11BlendState : public DX11Resource<ID3D11BlendState*> {
             HRESULT hResult = device->CreateBlendState(&blendDesc, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create blend state (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11BlendState)
 };
 
 class D3D11SamplerState : public DX11Resource<ID3D11SamplerState*> {
@@ -152,8 +130,6 @@ class D3D11SamplerState : public DX11Resource<ID3D11SamplerState*> {
             HRESULT hResult = device->CreateSamplerState(&samplerDesc, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create sampler state (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11SamplerState)
 };
 
 class D3D11DepthStencilState : public DX11Resource<ID3D11DepthStencilState*> {
@@ -162,8 +138,6 @@ class D3D11DepthStencilState : public DX11Resource<ID3D11DepthStencilState*> {
             HRESULT hResult = device->CreateDepthStencilState(&stencilDesc, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create depth stencil state (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11DepthStencilState)
 };
 
 class D3D11Buffer : public DX11Resource<ID3D11Buffer*> {
@@ -172,8 +146,6 @@ class D3D11Buffer : public DX11Resource<ID3D11Buffer*> {
             HRESULT hResult = device->CreateBuffer(&bufferDesc, &subresourceData, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create buffer (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11Buffer)
 };
 
 class D3D11VertexShader : public DX11Resource<ID3D11VertexShader*> {
@@ -182,8 +154,6 @@ class D3D11VertexShader : public DX11Resource<ID3D11VertexShader*> {
             HRESULT hResult = device->CreateVertexShader(bytecode.data(), sizeof(uint8_t) * bytecode.size(), NULL, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create vertex shader (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11VertexShader)
 };
 
 class D3D11PixelShader : public DX11Resource<ID3D11PixelShader*> {
@@ -192,8 +162,6 @@ class D3D11PixelShader : public DX11Resource<ID3D11PixelShader*> {
             HRESULT hResult = device->CreatePixelShader(bytecode.data(), sizeof(uint8_t) * bytecode.size(), NULL, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create fragment shader (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11PixelShader)
 };
 
 class D3D11InputLayout : public DX11Resource<ID3D11InputLayout*> {
@@ -202,8 +170,6 @@ class D3D11InputLayout : public DX11Resource<ID3D11InputLayout*> {
             HRESULT hResult = device->CreateInputLayout(vertexInputElemDesc.data(), (UINT)vertexInputElemDesc.size(), bytecode.data(), bytecode.size() * sizeof(uint8_t), &resource);
             __ASSERT(!FAILED(hResult), "Failed to create input layout (HRESULT: " + String::fromInt(hResult) + ")");
         }
-
-        __RES_MNGMT__REF_FACT_METH(D3D11InputLayout)
 };
 
 }

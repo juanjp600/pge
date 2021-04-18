@@ -44,7 +44,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
         }
     }
 
-    glTexture = GLTexture::createRef(resourceManager);
+    glTexture = resourceManager.addNewResource<GLTexture>();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,glTexture);
 
@@ -78,7 +78,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,int w,int h,bool renderTarget,const void*
         /*glGenFramebuffers(1,&glFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);*/
 
-        glDepthbuffer = GLDepthBuffer::createRef(resourceManager, w, h);
+        glDepthbuffer = resourceManager.addNewResource<GLDepthBuffer>(w, h);
         //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, glDepthbuffer);
     }
 
@@ -98,7 +98,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
 
     ((GraphicsOGL3*)graphics)->takeGlContext();
 
-    glTexture = GLTexture::createRef(resourceManager);
+    glTexture = resourceManager.addNewResource<GLTexture>();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,glTexture);
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,fiBuffer);
@@ -124,7 +124,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx,const FilePath& fn,ThreadManager* threadM
     filename = fn;
     name = fn.str();
 
-    glTexture = GLTexture::createRef(resourceManager);
+    glTexture = resourceManager.addNewResource<GLTexture>();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,glTexture);
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,realWidth,realHeight,0,GL_RGBA,GL_UNSIGNED_BYTE,nullptr);

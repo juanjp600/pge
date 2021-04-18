@@ -60,17 +60,17 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
     dxTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
     dxTextureDesc.CPUAccessFlags = 0;
 
-    dxTexture = D3D11Texture2D::createRef(resourceManager, dxDevice, dxTextureDesc);
+    dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, dxTextureDesc);
     if (buffer != nullptr) { dxContext->UpdateSubresource(dxTexture,0,NULL,buffer,realWidth*4,0); }
 
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     dxShaderResourceViewDesc.Format = dxFormat;
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     dxShaderResourceViewDesc.Texture2D.MipLevels = 1;
-    dxShaderResourceView = D3D11ShaderResourceView::createRef(resourceManager, dxDevice, dxTexture, dxShaderResourceViewDesc);
+    dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxShaderResourceViewDesc);
 
     if (isRT) {
-        dxRtv = D3D11RenderTargetView::createRef(resourceManager, dxDevice, dxTexture);
+        dxRtv = resourceManager.addNewResource<D3D11RenderTargetView>(dxDevice, dxTexture);
 
         // Create depth stencil texture
         D3D11_TEXTURE2D_DESC descDepth;
@@ -86,7 +86,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
         descDepth.CPUAccessFlags = 0;
         descDepth.MiscFlags = 0;
-        dxZBufferTexture = D3D11Texture2D::createRef(resourceManager, dxDevice, descDepth);
+        dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, descDepth);
 
         // Create the depth stencil view
         D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
@@ -94,7 +94,7 @@ TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void*
         descDSV.Format = descDepth.Format;
         descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
         descDSV.Texture2D.MipSlice = 0;
-        dxZBufferView = D3D11DepthStencilView::createRef(resourceManager, dxDevice, dxZBufferTexture, descDSV);
+        dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture, descDSV);
     }
 
     if (newBuffer!=nullptr) { delete[] newBuffer; }
@@ -129,7 +129,7 @@ TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
 
     HRESULT hResult = 0;
 
-    dxTexture = D3D11Texture2D::createRef(resourceManager, dxDevice, dxTextureDesc);
+    dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, dxTextureDesc);
     dxContext->UpdateSubresource(dxTexture,0,NULL,fiBuffer,realWidth*4,0);
 
     ZeroMemory( &dxShaderResourceViewDesc,sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
@@ -137,7 +137,7 @@ TextureDX11::TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw,
     dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     dxShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
     dxShaderResourceViewDesc.Texture2D.MipLevels = -1;
-    dxShaderResourceView = D3D11ShaderResourceView::createRef(resourceManager, dxDevice, dxTexture, dxShaderResourceViewDesc);
+    dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxShaderResourceViewDesc);
 
     dxContext->GenerateMips(dxShaderResourceView);
 

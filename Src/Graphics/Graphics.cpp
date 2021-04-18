@@ -11,9 +11,9 @@ Graphics::Graphics(const String& name, int w, int h, bool fs, uint32_t windowFla
     caption = name;
     width = w; height = h; fullscreen = fs;
 
-    eventSubscriber = WindowEventSubscriber::createRef(resourceManager, this);
+    eventSubscriber = resourceManager.addNewResource<WindowEventSubscriber>(this);
 
-    sdlWindow = SDLWindow::createRef(resourceManager, name, w, h, windowFlags);
+    sdlWindow = resourceManager.addNewResource<SDLWindow>(name, w, h, windowFlags);
 
     open = true;
     focused = true;
