@@ -38,6 +38,14 @@ class ResourceReferenceVector {
         void clear() {
             elements.clear();
         }
+
+        typename std::vector<T>::iterator begin() {
+            return elements.begin();
+        }
+
+        typename std::vector<T>::iterator end() {
+            return elements.end();
+        }
 };
 
 }

@@ -1,7 +1,7 @@
 #ifndef PGEINTERNAL_SHADER_DX11_H_INCLUDED
 #define PGEINTERNAL_SHADER_DX11_H_INCLUDED
 
-#include <vector>
+#include <map>
 
 #include <dxgi.h>
 #include <d3dcommon.h>
@@ -45,8 +45,7 @@ class ShaderDX11 : public Shader {
         typedef ResourceReference<CBufferInfo*> CBufferInfoRef;
         class ConstantDX11 : public Constant {
             public:
-                ConstantDX11(CBufferInfoRef cBuffer, const String& nm, int offst, int sz);
-                ~ConstantDX11(){};
+                ConstantDX11(CBufferInfoRef cBuffer, int offst, int sz);
 
                 void setValue(const Matrix4x4f& value) override;
                 void setValue(const Vector2f& value) override;
@@ -56,11 +55,8 @@ class ShaderDX11 : public Shader {
                 void setValue(float value) override;
                 void setValue(int value) override;
 
-                const String& getName() const;
-
             private:
                 CBufferInfoRef constantBuffer;
-                String name;
                 int offset;
                 int size;
         };
@@ -71,8 +67,8 @@ class ShaderDX11 : public Shader {
                 ~CBufferInfo();
 
                 uint8_t* getData();
-                std::vector<ConstantDX11>& getConstants();
-                void addConstant(ConstantDX11 constant);
+                std::map<long long, ConstantDX11>* getConstants();
+                void addConstant(const String& name, const ConstantDX11& constant);
                 bool isDirty() const;
                 void markAsDirty();
                 void update();
@@ -82,7 +78,7 @@ class ShaderDX11 : public Shader {
                 String name;
                 uint8_t* data;
                 int size;
-                std::vector<ConstantDX11> constants;
+                std::map<long long, ConstantDX11> constants;
                 D3D11ImmediateContext::Ref dxContext;
                 D3D11Buffer::Ref dxCBuffer;
                 bool dirty;
