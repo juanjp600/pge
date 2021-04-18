@@ -59,8 +59,6 @@ class VKInstance : public Resource<vk::Instance> {
         ~VKInstance() {
             resource.destroy();
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKInstance)
 };
 
 class VKDevice : public Resource<vk::Device> {
@@ -79,8 +77,6 @@ class VKDevice : public Resource<vk::Device> {
         ~VKDevice() {
             resource.destroy();
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKDevice)
 };
 
 class VKSurface : public Resource<vk::SurfaceKHR> {
@@ -100,8 +96,6 @@ class VKSurface : public Resource<vk::SurfaceKHR> {
         ~VKSurface() {
             instance.destroySurfaceKHR(resource);
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKSurface)
 };
 
 class VKSemaphore : public VKDestroyResource<vk::Semaphore> {
@@ -109,8 +103,6 @@ class VKSemaphore : public VKDestroyResource<vk::Semaphore> {
         VKSemaphore(vk::Device dev) : VKDestroyResource(dev) {
             resource = dev.createSemaphore(vk::SemaphoreCreateInfo({}));
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKSemaphore)
 };
 
 class VKFence : public VKDestroyResource<vk::Fence> {
@@ -118,8 +110,6 @@ class VKFence : public VKDestroyResource<vk::Fence> {
         VKFence(vk::Device dev, bool signaled = false) : VKDestroyResource(dev) {
             resource = dev.createFence(vk::FenceCreateInfo(signaled ? vk::FenceCreateFlagBits::eSignaled : (vk::FenceCreateFlags)0));
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKFence)
 };
 
 class VKCommandPool : public VKDestroyResource<vk::CommandPool> {
@@ -127,8 +117,6 @@ class VKCommandPool : public VKDestroyResource<vk::CommandPool> {
         VKCommandPool(vk::Device dev, int queueIndex) : VKDestroyResource(dev) {
             resource = dev.createCommandPool(vk::CommandPoolCreateInfo({}, queueIndex));
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKCommandPool)
 };
 
 class VKImageView : public VKDestroyResource<vk::ImageView> {
@@ -138,8 +126,6 @@ class VKImageView : public VKDestroyResource<vk::ImageView> {
             ivci.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
             resource = dev.createImageView(ivci);
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKImageView)
 };
 
 class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
@@ -151,8 +137,6 @@ class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
             vk::SubpassDependency dependency = vk::SubpassDependency(VK_SUBPASS_EXTERNAL, 0, vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput, {}, vk::AccessFlagBits::eColorAttachmentWrite);
             resource = dev.createRenderPass(vk::RenderPassCreateInfo({}, 1, &colorAttachment, 1, &subpass, 1, &dependency));
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKRenderPass)
 };
 
 class VKFramebuffer : public VKDestroyResource<vk::Framebuffer> {
@@ -160,8 +144,6 @@ class VKFramebuffer : public VKDestroyResource<vk::Framebuffer> {
         VKFramebuffer(vk::Device dev, vk::RenderPass renderPass, vk::ImageView swapchainImageView, vk::Extent2D swapchainExtent) : VKDestroyResource(dev) {
             resource = dev.createFramebuffer(vk::FramebufferCreateInfo({}, renderPass, 1, &swapchainImageView, swapchainExtent.width, swapchainExtent.height, 1));
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKFramebuffer)
 };
 
 class VKSwapchain : public VKDestroyResource<vk::SwapchainKHR> {
@@ -195,8 +177,6 @@ class VKSwapchain : public VKDestroyResource<vk::SwapchainKHR> {
             }
             resource = dev.createSwapchainKHR(sci);
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKSwapchain)
 };
 
 class VKBuffer : public VKDestroyResource<vk::Buffer> {
@@ -205,8 +185,6 @@ class VKBuffer : public VKDestroyResource<vk::Buffer> {
             vk::BufferCreateInfo bufferInfo = vk::BufferCreateInfo({}, size, bufferUsage, vk::SharingMode::eExclusive);
             resource = device.createBuffer(bufferInfo);
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKBuffer)
 };
 
 class VKMemory : public VKFreeResource<vk::DeviceMemory> {
@@ -231,8 +209,6 @@ class VKMemory : public VKFreeResource<vk::DeviceMemory> {
 
             device.bindBufferMemory(buffer, resource, 0);
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKMemory)
 };
 
 class VKPipelineInfo {
@@ -307,8 +283,6 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
             __ASSERT(creation.result == vk::Result::eSuccess, "Failed to create graphics pipeline (VKERROR: " + String::fromInt((int)creation.result) + ")");
             resource = creation.value;
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKPipeline)
 };
 
 class VKPipelineLayout : public VKDestroyResource<vk::PipelineLayout> {
@@ -317,8 +291,6 @@ class VKPipelineLayout : public VKDestroyResource<vk::PipelineLayout> {
             vk::PipelineLayoutCreateInfo layoutInfo({}, 0, nullptr, (uint32_t)ranges.size(), ranges.data());
             resource = device.createPipelineLayout(layoutInfo);
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKPipelineLayout)
 };
 
 class VKShader : public VKDestroyResource<vk::ShaderModule> {
@@ -327,8 +299,6 @@ class VKShader : public VKDestroyResource<vk::ShaderModule> {
             vk::ShaderModuleCreateInfo shaderCreateInfo = vk::ShaderModuleCreateInfo({}, shaderBinary.size(), (uint32_t*)shaderBinary.data());
             resource = device.createShaderModule(shaderCreateInfo);
         }
-
-        __RES_MNGMT__REF_FACT_METH(VKShader)
 };
 
 }

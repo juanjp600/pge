@@ -399,7 +399,7 @@
       <Filter>Src\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\VK.h">
-      <Filter>Include\ResourceManagement</Filter>
+      <Filter>Src\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Misc\Info.h">
       <Filter>Include\Misc</Filter>

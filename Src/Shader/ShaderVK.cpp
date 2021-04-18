@@ -15,7 +15,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
 
     // Shader.
     std::vector<uint8_t> shaderBinary; FileUtil::readBytes(path + "shader.spv", shaderBinary);
-    vkShader = VKShader::createRef(resourceManager, device, shaderBinary);
+    vkShader = resourceManager.addNewResource<VKShader>(device, shaderBinary);
 
     // Reflect.
     SpvReflectShaderModule reflection; SpvReflectResult res = spvReflectCreateShaderModule(shaderBinary.size(), shaderBinary.data(), &reflection);
@@ -64,7 +64,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
         if (!fragmentConstantMap.empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eFragment }, fragmentOffset, pushConstant.padded_size - fragmentOffset)); }
     }
 
-    layout = VKPipelineLayout::createRef(resourceManager, device, ranges);
+    layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges);
     
     spvReflectDestroyShaderModule(&reflection);
 

@@ -102,11 +102,11 @@ void MeshVK::updateInternalData() {
 	device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, VK_WHOLE_SIZE));
 	device.unmapMemory(stagingMemory);
 
-	dataBuffer = VKBuffer::createRef(resourceManager, device, finalTotalSize, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer);
-	dataMemory = VKMemory::createRef(resourceManager, device, physicalDevice, dataBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal);
+	dataBuffer = resourceManager.addNewResource<VKBuffer>(device, finalTotalSize, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer);
+	dataMemory = resourceManager.addNewResource<VKMemory>(device, physicalDevice, dataBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal);
 	graphics->transfer(stagingBuffer, dataBuffer, finalTotalSize);
 
-	pipeline = VKPipeline::createRef(resourceManager, device, shader->getShaderStageInfo(), shader->getVertexInputInfo(), shader->getLayout(), graphics->getPipelineInfo(), graphics->getRenderPass(), primitiveType);
+	pipeline = resourceManager.addNewResource<VKPipeline>(device, shader->getShaderStageInfo(), shader->getVertexInputInfo(), shader->getLayout(), graphics->getPipelineInfo(), graphics->getRenderPass(), primitiveType);
 
 	mustUpdateInternalData = false;
 }

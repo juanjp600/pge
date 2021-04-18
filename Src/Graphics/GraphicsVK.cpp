@@ -17,9 +17,9 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, bool fs) : GraphicsInte
     layers.push_back("VK_LAYER_KHRONOS_validation");
 #endif
 
-    instance = VKInstance::createRef(resourceManager, sdlWindow, name, layers);
+    instance = resourceManager.addNewResource<VKInstance>(sdlWindow, name, layers);
 
-    surface = VKSurface::createRef(resourceManager, instance, sdlWindow);
+    surface = resourceManager.addNewResource<VKSurface>(instance, sdlWindow);
 
     // The device extensions we need.
     std::vector<const char*> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
@@ -100,7 +100,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, bool fs) : GraphicsInte
     }
     __ASSERT(foundCompatibleDevice, "No Vulkan compatible GPU found");
 
-    device = VKDevice::createRef(resourceManager, physicalDevice, std::set { graphicsQueueIndex, presentQueueIndex, transferQueueIndex }, layers, deviceExtensions);
+    device = resourceManager.addNewResource<VKDevice>(physicalDevice, std::set { graphicsQueueIndex, presentQueueIndex, transferQueueIndex }, layers, deviceExtensions);
 
     graphicsQueue = device->getQueue(graphicsQueueIndex, 0);
     presentQueue = device->getQueue(presentQueueIndex, 0);
@@ -122,9 +122,9 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, bool fs) : GraphicsInte
     renderFinishedSemaphores = ResourceReferenceVector<vk::Semaphore>::withSize(MAX_FRAMES_IN_FLIGHT);
     inFlightFences = ResourceReferenceVector<vk::Fence>::withSize(MAX_FRAMES_IN_FLIGHT);
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        imageAvailableSemaphores[i] = VKSemaphore::createRef(resourceManager, device);
-        renderFinishedSemaphores[i] = VKSemaphore::createRef(resourceManager, device);
-        inFlightFences[i] = VKFence::createRef(resourceManager, device, i != 0);
+        imageAvailableSemaphores[i] = resourceManager.addNewResource<VKSemaphore>(device);
+        renderFinishedSemaphores[i] = resourceManager.addNewResource<VKSemaphore>(device);
+        inFlightFences[i] = resourceManager.addNewResource<VKFence>(device, i != 0);
     }
     imagesInFlight.resize(MAX_FRAMES_IN_FLIGHT);
     acquireNextImage();
@@ -202,7 +202,7 @@ void GraphicsVK::transfer(const vk::Buffer& src, const vk::Buffer& dst, int size
 
 void GraphicsVK::createSwapchain(bool vsync) {
     resourceManager.deleteResourcefromReference(swapchain);
-    swapchain = VKSwapchain::createRef(resourceManager, device, physicalDevice, surface, &swapchainExtent, width, height, swapchainFormat,
+    swapchain = resourceManager.addNewResource<VKSwapchain>(device, physicalDevice, surface, &swapchainExtent, width, height, swapchainFormat,
         graphicsQueueIndex, presentQueueIndex, transferQueueIndex, vsync);
 
     // Creating image views for our swapchain images to ultimately write to.
@@ -210,7 +210,7 @@ void GraphicsVK::createSwapchain(bool vsync) {
     swapchainImageViews.resize((int)swapchainImages.size());
     for (int i = 0; i < (int)swapchainImages.size(); i++) {
         resourceManager.deleteResource(swapchainImageViews[i]);
-        swapchainImageViews[i] = VKImageView::createRef(resourceManager, device, swapchainImages[i], swapchainFormat);
+        swapchainImageViews[i] = resourceManager.addNewResource<VKImageView>(device, swapchainImages[i], swapchainFormat);
     }
     
     scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
@@ -218,12 +218,12 @@ void GraphicsVK::createSwapchain(bool vsync) {
     pipelineInfo.init(swapchainExtent, &scissor);
 
     resourceManager.deleteResourcefromReference(renderPass);
-    renderPass = VKRenderPass::createRef(resourceManager, device, swapchainFormat);
+    renderPass = resourceManager.addNewResource<VKRenderPass>(device, swapchainFormat);
 
     framebuffers.resize(swapchainImageViews.size());
     for (int i = 0; i < (int)swapchainImageViews.size(); i++) {
         resourceManager.deleteResource(framebuffers[i]);
-        framebuffers[i] = VKFramebuffer::createRef(resourceManager, device, renderPass, swapchainImageViews[i], swapchainExtent);
+        framebuffers[i] = resourceManager.addNewResource<VKFramebuffer>(device, renderPass, swapchainImageViews[i], swapchainExtent);
     }
 
     comPools.resize(framebuffers.size());
@@ -231,14 +231,14 @@ void GraphicsVK::createSwapchain(bool vsync) {
     vk::Result result;
     for (int i = 0; i < (int)framebuffers.size(); i++) {
         resourceManager.deleteResource(comPools[i]);
-        comPools[i] = VKCommandPool::createRef(resourceManager, device, graphicsQueueIndex);
+        comPools[i] = resourceManager.addNewResource<VKCommandPool>(device, graphicsQueueIndex);
         vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPools[i], vk::CommandBufferLevel::ePrimary, 1);
         result = device->allocateCommandBuffers(&comBufAllInfo, &comBuffers[i]);
         __ASSERT(result == vk::Result::eSuccess, "Failed to allocate command buffers (VKERROR: " + String::fromInt((int)result) + ")");
     }
 
     resourceManager.deleteResourcefromReference(transferComPool);
-    transferComPool = VKCommandPool::createRef(resourceManager, device, transferQueueIndex);
+    transferComPool = resourceManager.addNewResource<VKCommandPool>(device, transferQueueIndex);
     // TODO: How many buffers should we have?
     vk::CommandBufferAllocateInfo transferComBufferInfo = vk::CommandBufferAllocateInfo(transferComPool, vk::CommandBufferLevel::ePrimary, 1);
     result = device->allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer);
