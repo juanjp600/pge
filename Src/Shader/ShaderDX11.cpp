@@ -114,30 +114,28 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefe
             }
             int varOffset = 0; reflectionInfo.read((char*)(void*)&varOffset, 1);
             int varSize = 0; reflectionInfo.read((char*)(void*)&varSize, 1);
-            constantBuffer->addConstant(ConstantDX11(constantBuffer,varName,varOffset,varSize));
+            constantBuffer->addConstant(varName, ConstantDX11(constantBuffer,varOffset,varSize));
         }
     }
 }
 
 Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
-    for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
-        std::vector<ConstantDX11>& vars = vertexConstantBuffers[i]->getConstants(); 
-        for (int j = 0; j < (int)vars.size(); j++) {
-            if (name.equals(vars[j].getName())) {
-                return &vars[j];
-            }
+    for (auto cBuffer : vertexConstantBuffers) {
+        auto map = cBuffer->getConstants();
+        auto it = map->find(name.getHashCode());
+        if (it != map->end()) {
+            return &it->second;
         }
     }
     return nullptr;
 }
 
 Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
-    for (int i = 0; i < (int)fragmentConstantBuffers.size(); i++) {
-        std::vector<ConstantDX11>& vars = fragmentConstantBuffers[i]->getConstants(); 
-        for (int j = 0; j < (int)vars.size(); j++) {
-            if (name.equals(vars[j].getName())) {
-                return &vars[j];
-            }
+    for (auto cBuffer : fragmentConstantBuffers) {
+        auto map = cBuffer->getConstants();
+        auto it = map->find(name.getHashCode());
+        if (it != map->end()) {
+            return &it->second;
         }
     }
     return nullptr;
@@ -228,12 +226,12 @@ uint8_t* ShaderDX11::CBufferInfo::getData() {
     return data;
 }
 
-std::vector<ShaderDX11::ConstantDX11>& ShaderDX11::CBufferInfo::getConstants() {
-    return constants;
+std::map<long long, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
+    return &constants;
 }
 
-void ShaderDX11::CBufferInfo::addConstant(ShaderDX11::ConstantDX11 constant) {
-    constants.push_back(constant);
+void ShaderDX11::CBufferInfo::addConstant(const String& name, const ShaderDX11::ConstantDX11& constant) {
+    constants.emplace(name.getHashCode(), constant);
 }
 
 bool ShaderDX11::CBufferInfo::isDirty() const {
@@ -254,9 +252,8 @@ D3D11Buffer::Ref ShaderDX11::CBufferInfo::getDxCBuffer() {
     return dxCBuffer;
 }
 
-ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoRef cBuffer, const String& nm, int offst, int sz) {
+ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoRef cBuffer, int offst, int sz) {
     constantBuffer = cBuffer;
-    name = nm;
     offset = offst;
     size = sz;
 }
@@ -303,9 +300,5 @@ void ShaderDX11::ConstantDX11::setValue(int value) {
     uint32_t valUi32 = value;
     memcpy(constantBuffer->getData()+offset,&valUi32,sizeof(uint32_t));
     constantBuffer->markAsDirty();
-}
-
-const String& ShaderDX11::ConstantDX11::getName() const {
-    return name;
 }
 
