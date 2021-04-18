@@ -6,13 +6,6 @@
 #include <Misc/String.h>
 #include <Math/Matrix.h>
 
-#include <GL/glew.h>
-#ifndef __APPLE__
-#include <GL/gl.h>
-#else
-#include <OpenGL/GL.h>
-#endif
-
 #include "../ResourceManagement/OGL3.h"
 #include "../ResourceManagement/ResourceManagerOGL3.h"
 
