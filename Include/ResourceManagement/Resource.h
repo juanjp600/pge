@@ -5,17 +5,6 @@
 
 #include "ResourceReference.h"
 
-#define __RES_MNGMT__REF_FACT_METH(Res) \
-typedef ResourceReference<decltype(resource)> Ref; \
-\
-template <class... Args> \
-static Ref createRef(ResourceManager& resMngr, Args... args) { \
-    static_assert(std::is_base_of<ResourceBase, Res>::value); \
-    Res* res = new Res(args...); \
-    resMngr.addResource(res); \
-    return Ref(*res); \
-}
-
 namespace PGE {
 
 class ResourceBase {
@@ -29,6 +18,8 @@ class Resource : public ResourceBase {
     protected:
         T resource;
     public:
+        typedef ResourceReference<T> Ref;
+
         Resource() { }
         Resource(const Resource<T>& other) = delete;
         Resource<T>& operator=(const Resource<T>& other) = delete;

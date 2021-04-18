@@ -21,8 +21,6 @@ class GLContext : public Resource<SDL_GLContext> {
         ~GLContext() {
             SDL_GL_DeleteContext(resource);
         }
-
-        __RES_MNGMT__REF_FACT_METH(GLContext)
 };
 
 class GLFramebuffer : public Resource<GLuint> {
@@ -37,8 +35,6 @@ class GLFramebuffer : public Resource<GLuint> {
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glDeleteFramebuffers(1, &resource);
         }
-
-        __RES_MNGMT__REF_FACT_METH(GLFramebuffer)
 };
 
 class GLBuffer : public Resource<GLuint> {
@@ -50,8 +46,6 @@ class GLBuffer : public Resource<GLuint> {
         ~GLBuffer() {
             glDeleteBuffers(1, &resource);
         }
-
-        __RES_MNGMT__REF_FACT_METH(GLBuffer)
 };
 
 class GLVertexArray : public Resource<GLuint> {
@@ -63,8 +57,6 @@ class GLVertexArray : public Resource<GLuint> {
         ~GLVertexArray() {
             glDeleteVertexArrays(1, &resource);
         }
-
-        __RES_MNGMT__REF_FACT_METH(GLVertexArray)
 };
 
 class GLTexture : public Resource<GLuint> {
@@ -76,8 +68,6 @@ class GLTexture : public Resource<GLuint> {
         ~GLTexture() {
             glDeleteTextures(1, &resource);
         }
-
-        __RES_MNGMT__REF_FACT_METH(GLTexture)
 };
 
 class GLDepthBuffer : public Resource<GLuint> {
@@ -92,8 +82,6 @@ class GLDepthBuffer : public Resource<GLuint> {
         ~GLDepthBuffer() {
             glDeleteRenderbuffers(1, &resource);
         }
-
-        __RES_MNGMT__REF_FACT_METH(GLDepthBuffer)
 };
 
 class GLShader : public Resource<GLuint> {
@@ -115,8 +103,6 @@ class GLShader : public Resource<GLuint> {
         ~GLShader() {
             glDeleteShader(resource);
         }
-
-        __RES_MNGMT__REF_FACT_METH(GLShader)
 };
 
 class GLProgram : public Resource<GLuint> {
@@ -135,8 +121,6 @@ class GLProgram : public Resource<GLuint> {
         ~GLProgram() {
             glDeleteProgram(resource);
         }
-
-        __RES_MNGMT__REF_FACT_METH(GLProgram)
 };
 
 }

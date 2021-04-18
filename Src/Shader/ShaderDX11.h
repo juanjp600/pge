@@ -87,8 +87,6 @@ class ShaderDX11 : public Shader {
         class CBufferInfoOwner : public Resource<CBufferInfo*> {
             public:
                 CBufferInfoOwner(Graphics* gfx, const String& nm, int sz, ResourceManager* rm);
-
-                __RES_MNGMT__REF_FACT_METH(CBufferInfoOwner)
         };
 
         ResourceReferenceVector<CBufferInfo*> vertexConstantBuffers;

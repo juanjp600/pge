@@ -73,7 +73,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     dxSamplerState = ResourceReferenceVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < samplerCount; i++) {
-        dxSamplerState[i] = D3D11SamplerState::createRef(resourceManager, dxDevice, samplerDesc);
+        dxSamplerState[i] = resourceManager.addNewResource<D3D11SamplerState>(dxDevice, samplerDesc);
     }
 
     reflectionInfo.close();
@@ -84,9 +84,9 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     FileUtil::readBytes(path + "fragment.dxbc", fragmentShaderBytecode);
     __ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: "+path.str()+")");
 
-    dxVertexShader = D3D11VertexShader::createRef(resourceManager, dxDevice, vertexShaderBytecode);
-    dxFragmentShader = D3D11PixelShader::createRef(resourceManager, dxDevice, fragmentShaderBytecode);
-    dxVertexInputLayout = D3D11InputLayout::createRef(resourceManager, dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
+    dxVertexShader = resourceManager.addNewResource<D3D11VertexShader>(dxDevice, vertexShaderBytecode);
+    dxFragmentShader = resourceManager.addNewResource<D3D11PixelShader>(dxDevice, fragmentShaderBytecode);
+    dxVertexInputLayout = resourceManager.addNewResource<D3D11InputLayout>(dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
 }
 
 void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceReferenceVector<CBufferInfo*>& constantBuffers) {
@@ -101,7 +101,7 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefe
         }
         int cBufferSize = 0; reflectionInfo.read((char*)(void*)&cBufferSize, 1);
         
-        CBufferInfoRef constantBuffer = CBufferInfoOwner::createRef(resourceManager, graphics, cBufferName, cBufferSize, &resourceManager);
+        CBufferInfoRef constantBuffer = resourceManager.addNewResource<CBufferInfoOwner>(graphics, cBufferName, cBufferSize, &resourceManager);
         constantBuffers.add(constantBuffer);
 
         int varCount = 0; reflectionInfo.read((char*)(void*)&varCount, 1);
@@ -211,7 +211,7 @@ ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, const String& nm, int s
 
     HRESULT hResult = 0;
 
-    dxCBuffer = D3D11Buffer::createRef(*resourceManager, ((GraphicsDX11*)graphics)->getDxDevice(), cBufferDesc, cBufferSubresourceData);
+    dxCBuffer = resourceManager->addNewResource<D3D11Buffer>(((GraphicsDX11*)graphics)->getDxDevice(), cBufferDesc, cBufferSubresourceData);
 
     dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
