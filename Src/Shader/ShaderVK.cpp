@@ -52,12 +52,12 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
         for (int j = 0; j < (int)pushConstant.member_count; j++) {
             String name = pushConstant.members[j].name;
             if (name.substr(0, 4) == "vert") {
-                vertexConstantMap.emplace(name.substr(5).getHashCode(), std::make_unique<PGE::ShaderVK::ConstantVK>(graphics, this, vk::ShaderStageFlagBits::eVertex, pushConstant.members[j].absolute_offset));
+                vertexConstantMap.emplace(name.substr(5).getHashCode(), ConstantVK(graphics, this, vk::ShaderStageFlagBits::eVertex, pushConstant.members[j].absolute_offset));
             } else {
                 if (fragmentConstantMap.size() == 0) {
                     fragmentOffset = pushConstant.members[j].absolute_offset;
                 }
-                fragmentConstantMap.emplace(name.substr(5).getHashCode(), std::make_unique<PGE::ShaderVK::ConstantVK>(graphics, this, vk::ShaderStageFlagBits::eFragment, pushConstant.members[j].absolute_offset));
+                fragmentConstantMap.emplace(name.substr(5).getHashCode(), ConstantVK(graphics, this, vk::ShaderStageFlagBits::eFragment, pushConstant.members[j].absolute_offset));
             }
         }
         if (!vertexConstantMap.empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eVertex }, 0, fragmentOffset)); }
@@ -83,7 +83,7 @@ Shader::Constant* ShaderVK::getVertexShaderConstant(const String& name) {
     if (it == vertexConstantMap.end()) {
         return nullptr;
     } else {
-        return it->second.get();
+        return &it->second;
     }
 }
 
@@ -92,7 +92,7 @@ Shader::Constant* ShaderVK::getFragmentShaderConstant(const String& name) {
     if (it == fragmentConstantMap.end()) {
         return nullptr;
     } else {
-        return it->second.get();
+        return &it->second;
     }
 }
 

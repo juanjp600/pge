@@ -60,8 +60,8 @@ namespace PGE {
                     vk::ShaderStageFlags stage;
                     int offset;
             };
-            std::map<long long, std::unique_ptr<ConstantVK>> vertexConstantMap;
-            std::map<long long, std::unique_ptr<ConstantVK>> fragmentConstantMap;
+            std::map<long long, ConstantVK> vertexConstantMap;
+            std::map<long long, ConstantVK> fragmentConstantMap;
 
             ResourceManagerVK resourceManager;
     };

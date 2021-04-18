@@ -281,18 +281,18 @@ vk::PhysicalDevice GraphicsVK::getPhysicalDevice() const {
     return physicalDevice;
 }
 
-// I fucking hate this, but C++ is stupid.
-// When you want to pass something by reference the copy constructor must be available, even though it shouldn't be used!
-const VKPipelineInfo* GraphicsVK::getPipelineInfo() const {
-    return &pipelineInfo;
-}
-
 vk::RenderPass GraphicsVK::getRenderPass() const {
     return renderPass;
 }
 
 vk::CommandBuffer GraphicsVK::getCurrentCommandBuffer() const {
     return comBuffers[backBufferIndex];
+}
+
+// I fucking hate this, but C++ is stupid.
+// When you want to pass something by reference the copy constructor must be available, even though it shouldn't be used!
+const VKPipelineInfo* GraphicsVK::getPipelineInfo() const {
+    return &pipelineInfo;
 }
 
 __GFX_OBJ_DEF(VK)

@@ -290,6 +290,7 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
         static constexpr vk::PipelineInputAssemblyStateCreateInfo inputAssemblyTris = vk::PipelineInputAssemblyStateCreateInfo({}, vk::PrimitiveTopology::eTriangleList, false);
 
     public:
+        // Sadly we can't make this any more straightforward, because we're in a header and including either shader or graphics would lead to circular inclusion.
         VKPipeline(vk::Device device, const vk::PipelineShaderStageCreateInfo* shaderInfo, const vk::PipelineVertexInputStateCreateInfo* vertexInfo, vk::PipelineLayout layout, const VKPipelineInfo* info, vk::RenderPass renderPass, Primitive::TYPE primitive) : VKDestroyResource(device) {
             const vk::PipelineInputAssemblyStateCreateInfo* inputInfo;
             switch (primitive) {
