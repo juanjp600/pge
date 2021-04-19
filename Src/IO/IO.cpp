@@ -103,8 +103,7 @@ void ControllerInternal::setName(const String& inName) {
 
 void IOInternal::update() {
     textInput = "";
-    for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
-        UserInput* input = (*it);
+    for (UserInput* input : inputs) {
         input->setHit(false);
 
         if (input->getDevice() == UserInput::DEVICE::MOUSE) {
@@ -116,8 +115,7 @@ void IOInternal::update() {
     SDL_Event event;
     while (((SysEventsInternal::SubscriberInternal*)keyboardSubscriber)->popEvent(event)) {
         SDL_KeyboardEvent keyEvent = event.key;
-        for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
-            UserInput* input = (*it);
+        for (UserInput* input : inputs) {
             if (input->getDevice()==UserInput::DEVICE::KEYBOARD) {
                 KeyboardInput* keyboardInput = (KeyboardInput*)input;
                 if ((int)keyEvent.keysym.sym==(int)keyboardInput->getButton()) {
@@ -156,8 +154,7 @@ void IOInternal::update() {
             }
         } else if (event.type==SDL_MOUSEBUTTONDOWN || event.type==SDL_MOUSEBUTTONUP) {
             SDL_MouseButtonEvent mouseButtonEvent = event.button;
-            for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
-                UserInput* input = (*it);
+            for (UserInput* input : inputs) {
                 if (input->getDevice()==UserInput::DEVICE::MOUSE) {
                     MouseInput* mouseInput = (MouseInput*)input;
                     MouseInput::BUTTON button;
@@ -214,8 +211,7 @@ void IOInternal::update() {
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(deviceEvent.which);
             for (int i = 0; i < (int)openControllers.size(); i++) {
                 if (openControllers[i]->getSdlController() == sdlController) {
-                    for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
-                        UserInput* input = (*it);
+                    for (UserInput* input : inputs) {
                         if (input->getDevice()==UserInput::DEVICE::CONTROLLER) {
                             ControllerInput* controllerInput = (ControllerInput*)input;
                             if (controllerInput->getController() == openControllers[i]) {
@@ -231,8 +227,7 @@ void IOInternal::update() {
         } else if (event.type == SDL_CONTROLLERAXISMOTION) {
             SDL_ControllerAxisEvent axisEvent = event.caxis;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(axisEvent.which);
-            for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
-                UserInput* input = (*it);
+            for (UserInput* input : inputs) {
                 if (input->getDevice()==UserInput::DEVICE::CONTROLLER) {
                     ControllerInput* controllerInput = (ControllerInput*)input;
                     if (controllerInput->getController() == nullptr) { continue; }
@@ -282,8 +277,7 @@ void IOInternal::update() {
         } else if (event.type == SDL_CONTROLLERBUTTONDOWN || event.type == SDL_CONTROLLERBUTTONUP) {
             SDL_ControllerButtonEvent buttonEvent = event.cbutton;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(buttonEvent.which);
-            for (std::set<UserInput*>::iterator it=inputs.begin();it!=inputs.end();it++) {
-                UserInput* input = (*it);
+            for (UserInput* input : inputs) {
                 if (input->getDevice()==UserInput::DEVICE::CONTROLLER) {
                     ControllerInput* controllerInput = (ControllerInput*)input;
                     if (controllerInput->getController() == nullptr) { continue; }
@@ -399,7 +393,7 @@ void IOInternal::trackInput(UserInput* input) {
 }
 
 void IOInternal::untrackInput(UserInput* input) {
-    std::set<UserInput*>::iterator it = inputs.find(input);
+    std::unordered_set<UserInput*>::iterator it = inputs.find(input);
     if (it != inputs.end()) {
         inputs.erase(it);
     }

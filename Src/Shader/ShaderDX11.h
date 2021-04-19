@@ -1,7 +1,7 @@
 #ifndef PGEINTERNAL_SHADER_DX11_H_INCLUDED
 #define PGEINTERNAL_SHADER_DX11_H_INCLUDED
 
-#include <map>
+#include <unordered_map>
 
 #include <dxgi.h>
 #include <d3dcommon.h>
@@ -67,7 +67,7 @@ class ShaderDX11 : public Shader {
                 ~CBufferInfo();
 
                 uint8_t* getData();
-                std::map<long long, ConstantDX11>* getConstants();
+                std::unordered_map<long long, ConstantDX11>* getConstants();
                 void addConstant(const String& name, const ConstantDX11& constant);
                 bool isDirty() const;
                 void markAsDirty();
@@ -78,7 +78,7 @@ class ShaderDX11 : public Shader {
                 String name;
                 uint8_t* data;
                 int size;
-                std::map<long long, ConstantDX11> constants;
+                std::unordered_map<long long, ConstantDX11> constants;
                 D3D11ImmediateContext::Ref dxContext;
                 D3D11Buffer::Ref dxCBuffer;
                 bool dirty;

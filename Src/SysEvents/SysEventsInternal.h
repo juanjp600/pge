@@ -1,7 +1,7 @@
 #ifndef PGEINTERNAL_SYSEVENTSINTERNAL_H_INCLUDED
 #define PGEINTERNAL_SYSEVENTSINTERNAL_H_INCLUDED
 
-#include <set>
+#include <unordered_set>
 #include <vector>
 
 #include <SDL.h>
@@ -17,7 +17,7 @@ class SysEventsInternal : public SysEvents {
         class SubscriberInternal;
 
     private:
-        static std::set<Subscriber*> subscribers;
+        static std::unordered_set<Subscriber*> subscribers;
         SysEventsInternal(){};
 
     public:
