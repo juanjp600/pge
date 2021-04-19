@@ -6,12 +6,7 @@
 
 #include <vector>
 
-#include <GL/glew.h>
-#ifndef __APPLE__
-#include <GL/gl.h>
-#else
-#include <OpenGL/GL.h>
-#endif
+#include <glad/glad.h>
 
 #include "../ResourceManagement/OGL3.h"
 #include "../ResourceManagement/ResourceManagerOGL3.h"

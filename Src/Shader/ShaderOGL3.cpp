@@ -1,12 +1,5 @@
 #include "ShaderOGL3.h"
 
-#include <GL/glew.h>
-#ifndef __APPLE__
-#include <GL/gl.h>
-#else
-#include <OpenGL/GL.h>
-#endif
-
 #include <Graphics/Graphics.h>
 #include <Exception/Exception.h>
 #include <Misc/FileUtil.h>

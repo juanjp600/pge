@@ -5,7 +5,7 @@
 
 #include <ResourceManagement/ResourceManager.h>
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <SDL.h>
 
 namespace PGE {

@@ -4,6 +4,8 @@
 #include "../Mesh/MeshOGL3.h"
 #include "../Texture/TextureOGL3.h"
 
+#include <glad/glad.h>
+
 using namespace PGE;
 
 GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/), resourceManager(this, 2) {
@@ -28,8 +30,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : Graphics
 
     glContext = resourceManager.addNewResource<GLContext>(sdlWindow());
 
-    glewExperimental = true;
-    __ASSERT(glewInit() == GL_NO_ERROR, "Failed to initialize GLEW (GLERROR: " + String::format(glGetError(), "%u") + ")");
+    __ASSERT(gladLoadGL() == 1, "Failed to initialize GLEW (GLERROR: " + String::format(glGetError(), "%u") + ")");
 
     depthTest = true;
     glEnable(GL_DEPTH_TEST);

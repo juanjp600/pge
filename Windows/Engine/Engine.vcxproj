@@ -173,18 +173,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glew-2.1.0/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Libraries/SPIRV-Reflect/include;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glew-2.1.0/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Libraries/SPIRV-Reflect/include;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glew-2.1.0/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glew-2.1.0/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
