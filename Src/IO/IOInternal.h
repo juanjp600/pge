@@ -1,6 +1,7 @@
 #ifndef PGEINTERNAL_IOINTERNAL_H_INCLUDED
 #define PGEINTERNAL_IOINTERNAL_H_INCLUDED
 
+#include <unordered_set>
 #include <vector>
 
 #include <SDL.h>
@@ -20,7 +21,7 @@ class IOInternal : public IO {
         SysEvents::Subscriber* controllerSubscriber;
         SysEvents::Subscriber* textSubscriber;
 
-        std::set<UserInput*> inputs;
+        std::unordered_set<UserInput*> inputs;
         Vector2f mousePos;
         Vector2i mouseWheelPos;
 

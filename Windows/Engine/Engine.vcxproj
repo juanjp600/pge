@@ -173,18 +173,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Libraries/SPIRV-Reflect/include;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2-2.0.9/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;../../Include;../../Libraries/SDL2/include;../../Libraries/FreeImage3180/Source;../../Libraries/libvorbis-1.3.6/include;../../Libraries/glad/include</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -194,7 +194,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>GLEW_STATIC;DEBUG;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;DEBUG;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -228,7 +228,7 @@ echo Generated Info.cpp!</Command>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>GLEW_STATIC;DEBUG;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;DEBUG;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -264,7 +264,7 @@ echo Generated Info.cpp!</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>GLEW_STATIC;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -303,7 +303,7 @@ echo Generated Info.cpp!</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>GLEW_STATIC;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>

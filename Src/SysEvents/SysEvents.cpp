@@ -4,14 +4,14 @@
 
 using namespace PGE;
 
-std::set<SysEvents::Subscriber*> SysEventsInternal::subscribers;
+std::unordered_set<SysEvents::Subscriber*> SysEventsInternal::subscribers;
 
 void SysEventsInternal::subscribe(SysEvents::Subscriber* subscriber) {
     subscribers.emplace(subscriber);
 }
 
 void SysEventsInternal::unsubscribe(SysEvents::Subscriber* subscriber) {
-    std::set<Subscriber*>::iterator it = subscribers.find(subscriber);
+    std::unordered_set<Subscriber*>::iterator it = subscribers.find(subscriber);
     if (it != subscribers.end()) {
         subscribers.erase(it);
     }
@@ -24,8 +24,8 @@ void SysEvents::update() {
 void SysEventsInternal::update() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-        for (std::set<Subscriber*>::iterator it=subscribers.begin();it!=subscribers.end();it++) {
-            SubscriberInternal* subscriber = (SubscriberInternal*)(*it);
+        for (auto sub : subscribers) {
+            SubscriberInternal* subscriber = (SubscriberInternal*)sub;
             SDL_Window* sdlWindow = ((GraphicsInternal*)subscriber->getGraphics())->getSdlWindow();
             bool takeEvent = false;
             if (subscriber->getEventType()==SubscriberInternal::EventType::WINDOW) {
