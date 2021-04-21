@@ -6,7 +6,7 @@
 
 using namespace PGE;
 
-TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,FORMAT fmt) : resourceManager(2) {
+TextureDX11::TextureDX11(Graphics* gfx,int w,int h,bool renderTarget,const void* buffer,FORMAT fmt) : resourceManager(renderTarget ? 2 + 3 : 2) {
     isRT = renderTarget;
 
     graphics = gfx;
