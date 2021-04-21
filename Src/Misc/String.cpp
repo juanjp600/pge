@@ -22,12 +22,11 @@ String::~String() {
 }
 
 String::String() {
-    reallocate(0);
-    data.shortStr[0]='\0';
-    recalculateHashAndLength();
+    reset();
 }
 
 String::String(const String& a) {
+    reset();
     *this = a;
 }
 
@@ -120,14 +119,14 @@ template String String::format<double>(double t, const PGE::String& format);
 
 String String::fromInt(int i) {
     String ret(32);
-    snprintf(ret.cstrNoConst(), 32, "%i", i);
+    snprintf(ret.cstrNoConst(), 31, "%d", i);
     ret.recalculateHashAndLength();
     return ret;
 }
 
 String String::fromFloat(float f) {
     String ret(32);
-    snprintf(ret.cstrNoConst(), 32, "%f", f);
+    snprintf(ret.cstrNoConst(), 31, "%f", f);
     ret.recalculateHashAndLength();
     return ret;
 }
@@ -305,6 +304,12 @@ void String::reallocate(int byteLength) {
         cCapacity = targetCapacity;
         data.longStr = new char[targetCapacity];
     }
+}
+
+void String::reset() {
+    reallocate(0);
+    data.shortStr[0]='\0';
+    recalculateHashAndLength();
 }
 
 void String::wCharToUtf8Str(const wchar* wbuffer) {
