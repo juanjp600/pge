@@ -107,7 +107,6 @@
     <ClInclude Include="..\..\Src\Sound\SoundInternal.h" />
     <ClInclude Include="..\..\Src\SysEvents\SysEventsInternal.h" />
     <ClInclude Include="..\..\Src\Texture\TextureDX11.h" />
-    <ClInclude Include="..\..\Src\Texture\TextureInternal.h" />
     <ClInclude Include="..\..\Src\Texture\TextureOGL3.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

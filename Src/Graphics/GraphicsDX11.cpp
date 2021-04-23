@@ -51,30 +51,9 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     dxSwapChain = resourceManager.addNewResource<DXGISwapChain>(dxgiFactory, dxDevice, dxSwapChainDesc);
     dxBackBufferRtv = resourceManager.addNewResource<D3D11BackBufferRtv>(dxDevice, dxSwapChain);
 
-    // Create depth stencil texture
-    D3D11_TEXTURE2D_DESC descDepth;
-    ZeroMemory(&descDepth, sizeof(descDepth));
-    descDepth.Width = width;
-    descDepth.Height = height;
-    descDepth.MipLevels = 1;
-    descDepth.ArraySize = 1;
-    descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    descDepth.SampleDesc.Count = 1;
-    descDepth.SampleDesc.Quality = 0;
-    descDepth.Usage = D3D11_USAGE_DEFAULT;
-    descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    descDepth.CPUAccessFlags = 0;
-    descDepth.MiscFlags = 0;
-    dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, descDepth);
+    dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::TYPE::DEPTH_STENCIL, w, h, DXGI_FORMAT_D24_UNORM_S8_UINT);
 
-    // Create the depth stencil view
-    D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-    ZeroMemory(&descDSV, sizeof(descDSV));
-    descDSV.Format = descDepth.Format;
-    descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-    descDSV.Texture2D.MipSlice = 0;
-    dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture, descDSV);
-
+    dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture, DXGI_FORMAT_D24_UNORM_S8_UINT);
     dxContext->OMSetRenderTargets(1, &dxBackBufferRtv, dxZBufferView);
 
     ZeroMemory(&dxRasterizerStateDesc, sizeof(D3D11_RASTERIZER_DESC));
