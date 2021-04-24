@@ -7,7 +7,6 @@
 #include "../Mesh/MeshOGL3.h"
 #include "../Texture/TextureDX11.h"
 #include "../Texture/TextureOGL3.h"
-#include "../Texture/TextureInternal.h"
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
@@ -61,24 +60,16 @@ Mesh* Mesh::create(Graphics* gfx, Primitive::TYPE pt) {
     return ((GraphicsInternal*)gfx)->createMesh(pt);
 }
 
-Texture* Texture::load(Graphics* gfx, const void* buffer, int size) {
-    int width; int height;
-    int realWidth; int realHeight;
-    std::unique_ptr<BYTE> fiBuffer = std::unique_ptr<BYTE>(loadFIBufferFromMemory(buffer, size, width, height, realWidth, realHeight));
-    return ((GraphicsInternal*)gfx)->loadTexture(fiBuffer.get(), width, height, realWidth, realHeight, FilePath());
+Texture* Texture::createRenderTarget(Graphics* gfx, int w, int h, FORMAT fmt) {
+    return ((GraphicsInternal*)gfx)->createRenderTargetTexture(w, h, fmt);
 }
 
-Texture* Texture::load(Graphics* gfx, const FilePath& filename) {
-    int width; int height;
-    int realWidth; int realHeight;
-    std::unique_ptr<BYTE> fiBuffer = std::unique_ptr<BYTE>(loadFIBufferFromFile(filename, width, height, realWidth, realHeight));
-    return ((GraphicsInternal*)gfx)->loadTexture(fiBuffer.get(), width, height, realWidth, realHeight, filename);
+Texture* Texture::createBlank(Graphics* gfx, int w, int h, FORMAT fmt) {
+    std::vector<uint8_t> bufferData = std::vector<uint8_t>(w * h * 4, 0);
+    return ((GraphicsInternal*)gfx)->loadTexture(w, h, bufferData.data(), fmt);
 }
 
-Texture* Texture::load(Graphics* gfx, const FilePath& filename, ThreadManager* threadManager) {
-    return ((GraphicsInternal*)gfx)->loadTexture(filename, threadManager);
-}
-
-Texture* Texture::create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer, FORMAT fmt) {
-    return ((GraphicsInternal*)gfx)->createTexture(w, h, renderTarget, buffer, fmt);
+Texture* Texture::load(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt) {
+    __ASSERT(buffer != nullptr, "Tried to load texture from nullptr");
+    return ((GraphicsInternal*)gfx)->loadTexture(w, h, buffer, fmt);
 }

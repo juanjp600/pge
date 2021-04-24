@@ -29,9 +29,9 @@ class D3D11Device : public DX11Resource<ID3D11Device*> {
     public:
         D3D11Device() {
             D3D_FEATURE_LEVEL dxFeatureLevel[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_9_3 };
-            D3D11_CREATE_DEVICE_FLAG creationFlags = (D3D11_CREATE_DEVICE_FLAG)0;
+            UINT creationFlags = 0;
 #ifdef DEBUG
-            creationFlags = D3D11_CREATE_DEVICE_FLAG::D3D11_CREATE_DEVICE_DEBUG;
+            creationFlags |= D3D11_CREATE_DEVICE_FLAG::D3D11_CREATE_DEVICE_DEBUG;
 #endif
             HRESULT hResult = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, creationFlags, dxFeatureLevel, 2, D3D11_SDK_VERSION,
                 &resource, NULL, NULL);
@@ -86,7 +86,32 @@ class D3D11BackBufferRtv : public DX11Resource<ID3D11RenderTargetView*> {
 
 class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
     public:
-        D3D11Texture2D(ID3D11Device* device, D3D11_TEXTURE2D_DESC textureDesc) {
+        enum class TYPE {
+            RENDER_TARGET,
+            DEPTH_STENCIL,
+            NORMAL
+        };
+        
+        D3D11Texture2D(ID3D11Device* device, TYPE type, int width, int height, DXGI_FORMAT format) {
+            D3D11_TEXTURE2D_DESC textureDesc;
+            ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+            textureDesc.Width = (UINT)width;
+            textureDesc.Height = (UINT)height;
+            if (type == TYPE::DEPTH_STENCIL) {
+                textureDesc.MipLevels = 1;
+            }
+            textureDesc.ArraySize = 1;
+            textureDesc.Format = format;
+            textureDesc.SampleDesc.Count = 1;
+            textureDesc.Usage = D3D11_USAGE_DEFAULT;
+            if (type == TYPE::DEPTH_STENCIL) {
+                textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+            } else {
+                textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+            }
+            if (type == TYPE::NORMAL) {
+                textureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+            }
             HRESULT hResult = device->CreateTexture2D(&textureDesc, NULL, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create texture (HRESULT: " + String::fromInt(hResult) + ")");
         }
@@ -94,16 +119,28 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
 
 class D3D11DepthStencilView : public DX11Resource<ID3D11DepthStencilView*> {
     public:
-        D3D11DepthStencilView(ID3D11Device* device, ID3D11Texture2D* texture, D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc) {
-            HRESULT hResult = device->CreateDepthStencilView(texture, &dsvDesc, &resource);
+        D3D11DepthStencilView(ID3D11Device* device, ID3D11Texture2D* texture, DXGI_FORMAT format) {
+            D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+            ZeroMemory(&descDSV, sizeof(descDSV));
+            descDSV.Format = format;
+            descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+            descDSV.Texture2D.MipSlice = 0;
+            HRESULT hResult = device->CreateDepthStencilView(texture, &descDSV, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create main depth stencil view (HRESULT: " + String::fromInt(hResult) + ")");
         }
 };
 
 class D3D11ShaderResourceView : public DX11Resource<ID3D11ShaderResourceView*> {
     public:
-        D3D11ShaderResourceView(ID3D11Device* device, ID3D11Texture2D* texture, D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc) {
-            HRESULT hResult = device->CreateShaderResourceView(texture, &srvDesc, &resource);
+        D3D11ShaderResourceView(ID3D11Device* device, ID3D11Texture2D* texture, DXGI_FORMAT format, bool rt) {
+            D3D11_SHADER_RESOURCE_VIEW_DESC dxShaderResourceViewDesc;
+            ZeroMemory(&dxShaderResourceViewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+            dxShaderResourceViewDesc.Format = format;
+            dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+            dxShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
+            dxShaderResourceViewDesc.Texture2D.MipLevels = rt ? 1 : -1;
+
+            HRESULT hResult = device->CreateShaderResourceView(texture, &dxShaderResourceViewDesc, &resource);
             __ASSERT(!FAILED(hResult), "Failed to create shader resource view (HRESULT: " + String::fromInt(hResult) + ")");
         }
 };

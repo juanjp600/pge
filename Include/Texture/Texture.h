@@ -23,20 +23,19 @@ class Texture {
         
         virtual void* getNative() const = 0;
 
-        static Texture* load(Graphics* gfx, const void* buffer, int size);
-        static Texture* load(Graphics* gfx, const FilePath& filename);
-        static Texture* load(Graphics* gfx, const FilePath& filename, ThreadManager* threadManager);
-        static Texture* create(Graphics* gfx, int w, int h, bool renderTarget, const void* buffer, FORMAT fmt);
-        virtual ~Texture(){};
+        static Texture* createRenderTarget(Graphics* gfx, int w, int h, FORMAT fmt);
+        static Texture* createBlank(Graphics* gfx, int w, int h, FORMAT fmt);
+        static Texture* load(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt);
+        virtual ~Texture() { };
 
     protected:
+        Texture(Graphics* gfx, int w, int h, bool rt, FORMAT fmt);
+
         Graphics* graphics;
         bool isRT;
 
         int width; int height;
-        int realWidth; int realHeight;
 
-        FilePath filename; String name;
         FORMAT format;
 };
 
