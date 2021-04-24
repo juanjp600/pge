@@ -29,9 +29,9 @@ class D3D11Device : public DX11Resource<ID3D11Device*> {
     public:
         D3D11Device() {
             D3D_FEATURE_LEVEL dxFeatureLevel[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_9_3 };
-            D3D11_CREATE_DEVICE_FLAG creationFlags = (D3D11_CREATE_DEVICE_FLAG)0;
+            UINT creationFlags = 0;
 #ifdef DEBUG
-            creationFlags = D3D11_CREATE_DEVICE_FLAG::D3D11_CREATE_DEVICE_DEBUG;
+            creationFlags |= D3D11_CREATE_DEVICE_FLAG::D3D11_CREATE_DEVICE_DEBUG;
 #endif
             HRESULT hResult = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, creationFlags, dxFeatureLevel, 2, D3D11_SDK_VERSION,
                 &resource, NULL, NULL);
@@ -107,10 +107,7 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
             if (type == TYPE::DEPTH_STENCIL) {
                 textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
             } else {
-                textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-                if (type == TYPE::RENDER_TARGET) {
-                    textureDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
-                }
+                textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
             }
             if (type == TYPE::NORMAL) {
                 textureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
