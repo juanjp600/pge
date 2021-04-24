@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\Audio\Audio.cpp" />
     <ClCompile Include="..\..\Src\Color\Color.cpp" />
     <ClCompile Include="..\..\Src\Exception\Exception.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Graphics.cpp" />
@@ -51,7 +50,6 @@
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp" />
-    <ClCompile Include="..\..\Src\Sound\Sound.cpp" />
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
     <ClCompile Include="..\..\Src\Texture\Texture.cpp" />
     <ClCompile Include="..\..\Src\Texture\TextureDX11.cpp" />
@@ -60,7 +58,6 @@
     <ClCompile Include="..\..\Src\UserInput\UserInput.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Include\Audio\Audio.h" />
     <ClInclude Include="..\..\Include\Color\Color.h" />
     <ClInclude Include="..\..\Include\Exception\Exception.h" />
     <ClInclude Include="..\..\Include\Graphics\Graphics.h" />
@@ -86,12 +83,10 @@
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceReference.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceReferenceVector.h" />
     <ClInclude Include="..\..\Include\Shader\Shader.h" />
-    <ClInclude Include="..\..\Include\Sound\Sound.h" />
     <ClInclude Include="..\..\Include\SysEvents\SysEvents.h" />
     <ClInclude Include="..\..\Include\Texture\Texture.h" />
     <ClInclude Include="..\..\Include\Threading\ThreadManager.h" />
     <ClInclude Include="..\..\Include\UserInput\UserInput.h" />
-    <ClInclude Include="..\..\Src\Audio\AudioInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />
@@ -104,7 +99,6 @@
     <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h" />
-    <ClInclude Include="..\..\Src\Sound\SoundInternal.h" />
     <ClInclude Include="..\..\Src\SysEvents\SysEventsInternal.h" />
     <ClInclude Include="..\..\Src\Texture\TextureDX11.h" />
     <ClInclude Include="..\..\Src\Texture\TextureOGL3.h" />

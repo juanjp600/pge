@@ -82,18 +82,6 @@
     <Filter Include="Src\Threading">
       <UniqueIdentifier>{922f5910-100f-4ac1-b3f5-37b9dbc452f6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Audio">
-      <UniqueIdentifier>{8eb171e0-663e-4dd0-8e8d-c5d219861735}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\Audio">
-      <UniqueIdentifier>{009b1ec8-90e0-4a1e-8515-811da9fc5fcd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\Sound">
-      <UniqueIdentifier>{1e351e31-4d25-4681-bc22-a11b7b3d0603}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Sound">
-      <UniqueIdentifier>{c36bb0fd-d167-45bf-a770-810b7f283d30}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Exception">
       <UniqueIdentifier>{ae97ce05-f017-4a7d-86b2-af0796ef45d7}</UniqueIdentifier>
     </Filter>
@@ -167,12 +155,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp">
       <Filter>Src\Threading</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Audio\Audio.cpp">
-      <Filter>Src\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Sound\Sound.cpp">
-      <Filter>Src\Sound</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Math\Plane.cpp">
       <Filter>Src\Math</Filter>
@@ -290,20 +272,8 @@
     <ClInclude Include="..\..\Include\Threading\ThreadManager.h">
       <Filter>Include\Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Audio\Audio.h">
-      <Filter>Include\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Sound\Sound.h">
-      <Filter>Include\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\Math\Plane.h">
       <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Audio\AudioInternal.h">
-      <Filter>Src\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Sound\SoundInternal.h">
-      <Filter>Src\Sound</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\SysEvents\SysEventsInternal.h">
       <Filter>Src\SysEvents</Filter>
