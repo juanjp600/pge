@@ -36,13 +36,7 @@ String::String() {
 }
 
 String::String(const String& a) {
-    reallocate(0);
-    data.shortStr[0] = '\0';
-    // Manual metadata:
-    _strByteLength = 0;
-    _strLength = 0;
-    _hashCode = FNV_SEED;
-    _hashCodeEvaluted = true;
+    invalidateMetadata();
     *this = a;
 }
 
