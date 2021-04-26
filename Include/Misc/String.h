@@ -58,7 +58,7 @@ class String {
 
         std::cmatch regexMatch(const std::regex& pattern) const;
 
-        String unHex() const;
+        //String unHex() const;
 
         String& operator=(const String& other);
         String& operator+=(const String& other);

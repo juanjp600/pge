@@ -658,6 +658,7 @@ std::cmatch String::regexMatch(const std::regex& pattern) const {
     return m;
 }
 
+/* TODO: Improve this if we get MacOS support back. Non-fixed return value size and possibly propagating more metadata.
 String String::unHex() const {
     int isUnhexing = 0;
 
@@ -705,6 +706,6 @@ String String::unHex() const {
         }
     }
     retBuf[resultSize]='\0';
-    // TODO: We might know some stuff here, but I don't really care right now. We should make this available only on MacOS anyways.
+    ret._strByteLength = resultSize;
     return ret;
-}
+}*/
