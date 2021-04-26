@@ -9,7 +9,11 @@
 #import <Foundation/Foundation.h>
 #endif
 
+#include <Exception/Exception.h>
+
 using namespace PGE;
+
+static constexpr uint64_t FNV_SEED = 0xcbf29ce484222325;
 
 String::_StringData::_StringData() {
     memset(shortStr, 0, shortStrCapacity);
@@ -22,11 +26,23 @@ String::~String() {
 }
 
 String::String() {
-    reset();
+    reallocate(0);
+    data.shortStr[0] = '\0';
+    // Manual metadata:
+    _strByteLength = 0;
+    _strLength = 0;
+    _hashCode = FNV_SEED;
+    _hashCodeEvaluted = true;
 }
 
 String::String(const String& a) {
-    reset();
+    reallocate(0);
+    data.shortStr[0] = '\0';
+    // Manual metadata:
+    _strByteLength = 0;
+    _strLength = 0;
+    _hashCode = FNV_SEED;
+    _hashCodeEvaluted = true;
     *this = a;
 }
 
@@ -34,24 +50,24 @@ String::String(const char* cstri) {
     int len = (int)strlen(cstri);
     reallocate(len);
     memcpy(cstrNoConst(), cstri, (len+1)*sizeof(char));
-    recalculateHashAndLength();
+    invalidateMetadata();
+    _strByteLength = len;
 }
 
 String::String(const std::string& cppstr) {
     int len = (int)cppstr.size();
     reallocate(len);
     memcpy(cstrNoConst(), cppstr.c_str(), (len+1)*sizeof(char));
-    recalculateHashAndLength();
+    invalidateMetadata();
+    _strByteLength = len;
 }
 
 String::String(const wchar* wstri) {
     wCharToUtf8Str(wstri);
-    recalculateHashAndLength();
 }
 
 String::String(const std::wstring& cppwstr) {
     wCharToUtf8Str(cppwstr.c_str());
-    recalculateHashAndLength();
 }
 
 #if defined(__APPLE__) && defined(__OBJC__)
@@ -60,7 +76,8 @@ String::String(const NSString* nsstr) {
     int len = (int)strlen(cPath);
     reallocate(len);
     memcpy(cstrNoConst(), cPath, (len+1)*sizeof(char));
-    recalculateHashAndLength();
+    invalidateMetadata();
+    _strByteLength = len;
 }
 #endif
 
@@ -71,14 +88,17 @@ String::String(const String& a, const String& b) {
     memcpy(buf, a.cstr(), a.byteLength());
     memcpy(buf + a.byteLength(), b.cstr(), b.byteLength());
     buf[len] = '\0';
-    recalculateHashAndLength();
+    invalidateMetadata();
+    _strByteLength = len;
 }
 
+// TODO: Revisit, possible exploit.
 String::String(char c) {
     reallocate(1);
     char* buf = cstrNoConst();
     buf[0] = c; buf[1] = '\0';
-    recalculateHashAndLength();
+    invalidateMetadata();
+    _strByteLength = 1;
 }
 
 String::String(wchar w) {
@@ -86,11 +106,11 @@ String::String(wchar w) {
     tempBuf[0] = w; tempBuf[1] = L'\0';
     wCharToUtf8Str(tempBuf);
     delete[] tempBuf;
-    recalculateHashAndLength();
 }
 
 String::String(int size) {
     reallocate(size);
+    invalidateMetadata();
 }
 
 template <class T>
@@ -101,7 +121,7 @@ String String::format(T t, const String& format) {
     }
     String ret(size);
     snprintf(ret.cstrNoConst(), size, format.cstr(), t);
-    ret.recalculateHashAndLength();
+    ret.invalidateMetadata();
     return ret;
 }
 
@@ -118,16 +138,19 @@ template String String::format<float>(float t, const PGE::String& format);
 template String String::format<double>(double t, const PGE::String& format);
 
 String String::fromInt(int i) {
-    String ret(32);
-    snprintf(ret.cstrNoConst(), 31, "%d", i);
-    ret.recalculateHashAndLength();
+    // "2147483647" has 10 characters.
+    String ret(10);
+    ret._strLength = snprintf(ret.cstrNoConst(), 10, "%d", i);
+    ret._strByteLength = ret._strLength;
     return ret;
 }
 
 String String::fromFloat(float f) {
-    String ret(32);
-    snprintf(ret.cstrNoConst(), 31, "%f", f);
-    ret.recalculateHashAndLength();
+    // Scientific notation to severly limit maximum output length.
+    // sign + 6 * digits + point + e + expsign + 2 * expdigits
+    String ret(12);
+    ret._strLength = snprintf(ret.cstrNoConst(), 12, "%g", f);
+    ret._strByteLength = ret._strLength;
     return ret;
 }
 
@@ -135,9 +158,10 @@ String& String::operator=(const String& other) {
     if (&other == this || other == *this) { return *this; }
     reallocate(other.byteLength());
     memcpy(cstrNoConst(),other.cstr(),(other.byteLength()+1)*sizeof(char));
-    strByteLength = other.byteLength();
-    strLength = other.length();
-    hashCode = other.getHashCode();
+    _strByteLength = other._strByteLength;
+    _strLength = other._strLength;
+    _hashCodeEvaluted = other._hashCodeEvaluted;
+    _hashCode = other._hashCode;
     return *this;
 }
 
@@ -177,8 +201,19 @@ std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
     return os.write(s.cstr(),s.byteLength());
 }
 
-long long String::getHashCode() const {
-    return hashCode;
+uint64_t String::getHashCode() const {
+    if (!_hashCodeEvaluted) {
+        // FNV-1a
+        const char* buf = cstr();
+        _hashCode = FNV_SEED;
+        // We get _strByteLength "for free" here.
+        for (_strByteLength = 0; buf[_strByteLength] != '\0'; _strByteLength++) {
+            _hashCode ^= buf[_strByteLength];
+            _hashCode *= 0x00000100000001b3u;
+        }
+        _hashCodeEvaluted = true;
+    }
+    return _hashCode;
 }
 
 bool String::equals(const String& other) const {
@@ -198,7 +233,7 @@ bool String::equalsIgnoreCase(const String& other) const {
     wstr(w2);
 
     bool equals = true;
-    for (int i = 0; i<strByteLength; i++) {
+    for (int i = 0; i<byteLength(); i++) {
         if (w1[i] != w2[i]) {
             equals = false;
             break;
@@ -210,7 +245,7 @@ bool String::equalsIgnoreCase(const String& other) const {
 }
 
 bool String::isEmpty() const {
-    return strByteLength == 0;
+    return byteLength() == 0;
 }
 
 static int measureCodepoint(unsigned char chr) {
@@ -253,7 +288,7 @@ static int convertWCharToUtf8(wchar chr, char* result) {
 
     if (((firstByte | (0x1 << (7-len))) & chr) == 0x00) {
         //it fits!
-        firstByte = firstByte | chr;
+        firstByte |= chr;
         if (result != nullptr) { result[len - 1] = firstByte; }
     } else {
         //it doesn't fit: add another byte
@@ -276,21 +311,6 @@ static int convertWCharToUtf8(wchar chr, char* result) {
     return len;
 }
 
-void String::recalculateHashAndLength() {
-    hashCode = 5381;
-    const char* buf = cstrNoConst();
-    strByteLength = strlen(buf);
-    strLength = 0;
-    int capacity = cCapacity > 0 ? cCapacity : shortStrCapacity;
-    for (int i = 0; i < capacity; i += measureCodepoint(buf[i])) {
-        if (buf[i] == '\0') {
-            break;
-        }
-        strLength++;
-        hashCode = ((hashCode << 5) + hashCode) + buf[i];
-    }
-}
-
 void String::reallocate(int byteLength) {
     if ((byteLength+1) < shortStrCapacity) { return; }
     int targetCapacity = 1;
@@ -306,29 +326,32 @@ void String::reallocate(int byteLength) {
     }
 }
 
-void String::reset() {
-    reallocate(0);
-    data.shortStr[0]='\0';
-    recalculateHashAndLength();
+void String::invalidateMetadata() const {
+    _hashCodeEvaluted = false;
+    _strLength = -1;
+    _strByteLength = -1;
 }
 
 void String::wCharToUtf8Str(const wchar* wbuffer) {
     //determine the capacity of the cbuffer by measuring the number of bytes required for each codepoint
-    strByteLength = 0;
+    int newCap = 0;
     for (int i = 0; wbuffer[i] != L'\0'; i++) {
-        strByteLength += convertWCharToUtf8(wbuffer[i], nullptr);
+        newCap += convertWCharToUtf8(wbuffer[i], nullptr);
     }
-    reallocate(strByteLength);
+    reallocate(newCap);
+
+    invalidateMetadata();
 
     //convert all the wchars to codepoints
     char* buf = cstrNoConst();
     int cIndex = 0;
-    int i = 0;
-    for (int i = 0; wbuffer[i] != L'\0'; i++) {
-        int increment = convertWCharToUtf8(wbuffer[i], &buf[cIndex]);
+    // We get _strLength "for free" here.
+    for (_strLength = 0; wbuffer[_strLength] != L'\0'; _strLength++) {
+        int increment = convertWCharToUtf8(wbuffer[_strLength], &buf[cIndex]);
         cIndex += increment;
     }
     buf[cIndex] = '\0';
+    _strByteLength = cIndex;
 }
 
 wchar String::utf8ToWChar(const char* cbuffer) {
@@ -347,11 +370,26 @@ wchar String::utf8ToWChar(const char* cbuffer) {
 }
 
 int String::length() const {
-    return strLength;
+    if (_strLength < 0) {
+        const char* buf = cstr();
+        _strLength = 0;
+        // We get _strByteLength "for free" here.
+        for (_strByteLength = 0; buf[_strByteLength] != '\0'; _strByteLength += measureCodepoint(buf[_strByteLength])) {
+            _strLength++;
+        }
+    }
+    return _strLength;
 }
 
 int String::byteLength() const {
-    return strByteLength;
+    if (_strByteLength < 0) {
+        _strByteLength = 0;
+        const char* buf = cstr();
+        while (buf[_strByteLength] != '\0') {
+            _strByteLength++;
+        }
+    }
+    return _strByteLength;
 }
 
 int String::findFirst(const String& fnd, int from) const {
@@ -394,7 +432,7 @@ void String::wstr(wchar* buffer) const {
     //convert all the codepoints to wchars
     const char* buf = cstr();
     int wIndex = 0;
-    for (int i = 0; i < strByteLength;) {
+    for (int i = 0; i < byteLength();) {
         int codepointLen = measureCodepoint(buf[i]);
 
         buffer[wIndex] = utf8ToWChar(buf+i);
@@ -402,7 +440,7 @@ void String::wstr(wchar* buffer) const {
         i += codepointLen;
         wIndex++;
     }
-    buffer[strByteLength] = '\0';
+    buffer[byteLength()] = '\0';
 }
 
 int String::toInt(bool& success) const {
@@ -453,10 +491,11 @@ String String::substr(int start, int cnt) const {
     }
 
     String retVal(actualSize + 1);
+    retVal.invalidateMetadata();
+    //retVal._strByteLength = actualSize;
     char* retBuf = retVal.cstrNoConst();
     retBuf[actualSize] = '\0';
     memcpy(retBuf, buf + startPos, actualSize);
-    retVal.recalculateHashAndLength();
     return retVal;
 }
 
@@ -470,17 +509,20 @@ wchar String::charAt(int pos) const {
 }
 
 String String::replace(const String& fnd, const String& rplace) const {
-    if (fnd.byteLength()==0) { return *this; }
+    __ASSERT(fnd.byteLength() != 0, "Find string can't be empty");
 
     const char* fndStr = fnd.cstr();
     const char* rplaceStr = rplace.cstr();
     const char* thisStr = cstr();
 
-    int newSize = strByteLength;
-    for (int i=0;i<strByteLength-fnd.byteLength()+1;) {
+    int replacedInstances = 0;
+
+    int newSize = byteLength();
+    for (int i=0;i<byteLength()-fnd.byteLength()+1;) {
         if (memcmp(fndStr, thisStr+i,fnd.byteLength())==0) {
             newSize+=rplace.byteLength()-fnd.byteLength();
             i+=fnd.byteLength();
+            replacedInstances++;
         } else {
             i++;
         }
@@ -489,8 +531,8 @@ String String::replace(const String& fnd, const String& rplace) const {
     String retVal(newSize);
     char* retBuf = retVal.cstrNoConst();
     int i=0; int j=0;
-    while (i<strByteLength) {
-        bool found = i<strByteLength-fnd.byteLength()+1;
+    while (i<byteLength()) {
+        bool found = i<byteLength()-fnd.byteLength()+1;
         if (found) {
             found = memcmp(fndStr,thisStr+i,fnd.byteLength())==0;
         }
@@ -502,16 +544,20 @@ String String::replace(const String& fnd, const String& rplace) const {
             i++; j++;
         }
     }
-    retBuf[j]=L'\0';
-
-    retVal.recalculateHashAndLength();
+    retBuf[j]='\0';
+    
+    retVal._strByteLength = newSize;
+    // If the string that is being operated on already has had its length calculated, we assume it to be worth it to pre-calculate the new string's length.
+    if (_strLength >= 0) {
+        retVal._strLength = _strLength - (fnd.length() - rplace.length()) * replacedInstances;
+    }
     return retVal;
 }
 
 String String::toUpper() const {
-    wchar* newBuf = new wchar[strByteLength * sizeof(wchar) + 1];
+    wchar* newBuf = new wchar[byteLength() * sizeof(wchar) + 1];
     wstr(newBuf);
-    for (int i = 0; i<strByteLength; i++) {
+    for (int i = 0; i<byteLength(); i++) {
         newBuf[i] = towupper(newBuf[i]);
     }
     String retVal(newBuf);
@@ -520,9 +566,9 @@ String String::toUpper() const {
 }
 
 String String::toLower() const {
-    wchar* newBuf = new wchar[strByteLength * sizeof(wchar) + 1];
+    wchar* newBuf = new wchar[byteLength() * sizeof(wchar) + 1];
     wstr(newBuf);
-    for (int i = 0; i<strByteLength; i++) {
+    for (int i = 0; i<byteLength(); i++) {
         newBuf[i] = towlower(newBuf[i]);
     }
     String retVal(newBuf);
@@ -531,13 +577,13 @@ String String::toLower() const {
 }
 
 String String::trim() const {
-    if (strByteLength==0) { return ""; }
+    if (byteLength()==0) { return *this; }
 
     const char* buf = cstr();
     int leadingPos = 0;
     while (buf[leadingPos] == ' ' || buf[leadingPos] == '\t') {
         leadingPos++;
-        if (leadingPos>=strByteLength) {
+        if (leadingPos>=byteLength()) {
             return *this;
         }
     }
@@ -551,11 +597,13 @@ String String::trim() const {
     }
 
     int newSize = trailingPos - leadingPos + 1;
-    String ret(newSize + 1);
+    String ret(newSize);
     char* retBuf = ret.cstrNoConst();
     memcpy(retBuf, buf + leadingPos, newSize);
     retBuf[newSize] = '\0';
-    ret.recalculateHashAndLength();
+    // If the length has been calculated, good, it remains valid, if not, it just goes more into the negative.
+    ret._strByteLength = newSize;
+    ret._strLength = _strLength - (byteLength() - newSize);
     return ret;
 }
 
@@ -584,7 +632,7 @@ std::vector<String> String::split(const String& needle, bool removeEmptyEntries)
 
 String String::join(const std::vector<String>& vect, const String& separator) {
     if (vect.size() <= 0) {
-        return String("");
+        return "";
     }
 
     String retVal = vect[0];
@@ -650,6 +698,6 @@ String String::unHex() const {
         }
     }
     retBuf[resultSize]='\0';
-    ret.recalculateHashAndLength();
+    // TODO: We might know some stuff here, but I don't really care right now. We should make this available only on MacOS anyways.
     return ret;
 }

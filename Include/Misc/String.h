@@ -63,7 +63,7 @@ class String {
         String& operator=(const String& other);
         String& operator+=(const String& other);
 
-        long long getHashCode() const;
+        uint64_t getHashCode() const;
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
         bool isEmpty() const;
@@ -71,12 +71,15 @@ class String {
     private:
         String(int size);
 
-        long long hashCode;
         int cCapacity = 0;
-        int strByteLength;
-        int strLength;
 
-        const static int shortStrCapacity = 16;
+        // Lazily evaluated.
+        mutable bool _hashCodeEvaluted;
+        mutable unsigned long long _hashCode;
+        mutable int _strByteLength;
+        mutable int _strLength;
+
+        constexpr static int shortStrCapacity = 16;
 
         union _StringData {
             char shortStr[shortStrCapacity];
@@ -84,11 +87,10 @@ class String {
             _StringData();
         } data;
 
-        void recalculateHashAndLength();
+        void invalidateMetadata() const;
         void wCharToUtf8Str(const wchar* wbuffer);
         static wchar utf8ToWChar(const char* cbuffer);
         void reallocate(int size);
-        void reset();
         char* cstrNoConst();
     };
 
