@@ -86,20 +86,32 @@ String::String(const String& a, const String& b) {
     _strByteLength = len;
 }
 
-// TODO: Revisit, possible exploit.
+static int convertWCharToUtf8(wchar chr, char* result);
+
 String::String(char c) {
-    reallocate(1);
-    char* buf = cstrNoConst();
-    buf[0] = c; buf[1] = '\0';
     invalidateMetadata();
-    _strByteLength = 1;
+    char* buf = cstrNoConst();
+    if (c < 0) {
+        reallocate(2);
+        convertWCharToUtf8((wchar)(unsigned char)c, buf);
+        buf[2] = '\0';
+        _strByteLength = 2;
+    } else {
+        reallocate(1);
+        buf[0] = c;
+        buf[1] = '\0';
+        _strByteLength = 1;
+    }
+    _strLength = 1;
 }
 
 String::String(wchar w) {
-    wchar* tempBuf = new wchar[2];
-    tempBuf[0] = w; tempBuf[1] = L'\0';
-    wCharToUtf8Str(tempBuf);
-    delete[] tempBuf;
+    reallocate(4);
+    char* buf = cstrNoConst();
+    invalidateMetadata();
+    _strByteLength = convertWCharToUtf8(w, buf);
+    _strLength = 1;
+    buf[_strByteLength] = '\0';
 }
 
 String::String(int size) {
