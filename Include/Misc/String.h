@@ -63,7 +63,7 @@ class String {
         String& operator=(const String& other);
         String& operator+=(const String& other);
 
-        uint64_t getHashCode() const;
+        long long getHashCode() const;
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
         bool isEmpty() const;
@@ -75,7 +75,7 @@ class String {
 
         // Lazily evaluated.
         mutable bool _hashCodeEvaluted;
-        mutable unsigned long long _hashCode;
+        mutable uint64_t _hashCode;
         mutable int _strByteLength;
         mutable int _strLength;
 

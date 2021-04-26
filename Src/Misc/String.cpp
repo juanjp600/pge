@@ -201,10 +201,11 @@ std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
     return os.write(s.cstr(),s.byteLength());
 }
 
-uint64_t String::getHashCode() const {
+long long String::getHashCode() const {
     if (!_hashCodeEvaluted) {
         // FNV-1a
-        const char* buf = cstr();
+        // Public domain
+        uint8_t* buf = (uint8_t*)cstr();
         _hashCode = FNV_SEED;
         // We get _strByteLength "for free" here.
         for (_strByteLength = 0; buf[_strByteLength] != '\0'; _strByteLength++) {
