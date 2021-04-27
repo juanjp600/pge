@@ -201,14 +201,6 @@ const String PGE::operator+(const char* a, const String& b) {
     return String(String(a), b);
 }
 
-bool PGE::operator<(const String& a, const String& b) {
-    return strcmp(a.cstr(), b.cstr()) < 0;
-}
-
-bool PGE::operator>(const String& a, const String& b) {
-    return strcmp(a.cstr(), b.cstr()) > 0;
-}
-
 std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
     return os.write(s.cstr(),s.byteLength());
 }
@@ -431,11 +423,11 @@ int String::findLast(const String& fnd, int from) const {
 }
 
 const char* String::cstr() const {
-    return cCapacity>0 ? data.longStr : data.shortStr;
+    return cCapacity > 0 ? data.longStr : data.shortStr;
 }
 
 char* String::cstrNoConst() {
-    return cCapacity>0 ? data.longStr : data.shortStr;
+    return cCapacity > 0 ? data.longStr : data.shortStr;
 }
 
 void String::wstr(wchar* buffer) const {

@@ -98,8 +98,6 @@ class String {
     bool operator!=(const String& a, const String& b);
     const String operator+(const String& a, const String& b);
     const String operator+(const char* a, const String& b);
-    bool operator<(const String& a, const String& b);
-    bool operator>(const String& a, const String& b);
     std::ostream& operator<<(std::ostream& os, const String& s);
 
 }
