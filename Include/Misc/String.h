@@ -85,7 +85,6 @@ class String {
         union _StringData {
             char shortStr[shortStrCapacity];
             char* longStr;
-            _StringData();
         } data;
 
         void wCharToUtf8Str(const wchar* wbuffer);

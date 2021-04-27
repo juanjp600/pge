@@ -15,10 +15,6 @@ using namespace PGE;
 
 static constexpr uint64_t FNV_SEED = 0xcbf29ce484222325;
 
-String::_StringData::_StringData() {
-    memset(shortStr, 0, shortStrCapacity);
-}
-
 String::~String() {
     if (cCapacity > 0) {
         delete[] data.longStr;
@@ -127,17 +123,13 @@ String::String(const String& other, int from, int cnt) {
 
 template <class T>
 String String::format(T t, const String& format) {
-    int size = snprintf(nullptr, 0, format.cstr(), t) + 1;
-    if (size < 0) {
-        throw std::runtime_error(("Invalid format: " + format).cstr());
-    }
+    int size = snprintf(nullptr, 0, format.cstr(), t);
     String ret(size);
-    snprintf(ret.cstrNoConst(), size, format.cstr(), t);
-    ret.invalidateMetadata();
+    sprintf(ret.cstrNoConst(), format.cstr(), t);
+    ret._strByteLength = size;
     return ret;
 }
 
-// TODO: Possibly remove
 template String String::format<int8_t>(int8_t t, const PGE::String& format);
 template String String::format<int16_t>(int16_t t, const PGE::String& format);
 template String String::format<int32_t>(int32_t t, const PGE::String& format);
@@ -150,9 +142,9 @@ template String String::format<float>(float t, const PGE::String& format);
 template String String::format<double>(double t, const PGE::String& format);
 
 String String::fromInt(int i) {
-    // "2147483647" has 10 characters.
-    String ret(10);
-    ret._strLength = snprintf(ret.cstrNoConst(), 10, "%d", i);
+    // "-2147483648" has 11 characters.
+    String ret(11);
+    ret._strLength = sprintf(ret.cstrNoConst(), "%d", i);
     ret._strByteLength = ret._strLength;
     return ret;
 }
@@ -161,7 +153,7 @@ String String::fromFloat(float f) {
     // Scientific notation to severly limit maximum output length.
     // sign + 6 * digits + point + e + expsign + 2 * expdigits
     String ret(12);
-    ret._strLength = snprintf(ret.cstrNoConst(), 12, "%g", f);
+    ret._strLength = sprintf(ret.cstrNoConst(), "%g", f);
     ret._strByteLength = ret._strLength;
     return ret;
 }
