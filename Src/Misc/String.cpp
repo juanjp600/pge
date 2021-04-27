@@ -27,33 +27,35 @@ String::~String() {
 
 String::String() {
     reallocate(0);
-    data.shortStr[0] = '\0';
     // Manual metadata:
     _strByteLength = 0;
     _strLength = 0;
     _hashCode = FNV_SEED;
     _hashCodeEvaluted = true;
+    cstrNoConst()[0] = '\0';
 }
 
 String::String(const String& a) {
-    invalidateMetadata();
-    *this = a;
+    reallocate(a.byteLength());
+    _strByteLength = a._strByteLength;
+    _strLength = a._strLength;
+    _hashCodeEvaluted = a._hashCodeEvaluted;
+    _hashCode = a._hashCode;
+    memcpy(cstrNoConst(), a.cstr(), (a.byteLength() + 1) * sizeof(char));
 }
 
 String::String(const char* cstri) {
     int len = (int)strlen(cstri);
     reallocate(len);
-    memcpy(cstrNoConst(), cstri, (len+1)*sizeof(char));
-    invalidateMetadata();
     _strByteLength = len;
+    memcpy(cstrNoConst(), cstri, (len+1)*sizeof(char));
 }
 
 String::String(const std::string& cppstr) {
     int len = (int)cppstr.size();
     reallocate(len);
-    memcpy(cstrNoConst(), cppstr.c_str(), (len+1)*sizeof(char));
-    invalidateMetadata();
     _strByteLength = len;
+    memcpy(cstrNoConst(), cppstr.c_str(), (len+1)*sizeof(char));
 }
 
 String::String(const wchar* wstri) {
@@ -69,38 +71,35 @@ String::String(const NSString* nsstr) {
     const char* cPath = [nsstr cStringUsingEncoding: NSUTF8StringEncoding];
     int len = (int)strlen(cPath);
     reallocate(len);
-    memcpy(cstrNoConst(), cPath, (len+1)*sizeof(char));
-    invalidateMetadata();
     _strByteLength = len;
+    memcpy(cstrNoConst(), cPath, (len+1)*sizeof(char));
 }
 #endif
 
 String::String(const String& a, const String& b) {
     int len = a.byteLength() + b.byteLength();
     reallocate(len);
+    _strByteLength = len;
     char* buf = cstrNoConst();
     memcpy(buf, a.cstr(), a.byteLength());
     memcpy(buf + a.byteLength(), b.cstr(), b.byteLength());
     buf[len] = '\0';
-    invalidateMetadata();
-    _strByteLength = len;
 }
 
 static int convertWCharToUtf8(wchar chr, char* result);
 
 String::String(char c) {
-    invalidateMetadata();
     char* buf = cstrNoConst();
     if (c < 0) {
         reallocate(2);
+        _strByteLength = 2;
         convertWCharToUtf8((wchar)(unsigned char)c, buf);
         buf[2] = '\0';
-        _strByteLength = 2;
     } else {
         reallocate(1);
+        _strByteLength = 1;
         buf[0] = c;
         buf[1] = '\0';
-        _strByteLength = 1;
     }
     _strLength = 1;
 }
@@ -108,7 +107,6 @@ String::String(char c) {
 String::String(wchar w) {
     reallocate(4);
     char* buf = cstrNoConst();
-    invalidateMetadata();
     _strByteLength = convertWCharToUtf8(w, buf);
     _strLength = 1;
     buf[_strByteLength] = '\0';
@@ -116,16 +114,14 @@ String::String(wchar w) {
 
 String::String(int size) {
     reallocate(size);
-    invalidateMetadata();
 }
 
 // Byte substr.
 String::String(const String& other, int from, int cnt) {
     reallocate(cnt);
+    _strByteLength = cnt;
     char* buf = cstrNoConst();
     memcpy(buf, other.cstr() + from, cnt);
-    invalidateMetadata();
-    _strByteLength = cnt;
     buf[cnt] = '\0';
 }
 
@@ -329,24 +325,23 @@ static int convertWCharToUtf8(wchar chr, char* result) {
 }
 
 void String::reallocate(int byteLength) {
-    if ((byteLength+1) < shortStrCapacity) { return; }
-    int targetCapacity = 1;
-    while (targetCapacity < (byteLength+1)) { targetCapacity <<= 1; }
-    if (targetCapacity <= cCapacity) { return; }
-
-    if (cCapacity < targetCapacity) {
-        if (cCapacity > 0) {
-            delete[] data.longStr;
-        }
-        cCapacity = targetCapacity;
-        data.longStr = new char[targetCapacity];
-    }
-}
-
-void String::invalidateMetadata() const {
+    // Invalidating metadata.
     _hashCodeEvaluted = false;
     _strLength = -1;
     _strByteLength = -1;
+
+    // Accounting for the terminating byte.
+    byteLength++;
+    if (byteLength <= shortStrCapacity || byteLength <= cCapacity) { return; }
+    int targetCapacity = 1;
+    while (targetCapacity < byteLength) { targetCapacity <<= 1; }
+    if (targetCapacity <= cCapacity) { return; }
+
+    if (cCapacity > 0) {
+        delete[] data.longStr;
+    }
+    cCapacity = targetCapacity;
+    data.longStr = new char[targetCapacity];
 }
 
 void String::wCharToUtf8Str(const wchar* wbuffer) {
@@ -356,8 +351,6 @@ void String::wCharToUtf8Str(const wchar* wbuffer) {
         newCap += convertWCharToUtf8(wbuffer[i], nullptr);
     }
     reallocate(newCap);
-
-    invalidateMetadata();
 
     //convert all the wchars to codepoints
     char* buf = cstrNoConst();
@@ -508,7 +501,6 @@ String String::substr(int start, int cnt) const {
     }
 
     String retVal(actualSize);
-    retVal.invalidateMetadata();
     retVal._strByteLength = actualSize;
     char* retBuf = retVal.cstrNoConst();
     retBuf[actualSize] = '\0';
