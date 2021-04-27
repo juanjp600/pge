@@ -53,7 +53,7 @@ class String {
         String toUpper() const;
         String toLower() const;
         String trim() const;
-        std::vector<String> split(const String& needle, bool removeEmptyEntries) const;
+        std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
         static String join(const std::vector<String>& vect, const String& separator);
 
         std::cmatch regexMatch(const std::regex& pattern) const;
@@ -70,6 +70,7 @@ class String {
 
     private:
         String(int size);
+        String(const String& other, int from, int cnt);
 
         int cCapacity = 0;
 

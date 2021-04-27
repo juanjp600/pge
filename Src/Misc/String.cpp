@@ -119,6 +119,16 @@ String::String(int size) {
     invalidateMetadata();
 }
 
+// Byte substr.
+String::String(const String& other, int from, int cnt) {
+    reallocate(cnt);
+    char* buf = cstrNoConst();
+    memcpy(buf, other.cstr() + from, cnt);
+    invalidateMetadata();
+    _strByteLength = cnt;
+    buf[cnt] = '\0';
+}
+
 template <class T>
 String String::format(T t, const String& format) {
     int size = snprintf(nullptr, 0, format.cstr(), t) + 1;
@@ -497,9 +507,9 @@ String String::substr(int start, int cnt) const {
         actualSize += measureCodepoint(buf[startPos + actualSize]);
     }
 
-    String retVal(actualSize + 1);
+    String retVal(actualSize);
     retVal.invalidateMetadata();
-    //retVal._strByteLength = actualSize;
+    retVal._strByteLength = actualSize;
     char* retBuf = retVal.cstrNoConst();
     retBuf[actualSize] = '\0';
     memcpy(retBuf, buf + startPos, actualSize);
@@ -604,34 +614,32 @@ String String::trim() const {
     }
 
     int newSize = trailingPos - leadingPos + 1;
-    String ret(newSize);
-    char* retBuf = ret.cstrNoConst();
-    memcpy(retBuf, buf + leadingPos, newSize);
-    retBuf[newSize] = '\0';
+    String ret(*this, leadingPos, newSize);
     // If the length has been calculated, good, it remains valid, if not, it just goes more into the negative.
-    ret._strByteLength = newSize;
     ret._strLength = _strLength - (byteLength() - newSize);
     return ret;
 }
 
-std::vector<String> String::split(const String& needle, bool removeEmptyEntries) const {
+std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
     std::vector<String> retVal;
-    String haystack = String(*this);
-    while (haystack.findFirst(needle) > -1) {
-        String adder = haystack.substr(0, haystack.findFirst(needle));
-        retVal.push_back(adder);
-        haystack = haystack.substr(adder.byteLength()+needle.byteLength());
+    const char* haystack = cstr();
+    const char* needle = needleStr.cstr();
+    int codepoint;
+    int cut = 0;
+    for (int i = 0; i < byteLength() - needleStr.byteLength() + 1; i += codepoint) {
+        codepoint = measureCodepoint(haystack[i]);
+        if (memcmp(haystack + i, needle, codepoint) == 0) {
+            int addSize = i - cut;
+            if (!removeEmptyEntries || addSize != 0) {
+                retVal.push_back(String(*this, cut, addSize));
+            }
+            cut = i + needleStr.byteLength();
+        }
     }
     // Add the rest of the string to the vector.
-    retVal.push_back(haystack);
-
-    if (removeEmptyEntries) {
-        for (int i = 0; i < (int)retVal.size(); i++) {
-            if (retVal[i].isEmpty()) {
-                retVal.erase(retVal.begin() + i);
-                i--;
-            }
-        }
+    int endAddSize = byteLength() - cut;
+    if (endAddSize != 0) {
+        retVal.push_back(String(*this, cut, endAddSize));
     }
 
     return retVal;
