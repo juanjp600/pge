@@ -508,41 +508,40 @@ String String::replace(const String& fnd, const String& rplace) const {
     const char* rplaceStr = rplace.cstr();
     const char* thisStr = cstr();
 
-    int replacedInstances = 0;
+    // A string of length n can only occur x/n times in a string of length x.
+    std::vector<int> foundPositions;
+    foundPositions.reserve(byteLength() / fnd.byteLength());
 
-    int newSize = byteLength();
-    for (int i=0;i<byteLength()-fnd.byteLength()+1;) {
-        if (memcmp(fndStr, thisStr+i,fnd.byteLength())==0) {
-            newSize+=rplace.byteLength()-fnd.byteLength();
-            i+=fnd.byteLength();
-            replacedInstances++;
+    for (int i = 0; i < byteLength() - fnd.byteLength() + 1;) {
+        if (memcmp(fndStr, thisStr + i,fnd.byteLength())==0) {
+            foundPositions.push_back(i);
+            i += fnd.byteLength();
         } else {
             i++;
         }
     }
-
-    String retVal(newSize);
-    char* retBuf = retVal.cstrNoConst();
-    int i=0; int j=0;
-    while (i<byteLength()) {
-        bool found = i<byteLength()-fnd.byteLength()+1;
-        if (found) {
-            found = memcmp(fndStr,thisStr+i,fnd.byteLength())==0;
-        }
-        if (found) {
-            memcpy(retBuf+j,rplaceStr,rplace.byteLength());
-            i+=fnd.byteLength(); j+=rplace.byteLength();
-        } else {
-            retBuf[j]=thisStr[i];
-            i++; j++;
-        }
-    }
-    retBuf[j]='\0';
     
+    int newSize = byteLength() - foundPositions.size() * (fnd.byteLength() - rplace.byteLength());
+    String retVal(newSize);
     retVal._strByteLength = newSize;
+
+    char* retBuf = retVal.cstrNoConst();
+    int retPos = 0;
+    int thisPos = 0;
+    for (int pos : foundPositions) {
+        int thisLen = pos - thisPos;
+        memcpy(retBuf + retPos, thisStr + thisPos, thisLen);
+        retPos += thisLen;
+        memcpy(retBuf + retPos, rplaceStr, rplace.byteLength());
+        retPos += rplace.byteLength();
+        thisPos = pos + fnd.byteLength();
+    }
+    // Append the rest of the string, including terminating byte.
+    memcpy(retBuf + retPos, thisStr + thisPos, byteLength() - thisPos + 1);
+   
     // If the string that is being operated on already has had its length calculated, we assume it to be worth it to pre-calculate the new string's length.
     if (_strLength >= 0) {
-        retVal._strLength = _strLength - (fnd.length() - rplace.length()) * replacedInstances;
+        retVal._strLength = _strLength - foundPositions.size() * (fnd.length() - rplace.length());
     }
     return retVal;
 }
@@ -622,8 +621,8 @@ std::vector<String> String::split(const String& needleStr, bool removeEmptyEntri
 }
 
 String String::join(const std::vector<String>& vect, const String& separator) {
-    if (vect.size() <= 0) {
-        return "";
+    if (vect.size() == 0) {
+        return String();
     }
 
     String retVal = vect[0];
