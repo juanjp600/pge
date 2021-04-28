@@ -13,7 +13,7 @@ using namespace PGE;
 static const String INVALID_STR = "Tried using an invalid path";
 
 static String sanitizeFileSeperator(const String& str) {
-    return str.replace("\\", "//");
+    return str.replace("\\", "/");
 }
 
 static String resourceStr;
