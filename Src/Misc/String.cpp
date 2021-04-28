@@ -468,27 +468,36 @@ float String::toFloat() const {
 }
 
 String String::substr(int start, int cnt) const {
-    if ((cnt<0) || (cnt+start>=byteLength())) {
-        cnt = byteLength()-start;
-    }
-
     const char* buf = cstr();
 
     int startPos = 0;
     for (int i = 0; i < start; i++) {
+        __ASSERT(buf[startPos] != '\0', "Substring would go past string data (start: " + fromInt(start) + "; size: " + fromInt(length()) + ")");
         startPos += measureCodepoint(buf[startPos]);
     }
 
     int actualSize = 0;
-    for (int i = 0; i < cnt; i++) {
-        actualSize += measureCodepoint(buf[startPos + actualSize]);
+    if (cnt < 0) {
+        cnt = 0;
+        while (buf[startPos + actualSize] != '\0') {
+            actualSize += measureCodepoint(buf[startPos + actualSize]);
+            cnt++;
+        }
+        // We get it for free here.
+        _strLength = start + cnt;
+    } else {
+        for (int i = 0; i < cnt; i++) {
+            __ASSERT(buf[startPos + actualSize] != '\0', "Substring would go past string data (start: " + fromInt(start) + "; content: " + fromInt(cnt) + "; size: " + fromInt(length()) + ")");
+            actualSize += measureCodepoint(buf[startPos + actualSize]);
+        }
     }
 
     String retVal(actualSize);
     retVal._strByteLength = actualSize;
+    retVal._strLength = cnt;
     char* retBuf = retVal.cstrNoConst();
-    retBuf[actualSize] = '\0';
     memcpy(retBuf, buf + startPos, actualSize);
+    retBuf[actualSize] = '\0';
     return retVal;
 }
 
