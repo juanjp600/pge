@@ -34,6 +34,9 @@ class String {
         static String fromInt(int i);
         static String fromFloat(float f);
 
+        String& operator=(const String& other);
+        String& operator+=(const String& other);
+
         const char* cstr() const;
         void wstr(wchar* buffer) const;
         int toInt(bool& success) const;
@@ -60,9 +63,6 @@ class String {
 
         //String unHex() const;
 
-        String& operator=(const String& other);
-        String& operator+=(const String& other);
-
         long long getHashCode() const;
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
@@ -88,7 +88,6 @@ class String {
         } data;
 
         void wCharToUtf8Str(const wchar* wbuffer);
-        static wchar utf8ToWChar(const char* cbuffer);
         void reallocate(int size);
         char* cstrNoConst();
     };

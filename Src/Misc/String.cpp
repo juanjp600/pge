@@ -15,6 +15,89 @@ using namespace PGE;
 
 static constexpr uint64_t FNV_SEED = 0xcbf29ce484222325;
 
+//
+// Utility
+//
+
+static int measureCodepoint(unsigned char chr) {
+    if ((chr & 0x80) == 0x00) {
+        //first bit is 0: treat as ASCII
+        return 1;
+    }
+
+    //first bit is 1, number of consecutive 1 bits at the start is length of codepoint
+    int len = 0;
+    while (((chr >> (7 - len)) & 0x01) == 0x01) {
+        len++;
+    }
+    return len;
+}
+
+static wchar utf8ToWChar(const char* cbuffer) {
+    int codepointLen = measureCodepoint(cbuffer[0]);
+    if (codepointLen == 1) {
+        return cbuffer[0];
+    } else {
+        // Decode first byte by skipping all bits that indicate the length of the codepoint.
+        wchar newChar = cbuffer[0] & (0x7f >> codepointLen);
+        for (int j = 1; j < codepointLen; j++) {
+            // Decode all of the following bytes, fixed 6 bits per byte.
+            newChar = (newChar << 6) | (cbuffer[j] & 0x3f);
+        }
+        return newChar;
+    }
+}
+
+static int convertWCharToUtf8(wchar chr, char* result) {
+    // Fits in standard ASCII, just return the char as-is.
+    if ((chr & 0x7f) == chr) {
+        if (result != nullptr) { result[0] = (char)chr; }
+        return 1;
+    }
+
+    int len = 1;
+
+    // Determine most of the bytes after the first one.
+    while ((chr & (~0x3f)) != 0x00) {
+        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
+        chr >>= 6;
+        len++;
+    }
+
+    // Determine the remaining byte(s): if the number of free bits in
+    // the first byte isn't enough to fit the remaining bits,
+    // add another byte.
+    char firstByte = 0x00;
+    for (int i = 0; i < len; i++) {
+        firstByte |= (0x1 << (7 - i));
+    }
+
+    if (((firstByte | (0x1 << (7 - len))) & chr) == 0x00) {
+        // It fits!
+        firstByte |= chr;
+    } else {
+        // It doesn't fit: add another byte.
+        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
+        chr >>= 6;
+        firstByte = (firstByte | (0x1 << (7 - len))) | chr;
+        len++;
+    }
+
+    if (result != nullptr) {
+        result[len - 1] = firstByte;
+        // Flip the result.
+        for (int i = 0; i < len / 2; i++) {
+            char b = result[i];
+            result[i] = result[len - 1 - i];
+            result[len - 1 - i] = b;
+        }
+    }
+
+    return len;
+}
+
+//
+
 String::~String() {
     if (cCapacity > 0) {
         delete[] data.longStr;
@@ -62,6 +145,26 @@ String::String(const std::wstring& cppwstr) {
     wCharToUtf8Str(cppwstr.c_str());
 }
 
+void String::wCharToUtf8Str(const wchar* wbuffer) {
+    // Determine the capacity of the cbuffer by measuring the number of bytes required for each codepoint.
+    int newCap = 0;
+    for (int i = 0; wbuffer[i] != L'\0'; i++) {
+        newCap += convertWCharToUtf8(wbuffer[i], nullptr);
+    }
+    reallocate(newCap);
+
+    // Convert all the wchars to codepoints.
+    char* buf = cstrNoConst();
+    int cIndex = 0;
+    // We get _strLength "for free" here.
+    for (_strLength = 0; wbuffer[_strLength] != L'\0'; _strLength++) {
+        int increment = convertWCharToUtf8(wbuffer[_strLength], &buf[cIndex]);
+        cIndex += increment;
+    }
+    buf[cIndex] = '\0';
+    _strByteLength = cIndex;
+}
+
 #if defined(__APPLE__) && defined(__OBJC__)
 String::String(const NSString* nsstr) {
     const char* cPath = [nsstr cStringUsingEncoding: NSUTF8StringEncoding];
@@ -81,8 +184,6 @@ String::String(const String& a, const String& b) {
     memcpy(buf + a.byteLength(), b.cstr(), b.byteLength());
     buf[len] = '\0';
 }
-
-static int convertWCharToUtf8(wchar chr, char* result);
 
 String::String(unsigned char c) {
     char* buf = cstrNoConst();
@@ -107,6 +208,10 @@ String::String(wchar w) {
     _strLength = 1;
     buf[_strByteLength] = '\0';
 }
+
+//
+// Private constructors.
+//
 
 String::String(int size) {
     reallocate(size);
@@ -243,68 +348,6 @@ bool String::isEmpty() const {
     return byteLength() == 0;
 }
 
-static int measureCodepoint(unsigned char chr) {
-    if ((chr & 0x80) == 0x00) {
-        //first bit is 0: treat as ASCII
-        return 1;
-    }
-
-    //first bit is 1, number of consecutive 1 bits at the start is length of codepoint
-    int len = 0;
-    while (((chr >> (7 - len)) & 0x01) == 0x01) {
-        len++;
-    }
-    return len;
-}
-
-static int convertWCharToUtf8(wchar chr, char* result) {
-    // Fits in standard ASCII, just return the char as-is.
-    if ((chr & 0x7f) == chr) {
-        if (result != nullptr) { result[0] = (char)chr; }
-        return 1;
-    }
-
-    int len = 1;
-
-    // Determine most of the bytes after the first one.
-    while ((chr & (~0x3f)) != 0x00) {
-        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
-        chr >>= 6;
-        len++;
-    }
-
-    // Determine the remaining byte(s): if the number of free bits in
-    // the first byte isn't enough to fit the remaining bits,
-    // add another byte.
-    char firstByte = 0x00;
-    for (int i = 0; i < len; i++) {
-        firstByte |= (0x1 << (7-i));
-    }
-
-    if (((firstByte | (0x1 << (7-len))) & chr) == 0x00) {
-        // It fits!
-        firstByte |= chr;
-    } else {
-        // It doesn't fit: add another byte.
-        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
-        chr >>= 6;
-        firstByte = (firstByte | (0x1 << (7 - len))) | chr;
-        len++;
-    }
-
-    if (result != nullptr) {
-        result[len - 1] = firstByte;
-        // Flip the result.
-        for (int i = 0; i < len / 2; i++) {
-            char b = result[i];
-            result[i] = result[len - 1 - i];
-            result[len - 1 - i] = b;
-        }
-    }
-
-    return len;
-}
-
 void String::reallocate(int byteLength) {
     // Invalidating metadata.
     _hashCodeEvaluted = false;
@@ -322,92 +365,6 @@ void String::reallocate(int byteLength) {
     }
     cCapacity = targetCapacity;
     data.longStr = new char[targetCapacity];
-}
-
-void String::wCharToUtf8Str(const wchar* wbuffer) {
-    // Determine the capacity of the cbuffer by measuring the number of bytes required for each codepoint.
-    int newCap = 0;
-    for (int i = 0; wbuffer[i] != L'\0'; i++) {
-        newCap += convertWCharToUtf8(wbuffer[i], nullptr);
-    }
-    reallocate(newCap);
-
-    // Convert all the wchars to codepoints.
-    char* buf = cstrNoConst();
-    int cIndex = 0;
-    // We get _strLength "for free" here.
-    for (_strLength = 0; wbuffer[_strLength] != L'\0'; _strLength++) {
-        int increment = convertWCharToUtf8(wbuffer[_strLength], &buf[cIndex]);
-        cIndex += increment;
-    }
-    buf[cIndex] = '\0';
-    _strByteLength = cIndex;
-}
-
-wchar String::utf8ToWChar(const char* cbuffer) {
-    int codepointLen = measureCodepoint(cbuffer[0]);
-    if (codepointLen == 1) {
-        return cbuffer[0];
-    } else {
-        // Decode first byte by skipping all bits that indicate the length of the codepoint.
-        wchar newChar = cbuffer[0] & (0x7f >> codepointLen);
-        for (int j = 1; j < codepointLen; j++) {
-            // Decode all of the following bytes, fixed 6 bits per byte.
-            newChar = (newChar << 6) | (cbuffer[j] & 0x3f);
-        }
-        return newChar;
-    }
-}
-
-int String::length() const {
-    if (_strLength < 0) {
-        const char* buf = cstr();
-        _strLength = 0;
-        // We get _strByteLength "for free" here.
-        for (_strByteLength = 0; buf[_strByteLength] != '\0'; _strByteLength += measureCodepoint(buf[_strByteLength])) {
-            _strLength++;
-        }
-    }
-    return _strLength;
-}
-
-int String::byteLength() const {
-    if (_strByteLength < 0) {
-        _strByteLength = 0;
-        const char* buf = cstr();
-        while (buf[_strByteLength] != '\0') {
-            _strByteLength++;
-        }
-    }
-    return _strByteLength;
-}
-
-int String::findFirst(const String& fnd, int from) const {
-    __ASSERT(!fnd.isEmpty(), "Find string can't be empty");
-    if (from < 0) { from = 0; }
-    int charPos = 0;
-    for (int i = 0; i <= byteLength()-fnd.byteLength(); i += measureCodepoint(cstr()[i])) {
-        if (charPos >= from) {
-            if (memcmp(fnd.cstr(), cstr() + i, fnd.byteLength()) == 0) { return charPos; }
-        }
-        charPos++;
-    }
-    return -1;
-}
-
-int String::findLast(const String& fnd, int from) const {
-    __ASSERT(!fnd.isEmpty(), "Find string can't be empty");
-    if (from < 0) { from = 0; }
-    const char* buf = cstr();
-    int charPos = 0;
-    int foundPos = -1;
-    for (int i = 0; i <= byteLength() - fnd.byteLength(); i += measureCodepoint(buf[i])) {
-        if (charPos >= from) {
-            if (memcmp(fnd.cstr(), buf + i, fnd.byteLength()) == 0) { foundPos = charPos; }
-        }
-        charPos++;
-    }
-    return foundPos;
 }
 
 const char* String::cstr() const {
@@ -459,6 +416,57 @@ int String::toInt() const {
 float String::toFloat() const {
     bool discard;
     return toFloat(discard);
+}
+
+int String::length() const {
+    if (_strLength < 0) {
+        const char* buf = cstr();
+        _strLength = 0;
+        // We get _strByteLength "for free" here.
+        for (_strByteLength = 0; buf[_strByteLength] != '\0'; _strByteLength += measureCodepoint(buf[_strByteLength])) {
+            _strLength++;
+        }
+    }
+    return _strLength;
+}
+
+int String::byteLength() const {
+    if (_strByteLength < 0) {
+        _strByteLength = 0;
+        const char* buf = cstr();
+        while (buf[_strByteLength] != '\0') {
+            _strByteLength++;
+        }
+    }
+    return _strByteLength;
+}
+
+int String::findFirst(const String& fnd, int from) const {
+    __ASSERT(!fnd.isEmpty(), "Find string can't be empty");
+    if (from < 0) { from = 0; }
+    int charPos = 0;
+    for (int i = 0; i <= byteLength() - fnd.byteLength(); i += measureCodepoint(cstr()[i])) {
+        if (charPos >= from) {
+            if (memcmp(fnd.cstr(), cstr() + i, fnd.byteLength()) == 0) { return charPos; }
+        }
+        charPos++;
+    }
+    return -1;
+}
+
+int String::findLast(const String& fnd, int from) const {
+    __ASSERT(!fnd.isEmpty(), "Find string can't be empty");
+    if (from < 0) { from = 0; }
+    const char* buf = cstr();
+    int charPos = 0;
+    int foundPos = -1;
+    for (int i = 0; i <= byteLength() - fnd.byteLength(); i += measureCodepoint(buf[i])) {
+        if (charPos >= from) {
+            if (memcmp(fnd.cstr(), buf + i, fnd.byteLength()) == 0) { foundPos = charPos; }
+        }
+        charPos++;
+    }
+    return foundPos;
 }
 
 String String::substr(int start, int cnt) const {
