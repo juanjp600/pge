@@ -498,7 +498,7 @@ wchar String::charAt(int pos) const {
     for (int i = 0; i < pos; i++) {
         strPos += measureCodepoint(buf[strPos]);
     }
-    return utf8ToWChar(buf+strPos);
+    return utf8ToWChar(buf + strPos);
 }
 
 String String::replace(const String& fnd, const String& rplace) const {
@@ -508,12 +508,9 @@ String String::replace(const String& fnd, const String& rplace) const {
     const char* rplaceStr = rplace.cstr();
     const char* thisStr = cstr();
 
-    // A string of length n can only occur x/n times in a string of length x.
     std::vector<int> foundPositions;
-    foundPositions.reserve(byteLength() / fnd.byteLength());
-
     for (int i = 0; i < byteLength() - fnd.byteLength() + 1;) {
-        if (memcmp(fndStr, thisStr + i,fnd.byteLength())==0) {
+        if (memcmp(fndStr, thisStr + i, fnd.byteLength()) == 0) {
             foundPositions.push_back(i);
             i += fnd.byteLength();
         } else {
@@ -521,7 +518,7 @@ String String::replace(const String& fnd, const String& rplace) const {
         }
     }
     
-    int newSize = byteLength() - foundPositions.size() * (fnd.byteLength() - rplace.byteLength());
+    int newSize = byteLength() + foundPositions.size() * (rplace.byteLength() - fnd.byteLength());
     String retVal(newSize);
     retVal._strByteLength = newSize;
 
@@ -541,7 +538,7 @@ String String::replace(const String& fnd, const String& rplace) const {
    
     // If the string that is being operated on already has had its length calculated, we assume it to be worth it to pre-calculate the new string's length.
     if (_strLength >= 0) {
-        retVal._strLength = _strLength - foundPositions.size() * (fnd.length() - rplace.length());
+        retVal._strLength = _strLength + foundPositions.size() * (rplace.length() - fnd.length());
     }
     return retVal;
 }
@@ -560,7 +557,7 @@ String String::toUpper() const {
 String String::toLower() const {
     wchar* newBuf = new wchar[byteLength() * sizeof(wchar) + 1];
     wstr(newBuf);
-    for (int i = 0; i<byteLength(); i++) {
+    for (int i = 0; i < byteLength(); i++) {
         newBuf[i] = towlower(newBuf[i]);
     }
     String retVal(newBuf);
@@ -569,7 +566,7 @@ String String::toLower() const {
 }
 
 String String::trim() const {
-    if (byteLength()==0) { return *this; }
+    if (byteLength() == 0) { return *this; }
 
     const char* buf = cstr();
     int leadingPos = 0;
@@ -580,7 +577,7 @@ String String::trim() const {
         }
     }
 
-    int trailingPos = byteLength()-1;
+    int trailingPos = byteLength() - 1;
     while (charAt(trailingPos) == ' ' || charAt(trailingPos) == '\t') {
         trailingPos--;
         if (trailingPos<0) {
