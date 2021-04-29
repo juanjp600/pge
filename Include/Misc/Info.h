@@ -1,7 +1,7 @@
 #ifndef PGE_INFO_H_INCLUDED
 #define PGE_INFO_H_INCLUDED
 
-#include <Misc/String.h>
+#include <String/String.h>
 
 namespace PGE {
 

@@ -9,7 +9,7 @@
 
 #include <ResourceManagement/ResourceReference.h>
 #include <Shader/Shader.h>
-#include <Misc/String.h>
+#include <String/String.h>
 
 #include "../Graphics/GraphicsDX11.h"
 

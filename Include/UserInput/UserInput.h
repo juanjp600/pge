@@ -2,7 +2,7 @@
 #define PGE_INPUT_H_INCLUDED
 
 #include <Math/Vector.h>
-#include <Misc/String.h>
+#include <String/String.h>
 
 namespace PGE {
 

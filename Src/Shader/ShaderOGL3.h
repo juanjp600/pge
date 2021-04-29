@@ -3,7 +3,7 @@
 
 #include <Graphics/Graphics.h>
 #include <Shader/Shader.h>
-#include <Misc/String.h>
+#include <String/String.h>
 #include <Math/Matrix.h>
 
 #include "../ResourceManagement/OGL3.h"

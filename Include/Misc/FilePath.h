@@ -1,7 +1,7 @@
 #ifndef PGE_FILEPATH_H_INCLUDED
 #define PGE_FILEPATH_H_INCLUDED
 
-#include "String.h"
+#include <String/String.h>
 
 namespace PGE {
 

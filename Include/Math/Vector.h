@@ -1,7 +1,7 @@
 #ifndef PGE_VECTOR_H_INCLUDED
 #define PGE_VECTOR_H_INCLUDED
 
-#include <Misc/String.h>
+#include <String/String.h>
 
 // TODO: Move consistency across classes?
 namespace PGE {

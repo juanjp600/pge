@@ -6,7 +6,7 @@
 #include <atomic>
 #include <vector>
 
-#include <Misc/String.h>
+#include <String/String.h>
 #include <Exception/Exception.h>
 
 namespace PGE {
