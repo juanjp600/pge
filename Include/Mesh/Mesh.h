@@ -30,7 +30,7 @@ class Vertex {
             Property();
             Property(const Property& other);
             void copyOtherValue(const Property& other);
-            long long hashCode;
+            uint64_t hashCode;
             PROPERTY_TYPE type;
             union Value {
                 Value();
@@ -54,7 +54,7 @@ class Vertex {
 
     private:
         std::vector<Property> properties;
-        Property& insertProperty(long long hashCode);
+        Property& insertProperty(uint64_t hashCode);
 };
 
 class Primitive {

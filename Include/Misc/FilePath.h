@@ -31,7 +31,7 @@ class FilePath {
 
         bool exists() const;
 
-        long long getHashCode() const;
+        uint64_t getHashCode() const;
         bool equals(const FilePath& other) const;
         bool isValid() const;
 };

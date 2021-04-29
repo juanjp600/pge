@@ -63,7 +63,7 @@ class String {
 
         //String unHex() const;
 
-        long long getHashCode() const;
+        uint64_t getHashCode() const;
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
         bool isEmpty() const;

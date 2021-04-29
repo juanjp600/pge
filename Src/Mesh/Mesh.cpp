@@ -84,7 +84,7 @@ const Vertex::Property& Vertex::getProperty(const String& name,int& indexHint) {
     return Property::def;
 }
 
-Vertex::Property& Vertex::insertProperty(long long hashCode) {
+Vertex::Property& Vertex::insertProperty(uint64_t hashCode) {
     int insertPos = 0;
     for (int i = 0; i < (int)properties.size(); i++) {
         if (properties[i].hashCode>hashCode) { break; }

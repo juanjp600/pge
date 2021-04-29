@@ -99,7 +99,7 @@ bool FilePath::exists() const {
     return FileUtil::exists(*this);
 }
 
-long long FilePath::getHashCode() const {
+uint64_t FilePath::getHashCode() const {
     return name.getHashCode();
 }
 

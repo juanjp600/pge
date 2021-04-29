@@ -227,7 +227,7 @@ uint8_t* ShaderDX11::CBufferInfo::getData() {
     return data;
 }
 
-std::unordered_map<long long, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
+std::unordered_map<uint64_t, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
     return &constants;
 }
 

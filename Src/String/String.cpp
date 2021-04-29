@@ -299,7 +299,7 @@ std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
     return os.write(s.cstr(), s.byteLength());
 }
 
-long long String::getHashCode() const {
+uint64_t String::getHashCode() const {
     if (!_hashCodeEvaluted) {
         // FNV-1a
         // Public domain
