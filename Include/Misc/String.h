@@ -26,7 +26,7 @@ class String {
         String(const NSString* nsstr);
         #endif
         String(const String& a, const String& b);
-        String(unsigned char c);
+        String(char c);
         String(wchar w);
 
         template <class T>

@@ -185,12 +185,12 @@ String::String(const String& a, const String& b) {
     buf[len] = '\0';
 }
 
-String::String(unsigned char c) {
+String::String(char c) {
     char* buf = cstrNoConst();
     if (c < 0) {
         reallocate(2);
         _strByteLength = 2;
-        convertWCharToUtf8((wchar)c, buf);
+        convertWCharToUtf8((wchar)(unsigned char)c, buf);
         buf[2] = '\0';
     } else {
         reallocate(1);
