@@ -16,16 +16,14 @@ class StringKeySafe {
 
 }
 
-using namespace PGE;
-
-template <> struct std::hash<StringKeySafe> {
-    size_t operator()(const StringKeySafe& key) const {
+template <> struct std::hash<PGE::StringKeySafe> {
+    size_t operator()(const PGE::StringKeySafe& key) const {
         return key.str.getHashCode();
     }
 };
 
-template <> struct std::equal_to<StringKeySafe> {
-    bool operator()(const StringKeySafe& a, const StringKeySafe& b) const {
+template <> struct std::equal_to<PGE::StringKeySafe> {
+    bool operator()(const PGE::StringKeySafe& a, const PGE::StringKeySafe& b) const {
         if (a.str.byteLength() != b.str.byteLength()) { return false; }
         if (a.str.length() != b.str.length()) { return false; }
         return memcmp(a.str.cstr(), b.str.cstr(), a.str.byteLength()) == 0;

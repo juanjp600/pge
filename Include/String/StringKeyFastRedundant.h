@@ -16,16 +16,14 @@ class StringKeyFastRedundant {
 
 }
 
-using namespace PGE;
-
-template <> struct std::hash<StringKeyFastRedundant> {
-    size_t operator()(const StringKeyFastRedundant& key) const {
+template <> struct std::hash<PGE::StringKeyFastRedundant> {
+    size_t operator()(const PGE::StringKeyFastRedundant& key) const {
         return key.str.getHashCode();
     }
 };
 
-template <> struct std::equal_to<StringKeyFastRedundant> {
-    bool operator()(const StringKeyFastRedundant& a, const StringKeyFastRedundant& b) const {
+template <> struct std::equal_to<PGE::StringKeyFastRedundant> {
+    bool operator()(const PGE::StringKeyFastRedundant& a, const PGE::StringKeyFastRedundant& b) const {
         return a.str.getHashCode() == b.str.getHashCode();
     }
 };

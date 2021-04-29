@@ -16,16 +16,14 @@ class StringKeyFast {
 
 }
 
-using namespace PGE;
-
-template <> struct std::hash<StringKeyFast> {
-    size_t operator()(const StringKeyFast& key) const {
+template <> struct std::hash<PGE::StringKeyFast> {
+    size_t operator()(const PGE::StringKeyFast& key) const {
         return key.hash;
     }
 };
 
-template <> struct std::equal_to<StringKeyFast> {
-    bool operator()(const StringKeyFast& a, const StringKeyFast& b) const {
+template <> struct std::equal_to<PGE::StringKeyFast> {
+    bool operator()(const PGE::StringKeyFast& a, const PGE::StringKeyFast& b) const {
         return a.hash == b.hash;
     }
 };
