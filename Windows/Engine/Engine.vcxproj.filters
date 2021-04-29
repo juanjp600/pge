@@ -359,5 +359,11 @@
     <ClInclude Include="..\..\Include\String\StringKeySafe.h">
       <Filter>Include\String</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\String\StringKeyFastRedundant.h">
+      <Filter>Include\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\String\StringKeyOrdered.h">
+      <Filter>Include\String</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
