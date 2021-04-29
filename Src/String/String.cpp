@@ -316,12 +316,14 @@ long long String::getHashCode() const {
 }
 
 bool String::equals(const String& other) const {
-    if (other.byteLength() != byteLength()) { return false; }
+    if (_strByteLength >= 0 && other._strByteLength >= 0 && byteLength() != other.byteLength()) { return false; }
+    if (_strLength >= 0 && other._strLength >= 0 && length() != other.length()) { return false; }
     return other.getHashCode() == getHashCode();
 }
 
 bool String::equalsIgnoreCase(const String& other) const {
-    if (byteLength() != other.byteLength()) { return false; }
+    if (_strByteLength >= 0 && other._strByteLength >= 0 && byteLength() != other.byteLength()) { return false; }
+    if (_strLength >= 0 && other._strLength >= 0 && length() != other.length()) { return false; }
     if (other.getHashCode() == getHashCode()) { return true; }
 
     wchar* w1 = new wchar[other.byteLength() * sizeof(wchar) + 1];
