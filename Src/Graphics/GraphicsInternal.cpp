@@ -11,7 +11,6 @@
 #include "../Texture/TextureDX11.h"
 #include "../Texture/TextureOGL3.h"
 #include "../Texture/TextureVK.h"
-#include "../Texture/TextureInternal.h"
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
