@@ -2,19 +2,11 @@
 
 using namespace PGE;
 
-TextureVK::TextureVK(Graphics* gfx, int width, int height, bool renderTarget, const void* buffer, FORMAT fmt) {
+TextureVK::TextureVK(Graphics* gfx, int w, int h, FORMAT fmt) : Texture(gfx, w, h, true, fmt) {
 
 }
 
-TextureVK::TextureVK(Graphics* gfx, const FilePath& fn, ThreadManager* threadManager) {
-    
-}
-
-TextureVK::TextureVK(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn) {
-
-}
-
-TextureVK::~TextureVK() {
+TextureVK::TextureVK(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt) : Texture(gfx, w, h, false, fmt) {
 
 }
 

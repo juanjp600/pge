@@ -63,6 +63,8 @@ class GLTexture : public Resource<GLuint> {
     public:
         GLTexture() {
             glGenTextures(1, &resource);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, resource);
         }
 
         ~GLTexture() {

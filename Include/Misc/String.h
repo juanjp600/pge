@@ -88,6 +88,7 @@ class String {
         void wCharToUtf8Str(const wchar* wbuffer);
         static wchar utf8ToWChar(const char* cbuffer);
         void reallocate(int size);
+        void reset();
         char* cstrNoConst();
     };
 

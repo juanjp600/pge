@@ -7,10 +7,10 @@ namespace PGE {
 
 class TextureVK : public Texture {
     public:
-        TextureVK(Graphics* gfx, int width, int height, bool renderTarget, const void* buffer, FORMAT fmt);
-        TextureVK(Graphics* gfx, const FilePath& fn, ThreadManager* threadManager);
-        TextureVK(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn);
-        ~TextureVK();
+        // Render target.
+        TextureVK(Graphics* gfx, int w, int h, FORMAT fmt);
+        // Loaded texture.
+        TextureVK(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt);
 
         Texture* copy() const override;
 

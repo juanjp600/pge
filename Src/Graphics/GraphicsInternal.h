@@ -14,9 +14,8 @@
 #define __GFX_OBJ_DEC \
 Shader* loadShader(const FilePath& path) override; \
 Mesh* createMesh(Primitive::TYPE pt) override; \
-Texture* loadTexture(uint8_t* buffer, int w, int h, int rw, int rh, const FilePath& fn = FilePath::fromStr("")) override; \
-Texture* loadTexture(const FilePath& filename, ThreadManager* threadManager) override; \
-Texture* createTexture(int w, int h, bool renderTarget, const void* buffer, Texture::FORMAT fmt) override;
+Texture* createRenderTargetTexture(int w, int h, Texture::FORMAT fmt) override; \
+Texture* loadTexture(int w, int h, uint8_t* buffer, Texture::FORMAT fmt) override;
 
 #define __GFX_OBJ_DEF(Type) \
 Shader* Graphics ## Type ## ::loadShader(const FilePath& path) { \
@@ -27,16 +26,12 @@ Mesh* Graphics ## Type ## ::createMesh(Primitive::TYPE pt) { \
     return new Mesh ## Type ## (this, pt); \
 } \
 \
-Texture* Graphics ## Type ## ::loadTexture(uint8_t* buffer, int w, int h, int rw, int rh, const FilePath& fn) { \
-    return new Texture ## Type ## (this, buffer, w, h, rw, rh, fn); \
+Texture* Graphics ## Type ## ::createRenderTargetTexture(int w, int h, Texture::FORMAT fmt) { \
+    return new Texture ## Type ## (this, w, h, fmt); \
 } \
 \
-Texture* Graphics ## Type ## ::loadTexture(const FilePath& filename, ThreadManager* threadManager) { \
-    return new Texture ## Type ## (this, filename, threadManager); \
-} \
-\
-Texture* Graphics ## Type ## ::createTexture(int w, int h, bool renderTarget, const void* buffer, Texture::FORMAT fmt) { \
-    return new Texture ## Type ## (this, w, h, renderTarget, buffer, fmt); \
+Texture* Graphics ## Type ## ::loadTexture(int w, int h, uint8_t* buffer, Texture::FORMAT fmt) { \
+    return new Texture ## Type ## (this, w, h, buffer, fmt); \
 }
 
 struct SDL_Window;
@@ -57,9 +52,8 @@ class GraphicsInternal : public Graphics {
 
         virtual Shader* loadShader(const FilePath& path) = 0;
         virtual Mesh* createMesh(Primitive::TYPE pt) = 0;
-        virtual Texture* loadTexture(uint8_t* buffer, int w, int h, int rw, int rh, const FilePath& fn) = 0;
-        virtual Texture* loadTexture(const FilePath& filename, ThreadManager* threadManager) = 0;
-        virtual Texture* createTexture(int w, int h, bool renderTarget, const void* buffer, Texture::FORMAT fmt) = 0;
+        virtual Texture* createRenderTargetTexture(int w, int h, Texture::FORMAT fmt) = 0;
+        virtual Texture* loadTexture(int w, int h, uint8_t* buffer, Texture::FORMAT fmt) = 0;
 };
 
 }

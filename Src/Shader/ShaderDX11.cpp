@@ -71,6 +71,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     samplerDesc.MipLODBias = -0.1f;
 
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
+    resourceManager.increaseSize(samplerCount);
     dxSamplerState = ResourceReferenceVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < samplerCount; i++) {
         dxSamplerState[i] = resourceManager.addNewResource<D3D11SamplerState>(dxDevice, samplerDesc);

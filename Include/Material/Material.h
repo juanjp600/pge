@@ -20,7 +20,7 @@ class Material {
         bool isOpaque() const;
 
     protected:
-        Material(){};
+        Material() { };
         Shader* shader; std::vector<Texture*> textures;
         bool opaque;
 };

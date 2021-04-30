@@ -13,9 +13,10 @@ namespace PGE {
 
 class TextureDX11 : public Texture {
     public:
-        TextureDX11(Graphics* gfx, int width, int height, bool renderTarget, const void* buffer, FORMAT fmt);
-        TextureDX11(Graphics* gfx, const FilePath& fn, ThreadManager* threadManager);
-        TextureDX11(Graphics* gfx, uint8_t* fiBuffer, int w, int h, int rw, int rh, const FilePath& fn);
+        // Render target.
+        TextureDX11(Graphics* gfx, int w, int h, FORMAT fmt);
+        // Loaded texture.
+        TextureDX11(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt);
 
         void useTexture(int index);
 
@@ -26,9 +27,7 @@ class TextureDX11 : public Texture {
         void* getNative() const override;
 
     private:
-        D3D11_TEXTURE2D_DESC dxTextureDesc;
         D3D11Texture2D::Ref dxTexture;
-        D3D11_SHADER_RESOURCE_VIEW_DESC dxShaderResourceViewDesc;
         D3D11ShaderResourceView::Ref dxShaderResourceView;
 
         D3D11RenderTargetView::Ref dxRtv;

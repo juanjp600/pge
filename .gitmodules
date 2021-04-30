@@ -1,6 +1,7 @@
 [submodule "Libraries/SDL2"]
 	path = Libraries/SDL2
-	url = git@github.com:libsdl-org/SDL.git
+	url = git@github.com:juanjp600/SDL.git
+	branch = main-2.0.14
 [submodule "Libraries\\SPIRV-Reflect"]
 	path = Libraries\\SPIRV-Reflect
 	url = git@github.com:KhronosGroup/SPIRV-Reflect.git
