@@ -32,7 +32,7 @@ class IO {
     
         virtual void startTextInputCapture() const = 0;
         virtual void stopTextInputCapture() const = 0;
-        virtual const String& getTextInput() const = 0;
+        virtual String getTextInput() const = 0;
     
         virtual void setClipboardText(const String& str) const = 0;
         virtual String getClipboardText() const = 0;

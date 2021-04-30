@@ -60,7 +60,7 @@ void IOInternal::stopTextInputCapture() const {
     SDL_StopTextInput();
 }
 
-const String& IOInternal::getTextInput() const {
+String IOInternal::getTextInput() const {
     return textInput;
 }
 

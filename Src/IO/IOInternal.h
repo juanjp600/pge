@@ -50,7 +50,7 @@ class IOInternal : public IO {
 
         void startTextInputCapture() const override;
         void stopTextInputCapture() const override;
-        const String& getTextInput() const override;
+        String getTextInput() const override;
 
         void setClipboardText(const String& str) const override;
         String getClipboardText() const override;
