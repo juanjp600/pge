@@ -387,7 +387,7 @@ void String::wstr(wchar* buffer) const {
         i += measureCodepoint(buf[i]);
         wIndex++;
     }
-    buffer[byteLength()] = '\0';
+    buffer[wIndex] = '\0';
 }
 
 int String::toInt(bool& success) const {
