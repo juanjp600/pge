@@ -82,7 +82,7 @@ class String {
 
         constexpr static int shortStrCapacity = 16;
 
-        union _StringData {
+        union {
             char shortStr[shortStrCapacity];
             char* longStr;
         } data;

@@ -223,7 +223,7 @@ void FileUtil::readLines(const FilePath& path, std::vector<String>& lines, bool 
 void FileUtil::readBytes(const FilePath& path, std::vector<uint8_t>& bytes) {
     std::ifstream file;
     file.open(path.cstr(), std::ios::ate | std::ios::binary);
-    __ASSERT(file.good(), "File is not good (file: \"" + path.str() + "\")");
+    PGE_ASSERT(file.good(), "File is not good (file: \"" + path.str() + "\")");
     size_t vertSize = (size_t)file.tellg();
     bytes.resize(bytes.size() + vertSize);
     file.seekg(0);

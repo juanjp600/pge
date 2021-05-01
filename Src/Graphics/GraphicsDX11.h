@@ -39,7 +39,7 @@ class GraphicsDX11 : public GraphicsInternal {
 
         void setZBufferState(ZBUFFER_STATE_INDEX index);
 
-        __GFX_OBJ_DEC
+        PGE_GFX_OBJ_DEC
 
     private:
         DXGIFactory1::Ref dxgiFactory;

@@ -26,7 +26,7 @@ Vertex& Vertex::operator=(const Vertex& other) {
                 break;
             }
         }
-        __ASSERT(found, "Failed to copy vertex property (hashcode: " + String::format(other.properties[i].hashCode, "%llX") + ")");
+        PGE_ASSERT(found, "Failed to copy vertex property (hashcode: " + String::format(other.properties[i].hashCode, "%llX") + ")");
     }
     return *this;
 }
@@ -98,7 +98,7 @@ Vertex::Property& Vertex::insertProperty(uint64_t hashCode) {
     properties.insert(properties.begin()+insertPos,prop);
 
     for (int i = 0; i < (int)properties.size()-1; i++) {
-        __ASSERT(properties[i].hashCode <= properties[i + 1].hashCode, "Incorrect vertex property order (" + String::fromInt(i) + ", " + String::fromInt(i + 1) + ")");
+        PGE_ASSERT(properties[i].hashCode <= properties[i + 1].hashCode, "Incorrect vertex property order (" + String::fromInt(i) + ", " + String::fromInt(i + 1) + ")");
     }
 
     return properties[insertPos];

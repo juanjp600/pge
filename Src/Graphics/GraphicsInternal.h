@@ -11,13 +11,13 @@
 #include <Mesh/Mesh.h>
 #include <Texture/Texture.h>
 
-#define __GFX_OBJ_DEC \
+#define PGE_GFX_OBJ_DEC \
 Shader* loadShader(const FilePath& path) override; \
 Mesh* createMesh(Primitive::TYPE pt) override; \
 Texture* createRenderTargetTexture(int w, int h, Texture::FORMAT fmt) override; \
 Texture* loadTexture(int w, int h, uint8_t* buffer, Texture::FORMAT fmt) override;
 
-#define __GFX_OBJ_DEF(Type) \
+#define PGE_GFX_OBJ_DEF(Type) \
 Shader* Graphics ## Type ## ::loadShader(const FilePath& path) { \
     return new Shader ## Type ## (this, path); \
 } \

@@ -54,13 +54,13 @@ FilePath FilePath::fromStr(const String& str) {
 }
 
 FilePath::FilePath(const FilePath& a, const String& b) {
-    __ASSERT(a.valid, INVALID_STR);
+    PGE_ASSERT(a.valid, INVALID_STR);
     name = a.str() + sanitizeFileSeperator(b);
     valid = true;
 }
 
 FilePath FilePath::makeDirectory() const {
-    __ASSERT(valid, INVALID_STR);
+    PGE_ASSERT(valid, INVALID_STR);
     if (str().charAt(length() - 1) != '/') {
         return *this + "/";
     }
@@ -80,7 +80,7 @@ void FilePath::wstr(wchar* buffer) const {
 }
 
 String FilePath::getExtension() const {
-    __ASSERT(valid, INVALID_STR);
+    PGE_ASSERT(valid, INVALID_STR);
     int startIndex = name.findLast(".");
     if (startIndex < 0) { return ""; }
     return name.substr(startIndex+1);
@@ -95,7 +95,7 @@ int FilePath::length() const {
 }
 
 bool FilePath::exists() const {
-    __ASSERT(valid, INVALID_STR);
+    PGE_ASSERT(valid, INVALID_STR);
     return FileUtil::exists(*this);
 }
 
