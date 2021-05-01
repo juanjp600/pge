@@ -444,7 +444,7 @@ int String::byteLength() const {
 }
 
 int String::findFirst(const String& fnd, int from) const {
-    __ASSERT(!fnd.isEmpty(), "Find string can't be empty");
+    PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
     if (from < 0) { from = 0; }
     int charPos = 0;
     for (int i = 0; i <= byteLength() - fnd.byteLength(); i += measureCodepoint(cstr()[i])) {
@@ -457,7 +457,7 @@ int String::findFirst(const String& fnd, int from) const {
 }
 
 int String::findLast(const String& fnd, int from) const {
-    __ASSERT(!fnd.isEmpty(), "Find string can't be empty");
+    PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
     if (from < 0) { from = 0; }
     const char* buf = cstr();
     int charPos = 0;
@@ -476,7 +476,7 @@ String String::substr(int start, int cnt) const {
 
     int startPos = 0;
     for (int i = 0; i < start; i++) {
-        __ASSERT(buf[startPos] != '\0', "Substring would go past string data (start: " + fromInt(start) + "; str: " + *this + ")");
+        PGE_ASSERT(buf[startPos] != '\0', "Substring would go past string data (start: " + fromInt(start) + "; str: " + *this + ")");
         startPos += measureCodepoint(buf[startPos]);
     }
 
@@ -491,7 +491,7 @@ String String::substr(int start, int cnt) const {
         _strLength = start + cnt;
     } else {
         for (int i = 0; i < cnt; i++) {
-            __ASSERT(buf[startPos + actualSize] != '\0', "Substring would go past string data (start: " + fromInt(start) + "; content: " + fromInt(cnt) + "; str: " + *this + ")");
+            PGE_ASSERT(buf[startPos + actualSize] != '\0', "Substring would go past string data (start: " + fromInt(start) + "; content: " + fromInt(cnt) + "; str: " + *this + ")");
             actualSize += measureCodepoint(buf[startPos + actualSize]);
         }
     }
@@ -515,7 +515,7 @@ wchar String::charAt(int pos) const {
 }
 
 String String::replace(const String& fnd, const String& rplace) const {
-    __ASSERT(fnd.byteLength() != 0, "Find string can't be empty");
+    PGE_ASSERT(fnd.byteLength() != 0, "Find string can't be empty");
 
     const char* fndStr = fnd.cstr();
     const char* rplaceStr = rplace.cstr();
