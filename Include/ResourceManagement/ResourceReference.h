@@ -16,23 +16,23 @@ class ResourceReference {
         ResourceReference() { }
         ResourceReference(T res) { internalResource = res; holdsResource = true; }
 
-        operator const T& () const { __ASSERT(holdsResource, "Reference not filled"); return internalResource; }
+        operator const T& () const { PGE_ASSERT(holdsResource, "Reference not filled"); return internalResource; }
         // Force cast.
-        const T& operator()() const { __ASSERT(holdsResource, "Reference not filled"); return internalResource; }
+        const T& operator()() const { PGE_ASSERT(holdsResource, "Reference not filled"); return internalResource; }
         
         template <class = typename std::enable_if<std::is_pointer<T>::value>::type>
         const T& operator->() const {
-            __ASSERT(holdsResource, "Reference not filled");
+            PGE_ASSERT(holdsResource, "Reference not filled");
             return internalResource;
         }
 
         template <class = typename std::enable_if<!std::is_pointer<T>::value>::type>
         const T* operator->() const {
-            __ASSERT(holdsResource, "Reference not filled");
+            PGE_ASSERT(holdsResource, "Reference not filled");
             return &internalResource;
         }
         
-        const T* operator&() const { __ASSERT(holdsResource, "Reference not filled"); return &internalResource; }
+        const T* operator&() const { PGE_ASSERT(holdsResource, "Reference not filled"); return &internalResource; }
 
         bool isHoldingResource() const { return holdsResource; }
 };

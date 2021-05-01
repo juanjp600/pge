@@ -107,7 +107,7 @@ namespace PGE {
 
     // [min, max)
     uint32_t Random::nextInt(uint32_t min, uint32_t max) {
-        __ASSERT(min <= max, "min > max (min: " + String::fromInt(min) + ", max: " + String::fromInt(max) + ")");
+        PGE_ASSERT(min <= max, "min > max (min: " + String::fromInt(min) + ", max: " + String::fromInt(max) + ")");
         return nextInt(max - min) + min;
     }
 

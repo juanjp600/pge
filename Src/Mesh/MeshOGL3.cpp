@@ -108,10 +108,10 @@ void MeshOGL3::uploadInternalData() {
     //TODO: determine when we should use GL_DYNAMIC_DRAW
     glBufferData(GL_ARRAY_BUFFER, glVertexData.size(),glVertexData.data(),GL_STATIC_DRAW);
     glError = glGetError();
-    __ASSERT(glError == GL_NO_ERROR, "Failed to create data store for vertex buffer (GLERROR: " + String::format(glError, "%u") + ")");
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create data store for vertex buffer (GLERROR: " + String::format(glError, "%u") + ")");
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,glIndexData.size()*sizeof(GLuint),glIndexData.data(),GL_STATIC_DRAW);
     glError = glGetError();
-    __ASSERT(glError == GL_NO_ERROR, "Failed to create data store for index buffer (GLERROR: " + String::format(glError, "%u") + ")");
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create data store for index buffer (GLERROR: " + String::format(glError, "%u") + ")");
 
     mustReuploadInternalData = false;
 }

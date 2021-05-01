@@ -11,10 +11,6 @@
 
 using namespace PGE;
 
-String::_StringData::_StringData() {
-    memset(shortStr, 0, shortStrCapacity);
-}
-
 String::~String() {
     if (cCapacity > 0) {
         delete[] data.longStr;

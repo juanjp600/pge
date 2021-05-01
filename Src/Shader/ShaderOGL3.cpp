@@ -14,7 +14,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
     filepath = path;
 
     std::vector<uint8_t> vertexFile; FileUtil::readBytes(path + "vertex.glsl", vertexFile);
-    __ASSERT(!vertexFile.empty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
+    PGE_ASSERT(!vertexFile.empty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
     vertexFile.push_back(0);
     String vertexSource = String((char*)vertexFile.data());
     std::vector<ShaderVar> vertexUniforms;
@@ -22,7 +22,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
     glVertexShader = resourceManager.addNewResource<GLShader>(GL_VERTEX_SHADER, vertexSource);
 
     std::vector<uint8_t> fragmentFile; FileUtil::readBytes(path + "fragment.glsl", fragmentFile);
-    __ASSERT(!fragmentFile.empty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
+    PGE_ASSERT(!fragmentFile.empty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
     fragmentFile.push_back(0);
     String fragmentSource = String((char*)fragmentFile.data());
     std::vector<ShaderVar> fragmentUniforms;
@@ -109,7 +109,7 @@ void ShaderOGL3::useShader() {
             } break;
         }
         glError = glGetError();
-        __ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + vertexAttribs[i].name + ")");
+        PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + vertexAttribs[i].name + ")");
     }
 
     for (int i = 0; i < (int)vertexShaderConstants.size(); i++) {
@@ -257,7 +257,7 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
     }
 
     glError = glGetError();
-    __ASSERT(glError == GL_NO_ERROR, "Failed to set uniform value (constant: " + getName() + "; GLERROR: " + String::fromInt(glError) +")");
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set uniform value (constant: " + getName() + "; GLERROR: " + String::fromInt(glError) +")");
 }
 
 String ShaderOGL3::ConstantOGL3::getName() const {

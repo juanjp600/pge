@@ -78,10 +78,9 @@ class String {
 
         const static int shortStrCapacity = 16;
 
-        union _StringData {
+        union {
             char shortStr[shortStrCapacity];
             char* longStr;
-            _StringData();
         } data;
 
         void recalculateHashAndLength();

@@ -34,7 +34,7 @@ class GraphicsOGL3 : public GraphicsInternal {
         void takeGlContext();
         SDL_GLContext getGlContext() const;
 
-        __GFX_OBJ_DEC
+        PGE_GFX_OBJ_DEC
 
     private:
         GLContext::Ref glContext;

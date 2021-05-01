@@ -24,7 +24,7 @@ class ResourceManager {
         template <class T, class... Args>
         ResourceReference<decltype(T::resource)> addNewResource(Args... args) {
 #ifdef DEBUG
-            __ASSERT(size > resources.size(), "Tried to add resource to full ResourceManager");
+            PGE_ASSERT(size > resources.size(), "Tried to add resource to full ResourceManager");
 #endif
             T* res = new T(args...);
             resources.push_back(res);

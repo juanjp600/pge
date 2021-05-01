@@ -70,6 +70,6 @@ Texture* Texture::createBlank(Graphics* gfx, int w, int h, FORMAT fmt) {
 }
 
 Texture* Texture::load(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt) {
-    __ASSERT(buffer != nullptr, "Tried to load texture from nullptr");
+    PGE_ASSERT(buffer != nullptr, "Tried to load texture from nullptr");
     return ((GraphicsInternal*)gfx)->loadTexture(w, h, buffer, fmt);
 }
