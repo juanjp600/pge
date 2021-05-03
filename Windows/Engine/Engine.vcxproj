@@ -49,6 +49,7 @@
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp" />
+    <ClCompile Include="..\..\Src\String\Char.cpp" />
     <ClCompile Include="..\..\Src\String\String.cpp" />
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
     <ClCompile Include="..\..\Src\Texture\Texture.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceReference.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceReferenceVector.h" />
     <ClInclude Include="..\..\Include\Shader\Shader.h" />
+    <ClInclude Include="..\..\Include\String\Char.h" />
     <ClInclude Include="..\..\Include\String\String.h" />
     <ClInclude Include="..\..\Include\String\StringKeyFast.h" />
     <ClInclude Include="..\..\Include\String\StringKeyFastRedundant.h" />
