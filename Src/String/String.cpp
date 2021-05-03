@@ -318,32 +318,30 @@ uint64_t String::getHashCode() const {
 bool String::equals(const String& other) const {
     if (_strByteLength >= 0 && other._strByteLength >= 0 && byteLength() != other.byteLength()) { return false; }
     if (_strLength >= 0 && other._strLength >= 0 && length() != other.length()) { return false; }
-    return other.getHashCode() == getHashCode();
+    if (_hashCodeEvaluted && other._hashCodeEvaluted) { return getHashCode() == other.getHashCode(); }
+    return strcmp(cstr(), other.cstr()) == 0;
 }
 
 bool String::equalsIgnoreCase(const String& other) const {
     if (_strByteLength >= 0 && other._strByteLength >= 0 && byteLength() != other.byteLength()) { return false; }
     if (_strLength >= 0 && other._strLength >= 0 && length() != other.length()) { return false; }
-    if (other.getHashCode() == getHashCode()) { return true; }
+    if (_hashCodeEvaluted && other._hashCodeEvaluted && getHashCode() == other.getHashCode()) { return true; }
 
-    wchar* w1 = new wchar[other.byteLength() * sizeof(wchar) + 1];
-    wchar* w2 = new wchar[byteLength() * sizeof(wchar) + 1];
+    const char* buf1 = cstr();
+    const char* buf2 = other.cstr();
 
-    other.wstr(w1);
-    wstr(w2);
-
-    bool equals = true;
-    for (int i = 0; i < byteLength(); i++) {
-        if (tolower(w1[i]) != tolower(w2[i])) {
-            equals = false;
-            break;
+    int i1 = 0;
+    int i2 = 0;
+    while (buf1[i1] != '\0' && buf2[i2] != '\0') {
+        // TODO: tolower is garbage.
+        if (std::tolower(utf8ToWChar(buf1 + i1)) != towlower(utf8ToWChar(buf2 + i2))) {
+            return false;
         }
+        i1 += measureCodepoint(buf1[i1]);
+        i2 += measureCodepoint(buf2[i2]);
     }
-
-    delete[] w1;
-    delete[] w2;
-
-    return equals;
+    
+    return buf1[i1] == buf2[i2];
 }
 
 bool String::isEmpty() const {
