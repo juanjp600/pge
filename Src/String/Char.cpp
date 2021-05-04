@@ -8,14 +8,17 @@ void Char::foldInto(wchar ch, std::deque<wchar>& deq) {
 	auto it = folding.find(ch);
 	if (it == folding.end()) {
 		deq.push_front(ch);
+		return;
 	}
+
 	wchar folded = it->second;
 	if (folded == L'\uFFFF') {
 		std::vector<wchar>& addChars = multiFolding.find(ch)->second;
 		deq.insert(deq.begin(), addChars.begin(), addChars.end());
-	} else {
-		deq.push_front(folded);
+		return;
 	}
+
+	deq.push_front(folded);
 }
 
 wchar Char::toUpper(wchar ch) {
