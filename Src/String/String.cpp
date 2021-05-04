@@ -1,4 +1,5 @@
 #include <String/String.h>
+#include <String/Char.h>
 
 #include <cstring>
 #include <cwchar>
@@ -48,6 +49,7 @@ static wchar utf8ToWChar(const char* cbuffer) {
     }
 }
 
+// TODO: Take into account variable length codepoints.
 static int convertWCharToUtf8(wchar chr, char* result) {
     // Fits in standard ASCII, just return the char as-is.
     if ((chr & 0x7f) == chr) {
@@ -235,6 +237,8 @@ String String::format(T t, const String& format) {
     return ret;
 }
 
+//
+
 template String String::format<int8_t>(int8_t t, const PGE::String& format);
 template String String::format<int16_t>(int16_t t, const PGE::String& format);
 template String String::format<int32_t>(int32_t t, const PGE::String& format);
@@ -333,8 +337,7 @@ bool String::equalsIgnoreCase(const String& other) const {
     int i1 = 0;
     int i2 = 0;
     while (buf1[i1] != '\0' && buf2[i2] != '\0') {
-        // TODO: tolower is garbage.
-        if (std::tolower(utf8ToWChar(buf1 + i1)) != towlower(utf8ToWChar(buf2 + i2))) {
+        if (!Char::equal(utf8ToWChar(buf1 + i1), utf8ToWChar(buf2 + i2))) {
             return false;
         }
         i1 += measureCodepoint(buf1[i1]);
@@ -558,7 +561,7 @@ String String::toUpper() const {
     wchar* newBuf = new wchar[byteLength() * sizeof(wchar) + 1];
     wstr(newBuf);
     for (int i = 0; i < byteLength(); i++) {
-        newBuf[i] = towupper(newBuf[i]);
+        newBuf[i] = Char::toUpper(newBuf[i]);
     }
     String retVal(newBuf);
     delete[] newBuf;
@@ -569,7 +572,7 @@ String String::toLower() const {
     wchar* newBuf = new wchar[byteLength() * sizeof(wchar) + 1];
     wstr(newBuf);
     for (int i = 0; i < byteLength(); i++) {
-        newBuf[i] = towlower(newBuf[i]);
+        newBuf[i] = Char::toLower(newBuf[i]);
     }
     String retVal(newBuf);
     delete[] newBuf;

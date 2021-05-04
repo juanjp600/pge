@@ -11,7 +11,11 @@
 
 namespace PGE {
 
+#ifdef _WIN32
 typedef wchar_t wchar;
+#else
+typedef char16_t wchar;
+#endif
 
 class String {
     public:
