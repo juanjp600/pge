@@ -51,7 +51,7 @@
     <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp" />
     <ClCompile Include="..\..\Src\String\Char.cpp" />
     <ClCompile Include="..\..\Src\String\String.cpp" />
-    <ClCompile Include="..\..\Src\String\DefaultUnicode.cpp" />
+    <ClCompile Include="..\..\Src\String\Unicode.cpp" />
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
     <ClCompile Include="..\..\Src\Texture\Texture.cpp" />
     <ClCompile Include="..\..\Src\Texture\TextureDX11.cpp" />

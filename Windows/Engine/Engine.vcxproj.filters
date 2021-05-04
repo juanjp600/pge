@@ -219,7 +219,7 @@
     <ClCompile Include="..\..\Src\String\Char.cpp">
       <Filter>Src\String</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\String\DefaultUnicode.cpp">
+    <ClCompile Include="..\..\Src\String\Unicode.cpp">
       <Filter>Src\String</Filter>
     </ClCompile>
   </ItemGroup>
