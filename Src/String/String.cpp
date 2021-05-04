@@ -327,45 +327,41 @@ bool String::equals(const String& other) const {
     return strcmp(cstr(), other.cstr()) == 0;
 }
 
+static void fold(const char*& buf, std::deque<wchar>& queue) {
+    if (queue.empty() && *buf != '\0') {
+        Char::foldInto(utf8ToWChar(buf), queue);
+        buf += measureCodepoint(*buf);
+    }
+}
+
 bool String::equalsIgnoreCase(const String& other) const {
     if (_hashCodeEvaluted && other._hashCodeEvaluted && getHashCode() == other.getHashCode()) { return true; }
 
-    const char* bufA = cstr();
-    const char* bufB = other.cstr();
+    const char* buf[2] = { cstr(), other.cstr() };
+    std::deque<wchar> queue[2];
 
-    int ia = 0;
-    int ib = 0;
-    std::deque<wchar> aQueue;
-    std::deque<wchar> bQueue;
-    do {
-        while (!aQueue.empty() && !bQueue.empty()) {
-            Char::Equality equality = Char::equal(aQueue.front(), bQueue.front());
-            if (equality == Char::Equality::EQUAL) {
-                // Continue, are we done yet?
-                aQueue.pop_front();
-                bQueue.pop_front();
-            } else if (equality == Char::Equality::DIFFERENT) {
-                return false;
-            } else {
-                std::deque<wchar>& modifyQueue = equality == Char::Equality::MULTI_A ? aQueue : bQueue;
-                std::vector<wchar>& pushChars = Char::multiFold(modifyQueue.front());
-                modifyQueue.pop_front();
-                modifyQueue.insert(modifyQueue.begin(), pushChars.begin(), pushChars.end());
-            }
+    // Feed first char.
+    for (int i = 0; i < 2; i++) {
+        fold(buf[i], queue[i]);
+    }
+
+    while (!queue[0].empty() && !queue[1].empty()) {
+        if (queue[0].front() == queue[1].front()) {
+            // Continue, are we done yet?
+            queue[0].pop_front();
+            queue[1].pop_front();
+        } else {
+            return false;
         }
+
         // Try refilling.
-        if (aQueue.empty() && bufA[ia] != '\0') {
-            aQueue.push_front(utf8ToWChar(bufA + ia));
-            ia += measureCodepoint(bufA[ia]);
+        for (int i = 0; i < 2; i++) {
+            fold(buf[i], queue[i]);
         }
-        if (bQueue.empty() && bufB[ib] != '\0') {
-            bQueue.push_front(utf8ToWChar(bufB + ib));
-            ib += measureCodepoint(bufB[ib]);
-        }
-    } while (!aQueue.empty() && !bQueue.empty());
+    }
 
     // If the strings are really equal, then both have the null char now.
-    return bufA[ia] == bufB[ib];
+    return *buf[0] == *buf[1];
 }
 
 bool String::isEmpty() const {

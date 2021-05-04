@@ -2,6 +2,7 @@
 #define PGE_CHAR_H_DEFINED
 
 #include <unordered_map>
+#include <deque>
 
 #include <String/String.h>
 
@@ -9,15 +10,7 @@ namespace PGE {
 
 class Char {
 	public:
-		enum class Equality {
-			EQUAL,
-			DIFFERENT,
-			MULTI_A,
-			MULTI_B
-		};
-
-		static std::vector<wchar>& multiFold(wchar ch);
-		static Equality equal(wchar a, wchar b);
+		static void foldInto(wchar ch, std::deque<wchar>& deq);
 		static wchar toLower(wchar ch);
 		static wchar toUpper(wchar ch);
 
@@ -28,7 +21,6 @@ class Char {
 		static std::unordered_map<wchar, std::vector<wchar>> multiFolding;
 		static std::unordered_map<wchar, wchar> up;
 		static std::unordered_map<wchar, wchar> down;
-		static wchar fold(wchar ch);
 };
 
 }

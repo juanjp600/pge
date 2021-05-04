@@ -4,33 +4,18 @@
 
 using namespace PGE;
 
-
-
-wchar Char::fold(wchar ch) {
+void Char::foldInto(wchar ch, std::deque<wchar>& deq) {
 	auto it = folding.find(ch);
-	if (it != folding.end()) {
-		return it->second;
+	if (it == folding.end()) {
+		deq.push_front(ch);
 	}
-	return ch;
-}
-
-std::vector<wchar>& Char::multiFold(wchar ch) {
-	// TODO: Assert.
-	return multiFolding.find(ch)->second;
-}
-
-Char::Equality Char::equal(wchar a, wchar b) {
-	PGE_ASSERT(a != L'\uFFFF' && b != L'\uFFFF', "Invalid characters");
-	wchar newA = fold(a);
-	if (newA == L'\uFFFF') {
-		return Equality::MULTI_A;
+	wchar folded = it->second;
+	if (folded == L'\uFFFF') {
+		std::vector<wchar>& addChars = multiFolding.find(ch)->second;
+		deq.insert(deq.begin(), addChars.begin(), addChars.end());
+	} else {
+		deq.push_front(folded);
 	}
-
-	wchar newB = fold(b);
-	if (newB == L'\uFFFF') {
-		return Equality::MULTI_B;
-	}
-	return newA == newB ? Equality::EQUAL : Equality::DIFFERENT;
 }
 
 wchar Char::toUpper(wchar ch) {

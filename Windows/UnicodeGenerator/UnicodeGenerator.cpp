@@ -68,7 +68,7 @@ int main() {
         in.getline(buffer, READ_BUFFER_SIZE);
         String line = buffer;
         if (line.length() == 0 || line.charAt(0) == L'#') { continue; }
-        std::vector<String> params = line.split(";", true);
+        std::vector<String> params = line.split(";", false);
         params[0] = params[0].trim();
         // We reached UTF-32 range!
         if (params[0].length() == 5) { break; }
@@ -105,6 +105,7 @@ int main() {
     while (!in.eof()) {
         in.getline(buffer, READ_BUFFER_SIZE);
         String line = buffer;
+        if (line.length() == 0 || line.charAt(0) == L'#') { continue; }
         std::vector<String> params = line.split(";", false);
         // We reached UTF-32 range!
         if (params[0].length() == 5) { break; }
