@@ -1,8 +1,12 @@
 #include <String/Char.h>
 
+#include <Exception/Exception.h>
+
 using namespace PGE;
 
-wchar_t Char::fold(wchar ch) {
+
+
+wchar Char::fold(wchar ch) {
 	auto it = folding.find(ch);
 	if (it != folding.end()) {
 		return it->second;
@@ -10,8 +14,23 @@ wchar_t Char::fold(wchar ch) {
 	return ch;
 }
 
-bool Char::equal(wchar a, wchar b) {
-	return fold(a) == fold(b);
+std::vector<wchar>& Char::multiFold(wchar ch) {
+	// TODO: Assert.
+	return multiFolding.find(ch)->second;
+}
+
+Char::Equality Char::equal(wchar a, wchar b) {
+	PGE_ASSERT(a != L'\uFFFF' && b != L'\uFFFF', "Invalid characters");
+	wchar newA = fold(a);
+	if (newA == L'\uFFFF') {
+		return Equality::MULTI_A;
+	}
+
+	wchar newB = fold(b);
+	if (newB == L'\uFFFF') {
+		return Equality::MULTI_B;
+	}
+	return newA == newB ? Equality::EQUAL : Equality::DIFFERENT;
 }
 
 wchar Char::toUpper(wchar ch) {

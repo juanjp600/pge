@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <cwctype>
 #include <iostream>
+#include <deque>
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
 #endif
@@ -327,24 +328,44 @@ bool String::equals(const String& other) const {
 }
 
 bool String::equalsIgnoreCase(const String& other) const {
-    if (_strByteLength >= 0 && other._strByteLength >= 0 && byteLength() != other.byteLength()) { return false; }
-    if (_strLength >= 0 && other._strLength >= 0 && length() != other.length()) { return false; }
     if (_hashCodeEvaluted && other._hashCodeEvaluted && getHashCode() == other.getHashCode()) { return true; }
 
-    const char* buf1 = cstr();
-    const char* buf2 = other.cstr();
+    const char* bufA = cstr();
+    const char* bufB = other.cstr();
 
-    int i1 = 0;
-    int i2 = 0;
-    while (buf1[i1] != '\0' && buf2[i2] != '\0') {
-        if (!Char::equal(utf8ToWChar(buf1 + i1), utf8ToWChar(buf2 + i2))) {
-            return false;
+    int ia = 0;
+    int ib = 0;
+    std::deque<wchar> aQueue;
+    std::deque<wchar> bQueue;
+    do {
+        while (!aQueue.empty() && !bQueue.empty()) {
+            Char::Equality equality = Char::equal(aQueue.front(), bQueue.front());
+            if (equality == Char::Equality::EQUAL) {
+                // Continue, are we done yet?
+                aQueue.pop_front();
+                bQueue.pop_front();
+            } else if (equality == Char::Equality::DIFFERENT) {
+                return false;
+            } else {
+                std::deque<wchar>& modifyQueue = equality == Char::Equality::MULTI_A ? aQueue : bQueue;
+                std::vector<wchar>& pushChars = Char::multiFold(modifyQueue.front());
+                modifyQueue.pop_front();
+                modifyQueue.insert(modifyQueue.begin(), pushChars.begin(), pushChars.end());
+            }
         }
-        i1 += measureCodepoint(buf1[i1]);
-        i2 += measureCodepoint(buf2[i2]);
-    }
-    
-    return buf1[i1] == buf2[i2];
+        // Try refilling.
+        if (aQueue.empty() && bufA[ia] != '\0') {
+            aQueue.push_front(utf8ToWChar(bufA + ia));
+            ia += measureCodepoint(bufA[ia]);
+        }
+        if (bQueue.empty() && bufB[ib] != '\0') {
+            bQueue.push_front(utf8ToWChar(bufB + ib));
+            ib += measureCodepoint(bufB[ib]);
+        }
+    } while (!aQueue.empty() && !bQueue.empty());
+
+    // If the strings are really equal, then both have the null char now.
+    return bufA[ia] == bufB[ib];
 }
 
 bool String::isEmpty() const {

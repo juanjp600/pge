@@ -9,7 +9,15 @@ namespace PGE {
 
 class Char {
 	public:
-		static bool equal(wchar a, wchar b);
+		enum class Equality {
+			EQUAL,
+			DIFFERENT,
+			MULTI_A,
+			MULTI_B
+		};
+
+		static std::vector<wchar>& multiFold(wchar ch);
+		static Equality equal(wchar a, wchar b);
 		static wchar toLower(wchar ch);
 		static wchar toUpper(wchar ch);
 
@@ -17,6 +25,7 @@ class Char {
 		Char() = delete;
 
 		static std::unordered_map<wchar, wchar> folding;
+		static std::unordered_map<wchar, std::vector<wchar>> multiFolding;
 		static std::unordered_map<wchar, wchar> up;
 		static std::unordered_map<wchar, wchar> down;
 		static wchar fold(wchar ch);

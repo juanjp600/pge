@@ -9,10 +9,15 @@ using namespace PGE;
 
 #define PGE_UNICODE_ASSERT_FILE(stream) PGE_ASSERT(stream.good(), "Stream is not good!")
 
+static String paramsToMapType(const String& key, const String& value) {
+    return "std::unordered_map<" + key + ", " + value + ">";
+}
+
 static constexpr int READ_BUFFER_SIZE = 256;
 static constexpr const char* INDENT = "    ";
 static constexpr const char* TAIL = "};";
-static const String MAP_TYPE = "std::unordered_map<wchar, wchar>";
+static const String MAP_TYPE = paramsToMapType("wchar", "wchar");
+static const String MULTI_FOLD_MAP_TYPE = paramsToMapType("wchar", "std::vector<wchar>");
 
 struct Mapping {
     String from;
@@ -24,11 +29,11 @@ static String rawToChar(const String& str) {
 }
 
 static String entriesToPair(const String& a, const String& b) {
-    return "{ " + rawToChar(a) + ", " + rawToChar(b) + " }, ";
+    return "{ " + rawToChar(a) + ", " + rawToChar(b) + " },";
 }
 
-static String toMapHead(const String& identifier) {
-    return MAP_TYPE + " Char::" + identifier + " = " + MAP_TYPE + " {";
+static String toMapHead(const String& mapType, const String& identifier) {
+    return mapType + " Char::" + identifier + " = " + mapType + " {";
 }
 
 static std::ostream& operator<<(std::ostream& stream, const std::vector<Mapping>& mappings) {
@@ -39,12 +44,6 @@ static std::ostream& operator<<(std::ostream& stream, const std::vector<Mapping>
 }
 
 int main() {
-    FilePath checkFile = FilePath::fromStr(".check");
-    if (checkFile.exists()) {
-        std::cout << "Check file already exists!" << std::endl;
-        return 0;
-    }
-
     std::ofstream out;
     out.open("../../Src/String/Unicode.cpp");
     PGE_UNICODE_ASSERT_FILE(out);
@@ -57,28 +56,45 @@ int main() {
     out << "using namespace PGE;" << std::endl;
     out << std::endl;
 
+    std::vector<Mapping> fullFolding;
+
     char buffer[READ_BUFFER_SIZE];
     std::ifstream in;
     in.open("CaseFolding.txt");
     PGE_UNICODE_ASSERT_FILE(in);
 
-    out << toMapHead("folding") << std::endl;
-
+    out << toMapHead(MAP_TYPE, "folding") << std::endl;
     while (!in.eof()) {
         in.getline(buffer, READ_BUFFER_SIZE);
         String line = buffer;
         if (line.length() == 0 || line.charAt(0) == L'#') { continue; }
         std::vector<String> params = line.split(";", true);
-        if (params[1].trim() != "C") { continue; }
         params[0] = params[0].trim();
         // We reached UTF-32 range!
         if (params[0].length() == 5) { break; }
-        out << INDENT << entriesToPair(params[0], params[2].trim()) << std::endl;
+        wchar type = params[1].trim().charAt(0);
+        if (type == 'C') {
+            out << INDENT << entriesToPair(params[0], params[2].trim()) << std::endl;
+        } else if (type == 'F') {
+            out << INDENT << entriesToPair(params[0], "FFFF") << std::endl;
+            fullFolding.push_back({ params[0], params[2].trim() });
+        }
     }
-
     in.close();
-
     out << TAIL << std::endl;
+
+    out << std::endl;
+    out << toMapHead(MULTI_FOLD_MAP_TYPE, "multiFolding") << std::endl;
+    for (Mapping& mapping : fullFolding) {
+        out << INDENT << "{ " << rawToChar(mapping.from) << ", { ";
+        std::vector<String> splitChars = mapping.to.split(" ", true);
+        for (String& ch : splitChars) {
+            out << rawToChar(ch) << ", ";
+        }
+        out << "} }," << std::endl;
+    }
+    out << TAIL << std::endl;
+
     out << std::endl;
 
     std::vector<Mapping> up;
@@ -86,7 +102,6 @@ int main() {
 
     in.open("UnicodeData.txt");
     PGE_UNICODE_ASSERT_FILE(in);
-
     while (!in.eof()) {
         in.getline(buffer, READ_BUFFER_SIZE);
         String line = buffer;
@@ -100,24 +115,18 @@ int main() {
             down.push_back({ params[0], params[13] });
         }
     }
-
     in.close();
 
-    out << toMapHead("up") << std::endl;
-    out << up << std::endl;
+    out << toMapHead(MAP_TYPE, "up") << std::endl;
+    out << up;
     out << TAIL << std::endl;
 
     out << std::endl;
 
-    out << toMapHead("down") << std::endl;
-    out << down << std::endl;
+    out << toMapHead(MAP_TYPE, "down") << std::endl;
+    out << down;
     out << TAIL << std::endl;
 
-    out.close();
-
-    out.open(checkFile.cstr());
-    PGE_UNICODE_ASSERT_FILE(out);
-    out << u8"\u0D9E\u0073\u0075\u0073";
     out.close();
 
     std::cout << "Generated Unicode code!" << std::endl;
