@@ -54,7 +54,7 @@ const FilePath& FilePath::getDataPath() {
         NSString* appSupportDir = [filePaths firstObject];
 
         return String([appSupportDir cStringUsingEncoding : NSUTF8StringEncoding]) + "/";
-#elif defined(WINDOWS)
+#elif defined(_WIN32)
     // Users/*user*/AppData/Roaming/ 
         PWSTR filePath;
         SHGetKnownFolderPath(FOLDERID_RoamingAppData, KF_FLAG_DEFAULT, NULL, &filePath);
@@ -126,7 +126,7 @@ bool FilePath::createDirectory() const {
         return false;
     }
 
-#ifdef WINDOWS
+#ifdef _WIN32
     SECURITY_ATTRIBUTES attrs;
     attrs.bInheritHandle = false;
     attrs.nLength = 0;
@@ -145,7 +145,7 @@ bool FilePath::createDirectory() const {
 }
 
 void FilePath::enumerateFolders(std::vector<FilePath>& folders) const {
-#if WINDOWS
+#if _WIN32
     HANDLE hFind;
     WIN32_FIND_DATAW ffd;
 
@@ -199,7 +199,7 @@ void FilePath::enumerateFolders(std::vector<FilePath>& folders) const {
 }
 
 void FilePath::enumerateFiles(std::vector<FilePath>& files) const {
-#if WINDOWS
+#if _WIN32
     HANDLE hFind;
     WIN32_FIND_DATAW ffd;
 
