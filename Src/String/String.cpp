@@ -1,5 +1,5 @@
 #include <String/String.h>
-#include <String/Char.h>
+#include "Char.h"
 
 #include <cstring>
 #include <cwchar>

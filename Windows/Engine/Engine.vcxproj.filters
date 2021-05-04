@@ -365,8 +365,8 @@
     <ClInclude Include="..\..\Include\String\StringKeyOrdered.h">
       <Filter>Include\String</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\String\Char.h">
-      <Filter>Include\String</Filter>
+    <ClInclude Include="..\..\Src\String\Char.h">
+      <Filter>Src\String</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

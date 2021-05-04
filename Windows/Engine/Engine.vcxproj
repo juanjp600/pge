@@ -83,7 +83,6 @@
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceReference.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceReferenceVector.h" />
     <ClInclude Include="..\..\Include\Shader\Shader.h" />
-    <ClInclude Include="..\..\Include\String\Char.h" />
     <ClInclude Include="..\..\Include\String\String.h" />
     <ClInclude Include="..\..\Include\String\StringKeyFast.h" />
     <ClInclude Include="..\..\Include\String\StringKeyFastRedundant.h" />
@@ -105,6 +104,7 @@
     <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h" />
+    <ClInclude Include="..\..\Src\String\Char.h" />
     <ClInclude Include="..\..\Src\SysEvents\SysEventsInternal.h" />
     <ClInclude Include="..\..\Src\Texture\TextureDX11.h" />
     <ClInclude Include="..\..\Src\Texture\TextureOGL3.h" />
