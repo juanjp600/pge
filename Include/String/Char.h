@@ -19,7 +19,7 @@ class Char {
 		static std::unordered_map<wchar, wchar> folding;
 		static std::unordered_map<wchar, wchar> up;
 		static std::unordered_map<wchar, wchar> down;
-		static wchar_t fold(wchar ch);
+		static wchar fold(wchar ch);
 };
 
 }
