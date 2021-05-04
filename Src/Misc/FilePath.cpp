@@ -53,7 +53,7 @@ const FilePath& FilePath::getDataPath() {
         NSArray* filePaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
         NSString* appSupportDir = [filePaths firstObject];
 
-        return String([appSupportDir cStringUsingEncoding : NSUTF8StringEncoding]) + "/";
+        dataPath = FilePath::fromStr([appSupportDir cStringUsingEncoding : NSUTF8StringEncoding]);
 #elif defined(_WIN32)
     // Users/*user*/AppData/Roaming/ 
         PWSTR filePath;
@@ -62,6 +62,7 @@ const FilePath& FilePath::getDataPath() {
         CoTaskMemFree(filePath);
         dataPath = FilePath::fromStr(path);
 #endif
+        dataPath = dataPath.makeDirectory();
     }
     return dataPath;
 }
@@ -214,7 +215,7 @@ void FilePath::enumerateFiles(std::vector<FilePath>& files) const {
 
         FilePath newPath = FilePath(filePath, fileName);
         if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
-            enumerateFiles(files);
+            newPath.enumerateFiles(files);
         } else {
             files.push_back(newPath);
         }
