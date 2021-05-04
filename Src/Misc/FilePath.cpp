@@ -134,11 +134,8 @@ bool FilePath::createDirectory() const {
     str().wstr(wstr);
     bool success = CreateDirectoryW(wstr, NULL);
     delete[] wstr;
-    if (success) {
-        return true;
-    } else {
-        throw std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
-    }
+    PGE_ASSERT(success, "Couldn't create directory (dir: " + str() + "; err: " + PGE::String::fromInt((int)GetLastError()) + ")");
+    return true;
 #else
     return mkdir(path.cstr(), S_IRWXU) == 0;
 #endif
@@ -157,9 +154,7 @@ void FilePath::enumerateFolders(std::vector<FilePath>& folders) const {
     hFind = FindFirstFileW(wstr, &ffd);
     delete[] wstr;
 
-    if (hFind == INVALID_HANDLE_VALUE) {
-        throw std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
-    }
+    PGE_ASSERT(hFind != INVALID_HANDLE_VALUE, "Couldn't enumerate directory (dir: " + str() + "; err: " + PGE::String::fromInt((int)GetLastError()) + ")");
 
     do {
         String fileName = ffd.cFileName;
@@ -180,9 +175,7 @@ void FilePath::enumerateFolders(std::vector<FilePath>& folders) const {
 
     dir = opendir(path.cstr());
 
-    if (dir == NULL) {
-        throw std::runtime_error(path.cstr());
-    }
+    PGE_ASSERT(dir != NULL, "Couldn't open directory (dir: " + str() + ")");
 
     while ((currentEntry = readdir(dir)) != NULL) {
         if (currentEntry->d_type == DT_DIR) {
@@ -211,9 +204,7 @@ void FilePath::enumerateFiles(std::vector<FilePath>& files) const {
     hFind = FindFirstFileW(wstr, &ffd);
     delete[] wstr;
 
-    if (hFind == INVALID_HANDLE_VALUE) {
-        throw std::runtime_error(PGE::String::fromInt((int)GetLastError()).cstr());
-    }
+    PGE_ASSERT(hFind != INVALID_HANDLE_VALUE, "Couldn't enumerate directory (dir: " + str() + "; err: " + PGE::String::fromInt((int)GetLastError()) + ")");
 
     do {
         String fileName = ffd.cFileName;
@@ -236,9 +227,7 @@ void FilePath::enumerateFiles(std::vector<FilePath>& files) const {
 
     dir = opendir(path.cstr());
 
-    if (dir == NULL) {
-        throw std::runtime_error(path.cstr());
-    }
+    PGE_ASSERT(dir != NULL, "Couldn't open directory (dir: " + str() + ")");
 
     while ((currentEntry = readdir(dir)) != NULL) {
         if (currentEntry->d_type == DT_DIR) { // If item is a directory, print its contents.
