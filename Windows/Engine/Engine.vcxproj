@@ -41,7 +41,6 @@
     <ClCompile Include="..\..\Src\Mesh\MeshOGL3.cpp" />
     <ClCompile Include="..\..\Src\Misc\BinaryReader.cpp" />
     <ClCompile Include="..\..\Src\Misc\FilePath.cpp" />
-    <ClCompile Include="..\..\Src\Misc\FileUtil.cpp" />
     <ClCompile Include="..\..\Src\Misc\FileWriter.cpp" />
     <ClCompile Include="..\..\Src\Misc\Info.cpp" />
     <ClCompile Include="..\..\Src\Misc\String.cpp" />
@@ -74,7 +73,6 @@
     <ClInclude Include="..\..\Include\Mesh\Mesh.h" />
     <ClInclude Include="..\..\Include\Misc\BinaryReader.h" />
     <ClInclude Include="..\..\Include\Misc\FilePath.h" />
-    <ClInclude Include="..\..\Include\Misc\FileUtil.h" />
     <ClInclude Include="..\..\Include\Misc\FileWriter.h" />
     <ClInclude Include="..\..\Include\Misc\Info.h" />
     <ClInclude Include="..\..\Include\Misc\String.h" />
@@ -176,7 +174,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>SDL_MAIN_HANDLED;DEBUG;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;DEBUG;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -210,7 +208,7 @@ echo Generated Info.cpp!</Command>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>SDL_MAIN_HANDLED;DEBUG;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;DEBUG;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -246,7 +244,7 @@ echo Generated Info.cpp!</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>SDL_MAIN_HANDLED;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -285,7 +283,7 @@ echo Generated Info.cpp!</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>SDL_MAIN_HANDLED;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
