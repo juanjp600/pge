@@ -3,7 +3,6 @@
 #include "ShaderDX11.h"
 #include <Exception/Exception.h>
 #include <fstream>
-#include <Misc/FileUtil.h>
 #include "../Graphics/GraphicsDX11.h"
 
 using namespace PGE;
@@ -79,10 +78,10 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
 
     reflectionInfo.close();
 
-    FileUtil::readBytes(path + "vertex.dxbc", vertexShaderBytecode);
+    (path + "vertex.dxbc").readBytes(vertexShaderBytecode);
     PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
 
-    FileUtil::readBytes(path + "fragment.dxbc", fragmentShaderBytecode);
+    (path + "fragment.dxbc").readBytes(fragmentShaderBytecode);
     PGE_ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: "+path.str()+")");
 
     dxVertexShader = resourceManager.addNewResource<D3D11VertexShader>(dxDevice, vertexShaderBytecode);
