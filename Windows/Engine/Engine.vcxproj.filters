@@ -168,9 +168,6 @@
     <ClCompile Include="..\..\Src\Init\Init.cpp">
       <Filter>Src\Init</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Misc\FileUtil.cpp">
-      <Filter>Src\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\IO\IOInternal.h">
       <Filter>Src\IO</Filter>
     </ClCompile>
@@ -286,9 +283,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\SysEvents\SysEvents.h">
       <Filter>Include\SysEvents</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\FileUtil.h">
-      <Filter>Include\Misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Misc\FilePath.h">
       <Filter>Include\Misc</Filter>
