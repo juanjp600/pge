@@ -2,7 +2,6 @@
 
 #include <Graphics/Graphics.h>
 #include <Exception/Exception.h>
-#include <Misc/FileUtil.h>
 #include "../Graphics/GraphicsOGL3.h"
 
 using namespace PGE;
@@ -13,7 +12,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
 
     filepath = path;
 
-    std::vector<uint8_t> vertexFile; FileUtil::readBytes(path + "vertex.glsl", vertexFile);
+    std::vector<uint8_t> vertexFile; (path + "vertex.glsl").readBytes(vertexFile);
     __ASSERT(!vertexFile.empty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
     vertexFile.push_back(0);
     String vertexSource = String((char*)vertexFile.data());
@@ -21,7 +20,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
     extractShaderVars(vertexSource, "uniform", vertexUniforms);
     glVertexShader = resourceManager.addNewResource<GLShader>(GL_VERTEX_SHADER, vertexSource);
 
-    std::vector<uint8_t> fragmentFile; FileUtil::readBytes(path + "fragment.glsl", fragmentFile);
+    std::vector<uint8_t> fragmentFile; (path + "fragment.glsl").readBytes(fragmentFile);
     __ASSERT(!fragmentFile.empty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
     fragmentFile.push_back(0);
     String fragmentSource = String((char*)fragmentFile.data());

@@ -41,7 +41,6 @@
     <ClCompile Include="..\..\Src\Mesh\MeshOGL3.cpp" />
     <ClCompile Include="..\..\Src\Misc\BinaryReader.cpp" />
     <ClCompile Include="..\..\Src\Misc\FilePath.cpp" />
-    <ClCompile Include="..\..\Src\Misc\FileUtil.cpp" />
     <ClCompile Include="..\..\Src\Misc\FileWriter.cpp" />
     <ClCompile Include="..\..\Src\Misc\Info.cpp" />
     <ClCompile Include="..\..\Src\Misc\String.cpp" />
@@ -74,7 +73,6 @@
     <ClInclude Include="..\..\Include\Mesh\Mesh.h" />
     <ClInclude Include="..\..\Include\Misc\BinaryReader.h" />
     <ClInclude Include="..\..\Include\Misc\FilePath.h" />
-    <ClInclude Include="..\..\Include\Misc\FileUtil.h" />
     <ClInclude Include="..\..\Include\Misc\FileWriter.h" />
     <ClInclude Include="..\..\Include\Misc\Info.h" />
     <ClInclude Include="..\..\Include\Misc\String.h" />
