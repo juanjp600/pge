@@ -405,7 +405,7 @@ int String::toInt(bool& success) const {
     try {
         success = true;
         return std::stoi(cstr());
-    } catch (std::exception) {
+    } catch (const std::exception&) {
         success = false;
         return 0;
     }
@@ -415,7 +415,7 @@ float String::toFloat(bool& success) const {
     try {
         success = true;
         return std::stof(cstr());
-    } catch (std::exception) {
+    } catch (const std::exception&) {
         success = false;
         return 0.f;
     }
