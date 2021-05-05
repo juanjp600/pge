@@ -15,17 +15,17 @@ class StringKeyOrdered {
             return str;
         }
 
+        bool operator<(const StringKeyOrdered& other) const {
+            return strcmp(getStr().cstr(), other.getStr().cstr()) < 0;
+        }
+
+        bool operator>(const StringKeyOrdered& other) const {
+            return strcmp(getStr().cstr(), other.getStr().cstr()) > 0;
+        }
+
     private:
         String str;
 };
-
-bool operator<(const StringKeyOrdered& a, const StringKeyOrdered& b) {
-    return strcmp(a.str.cstr(), b.str.cstr()) < 0;
-}
-
-bool operator>(const StringKeyOrdered& a, const StringKeyOrdered& b) {
-    return strcmp(a.str.cstr(), b.str.cstr()) > 0;
-}
 
 }
 
