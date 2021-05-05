@@ -39,9 +39,9 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nC
         SDL_Quit();
         return retVal;
 #ifndef DEBUG
-    } catch (Exception& e) {
+    } catch (const Exception& e) {
         showError("PGE::Exception", e.what());
-    } catch (std::exception& e) {
+    } catch (const std::exception& e) {
         showError("std::exception", e.what());
     } catch (...) {
         showError("Unknown", "???");

@@ -56,7 +56,7 @@ void ThreadManager::NewThreadRequest::setThreadManager(ThreadManager* mgr) {
 static void _startThread(ThreadManager::NewThreadRequest* request, ThreadManager* threadManager) {
     try {
         request->execute();
-    } catch (Exception& e) {
+    } catch (const Exception& e) {
         threadManager->handleException(request, e);
     }
 }
