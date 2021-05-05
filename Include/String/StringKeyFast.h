@@ -7,11 +7,15 @@ namespace PGE {
 
 class StringKeyFast {
     public:
+        friend std::hash<StringKeyFast>;
+        friend std::equal_to<StringKeyFast>;
+        
         template <class... Args>
-        StringKeyFast(Args... args) : hash(String(args...).getHashCode()) { }
-        StringKeyFast(const String& str) : hash(str.getHashCode()) { }
+        StringKeyFast(Args... args) : hash(String::HashFriend::get(String(args...))) { }
+        StringKeyFast(const String& str) : hash(String::HashFriend::get(str)) { }
 
-        const uint64_t hash;
+    private:
+        uint64_t hash;
 };
 
 }

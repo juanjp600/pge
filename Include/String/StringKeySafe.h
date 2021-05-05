@@ -7,18 +7,29 @@ namespace PGE {
 
 class StringKeySafe {
     public:
+        friend std::hash<StringKeySafe>;
+
         template <class... Args>
         StringKeySafe(Args... args) : str(String(args...)) { }
         StringKeySafe(const String& str) : str(str) { }
 
-        const String str;
+        const String& getStr() const {
+            return str;
+        }
+
+    private:
+        String str;
+
+        uint64_t hash() const {
+            return String::HashFriend::get(str);
+        }
 };
 
 }
 
 template <> struct std::hash<PGE::StringKeySafe> {
     size_t operator()(const PGE::StringKeySafe& key) const {
-        return key.str.getHashCode();
+        return key.hash();
     }
 };
 

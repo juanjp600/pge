@@ -122,7 +122,7 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefe
 Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
     for (auto cBuffer : vertexConstantBuffers) {
         auto map = cBuffer->getConstants();
-        auto it = map->find(name.getHashCode());
+        auto it = map->find(name);
         if (it != map->end()) {
             return &it->second;
         }
@@ -133,7 +133,7 @@ Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
 Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
     for (auto cBuffer : fragmentConstantBuffers) {
         auto map = cBuffer->getConstants();
-        auto it = map->find(name.getHashCode());
+        auto it = map->find(name);
         if (it != map->end()) {
             return &it->second;
         }
@@ -226,12 +226,12 @@ uint8_t* ShaderDX11::CBufferInfo::getData() {
     return data;
 }
 
-std::unordered_map<uint64_t, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
+std::unordered_map<StringKeyFast, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
     return &constants;
 }
 
 void ShaderDX11::CBufferInfo::addConstant(const String& name, const ShaderDX11::ConstantDX11& constant) {
-    constants.emplace(name.getHashCode(), constant);
+    constants.emplace(name, constant);
 }
 
 bool ShaderDX11::CBufferInfo::isDirty() const {

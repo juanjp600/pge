@@ -1,6 +1,8 @@
 #ifndef PGE_STRING_KEY_ORDERED_H_INCLUDED
 #define PGE_STRING_KEY_ORDERED_H_INCLUDED
 
+#include <String/String.h>
+
 namespace PGE {
 
 class StringKeyOrdered {
@@ -9,7 +11,12 @@ class StringKeyOrdered {
         StringKeyOrdered(Args... args) : str(String(args...)) { }
         StringKeyOrdered(const String& str) : str(str) { }
 
-        const String str;
+        const String& getStr() const {
+            return str;
+        }
+
+    private:
+        String str;
 };
 
 bool operator<(const StringKeyOrdered& a, const StringKeyOrdered& b) {

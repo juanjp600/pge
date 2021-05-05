@@ -13,8 +13,23 @@ namespace PGE {
 
 typedef wchar_t wchar;
 
+class StringKeyFast;
+class StringKeyFastRedundant;
+class StringKeySafe;
+
 class String {
     public:
+        struct HashFriend {
+            friend StringKeyFast;
+            friend StringKeyFastRedundant;
+            friend StringKeySafe;
+
+            private:
+                static uint64_t get(const String& str);
+
+                HashFriend() = delete;
+        };
+
         ~String();
         String();
         String(const String& a);
@@ -63,7 +78,6 @@ class String {
 
         //String unHex() const;
 
-        uint64_t getHashCode() const;
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
         bool isEmpty() const;
@@ -86,6 +100,8 @@ class String {
             char shortStr[shortStrCapacity];
             char* longStr;
         } data;
+
+        uint64_t getHashCode() const;
 
         void wCharToUtf8Str(const wchar* wbuffer);
         void reallocate(int size);

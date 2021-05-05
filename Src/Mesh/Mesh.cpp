@@ -5,139 +5,77 @@
 
 using namespace PGE;
 
-const Vertex::Property Vertex::Property::def = Vertex::Property();
-
-Vertex::Vertex() { }
-
-Vertex::Vertex(const Vertex& other) {
-    for (int i = 0; i < (int)other.properties.size(); i++) {
-        properties.push_back(Property(other.properties[i]));
-    }
-}
-
-Vertex& Vertex::operator=(const Vertex& other) {
-    for (int i = 0; i < (int)other.properties.size(); i++) {
-        bool found = false;
-        insertProperty(other.properties[i].hashCode);
-        for (int j = 0; j < (int)properties.size(); j++) {
-            if (properties[j].hashCode == other.properties[i].hashCode) {
-                properties[j].copyOtherValue(other.properties[i]);
-                found = true;
-                break;
-            }
-        }
-        PGE_ASSERT(found, "Failed to copy vertex property (hashcode: " + String::format(other.properties[i].hashCode, "%llX") + ")");
-    }
-    return *this;
-}
-
-Vertex::Property::Value::Value() {
-    vector4fVal = Vector4f::zero;
-}
-
-Vertex::Property::Property() {
-    hashCode = 0;
-    type = PROPERTY_TYPE::VECTOR2F;
-    value.vector2fVal = Vector2f::zero;
-}
-
 Vertex::Property::Property(const Vertex::Property& other) {
-    hashCode = other.hashCode;
-    copyOtherValue(other);
-}
-
-void Vertex::Property::copyOtherValue(const Vertex::Property& other) {
     type = other.type;
     switch (type) {
-        case PROPERTY_TYPE::VECTOR2F: {
+        case Type::VECTOR2F: {
             value.vector2fVal = other.value.vector2fVal;
         } break;
-        case PROPERTY_TYPE::VECTOR3F: {
+        case Type::VECTOR3F: {
             value.vector3fVal = other.value.vector3fVal;
         } break;
-        case PROPERTY_TYPE::VECTOR4F: {
+        case Type::VECTOR4F: {
             value.vector4fVal = other.value.vector4fVal;
         } break;
-        case PROPERTY_TYPE::COLOR: {
+        case Type::COLOR: {
             value.colorVal = other.value.colorVal;
         } break;
-        case PROPERTY_TYPE::FLOAT: {
+        case Type::FLOAT: {
             value.floatVal = other.value.floatVal;
         } break;
-        case PROPERTY_TYPE::UINT: {
+        case Type::UINT: {
             value.uintVal = other.value.uintVal;
         } break;
+        default: {
+            PGE_ASSERT(false, "Invalid vertex property type!");
+        }
     }
 }
 
-const Vertex::Property& Vertex::getProperty(const String& name,int& indexHint) {
-    if ((indexHint < (int)properties.size()) && properties[indexHint].hashCode == name.getHashCode()) {
-        return properties[indexHint];
-    }
-    for (int i = 0; i < (int)properties.size(); i++) {
-        if (properties[i].hashCode>name.getHashCode()) { break; }
-        if (properties[i].hashCode == name.getHashCode()) {
-            indexHint = i;
-            return properties[i];
-        }
-    }
-    return Property::def;
+const Vertex::Property& Vertex::getProperty(const String& name) const {
+    return properties.find(name)->second;
 }
 
-Vertex::Property& Vertex::insertProperty(uint64_t hashCode) {
-    int insertPos = 0;
-    for (int i = 0; i < (int)properties.size(); i++) {
-        if (properties[i].hashCode>hashCode) { break; }
-        if (properties[i].hashCode == hashCode) {
-            return properties[i];
-        }
-        insertPos = i+1;
-    }
+void Vertex::setFloat(const String& name, float val) {
     Property prop;
-    prop.hashCode = hashCode;
-    properties.insert(properties.begin()+insertPos,prop);
-
-    for (int i = 0; i < (int)properties.size()-1; i++) {
-        PGE_ASSERT(properties[i].hashCode <= properties[i + 1].hashCode, "Incorrect vertex property order (" + String::fromInt(i) + ", " + String::fromInt(i + 1) + ")");
-    }
-
-    return properties[insertPos];
-}
-
-void Vertex::setFloat(const String& name,float val) {
-    Property& prop = insertProperty(name.getHashCode());
     prop.value.floatVal = val;
-    prop.type = PROPERTY_TYPE::FLOAT;
+    prop.type = Property::Type::FLOAT;
+    properties.emplace(name, prop);
 }
 
-void Vertex::setUInt(const String& name,unsigned int val) {
-    Property& prop = insertProperty(name.getHashCode());
+void Vertex::setUInt(const String& name, unsigned int val) {
+    Property prop;
     prop.value.uintVal = val;
-    prop.type = PROPERTY_TYPE::UINT;
+    prop.type = Property::Type::UINT;
+    properties.emplace(name, prop);
 }
 
 void Vertex::setVector2f(const String& name, const Vector2f& val) {
-    Property& prop = insertProperty(name.getHashCode());
+    Property prop;
     prop.value.vector2fVal = val;
-    prop.type = PROPERTY_TYPE::VECTOR2F;
+    prop.type = Property::Type::VECTOR2F;
+    properties.emplace(name, prop);
 }
 
 void Vertex::setVector3f(const String& name, const Vector3f& val) {
-    Property& prop = insertProperty(name.getHashCode());
+    Property prop;
     prop.value.vector3fVal = val;
-    prop.type = PROPERTY_TYPE::VECTOR3F;
+    prop.type = Property::Type::VECTOR3F;
+    properties.emplace(name, prop);
 }
 
 void Vertex::setVector4f(const String& name, const Vector4f& val) {
-    Property& prop = insertProperty(name.getHashCode());
+    Property prop;
     prop.value.vector4fVal = val;
-    prop.type = PROPERTY_TYPE::VECTOR4F;
+    prop.type = Property::Type::VECTOR4F;
+    properties.emplace(name, prop);
 }
 
 void Vertex::setColor(const String& name, const Color& val) {
-    Property& prop = insertProperty(name.getHashCode());
+    Property prop;
     prop.value.colorVal = val;
-    prop.type = PROPERTY_TYPE::COLOR;
+    prop.type = Property::Type::COLOR;
+    properties.emplace(name, prop);
 }
 
 Primitive::Primitive(long ia,long ib) {

@@ -10,6 +10,7 @@
 #include <ResourceManagement/ResourceReference.h>
 #include <Shader/Shader.h>
 #include <String/String.h>
+#include <String/StringKeyFast.h>
 
 #include "../Graphics/GraphicsDX11.h"
 
@@ -67,7 +68,7 @@ class ShaderDX11 : public Shader {
                 ~CBufferInfo();
 
                 uint8_t* getData();
-                std::unordered_map<uint64_t, ConstantDX11>* getConstants();
+                std::unordered_map<StringKeyFast, ConstantDX11>* getConstants();
                 void addConstant(const String& name, const ConstantDX11& constant);
                 bool isDirty() const;
                 void markAsDirty();
@@ -78,7 +79,7 @@ class ShaderDX11 : public Shader {
                 String name;
                 uint8_t* data;
                 int size;
-                std::unordered_map<uint64_t, ConstantDX11> constants;
+                std::unordered_map<StringKeyFast, ConstantDX11> constants;
                 D3D11ImmediateContext::Ref dxContext;
                 D3D11Buffer::Ref dxCBuffer;
                 bool dirty;
