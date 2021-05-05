@@ -66,7 +66,7 @@ void ThreadManager::NewThreadRequest::startThread() {
     thread = new std::thread(_startThread, this, threadManager);
 }
 
-void ThreadManager::handleException(ThreadManager::NewThreadRequest* request, Exception& e) {
+void ThreadManager::handleException(ThreadManager::NewThreadRequest* request, const Exception& e) {
     exceptionMutex.lock();
     ExceptionData data;
     data.request = request;
