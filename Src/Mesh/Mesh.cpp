@@ -37,45 +37,39 @@ const Vertex::Property& Vertex::getProperty(const String& name) const {
 }
 
 void Vertex::setFloat(const String& name, float val) {
-    Property prop;
+    Property& prop = properties[name];
     prop.value.floatVal = val;
     prop.type = Property::Type::FLOAT;
-    properties.emplace(name, prop);
 }
 
 void Vertex::setUInt(const String& name, unsigned int val) {
-    Property prop;
+    Property& prop = properties[name];
     prop.value.uintVal = val;
     prop.type = Property::Type::UINT;
-    properties.emplace(name, prop);
 }
 
 void Vertex::setVector2f(const String& name, const Vector2f& val) {
-    Property prop;
+    Property& prop = properties[name];
     prop.value.vector2fVal = val;
     prop.type = Property::Type::VECTOR2F;
-    properties.emplace(name, prop);
 }
 
 void Vertex::setVector3f(const String& name, const Vector3f& val) {
-    Property prop;
+    Property& prop = properties[name];
     prop.value.vector3fVal = val;
     prop.type = Property::Type::VECTOR3F;
-    properties.emplace(name, prop);
 }
 
 void Vertex::setVector4f(const String& name, const Vector4f& val) {
-    Property prop;
+    Property& prop = properties[name];
     prop.value.vector4fVal = val;
     prop.type = Property::Type::VECTOR4F;
-    properties.emplace(name, prop);
 }
 
 void Vertex::setColor(const String& name, const Color& val) {
-    Property prop;
+    Property& prop = properties[name];
     prop.value.colorVal = val;
     prop.type = Property::Type::COLOR;
-    properties.emplace(name, prop);
 }
 
 Primitive::Primitive(long ia,long ib) {
