@@ -279,7 +279,7 @@ String& String::operator+=(const String& other) {
 
 String& String::operator+=(wchar ch) {
     int aLen = byteLength();
-    reallocate(aLen + 4);
+    reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
     memcpy(buf, cstr(), aLen);
     int actualSize = aLen + convertWCharToUtf8(ch, buf + aLen);
