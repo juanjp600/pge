@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 
-#include <String/StringKeyFast.h>
+#include <String/String.h>
 
 #include <Material/Material.h>
 #include <Color/Color.h>
@@ -53,7 +53,7 @@ class Vertex {
         void setColor(const String& name, const Color& val);
 
     private:
-        std::unordered_map<StringKeyFast, Property> properties;
+        std::unordered_map<String::Key, Property> properties;
 };
 
 class Primitive {

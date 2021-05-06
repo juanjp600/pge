@@ -700,7 +700,3 @@ String String::unHex() const {
     ret._strByteLength = resultSize;
     return ret;
 }*/
-
-uint64_t String::HashFriend::get(const String& str) {
-    return str.getHashCode();
-}

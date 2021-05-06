@@ -226,7 +226,7 @@ uint8_t* ShaderDX11::CBufferInfo::getData() {
     return data;
 }
 
-std::unordered_map<StringKeyFast, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
+std::unordered_map<String::Key, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
     return &constants;
 }
 
