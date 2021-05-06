@@ -30,7 +30,6 @@ class String {
         #if defined(__APPLE__) && defined(__OBJC__)
         String(const NSString* nsstr);
         #endif
-        String(const String& a, const String& b);
         String(char c);
         String(wchar w);
 
@@ -41,6 +40,7 @@ class String {
 
         String& operator=(const String& other);
         String& operator+=(const String& other);
+        String& operator+=(wchar ch);
 
         const char* cstr() const;
         void wstr(wchar* buffer) const;
@@ -94,14 +94,20 @@ class String {
         uint64_t getHashCode() const;
 
         void wCharToUtf8Str(const wchar* wbuffer);
-        void reallocate(int size);
+        void reallocate(int size, bool copyOldData = false);
         char* cstrNoConst();
+
+        // TODO: Remove (juan hates his friends).
+        friend const String operator+(const String& a, const String& b);
+        friend const String operator+(const char* a, const String& b);
+        friend const String operator+(const String& a, wchar b);
     };
 
-    bool operator==(const String& a, const String& b);
-    bool operator!=(const String& a, const String& b);
     const String operator+(const String& a, const String& b);
     const String operator+(const char* a, const String& b);
+    const String operator+(const String& a, wchar b);
+    bool operator==(const String& a, const String& b);
+    bool operator!=(const String& a, const String& b);
     std::ostream& operator<<(std::ostream& os, const String& s);
 
 }

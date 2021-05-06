@@ -175,16 +175,6 @@ String::String(const NSString* nsstr) {
 }
 #endif
 
-String::String(const String& a, const String& b) {
-    int len = a.byteLength() + b.byteLength();
-    reallocate(len);
-    _strByteLength = len;
-    char* buf = cstrNoConst();
-    memcpy(buf, a.cstr(), a.byteLength());
-    memcpy(buf + a.byteLength(), b.cstr(), b.byteLength());
-    buf[len] = '\0';
-}
-
 String::String(char c) {
     char* buf = cstrNoConst();
     if (c < 0) {
@@ -264,9 +254,9 @@ String String::fromFloat(float f) {
 }
 
 String& String::operator=(const String& other) {
-    if (&other == this || other == *this) { return *this; }
+    if (cstr()[0] == '\0' && other.cstr()[0] == '\0') { return *this; }
     reallocate(other.byteLength());
-    memcpy(cstrNoConst(), other.cstr(), (other.byteLength() + 1) * sizeof(char));
+    memcpy(cstrNoConst(), other.cstr(), other.byteLength() + 1);
     _strByteLength = other._strByteLength;
     _strLength = other._strLength;
     _hashCodeEvaluted = other._hashCodeEvaluted;
@@ -275,8 +265,69 @@ String& String::operator=(const String& other) {
 }
 
 String& String::operator+=(const String& other) {
-    *this = String(*this, other);
+    int oldByteSize = byteLength();
+    int newSize = oldByteSize + other.byteLength();
+    reallocate(newSize, true);
+    char* buf = cstrNoConst();
+    memcpy(buf + oldByteSize, other.cstr(), other.byteLength() + 1);
+    _strByteLength = newSize;
+    if (_strLength >= 0 && other._strLength >= 0) {
+        _strLength += other.length();
+    }
     return *this;
+}
+
+String& String::operator+=(wchar ch) {
+    int aLen = byteLength();
+    reallocate(aLen + 4);
+    char* buf = cstrNoConst();
+    memcpy(buf, cstr(), aLen);
+    int actualSize = aLen + convertWCharToUtf8(ch, buf + aLen);
+    buf[actualSize] = '\0';
+    _strByteLength = actualSize;
+    if (_strLength >= 0) {
+        _strLength++;
+    }
+    return *this;
+}
+
+const String PGE::operator+(const String& a, const String& b) {
+    int aLen = a.byteLength();
+    int bLen = b.byteLength();
+    String ret = String(aLen + bLen);
+    char* buf = ret.cstrNoConst();
+    memcpy(buf, a.cstr(), aLen);
+    memcpy(buf + aLen, b.cstr(), bLen + 1);
+    ret._strByteLength = aLen + bLen;
+    if (a._strLength >= 0 && b._strLength >= 0) {
+        ret._strLength = a.length() + b.length();
+    }
+    return ret;
+}
+
+const String PGE::operator+(const char* a, const String& b) {
+    int aLen = strlen(a);
+    int bLen = b.byteLength();
+    String ret = String(aLen + bLen);
+    char* buf = ret.cstrNoConst();
+    memcpy(buf, a, aLen);
+    memcpy(buf + aLen, b.cstr(), bLen + 1);
+    ret._strByteLength = aLen + bLen;
+    return ret;
+}
+
+const String PGE::operator+(const String& a, wchar b) {
+    int aLen = a.byteLength();
+    String ret = String(aLen + 4);
+    char* buf = ret.cstrNoConst();
+    memcpy(buf, a.cstr(), aLen);
+    int actualSize = aLen = convertWCharToUtf8(b, buf + aLen);
+    buf[actualSize] = '\0';
+    ret._strByteLength = actualSize;
+    if (a._strLength >= 0) {
+        ret._strLength = a.length() + 1;
+    }
+    return ret;
 }
 
 bool PGE::operator==(const String& a, const String& b) {
@@ -285,14 +336,6 @@ bool PGE::operator==(const String& a, const String& b) {
 
 bool PGE::operator!=(const String& a, const String& b) {
     return !a.equals(b);
-}
-
-const String PGE::operator+(const String& a, const String& b) {
-    return String(a, b);
-}
-
-const String PGE::operator+(const char* a, const String& b) {
-    return String(String(a), b);
 }
 
 std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
@@ -348,23 +391,29 @@ bool String::isEmpty() const {
     return byteLength() == 0;
 }
 
-void String::reallocate(int byteLength) {
+void String::reallocate(int size, bool copyOldData) {
     // Invalidating metadata.
     _hashCodeEvaluted = false;
     _strLength = -1;
     _strByteLength = -1;
 
     // Accounting for the terminating byte.
-    byteLength++;
-    if (byteLength <= shortStrCapacity || byteLength <= cCapacity) { return; }
+    size++;
+    if (size <= shortStrCapacity || size <= cCapacity) { return; }
     int targetCapacity = 1;
-    while (targetCapacity < byteLength) { targetCapacity <<= 1; }
+    while (targetCapacity < size) { targetCapacity <<= 1; }
+
+    char* newData = new char[targetCapacity];
+
+    if (copyOldData) {
+        memcpy(newData, cstr(), byteLength());
+    }
 
     if (cCapacity > 0) {
         delete[] data.longStr;
     }
     cCapacity = targetCapacity;
-    data.longStr = new char[targetCapacity];
+    data.longStr = newData;
 }
 
 const char* String::cstr() const {

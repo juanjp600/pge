@@ -156,7 +156,7 @@ void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::
     for (int i=0; i < src.length(); i++) {
         PGE::wchar chr = src.charAt(i);
         if (chr!='\r' && chr!='\n') {
-            line = String(line,chr);
+            line += chr;
         } else {
             if (line.substr(0, varStr.length()).equals(varStr)) {
                 bool readType = false;
@@ -175,9 +175,9 @@ void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::
                             break;
                         } else {
                             if (readType) {
-                                var.name = String(var.name,chr);
+                                var.name += chr;
                             } else {
-                                var.type = String(var.type,chr);
+                                var.type += chr;
                             }
                         }
                     }

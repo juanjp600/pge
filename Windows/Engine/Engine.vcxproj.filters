@@ -350,8 +350,5 @@
     <ClInclude Include="..\..\Include\String\Key.h">
       <Filter>Include\String</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\String\Key.h">
-      <Filter>Src\String</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

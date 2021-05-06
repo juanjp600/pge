@@ -12,7 +12,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
 
     filepath = path;
 
-    std::ifstream reflectionInfo; reflectionInfo.open(String(path.str(),"reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
+    std::ifstream reflectionInfo; reflectionInfo.open((path.str() + "reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
 
     readConstantBuffers(reflectionInfo,vertexConstantBuffers);
 
@@ -22,7 +22,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
         String propertyName = "";
         char chr; reflectionInfo.read(&chr,1);
         while (chr!=0) {
-            propertyName = String(propertyName,chr);
+            propertyName += chr;
             reflectionInfo.read(&chr, 1);
         }
         vertexInputElems.push_back(propertyName);
@@ -30,7 +30,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
         String semanticName = "";
         reflectionInfo.read(&chr,1);
         while (chr!=0) {
-            semanticName = String(semanticName,chr);
+            semanticName += chr;
             reflectionInfo.read(&chr, 1);
         }
         vertexInputElemSemanticNames[i] = semanticName;
@@ -96,7 +96,7 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefe
         String cBufferName = "";
         char chr; reflectionInfo.read(&chr, 1);
         while (chr != 0) {
-            cBufferName = String(cBufferName, chr);
+            cBufferName += chr;
             reflectionInfo.read(&chr, 1);
         }
         int cBufferSize = 0; reflectionInfo.read((char*)(void*)&cBufferSize, 1);
@@ -109,7 +109,7 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefe
             String varName = "";
             reflectionInfo.read(&chr, 1);
             while (chr != 0) {
-                varName = String(varName, chr);
+                varName += chr;
                 reflectionInfo.read(&chr, 1);
             }
             int varOffset = 0; reflectionInfo.read((char*)(void*)&varOffset, 1);
