@@ -321,9 +321,10 @@ const String PGE::operator+(const String& a, wchar b) {
     String ret = String(aLen + 4);
     char* buf = ret.cstrNoConst();
     memcpy(buf, a.cstr(), aLen);
-    int actualSize = aLen = convertWCharToUtf8(b, buf + aLen);
-    buf[actualSize] = '\0';
-    ret._strByteLength = actualSize;
+    int newCodepointLength = convertWCharToUtf8(b, buf + aLen);
+    aLen += newCodepointLength;
+    buf[aLen] = '\0';
+    ret._strByteLength = aLen;
     if (a._strLength >= 0) {
         ret._strLength = a.length() + 1;
     }
