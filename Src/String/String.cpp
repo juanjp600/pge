@@ -253,18 +253,17 @@ String String::fromFloat(float f) {
     return ret;
 }
 
-String& String::operator=(const String& other) {
-    if (cstr()[0] == '\0' && other.cstr()[0] == '\0') { return *this; }
+void String::operator=(const String& other) {
+    if (cstr()[0] == '\0' && other.cstr()[0] == '\0') { return; }
     reallocate(other.byteLength());
     memcpy(cstrNoConst(), other.cstr(), other.byteLength() + 1);
     _strByteLength = other._strByteLength;
     _strLength = other._strLength;
     _hashCodeEvaluted = other._hashCodeEvaluted;
     _hashCode = other._hashCode;
-    return *this;
 }
 
-String& String::operator+=(const String& other) {
+void String::operator+=(const String& other) {
     int oldByteSize = byteLength();
     int newSize = oldByteSize + other.byteLength();
     reallocate(newSize, true);
@@ -274,10 +273,9 @@ String& String::operator+=(const String& other) {
     if (_strLength >= 0 && other._strLength >= 0) {
         _strLength += other.length();
     }
-    return *this;
 }
 
-String& String::operator+=(wchar ch) {
+void String::operator+=(wchar ch) {
     int aLen = byteLength();
     reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
@@ -288,7 +286,6 @@ String& String::operator+=(wchar ch) {
     if (_strLength >= 0) {
         _strLength++;
     }
-    return *this;
 }
 
 const String PGE::operator+(const String& a, const String& b) {

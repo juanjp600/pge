@@ -38,9 +38,9 @@ class String {
         static String fromInt(int i);
         static String fromFloat(float f);
 
-        String& operator=(const String& other);
-        String& operator+=(const String& other);
-        String& operator+=(wchar ch);
+        void operator=(const String& other);
+        void operator+=(const String& other);
+        void operator+=(wchar ch);
 
         const char* cstr() const;
         void wstr(wchar* buffer) const;
