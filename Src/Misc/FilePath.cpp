@@ -107,8 +107,8 @@ FilePath FilePath::makeDirectory() const {
 
 String FilePath::getExtension() const {
     PGE_ASSERT(valid, INVALID_STR);
-    int startIndex = *name.findLast(".");
-    if (startIndex < 0) { return ""; }
+    String::Iterator startIndex = name.findLast(".");
+    if (startIndex == name.end()) { return ""; }
     return name.substr(startIndex+1);
 }
 

@@ -627,7 +627,7 @@ String String::substr(const Iterator& start, const Iterator& to) const {
 
 String::Iterator String::charAt(int pos) const {
     Iterator it;
-    for (auto it = begin(); it != end() && it.charIndex != pos; ++it);
+    for (it = begin(); it != end() && it.charIndex != pos; ++it);
     return it;
 }
 
