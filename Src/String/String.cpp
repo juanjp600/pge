@@ -1,9 +1,5 @@
 #include <String/String.h>
 
-#include <cstring>
-#include <cwchar>
-#include <cstdlib>
-#include <cwctype>
 #include <iostream>
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
@@ -94,6 +90,99 @@ static int convertWCharToUtf8(wchar chr, char* result) {
     }
 
     return len;
+}
+
+//
+// Iterator
+//
+
+String::Iterator::Iterator() {
+    ref = nullptr;
+    index = -1;
+    charIndex = -1;
+}
+
+String::Iterator::Iterator(const String& str) {
+    ref = &str;
+    index = 0;
+    charIndex = 0;
+}
+
+String::Iterator::Iterator(const String& str, int byteIndex, int chIndex) {
+    ref = &str;
+    index = byteIndex;
+    charIndex = chIndex;
+}
+
+String::Iterator& String::Iterator::operator++() {
+    PGE_ASSERT(index < ref->byteLength(), "Can't increment iterator past string end");
+    index += measureCodepoint(ref->cstr()[index]);
+    charIndex++;
+    // We reached the end and get the str length for free.
+    if (index == ref->byteLength()) {
+        ref->_strLength = charIndex;
+    }
+    _ch = L'\uFFFF';
+    return *this;
+}
+
+String::Iterator& String::Iterator::operator++(int) {
+    Iterator temp = *this;
+    ++(*this);
+    return temp;
+}
+
+String::Iterator String::Iterator::operator+(int steps) {
+    PGE_ASSERT(steps >= 0, "String iterators cannot go backwards");
+    String::Iterator ret = *this;
+    for (int i = 0; i < steps; i++) {
+        ++ret;
+    }
+    return ret;
+}
+
+void String::Iterator::operator+=(int steps) {
+    PGE_ASSERT(steps >= 0, "String iterators cannot go backwards");
+    for (int i = 0; i < steps; i++) {
+        ++*this;
+    }
+}
+
+wchar String::Iterator::operator*() const {
+    genChar();
+    return _ch;
+}
+
+const wchar* String::Iterator::operator->() const {
+    genChar();
+    return &_ch;
+}
+
+bool String::Iterator::operator==(const Iterator& other) const {
+    return ref == other.ref && index == other.index;
+}
+
+bool String::Iterator::operator!=(const Iterator& other) const {
+    return ref != other.ref || index != other.index;
+}
+
+int String::Iterator::getPosition() const {
+    return charIndex == -1 ? ref->length() : charIndex;
+}
+
+void String::Iterator::genChar() const {
+    if (_ch == L'\uFFFF') {
+        _ch = utf8ToWChar(ref->cstr() + index);
+    }
+}
+
+String::Iterator String::begin() const {
+    return Iterator(*this);
+}
+
+String::Iterator String::end() const {
+    // We need byteLength for functionality, but length is optional.
+    return Iterator(*this, byteLength(), _strLength);
 }
 
 //
@@ -318,10 +407,9 @@ const String PGE::operator+(const String& a, wchar b) {
     String ret = String(aLen + 4);
     char* buf = ret.cstrNoConst();
     memcpy(buf, a.cstr(), aLen);
-    int newCodepointLength = convertWCharToUtf8(b, buf + aLen);
-    aLen += newCodepointLength;
-    buf[aLen] = '\0';
-    ret._strByteLength = aLen;
+    int actualSize = aLen + convertWCharToUtf8(b, buf + aLen);
+    buf[actualSize] = '\0';
+    ret._strByteLength = actualSize;
     if (a._strLength >= 0) {
         ret._strLength = a.length() + 1;
     }
@@ -424,15 +512,10 @@ char* String::cstrNoConst() {
 
 void String::wstr(wchar* buffer) const {
     // Convert all the codepoints to wchars.
-    const char* buf = cstr();
-    int wIndex = 0;
-    for (int i = 0; i < byteLength();) {
-        buffer[wIndex] = utf8ToWChar(buf+i);
-
-        i += measureCodepoint(buf[i]);
-        wIndex++;
+    for (Iterator it = begin(); it != end(); ++it) {
+        buffer[it.getPosition()] = *it;
     }
-    buffer[wIndex] = '\0';
+    buffer[length()] = '\0';
 }
 
 int String::toInt(bool& success) const {
@@ -488,75 +571,64 @@ int String::byteLength() const {
     return _strByteLength;
 }
 
-int String::findFirst(const String& fnd, int from) const {
-    PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
-    if (from < 0) { from = 0; }
-    int charPos = 0;
-    for (int i = 0; i <= byteLength() - fnd.byteLength(); i += measureCodepoint(cstr()[i])) {
-        if (charPos >= from) {
-            if (memcmp(fnd.cstr(), cstr() + i, fnd.byteLength()) == 0) { return charPos; }
-        }
-        charPos++;
-    }
-    return -1;
+String::Iterator String::findFirst(const String& fnd, int from) const {
+    return findFirst(fnd, begin() + from);
 }
 
-int String::findLast(const String& fnd, int from) const {
+String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
     PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
-    if (from < 0) { from = 0; }
-    const char* buf = cstr();
-    int charPos = 0;
-    int foundPos = -1;
-    for (int i = 0; i <= byteLength() - fnd.byteLength(); i += measureCodepoint(buf[i])) {
-        if (charPos >= from) {
-            if (memcmp(fnd.cstr(), buf + i, fnd.byteLength()) == 0) { foundPos = charPos; }
-        }
-        charPos++;
+    for (auto it = from; it != end(); ++it) {
+        if (memcmp(fnd.cstr(), cstr() + it.index, fnd.byteLength()) == 0) { return it; }
     }
-    return foundPos;
+    return end();
+}
+
+String::Iterator String::findLast(const String& fnd, int from) const {
+    return findLast(fnd, begin() + from);
+}
+
+String::Iterator String::findLast(const String& fnd, const Iterator& from) const {
+    PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
+    String::Iterator found = end();
+    for (auto it = from; it != end(); ++it) {
+        if (memcmp(fnd.cstr(), cstr() + it.index, fnd.byteLength()) == 0) { found = it; }
+    }
+    return found;
+}
+
+String String::substr(int start) const {
+    return substr(begin() + start);
 }
 
 String String::substr(int start, int cnt) const {
-    const char* buf = cstr();
+    Iterator from = begin() + start;
+    return substr(from, from + cnt);
+}
 
-    int startPos = 0;
-    for (int i = 0; i < start; i++) {
-        PGE_ASSERT(buf[startPos] != '\0', "Substring would go past string data (start: " + fromInt(start) + "; str: " + *this + ")");
-        startPos += measureCodepoint(buf[startPos]);
+String String::substr(const Iterator& start) const {
+    return substr(start, end());
+}
+
+String String::substr(const Iterator& start, const Iterator& to) const {
+    PGE_ASSERT(start.index <= to.index, "Start iterator can't come after to iterator (start: " + fromInt(start.index) + "; to: " + fromInt(to.index) + "; str: " + *this + ")");
+    PGE_ASSERT(to.index <= end().index, "To iterator can't come after end iterator (to: " + fromInt(to.index) + "; end: " + fromInt(end().index) + "; str: " + *this + ")");
+
+    int newSize = to.index - start.index;
+    String retVal(newSize);
+    retVal._strByteLength = newSize;
+    if (to.charIndex >= 0) {
+        retVal._strLength = to.charIndex - start.charIndex;
     }
-
-    int actualSize = 0;
-    if (cnt < 0) {
-        cnt = 0;
-        while (buf[startPos + actualSize] != '\0') {
-            actualSize += measureCodepoint(buf[startPos + actualSize]);
-            cnt++;
-        }
-        // We get it for free here.
-        _strLength = start + cnt;
-    } else {
-        for (int i = 0; i < cnt; i++) {
-            PGE_ASSERT(buf[startPos + actualSize] != '\0', "Substring would go past string data (start: " + fromInt(start) + "; content: " + fromInt(cnt) + "; str: " + *this + ")");
-            actualSize += measureCodepoint(buf[startPos + actualSize]);
-        }
-    }
-
-    String retVal(actualSize);
-    retVal._strByteLength = actualSize;
-    retVal._strLength = cnt;
     char* retBuf = retVal.cstrNoConst();
-    memcpy(retBuf, buf + startPos, actualSize);
-    retBuf[actualSize] = '\0';
+    memcpy(retBuf, cstr() + start.index, newSize);
+    retBuf[newSize] = '\0';
     return retVal;
 }
 
-wchar String::charAt(int pos) const {
-    const char* buf = cstr();
-    int strPos = 0;
-    for (int i = 0; i < pos; i++) {
-        strPos += measureCodepoint(buf[strPos]);
-    }
-    return utf8ToWChar(buf + strPos);
+String::Iterator String::charAt(int pos) const {
+    Iterator it;
+    for (auto it = begin(); it != end() && it.charIndex != pos; ++it);
+    return it;
 }
 
 String String::replace(const String& fnd, const String& rplace) const {
@@ -636,7 +708,7 @@ String String::trim() const {
     }
 
     int trailingPos = byteLength() - 1;
-    while (charAt(trailingPos) == ' ' || charAt(trailingPos) == '\t') {
+    while (*charAt(trailingPos) == ' ' || *charAt(trailingPos) == '\t') {
         trailingPos--;
         if (trailingPos<0) {
             return *this;

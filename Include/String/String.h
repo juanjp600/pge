@@ -6,7 +6,7 @@
 #include <regex>
 
 #if defined(__APPLE__) && defined(__OBJC__)
-#include <Foundation/NSString.h>
+#import <Foundation/NSString.h>
 #endif
 
 namespace PGE {
@@ -20,6 +20,48 @@ class String {
         class SafeKey;
         class OrderedKey;
 
+        struct Iterator {
+            using iterator_category = std::forward_iterator_tag;
+            using difference_type = unsigned int;
+            using value_type = wchar;
+            using pointer = value_type*;
+            using reference = value_type&;
+
+            Iterator();
+            Iterator(const String& str);
+
+            Iterator& operator++();
+            Iterator& operator++(int);
+
+            Iterator operator+(int steps);
+            void operator+=(int steps);
+
+            wchar operator*() const;
+            const wchar* operator->() const;
+
+            // Member avoids friend.
+            bool operator==(const Iterator& other) const;
+            bool operator!=(const Iterator& other) const;
+
+            int getPosition() const;
+
+            private:
+                Iterator(const String& str, int byteIndex, int chIndex);
+
+                void genChar() const;
+
+                const String* ref;
+                // Lazily evaluated, Unicode invalid character by default.
+                mutable wchar _ch = L'\uFFFF';
+                int index;
+                int charIndex;
+
+            friend String;
+        };
+
+        Iterator begin() const;
+        Iterator end() const;
+
         ~String();
         String();
         String(const String& a);
@@ -27,9 +69,9 @@ class String {
         String(const std::string& cppstr);
         String(const wchar* wstr);
         String(const std::wstring& cppwstr);
-        #if defined(__APPLE__) && defined(__OBJC__)
+#if defined(__APPLE__) && defined(__OBJC__)
         String(const NSString* nsstr);
-        #endif
+#endif
         String(char c);
         String(wchar w);
 
@@ -42,6 +84,11 @@ class String {
         void operator+=(const String& other);
         void operator+=(wchar ch);
 
+        // TODO: Remove (juan hates his friends).
+        friend const String operator+(const String& a, const String& b);
+        friend const String operator+(const char* a, const String& b);
+        friend const String operator+(const String& a, wchar b);
+
         const char* cstr() const;
         void wstr(wchar* buffer) const;
         int toInt(bool& success) const;
@@ -52,11 +99,16 @@ class String {
         int length() const;
         int byteLength() const;
 
-        int findFirst(const String& fnd, int from = -1) const;
-        int findLast(const String& fnd, int from = -1) const;
+        Iterator findFirst(const String& fnd, int from = 0) const;
+        Iterator findFirst(const String& fnd, const Iterator& from) const;
+        Iterator findLast(const String& fnd, int from = 0) const;
+        Iterator findLast(const String& fnd, const Iterator& from) const;
 
-        String substr(int start, int cnt = -1) const;
-        wchar charAt(int pos) const;
+        String substr(int start) const;
+        String substr(int start, int cnt) const;
+        String substr(const Iterator& start) const;
+        String substr(const Iterator& start, const Iterator& to) const;
+        Iterator charAt(int pos) const;
         String replace(const String& fnd, const String& rplace) const;
         String toUpper() const;
         String toLower() const;
@@ -96,19 +148,11 @@ class String {
         void wCharToUtf8Str(const wchar* wbuffer);
         void reallocate(int size, bool copyOldData = false);
         char* cstrNoConst();
+};
 
-        // TODO: Remove (juan hates his friends).
-        friend const String operator+(const String& a, const String& b);
-        friend const String operator+(const char* a, const String& b);
-        friend const String operator+(const String& a, wchar b);
-    };
-
-    const String operator+(const String& a, const String& b);
-    const String operator+(const char* a, const String& b);
-    const String operator+(const String& a, wchar b);
-    bool operator==(const String& a, const String& b);
-    bool operator!=(const String& a, const String& b);
-    std::ostream& operator<<(std::ostream& os, const String& s);
+bool operator==(const String& a, const String& b);
+bool operator!=(const String& a, const String& b);
+std::ostream& operator<<(std::ostream& os, const String& s);
 
 }
 

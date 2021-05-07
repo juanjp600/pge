@@ -99,7 +99,7 @@ bool FilePath::isValid() const {
 
 FilePath FilePath::makeDirectory() const {
     PGE_ASSERT(valid, INVALID_STR);
-    if (str().charAt(length() - 1) != '/') {
+    if (*str().charAt(length() - 1) != '/') {
         return *this + "/";
     }
     return *this;
@@ -107,7 +107,7 @@ FilePath FilePath::makeDirectory() const {
 
 String FilePath::getExtension() const {
     PGE_ASSERT(valid, INVALID_STR);
-    int startIndex = name.findLast(".");
+    int startIndex = *name.findLast(".");
     if (startIndex < 0) { return ""; }
     return name.substr(startIndex+1);
 }
