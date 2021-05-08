@@ -63,7 +63,7 @@ class ThreadManager {
         };
 
         void requestExecutionOnNewThread(NewThreadRequest* request);
-        void handleException(NewThreadRequest* request, Exception& e);
+        void handleException(NewThreadRequest* request, const Exception& e);
 
     private:
         std::vector<NewThreadRequest*> newThreadRequests;

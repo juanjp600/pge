@@ -15,7 +15,8 @@
 Shader* loadShader(const FilePath& path) override; \
 Mesh* createMesh(Primitive::TYPE pt) override; \
 Texture* createRenderTargetTexture(int w, int h, Texture::FORMAT fmt) override; \
-Texture* loadTexture(int w, int h, uint8_t* buffer, Texture::FORMAT fmt) override;
+Texture* loadTexture(int w, int h, uint8_t* buffer, Texture::FORMAT fmt) override; \
+String getRendererName() const override;
 
 #define PGE_GFX_OBJ_DEF(Type) \
 Shader* Graphics ## Type ## ::loadShader(const FilePath& path) { \
@@ -32,6 +33,10 @@ Texture* Graphics ## Type ## ::createRenderTargetTexture(int w, int h, Texture::
 \
 Texture* Graphics ## Type ## ::loadTexture(int w, int h, uint8_t* buffer, Texture::FORMAT fmt) { \
     return new Texture ## Type ## (this, w, h, buffer, fmt); \
+} \
+\
+String Graphics ## Type ## ::getRendererName() const { \
+    return #Type; \
 }
 
 struct SDL_Window;
