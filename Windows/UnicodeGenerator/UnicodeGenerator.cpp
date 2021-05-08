@@ -67,12 +67,12 @@ int main() {
     while (!in.eof()) {
         in.getline(buffer, READ_BUFFER_SIZE);
         String line = buffer;
-        if (line.length() == 0 || line.charAt(0) == L'#') { continue; }
+        if (line.length() == 0 || *line.charAt(0) == L'#') { continue; }
         std::vector<String> params = line.split(";", false);
         params[0] = params[0].trim();
         // We reached UTF-32 range!
         if (params[0].length() == 5) { break; }
-        wchar type = params[1].trim().charAt(0);
+        wchar type = *params[1].trim().charAt(0);
         if (type == 'C') {
             out << INDENT << entriesToPair(params[0], params[2].trim()) << std::endl;
         } else if (type == 'F') {
@@ -105,7 +105,7 @@ int main() {
     while (!in.eof()) {
         in.getline(buffer, READ_BUFFER_SIZE);
         String line = buffer;
-        if (line.length() == 0 || line.charAt(0) == L'#') { continue; }
+        if (line.length() == 0 || *line.charAt(0) == L'#') { continue; }
         std::vector<String> params = line.split(";", false);
         // We reached UTF-32 range!
         if (params[0].length() == 5) { break; }

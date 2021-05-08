@@ -4,21 +4,23 @@
 
 using namespace PGE;
 
-void Char::foldInto(wchar ch, std::deque<wchar>& deq) {
+void Char::foldInto(wchar ch, std::queue<wchar>& deq) {
 	auto it = folding.find(ch);
 	if (it == folding.end()) {
-		deq.push_front(ch);
+		deq.push(ch);
 		return;
 	}
 
 	wchar folded = it->second;
 	if (folded == L'\uFFFF') {
 		std::vector<wchar>& addChars = multiFolding.find(ch)->second;
-		deq.insert(deq.begin(), addChars.begin(), addChars.end());
+		for (wchar add : addChars) {
+			deq.push(add);
+		}
 		return;
 	}
 
-	deq.push_front(folded);
+	deq.push(folded);
 }
 
 wchar Char::toUpper(wchar ch) {

@@ -2,7 +2,7 @@
 #define PGE_CHAR_H_DEFINED
 
 #include <unordered_map>
-#include <deque>
+#include <queue>
 
 #include <String/String.h>
 
@@ -10,7 +10,7 @@ namespace PGE {
 
 class Char {
 	public:
-		static void foldInto(wchar ch, std::deque<wchar>& deq);
+		static void foldInto(wchar ch, std::queue<wchar>& deq);
 		static wchar toLower(wchar ch);
 		static wchar toUpper(wchar ch);
 

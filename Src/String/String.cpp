@@ -2,7 +2,7 @@
 #include "Char.h"
 
 #include <iostream>
-#include <deque>
+#include <queue>
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
 #endif
@@ -456,7 +456,7 @@ bool String::equals(const String& other) const {
     return strcmp(cstr(), other.cstr()) == 0;
 }
 
-static void fold(const char*& buf, std::deque<wchar>& queue) {
+static void fold(const char*& buf, std::queue<wchar>& queue) {
     if (queue.empty() && *buf != '\0') {
         Char::foldInto(utf8ToWChar(buf), queue);
         buf += measureCodepoint(*buf);
@@ -467,7 +467,7 @@ bool String::equalsIgnoreCase(const String& other) const {
     if (_hashCodeEvaluted && other._hashCodeEvaluted && getHashCode() == other.getHashCode()) { return true; }
 
     const char* buf[2] = { cstr(), other.cstr() };
-    std::deque<wchar> queue[2];
+    std::queue<wchar> queue[2];
 
     // Feed first char.
     for (int i = 0; i < 2; i++) {
@@ -477,8 +477,8 @@ bool String::equalsIgnoreCase(const String& other) const {
     while (!queue[0].empty() && !queue[1].empty()) {
         if (queue[0].front() == queue[1].front()) {
             // Continue, are we done yet?
-            queue[0].pop_front();
-            queue[1].pop_front();
+            queue[0].pop();
+            queue[1].pop();
         } else {
             return false;
         }
