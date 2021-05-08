@@ -157,12 +157,14 @@ void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::
         if (chr!='\r' && chr!='\n') {
             line += chr;
         } else {
-            if (line.substr(0, varStr.length()).equals(varStr)) {
+            if (line.substr(0, varStr.length() < line.length() ? varStr.length() : line.length()).equals(varStr)) {
                 bool readType = false;
                 ShaderVar var;
                 var.type = "";
                 var.name = "";
-                for (wchar chr : line) {
+                auto it = line.begin() + (varStr.length() - 1);
+                while (++it != line.end()) {
+                    wchar chr = *it;
                     if (chr==' ') {
                         if (readType && var.name.length()>0) {
                             break;
