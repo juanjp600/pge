@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <Init/Init.h>
+#include <Graphics/Graphics.h>
 #include <Exception/Exception.h>
 #include <Misc/FileWriter.h>
 #include <Misc/Info.h>
@@ -13,6 +14,11 @@ static void showError(const String& exceptionType, const String& what) {
     writer.writeLine(Info::BRANCH + " - " + Info::COMMIT);
     writer.writeLine(exceptionType);
     writer.writeLine(what);
+    String activeGraphics = "Active graphics: \n";
+    for (Graphics* gfx : Graphics::getActiveInstances()) {
+        activeGraphics += gfx->getInfo();
+    }
+    writer.writeLine(activeGraphics);
     SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags::SDL_MESSAGEBOX_ERROR, "Fatal Error",
         "An exception has been thrown, please send \"exception.txt\" to a developer.", NULL);
 }

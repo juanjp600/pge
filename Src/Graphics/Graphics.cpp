@@ -7,6 +7,12 @@
 
 using namespace PGE;
 
+static std::list<Graphics*> activeGraphics;
+
+const std::list<Graphics*>& Graphics::getActiveInstances() {
+    return activeGraphics;
+}
+
 Graphics::Graphics(const String& name, int w, int h, bool fs, uint32_t windowFlags) : resourceManager(2) {
     caption = name;
     width = w; height = h; fullscreen = fs;
@@ -17,6 +23,12 @@ Graphics::Graphics(const String& name, int w, int h, bool fs, uint32_t windowFla
 
     open = true;
     focused = true;
+
+    activeGraphics.push_back(this);
+}
+
+Graphics::~Graphics() {
+    activeGraphics.erase(std::find(activeGraphics.begin(), activeGraphics.end(), this));
 }
 
 void Graphics::update() {
@@ -66,4 +78,12 @@ void Graphics::setVsync(bool isEnabled) {
 
 bool Graphics::getVsync() const {
     return vsync;
+}
+
+#define APPEND(name) '\n' + #name + ": " + String::fromInt(name)
+
+String Graphics::getInfo() const {
+    return caption + " (" + getRendererName() + ") "
+        + String::fromInt(width) + 'x' + String::fromInt(height) + " / " + String::fromInt(viewport.width()) + 'x' + String::fromInt(viewport.height())
+        + APPEND(open) + APPEND(focused) + APPEND(fullscreen) + APPEND(vsync) + APPEND(depthTest);
 }
