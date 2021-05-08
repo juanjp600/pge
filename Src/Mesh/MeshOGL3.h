@@ -6,7 +6,7 @@
 
 #include <vector>
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include "../ResourceManagement/OGL3.h"
 #include "../ResourceManagement/ResourceManagerOGL3.h"
