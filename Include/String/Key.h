@@ -59,10 +59,6 @@ class String::SafeKey {
             return str.getHashCode();
         }
 
-        bool byteLengthEvaluated() const {
-            return str._strByteLength >= 0;
-        }
-
         bool lengthEvaluated() const {
             return str._strLength >= 0;
         }
@@ -124,7 +120,7 @@ template <> struct std::hash<PGE::String::SafeKey> {
 
 template <> struct std::equal_to<PGE::String::SafeKey> {
     bool operator()(const PGE::String::SafeKey& a, const PGE::String::SafeKey& b) const {
-        if (a.byteLengthEvaluated() && b.byteLengthEvaluated() && a.str.byteLength() != b.str.byteLength()) { return false; }
+        if (a.str.byteLength() != b.str.byteLength()) { return false; }
         if (a.lengthEvaluated() && b.lengthEvaluated() && a.str.length() != b.str.length()) { return false; }
         return memcmp(a.str.cstr(), b.str.cstr(), a.str.byteLength()) == 0;
     }

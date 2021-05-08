@@ -128,15 +128,15 @@ class String {
         String(int size);
         String(const String& other, int from, int cnt);
 
-        int cCapacity = 0;
-
         // Lazily evaluated.
         mutable bool _hashCodeEvaluted;
         mutable uint64_t _hashCode;
-        mutable int _strByteLength;
         mutable int _strLength;
 
+        int strByteLength = -1;
+
         constexpr static int shortStrCapacity = 16;
+        int cCapacity = shortStrCapacity;
 
         union {
             char shortStr[shortStrCapacity];
