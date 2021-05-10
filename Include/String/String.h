@@ -120,6 +120,8 @@ class String {
 
         //String unHex() const;
 
+        uint64_t getHashCode() const;
+
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
         bool isEmpty() const;
@@ -142,8 +144,6 @@ class String {
             char shortStr[shortStrCapacity];
             char* longStr;
         } data;
-
-        uint64_t getHashCode() const;
 
         void wCharToUtf8Str(const wchar* wbuffer);
         void reallocate(int size, bool copyOldData = false);
