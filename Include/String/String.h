@@ -1,6 +1,7 @@
 #ifndef PGE_STRING_H_INCLUDED
 #define PGE_STRING_H_INCLUDED
 
+#include <unordered_map>
 #include <vector>
 #include <string>
 #include <regex>
@@ -147,6 +148,8 @@ class String {
             char* longStr;
         } data;
 
+        String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
+
         uint64_t getHashCode() const;
 
         void wCharToUtf8Str(const wchar* wbuffer);
@@ -157,6 +160,7 @@ class String {
 bool operator==(const String& a, const String& b);
 bool operator!=(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);
+std::wostream& operator<<(std::wostream& wos, const String& s);
 
 }
 

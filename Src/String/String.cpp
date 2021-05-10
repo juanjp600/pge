@@ -1,5 +1,5 @@
 #include <String/String.h>
-#include "Char.h"
+#include "Unicode.h"
 
 #include <iostream>
 #include <queue>
@@ -432,6 +432,14 @@ std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
     return os.write(s.cstr(), s.byteLength());
 }
 
+std::wostream& PGE::operator<<(std::wostream& wos, const String& s) {
+    wchar* chars = new wchar[s.length() + 1];
+    s.wstr(chars);
+    wos.write(chars, s.length());
+    delete[] chars;
+    return wos;
+}
+
 uint64_t String::getHashCode() const {
     if (!_hashCodeEvaluted) {
         // FNV-1a
@@ -456,7 +464,21 @@ bool String::equals(const String& other) const {
 
 static void fold(const char*& buf, std::queue<wchar>& queue) {
     if (queue.empty() && *buf != '\0') {
-        Char::foldInto(utf8ToWChar(buf), queue);
+        wchar ch = utf8ToWChar(buf);
+        auto it = Unicode::FOLDING.find(ch);
+        if (it == Unicode::FOLDING.end()) {
+            queue.push(ch);
+        } else {
+            wchar folded = it->second;
+            if (folded != L'\uFFFF') {
+                queue.push(folded);
+            } else {
+                const std::vector<wchar>& addChars = Unicode::MULTI_FOLDING.find(ch)->second;
+                for (wchar add : addChars) {
+                    queue.push(add);
+                }
+            }
+        }
         buf += measureCodepoint(*buf);
     }
 }
@@ -685,26 +707,33 @@ String String::replace(const String& fnd, const String& rplace) const {
     return retVal;
 }
 
-String String::toUpper() const {
-    wchar* newBuf = new wchar[byteLength() * sizeof(wchar) + 1];
-    wstr(newBuf);
-    for (int i = 0; i < byteLength(); i++) {
-        newBuf[i] = Char::toUpper(newBuf[i]);
+// TODO: Funny special cases!
+String String::performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const {
+    String ret = String(byteLength());
+    ret.strByteLength = 0;
+    ret._strLength = 0;
+    for (wchar ch : *this) {
+        const auto& find = conv.find(ch);
+        if (find == conv.end()) {
+            ret += ch;
+        } else if (find->second == L'\uFFFF') {
+            const std::vector<wchar>& multiFind = multiConv.find(ch)->second;
+            for (wchar writeChar : multiFind) {
+                ret += writeChar;
+            }
+        } else {
+            ret += find->second;
+        }
     }
-    String retVal(newBuf);
-    delete[] newBuf;
-    return retVal;
+    return ret;
+}
+
+String String::toUpper() const {
+    return performCaseConversion(Unicode::UP, Unicode::MULTI_UP);
 }
 
 String String::toLower() const {
-    wchar* newBuf = new wchar[byteLength() * sizeof(wchar) + 1];
-    wstr(newBuf);
-    for (int i = 0; i < byteLength(); i++) {
-        newBuf[i] = Char::toLower(newBuf[i]);
-    }
-    String retVal(newBuf);
-    delete[] newBuf;
-    return retVal;
+    return performCaseConversion(Unicode::DOWN, Unicode::MULTI_DOWN);
 }
 
 String String::trim() const {

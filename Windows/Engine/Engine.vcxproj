@@ -48,7 +48,6 @@
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp" />
     <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp" />
-    <ClCompile Include="..\..\Src\String\Char.cpp" />
     <ClCompile Include="..\..\Src\String\String.cpp" />
     <ClCompile Include="..\..\Src\String\Unicode.cpp" />
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
@@ -100,7 +99,7 @@
     <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h" />
-    <ClInclude Include="..\..\Src\String\Char.h" />
+    <ClInclude Include="..\..\Src\String\Unicode.h" />
     <ClInclude Include="..\..\Src\SysEvents\SysEventsInternal.h" />
     <ClInclude Include="..\..\Src\Texture\TextureDX11.h" />
     <ClInclude Include="..\..\Src\Texture\TextureOGL3.h" />
