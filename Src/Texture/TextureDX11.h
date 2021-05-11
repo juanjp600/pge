@@ -14,9 +14,9 @@ namespace PGE {
 class TextureDX11 : public Texture {
     public:
         // Render target.
-        TextureDX11(Graphics* gfx, int w, int h, FORMAT fmt);
+        TextureDX11(Graphics* gfx, int w, int h, Format fmt);
         // Loaded texture.
-        TextureDX11(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt);
+        TextureDX11(Graphics* gfx, int w, int h, byte* buffer, Format fmt);
 
         void useTexture(int index);
 

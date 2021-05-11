@@ -338,5 +338,8 @@
     <ClInclude Include="..\..\Include\Misc\FileWriter.h">
       <Filter>Include\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\Misc\Byte.h">
+      <Filter>Include\Misc</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

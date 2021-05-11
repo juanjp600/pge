@@ -86,30 +86,30 @@ class D3D11BackBufferRtv : public DX11Resource<ID3D11RenderTargetView*> {
 
 class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
     public:
-        enum class TYPE {
+        enum class Type {
             RENDER_TARGET,
             DEPTH_STENCIL,
             NORMAL
         };
         
-        D3D11Texture2D(ID3D11Device* device, TYPE type, int width, int height, DXGI_FORMAT format) {
+        D3D11Texture2D(ID3D11Device* device, Type type, int width, int height, DXGI_FORMAT format) {
             D3D11_TEXTURE2D_DESC textureDesc;
             ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
             textureDesc.Width = (UINT)width;
             textureDesc.Height = (UINT)height;
-            if (type == TYPE::DEPTH_STENCIL) {
+            if (type == Type::DEPTH_STENCIL) {
                 textureDesc.MipLevels = 1;
             }
             textureDesc.ArraySize = 1;
             textureDesc.Format = format;
             textureDesc.SampleDesc.Count = 1;
             textureDesc.Usage = D3D11_USAGE_DEFAULT;
-            if (type == TYPE::DEPTH_STENCIL) {
+            if (type == Type::DEPTH_STENCIL) {
                 textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
             } else {
                 textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
             }
-            if (type == TYPE::NORMAL) {
+            if (type == Type::NORMAL) {
                 textureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
             }
             HRESULT hResult = device->CreateTexture2D(&textureDesc, NULL, &resource);
@@ -187,24 +187,24 @@ class D3D11Buffer : public DX11Resource<ID3D11Buffer*> {
 
 class D3D11VertexShader : public DX11Resource<ID3D11VertexShader*> {
     public:
-        D3D11VertexShader(ID3D11Device* device, const std::vector<uint8_t>& bytecode) {
-            HRESULT hResult = device->CreateVertexShader(bytecode.data(), sizeof(uint8_t) * bytecode.size(), NULL, &resource);
+        D3D11VertexShader(ID3D11Device* device, const std::vector<byte>& bytecode) {
+            HRESULT hResult = device->CreateVertexShader(bytecode.data(), bytecode.size(), NULL, &resource);
             PGE_ASSERT(!FAILED(hResult), "Failed to create vertex shader (HRESULT: " + String::fromInt(hResult) + ")");
         }
 };
 
 class D3D11PixelShader : public DX11Resource<ID3D11PixelShader*> {
     public:
-        D3D11PixelShader(ID3D11Device* device, const std::vector<uint8_t>& bytecode) {
-            HRESULT hResult = device->CreatePixelShader(bytecode.data(), sizeof(uint8_t) * bytecode.size(), NULL, &resource);
+        D3D11PixelShader(ID3D11Device* device, const std::vector<byte>& bytecode) {
+            HRESULT hResult = device->CreatePixelShader(bytecode.data(), bytecode.size(), NULL, &resource);
             PGE_ASSERT(!FAILED(hResult), "Failed to create fragment shader (HRESULT: " + String::fromInt(hResult) + ")");
         }
 };
 
 class D3D11InputLayout : public DX11Resource<ID3D11InputLayout*> {
     public:
-        D3D11InputLayout(ID3D11Device* device, const std::vector<D3D11_INPUT_ELEMENT_DESC> vertexInputElemDesc, const std::vector<uint8_t>& bytecode) {
-            HRESULT hResult = device->CreateInputLayout(vertexInputElemDesc.data(), (UINT)vertexInputElemDesc.size(), bytecode.data(), bytecode.size() * sizeof(uint8_t), &resource);
+        D3D11InputLayout(ID3D11Device* device, const std::vector<D3D11_INPUT_ELEMENT_DESC> vertexInputElemDesc, const std::vector<byte>& bytecode) {
+            HRESULT hResult = device->CreateInputLayout(vertexInputElemDesc.data(), (UINT)vertexInputElemDesc.size(), bytecode.data(), bytecode.size(), &resource);
             PGE_ASSERT(!FAILED(hResult), "Failed to create input layout (HRESULT: " + String::fromInt(hResult) + ")");
         }
 };

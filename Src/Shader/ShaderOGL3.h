@@ -40,7 +40,7 @@ class ShaderOGL3 : public Shader {
                 String getName() const;
 
             private:
-                enum class VALUE_TYPE {
+                enum class ValueType {
                     MATRIX,
                     VECTOR2F,
                     VECTOR3F,
@@ -59,7 +59,7 @@ class ShaderOGL3 : public Shader {
                     float floatVal;
                     int intVal;
                 } val;
-                VALUE_TYPE valueType;
+                ValueType valueType;
                 Graphics* graphics;
                 String name;
                 int location;

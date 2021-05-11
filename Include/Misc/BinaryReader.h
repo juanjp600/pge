@@ -19,8 +19,8 @@ class BinaryReader {
         BinaryReader(const FilePath& file);
         ~BinaryReader();
 
-        uint8_t readByte();
-        uint8_t* readBytes(int count);
+        byte readByte();
+        byte* readBytes(int count);
         bool readBoolean();
         int32_t readInt();
         uint32_t readUInt();

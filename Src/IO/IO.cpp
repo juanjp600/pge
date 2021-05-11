@@ -106,7 +106,7 @@ void IOInternal::update() {
     for (UserInput* input : inputs) {
         input->setHit(false);
 
-        if (input->getDevice() == UserInput::DEVICE::MOUSE) {
+        if (input->getDevice() == UserInput::Device::MOUSE) {
             MouseInput* mouse = (MouseInput*)input;
             mouse->setClickCount(0);
         }
@@ -116,7 +116,7 @@ void IOInternal::update() {
     while (((SysEventsInternal::SubscriberInternal*)keyboardSubscriber)->popEvent(event)) {
         SDL_KeyboardEvent keyEvent = event.key;
         for (UserInput* input : inputs) {
-            if (input->getDevice()==UserInput::DEVICE::KEYBOARD) {
+            if (input->getDevice()==UserInput::Device::KEYBOARD) {
                 KeyboardInput* keyboardInput = (KeyboardInput*)input;
                 if ((int)keyEvent.keysym.sym==(int)keyboardInput->getButton()) {
                     if (event.type == SDL_KEYDOWN) {
@@ -155,24 +155,24 @@ void IOInternal::update() {
         } else if (event.type==SDL_MOUSEBUTTONDOWN || event.type==SDL_MOUSEBUTTONUP) {
             SDL_MouseButtonEvent mouseButtonEvent = event.button;
             for (UserInput* input : inputs) {
-                if (input->getDevice()==UserInput::DEVICE::MOUSE) {
+                if (input->getDevice()==UserInput::Device::MOUSE) {
                     MouseInput* mouseInput = (MouseInput*)input;
-                    MouseInput::BUTTON button;
+                    MouseInput::Button button;
                     switch (mouseButtonEvent.button) {
                         case SDL_BUTTON_LEFT: {
-                            button = MouseInput::BUTTON::LEFT;
+                            button = MouseInput::Button::LEFT;
                         } break;
                         case SDL_BUTTON_RIGHT: {
-                            button = MouseInput::BUTTON::RIGHT;
+                            button = MouseInput::Button::RIGHT;
                         } break;
                         case SDL_BUTTON_MIDDLE: {
-                            button = MouseInput::BUTTON::MIDDLE;
+                            button = MouseInput::Button::MIDDLE;
                         } break;
                         case SDL_BUTTON_X1: {
-                            button = MouseInput::BUTTON::SIDE1;
+                            button = MouseInput::Button::SIDE1;
                         } break;
                         case SDL_BUTTON_X2: {
-                            button = MouseInput::BUTTON::SIDE2;
+                            button = MouseInput::Button::SIDE2;
                         } break;
                         default: {
                             continue;
@@ -212,7 +212,7 @@ void IOInternal::update() {
             for (int i = 0; i < (int)openControllers.size(); i++) {
                 if (openControllers[i]->getSdlController() == sdlController) {
                     for (UserInput* input : inputs) {
-                        if (input->getDevice()==UserInput::DEVICE::CONTROLLER) {
+                        if (input->getDevice()==UserInput::Device::CONTROLLER) {
                             ControllerInput* controllerInput = (ControllerInput*)input;
                             if (controllerInput->getController() == openControllers[i]) {
                                 controllerInput->removeController();
@@ -228,25 +228,25 @@ void IOInternal::update() {
             SDL_ControllerAxisEvent axisEvent = event.caxis;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(axisEvent.which);
             for (UserInput* input : inputs) {
-                if (input->getDevice()==UserInput::DEVICE::CONTROLLER) {
+                if (input->getDevice()==UserInput::Device::CONTROLLER) {
                     ControllerInput* controllerInput = (ControllerInput*)input;
                     if (controllerInput->getController() == nullptr) { continue; }
                     if (((ControllerInternal*)controllerInput->getController())->getSdlController() != sdlController) { continue; }
-                    ControllerInput::BUTTON button = ControllerInput::BUTTON::INVALID;
+                    ControllerInput::Button button = ControllerInput::Button::INVALID;
                     switch (axisEvent.axis) {
                         case SDL_CONTROLLER_AXIS_LEFTX:
                         case SDL_CONTROLLER_AXIS_LEFTY: {
-                            button = ControllerInput::BUTTON::LEFTSTICK;
+                            button = ControllerInput::Button::LEFTSTICK;
                         } break;
                         case SDL_CONTROLLER_AXIS_RIGHTX:
                         case SDL_CONTROLLER_AXIS_RIGHTY: {
-                            button = ControllerInput::BUTTON::RIGHTSTICK;
+                            button = ControllerInput::Button::RIGHTSTICK;
                         } break;
                         case SDL_CONTROLLER_AXIS_TRIGGERLEFT: {
-                            button = ControllerInput::BUTTON::LEFTTRIGGER;
+                            button = ControllerInput::Button::LEFTTRIGGER;
                         } break;
                         case SDL_CONTROLLER_AXIS_TRIGGERRIGHT: {
-                            button = ControllerInput::BUTTON::RIGHTTRIGGER;
+                            button = ControllerInput::Button::RIGHTTRIGGER;
                         } break;
                     }
 
@@ -278,56 +278,56 @@ void IOInternal::update() {
             SDL_ControllerButtonEvent buttonEvent = event.cbutton;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(buttonEvent.which);
             for (UserInput* input : inputs) {
-                if (input->getDevice()==UserInput::DEVICE::CONTROLLER) {
+                if (input->getDevice()==UserInput::Device::CONTROLLER) {
                     ControllerInput* controllerInput = (ControllerInput*)input;
                     if (controllerInput->getController() == nullptr) { continue; }
                     if (((ControllerInternal*)controllerInput->getController())->getSdlController() != sdlController) { continue; }
-                    ControllerInput::BUTTON button = ControllerInput::BUTTON::INVALID;
+                    ControllerInput::Button button = ControllerInput::Button::INVALID;
                     switch (buttonEvent.button) {
                         case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: {
-                            button = ControllerInput::BUTTON::LEFTBUMPER;
+                            button = ControllerInput::Button::LEFTBUMPER;
                         } break;
                         case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: {
-                            button = ControllerInput::BUTTON::RIGHTBUMPER;
+                            button = ControllerInput::Button::RIGHTBUMPER;
                         } break;
                         case SDL_CONTROLLER_BUTTON_A: {
-                            button = ControllerInput::BUTTON::A;
+                            button = ControllerInput::Button::A;
                         } break;
                         case SDL_CONTROLLER_BUTTON_B: {
-                            button = ControllerInput::BUTTON::B;
+                            button = ControllerInput::Button::B;
                         } break;
                         case SDL_CONTROLLER_BUTTON_X: {
-                            button = ControllerInput::BUTTON::X;
+                            button = ControllerInput::Button::X;
                         } break;
                         case SDL_CONTROLLER_BUTTON_Y: {
-                            button = ControllerInput::BUTTON::Y;
+                            button = ControllerInput::Button::Y;
                         } break;
                         case SDL_CONTROLLER_BUTTON_BACK: {
-                            button = ControllerInput::BUTTON::BACK;
+                            button = ControllerInput::Button::BACK;
                         } break;
                         case SDL_CONTROLLER_BUTTON_GUIDE: {
-                            button = ControllerInput::BUTTON::GUIDE;
+                            button = ControllerInput::Button::GUIDE;
                         } break;
                         case SDL_CONTROLLER_BUTTON_START: {
-                            button = ControllerInput::BUTTON::START;
+                            button = ControllerInput::Button::START;
                         } break;
                         case SDL_CONTROLLER_BUTTON_LEFTSTICK: {
-                            button = ControllerInput::BUTTON::LEFTSTICK;
+                            button = ControllerInput::Button::LEFTSTICK;
                         } break;
                         case SDL_CONTROLLER_BUTTON_RIGHTSTICK: {
-                            button = ControllerInput::BUTTON::RIGHTSTICK;
+                            button = ControllerInput::Button::RIGHTSTICK;
                         } break;
                         case SDL_CONTROLLER_BUTTON_DPAD_UP: {
-                            button = ControllerInput::BUTTON::DPAD_UP;
+                            button = ControllerInput::Button::DPAD_UP;
                         } break;
                         case SDL_CONTROLLER_BUTTON_DPAD_LEFT: {
-                            button = ControllerInput::BUTTON::DPAD_LEFT;
+                            button = ControllerInput::Button::DPAD_LEFT;
                         } break;
                         case SDL_CONTROLLER_BUTTON_DPAD_DOWN: {
-                            button = ControllerInput::BUTTON::DPAD_DOWN;
+                            button = ControllerInput::Button::DPAD_DOWN;
                         } break;
                         case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: {
-                            button = ControllerInput::BUTTON::DPAD_RIGHT;
+                            button = ControllerInput::Button::DPAD_RIGHT;
                         } break;
                     }
 
@@ -383,7 +383,7 @@ void IOInternal::setMouseVisibility(bool visible) {
 
 Vector2i IOInternal::getMouseWheelDelta() {
     Vector2i mwp = mouseWheelPos;
-    mouseWheelPos = Vector2i::zero;
+    mouseWheelPos = Vector2i::ZERO;
     return mwp;
 }
 

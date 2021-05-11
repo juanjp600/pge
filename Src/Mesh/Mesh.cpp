@@ -32,13 +32,13 @@ Vertex& Vertex::operator=(const Vertex& other) {
 }
 
 Vertex::Property::Value::Value() {
-    vector4fVal = Vector4f::zero;
+    vector4fVal = Vector4f::ZERO;
 }
 
 Vertex::Property::Property() {
     hashCode = 0;
     type = PROPERTY_TYPE::VECTOR2F;
-    value.vector2fVal = Vector2f::zero;
+    value.vector2fVal = Vector2f::ZERO;
 }
 
 Vertex::Property::Property(const Vertex::Property& other) {

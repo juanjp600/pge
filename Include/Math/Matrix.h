@@ -41,8 +41,8 @@ class Matrix4x4f {
         static Matrix4x4f constructPerspectiveMat(float horizontalfov, float aspectRatio, float nearZ, float farZ);
         static Matrix4x4f constructOrthographicMat(float width, float height, float nearZ, float farZ);
 
-        static const Matrix4x4f identity;
-        static const Matrix4x4f zero;
+        static const Matrix4x4f IDENTITY;
+        static const Matrix4x4f ZERO;
 };
 
 }

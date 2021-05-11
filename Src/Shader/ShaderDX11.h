@@ -26,14 +26,14 @@ class ShaderDX11 : public Shader {
         void useVertexInputLayout();
         void useSamplers();
 
-        uint8_t* getDxVsCode(); int getDxVsCodeLen() const;
-        uint8_t* getDxFsCode(); int getDxFsCodeLen() const;
+        byte* getDxVsCode(); int getDxVsCodeLen() const;
+        byte* getDxFsCode(); int getDxFsCodeLen() const;
 
         const std::vector<String>& getVertexInputElems() const;
 
     private:
-        std::vector<uint8_t> vertexShaderBytecode;
-        std::vector<uint8_t> fragmentShaderBytecode;
+        std::vector<byte> vertexShaderBytecode;
+        std::vector<byte> fragmentShaderBytecode;
 
         std::vector<String> vertexInputElemSemanticNames;
         std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc;
@@ -66,7 +66,7 @@ class ShaderDX11 : public Shader {
                 CBufferInfo(Graphics* graphics, const String& nm, int sz, ResourceManager* resourceManager);
                 ~CBufferInfo();
 
-                uint8_t* getData();
+                byte* getData();
                 std::unordered_map<long long, ConstantDX11>* getConstants();
                 void addConstant(const String& name, const ConstantDX11& constant);
                 bool isDirty() const;
@@ -76,7 +76,7 @@ class ShaderDX11 : public Shader {
 
             private:
                 String name;
-                uint8_t* data;
+                byte* data;
                 int size;
                 std::unordered_map<long long, ConstantDX11> constants;
                 D3D11ImmediateContext::Ref dxContext;
@@ -84,6 +84,7 @@ class ShaderDX11 : public Shader {
                 bool dirty;
         };
         
+        // TODO: Move.
         class CBufferInfoOwner : public Resource<CBufferInfo*> {
             public:
                 CBufferInfoOwner(Graphics* gfx, const String& nm, int sz, ResourceManager* rm);

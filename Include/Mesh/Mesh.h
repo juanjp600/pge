@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include <Misc/Byte.h>
 #include <Material/Material.h>
 #include <Color/Color.h>
 #include <Math/Vector.h>
@@ -59,9 +60,9 @@ class Vertex {
 
 class Primitive {
     public:
-        enum class TYPE {
+        enum class Type {
             TRIANGLE,
-            LINE,
+            LINE
         };
 
         Primitive(long ia,long ib);
@@ -72,7 +73,7 @@ class Primitive {
 
 class Mesh {
     public:
-        static Mesh* create(Graphics* gfx, Primitive::TYPE pt);
+        static Mesh* create(Graphics* gfx, Primitive::Type pt);
         Mesh* clone();
         virtual ~Mesh() { };
 
@@ -102,7 +103,7 @@ class Mesh {
         Material* material;
 
         Graphics* graphics;
-        Primitive::TYPE primitiveType;
+        Primitive::Type primitiveType;
 
         int vertexCount; int primitiveCount;
         std::vector<Vertex> vertices;
