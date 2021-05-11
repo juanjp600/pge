@@ -484,7 +484,8 @@ void String::reallocate(int size, bool copyOldData) {
 
     if (size <= shortStrCapacity || size <= cCapacity) { return; }
 
-    int targetCapacity = cCapacity;
+    // TODO: This is an unfit solution to the static initialization order fiasco.
+    int targetCapacity = std::max(cCapacity, shortStrCapacity);
     while (targetCapacity < size) { targetCapacity <<= 1; }
 
     char* newData = new char[targetCapacity];
