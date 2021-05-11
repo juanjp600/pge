@@ -72,10 +72,10 @@
     <ClInclude Include="..\..\Include\Math\Vector.h" />
     <ClInclude Include="..\..\Include\Mesh\Mesh.h" />
     <ClInclude Include="..\..\Include\Misc\BinaryReader.h" />
+    <ClInclude Include="..\..\Include\Misc\Byte.h" />
     <ClInclude Include="..\..\Include\Misc\FilePath.h" />
     <ClInclude Include="..\..\Include\Misc\FileWriter.h" />
     <ClInclude Include="..\..\Include\Misc\Info.h" />
-    <ClInclude Include="..\..\Include\Misc\String.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\Resource.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceReference.h" />
@@ -180,6 +180,12 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OpenMPSupport>false</OpenMPSupport>
+      <EnableModules>false</EnableModules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <PreBuildEvent>
       <Command>cd ../../Src/Misc/
@@ -214,6 +220,12 @@ echo Generated Info.cpp!</Command>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OpenMPSupport>false</OpenMPSupport>
+      <EnableModules>false</EnableModules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <PreBuildEvent>
       <Command>cd ../../Src/Misc/
@@ -249,6 +261,12 @@ echo Generated Info.cpp!</Command>
       <PreprocessorDefinitions>SDL_MAIN_HANDLED;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OpenMPSupport>false</OpenMPSupport>
+      <EnableModules>false</EnableModules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -288,6 +306,12 @@ echo Generated Info.cpp!</Command>
       <PreprocessorDefinitions>SDL_MAIN_HANDLED;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OpenMPSupport>false</OpenMPSupport>
+      <EnableModules>false</EnableModules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

@@ -141,7 +141,7 @@ Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
     return nullptr;
 }
 
-uint8_t* ShaderDX11::getDxVsCode() {
+byte* ShaderDX11::getDxVsCode() {
     return vertexShaderBytecode.data();
 }
 
@@ -149,7 +149,7 @@ int ShaderDX11::getDxVsCodeLen() const {
     return (int)vertexShaderBytecode.size();
 }
 
-uint8_t* ShaderDX11::getDxFsCode() {
+byte* ShaderDX11::getDxFsCode() {
     return fragmentShaderBytecode.data();
 }
 
@@ -195,7 +195,7 @@ ShaderDX11::CBufferInfoOwner::CBufferInfoOwner(Graphics* gfx, const String& nm, 
 ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, const String& nm, int sz, ResourceManager* resourceManager) {
     name = nm;
     size = sz;
-    data = new uint8_t[size];
+    data = new byte[size];
 
     D3D11_BUFFER_DESC cBufferDesc;
     D3D11_SUBRESOURCE_DATA cBufferSubresourceData;
@@ -222,7 +222,7 @@ ShaderDX11::CBufferInfo::~CBufferInfo() {
     delete[] data;
 }
 
-uint8_t* ShaderDX11::CBufferInfo::getData() {
+byte* ShaderDX11::CBufferInfo::getData() {
     return data;
 }
 

@@ -187,24 +187,24 @@ class D3D11Buffer : public DX11Resource<ID3D11Buffer*> {
 
 class D3D11VertexShader : public DX11Resource<ID3D11VertexShader*> {
     public:
-        D3D11VertexShader(ID3D11Device* device, const std::vector<uint8_t>& bytecode) {
-            HRESULT hResult = device->CreateVertexShader(bytecode.data(), sizeof(uint8_t) * bytecode.size(), NULL, &resource);
+        D3D11VertexShader(ID3D11Device* device, const std::vector<byte>& bytecode) {
+            HRESULT hResult = device->CreateVertexShader(bytecode.data(), bytecode.size(), NULL, &resource);
             PGE_ASSERT(!FAILED(hResult), "Failed to create vertex shader (HRESULT: " + String::fromInt(hResult) + ")");
         }
 };
 
 class D3D11PixelShader : public DX11Resource<ID3D11PixelShader*> {
     public:
-        D3D11PixelShader(ID3D11Device* device, const std::vector<uint8_t>& bytecode) {
-            HRESULT hResult = device->CreatePixelShader(bytecode.data(), sizeof(uint8_t) * bytecode.size(), NULL, &resource);
+        D3D11PixelShader(ID3D11Device* device, const std::vector<byte>& bytecode) {
+            HRESULT hResult = device->CreatePixelShader(bytecode.data(), bytecode.size(), NULL, &resource);
             PGE_ASSERT(!FAILED(hResult), "Failed to create fragment shader (HRESULT: " + String::fromInt(hResult) + ")");
         }
 };
 
 class D3D11InputLayout : public DX11Resource<ID3D11InputLayout*> {
     public:
-        D3D11InputLayout(ID3D11Device* device, const std::vector<D3D11_INPUT_ELEMENT_DESC> vertexInputElemDesc, const std::vector<uint8_t>& bytecode) {
-            HRESULT hResult = device->CreateInputLayout(vertexInputElemDesc.data(), (UINT)vertexInputElemDesc.size(), bytecode.data(), bytecode.size() * sizeof(uint8_t), &resource);
+        D3D11InputLayout(ID3D11Device* device, const std::vector<D3D11_INPUT_ELEMENT_DESC> vertexInputElemDesc, const std::vector<byte>& bytecode) {
+            HRESULT hResult = device->CreateInputLayout(vertexInputElemDesc.data(), (UINT)vertexInputElemDesc.size(), bytecode.data(), bytecode.size(), &resource);
             PGE_ASSERT(!FAILED(hResult), "Failed to create input layout (HRESULT: " + String::fromInt(hResult) + ")");
         }
 };

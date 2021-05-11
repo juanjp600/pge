@@ -15,7 +15,7 @@
 Shader* loadShader(const FilePath& path) override; \
 Mesh* createMesh(Primitive::TYPE pt) override; \
 Texture* createRenderTargetTexture(int w, int h, Texture::FORMAT fmt) override; \
-Texture* loadTexture(int w, int h, uint8_t* buffer, Texture::FORMAT fmt) override; \
+Texture* loadTexture(int w, int h, byte* buffer, Texture::FORMAT fmt) override; \
 String getRendererName() const override;
 
 #define PGE_GFX_OBJ_DEF(Type) \
@@ -31,7 +31,7 @@ Texture* Graphics ## Type ## ::createRenderTargetTexture(int w, int h, Texture::
     return new Texture ## Type ## (this, w, h, fmt); \
 } \
 \
-Texture* Graphics ## Type ## ::loadTexture(int w, int h, uint8_t* buffer, Texture::FORMAT fmt) { \
+Texture* Graphics ## Type ## ::loadTexture(int w, int h, byte* buffer, Texture::FORMAT fmt) { \
     return new Texture ## Type ## (this, w, h, buffer, fmt); \
 } \
 \
@@ -58,7 +58,7 @@ class GraphicsInternal : public Graphics {
         virtual Shader* loadShader(const FilePath& path) = 0;
         virtual Mesh* createMesh(Primitive::TYPE pt) = 0;
         virtual Texture* createRenderTargetTexture(int w, int h, Texture::FORMAT fmt) = 0;
-        virtual Texture* loadTexture(int w, int h, uint8_t* buffer, Texture::FORMAT fmt) = 0;
+        virtual Texture* loadTexture(int w, int h, byte* buffer, Texture::FORMAT fmt) = 0;
 };
 
 }
