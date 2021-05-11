@@ -72,6 +72,7 @@
     <ClInclude Include="..\..\Include\Math\Vector.h" />
     <ClInclude Include="..\..\Include\Mesh\Mesh.h" />
     <ClInclude Include="..\..\Include\Misc\BinaryReader.h" />
+    <ClInclude Include="..\..\Include\Misc\Byte.h" />
     <ClInclude Include="..\..\Include\Misc\FilePath.h" />
     <ClInclude Include="..\..\Include\Misc\FileWriter.h" />
     <ClInclude Include="..\..\Include\Misc\Info.h" />

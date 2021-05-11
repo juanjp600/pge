@@ -1,6 +1,7 @@
 #ifndef PGE_FILEPATH_H_INCLUDED
 #define PGE_FILEPATH_H_INCLUDED
 
+#include "Byte.h"
 #include "String.h"
 
 namespace PGE {
@@ -43,7 +44,7 @@ class FilePath {
         void readLines(std::vector<String>& lines, bool includeEmptyLines = false) const;
 
         // Returns all bytes in a file.
-        void readBytes(std::vector<uint8_t>& bytes) const;
+        void readBytes(std::vector<byte>& bytes) const;
 
         int byteLength() const;
         int length() const;

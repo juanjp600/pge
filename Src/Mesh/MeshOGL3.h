@@ -1,7 +1,6 @@
 #ifndef PGEINTERNAL_MESHOGL3_H_INCLUDED
 #define PGEINTERNAL_MESHOGL3_H_INCLUDED
 
-#include <Graphics/Graphics.h>
 #include <Mesh/Mesh.h>
 
 #include <vector>
@@ -31,7 +30,7 @@ class MeshOGL3 : public Mesh {
 
         ResourceManagerOGL3 resourceManager;
 
-        std::vector<uint8_t> glVertexData;
+        std::vector<byte> glVertexData;
         std::vector<GLuint> glIndexData;
 };
 

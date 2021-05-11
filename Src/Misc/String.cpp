@@ -101,17 +101,19 @@ String String::format(T t, const String& format) {
     return ret;
 }
 
-// TODO: Possibly remove
-template String String::format<int8_t>(int8_t t, const PGE::String& format);
-template String String::format<int16_t>(int16_t t, const PGE::String& format);
-template String String::format<int32_t>(int32_t t, const PGE::String& format);
-template String String::format<int64_t>(int64_t t, const PGE::String& format);
-template String String::format<uint8_t>(uint8_t t, const PGE::String& format);
-template String String::format<uint16_t>(uint16_t t, const PGE::String& format);
-template String String::format<uint32_t>(uint32_t t, const PGE::String& format);
-template String String::format<uint64_t>(uint64_t t, const PGE::String& format);
+template String String::format<char>(char t, const PGE::String& format);
+template String String::format<short>(short t, const PGE::String& format);
+template String String::format<int>(int t, const PGE::String& format);
+template String String::format<long>(long t, const PGE::String& format);
+template String String::format<long long>(long long t, const PGE::String& format);
+template String String::format<unsigned char>(unsigned char t, const PGE::String& format);
+template String String::format<unsigned short>(unsigned short t, const PGE::String& format);
+template String String::format<unsigned int>(unsigned int t, const PGE::String& format);
+template String String::format<unsigned long>(unsigned long t, const PGE::String& format);
+template String String::format<unsigned long long>(unsigned long long t, const PGE::String& format);
 template String String::format<float>(float t, const PGE::String& format);
 template String String::format<double>(double t, const PGE::String& format);
+template String String::format<long double>(long double t, const PGE::String& format);
 
 String String::fromInt(int i) {
     String ret(32);
