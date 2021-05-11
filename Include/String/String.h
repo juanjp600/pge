@@ -31,7 +31,7 @@ class String {
             Iterator(const String& str);
 
             Iterator& operator++();
-            Iterator& operator++(int);
+            Iterator operator++(int);
 
             Iterator operator+(int steps);
             void operator+=(int steps);

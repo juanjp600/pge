@@ -126,7 +126,7 @@ String::Iterator& String::Iterator::operator++() {
     return *this;
 }
 
-String::Iterator& String::Iterator::operator++(int) {
+String::Iterator String::Iterator::operator++(int) {
     Iterator temp = *this;
     ++(*this);
     return temp;
