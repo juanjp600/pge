@@ -57,8 +57,8 @@ class Vector2f {
 
         static Vector2f lerp(const Vector2f& oldValue, const Vector2f& newValue, float interpolation);
 
-        static const Vector2f zero;
-        static const Vector2f one;
+        static const Vector2f ZERO;
+        static const Vector2f ONE;
 };
 
 class Vector3f {
@@ -108,8 +108,8 @@ class Vector3f {
 
         static Vector3f lerp(const Vector3f& oldValue, const Vector3f& newValue, float interpolation);
 
-        static const Vector3f zero;
-        static const Vector3f one;
+        static const Vector3f ZERO;
+        static const Vector3f ONE;
 };
 
 class Vector4f {
@@ -121,8 +121,8 @@ class Vector4f {
         Vector4f(float ix,float iy,float iz,float iw);
         Vector4f(const Vector3f& v3, float iw);
 
-        static const Vector4f zero;
-        static const Vector4f one;
+        static const Vector4f ZERO;
+        static const Vector4f ONE;
 };
 
 class Vector2i {
@@ -148,8 +148,8 @@ class Vector2i {
 
         Vector2i multiply(int s) const;
 
-        static const Vector2i zero;
-        static const Vector2i one;
+        static const Vector2i ZERO;
+        static const Vector2i ONE;
 };
 
 }

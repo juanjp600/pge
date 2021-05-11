@@ -84,6 +84,7 @@ class ShaderDX11 : public Shader {
                 bool dirty;
         };
         
+        // TODO: Move.
         class CBufferInfoOwner : public Resource<CBufferInfo*> {
             public:
                 CBufferInfoOwner(Graphics* gfx, const String& nm, int sz, ResourceManager* rm);
