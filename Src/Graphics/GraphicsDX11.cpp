@@ -51,7 +51,7 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     dxSwapChain = resourceManager.addNewResource<DXGISwapChain>(dxgiFactory, dxDevice, dxSwapChainDesc);
     dxBackBufferRtv = resourceManager.addNewResource<D3D11BackBufferRtv>(dxDevice, dxSwapChain);
 
-    dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::TYPE::DEPTH_STENCIL, w, h, DXGI_FORMAT_D24_UNORM_S8_UINT);
+    dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::DEPTH_STENCIL, w, h, DXGI_FORMAT_D24_UNORM_S8_UINT);
 
     dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture, DXGI_FORMAT_D24_UNORM_S8_UINT);
     dxContext->OMSetRenderTargets(1, &dxBackBufferRtv, dxZBufferView);
@@ -103,14 +103,14 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
-    dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE], 0);
+    dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_WRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_WRITE], 0);
 
     depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_NOWRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
 
     depthStencilDesc.DepthEnable = FALSE;
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxDepthStencilState[(int)ZBufferStateIndex::DISABLED] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
 
     setViewport(Rectanglei(0,0,w,h));
     currentRenderTargetViews.add(dxBackBufferRtv);
@@ -208,7 +208,7 @@ ID3D11DepthStencilView* GraphicsDX11::getZBufferView() const {
     return dxZBufferView;
 }
 
-void GraphicsDX11::setZBufferState(GraphicsDX11::ZBUFFER_STATE_INDEX index) {
+void GraphicsDX11::setZBufferState(GraphicsDX11::ZBufferStateIndex index) {
     dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)index], 0);
 }
 

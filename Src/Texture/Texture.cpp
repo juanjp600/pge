@@ -2,7 +2,7 @@
 
 using namespace PGE;
 
-Texture::Texture(Graphics* gfx, int w, int h, bool rt, FORMAT fmt) {
+Texture::Texture(Graphics* gfx, int w, int h, bool rt, Format fmt) {
     graphics = gfx;
     width = w;
     height = h;

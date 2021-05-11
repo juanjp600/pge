@@ -86,30 +86,30 @@ class D3D11BackBufferRtv : public DX11Resource<ID3D11RenderTargetView*> {
 
 class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
     public:
-        enum class TYPE {
+        enum class Type {
             RENDER_TARGET,
             DEPTH_STENCIL,
             NORMAL
         };
         
-        D3D11Texture2D(ID3D11Device* device, TYPE type, int width, int height, DXGI_FORMAT format) {
+        D3D11Texture2D(ID3D11Device* device, Type type, int width, int height, DXGI_FORMAT format) {
             D3D11_TEXTURE2D_DESC textureDesc;
             ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
             textureDesc.Width = (UINT)width;
             textureDesc.Height = (UINT)height;
-            if (type == TYPE::DEPTH_STENCIL) {
+            if (type == Type::DEPTH_STENCIL) {
                 textureDesc.MipLevels = 1;
             }
             textureDesc.ArraySize = 1;
             textureDesc.Format = format;
             textureDesc.SampleDesc.Count = 1;
             textureDesc.Usage = D3D11_USAGE_DEFAULT;
-            if (type == TYPE::DEPTH_STENCIL) {
+            if (type == Type::DEPTH_STENCIL) {
                 textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
             } else {
                 textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
             }
-            if (type == TYPE::NORMAL) {
+            if (type == Type::NORMAL) {
                 textureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
             }
             HRESULT hResult = device->CreateTexture2D(&textureDesc, NULL, &resource);

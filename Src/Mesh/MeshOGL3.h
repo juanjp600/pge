@@ -14,7 +14,7 @@ namespace PGE {
 
 class MeshOGL3 : public Mesh {
     public:
-        MeshOGL3(Graphics* gfx, Primitive::TYPE pt);
+        MeshOGL3(Graphics* gfx, Primitive::Type pt);
 
         void updateInternalData() override;
 

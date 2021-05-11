@@ -6,17 +6,17 @@
 
 using namespace PGE;
 
-static void textureImage(int width, int height, byte* buffer, Texture::FORMAT format) {
+static void textureImage(int width, int height, byte* buffer, Texture::Format format) {
     GLint glInternalFormat;
     GLenum glFormat;
     GLenum glPixelType;
     switch (format) {
-        case Texture::FORMAT::RGBA32: {
+        case Texture::Format::RGBA32: {
             glInternalFormat = GL_RGBA;
             glFormat = GL_RGBA;
             glPixelType = GL_UNSIGNED_BYTE;
         } break;
-        case Texture::FORMAT::R32F: {
+        case Texture::Format::R32F: {
             glInternalFormat = GL_R32F;
             glFormat = GL_RED;
             glPixelType = GL_FLOAT;
@@ -36,7 +36,7 @@ static void applyTextureParameters(bool rt) {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, rt ? 1.f : 4.f);
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, FORMAT fmt) : Texture(gfx, w, h, true, fmt), resourceManager(gfx, 2) {
+TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, Format fmt) : Texture(gfx, w, h, true, fmt), resourceManager(gfx, 2) {
     ((GraphicsOGL3*)gfx)->takeGlContext();
     glTexture = resourceManager.addNewResource<GLTexture>();
     textureImage(w, h, nullptr, fmt);
@@ -47,7 +47,7 @@ TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, FORMAT fmt) : Texture(gfx,
     //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, glDepthbuffer);
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, byte* buffer, FORMAT fmt) : Texture(gfx, w, h, false, fmt), resourceManager(gfx, 2) {
+TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, byte* buffer, Format fmt) : Texture(gfx, w, h, false, fmt), resourceManager(gfx, 2) {
     ((GraphicsOGL3*)gfx)->takeGlContext();
     glTexture = resourceManager.addNewResource<GLTexture>();
     textureImage(w, h, buffer, fmt);
