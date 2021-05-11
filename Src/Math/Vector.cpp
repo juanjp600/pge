@@ -3,8 +3,8 @@
 
 using namespace PGE;
 
-const Vector2f Vector2f::zero = Vector2f(0.f,0.f);
-const Vector2f Vector2f::one = Vector2f(1.f,1.f);
+const Vector2f Vector2f::ZERO = Vector2f(0.f,0.f);
+const Vector2f Vector2f::ONE = Vector2f(1.f,1.f);
 
 Vector2f::Vector2f() {
     x = 0.f; y = 0.f;
@@ -134,7 +134,7 @@ Vector2f Vector2f::invert() const {
 
 Vector2f Vector2f::normalize() const {
     float lenSqr = lengthSquared();
-    if (lenSqr < 0.0001f) { return Vector2f::zero; }
+    if (lenSqr < 0.0001f) { return Vector2f::ZERO; }
     if (lenSqr > 0.9999f && lenSqr < 1.0001f) { return *this; }
     return multiply(1.f/sqrt(lenSqr));
 }
@@ -157,8 +157,8 @@ Vector2f Vector2f::lerp(const Vector2f& oldValue, const Vector2f& newValue, floa
     return oldValue.add(newValue.subtract(oldValue).multiply(interpolation));
 }
 
-const Vector3f Vector3f::zero = Vector3f(0.f,0.f,0.f);
-const Vector3f Vector3f::one = Vector3f(1.f,1.f,1.f);
+const Vector3f Vector3f::ZERO = Vector3f(0.f,0.f,0.f);
+const Vector3f Vector3f::ONE = Vector3f(1.f,1.f,1.f);
 
 Vector3f::Vector3f() {
     x=0.f; y=0.f; z=0.f;
@@ -287,7 +287,7 @@ Vector3f Vector3f::invert() const {
 
 Vector3f Vector3f::normalize() const {
     float lenSqr = lengthSquared();
-    if (lenSqr < 0.0001f) { return Vector3f::zero; }
+    if (lenSqr < 0.0001f) { return Vector3f::ZERO; }
     if (lenSqr > 0.9999f && lenSqr < 1.0001f) { return *this; }
     return multiply(1.f/sqrt(lenSqr));
 }
@@ -330,11 +330,11 @@ Vector4f::Vector4f(const Vector3f& v3, float iw) {
     x = v3.x; y = v3.y; z = v3.z; w = iw;
 }
 
-const Vector4f Vector4f::zero = Vector4f(0.f,0.f,0.f,0.f);
-const Vector4f Vector4f::one = Vector4f(1.f,1.f,1.f,1.f);
+const Vector4f Vector4f::ZERO = Vector4f(0.f,0.f,0.f,0.f);
+const Vector4f Vector4f::ONE = Vector4f(1.f,1.f,1.f,1.f);
 
-const Vector2i Vector2i::zero = Vector2i(0,0);
-const Vector2i Vector2i::one = Vector2i(1,1);
+const Vector2i Vector2i::ZERO = Vector2i(0,0);
+const Vector2i Vector2i::ONE = Vector2i(1,1);
 
 Vector2i::Vector2i() {
     x=0; y=0;
