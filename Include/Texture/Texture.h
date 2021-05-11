@@ -18,6 +18,7 @@ class Texture {
         bool isRenderTarget() const;
 
         int getWidth() const; int getHeight() const;
+        Vector2i getDimensions() const;
 
         virtual Texture* copy() const = 0;
         
@@ -34,7 +35,7 @@ class Texture {
         Graphics* graphics;
         bool isRT;
 
-        int width; int height;
+        Vector2i dimensions;
 
         FORMAT format;
 };

@@ -28,7 +28,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : Graphics
     //        SDL_SetWindowPosition(sdlWindow,0,0);
     //    }
 
-    glContext = resourceManager.addNewResource<GLContext>(sdlWindow());
+    glContext = resourceManager.addNewResource<GLContext>(sdlWindow);
 
     PGE_ASSERT(gladLoadGL() == 1, "Failed to initialize GLEW (GLERROR: " + String::format(glGetError(), "%u") + ")");
 

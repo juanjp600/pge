@@ -21,7 +21,7 @@ Graphics::Graphics(const String& name, int w, int h, bool fs, uint32_t windowFla
 
 void Graphics::update() {
     SDL_Event event;
-    while (((SysEventsInternal::SubscriberInternal*)eventSubscriber())->popEvent(event)) {
+    while (((SysEventsInternal::SubscriberInternal*)eventSubscriber.get())->popEvent(event)) {
         if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
             open = false;
         } else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
