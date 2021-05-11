@@ -56,20 +56,20 @@ Shader* Shader::load(Graphics* gfx, const FilePath& path) {
     return ((GraphicsInternal*)gfx)->loadShader(path);
 }
 
-Mesh* Mesh::create(Graphics* gfx, Primitive::TYPE pt) {
+Mesh* Mesh::create(Graphics* gfx, Primitive::Type pt) {
     return ((GraphicsInternal*)gfx)->createMesh(pt);
 }
 
-Texture* Texture::createRenderTarget(Graphics* gfx, int w, int h, FORMAT fmt) {
+Texture* Texture::createRenderTarget(Graphics* gfx, int w, int h, Format fmt) {
     return ((GraphicsInternal*)gfx)->createRenderTargetTexture(w, h, fmt);
 }
 
-Texture* Texture::createBlank(Graphics* gfx, int w, int h, FORMAT fmt) {
+Texture* Texture::createBlank(Graphics* gfx, int w, int h, Format fmt) {
     std::vector<byte> bufferData = std::vector<byte>(w * h * 4, 0);
     return ((GraphicsInternal*)gfx)->loadTexture(w, h, bufferData.data(), fmt);
 }
 
-Texture* Texture::load(Graphics* gfx, int w, int h, byte* buffer, FORMAT fmt) {
+Texture* Texture::load(Graphics* gfx, int w, int h, byte* buffer, Format fmt) {
     PGE_ASSERT(buffer != nullptr, "Tried to load texture from nullptr");
     return ((GraphicsInternal*)gfx)->loadTexture(w, h, buffer, fmt);
 }

@@ -13,30 +13,30 @@
 
 #define PGE_GFX_OBJ_DEC \
 Shader* loadShader(const FilePath& path) override; \
-Mesh* createMesh(Primitive::TYPE pt) override; \
-Texture* createRenderTargetTexture(int w, int h, Texture::FORMAT fmt) override; \
-Texture* loadTexture(int w, int h, byte* buffer, Texture::FORMAT fmt) override; \
+Mesh* createMesh(Primitive::Type pt) override; \
+Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) override; \
+Texture* loadTexture(int w, int h, byte* buffer, Texture::Format fmt) override; \
 String getRendererName() const override;
 
-#define PGE_GFX_OBJ_DEF(Type) \
-Shader* Graphics ## Type ## ::loadShader(const FilePath& path) { \
-    return new Shader ## Type ## (this, path); \
+#define PGE_GFX_OBJ_DEF(GfxType) \
+Shader* Graphics ## GfxType ## ::loadShader(const FilePath& path) { \
+    return new Shader ## GfxType ## (this, path); \
 } \
 \
-Mesh* Graphics ## Type ## ::createMesh(Primitive::TYPE pt) { \
-    return new Mesh ## Type ## (this, pt); \
+Mesh* Graphics ## GfxType ## ::createMesh(Primitive::Type pt) { \
+    return new Mesh ## GfxType ## (this, pt); \
 } \
 \
-Texture* Graphics ## Type ## ::createRenderTargetTexture(int w, int h, Texture::FORMAT fmt) { \
-    return new Texture ## Type ## (this, w, h, fmt); \
+Texture* Graphics ## GfxType ## ::createRenderTargetTexture(int w, int h, Texture::Format fmt) { \
+    return new Texture ## GfxType ## (this, w, h, fmt); \
 } \
 \
-Texture* Graphics ## Type ## ::loadTexture(int w, int h, byte* buffer, Texture::FORMAT fmt) { \
-    return new Texture ## Type ## (this, w, h, buffer, fmt); \
+Texture* Graphics ## GfxType ## ::loadTexture(int w, int h, byte* buffer, Texture::Format fmt) { \
+    return new Texture ## GfxType ## (this, w, h, buffer, fmt); \
 } \
 \
-String Graphics ## Type ## ::getRendererName() const { \
-    return #Type; \
+String Graphics ## GfxType ## ::getRendererName() const { \
+    return #GfxType; \
 }
 
 struct SDL_Window;
@@ -56,9 +56,9 @@ class GraphicsInternal : public Graphics {
 #endif
 
         virtual Shader* loadShader(const FilePath& path) = 0;
-        virtual Mesh* createMesh(Primitive::TYPE pt) = 0;
-        virtual Texture* createRenderTargetTexture(int w, int h, Texture::FORMAT fmt) = 0;
-        virtual Texture* loadTexture(int w, int h, byte* buffer, Texture::FORMAT fmt) = 0;
+        virtual Mesh* createMesh(Primitive::Type pt) = 0;
+        virtual Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) = 0;
+        virtual Texture* loadTexture(int w, int h, byte* buffer, Texture::Format fmt) = 0;
 };
 
 }

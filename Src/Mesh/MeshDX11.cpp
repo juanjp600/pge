@@ -9,7 +9,7 @@
 
 using namespace PGE;
 
-MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) : resourceManager(2) {
+MeshDX11::MeshDX11(Graphics* gfx,Primitive::Type pt) : resourceManager(2) {
     graphics = gfx;
 
     primitiveType = pt;
@@ -88,7 +88,7 @@ void MeshDX11::updateInternalData() {
     for (int i=0;i<primitiveCount;i++) {
         dxIndexData.push_back((WORD)primitives[i].a);
         dxIndexData.push_back((WORD)primitives[i].b);
-        if (primitiveType==Primitive::TYPE::TRIANGLE) {
+        if (primitiveType==Primitive::Type::TRIANGLE) {
             dxIndexData.push_back((WORD)primitives[i].c);
         }
     }
@@ -150,7 +150,7 @@ void MeshDX11::render() {
 
     D3D11_PRIMITIVE_TOPOLOGY dxPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     int dxIndexMultiplier = 3;
-    if (primitiveType==Primitive::TYPE::LINE) {
+    if (primitiveType==Primitive::Type::LINE) {
         dxPrimitiveTopology=D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
         dxIndexMultiplier = 2;
     }
@@ -167,8 +167,8 @@ void MeshDX11::render() {
 
     ((GraphicsDX11*)graphics)->setZBufferState(
         graphics->getDepthTest()
-                ? (opaque ? GraphicsDX11::ZBUFFER_STATE_INDEX::ENABLED_WRITE : GraphicsDX11::ZBUFFER_STATE_INDEX::ENABLED_NOWRITE)
-                : GraphicsDX11::ZBUFFER_STATE_INDEX::DISABLED);
+                ? (opaque ? GraphicsDX11::ZBufferStateIndex::ENABLED_WRITE : GraphicsDX11::ZBufferStateIndex::ENABLED_NOWRITE)
+                : GraphicsDX11::ZBufferStateIndex::DISABLED);
     
     dxContext->DrawIndexed(primitiveCount*dxIndexMultiplier,0,0);
 

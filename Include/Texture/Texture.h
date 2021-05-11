@@ -10,7 +10,7 @@ namespace PGE {
 
 class Texture {
     public:
-        enum class FORMAT {
+        enum class Format {
             RGBA32,
             R32F
         };
@@ -23,20 +23,20 @@ class Texture {
         
         virtual void* getNative() const = 0;
 
-        static Texture* createRenderTarget(Graphics* gfx, int w, int h, FORMAT fmt);
-        static Texture* createBlank(Graphics* gfx, int w, int h, FORMAT fmt);
-        static Texture* load(Graphics* gfx, int w, int h, byte* buffer, FORMAT fmt);
+        static Texture* createRenderTarget(Graphics* gfx, int w, int h, Format fmt);
+        static Texture* createBlank(Graphics* gfx, int w, int h, Format fmt);
+        static Texture* load(Graphics* gfx, int w, int h, byte* buffer, Format fmt);
         virtual ~Texture() = default;
 
     protected:
-        Texture(Graphics* gfx, int w, int h, bool rt, FORMAT fmt);
+        Texture(Graphics* gfx, int w, int h, bool rt, Format fmt);
 
         Graphics* graphics;
         bool isRT;
 
         int width; int height;
 
-        FORMAT format;
+        Format format;
 };
 
 }

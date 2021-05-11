@@ -10,7 +10,7 @@
 
 using namespace PGE;
 
-MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) : resourceManager(gfx, 3) {
+MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::Type pt) : resourceManager(gfx, 3) {
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     primitiveType = pt;
@@ -86,7 +86,7 @@ void MeshOGL3::updateInternalData() {
     for (int i=0;i<primitiveCount;i++) {
         glIndexData.push_back((GLuint)primitives[i].a);
         glIndexData.push_back((GLuint)primitives[i].b);
-        if (primitiveType==Primitive::TYPE::TRIANGLE) {
+        if (primitiveType==Primitive::Type::TRIANGLE) {
             glIndexData.push_back((GLuint)primitives[i].c);
         }
     }
@@ -141,7 +141,7 @@ void MeshOGL3::render() {
 
     GLenum glPrimitiveType = GL_TRIANGLES;
     int glIndexMultiplier = 3;
-    if (primitiveType==Primitive::TYPE::LINE) {
+    if (primitiveType==Primitive::Type::LINE) {
         glPrimitiveType=GL_LINES;
         glIndexMultiplier = 2;
     }

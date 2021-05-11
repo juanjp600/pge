@@ -17,7 +17,7 @@ namespace PGE {
 
 class MeshDX11 : public Mesh {
     public:
-        MeshDX11(Graphics* gfx, Primitive::TYPE pt);
+        MeshDX11(Graphics* gfx, Primitive::Type pt);
 
         void updateInternalData() override;
 
