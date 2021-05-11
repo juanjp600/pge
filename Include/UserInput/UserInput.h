@@ -314,7 +314,7 @@ class MouseInput : public UserInput {
 
 class Controller {
     public:
-        virtual ~Controller() { }
+        virtual ~Controller() = default;
         virtual const String& getName() const = 0;
         virtual void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) = 0;
 };

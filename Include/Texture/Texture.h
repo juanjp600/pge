@@ -26,7 +26,7 @@ class Texture {
         static Texture* createRenderTarget(Graphics* gfx, int w, int h, FORMAT fmt);
         static Texture* createBlank(Graphics* gfx, int w, int h, FORMAT fmt);
         static Texture* load(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt);
-        virtual ~Texture() { };
+        virtual ~Texture() = default;
 
     protected:
         Texture(Graphics* gfx, int w, int h, bool rt, FORMAT fmt);
