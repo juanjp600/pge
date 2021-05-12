@@ -28,7 +28,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
     extractShaderVars(fragmentSource, "uniform", fragmentUniforms);
     glFragmentShader = resourceManager.addNewResource<GLShader>(GL_FRAGMENT_SHADER, fragmentSource);
 
-    glShaderProgram = resourceManager.addNewResource<GLProgram>(std::vector{ glVertexShader, glFragmentShader });
+    glShaderProgram = resourceManager.addNewResource<GLProgram>(std::vector{ glVertexShader.get(), glFragmentShader.get() });
 
     for (int i = 0; i < (int)vertexUniforms.size(); i++) {
         vertexShaderConstants.push_back(ConstantOGL3(graphics,vertexUniforms[i].name,glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr())));

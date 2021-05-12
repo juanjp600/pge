@@ -14,10 +14,10 @@ namespace PGE {
 
 class GLContext : public Resource<SDL_GLContext> {
     public:
-        GLContext(SDLWindow::Ref window) {
-            resource = SDL_GL_CreateContext(window.get());
+        GLContext(SDL_Window* window) {
+            resource = SDL_GL_CreateContext(window);
             // And make it later in the day.
-            SDL_GL_MakeCurrent(window.get(), resource);
+            SDL_GL_MakeCurrent(window, resource);
         }
 
         ~GLContext() {
@@ -111,10 +111,10 @@ class GLShader : public Resource<GLuint> {
 
 class GLProgram : public Resource<GLuint> {
     public:
-        GLProgram(const std::vector<GLShader::Ref>& shaders) {
+        GLProgram(const std::vector<GLuint>& shaders) {
             resource = glCreateProgram();
-            for (GLShader::Ref s : shaders) {
-                glAttachShader(resource, s.get());
+            for (GLuint s : shaders) {
+                glAttachShader(resource, s);
             }
             glLinkProgram(resource);
             GLint result;
