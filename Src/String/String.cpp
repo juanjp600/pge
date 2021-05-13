@@ -46,7 +46,7 @@ static wchar utf8ToWChar(const char* cbuffer) {
     }
 }
 
-// TODO: Take into account variable length codepoints.
+// TODO: Take into account UTF-16 surrogate pairs.
 static int convertWCharToUtf8(wchar chr, char* result) {
     // Fits in standard ASCII, just return the char as-is.
     if ((chr & 0x7f) == chr) {

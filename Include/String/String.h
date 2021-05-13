@@ -12,6 +12,8 @@
 
 namespace PGE {
 
+// We always want 16 bits, but Windows functions expect wchar_t, so this only acts as to avoid unnecessary casting.
+// wchar_t is always 16 bits on Windows.
 #ifdef _WIN32
 typedef wchar_t wchar;
 #else
