@@ -260,9 +260,6 @@
     <ClInclude Include="..\..\Include\Mesh\Mesh.h">
       <Filter>Include\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\String.h">
-      <Filter>Include\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\UserInput\UserInput.h">
       <Filter>Include\UserInput</Filter>
     </ClInclude>
@@ -355,6 +352,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Misc\Byte.h">
       <Filter>Include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\String\Key.h">
+      <Filter>Include\String</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
