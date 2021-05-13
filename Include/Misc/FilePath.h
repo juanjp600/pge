@@ -1,8 +1,8 @@
 #ifndef PGE_FILEPATH_H_INCLUDED
 #define PGE_FILEPATH_H_INCLUDED
 
-#include "Byte.h"
-#include "String.h"
+#include <Misc/Byte.h>
+#include <String/String.h>
 
 namespace PGE {
 

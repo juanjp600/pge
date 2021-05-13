@@ -1,7 +1,9 @@
 #ifndef PGE_MESH_H_INCLUDED
 #define PGE_MESH_H_INCLUDED
 
-#include <vector>
+#include <unordered_map>
+
+#include <String/Key.h>
 
 #include <Misc/Byte.h>
 #include <Material/Material.h>
@@ -15,37 +17,35 @@ class Graphics;
 
 class Vertex {
     public:
-        Vertex();
-        Vertex(const Vertex& other);
-        Vertex& operator=(const Vertex& other);
-        enum class PROPERTY_TYPE {
-            FLOAT,
-            UINT,
-            VECTOR2F,
-            VECTOR3F,
-            VECTOR4F,
-            COLOR
-        };
+        Vertex() = default;
 
         struct Property {
-            Property();
+            enum class Type {
+                FLOAT,
+                UINT,
+                VECTOR2F,
+                VECTOR3F,
+                VECTOR4F,
+                COLOR,
+                INVALID
+            };
+
+            Property() = default;
             Property(const Property& other);
-            void copyOtherValue(const Property& other);
-            long long hashCode;
-            PROPERTY_TYPE type;
-            union Value {
-                Value();
-                Value(const Value& other) =delete;
+            Type type = Type::INVALID;
+            // TODO: Replace all this with set byte layout.
+            union {
                 float floatVal;
                 unsigned int uintVal;
                 Vector2f vector2fVal;
                 Vector3f vector3fVal;
-                Vector4f vector4fVal;
+                Vector4f vector4fVal = Vector4f::ZERO;
                 Color colorVal;
             } value;
-            const static Property def;
         };
-        const Property& getProperty(const String& name,int& indexHint);
+
+        const Property& getProperty(const String& name) const;
+        
         void setFloat(const String& name,float val);
         void setUInt(const String& name,unsigned int val);
         void setVector2f(const String& name, const Vector2f& val);
@@ -54,8 +54,7 @@ class Vertex {
         void setColor(const String& name, const Color& val);
 
     private:
-        std::vector<Property> properties;
-        Property& insertProperty(long long hashCode);
+        std::unordered_map<String::Key, Property> properties;
 };
 
 class Primitive {
@@ -75,7 +74,7 @@ class Mesh {
     public:
         static Mesh* create(Graphics* gfx, Primitive::Type pt);
         Mesh* clone();
-        virtual ~Mesh() { };
+        virtual ~Mesh() = default;
 
         void setGeometry(int vertexCount, const std::vector<Vertex>& verts, int primCount, const std::vector<Primitive>& prims);
         void setGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims);

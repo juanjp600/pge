@@ -12,7 +12,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
 
     filepath = path;
 
-    std::ifstream reflectionInfo; reflectionInfo.open(String(path.str(),"reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
+    std::ifstream reflectionInfo; reflectionInfo.open((path.str() + "reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
 
     readConstantBuffers(reflectionInfo,vertexConstantBuffers);
 
@@ -22,7 +22,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
         String propertyName = "";
         char chr; reflectionInfo.read(&chr,1);
         while (chr!=0) {
-            propertyName = String(propertyName,chr);
+            propertyName += chr;
             reflectionInfo.read(&chr, 1);
         }
         vertexInputElems.push_back(propertyName);
@@ -30,7 +30,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
         String semanticName = "";
         reflectionInfo.read(&chr,1);
         while (chr!=0) {
-            semanticName = String(semanticName,chr);
+            semanticName += chr;
             reflectionInfo.read(&chr, 1);
         }
         vertexInputElemSemanticNames[i] = semanticName;
@@ -82,7 +82,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
 
     (path + "fragment.dxbc").readBytes(fragmentShaderBytecode);
-    PGE_ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str()+")");
+    PGE_ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str() + ")");
 
     dxVertexShader = resourceManager.addNewResource<D3D11VertexShader>(dxDevice, vertexShaderBytecode);
     dxFragmentShader = resourceManager.addNewResource<D3D11PixelShader>(dxDevice, fragmentShaderBytecode);
@@ -96,7 +96,7 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefe
         String cBufferName = "";
         char chr; reflectionInfo.read(&chr, 1);
         while (chr != 0) {
-            cBufferName = String(cBufferName, chr);
+            cBufferName += chr;
             reflectionInfo.read(&chr, 1);
         }
         int cBufferSize = 0; reflectionInfo.read((char*)(void*)&cBufferSize, 1);
@@ -109,7 +109,7 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefe
             String varName = "";
             reflectionInfo.read(&chr, 1);
             while (chr != 0) {
-                varName = String(varName, chr);
+                varName += chr;
                 reflectionInfo.read(&chr, 1);
             }
             int varOffset = 0; reflectionInfo.read((char*)(void*)&varOffset, 1);
@@ -122,7 +122,7 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefe
 Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
     for (auto cBuffer : vertexConstantBuffers) {
         auto map = cBuffer->getConstants();
-        auto it = map->find(name.getHashCode());
+        auto it = map->find(name);
         if (it != map->end()) {
             return &it->second;
         }
@@ -133,7 +133,7 @@ Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
 Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
     for (auto cBuffer : fragmentConstantBuffers) {
         auto map = cBuffer->getConstants();
-        auto it = map->find(name.getHashCode());
+        auto it = map->find(name);
         if (it != map->end()) {
             return &it->second;
         }
@@ -226,12 +226,12 @@ byte* ShaderDX11::CBufferInfo::getData() {
     return data;
 }
 
-std::unordered_map<long long, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
+std::unordered_map<String::Key, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
     return &constants;
 }
 
 void ShaderDX11::CBufferInfo::addConstant(const String& name, const ShaderDX11::ConstantDX11& constant) {
-    constants.emplace(name.getHashCode(), constant);
+    constants.emplace(name, constant);
 }
 
 bool ShaderDX11::CBufferInfo::isDirty() const {

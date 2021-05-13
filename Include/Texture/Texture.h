@@ -1,7 +1,7 @@
 #ifndef PGE_TEXTURE_H_INCLUDED
 #define PGE_TEXTURE_H_INCLUDED
 
-#include <Misc/String.h>
+#include <String/String.h>
 #include <Misc/FilePath.h>
 #include <Graphics/Graphics.h>
 #include <Threading/ThreadManager.h>

@@ -97,6 +97,12 @@
     <Filter Include="Src\ResourceManagement">
       <UniqueIdentifier>{952e82de-03b6-4eb2-8ce4-e74c2c587921}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\String">
+      <UniqueIdentifier>{2e8d4111-cef8-4a2e-a168-a1934da0d407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\String">
+      <UniqueIdentifier>{484bdd3a-89f5-4fe8-a771-23248a864aaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -146,9 +152,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Texture\Texture.cpp">
       <Filter>Src\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Misc\String.cpp">
-      <Filter>Src\Misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp">
       <Filter>Src\SysEvents</Filter>
@@ -206,6 +209,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Misc\FileWriter.cpp">
       <Filter>Src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\String\String.cpp">
+      <Filter>Src\String</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\String\Unicode.cpp">
+      <Filter>Src\String</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -337,6 +346,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Misc\FileWriter.h">
       <Filter>Include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\String\String.h">
+      <Filter>Include\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\String\Unicode.h">
+      <Filter>Src\String</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Misc\Byte.h">
       <Filter>Include\Misc</Filter>

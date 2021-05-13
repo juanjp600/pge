@@ -13,7 +13,7 @@ class ResourceReference {
         T internalResource;
         bool holdsResource = false;
     public:
-        ResourceReference() { }
+        ResourceReference() = default;
         ResourceReference(T res) { internalResource = res; holdsResource = true; }
 
         operator const T& () const { return get(); }
