@@ -213,6 +213,9 @@
     <ClCompile Include="..\..\Src\String\String.cpp">
       <Filter>Src\String</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\String\Unicode.cpp">
+      <Filter>Src\String</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -347,8 +350,8 @@
     <ClInclude Include="..\..\Include\String\String.h">
       <Filter>Include\String</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\String\Key.h">
-      <Filter>Include\String</Filter>
+    <ClInclude Include="..\..\Src\String\Unicode.h">
+      <Filter>Src\String</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Misc\Byte.h">
       <Filter>Include\Misc</Filter>

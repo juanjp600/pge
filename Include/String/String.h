@@ -1,6 +1,7 @@
 #ifndef PGE_STRING_H_INCLUDED
 #define PGE_STRING_H_INCLUDED
 
+#include <unordered_map>
 #include <vector>
 #include <string>
 #include <regex>
@@ -11,7 +12,13 @@
 
 namespace PGE {
 
+// We always want 16 bits, but Windows functions expect wchar_t, so this only acts as to avoid unnecessary casting.
+// wchar_t is always 16 bits on Windows.
+#ifdef _WIN32
 typedef wchar_t wchar;
+#else
+typedef char16_t wchar;
+#endif
 
 class String {
     public:
@@ -145,6 +152,8 @@ class String {
             char* longStr;
         } data;
 
+        String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
+
         void wCharToUtf8Str(const wchar* wbuffer);
         void reallocate(int size, bool copyOldData = false);
         char* cstrNoConst();
@@ -153,6 +162,7 @@ class String {
 bool operator==(const String& a, const String& b);
 bool operator!=(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);
+std::wostream& operator<<(std::wostream& wos, const String& s);
 
 }
 
