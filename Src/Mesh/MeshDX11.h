@@ -1,6 +1,8 @@
 #ifndef PGEINTERNAL_MESH_DX11_H_INCLUDED
 #define PGEINTERNAL_MESH_DX11_H_INCLUDED
 
+#include <Mesh/Mesh.h>
+
 #include <vector>
 
 #include <dxgi.h>
@@ -8,7 +10,6 @@
 #include <d3d11.h>
 
 #include <Windows.h>
-#include <Mesh/Mesh.h>
 
 #include "../ResourceManagement/DX11.h"
 
@@ -16,14 +17,14 @@ namespace PGE {
 
 class MeshDX11 : public Mesh {
     public:
-        MeshDX11(Graphics* gfx, Primitive::TYPE pt);
+        MeshDX11(Graphics* gfx, Primitive::Type pt);
 
         void updateInternalData() override;
 
         void render() override;
 
     private:
-        std::vector<uint8_t> dxVertexData;
+        std::vector<byte> dxVertexData;
         std::vector<WORD> dxIndexData;
         UINT stride = 0;
 

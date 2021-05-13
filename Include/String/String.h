@@ -38,7 +38,7 @@ class String {
             Iterator(const String& str);
 
             Iterator& operator++();
-            Iterator& operator++(int);
+            Iterator operator++(int);
 
             Iterator operator+(int steps);
             void operator+=(int steps);
@@ -127,6 +127,8 @@ class String {
 
         //String unHex() const;
 
+        uint64_t getHashCode() const;
+
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
         bool isEmpty() const;
@@ -151,8 +153,6 @@ class String {
         } data;
 
         String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
-
-        uint64_t getHashCode() const;
 
         void wCharToUtf8Str(const wchar* wbuffer);
         void reallocate(int size, bool copyOldData = false);

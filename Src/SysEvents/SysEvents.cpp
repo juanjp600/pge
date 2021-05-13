@@ -60,8 +60,6 @@ void SysEventsInternal::update() {
     }
 }
 
-SysEventsInternal::SubscriberInternal::SubscriberInternal() {}
-
 SysEventsInternal::SubscriberInternal::SubscriberInternal(Graphics* gfx,EventType et) {
     graphics = gfx; eventType = et;
     receivedEvent = false;

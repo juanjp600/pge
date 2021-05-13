@@ -14,7 +14,7 @@ class Graphics;
 class Shader {
     public:
         static Shader* load(Graphics* gfx, const FilePath& path);
-        virtual ~Shader() { };
+        virtual ~Shader() = default;
 
         class Constant {
             public:
@@ -27,14 +27,14 @@ class Shader {
                 virtual void setValue(int value) = 0;
 
             protected:
-                Constant() { };
-                virtual ~Constant() { };
+                Constant() = default;
+                virtual ~Constant() = default;
         };
         virtual Constant* getVertexShaderConstant(const String& constName) = 0;
         virtual Constant* getFragmentShaderConstant(const String& constName) = 0;
 
     protected:
-        Shader(){};
+        Shader() = default;
 
         FilePath filepath;
 };

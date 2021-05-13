@@ -6,7 +6,7 @@
 using namespace PGE;
 
 Line2f::Line2f() {
-    pointA = Vector2f::zero; pointB = Vector2f::zero;
+    pointA = Vector2f::ZERO; pointB = Vector2f::ZERO;
 }
 
 Line2f::Line2f(const Vector2f& a,const Vector2f& b) {
@@ -56,7 +56,7 @@ Vector2f Line2f::closestPoint(const Vector2f& point,bool segmentOnly) const {
 }
 
 Line2i::Line2i() {
-    pointA = Vector2i::zero; pointB = Vector2i::zero;
+    pointA = Vector2i::ZERO; pointB = Vector2i::ZERO;
 }
 
 Line2i::Line2i(const Vector2i& a,const Vector2i& b) {
@@ -93,7 +93,7 @@ bool Line2i::intersects(const Line2i& other,Vector2f& point,bool segmentOnly) co
 }
 
 Line3f::Line3f() {
-    pointA = Vector3f::zero; pointB = Vector3f::zero;
+    pointA = Vector3f::ZERO; pointB = Vector3f::ZERO;
 }
 
 Line3f::Line3f(const Vector3f& a,const Vector3f& b) {

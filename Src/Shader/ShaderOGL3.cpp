@@ -12,7 +12,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
 
     filepath = path;
 
-    std::vector<uint8_t> vertexFile; (path + "vertex.glsl").readBytes(vertexFile);
+    std::vector<byte> vertexFile; (path + "vertex.glsl").readBytes(vertexFile);
     PGE_ASSERT(!vertexFile.empty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
     vertexFile.push_back(0);
     String vertexSource = String((char*)vertexFile.data());
@@ -20,7 +20,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
     extractShaderVars(vertexSource, "uniform", vertexUniforms);
     glVertexShader = resourceManager.addNewResource<GLShader>(GL_VERTEX_SHADER, vertexSource);
 
-    std::vector<uint8_t> fragmentFile; (path + "fragment.glsl").readBytes(fragmentFile);
+    std::vector<byte> fragmentFile; (path + "fragment.glsl").readBytes(fragmentFile);
     PGE_ASSERT(!fragmentFile.empty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
     fragmentFile.push_back(0);
     String fragmentSource = String((char*)fragmentFile.data());
@@ -94,7 +94,7 @@ void ShaderOGL3::useShader() {
 
     glUseProgram(glShaderProgram);
 
-    uint8_t* ptr = nullptr;
+    byte* ptr = nullptr;
     for (int i = 0; i < (int)vertexAttribs.size(); i++) {
         glEnableVertexAttribArray(vertexAttribs[i].location);
         switch (vertexAttribs[i].type) {
@@ -200,31 +200,31 @@ ShaderOGL3::ConstantOGL3::Value::Value() {
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Matrix4x4f& value) {
-    val.matrixVal = value; valueType = VALUE_TYPE::MATRIX;
+    val.matrixVal = value; valueType = ValueType::MATRIX;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Vector2f& value) {
-    val.vector2fVal = value; valueType = VALUE_TYPE::VECTOR2F;
+    val.vector2fVal = value; valueType = ValueType::VECTOR2F;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Vector3f& value) {
-    val.vector3fVal = value; valueType = VALUE_TYPE::VECTOR3F;
+    val.vector3fVal = value; valueType = ValueType::VECTOR3F;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Vector4f& value) {
-    val.vector4fVal = value; valueType = VALUE_TYPE::VECTOR4F;
+    val.vector4fVal = value; valueType = ValueType::VECTOR4F;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Color& value) {
-    val.colorVal = value; valueType = VALUE_TYPE::COLOR;
+    val.colorVal = value; valueType = ValueType::COLOR;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(float value) {
-    val.floatVal = value; valueType = VALUE_TYPE::FLOAT;
+    val.floatVal = value; valueType = ValueType::FLOAT;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(int value) {
-    val.intVal = value; valueType = VALUE_TYPE::INT;
+    val.intVal = value; valueType = ValueType::INT;
 }
 
 void ShaderOGL3::ConstantOGL3::setUniform() {
@@ -232,25 +232,25 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
 
     ((GraphicsOGL3*)graphics)->takeGlContext();
     switch (valueType) {
-        case VALUE_TYPE::MATRIX: {
+        case ValueType::MATRIX: {
             glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)val.matrixVal.elements);
         } break;
-        case VALUE_TYPE::VECTOR2F: {
+        case ValueType::VECTOR2F: {
             glUniform2f(location,val.vector2fVal.x,val.vector2fVal.y);
         } break;
-        case VALUE_TYPE::VECTOR3F: {
+        case ValueType::VECTOR3F: {
             glUniform3f(location,val.vector3fVal.x,val.vector3fVal.y,val.vector3fVal.z);
         } break;
-        case VALUE_TYPE::VECTOR4F: {
+        case ValueType::VECTOR4F: {
             glUniform4f(location,val.vector4fVal.x,val.vector4fVal.y,val.vector4fVal.z,val.vector4fVal.w);
         } break;
-        case VALUE_TYPE::COLOR: {
+        case ValueType::COLOR: {
             glUniform4f(location,val.colorVal.red,val.colorVal.green,val.colorVal.blue,val.colorVal.alpha);
         } break;
-        case VALUE_TYPE::FLOAT: {
+        case ValueType::FLOAT: {
             glUniform1f(location,val.floatVal);
         } break;
-        case VALUE_TYPE::INT: {
+        case ValueType::INT: {
             glUniform1i(location,val.intVal);
         } break;
     }

@@ -12,9 +12,9 @@ namespace PGE {
 class TextureOGL3 : public Texture {
     public:
         // Render target.
-        TextureOGL3(Graphics* gfx, int w, int h, FORMAT fmt);
+        TextureOGL3(Graphics* gfx, int w, int h, Format fmt);
         // Loaded texture.
-        TextureOGL3(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt);
+        TextureOGL3(Graphics* gfx, int w, int h, byte* buffer, Format fmt);
 
         Texture* copy() const override;
 

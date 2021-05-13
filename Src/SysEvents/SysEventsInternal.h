@@ -18,7 +18,7 @@ class SysEventsInternal : public SysEvents {
 
     private:
         static std::unordered_set<Subscriber*> subscribers;
-        SysEventsInternal(){};
+        SysEventsInternal() = default;
 
     public:
         static void subscribe(Subscriber* sub);
@@ -42,7 +42,7 @@ class SysEventsInternal : public SysEvents {
                 bool receivedEvent;
 
             public:
-                SubscriberInternal();
+                SubscriberInternal() = default;
                 SubscriberInternal(Graphics* gfx,EventType et);
 
                 Graphics* getGraphics() const;

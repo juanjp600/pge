@@ -17,8 +17,8 @@ T BinaryReader::read() {
     return val;
 }
 
-uint8_t* BinaryReader::readBytes(int count) {
-    uint8_t* bytes = new uint8_t[count];
+byte* BinaryReader::readBytes(int count) {
+    byte* bytes = new byte[count];
     stream.read((char*)bytes, count);
     return bytes;
 }
@@ -27,8 +27,8 @@ bool BinaryReader::readBoolean() {
     return readByte() != 0;
 }
 
-uint8_t BinaryReader::readByte() {
-    return read<uint8_t>();
+byte BinaryReader::readByte() {
+    return read<byte>();
 }
 
 int32_t BinaryReader::readInt() {

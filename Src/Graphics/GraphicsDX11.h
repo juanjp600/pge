@@ -31,13 +31,13 @@ class GraphicsDX11 : public GraphicsInternal {
         ID3D11RenderTargetView* getBackBufferRtv() const;
         ID3D11DepthStencilView* getZBufferView() const;
 
-        enum class ZBUFFER_STATE_INDEX {
+        enum class ZBufferStateIndex {
             ENABLED_WRITE = 0,
             ENABLED_NOWRITE = 1,
             DISABLED = 2
         };
 
-        void setZBufferState(ZBUFFER_STATE_INDEX index);
+        void setZBufferState(ZBufferStateIndex index);
 
         PGE_GFX_OBJ_DEC
 

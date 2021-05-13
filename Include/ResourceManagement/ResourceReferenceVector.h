@@ -10,7 +10,7 @@ class ResourceReferenceVector {
         ResourceReferenceVector(int sz) : elements(sz) { }
 
     public:
-        ResourceReferenceVector() { }
+        ResourceReferenceVector() = default;
         static ResourceReferenceVector<T> withSize(int sz) {
             return ResourceReferenceVector<T>(sz);
         }

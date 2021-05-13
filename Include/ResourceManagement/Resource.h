@@ -9,7 +9,7 @@ namespace PGE {
 
 class ResourceBase {
     public:
-        virtual ~ResourceBase() { }
+        virtual ~ResourceBase() = default;
 };
 
 // Only inherit publicly and use the designated macro.
@@ -20,7 +20,7 @@ class Resource : public ResourceBase {
     public:
         typedef ResourceReference<T> Ref;
 
-        Resource() { }
+        Resource() = default;
         Resource(const Resource<T>& other) = delete;
         Resource<T>& operator=(const Resource<T>& other) = delete;
 

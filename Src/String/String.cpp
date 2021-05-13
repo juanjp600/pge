@@ -7,6 +7,7 @@
 #import <Foundation/Foundation.h>
 #endif
 
+#include <Misc/Byte.h>
 #include <Exception/Exception.h>
 
 using namespace PGE;
@@ -129,7 +130,7 @@ String::Iterator& String::Iterator::operator++() {
     return *this;
 }
 
-String::Iterator& String::Iterator::operator++(int) {
+String::Iterator String::Iterator::operator++(int) {
     Iterator temp = *this;
     ++(*this);
     return temp;
@@ -316,18 +317,19 @@ String String::format(T t, const String& format) {
     return ret;
 }
 
-//
-
-template String String::format<int8_t>(int8_t t, const PGE::String& format);
-template String String::format<int16_t>(int16_t t, const PGE::String& format);
-template String String::format<int32_t>(int32_t t, const PGE::String& format);
-template String String::format<int64_t>(int64_t t, const PGE::String& format);
-template String String::format<uint8_t>(uint8_t t, const PGE::String& format);
-template String String::format<uint16_t>(uint16_t t, const PGE::String& format);
-template String String::format<uint32_t>(uint32_t t, const PGE::String& format);
-template String String::format<uint64_t>(uint64_t t, const PGE::String& format);
+template String String::format<char>(char t, const PGE::String& format);
+template String String::format<short>(short t, const PGE::String& format);
+template String String::format<int>(int t, const PGE::String& format);
+template String String::format<long>(long t, const PGE::String& format);
+template String String::format<long long>(long long t, const PGE::String& format);
+template String String::format<unsigned char>(unsigned char t, const PGE::String& format);
+template String String::format<unsigned short>(unsigned short t, const PGE::String& format);
+template String String::format<unsigned int>(unsigned int t, const PGE::String& format);
+template String String::format<unsigned long>(unsigned long t, const PGE::String& format);
+template String String::format<unsigned long long>(unsigned long long t, const PGE::String& format);
 template String String::format<float>(float t, const PGE::String& format);
 template String String::format<double>(double t, const PGE::String& format);
+template String String::format<long double>(long double t, const PGE::String& format);
 
 String String::fromInt(int i) {
     // "-2147483648" has 11 characters.
@@ -372,7 +374,6 @@ void String::operator+=(wchar ch) {
     int aLen = byteLength();
     reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
-    memcpy(buf, cstr(), aLen);
     int actualSize = aLen + convertWCharToUtf8(ch, buf + aLen);
     buf[actualSize] = '\0';
     strByteLength = actualSize;
@@ -444,7 +445,7 @@ uint64_t String::getHashCode() const {
     if (!_hashCodeEvaluted) {
         // FNV-1a
         // Public domain
-        uint8_t* buf = (uint8_t*)cstr();
+        byte* buf = (byte*)cstr();
         _hashCode = FNV_SEED;
         for (int i = 0; buf[i] != '\0'; i++) {
             _hashCode ^= buf[i];
@@ -527,7 +528,8 @@ void String::reallocate(int size, bool copyOldData) {
 
     if (size <= shortStrCapacity || size <= cCapacity) { return; }
 
-    int targetCapacity = cCapacity;
+    // TODO: This is an unfit solution to the static initialization order fiasco.
+    int targetCapacity = std::max(cCapacity, shortStrCapacity);
     while (targetCapacity < size) { targetCapacity <<= 1; }
 
     char* newData = new char[targetCapacity];
