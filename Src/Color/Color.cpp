@@ -1,6 +1,17 @@
 #include <Color/Color.h>
 
+#include <Exception/Exception.h>
+
 using namespace PGE;
+
+#define PGE_ASSERT_COLOR(color, name) PGE_ASSERT((color).name >= 0.f && (color).name <= 1.f, "Value is outside of valid range (" #name ": " + String::fromFloat((color).name) + ")")
+
+static void validateColor(const Color& color) {
+    PGE_ASSERT_COLOR(color, red);
+    PGE_ASSERT_COLOR(color, green);
+    PGE_ASSERT_COLOR(color, blue);
+    PGE_ASSERT_COLOR(color, alpha);
+}
 
 Color::Color() {
     red = 1.f; green = 1.f; blue = 1.f; alpha = 1.f;
@@ -8,10 +19,48 @@ Color::Color() {
 
 Color::Color(int r, int g, int b, int a) {
     red = ((float)r)/255.f; green = ((float)g)/255.f; blue = ((float)b)/255.f; alpha = ((float)a)/255.f;
+    validateColor(*this);
 }
 
 Color::Color(float r, float g, float b, float a) {
     red = r; green = g; blue = b; alpha = a;
+    validateColor(*this);
+}
+
+Color Color::fromHSV(float h, float s, float v, float alpha) {
+    PGE_ASSERT(h >= 0 && h <= 360.f, "Hue is outside of valid range (hue: " + String::fromFloat(h) + ")");
+    PGE_ASSERT(s >= 0 && s <= 1.f, "Saturation is outside of valid range (saturation: " + String::fromFloat(s) + ")");
+    PGE_ASSERT(v >= 0 && v <= 1.f, "Value is outside of valid range (value: " + String::fromFloat(v) + ")");
+
+    float hh = h / 60.f;
+    int i = (int)hh;
+    float dr = hh - i; // Decimal remainder.
+
+    float x = v * (1.f - s);
+    float y = v * (1.f - (s * dr));
+    float z = v * (1.f - (s * (1.f - dr)));
+
+    switch (i) {
+        default:
+        case 0: {
+            return Color(v, z, x);
+        }
+        case 1: {
+            return Color(y, v, x);
+        }
+        case 2: {
+            return Color(x, v, z);
+        }
+        case 3: {
+            return Color(x, y, v);
+        }
+        case 4: {
+            return Color(z, x, v);
+        }
+        case 5: {
+            return Color(v, x, y);
+        }
+    }
 }
 
 bool Color::operator==(const Color& other) const {
@@ -40,18 +89,22 @@ int Color::getAlphaInt() const {
 
 void Color::setRedInt(int r) {
     red = ((float)r)/255.f;
+    PGE_ASSERT_COLOR(*this, red);
 }
 
 void Color::setGreenInt(int g) {
     green = ((float)g)/255.f;
+    PGE_ASSERT_COLOR(*this, green);
 }
 
 void Color::setBlueInt(int b) {
     blue = ((float)b)/255.f;
+    PGE_ASSERT_COLOR(*this, blue);
 }
 
 void Color::setAlphaInt(int a) {
     alpha = ((float)a)/255.f;
+    PGE_ASSERT_COLOR(*this, alpha);
 }
 
 const Color Color::RED = Color(1.f, 0.f, 0.f);

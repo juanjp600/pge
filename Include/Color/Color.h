@@ -7,7 +7,9 @@ class Color {
     public:
         Color();
         Color(int r, int g, int b, int a = 255);
-        Color(float r, float g, float b, float a = 1.0f);
+        Color(float r, float g, float b, float a = 1.f);
+
+        static Color fromHSV(float h, float s, float v, float a = 1.f);
 
         bool operator==(const Color& other) const;
         bool operator!=(const Color& other) const;
