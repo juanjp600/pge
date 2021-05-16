@@ -31,6 +31,7 @@
     <ClCompile Include="..\..\Src\Material\Material.cpp" />
     <ClCompile Include="..\..\Src\Math\AABBox.cpp" />
     <ClCompile Include="..\..\Src\Math\Line.cpp" />
+    <ClCompile Include="..\..\Src\Math\Math.cpp" />
     <ClCompile Include="..\..\Src\Math\Matrix.cpp" />
     <ClCompile Include="..\..\Src\Math\Plane.cpp" />
     <ClCompile Include="..\..\Src\Math\Random.cpp" />
