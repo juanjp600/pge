@@ -96,7 +96,6 @@
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h" />
-    <ClInclude Include="..\..\Src\Misc\Info.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\DX11.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\OGL3.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\Misc.h" />

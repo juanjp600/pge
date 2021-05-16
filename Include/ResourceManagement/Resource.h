@@ -17,6 +17,7 @@ template <class T>
 class Resource : public ResourceBase {
     protected:
         T resource;
+
     public:
         typedef ResourceView<T> View;
 

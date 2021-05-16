@@ -5,12 +5,11 @@
 
 namespace PGE {
 
-class Info {
-    public:
-        static const String REPO_LINK;
-        static const String BRANCH;
-        static const String COMMIT;
-};
+namespace Info {
+    extern const String REPO_LINK;
+    extern const String BRANCH;
+    extern const String COMMIT;
+}
 
 }
 
