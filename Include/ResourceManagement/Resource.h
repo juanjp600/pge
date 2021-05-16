@@ -27,7 +27,7 @@ class Resource : public ResourceBase {
 
         operator const T& () const { return resource; }
         // Force cast.
-        const T& operator()() const { return resource; }
+        const T& get() const { return resource; }
         
         template <class = typename std::enable_if<std::is_pointer<T>::value>::type>
         const T& operator->() const {

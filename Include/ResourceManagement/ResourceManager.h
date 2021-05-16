@@ -33,10 +33,10 @@ class ResourceManager {
 
         template <class T>
         void deleteResource(T internalResource) {
-            // Static assertion is likely not possible here due to ResourceReference's template.
-            for (std::vector<ResourceBase*>::iterator it = resources.end() - 1; it > resources.begin();it--) {
+            // Static assertion is likely not possible here due to ResourceViews's template.
+            for (std::vector<ResourceBase*>::iterator it = resources.end() - 1; it >= resources.begin();it--) {
                 Resource<T>* specifiedResource = dynamic_cast<Resource<T>*>(*it);
-                if (specifiedResource != nullptr && (*specifiedResource)() == internalResource) {
+                if (specifiedResource != nullptr && specifiedResource->get() == internalResource) {
                     delete specifiedResource;
                     resources.erase(it);
                     return;
