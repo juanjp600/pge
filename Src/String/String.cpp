@@ -12,7 +12,7 @@
 
 using namespace PGE;
 
-static constexpr uint64_t FNV_SEED = 0xcbf29ce484222325;
+constexpr uint64_t FNV_SEED = 0xcbf29ce484222325;
 
 //
 // Utility
