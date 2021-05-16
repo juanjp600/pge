@@ -248,7 +248,7 @@ void ShaderDX11::CBufferInfo::update() {
     dirty = false;
 }
 
-D3D11Buffer::Ref ShaderDX11::CBufferInfo::getDxCBuffer() {
+D3D11Buffer::View ShaderDX11::CBufferInfo::getDxCBuffer() {
     return dxCBuffer;
 }
 

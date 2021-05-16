@@ -22,13 +22,13 @@ class ResourceManager {
         virtual ~ResourceManager();
 
         template <class T, class... Args>
-        ResourceReference<decltype(T::resource)> addNewResource(Args... args) {
+        ResourceView<decltype(T::resource)> addNewResource(Args... args) {
 #ifdef DEBUG
             PGE_ASSERT(size > resources.size(), "Tried to add resource to full ResourceManager");
 #endif
             T* res = new T(args...);
             resources.push_back(res);
-            return ResourceReference<decltype(T::resource)>(*res);
+            return ResourceView<decltype(T::resource)>(*res);
         }
 
         template <class T>
@@ -45,7 +45,7 @@ class ResourceManager {
         }
 
         template <class T>
-        void deleteResourcefromReference(ResourceReference<T> reference) {
+        void deleteResourcefromReference(ResourceView<T> reference) {
             if (!reference.isHoldingResource()) {
                 return;
             }

@@ -171,10 +171,10 @@ Matrix4x4f Matrix4x4f::constructWorldMat(const Vector3f& position,const Vector3f
     return scaleMat.product(rotationMat.product(translationMat));
 }
 
-Matrix4x4f Matrix4x4f::constructViewMat(const Vector3f& position,const Vector3f& target,const Vector3f& upVector) {
+Matrix4x4f Matrix4x4f::constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector) {
     Matrix4x4f newMat = IDENTITY;
 
-    Vector3f zAxis = target.multiply(-1.f);
+    Vector3f zAxis = forwardVector.multiply(-1.f);
     zAxis = zAxis.normalize();
 
     Vector3f xAxis = upVector.crossProduct(zAxis);

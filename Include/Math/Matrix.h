@@ -34,7 +34,7 @@ class Matrix4x4f {
         static Matrix4x4f rotate(const Vector3f& rotation);
 
         static Matrix4x4f constructWorldMat(const Vector3f& position, const Vector3f& scale, const Vector3f& rotation);
-        static Matrix4x4f constructViewMat(const Vector3f& position, const Vector3f& target, const Vector3f& upVector);
+        static Matrix4x4f constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector);
         Vector3f extractViewTarget() const;
         Vector3f extractViewUp() const;
         Vector3f extractViewPosition() const;

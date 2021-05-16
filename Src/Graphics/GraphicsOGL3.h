@@ -37,8 +37,8 @@ class GraphicsOGL3 : public GraphicsInternal {
         PGE_GFX_OBJ_DEC
 
     private:
-        GLContext::Ref glContext;
-        GLFramebuffer::Ref glFramebuffer;
+        GLContext::View glContext;
+        GLFramebuffer::View glFramebuffer;
 
         ResourceManagerOGL3 resourceManager;
 };

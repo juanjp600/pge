@@ -37,12 +37,12 @@ class ShaderDX11 : public Shader {
 
         std::vector<String> vertexInputElemSemanticNames;
         std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc;
-        D3D11InputLayout::Ref dxVertexInputLayout;
+        D3D11InputLayout::View dxVertexInputLayout;
 
         std::vector<String> vertexInputElems;
 
         class CBufferInfo;
-        typedef ResourceReference<CBufferInfo*> CBufferInfoRef;
+        typedef ResourceView<CBufferInfo*> CBufferInfoRef;
         class ConstantDX11 : public Constant {
             public:
                 ConstantDX11(CBufferInfoRef cBuffer, int offst, int sz);
@@ -72,15 +72,15 @@ class ShaderDX11 : public Shader {
                 bool isDirty() const;
                 void markAsDirty();
                 void update();
-                D3D11Buffer::Ref getDxCBuffer();
+                D3D11Buffer::View getDxCBuffer();
 
             private:
                 String name;
                 byte* data;
                 int size;
                 std::unordered_map<String::Key, ConstantDX11> constants;
-                D3D11ImmediateContext::Ref dxContext;
-                D3D11Buffer::Ref dxCBuffer;
+                D3D11ImmediateContext::View dxContext;
+                D3D11Buffer::View dxCBuffer;
                 bool dirty;
         };
         
@@ -96,8 +96,8 @@ class ShaderDX11 : public Shader {
 
         ResourceReferenceVector<ID3D11SamplerState*> dxSamplerState;
 
-        D3D11VertexShader::Ref dxVertexShader;
-        D3D11PixelShader::Ref dxFragmentShader;
+        D3D11VertexShader::View dxVertexShader;
+        D3D11PixelShader::View dxFragmentShader;
 
         Graphics* graphics;
 

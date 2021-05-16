@@ -30,11 +30,11 @@ class MeshDX11 : public Mesh {
 
         D3D11_BUFFER_DESC dxVertexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxVertexBufferData;
-        D3D11Buffer::Ref dxVertexBuffer;
+        D3D11Buffer::View dxVertexBuffer;
 
         D3D11_BUFFER_DESC dxIndexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxIndexBufferData;
-        ResourceReference<ID3D11Buffer*> dxIndexBuffer;
+        ResourceView<ID3D11Buffer*> dxIndexBuffer;
 
         ResourceManager resourceManager;
 

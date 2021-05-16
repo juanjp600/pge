@@ -72,8 +72,8 @@ class Graphics {
         bool vsync;
 
         // Base class always automatically takes care of SysEvents and the window.
-        WindowEventSubscriber::Ref eventSubscriber;
-        SDLWindow::Ref sdlWindow;
+        WindowEventSubscriber::View eventSubscriber;
+        SDLWindow::View sdlWindow;
 
     private:
         ResourceManager resourceManager;

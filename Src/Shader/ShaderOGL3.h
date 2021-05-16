@@ -86,9 +86,9 @@ class ShaderOGL3 : public Shader {
         };
         void extractShaderVars(const String& src,const String& varKind,std::vector<ShaderVar>& varList);
 
-        GLShader::Ref glVertexShader;
-        GLShader::Ref glFragmentShader;
-        GLProgram::Ref glShaderProgram;
+        GLShader::View glVertexShader;
+        GLShader::View glFragmentShader;
+        GLProgram::View glShaderProgram;
 
         ResourceManagerOGL3 resourceManager;
 

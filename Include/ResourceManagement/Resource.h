@@ -18,7 +18,7 @@ class Resource : public ResourceBase {
     protected:
         T resource;
     public:
-        typedef ResourceReference<T> Ref;
+        typedef ResourceView<T> View;
 
         Resource() = default;
         Resource(const Resource<T>& other) = delete;

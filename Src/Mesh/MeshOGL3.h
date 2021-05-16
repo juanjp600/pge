@@ -23,10 +23,10 @@ class MeshOGL3 : public Mesh {
     private:
         void uploadInternalData() override;
 
-        GLBuffer::Ref glVertexBufferObject;
-        GLBuffer::Ref glIndexBufferObject;
+        GLBuffer::View glVertexBufferObject;
+        GLBuffer::View glIndexBufferObject;
 
-        GLVertexArray::Ref glVertexArrayObject;
+        GLVertexArray::View glVertexArrayObject;
 
         ResourceManagerOGL3 resourceManager;
 

@@ -27,12 +27,12 @@ class TextureDX11 : public Texture {
         void* getNative() const override;
 
     private:
-        D3D11Texture2D::Ref dxTexture;
-        D3D11ShaderResourceView::Ref dxShaderResourceView;
+        D3D11Texture2D::View dxTexture;
+        D3D11ShaderResourceView::View dxShaderResourceView;
 
-        D3D11RenderTargetView::Ref dxRtv;
-        D3D11Texture2D::Ref dxZBufferTexture;
-        D3D11DepthStencilView::Ref dxZBufferView;
+        D3D11RenderTargetView::View dxRtv;
+        D3D11Texture2D::View dxZBufferTexture;
+        D3D11DepthStencilView::View dxZBufferView;
 
         ResourceManager resourceManager;
 };

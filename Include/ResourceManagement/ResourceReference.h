@@ -8,13 +8,13 @@
 namespace PGE {
 
 template <class T>
-class ResourceReference {
+class ResourceView {
     private:
         T internalResource;
         bool holdsResource = false;
     public:
-        ResourceReference() = default;
-        ResourceReference(T res) { internalResource = res; holdsResource = true; }
+        ResourceView() = default;
+        ResourceView(T res) { internalResource = res; holdsResource = true; }
 
         operator const T& () const { return get(); }
         // Force cast.

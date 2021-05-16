@@ -24,9 +24,9 @@ class TextureOGL3 : public Texture {
         void* getNative() const override;
 
     private:
-        GLTexture::Ref glTexture;
+        GLTexture::View glTexture;
         //GLuint glFramebuffer;
-        GLDepthBuffer::Ref glDepthbuffer;
+        GLDepthBuffer::View glDepthbuffer;
 
         ResourceManagerOGL3 resourceManager;
 };

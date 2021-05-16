@@ -19,7 +19,7 @@ class ResourceReferenceVector {
             return elements[i];
         }
 
-        void add(ResourceReference<T> element) {
+        void add(ResourceView<T> element) {
             elements.push_back(element);
         }
 
