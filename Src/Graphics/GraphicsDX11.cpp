@@ -81,7 +81,7 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
 
     dxContext->OMSetBlendState(dxBlendState, 0, 0xffffffff);
 
-    dxDepthStencilState = ResourceReferenceVector<ID3D11DepthStencilState*>::withSize(3);
+    dxDepthStencilState = ResourceViewVector<ID3D11DepthStencilState*>::withSize(3);
 
     D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
     depthStencilDesc.DepthEnable = TRUE;

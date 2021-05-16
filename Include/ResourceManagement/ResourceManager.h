@@ -45,12 +45,12 @@ class ResourceManager {
         }
 
         template <class T>
-        void deleteResourcefromReference(ResourceView<T> reference) {
-            if (!reference.isHoldingResource()) {
+        void deleteResourcefromReference(ResourceView<T> view) {
+            if (!view.isHoldingResource()) {
                 return;
             }
 
-            deleteResource(reference.get());
+            deleteResource(view.get());
         }
 
         void increaseSize(int count);

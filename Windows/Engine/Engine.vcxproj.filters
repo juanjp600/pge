@@ -317,7 +317,7 @@
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ResourceManagement\ResourceReference.h">
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceView.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\DX11.h">
@@ -326,7 +326,7 @@
     <ClInclude Include="..\..\Include\ResourceManagement\Resource.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ResourceManagement\ResourceReferenceVector.h">
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceViewVector.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\OGL3.h">

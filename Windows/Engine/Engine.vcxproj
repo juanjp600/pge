@@ -81,8 +81,8 @@
     <ClInclude Include="..\..\Include\Misc\Info.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\Resource.h" />
-    <ClInclude Include="..\..\Include\ResourceManagement\ResourceReference.h" />
-    <ClInclude Include="..\..\Include\ResourceManagement\ResourceReferenceVector.h" />
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceView.h" />
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceViewVector.h" />
     <ClInclude Include="..\..\Include\Shader\Shader.h" />
     <ClInclude Include="..\..\Include\String\Key.h" />
     <ClInclude Include="..\..\Include\String\String.h" />

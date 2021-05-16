@@ -71,7 +71,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
 
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     resourceManager.increaseSize(samplerCount);
-    dxSamplerState = ResourceReferenceVector<ID3D11SamplerState*>::withSize(samplerCount);
+    dxSamplerState = ResourceViewVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < samplerCount; i++) {
         dxSamplerState[i] = resourceManager.addNewResource<D3D11SamplerState>(dxDevice, samplerDesc);
     }
@@ -89,7 +89,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     dxVertexInputLayout = resourceManager.addNewResource<D3D11InputLayout>(dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
 }
 
-void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceReferenceVector<CBufferInfo*>& constantBuffers) {
+void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceViewVector<CBufferInfo*>& constantBuffers) {
     int cBufferCount = 0; reflectionInfo.read((char*)(void*)&cBufferCount, 1);
     resourceManager.increaseSize(cBufferCount * 2);
     for (int i = 0; i < cBufferCount; i++) {

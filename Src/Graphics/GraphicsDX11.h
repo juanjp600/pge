@@ -7,7 +7,7 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 
-#include <ResourceManagement/ResourceReferenceVector.h>
+#include <ResourceManagement/ResourceViewVector.h>
 #include "../ResourceManagement/DX11.h"
 
 namespace PGE {
@@ -53,7 +53,7 @@ class GraphicsDX11 : public GraphicsInternal {
         D3D11RenderTargetView::View dxBackBufferRtv;
         D3D11Texture2D::View dxZBufferTexture;
         D3D11DepthStencilView::View dxZBufferView;
-        ResourceReferenceVector<ID3D11DepthStencilState*> dxDepthStencilState;
+        ResourceViewVector<ID3D11DepthStencilState*> dxDepthStencilState;
 
         D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
         D3D11RasterizerState::View dxRasterizerState;
@@ -63,7 +63,7 @@ class GraphicsDX11 : public GraphicsInternal {
 
         D3D11_VIEWPORT dxViewport;
 
-        ResourceReferenceVector<ID3D11RenderTargetView*> currentRenderTargetViews;
+        ResourceViewVector<ID3D11RenderTargetView*> currentRenderTargetViews;
         D3D11DepthStencilView::View currentDepthStencilView;
 
         ResourceManager resourceManager;

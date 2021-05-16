@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-#include "ResourceReference.h"
+#include "ResourceView.h"
 
 namespace PGE {
 
