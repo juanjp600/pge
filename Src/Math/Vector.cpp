@@ -1,5 +1,6 @@
-#include <math.h>
 #include <Math/Vector.h>
+
+#include <Math/Math.h>
 
 using namespace PGE;
 
@@ -134,8 +135,8 @@ Vector2f Vector2f::invert() const {
 
 Vector2f Vector2f::normalize() const {
     float lenSqr = lengthSquared();
-    if (lenSqr < 0.0001f) { return Vector2f::ZERO; }
-    if (lenSqr > 0.9999f && lenSqr < 1.0001f) { return *this; }
+    if (Math::equalFloats(0.f, lenSqr)) { return Vector2f::ZERO; }
+    if (Math::equalFloats(1.f, lenSqr)) { return *this; }
     return multiply(1.f/sqrt(lenSqr));
 }
 
@@ -287,8 +288,8 @@ Vector3f Vector3f::invert() const {
 
 Vector3f Vector3f::normalize() const {
     float lenSqr = lengthSquared();
-    if (lenSqr < 0.0001f) { return Vector3f::ZERO; }
-    if (lenSqr > 0.9999f && lenSqr < 1.0001f) { return *this; }
+    if (Math::equalFloats(0.f, lenSqr)) { return Vector3f::ZERO; }
+    if (Math::equalFloats(1.f, lenSqr)) { return *this; }
     return multiply(1.f/sqrt(lenSqr));
 }
 
