@@ -66,6 +66,7 @@
     <ClInclude Include="..\..\Include\Material\Material.h" />
     <ClInclude Include="..\..\Include\Math\AABBox.h" />
     <ClInclude Include="..\..\Include\Math\Line.h" />
+    <ClInclude Include="..\..\Include\Math\Math.h" />
     <ClInclude Include="..\..\Include\Math\Matrix.h" />
     <ClInclude Include="..\..\Include\Math\Plane.h" />
     <ClInclude Include="..\..\Include\Math\Random.h" />

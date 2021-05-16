@@ -356,5 +356,8 @@
     <ClInclude Include="..\..\Include\String\Key.h">
       <Filter>Include\String</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\Math\Math.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
