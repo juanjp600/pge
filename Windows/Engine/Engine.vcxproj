@@ -79,6 +79,7 @@
     <ClInclude Include="..\..\Include\Misc\FilePath.h" />
     <ClInclude Include="..\..\Include\Misc\FileWriter.h" />
     <ClInclude Include="..\..\Include\Misc\Info.h" />
+    <ClInclude Include="..\..\Include\ResourceManagement\RawWrapper.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\Resource.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceView.h" />

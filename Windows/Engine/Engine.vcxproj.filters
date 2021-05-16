@@ -362,5 +362,8 @@
     <ClInclude Include="..\..\Include\Math\Math.h">
       <Filter>Include\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\ResourceManagement\RawWrapper.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
