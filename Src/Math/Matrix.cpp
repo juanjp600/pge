@@ -28,7 +28,7 @@ Matrix4x4f::Matrix4x4f(float aa,float ab,float ac,float ad,
     elements[3][0] = da; elements[3][1] = db; elements[3][2] = dc; elements[3][3] = dd;
 }
 
-Matrix4x4f& Matrix4x4f::operator*=(const Matrix4x4f& other) {
+void Matrix4x4f::operator*=(const Matrix4x4f& other) {
     Matrix4x4f retVal = ZERO;
     for (int i = 0; i < 4; i++) {
         for (int k = 0; k < 4; k++) {
@@ -38,7 +38,6 @@ Matrix4x4f& Matrix4x4f::operator*=(const Matrix4x4f& other) {
         }
     }
     *this = retVal;
-    return *this;
 }
 
 Matrix4x4f Matrix4x4f::operator*(const Matrix4x4f& other) const {
@@ -174,7 +173,7 @@ Matrix4x4f Matrix4x4f::constructWorldMat(const Vector3f& position,const Vector3f
 Matrix4x4f Matrix4x4f::constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector) {
     Matrix4x4f newMat = IDENTITY;
 
-    Vector3f zAxis = forwardVector.multiply(-1.f);
+    Vector3f zAxis = -forwardVector;
     zAxis = zAxis.normalize();
 
     Vector3f xAxis = upVector.crossProduct(zAxis);
@@ -218,7 +217,7 @@ Vector3f Matrix4x4f::extractViewPosition() const {
     Vector3f yAxis = Vector3f(elements[0][1], elements[1][1], elements[2][1]);
     Vector3f zAxis = Vector3f(elements[0][2], elements[1][2], elements[2][2]);
 
-    return xAxis.multiply(elements[3][0]).add(yAxis.multiply(elements[3][1])).add(zAxis.multiply(elements[3][2])).multiply(-1.f);
+    return -(xAxis * elements[3][0] + yAxis * elements[3][1] + zAxis * elements[3][2]);
 }
 
 Matrix4x4f Matrix4x4f::constructPerspectiveMat(float horizontalfov, float aspectRatio, float nearZ, float farZ) {

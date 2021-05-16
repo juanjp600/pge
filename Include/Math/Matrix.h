@@ -15,7 +15,7 @@ class Matrix4x4f {
                    float ca,float cb,float cc,float cd,
                    float da,float db,float dc,float dd);
 
-        Matrix4x4f& operator*=(const Matrix4x4f& other);
+        void operator*=(const Matrix4x4f& other);
         Matrix4x4f operator*(const Matrix4x4f& other) const;
 
         bool operator==(const Matrix4x4f& other) const;

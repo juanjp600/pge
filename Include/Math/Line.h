@@ -7,7 +7,7 @@
 
 namespace PGE {
 
-class Line2f; class Line2i; class Line3f;
+class Line2i;
 
 class Line2f {
     public:

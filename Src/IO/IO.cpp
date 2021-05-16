@@ -150,7 +150,7 @@ void IOInternal::update() {
             mouseWheelPos.y -= event.wheel.y;
             // If the direction is flipped multiply by -1.
             if (event.wheel.direction == SDL_MOUSEWHEEL_FLIPPED) {
-                mouseWheelPos.multiply(-1);
+                mouseWheelPos = -mouseWheelPos;
             }
         } else if (event.type==SDL_MOUSEBUTTONDOWN || event.type==SDL_MOUSEBUTTONUP) {
             SDL_MouseButtonEvent mouseButtonEvent = event.button;

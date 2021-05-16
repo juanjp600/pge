@@ -48,8 +48,8 @@ Plane::Plane() {
 }
 
 Plane::Plane(const Vector3f& p1, const Vector3f& p2, const Vector3f& p3) {
-    Vector3f ab = p2.add(p1.multiply(-1.f));
-    Vector3f ac = p3.add(p1.multiply(-1.f));
+    Vector3f ab = p2 - p1;
+    Vector3f ac = p3 - p1;
 
     normal = ac.crossProduct(ab).normalize();
     distanceFromOrigin = normal.dotProduct(p1);
@@ -76,13 +76,13 @@ bool Plane::getIntersectionPoint(const Line3f& line, Vector3f& intersectionPoint
     // http://softsurfer.com/Archive/algorithm_0104/algorithm_0104B.htm#Line%20Intersections
     // http://paulbourke.net/geometry/planeline/
 
-    Vector3f dir = line.pointB.add(line.pointA.multiply(-1.f));
+    Vector3f dir = line.pointB - line.pointA;
     float denominator = -normal.dotProduct(dir);
-    float numerator = normal.dotProduct(line.pointA.add(normal.multiply(-distanceFromOrigin)));
+    float numerator = normal.dotProduct(line.pointA + normal * -distanceFromOrigin);
     if (fabs(denominator) < 0.001f || (!ignoreDirection && denominator < 0)) { return false; }
     float u = numerator / denominator;
     if (!ignoreSegment && (u < 0 || u > 1)) { return false; }
-    intersectionPoint = line.pointA.add(dir.multiply(u));
+    intersectionPoint = line.pointA + dir * u;
     coveredAmount = u;
     return true;
 }
@@ -92,7 +92,7 @@ float Plane::evalAtPoint(const Vector3f& co) {
 }
 
 bool Plane::equals(const Plane& other, float delta) {
-    return (normal.add(other.normal.multiply(-1.f)).lengthSquared()<delta*delta)
+    return ((normal - other.normal).lengthSquared()<delta*delta)
             && (fabs(distanceFromOrigin - other.distanceFromOrigin) < delta);
 }
 
@@ -106,7 +106,7 @@ bool Plane::getPlaneIntersect(const Plane& p1, const Plane& p2, const Plane& p3,
     float denom = p1.normal.dotProduct(c1);
     if (denom < 0.001f) { return false; } // No intersection, planes must be parallel
 
-    Vector3f numer = (c1.multiply(p1.distanceFromOrigin)).add(c2.multiply(p2.distanceFromOrigin)).add(c3.multiply(p3.distanceFromOrigin));
-    intersectionPoint = numer.multiply(1.f / denom);
+    Vector3f numer = c1 * p1.distanceFromOrigin + c2 * p2.distanceFromOrigin + c3 * p3.distanceFromOrigin;
+    intersectionPoint = numer/denom;
     return true;
 }

@@ -64,7 +64,7 @@ float Rectanglef::area() const {
 }
 
 Vector2f Rectanglef::center() const {
-    return tl.add(br).multiply(0.5f);
+    return (tl + br) * 0.5f;
 }
 
 Vector2f Rectanglef::topLeftCorner() const {

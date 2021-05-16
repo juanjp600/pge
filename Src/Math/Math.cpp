@@ -2,8 +2,6 @@
 
 using namespace PGE;
 
-constexpr float MARGIN_ERROR = 0.001f;
-
 float Math::degToRad(float degree) {
     return degree * Math::PI / 180.0f;
 }
@@ -12,8 +10,8 @@ float Math::radToDeg(float radians) {
     return radians * 180.0f / Math::PI;
 }
 
-bool Math::equalFloats(float val, float other) {
-    return abs(val - other) < MARGIN_ERROR;
+bool Math::equalFloats(float val, float other, float epsilon) {
+    return abs(val - other) < epsilon;
 }
 
 int Math::floor(float val) {
