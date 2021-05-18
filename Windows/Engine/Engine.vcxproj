@@ -224,6 +224,9 @@ echo const String Info::COMMIT = "%GIT_COMMIT%";
 ) &gt; Info.cpp
 echo Generated Info.cpp!</Command>
     </PreBuildEvent>
+    <Lib>
+      <AdditionalDependencies>$(VK_SDK_PATH)/Lib/vulkan-1.lib;$(SolutionDir)$(Platform)/$(Configuration)/spirv-reflect.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -264,6 +267,9 @@ echo const String Info::COMMIT = "%GIT_COMMIT%";
 ) &gt; Info.cpp
 echo Generated Info.cpp!</Command>
     </PreBuildEvent>
+    <Lib>
+      <AdditionalDependencies>$(VK_SDK_PATH)/Lib/vulkan-1.lib;$(SolutionDir)$(Platform)/$(Configuration)/spirv-reflect.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -309,6 +315,9 @@ echo const String Info::COMMIT = "%GIT_COMMIT%";
 ) &gt; Info.cpp
 echo Generated Info.cpp!</Command>
     </PreBuildEvent>
+    <Lib>
+      <AdditionalDependencies>$(VK_SDK_PATH)/Lib/vulkan-1.lib;$(SolutionDir)$(Platform)/$(Configuration)/spirv-reflect.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -354,6 +363,9 @@ echo const String Info::COMMIT = "%GIT_COMMIT%";
 ) &gt; Info.cpp
 echo Generated Info.cpp!</Command>
     </PreBuildEvent>
+    <Lib>
+      <AdditionalDependencies>$(VK_SDK_PATH)/Lib/vulkan-1.lib;$(SolutionDir)$(Platform)/$(Configuration)/spirv-reflect.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
