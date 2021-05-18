@@ -195,14 +195,17 @@ ShaderDX11::CBufferInfoOwner::CBufferInfoOwner(Graphics* gfx, const String& nm, 
 ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, const String& nm, int sz, ResourceManager* resourceManager) {
     name = nm;
     size = sz;
-    data = new byte[size];
+    int cBufferSize = size;
+    data = new byte[cBufferSize];
 
     D3D11_BUFFER_DESC cBufferDesc;
     D3D11_SUBRESOURCE_DATA cBufferSubresourceData;
 
+    if ((cBufferSize % 16) != 0) { cBufferSize = cBufferSize + (16 - (cBufferSize % 16)); } //round up to a multiple of 16, see https://docs.microsoft.com/en-us/windows/win32/api/d3d11/ns-d3d11-d3d11_buffer_desc
+
     ZeroMemory( &cBufferDesc, sizeof(D3D11_BUFFER_DESC) );
     cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    cBufferDesc.ByteWidth = sizeof(FLOAT)*48;
+    cBufferDesc.ByteWidth = cBufferSize;
     cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     cBufferDesc.CPUAccessFlags = 0;
 
