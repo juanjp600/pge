@@ -47,7 +47,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
         PGE_ASSERT(blockName == "vulkanConstants", "Invalid push constant (\"" + blockName + "\")");
 
         ranges.reserve(2);
-        int fragmentOffset;
+        int fragmentOffset = pushConstant.padded_size;
         for (int j = 0; j < (int)pushConstant.member_count; j++) {
             String name = pushConstant.members[j].name;
             if (name.substr(0, 4) == "vert") {
@@ -103,7 +103,8 @@ ShaderVK::ConstantVK::ConstantVK(Graphics* gfx, ShaderVK* she, vk::ShaderStageFl
 }
 
 void ShaderVK::ConstantVK::setValue(const Matrix4x4f& value) {
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), value.elements);
+    // TODO: Look into matrix order bullshit, I hate my life.
+    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), value.transpose().elements);
 }
 
 void ShaderVK::ConstantVK::setValue(const Vector2f& value) {

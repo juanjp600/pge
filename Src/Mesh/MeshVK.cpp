@@ -36,7 +36,6 @@ void MeshVK::updateInternalData() {
 	VKMemory stagingMemory = VKMemory(device, physicalDevice, stagingBuffer, vk::MemoryPropertyFlagBits::eHostVisible);
 
 	std::vector<String> vertexInputNames = shader->getVertexInputNames();
-	std::vector<int> hintIndices(vertexInputNames.size());
 	float* vertexCursor = (float*)device.mapMemory(stagingMemory, 0, finalTotalSize);
 	for (int i = 0; i < vertexCount; i++) {
 		for (int j = 0; j < (int)vertexInputNames.size(); j++) {
