@@ -4,7 +4,7 @@
 #include "../Mesh/MeshOGL3.h"
 #include "../Texture/TextureOGL3.h"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 using namespace PGE;
 
@@ -28,9 +28,9 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : Graphics
     //        SDL_SetWindowPosition(sdlWindow,0,0);
     //    }
 
-    glContext = resourceManager.addNewResource<GLContext>(sdlWindow());
+    glContext = resourceManager.addNewResource<GLContext>(sdlWindow);
 
-    __ASSERT(gladLoadGL() == 1, "Failed to initialize GLEW (GLERROR: " + String::format(glGetError(), "%u") + ")");
+    PGE_ASSERT(gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress) != 0, "Failed to initialize GLAD (GLERROR: " + String::format(glGetError(), "%u") + ")");
 
     depthTest = true;
     glEnable(GL_DEPTH_TEST);
@@ -43,7 +43,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : Graphics
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     GLenum glError = glGetError();
-    __ASSERT(glError == GL_NO_ERROR, "Failed to initialize window data post-GLEW initialization (GLERROR: " + String::format(glError, "%u") + ")");
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to initialize window data post-GLAD initialization (GLERROR: " + String::format(glError, "%u") + ")");
 
     SDL_GL_SwapWindow(sdlWindow);
 
@@ -111,7 +111,7 @@ void GraphicsOGL3::setRenderTargets(const std::vector<Texture*>& renderTargets) 
 
     TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        __ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets["+String::fromInt(i)+"] is not a valid render target");
+        PGE_ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets["+String::fromInt(i)+"] is not a valid render target");
 
         if (i == 0) { continue; }
 
@@ -163,4 +163,4 @@ void GraphicsOGL3::setVsync(bool isEnabled) {
     }
 }
 
-__GFX_OBJ_DEF(OGL3)
+PGE_GFX_OBJ_DEF(OGL3)

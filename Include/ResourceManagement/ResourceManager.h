@@ -22,22 +22,22 @@ class ResourceManager {
         virtual ~ResourceManager();
 
         template <class T, class... Args>
-        ResourceReference<decltype(T::resource)> addNewResource(Args... args) {
+        ResourceView<decltype(T::resource)> addNewResource(Args... args) {
 #ifdef DEBUG
-            __ASSERT(size > resources.size(), "Tried to add resource to full ResourceManager");
+            PGE_ASSERT(size > resources.size(), "Tried to add resource to full ResourceManager");
 #endif
             T* res = new T(args...);
             resources.push_back(res);
-            return ResourceReference<decltype(T::resource)>(*res);
+            return ResourceView<decltype(T::resource)>(*res);
         }
 
         template <class T>
         void deleteResource(T internalResource) {
-            // Static assertion is likely not possible here due to ResourceReference's template.
+            // Static assertion is likely not possible here due to ResourceViews's template.
             for (auto it = resources.end(); it > resources.begin();) {
                 it--;
                 Resource<T>* specifiedResource = dynamic_cast<Resource<T>*>(*it);
-                if (specifiedResource != nullptr && (*specifiedResource)() == internalResource) {
+                if (specifiedResource != nullptr && specifiedResource->get() == internalResource) {
                     delete specifiedResource;
                     resources.erase(it);
                     return;
@@ -46,12 +46,12 @@ class ResourceManager {
         }
 
         template <class T>
-        void deleteResourcefromReference(ResourceReference<T> reference) {
-            if (!reference.isHoldingResource()) {
+        void deleteResourcefromReference(ResourceView<T> view) {
+            if (!view.isHoldingResource()) {
                 return;
             }
 
-            deleteResource(reference());
+            deleteResource(view.get());
         }
 
         void increaseSize(int count);

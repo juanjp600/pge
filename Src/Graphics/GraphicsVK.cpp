@@ -98,7 +98,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, bool fs) : GraphicsInte
             selectedPdSize = pdSize;
         }
     }
-    __ASSERT(foundCompatibleDevice, "No Vulkan compatible GPU found");
+    PGE_ASSERT(foundCompatibleDevice, "No Vulkan compatible GPU found");
 
     device = resourceManager.addNewResource<VKDevice>(physicalDevice, std::set { graphicsQueueIndex, presentQueueIndex, transferQueueIndex }, layers, deviceExtensions);
 
@@ -118,9 +118,9 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, bool fs) : GraphicsInte
 
     createSwapchain(true);
 
-    imageAvailableSemaphores = ResourceReferenceVector<vk::Semaphore>::withSize(MAX_FRAMES_IN_FLIGHT);
-    renderFinishedSemaphores = ResourceReferenceVector<vk::Semaphore>::withSize(MAX_FRAMES_IN_FLIGHT);
-    inFlightFences = ResourceReferenceVector<vk::Fence>::withSize(MAX_FRAMES_IN_FLIGHT);
+    imageAvailableSemaphores = ResourceViewVector<vk::Semaphore>::withSize(MAX_FRAMES_IN_FLIGHT);
+    renderFinishedSemaphores = ResourceViewVector<vk::Semaphore>::withSize(MAX_FRAMES_IN_FLIGHT);
+    inFlightFences = ResourceViewVector<vk::Fence>::withSize(MAX_FRAMES_IN_FLIGHT);
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         imageAvailableSemaphores[i] = resourceManager.addNewResource<VKSemaphore>(device);
         renderFinishedSemaphores[i] = resourceManager.addNewResource<VKSemaphore>(device);
@@ -149,17 +149,17 @@ void GraphicsVK::endRender() {
     vk::SubmitInfo submitInfo = vk::SubmitInfo(1, &imageAvailableSemaphores[currentFrame], &waitStages, 1, &comBuffers[backBufferIndex], 1, &renderFinishedSemaphores[currentFrame]);
     vk::Result result;
     result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
-    __ASSERT(result == vk::Result::eSuccess, "Failed to submit to graphics queue (VKERROR: " + String::fromInt((int)result) + ")");
+    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to graphics queue (VKERROR: " + String::fromInt((int)result) + ")");
 
     vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, (uint32_t*)&backBufferIndex, nullptr);
     result = presentQueue.presentKHR(presentInfo);
-    __ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::fromInt((int)result) + ")");
+    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::fromInt((int)result) + ")");
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
     // Wait until the current frames in flight are less than the max.
     result = device->waitForFences(inFlightFences[currentFrame], false, UINT64_MAX);
-    __ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::fromInt((int)result) + ")");
+    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::fromInt((int)result) + ")");
 }
 
 void GraphicsVK::acquireNextImage() {
@@ -170,7 +170,7 @@ void GraphicsVK::acquireNextImage() {
     if (imagesInFlight[backBufferIndex] != VK_NULL_HANDLE) {
         // If so, wait on it!
         result = device->waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX);
-        __ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::fromInt((int)result) + ")");
+        PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::fromInt((int)result) + ")");
         imagesInFlight[backBufferIndex] = vk::Fence(nullptr);
     }
     imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
@@ -234,7 +234,7 @@ void GraphicsVK::createSwapchain(bool vsync) {
         comPools[i] = resourceManager.addNewResource<VKCommandPool>(device, graphicsQueueIndex);
         vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPools[i], vk::CommandBufferLevel::ePrimary, 1);
         result = device->allocateCommandBuffers(&comBufAllInfo, &comBuffers[i]);
-        __ASSERT(result == vk::Result::eSuccess, "Failed to allocate command buffers (VKERROR: " + String::fromInt((int)result) + ")");
+        PGE_ASSERT(result == vk::Result::eSuccess, "Failed to allocate command buffers (VKERROR: " + String::fromInt((int)result) + ")");
     }
 
     resourceManager.deleteResourcefromReference(transferComPool);
@@ -242,7 +242,7 @@ void GraphicsVK::createSwapchain(bool vsync) {
     // TODO: How many buffers should we have?
     vk::CommandBufferAllocateInfo transferComBufferInfo = vk::CommandBufferAllocateInfo(transferComPool, vk::CommandBufferLevel::ePrimary, 1);
     result = device->allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer);
-    __ASSERT(result == vk::Result::eSuccess, "Failed to allocate transfer command buffers (VKERROR: " + String::fromInt((int)result) + ")");
+    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to allocate transfer command buffers (VKERROR: " + String::fromInt((int)result) + ")");
 }
 
 void GraphicsVK::setRenderTarget(Texture* renderTarget) {
@@ -295,4 +295,4 @@ const VKPipelineInfo* GraphicsVK::getPipelineInfo() const {
     return &pipelineInfo;
 }
 
-__GFX_OBJ_DEF(VK)
+PGE_GFX_OBJ_DEF(VK)

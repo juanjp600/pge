@@ -2,6 +2,7 @@
 #define PGE_GRAPHICS_H_INCLUDED
 
 #include <vector>
+#include <list>
 
 #include "../../Src/ResourceManagement/Misc.h"
 
@@ -26,8 +27,10 @@ class Graphics {
 
         static Graphics* create(const String& name="PGE Application", int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default);
 
+        static const std::list<Graphics*>& getActiveInstances();
+
         Graphics(const String& name, int w, int h, bool fs, uint32_t windowFlags);
-        virtual ~Graphics() { };
+        virtual ~Graphics();
         
         virtual void update();
         virtual void swap() = 0;
@@ -53,6 +56,9 @@ class Graphics {
         virtual void setVsync(bool isEnabled);
         virtual bool getVsync() const;
 
+        String getInfo() const;
+        virtual String getRendererName() const = 0;
+
     protected:
         String caption;
 
@@ -67,8 +73,8 @@ class Graphics {
         bool vsync;
 
         // Base class always automatically takes care of SysEvents and the window.
-        WindowEventSubscriber::Ref eventSubscriber;
-        SDLWindow::Ref sdlWindow;
+        WindowEventSubscriber::View eventSubscriber;
+        SDLWindow::View sdlWindow;
 
     private:
         ResourceManager resourceManager;

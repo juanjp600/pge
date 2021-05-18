@@ -4,18 +4,18 @@
 
 using namespace PGE;
 
-const Matrix4x4f Matrix4x4f::identity = Matrix4x4f(1,0,0,0,
+const Matrix4x4f Matrix4x4f::IDENTITY = Matrix4x4f(1,0,0,0,
                                                    0,1,0,0,
                                                    0,0,1,0,
                                                    0,0,0,1);
 
-const Matrix4x4f Matrix4x4f::zero = Matrix4x4f(0,0,0,0,
+const Matrix4x4f Matrix4x4f::ZERO = Matrix4x4f(0,0,0,0,
                                                0,0,0,0,
                                                0,0,0,0,
                                                0,0,0,0);
 
 Matrix4x4f::Matrix4x4f() {
-    *this = identity;
+    *this = IDENTITY;
 }
 
 Matrix4x4f::Matrix4x4f(float aa,float ab,float ac,float ad,
@@ -28,8 +28,8 @@ Matrix4x4f::Matrix4x4f(float aa,float ab,float ac,float ad,
     elements[3][0] = da; elements[3][1] = db; elements[3][2] = dc; elements[3][3] = dd;
 }
 
-Matrix4x4f& Matrix4x4f::operator*=(const Matrix4x4f& other) {
-    Matrix4x4f retVal = zero;
+void Matrix4x4f::operator*=(const Matrix4x4f& other) {
+    Matrix4x4f retVal = ZERO;
     for (int i = 0; i < 4; i++) {
         for (int k = 0; k < 4; k++) {
             for (int j = 0; j < 4; j++) {
@@ -38,11 +38,10 @@ Matrix4x4f& Matrix4x4f::operator*=(const Matrix4x4f& other) {
         }
     }
     *this = retVal;
-    return *this;
 }
 
 Matrix4x4f Matrix4x4f::operator*(const Matrix4x4f& other) const {
-    Matrix4x4f retVal = zero;
+    Matrix4x4f retVal = ZERO;
     for (int i = 0; i < 4; i++) {
         for (int k = 0; k < 4; k++) {
             for (int j = 0; j < 4; j++) {
@@ -86,7 +85,7 @@ Matrix4x4f Matrix4x4f::transpose() const {
 }
 
 Matrix4x4f Matrix4x4f::product(const Matrix4x4f& other) const {
-    Matrix4x4f retVal = zero;
+    Matrix4x4f retVal = ZERO;
     for (int i = 0; i < 4; i++) {
         for (int k = 0; k < 4; k++) {
             for (int j = 0; j < 4; j++) {
@@ -98,7 +97,7 @@ Matrix4x4f Matrix4x4f::product(const Matrix4x4f& other) const {
 }
 
 Vector4f Matrix4x4f::transform(const Vector4f& other) const {
-    Vector4f retVal = Vector4f::zero;
+    Vector4f retVal = Vector4f::ZERO;
     retVal.x = other.x*elements[0][0]+other.y*elements[1][0]+other.z*elements[2][0]+other.w*elements[3][0];
     retVal.y = other.x*elements[0][1]+other.y*elements[1][1]+other.z*elements[2][1]+other.w*elements[3][1];
     retVal.z = other.x*elements[0][2]+other.y*elements[1][2]+other.z*elements[2][2]+other.w*elements[3][2];
@@ -171,10 +170,10 @@ Matrix4x4f Matrix4x4f::constructWorldMat(const Vector3f& position,const Vector3f
     return scaleMat.product(rotationMat.product(translationMat));
 }
 
-Matrix4x4f Matrix4x4f::constructViewMat(const Vector3f& position,const Vector3f& target,const Vector3f& upVector) {
-    Matrix4x4f newMat = identity;
+Matrix4x4f Matrix4x4f::constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector) {
+    Matrix4x4f newMat = IDENTITY;
 
-    Vector3f zAxis = target.multiply(-1.f);
+    Vector3f zAxis = -forwardVector;
     zAxis = zAxis.normalize();
 
     Vector3f xAxis = upVector.crossProduct(zAxis);
@@ -218,11 +217,11 @@ Vector3f Matrix4x4f::extractViewPosition() const {
     Vector3f yAxis = Vector3f(elements[0][1], elements[1][1], elements[2][1]);
     Vector3f zAxis = Vector3f(elements[0][2], elements[1][2], elements[2][2]);
 
-    return xAxis.multiply(elements[3][0]).add(yAxis.multiply(elements[3][1])).add(zAxis.multiply(elements[3][2])).multiply(-1.f);
+    return -(xAxis * elements[3][0] + yAxis * elements[3][1] + zAxis * elements[3][2]);
 }
 
 Matrix4x4f Matrix4x4f::constructPerspectiveMat(float horizontalfov, float aspectRatio, float nearZ, float farZ) {
-    Matrix4x4f retval = PGE::Matrix4x4f::identity;
+    Matrix4x4f retval = PGE::Matrix4x4f::IDENTITY;
     float rad = horizontalfov * 0.5f;
     float nad = cos(rad) / sin(rad);
 
@@ -236,7 +235,7 @@ Matrix4x4f Matrix4x4f::constructPerspectiveMat(float horizontalfov, float aspect
 }
 
 Matrix4x4f Matrix4x4f::constructOrthographicMat(float width, float height, float nearZ, float farZ) {
-    Matrix4x4f retval = PGE::Matrix4x4f::identity;
+    Matrix4x4f retval = PGE::Matrix4x4f::IDENTITY;
 
     retval.elements[0][0] = 2.f / width;
     retval.elements[1][1] = -2.f / height;

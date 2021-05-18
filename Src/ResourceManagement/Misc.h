@@ -1,7 +1,7 @@
 #ifndef PGEINTERNAL_RESOURCEMANAGEMENT_SDL
 #define PGEINTERNAL_RESOURCEMANAGEMENT_SDL
 
-#include <Misc/String.h>
+#include <String/String.h>
 
 #include <ResourceManagement/ResourceManager.h>
 

@@ -10,7 +10,7 @@
 
 using namespace PGE;
 
-MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::TYPE pt) : resourceManager(gfx, 3) {
+MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::Type pt) : resourceManager(gfx, 3) {
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     primitiveType = pt;
@@ -35,39 +35,35 @@ void MeshOGL3::updateInternalData() {
 
     const std::vector<String>& vertexInputElems = ((ShaderOGL3*)material->getShader())->getVertexInputElems();
     int vertexInputElemCount = (int)vertexInputElems.size();
-    int* indexHints = new int[vertexInputElemCount];
-    for (int j=0;j<vertexInputElemCount;j++) {
-        indexHints[j] = 0;
-    }
     for (int i=0;i<vertexCount;i++) {
         for (int j=0;j<vertexInputElemCount;j++) {
-            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j],indexHints[j]);
+            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j]);
             switch (prop.type) {
-                case Vertex::PROPERTY_TYPE::FLOAT: {
+                case Vertex::Property::Type::FLOAT: {
                     int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+sizeof(float));
                     memcpy(&(glVertexData[offset]),&(prop.value.floatVal),sizeof(float));
                 } break;
-                case Vertex::PROPERTY_TYPE::UINT: {
+                case Vertex::Property::Type::UINT: {
                     int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+sizeof(uint32_t));
                     uint32_t uint = prop.value.uintVal;
                     memcpy(&(glVertexData[offset]),&uint,sizeof(uint32_t));
                 } break;
-                case Vertex::PROPERTY_TYPE::VECTOR2F: {
+                case Vertex::Property::Type::VECTOR2F: {
                     int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+(sizeof(float)*2));
                     memcpy(&(glVertexData[offset]),&(prop.value.vector2fVal.x),sizeof(float));
                     memcpy(&(glVertexData[offset])+sizeof(float),&(prop.value.vector2fVal.y),sizeof(float));
                 } break;
-                case Vertex::PROPERTY_TYPE::VECTOR3F: {
+                case Vertex::Property::Type::VECTOR3F: {
                     int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+(sizeof(float)*3));
                     memcpy(&(glVertexData[offset]),&(prop.value.vector3fVal.x),sizeof(float));
                     memcpy(&(glVertexData[offset])+sizeof(float),&(prop.value.vector3fVal.y),sizeof(float));
                     memcpy(&(glVertexData[offset])+(sizeof(float)*2),&(prop.value.vector3fVal.z),sizeof(float));
                 } break;
-                case Vertex::PROPERTY_TYPE::VECTOR4F: {
+                case Vertex::Property::Type::VECTOR4F: {
                     int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+(sizeof(float)*4));
                     memcpy(&(glVertexData[offset]),&(prop.value.vector4fVal.x),sizeof(float));
@@ -75,7 +71,7 @@ void MeshOGL3::updateInternalData() {
                     memcpy(&(glVertexData[offset])+(sizeof(float)*2),&(prop.value.vector4fVal.z),sizeof(float));
                     memcpy(&(glVertexData[offset])+(sizeof(float)*3),&(prop.value.vector4fVal.w),sizeof(float));
                 } break;
-                case Vertex::PROPERTY_TYPE::COLOR: {
+                case Vertex::Property::Type::COLOR: {
                     int offset = (int)glVertexData.size();
                     glVertexData.resize(offset+(sizeof(float)*4));
                     memcpy(&(glVertexData[offset]),&(prop.value.colorVal.red),sizeof(float));
@@ -86,12 +82,11 @@ void MeshOGL3::updateInternalData() {
             }
         }
     }
-    delete[] indexHints;
 
     for (int i=0;i<primitiveCount;i++) {
         glIndexData.push_back((GLuint)primitives[i].a);
         glIndexData.push_back((GLuint)primitives[i].b);
-        if (primitiveType==Primitive::TYPE::TRIANGLE) {
+        if (primitiveType==Primitive::Type::TRIANGLE) {
             glIndexData.push_back((GLuint)primitives[i].c);
         }
     }
@@ -108,10 +103,10 @@ void MeshOGL3::uploadInternalData() {
     //TODO: determine when we should use GL_DYNAMIC_DRAW
     glBufferData(GL_ARRAY_BUFFER, glVertexData.size(),glVertexData.data(),GL_STATIC_DRAW);
     glError = glGetError();
-    __ASSERT(glError == GL_NO_ERROR, "Failed to create data store for vertex buffer (GLERROR: " + String::format(glError, "%u") + ")");
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create data store for vertex buffer (GLERROR: " + String::format(glError, "%u") + ")");
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,glIndexData.size()*sizeof(GLuint),glIndexData.data(),GL_STATIC_DRAW);
     glError = glGetError();
-    __ASSERT(glError == GL_NO_ERROR, "Failed to create data store for index buffer (GLERROR: " + String::format(glError, "%u") + ")");
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create data store for index buffer (GLERROR: " + String::format(glError, "%u") + ")");
 
     mustReuploadInternalData = false;
 }
@@ -146,7 +141,7 @@ void MeshOGL3::render() {
 
     GLenum glPrimitiveType = GL_TRIANGLES;
     int glIndexMultiplier = 3;
-    if (primitiveType==Primitive::TYPE::LINE) {
+    if (primitiveType==Primitive::Type::LINE) {
         glPrimitiveType=GL_LINES;
         glIndexMultiplier = 2;
     }

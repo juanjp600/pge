@@ -1,25 +1,25 @@
-#ifndef PGE_RESOURCEREFERENCEVECTOR_H_INCLUDED
-#define PGE_RESOURCEREFERENCEVECTOR_H_INCLUDED
+#ifndef PGE_RESOURCE_VIEW_VECTOR_H_INCLUDED
+#define PGE_RESOURCE_VIEW_VECTOR_H_INCLUDED
 
 namespace PGE {
 
 template <class T>
-class ResourceReferenceVector {
+class ResourceViewVector {
     private:
         std::vector<T> elements;
-        ResourceReferenceVector(int sz) : elements(sz) { }
+        ResourceViewVector(int sz) : elements(sz) { }
 
     public:
-        ResourceReferenceVector() { }
-        static ResourceReferenceVector<T> withSize(int sz) {
-            return ResourceReferenceVector<T>(sz);
+        ResourceViewVector() = default;
+        static ResourceViewVector<T> withSize(int sz) {
+            return ResourceViewVector<T>(sz);
         }
 
         T& operator[](int i) {
             return elements[i];
         }
 
-        void add(ResourceReference<T> element) {
+        void add(ResourceView<T> element) {
             elements.push_back(element);
         }
 
@@ -50,4 +50,4 @@ class ResourceReferenceVector {
 
 }
 
-#endif // PGE_RESOURCEREFERENCEVECTOR_H_INCLUDED
+#endif // PGE_RESOURCE_VIEW_VECTOR_H_INCLUDED

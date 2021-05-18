@@ -32,7 +32,7 @@ namespace PGE {
             int vertexStride;
             std::vector<String> vertexInputNames;
 
-            VKShader::Ref vkShader;
+            VKShader::View vkShader;
 
             vk::PipelineShaderStageCreateInfo shaderStageInfo[2];
 
@@ -40,7 +40,7 @@ namespace PGE {
             std::vector<vk::VertexInputAttributeDescription> vertexInputAttributes;
             vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
 
-            VKPipelineLayout::Ref layout;
+            VKPipelineLayout::View layout;
 
             class ConstantVK : public Constant {
                 public:

@@ -2,7 +2,6 @@
 
 #include <Graphics/Graphics.h>
 #include <Exception/Exception.h>
-#include <Misc/FileUtil.h>
 #include "../Graphics/GraphicsOGL3.h"
 
 using namespace PGE;
@@ -13,26 +12,26 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
 
     filepath = path;
 
-    std::vector<uint8_t> vertexFile; FileUtil::readBytes(path + "vertex.glsl", vertexFile);
-    __ASSERT(!vertexFile.empty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
+    std::vector<byte> vertexFile; (path + "vertex.glsl").readBytes(vertexFile);
+    PGE_ASSERT(!vertexFile.empty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
     vertexFile.push_back(0);
     String vertexSource = String((char*)vertexFile.data());
     std::vector<ShaderVar> vertexUniforms;
     extractShaderVars(vertexSource, "uniform", vertexUniforms);
     glVertexShader = resourceManager.addNewResource<GLShader>(GL_VERTEX_SHADER, vertexSource);
 
-    std::vector<uint8_t> fragmentFile; FileUtil::readBytes(path + "fragment.glsl", fragmentFile);
-    __ASSERT(!fragmentFile.empty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
+    std::vector<byte> fragmentFile; (path + "fragment.glsl").readBytes(fragmentFile);
+    PGE_ASSERT(!fragmentFile.empty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
     fragmentFile.push_back(0);
     String fragmentSource = String((char*)fragmentFile.data());
     std::vector<ShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource, "uniform", fragmentUniforms);
     glFragmentShader = resourceManager.addNewResource<GLShader>(GL_FRAGMENT_SHADER, fragmentSource);
 
-    glShaderProgram = resourceManager.addNewResource<GLProgram>(std::vector{ glVertexShader(), glFragmentShader() });
+    glShaderProgram = resourceManager.addNewResource<GLProgram>(std::vector{ glVertexShader.get(), glFragmentShader.get() });
 
     for (int i = 0; i < (int)vertexUniforms.size(); i++) {
-        vertexShaderConstants.push_back(ConstantOGL3(graphics,vertexUniforms[i].name,glGetUniformLocation(glShaderProgram(), vertexUniforms[i].name.cstr())));
+        vertexShaderConstants.push_back(ConstantOGL3(graphics,vertexUniforms[i].name,glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr())));
     }
 
     for (int i = 0; i < (int)fragmentUniforms.size(); i++) {
@@ -95,7 +94,7 @@ void ShaderOGL3::useShader() {
 
     glUseProgram(glShaderProgram);
 
-    uint8_t* ptr = nullptr;
+    byte* ptr = nullptr;
     for (int i = 0; i < (int)vertexAttribs.size(); i++) {
         glEnableVertexAttribArray(vertexAttribs[i].location);
         switch (vertexAttribs[i].type) {
@@ -109,7 +108,7 @@ void ShaderOGL3::useShader() {
             } break;
         }
         glError = glGetError();
-        __ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + vertexAttribs[i].name + ")");
+        PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + vertexAttribs[i].name + ")");
     }
 
     for (int i = 0; i < (int)vertexShaderConstants.size(); i++) {
@@ -154,20 +153,20 @@ Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
 void ShaderOGL3::extractShaderVars(const String& src, const String& varKind, std::vector<ShaderVar>& varList) {
     String line = "";
     String varStr = varKind + " ";
-    for (int i = 0; i < (int)src.length(); i++) {
-        PGE::wchar chr = src.charAt(i);
-        if (chr!='\r' && chr!='\n') {
-            line = String(line,chr);
+    for (wchar chr : src) {
+        if (chr != '\r' && chr != '\n') {
+            line += chr;
         } else {
-            if (line.substr(0, varStr.length()).equals(varStr)) {
+            if (line.substr(0, varStr.length() < line.length() ? varStr.length() : line.length()).equals(varStr)) {
                 bool readType = false;
                 ShaderVar var;
                 var.type = "";
                 var.name = "";
-                for (int j = varStr.length(); j < line.length(); j++) {
-                    chr = line.charAt(j);
+                auto it = line.begin() + (varStr.length() - 1);
+                while (++it != line.end()) {
+                    wchar chr = *it;
                     if (chr == ' ') {
-                        if (readType && var.name.length() > 0) {
+                        if (readType && var.name.length()>0) {
                             break;
                         }
                         readType = true;
@@ -176,9 +175,9 @@ void ShaderOGL3::extractShaderVars(const String& src, const String& varKind, std
                             break;
                         } else {
                             if (readType) {
-                                var.name = String(var.name, chr);
+                                var.name += chr;
                             } else {
-                                var.type = String(var.type, chr);
+                                var.type += chr;
                             }
                         }
                     }
@@ -201,31 +200,31 @@ ShaderOGL3::ConstantOGL3::Value::Value() {
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Matrix4x4f& value) {
-    val.matrixVal = value; valueType = VALUE_TYPE::MATRIX;
+    val.matrixVal = value; valueType = ValueType::MATRIX;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Vector2f& value) {
-    val.vector2fVal = value; valueType = VALUE_TYPE::VECTOR2F;
+    val.vector2fVal = value; valueType = ValueType::VECTOR2F;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Vector3f& value) {
-    val.vector3fVal = value; valueType = VALUE_TYPE::VECTOR3F;
+    val.vector3fVal = value; valueType = ValueType::VECTOR3F;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Vector4f& value) {
-    val.vector4fVal = value; valueType = VALUE_TYPE::VECTOR4F;
+    val.vector4fVal = value; valueType = ValueType::VECTOR4F;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Color& value) {
-    val.colorVal = value; valueType = VALUE_TYPE::COLOR;
+    val.colorVal = value; valueType = ValueType::COLOR;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(float value) {
-    val.floatVal = value; valueType = VALUE_TYPE::FLOAT;
+    val.floatVal = value; valueType = ValueType::FLOAT;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(int value) {
-    val.intVal = value; valueType = VALUE_TYPE::INT;
+    val.intVal = value; valueType = ValueType::INT;
 }
 
 void ShaderOGL3::ConstantOGL3::setUniform() {
@@ -233,31 +232,31 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
 
     ((GraphicsOGL3*)graphics)->takeGlContext();
     switch (valueType) {
-        case VALUE_TYPE::MATRIX: {
+        case ValueType::MATRIX: {
             glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)val.matrixVal.elements);
         } break;
-        case VALUE_TYPE::VECTOR2F: {
+        case ValueType::VECTOR2F: {
             glUniform2f(location, val.vector2fVal.x, val.vector2fVal.y);
         } break;
-        case VALUE_TYPE::VECTOR3F: {
+        case ValueType::VECTOR3F: {
             glUniform3f(location, val.vector3fVal.x, val.vector3fVal.y, val.vector3fVal.z);
         } break;
-        case VALUE_TYPE::VECTOR4F: {
-            glUniform4f(location, val.vector4fVal.x, val.vector4fVal.y, val.vector4fVal.z, val.vector4fVal.w);
+        case ValueType::VECTOR4F: {
+            glUniform4f(location,val.vector4fVal.x, val.vector4fVal.y, val.vector4fVal.z, val.vector4fVal.w);
         } break;
-        case VALUE_TYPE::COLOR: {
-            glUniform4f(location, val.colorVal.red, val.colorVal.green, val.colorVal.blue, val.colorVal.alpha);
+        case ValueType::COLOR: {
+            glUniform4f(location,val.colorVal.red, val.colorVal.green, val.colorVal.blue, val.colorVal.alpha);
         } break;
-        case VALUE_TYPE::FLOAT: {
-            glUniform1f(location, val.floatVal);
+        case ValueType::FLOAT: {
+            glUniform1f(location,val.floatVal);
         } break;
-        case VALUE_TYPE::INT: {
-            glUniform1i(location, val.intVal);
+        case ValueType::INT: {
+            glUniform1i(location,val.intVal);
         } break;
     }
 
     glError = glGetError();
-    __ASSERT(glError == GL_NO_ERROR, "Failed to set uniform value (constant: " + getName() + "; GLERROR: " + String::fromInt(glError) +")");
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set uniform value (constant: " + getName() + "; GLERROR: " + String::fromInt(glError) +")");
 }
 
 String ShaderOGL3::ConstantOGL3::getName() const {

@@ -5,7 +5,7 @@
 
 namespace PGE {
 
-class Rectanglef; class Rectanglei;
+class Rectanglei;
 
 class Rectanglef {
     public:

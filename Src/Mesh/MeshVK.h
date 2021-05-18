@@ -12,19 +12,19 @@ namespace PGE {
 
 class MeshVK : public Mesh {
     public:
-        MeshVK(Graphics* gfx, Primitive::TYPE pt);
+        MeshVK(Graphics* gfx, Primitive::Type pt);
 
         void updateInternalData() override;
         void render() override;
 
     private:
-        VKPipeline::Ref pipeline;
+        VKPipeline::View pipeline;
 
         vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 
         // TODO: Combine buffers??
-        VKBuffer::Ref dataBuffer;
-        VKMemory::Ref dataMemory;
+        VKBuffer::View dataBuffer;
+        VKMemory::View dataMemory;
 
         ResourceManagerVK resourceManager;
 

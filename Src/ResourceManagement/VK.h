@@ -90,7 +90,7 @@ class VKSurface : public Resource<vk::SurfaceKHR> {
             // Creating the window's surface via SDL.
             // TODO: Change SDL to be more epic.
             bool success = SDL_Vulkan_CreateSurface(window, (VkInstance)instance, (VkSurfaceKHR*)&resource);
-            __ASSERT(success, "Failed to create Vulkan surface (SDLERROR: " + String(SDL_GetError()) + ")");
+            PGE_ASSERT(success, "Failed to create Vulkan surface (SDLERROR: " + String(SDL_GetError()) + ")");
         }
 
         ~VKSurface() {
@@ -201,7 +201,7 @@ class VKMemory : public VKFreeResource<vk::DeviceMemory> {
                     break;
                 }
             }
-            __ASSERT(memIndex != -1, "No suitable memory type found");
+            PGE_ASSERT(memIndex != -1, "No suitable memory type found");
 
 
             vk::MemoryAllocateInfo memoryInfo = vk::MemoryAllocateInfo(memReq.size, memIndex);
@@ -267,20 +267,20 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
 
     public:
         // Sadly we can't make this any more straightforward, because we're in a header and including either shader or graphics would lead to circular inclusion.
-        VKPipeline(vk::Device device, const vk::PipelineShaderStageCreateInfo* shaderInfo, const vk::PipelineVertexInputStateCreateInfo* vertexInfo, vk::PipelineLayout layout, const VKPipelineInfo* info, vk::RenderPass renderPass, Primitive::TYPE primitive) : VKDestroyResource(device) {
+        VKPipeline(vk::Device device, const vk::PipelineShaderStageCreateInfo* shaderInfo, const vk::PipelineVertexInputStateCreateInfo* vertexInfo, vk::PipelineLayout layout, const VKPipelineInfo* info, vk::RenderPass renderPass, Primitive::Type primitive) : VKDestroyResource(device) {
             const vk::PipelineInputAssemblyStateCreateInfo* inputInfo;
             switch (primitive) {
-                case Primitive::TYPE::LINE: {
+                case Primitive::Type::LINE: {
                     inputInfo = &inputAssemblyLines;
                 } break;
                 default:
-                case Primitive::TYPE::TRIANGLE: {
+                case Primitive::Type::TRIANGLE: {
                     inputInfo = &inputAssemblyTris;
                 } break;
             }
             vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shaderInfo, vertexInfo, inputInfo, nullptr, info->getViewportInfo(), info->getRasterizationInfo(), info->getMultisamplerInfo(), nullptr, info->getColorBlendInfo(), nullptr, layout, renderPass, 0, {}, -1);
             vk::ResultValue<vk::Pipeline> creation = device.createGraphicsPipeline(nullptr, pipelineInfo);
-            __ASSERT(creation.result == vk::Result::eSuccess, "Failed to create graphics pipeline (VKERROR: " + String::fromInt((int)creation.result) + ")");
+            PGE_ASSERT(creation.result == vk::Result::eSuccess, "Failed to create graphics pipeline (VKERROR: " + String::fromInt((int)creation.result) + ")");
             resource = creation.value;
         }
 };

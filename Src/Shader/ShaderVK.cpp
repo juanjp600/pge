@@ -1,7 +1,6 @@
 #include "ShaderVK.h"
 
 #include <Exception/Exception.h>
-#include <Misc/FileUtil.h>
 
 #include "../Graphics/GraphicsVK.h"
 
@@ -14,7 +13,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
     vk::Device device = ((GraphicsVK*)gfx)->getDevice();
 
     // Shader.
-    std::vector<uint8_t> shaderBinary; FileUtil::readBytes(path + "shader.spv", shaderBinary);
+    std::vector<uint8_t> shaderBinary; (path + "shader.spv").readBytes(shaderBinary);
     vkShader = resourceManager.addNewResource<VKShader>(device, shaderBinary);
 
     // Reflect.
@@ -45,7 +44,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
         auto lol = reflection.push_constant_blocks[1];
         SpvReflectBlockVariable pushConstant = reflection.push_constant_blocks[0];
         String blockName = pushConstant.name;
-        __ASSERT(blockName == "vulkanConstants", "Invalid push constant (\"" + blockName + "\")");
+        PGE_ASSERT(blockName == "vulkanConstants", "Invalid push constant (\"" + blockName + "\")");
 
         ranges.reserve(2);
         int fragmentOffset;
@@ -72,8 +71,8 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
     vertexInputBinding = vk::VertexInputBindingDescription(0, vertexStride, vk::VertexInputRate::eVertex);
     vertexInputInfo = vk::PipelineVertexInputStateCreateInfo({}, 1, &vertexInputBinding, (uint32_t)vertexInputAttributes.size(), vertexInputAttributes.data());
 
-    vk::PipelineShaderStageCreateInfo vertexInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eVertex, vkShader(), "VS");
-    vk::PipelineShaderStageCreateInfo fragmentInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eFragment, vkShader(), "PS");
+    vk::PipelineShaderStageCreateInfo vertexInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eVertex, vkShader, "VS");
+    vk::PipelineShaderStageCreateInfo fragmentInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eFragment, vkShader, "PS");
     shaderStageInfo[0] = vertexInfo;
     shaderStageInfo[1] = fragmentInfo;
 }

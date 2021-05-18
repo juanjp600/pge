@@ -21,11 +21,11 @@ const Vector3f& AABBox::getMax() const {
 }
 
 Vector3f AABBox::getCenter() const {
-    return min.add(max).multiply(0.5f);
+    return (min + max) * 0.5f;
 }
 
 Vector3f AABBox::getDims() const {
-    return max.subtract(min);
+    return max - min;
 }
 
 bool AABBox::intersects(const AABBox& other) const {

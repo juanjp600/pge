@@ -2,10 +2,9 @@
 
 using namespace PGE;
 
-Texture::Texture(Graphics* gfx, int w, int h, bool rt, FORMAT fmt) {
+Texture::Texture(Graphics* gfx, int w, int h, bool rt, Format fmt) {
     graphics = gfx;
-    width = w;
-    height = h;
+    dimensions = Vector2i(w,h);
     isRT = rt;
     format = fmt;
 }
@@ -15,9 +14,13 @@ bool Texture::isRenderTarget() const {
 }
 
 int Texture::getWidth() const {
-    return width;
+    return dimensions.x;
 }
 
 int Texture::getHeight() const {
-    return height;
+    return dimensions.y;
+}
+
+Vector2i Texture::getDimensions() const {
+    return dimensions;
 }

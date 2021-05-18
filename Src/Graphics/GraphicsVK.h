@@ -3,7 +3,7 @@
 
 #include "GraphicsInternal.h"
 
-#include <ResourceManagement/ResourceReferenceVector.h>
+#include <ResourceManagement/ResourceViewVector.h>
 #include "../ResourceManagement/ResourceManagerVK.h"
 #include "../ResourceManagement/VK.h"
 
@@ -35,7 +35,7 @@ class GraphicsVK : public GraphicsInternal {
         vk::CommandBuffer getCurrentCommandBuffer() const;
         const VKPipelineInfo* getPipelineInfo() const;
 
-        __GFX_OBJ_DEC
+        PGE_GFX_OBJ_DEC
 
     private:
         // TODO: Remove.
@@ -43,37 +43,37 @@ class GraphicsVK : public GraphicsInternal {
         uint32_t presentQueueIndex;
         uint32_t transferQueueIndex;
 
-        VKInstance::Ref instance;
+        VKInstance::View instance;
         vk::PhysicalDevice physicalDevice;
-        VKDevice::Ref device;
-        VKSurface::Ref surface;
+        VKDevice::View device;
+        VKSurface::View surface;
 
         vk::Queue graphicsQueue;
         vk::Queue presentQueue;
         vk::Queue transferQueue;
 
         // TODO: Wrap this?
-        VKSwapchain::Ref swapchain;
+        VKSwapchain::View swapchain;
         vk::Extent2D swapchainExtent;
         vk::SurfaceFormatKHR swapchainFormat;
-        ResourceReferenceVector<vk::ImageView> swapchainImageViews;
+        ResourceViewVector<vk::ImageView> swapchainImageViews;
 
         vk::Rect2D scissor;
 
         VKPipelineInfo pipelineInfo;
 
-        VKRenderPass::Ref renderPass;
+        VKRenderPass::View renderPass;
 
-        ResourceReferenceVector<vk::Framebuffer> framebuffers;
+        ResourceViewVector<vk::Framebuffer> framebuffers;
 
-        ResourceReferenceVector<vk::CommandPool> comPools;
+        ResourceViewVector<vk::CommandPool> comPools;
         std::vector<vk::CommandBuffer> comBuffers;
-        VKCommandPool::Ref transferComPool;
+        VKCommandPool::View transferComPool;
         vk::CommandBuffer transferComBuffer;
 
-        ResourceReferenceVector<vk::Semaphore> imageAvailableSemaphores;
-        ResourceReferenceVector<vk::Semaphore> renderFinishedSemaphores;
-        ResourceReferenceVector<vk::Fence> inFlightFences;
+        ResourceViewVector<vk::Semaphore> imageAvailableSemaphores;
+        ResourceViewVector<vk::Semaphore> renderFinishedSemaphores;
+        ResourceViewVector<vk::Fence> inFlightFences;
         // We don't actually own any resource here.
         std::vector<vk::Fence> imagesInFlight;
 

@@ -9,7 +9,7 @@
 
 using namespace PGE;
 
-MeshDX11::MeshDX11(Graphics* gfx,Primitive::TYPE pt) : resourceManager(2) {
+MeshDX11::MeshDX11(Graphics* gfx,Primitive::Type pt) : resourceManager(2) {
     graphics = gfx;
 
     primitiveType = pt;
@@ -30,35 +30,31 @@ void MeshDX11::updateInternalData() {
     stride = 0;
     const std::vector<String>& vertexInputElems = ((ShaderDX11*)material->getShader())->getVertexInputElems();
     int vertexInputElemCount = (int)vertexInputElems.size();
-    int* indexHints = new int[vertexInputElemCount];
-    for (int j=0;j<vertexInputElemCount;j++) {
-        indexHints[j] = 0;
-    }
     for (int i=0;i<vertexCount;i++) {
         for (int j=0;j<vertexInputElemCount;j++) {
-            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j],indexHints[j]);
+            const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j]);
             switch (prop.type) {
-                case Vertex::PROPERTY_TYPE::FLOAT: {
+                case Vertex::Property::Type::FLOAT: {
                     if (recalculateStride) { stride += sizeof(float); }
                     int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+sizeof(float));
                     memcpy(&(dxVertexData[offset]),&(prop.value.floatVal),sizeof(float));
                 } break;
-                case Vertex::PROPERTY_TYPE::UINT: {
+                case Vertex::Property::Type::UINT: {
                     if (recalculateStride) { stride += sizeof(uint32_t); }
                     int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+sizeof(uint32_t));
                     uint32_t uint = prop.value.uintVal;
                     memcpy(&(dxVertexData[offset]),&uint,sizeof(uint32_t));
                 } break;
-                case Vertex::PROPERTY_TYPE::VECTOR2F: {
+                case Vertex::Property::Type::VECTOR2F: {
                     if (recalculateStride) { stride += sizeof(float)*2; }
                     int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+(sizeof(float)*2));
                     memcpy(&(dxVertexData[offset]),&(prop.value.vector2fVal.x),sizeof(float));
                     memcpy(&(dxVertexData[offset])+sizeof(float),&(prop.value.vector2fVal.y),sizeof(float));
                 } break;
-                case Vertex::PROPERTY_TYPE::VECTOR3F: {
+                case Vertex::Property::Type::VECTOR3F: {
                     if (recalculateStride) { stride += sizeof(float)*3; }
                     int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+(sizeof(float)*3));
@@ -66,7 +62,7 @@ void MeshDX11::updateInternalData() {
                     memcpy(&(dxVertexData[offset])+sizeof(float),&(prop.value.vector3fVal.y),sizeof(float));
                     memcpy(&(dxVertexData[offset])+(sizeof(float)*2),&(prop.value.vector3fVal.z),sizeof(float));
                 } break;
-                case Vertex::PROPERTY_TYPE::VECTOR4F: {
+                case Vertex::Property::Type::VECTOR4F: {
                     if (recalculateStride) { stride += sizeof(float)*4; }
                     int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+(sizeof(float)*4));
@@ -75,7 +71,7 @@ void MeshDX11::updateInternalData() {
                     memcpy(&(dxVertexData[offset])+(sizeof(float)*2),&(prop.value.vector4fVal.z),sizeof(float));
                     memcpy(&(dxVertexData[offset])+(sizeof(float)*3),&(prop.value.vector4fVal.w),sizeof(float));
                 } break;
-                case Vertex::PROPERTY_TYPE::COLOR: {
+                case Vertex::Property::Type::COLOR: {
                     if (recalculateStride) { stride += sizeof(float)*4; }
                     int offset = (int)dxVertexData.size();
                     dxVertexData.resize(offset+(sizeof(float)*4));
@@ -88,12 +84,11 @@ void MeshDX11::updateInternalData() {
         }
         recalculateStride = false;
     }
-    delete[] indexHints;
 
     for (int i=0;i<primitiveCount;i++) {
         dxIndexData.push_back((WORD)primitives[i].a);
         dxIndexData.push_back((WORD)primitives[i].b);
-        if (primitiveType==Primitive::TYPE::TRIANGLE) {
+        if (primitiveType==Primitive::Type::TRIANGLE) {
             dxIndexData.push_back((WORD)primitives[i].c);
         }
     }
@@ -155,7 +150,7 @@ void MeshDX11::render() {
 
     D3D11_PRIMITIVE_TOPOLOGY dxPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     int dxIndexMultiplier = 3;
-    if (primitiveType==Primitive::TYPE::LINE) {
+    if (primitiveType==Primitive::Type::LINE) {
         dxPrimitiveTopology=D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
         dxIndexMultiplier = 2;
     }
@@ -172,8 +167,8 @@ void MeshDX11::render() {
 
     ((GraphicsDX11*)graphics)->setZBufferState(
         graphics->getDepthTest()
-                ? (opaque ? GraphicsDX11::ZBUFFER_STATE_INDEX::ENABLED_WRITE : GraphicsDX11::ZBUFFER_STATE_INDEX::ENABLED_NOWRITE)
-                : GraphicsDX11::ZBUFFER_STATE_INDEX::DISABLED);
+                ? (opaque ? GraphicsDX11::ZBufferStateIndex::ENABLED_WRITE : GraphicsDX11::ZBufferStateIndex::ENABLED_NOWRITE)
+                : GraphicsDX11::ZBufferStateIndex::DISABLED);
     
     dxContext->DrawIndexed(primitiveCount*dxIndexMultiplier,0,0);
 

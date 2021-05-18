@@ -3,7 +3,7 @@
 
 #include <Graphics/Graphics.h>
 #include <Shader/Shader.h>
-#include <Misc/String.h>
+#include <String/String.h>
 #include <Math/Matrix.h>
 
 #include "../ResourceManagement/OGL3.h"
@@ -40,7 +40,7 @@ class ShaderOGL3 : public Shader {
                 String getName() const;
 
             private:
-                enum class VALUE_TYPE {
+                enum class ValueType {
                     MATRIX,
                     VECTOR2F,
                     VECTOR3F,
@@ -59,7 +59,7 @@ class ShaderOGL3 : public Shader {
                     float floatVal;
                     int intVal;
                 } val;
-                VALUE_TYPE valueType;
+                ValueType valueType;
                 Graphics* graphics;
                 String name;
                 int location;
@@ -86,9 +86,9 @@ class ShaderOGL3 : public Shader {
         };
         void extractShaderVars(const String& src,const String& varKind,std::vector<ShaderVar>& varList);
 
-        GLShader::Ref glVertexShader;
-        GLShader::Ref glFragmentShader;
-        GLProgram::Ref glShaderProgram;
+        GLShader::View glVertexShader;
+        GLShader::View glFragmentShader;
+        GLProgram::View glShaderProgram;
 
         ResourceManagerOGL3 resourceManager;
 

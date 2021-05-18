@@ -14,9 +14,9 @@ namespace PGE {
 class TextureDX11 : public Texture {
     public:
         // Render target.
-        TextureDX11(Graphics* gfx, int w, int h, FORMAT fmt);
+        TextureDX11(Graphics* gfx, int w, int h, Format fmt);
         // Loaded texture.
-        TextureDX11(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt);
+        TextureDX11(Graphics* gfx, int w, int h, byte* buffer, Format fmt);
 
         void useTexture(int index);
 
@@ -27,12 +27,12 @@ class TextureDX11 : public Texture {
         void* getNative() const override;
 
     private:
-        D3D11Texture2D::Ref dxTexture;
-        D3D11ShaderResourceView::Ref dxShaderResourceView;
+        D3D11Texture2D::View dxTexture;
+        D3D11ShaderResourceView::View dxShaderResourceView;
 
-        D3D11RenderTargetView::Ref dxRtv;
-        D3D11Texture2D::Ref dxZBufferTexture;
-        D3D11DepthStencilView::Ref dxZBufferView;
+        D3D11RenderTargetView::View dxRtv;
+        D3D11Texture2D::View dxZBufferTexture;
+        D3D11DepthStencilView::View dxZBufferView;
 
         ResourceManager resourceManager;
 };

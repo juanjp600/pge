@@ -2,13 +2,13 @@
 #define PGE_INPUT_H_INCLUDED
 
 #include <Math/Vector.h>
-#include <Misc/String.h>
+#include <String/String.h>
 
 namespace PGE {
 
 class UserInput {
     public:
-        enum class DEVICE {
+        enum class Device {
             KEYBOARD,
             MOUSE,
             CONTROLLER
@@ -16,7 +16,7 @@ class UserInput {
 
         virtual ~UserInput() = default;
 
-        virtual DEVICE getDevice() const = 0;
+        virtual Device getDevice() const = 0;
         virtual int getKey() const = 0;
 
         bool isDown() const;
@@ -34,7 +34,7 @@ class UserInput {
 class KeyboardInput : public UserInput {
     public:
         //carbon copy of SDL's keycode enum
-        enum class KEYCODE {
+        enum class Keycode {
             UNKNOWN = 0x00000000,
             RETURN = 0x0000000d,
             ESCAPE = 0x0000001b,
@@ -277,18 +277,18 @@ class KeyboardInput : public UserInput {
             AUDIOFASTFORWARD = 0x4000011e
         };
 
-        virtual DEVICE getDevice() const;
+        virtual Device getDevice() const;
         int getKey() const override;
-        KEYCODE getButton() const;
+        Keycode getButton() const;
 
-        KeyboardInput(KEYCODE inKeyCode);
+        KeyboardInput(Keycode inKeyCode);
     private:
-        KEYCODE keyCode;
+        Keycode keyCode;
 };
 
 class MouseInput : public UserInput {
     public:
-        enum class BUTTON {
+        enum class Button {
             LEFT,
             RIGHT,
             MIDDLE,
@@ -296,17 +296,17 @@ class MouseInput : public UserInput {
             SIDE2
         };
 
-        virtual DEVICE getDevice() const;
+        virtual Device getDevice() const;
         int getKey() const override;
-        BUTTON getButton() const;
+        Button getButton() const;
     
         void setClickCount(int count);
         int getClickCount() const;
 
-        MouseInput(BUTTON inMouseButton);
+        MouseInput(Button inMouseButton);
 
     private:
-        BUTTON mouseButton;
+        Button mouseButton;
     
         // The amount of clicks done in rapid succession. 1 for single-clicks, 2 for double-clicks, ect.
         int clicks;
@@ -314,14 +314,14 @@ class MouseInput : public UserInput {
 
 class Controller {
     public:
-        virtual ~Controller() { }
+        virtual ~Controller() = default;
         virtual const String& getName() const = 0;
         virtual void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) = 0;
 };
 
 class ControllerInput : public UserInput {
     public:
-        enum class BUTTON {
+        enum class Button {
             INVALID = -1,
             A,
             B,
@@ -343,9 +343,9 @@ class ControllerInput : public UserInput {
             MAX
         };
 
-        virtual DEVICE getDevice() const;
+        virtual Device getDevice() const;
         int getKey() const override;
-        BUTTON getButton() const;
+        Button getButton() const;
         const Vector2f& getStickPosition() const;
         float getPressDepth() const;
         float getDownThreshold() const;
@@ -356,11 +356,11 @@ class ControllerInput : public UserInput {
         void setPressDepth(float depth);
         void setDownThreshold(float threshold);
 
-        ControllerInput(Controller* ctrlr, BUTTON inControllerButton, float threshold = 0.5f);
+        ControllerInput(Controller* ctrlr, Button inControllerButton, float threshold = 0.5f);
 
     private:
         Controller* controller;
-        BUTTON controllerButton;
+        Button controllerButton;
         Vector2f stickPosition;
         float pressDepth;
         float downThreshold;

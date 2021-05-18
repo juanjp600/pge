@@ -3,7 +3,6 @@
 #include "ShaderDX11.h"
 #include <Exception/Exception.h>
 #include <fstream>
-#include <Misc/FileUtil.h>
 #include "../Graphics/GraphicsDX11.h"
 
 using namespace PGE;
@@ -13,7 +12,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
 
     filepath = path;
 
-    std::ifstream reflectionInfo; reflectionInfo.open(String(path.str(),"reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
+    std::ifstream reflectionInfo; reflectionInfo.open((path.str() + "reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
 
     readConstantBuffers(reflectionInfo,vertexConstantBuffers);
 
@@ -23,7 +22,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
         String propertyName = "";
         char chr; reflectionInfo.read(&chr,1);
         while (chr!=0) {
-            propertyName = String(propertyName,chr);
+            propertyName += chr;
             reflectionInfo.read(&chr, 1);
         }
         vertexInputElems.push_back(propertyName);
@@ -31,7 +30,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
         String semanticName = "";
         reflectionInfo.read(&chr,1);
         while (chr!=0) {
-            semanticName = String(semanticName,chr);
+            semanticName += chr;
             reflectionInfo.read(&chr, 1);
         }
         vertexInputElemSemanticNames[i] = semanticName;
@@ -72,32 +71,32 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
 
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     resourceManager.increaseSize(samplerCount);
-    dxSamplerState = ResourceReferenceVector<ID3D11SamplerState*>::withSize(samplerCount);
+    dxSamplerState = ResourceViewVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < samplerCount; i++) {
         dxSamplerState[i] = resourceManager.addNewResource<D3D11SamplerState>(dxDevice, samplerDesc);
     }
 
     reflectionInfo.close();
 
-    FileUtil::readBytes(path + "vertex.dxbc", vertexShaderBytecode);
-    __ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
+    (path + "vertex.dxbc").readBytes(vertexShaderBytecode);
+    PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
 
-    FileUtil::readBytes(path + "fragment.dxbc", fragmentShaderBytecode);
-    __ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: "+path.str()+")");
+    (path + "fragment.dxbc").readBytes(fragmentShaderBytecode);
+    PGE_ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str() + ")");
 
     dxVertexShader = resourceManager.addNewResource<D3D11VertexShader>(dxDevice, vertexShaderBytecode);
     dxFragmentShader = resourceManager.addNewResource<D3D11PixelShader>(dxDevice, fragmentShaderBytecode);
     dxVertexInputLayout = resourceManager.addNewResource<D3D11InputLayout>(dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
 }
 
-void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceReferenceVector<CBufferInfo*>& constantBuffers) {
+void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceViewVector<CBufferInfo*>& constantBuffers) {
     int cBufferCount = 0; reflectionInfo.read((char*)(void*)&cBufferCount, 1);
     resourceManager.increaseSize(cBufferCount * 2);
     for (int i = 0; i < cBufferCount; i++) {
         String cBufferName = "";
         char chr; reflectionInfo.read(&chr, 1);
         while (chr != 0) {
-            cBufferName = String(cBufferName, chr);
+            cBufferName += chr;
             reflectionInfo.read(&chr, 1);
         }
         int cBufferSize = 0; reflectionInfo.read((char*)(void*)&cBufferSize, 1);
@@ -110,7 +109,7 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefe
             String varName = "";
             reflectionInfo.read(&chr, 1);
             while (chr != 0) {
-                varName = String(varName, chr);
+                varName += chr;
                 reflectionInfo.read(&chr, 1);
             }
             int varOffset = 0; reflectionInfo.read((char*)(void*)&varOffset, 1);
@@ -123,7 +122,7 @@ void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceRefe
 Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
     for (auto cBuffer : vertexConstantBuffers) {
         auto map = cBuffer->getConstants();
-        auto it = map->find(name.getHashCode());
+        auto it = map->find(name);
         if (it != map->end()) {
             return &it->second;
         }
@@ -134,7 +133,7 @@ Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
 Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
     for (auto cBuffer : fragmentConstantBuffers) {
         auto map = cBuffer->getConstants();
-        auto it = map->find(name.getHashCode());
+        auto it = map->find(name);
         if (it != map->end()) {
             return &it->second;
         }
@@ -142,7 +141,7 @@ Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
     return nullptr;
 }
 
-uint8_t* ShaderDX11::getDxVsCode() {
+byte* ShaderDX11::getDxVsCode() {
     return vertexShaderBytecode.data();
 }
 
@@ -150,7 +149,7 @@ int ShaderDX11::getDxVsCodeLen() const {
     return (int)vertexShaderBytecode.size();
 }
 
-uint8_t* ShaderDX11::getDxFsCode() {
+byte* ShaderDX11::getDxFsCode() {
     return fragmentShaderBytecode.data();
 }
 
@@ -196,14 +195,17 @@ ShaderDX11::CBufferInfoOwner::CBufferInfoOwner(Graphics* gfx, const String& nm, 
 ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, const String& nm, int sz, ResourceManager* resourceManager) {
     name = nm;
     size = sz;
-    data = new uint8_t[size];
+    int cBufferSize = size;
+    //round up to a multiple of 16, see https://docs.microsoft.com/en-us/windows/win32/api/d3d11/ns-d3d11-d3d11_buffer_desc
+    if ((cBufferSize % 16) != 0) { cBufferSize += 16 - (cBufferSize % 16); }
+    data = new byte[cBufferSize];
 
     D3D11_BUFFER_DESC cBufferDesc;
     D3D11_SUBRESOURCE_DATA cBufferSubresourceData;
 
     ZeroMemory( &cBufferDesc, sizeof(D3D11_BUFFER_DESC) );
     cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    cBufferDesc.ByteWidth = sizeof(FLOAT)*48;
+    cBufferDesc.ByteWidth = cBufferSize;
     cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     cBufferDesc.CPUAccessFlags = 0;
 
@@ -223,16 +225,16 @@ ShaderDX11::CBufferInfo::~CBufferInfo() {
     delete[] data;
 }
 
-uint8_t* ShaderDX11::CBufferInfo::getData() {
+byte* ShaderDX11::CBufferInfo::getData() {
     return data;
 }
 
-std::unordered_map<long long, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
+std::unordered_map<String::Key, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
     return &constants;
 }
 
 void ShaderDX11::CBufferInfo::addConstant(const String& name, const ShaderDX11::ConstantDX11& constant) {
-    constants.emplace(name.getHashCode(), constant);
+    constants.emplace(name, constant);
 }
 
 bool ShaderDX11::CBufferInfo::isDirty() const {
@@ -249,7 +251,7 @@ void ShaderDX11::CBufferInfo::update() {
     dirty = false;
 }
 
-D3D11Buffer::Ref ShaderDX11::CBufferInfo::getDxCBuffer() {
+D3D11Buffer::View ShaderDX11::CBufferInfo::getDxCBuffer() {
     return dxCBuffer;
 }
 

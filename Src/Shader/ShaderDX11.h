@@ -7,9 +7,9 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 
-#include <ResourceManagement/ResourceReference.h>
+#include <ResourceManagement/ResourceView.h>
 #include <Shader/Shader.h>
-#include <Misc/String.h>
+#include <String/String.h>
 
 #include "../Graphics/GraphicsDX11.h"
 
@@ -26,23 +26,23 @@ class ShaderDX11 : public Shader {
         void useVertexInputLayout();
         void useSamplers();
 
-        uint8_t* getDxVsCode(); int getDxVsCodeLen() const;
-        uint8_t* getDxFsCode(); int getDxFsCodeLen() const;
+        byte* getDxVsCode(); int getDxVsCodeLen() const;
+        byte* getDxFsCode(); int getDxFsCodeLen() const;
 
         const std::vector<String>& getVertexInputElems() const;
 
     private:
-        std::vector<uint8_t> vertexShaderBytecode;
-        std::vector<uint8_t> fragmentShaderBytecode;
+        std::vector<byte> vertexShaderBytecode;
+        std::vector<byte> fragmentShaderBytecode;
 
         std::vector<String> vertexInputElemSemanticNames;
         std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc;
-        D3D11InputLayout::Ref dxVertexInputLayout;
+        D3D11InputLayout::View dxVertexInputLayout;
 
         std::vector<String> vertexInputElems;
 
         class CBufferInfo;
-        typedef ResourceReference<CBufferInfo*> CBufferInfoRef;
+        typedef ResourceView<CBufferInfo*> CBufferInfoRef;
         class ConstantDX11 : public Constant {
             public:
                 ConstantDX11(CBufferInfoRef cBuffer, int offst, int sz);
@@ -66,37 +66,38 @@ class ShaderDX11 : public Shader {
                 CBufferInfo(Graphics* graphics, const String& nm, int sz, ResourceManager* resourceManager);
                 ~CBufferInfo();
 
-                uint8_t* getData();
-                std::unordered_map<long long, ConstantDX11>* getConstants();
+                byte* getData();
+                std::unordered_map<String::Key, ConstantDX11>* getConstants();
                 void addConstant(const String& name, const ConstantDX11& constant);
                 bool isDirty() const;
                 void markAsDirty();
                 void update();
-                D3D11Buffer::Ref getDxCBuffer();
+                D3D11Buffer::View getDxCBuffer();
 
             private:
                 String name;
-                uint8_t* data;
+                byte* data;
                 int size;
-                std::unordered_map<long long, ConstantDX11> constants;
-                D3D11ImmediateContext::Ref dxContext;
-                D3D11Buffer::Ref dxCBuffer;
+                std::unordered_map<String::Key, ConstantDX11> constants;
+                D3D11ImmediateContext::View dxContext;
+                D3D11Buffer::View dxCBuffer;
                 bool dirty;
         };
         
+        // TODO: Move.
         class CBufferInfoOwner : public Resource<CBufferInfo*> {
             public:
                 CBufferInfoOwner(Graphics* gfx, const String& nm, int sz, ResourceManager* rm);
         };
 
-        ResourceReferenceVector<CBufferInfo*> vertexConstantBuffers;
-        ResourceReferenceVector<CBufferInfo*> fragmentConstantBuffers;
-        void readConstantBuffers(std::ifstream& reflectionInfo, ResourceReferenceVector<CBufferInfo*>& constantBuffers);
+        ResourceViewVector<CBufferInfo*> vertexConstantBuffers;
+        ResourceViewVector<CBufferInfo*> fragmentConstantBuffers;
+        void readConstantBuffers(std::ifstream& reflectionInfo, ResourceViewVector<CBufferInfo*>& constantBuffers);
 
-        ResourceReferenceVector<ID3D11SamplerState*> dxSamplerState;
+        ResourceViewVector<ID3D11SamplerState*> dxSamplerState;
 
-        D3D11VertexShader::Ref dxVertexShader;
-        D3D11PixelShader::Ref dxFragmentShader;
+        D3D11VertexShader::View dxVertexShader;
+        D3D11PixelShader::View dxFragmentShader;
 
         Graphics* graphics;
 

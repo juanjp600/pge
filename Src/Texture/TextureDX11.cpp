@@ -5,12 +5,12 @@
 
 using namespace PGE;
 
-static DXGI_FORMAT getDXFormat(Texture::FORMAT format) {
+static DXGI_FORMAT getDXFormat(Texture::Format format) {
     switch (format) {
-        case Texture::FORMAT::RGBA32: {
+        case Texture::Format::RGBA32: {
             return DXGI_FORMAT_R8G8B8A8_UNORM;
         } break;
-        case Texture::FORMAT::R32F: {
+        case Texture::Format::R32F: {
             return DXGI_FORMAT_R32_FLOAT;
         } break;
         default: {
@@ -19,29 +19,29 @@ static DXGI_FORMAT getDXFormat(Texture::FORMAT format) {
     }
 }
 
-TextureDX11::TextureDX11(Graphics* gfx, int w, int h, FORMAT fmt) : Texture(gfx, width, height, true, fmt), resourceManager(5) {
+TextureDX11::TextureDX11(Graphics* gfx, int w, int h, Format fmt) : Texture(gfx, w, h, true, fmt), resourceManager(5) {
     ID3D11Device* dxDevice = ((GraphicsDX11*)gfx)->getDxDevice();
 
     DXGI_FORMAT dxFormat = getDXFormat(fmt);
 
-    dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::TYPE::RENDER_TARGET, w, h, dxFormat);
+    dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::RENDER_TARGET, w, h, dxFormat);
 
     dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat, true);
 
     dxRtv = resourceManager.addNewResource<D3D11RenderTargetView>(dxDevice, dxTexture);
 
-    dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::TYPE::DEPTH_STENCIL, w, h, DXGI_FORMAT_D24_UNORM_S8_UINT);
+    dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::DEPTH_STENCIL, w, h, DXGI_FORMAT_D24_UNORM_S8_UINT);
 
     dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture, DXGI_FORMAT_D24_UNORM_S8_UINT);
 }
 
-TextureDX11::TextureDX11(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt) : Texture(gfx, width, height, false, fmt), resourceManager(2) {
+TextureDX11::TextureDX11(Graphics* gfx, int w, int h, byte* buffer, Format fmt) : Texture(gfx, w, h, false, fmt), resourceManager(2) {
     ID3D11Device* dxDevice = ((GraphicsDX11*)gfx)->getDxDevice();
     ID3D11DeviceContext* dxContext = ((GraphicsDX11*)gfx)->getDxContext();
 
     DXGI_FORMAT dxFormat = getDXFormat(fmt);
 
-    dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::TYPE::NORMAL, w, h, dxFormat);
+    dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::NORMAL, w, h, dxFormat);
     dxContext->UpdateSubresource(dxTexture, 0, NULL, buffer, w * 4, 0);
 
     dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat, false);

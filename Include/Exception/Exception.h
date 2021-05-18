@@ -1,7 +1,7 @@
 #ifndef PGE_EXCEPTION_H_INCLUDED
 #define PGE_EXCEPTION_H_INCLUDED
 
-#include <Misc/String.h>
+#include <String/String.h>
 
 namespace PGE {
 
@@ -21,8 +21,8 @@ class Exception {
 
 }
 
-#define __CREATE_EX(INFO) PGE::Exception(__FILE__, __LINE__, INFO)
+#define PGE_CREATE_EX(INFO) PGE::Exception(__FILE__, __LINE__, INFO)
 
-#define __ASSERT(COND, INFO) if (!(COND)) throw __CREATE_EX(INFO)
+#define PGE_ASSERT(COND, INFO) if (!(COND)) throw PGE_CREATE_EX(INFO)
 
 #endif // PGE_EXCEPTION_H_INCLUDED

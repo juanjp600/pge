@@ -1,12 +1,11 @@
 #ifndef PGEINTERNAL_MESHOGL3_H_INCLUDED
 #define PGEINTERNAL_MESHOGL3_H_INCLUDED
 
-#include <Graphics/Graphics.h>
 #include <Mesh/Mesh.h>
 
 #include <vector>
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include "../ResourceManagement/OGL3.h"
 #include "../ResourceManagement/ResourceManagerOGL3.h"
@@ -15,7 +14,7 @@ namespace PGE {
 
 class MeshOGL3 : public Mesh {
     public:
-        MeshOGL3(Graphics* gfx, Primitive::TYPE pt);
+        MeshOGL3(Graphics* gfx, Primitive::Type pt);
 
         void updateInternalData() override;
 
@@ -24,14 +23,14 @@ class MeshOGL3 : public Mesh {
     private:
         void uploadInternalData() override;
 
-        GLBuffer::Ref glVertexBufferObject;
-        GLBuffer::Ref glIndexBufferObject;
+        GLBuffer::View glVertexBufferObject;
+        GLBuffer::View glIndexBufferObject;
 
-        GLVertexArray::Ref glVertexArrayObject;
+        GLVertexArray::View glVertexArrayObject;
 
         ResourceManagerOGL3 resourceManager;
 
-        std::vector<uint8_t> glVertexData;
+        std::vector<byte> glVertexData;
         std::vector<GLuint> glIndexData;
 };
 

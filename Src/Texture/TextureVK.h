@@ -8,9 +8,9 @@ namespace PGE {
 class TextureVK : public Texture {
     public:
         // Render target.
-        TextureVK(Graphics* gfx, int w, int h, FORMAT fmt);
+        TextureVK(Graphics* gfx, int w, int h, Format fmt);
         // Loaded texture.
-        TextureVK(Graphics* gfx, int w, int h, uint8_t* buffer, FORMAT fmt);
+        TextureVK(Graphics* gfx, int w, int h, uint8_t* buffer, Format fmt);
 
         Texture* copy() const override;
 

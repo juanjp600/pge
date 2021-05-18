@@ -15,7 +15,7 @@ class Matrix4x4f {
                    float ca,float cb,float cc,float cd,
                    float da,float db,float dc,float dd);
 
-        Matrix4x4f& operator*=(const Matrix4x4f& other);
+        void operator*=(const Matrix4x4f& other);
         Matrix4x4f operator*(const Matrix4x4f& other) const;
 
         bool operator==(const Matrix4x4f& other) const;
@@ -34,15 +34,15 @@ class Matrix4x4f {
         static Matrix4x4f rotate(const Vector3f& rotation);
 
         static Matrix4x4f constructWorldMat(const Vector3f& position, const Vector3f& scale, const Vector3f& rotation);
-        static Matrix4x4f constructViewMat(const Vector3f& position, const Vector3f& target, const Vector3f& upVector);
+        static Matrix4x4f constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector);
         Vector3f extractViewTarget() const;
         Vector3f extractViewUp() const;
         Vector3f extractViewPosition() const;
         static Matrix4x4f constructPerspectiveMat(float horizontalfov, float aspectRatio, float nearZ, float farZ);
         static Matrix4x4f constructOrthographicMat(float width, float height, float nearZ, float farZ);
 
-        static const Matrix4x4f identity;
-        static const Matrix4x4f zero;
+        static const Matrix4x4f IDENTITY;
+        static const Matrix4x4f ZERO;
 };
 
 }

@@ -18,10 +18,10 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
         SDL_SetWindowBordered(sdlWindow, SDL_bool::SDL_FALSE);
         SDL_Rect displayBounds;
         int displayIndex = SDL_GetWindowDisplayIndex(sdlWindow);
-        __ASSERT(displayIndex >= 0, "Failed to determine display index (SDLERROR: " + String(SDL_GetError()) + ")");
+        PGE_ASSERT(displayIndex >= 0, "Failed to determine display index (SDLERROR: " + String(SDL_GetError()) + ")");
         int errorCode = SDL_GetDisplayBounds(displayIndex, &displayBounds);
-        __ASSERT(errorCode == 0, "Failed to get display bounds (SDLERROR: " + String(SDL_GetError()) + ")");
-        __ASSERT(displayBounds.w > 0 && displayBounds.h > 0, "Display bounds are invalid (" + String::fromInt(displayBounds.w) + "x" + String::fromInt(displayBounds.h) + ")");
+        PGE_ASSERT(errorCode == 0, "Failed to get display bounds (SDLERROR: " + String(SDL_GetError()) + ")");
+        PGE_ASSERT(displayBounds.w > 0 && displayBounds.h > 0, "Display bounds are invalid (" + String::fromInt(displayBounds.w) + "x" + String::fromInt(displayBounds.h) + ")");
         SDL_SetWindowSize(sdlWindow, displayBounds.w, displayBounds.h);
         SDL_SetWindowPosition(sdlWindow, 0, 0);
     }
@@ -31,7 +31,7 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     SDL_SysWMinfo sysWMinfo;
     SDL_VERSION(&sysWMinfo.version); //REMINDER: THIS LINE IS VERY IMPORTANT
     bool validInfo = SDL_GetWindowWMInfo(sdlWindow, &sysWMinfo);
-    __ASSERT(validInfo, "Failed to initialize SDL version info (SDLERROR: " + String(SDL_GetError()) + ")");
+    PGE_ASSERT(validInfo, "Failed to initialize SDL version info (SDLERROR: " + String(SDL_GetError()) + ")");
 
     ZeroMemory(&dxSwapChainDesc, sizeof(dxSwapChainDesc));
     dxSwapChainDesc.BufferCount = 1;
@@ -51,7 +51,7 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     dxSwapChain = resourceManager.addNewResource<DXGISwapChain>(dxgiFactory, dxDevice, dxSwapChainDesc);
     dxBackBufferRtv = resourceManager.addNewResource<D3D11BackBufferRtv>(dxDevice, dxSwapChain);
 
-    dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::TYPE::DEPTH_STENCIL, w, h, DXGI_FORMAT_D24_UNORM_S8_UINT);
+    dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::DEPTH_STENCIL, w, h, DXGI_FORMAT_D24_UNORM_S8_UINT);
 
     dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture, DXGI_FORMAT_D24_UNORM_S8_UINT);
     dxContext->OMSetRenderTargets(1, &dxBackBufferRtv, dxZBufferView);
@@ -81,7 +81,7 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
 
     dxContext->OMSetBlendState(dxBlendState, 0, 0xffffffff);
 
-    dxDepthStencilState = ResourceReferenceVector<ID3D11DepthStencilState*>::withSize(3);
+    dxDepthStencilState = ResourceViewVector<ID3D11DepthStencilState*>::withSize(3);
 
     D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
     depthStencilDesc.DepthEnable = TRUE;
@@ -103,14 +103,14 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
-    dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_WRITE], 0);
+    dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_WRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_WRITE], 0);
 
     depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::ENABLED_NOWRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_NOWRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
 
     depthStencilDesc.DepthEnable = FALSE;
-    dxDepthStencilState[(int)ZBUFFER_STATE_INDEX::DISABLED] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxDepthStencilState[(int)ZBufferStateIndex::DISABLED] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
 
     setViewport(Rectanglei(0,0,w,h));
     currentRenderTargetViews.add(dxBackBufferRtv);
@@ -151,14 +151,14 @@ void GraphicsDX11::setRenderTargets(const std::vector<Texture*>& renderTargets) 
     currentRenderTargetViews.clear();
     TextureDX11* maxSizeTexture = (TextureDX11*)renderTargets[0];
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        __ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets[" + String::fromInt(i) + "] is not a valid render target");
+        PGE_ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets[" + String::fromInt(i) + "] is not a valid render target");
         currentRenderTargetViews.add(((TextureDX11*)renderTargets[i])->getRtv());
         if (renderTargets[i]->getWidth()+renderTargets[i]->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
             maxSizeTexture = (TextureDX11*)renderTargets[i];
         }
     }
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        __ASSERT(renderTargets[i]->getWidth() <= maxSizeTexture->getWidth() && renderTargets[i]->getHeight() <= maxSizeTexture->getHeight(),
+        PGE_ASSERT(renderTargets[i]->getWidth() <= maxSizeTexture->getWidth() && renderTargets[i]->getHeight() <= maxSizeTexture->getHeight(),
             "Render target sizes are incompatible (" + String::fromInt(maxSizeTexture->getWidth()) + "x" + String::fromInt(maxSizeTexture->getHeight()) + " vs " +
                                                        String::fromInt(renderTargets[i]->getWidth()) + "x" + String::fromInt(renderTargets[i]->getHeight()) + ")");
     }
@@ -207,8 +207,8 @@ ID3D11DepthStencilView* GraphicsDX11::getZBufferView() const {
     return dxZBufferView;
 }
 
-void GraphicsDX11::setZBufferState(GraphicsDX11::ZBUFFER_STATE_INDEX index) {
+void GraphicsDX11::setZBufferState(GraphicsDX11::ZBufferStateIndex index) {
     dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)index], 0);
 }
 
-__GFX_OBJ_DEF(DX11)
+PGE_GFX_OBJ_DEF(DX11)

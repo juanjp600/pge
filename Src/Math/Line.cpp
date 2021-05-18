@@ -6,7 +6,7 @@
 using namespace PGE;
 
 Line2f::Line2f() {
-    pointA = Vector2f::zero; pointB = Vector2f::zero;
+    pointA = Vector2f::ZERO; pointB = Vector2f::ZERO;
 }
 
 Line2f::Line2f(const Vector2f& a,const Vector2f& b) {
@@ -36,15 +36,15 @@ bool Line2f::intersects(const Line2f& other,Vector2f& point,bool segmentOnly) co
 
     point.x = (((p1a.x*p1b.y)-(p1a.y*p1b.x))*(p2a.x-p2b.x))-((p1a.x-p1b.x)*((p2a.x*p2b.y)-(p2a.y*p2b.x)));
     point.y = (((p1a.x*p1b.y)-(p1a.y*p1b.x))*(p2a.y-p2b.y))-((p1a.y-p1b.y)*((p2a.x*p2b.y)-(p2a.y*p2b.x)));
-    point = point.multiply(1.f/denominator);
+    point = point/denominator;
 
     if (!segmentOnly) { return true; }
     return boundingBox().isPointInside(point) && other.boundingBox().isPointInside(point);
 }
 
 Vector2f Line2f::closestPoint(const Vector2f& point,bool segmentOnly) const {
-    Vector2f aToP = point.subtract(pointA);
-    Vector2f aToB = pointB.subtract(pointA);
+    Vector2f aToP = point - pointA;
+    Vector2f aToB = pointB - pointA;
 
     float t = aToP.dotProduct(aToB)/aToB.lengthSquared();
 
@@ -52,11 +52,11 @@ Vector2f Line2f::closestPoint(const Vector2f& point,bool segmentOnly) const {
         if (t<0) { return pointA; }
         if (t>1) { return pointB; }
     }
-    return pointA.add(aToB.multiply(t));
+    return pointA + aToB * t;
 }
 
 Line2i::Line2i() {
-    pointA = Vector2i::zero; pointB = Vector2i::zero;
+    pointA = Vector2i::ZERO; pointB = Vector2i::ZERO;
 }
 
 Line2i::Line2i(const Vector2i& a,const Vector2i& b) {
@@ -86,14 +86,14 @@ bool Line2i::intersects(const Line2i& other,Vector2f& point,bool segmentOnly) co
 
     point.x = (float)((((p1a.x*p1b.y)-(p1a.y*p1b.x))*(p2a.x-p2b.x))-((p1a.x-p1b.x)*((p2a.x*p2b.y)-(p2a.y*p2b.x))));
     point.y = (float)((((p1a.x*p1b.y)-(p1a.y*p1b.x))*(p2a.y-p2b.y))-((p1a.y-p1b.y)*((p2a.x*p2b.y)-(p2a.y*p2b.x))));
-    point = point.multiply(1.f/denominator);
+    point = point/denominator;
 
     if (!segmentOnly) { return true; }
     return boundingBox().isPointInside(point) && other.boundingBox().isPointInside(point);
 }
 
 Line3f::Line3f() {
-    pointA = Vector3f::zero; pointB = Vector3f::zero;
+    pointA = Vector3f::ZERO; pointB = Vector3f::ZERO;
 }
 
 Line3f::Line3f(const Vector3f& a,const Vector3f& b) {
@@ -109,8 +109,8 @@ AABBox Line3f::boundingBox() const {
 }
 
 Vector3f Line3f::closestPoint(const Vector3f& point,bool segmentOnly) const {
-    Vector3f aToP = point.subtract(pointA);
-    Vector3f aToB = pointB.subtract(pointA);
+    Vector3f aToP = point - pointA;
+    Vector3f aToB = pointB - pointA;
 
     float t = aToP.dotProduct(aToB)/aToB.lengthSquared();
 
@@ -118,5 +118,5 @@ Vector3f Line3f::closestPoint(const Vector3f& point,bool segmentOnly) const {
         if (t<0) { return pointA; }
         if (t>1) { return pointB; }
     }
-    return pointA.add(aToB.multiply(t));
+    return pointA + aToB * t;
 }

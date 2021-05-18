@@ -97,6 +97,12 @@
     <Filter Include="Src\ResourceManagement">
       <UniqueIdentifier>{952e82de-03b6-4eb2-8ce4-e74c2c587921}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\String">
+      <UniqueIdentifier>{2e8d4111-cef8-4a2e-a168-a1934da0d407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\String">
+      <UniqueIdentifier>{484bdd3a-89f5-4fe8-a771-23248a864aaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -147,9 +153,6 @@
     <ClCompile Include="..\..\Src\Texture\Texture.cpp">
       <Filter>Src\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Misc\String.cpp">
-      <Filter>Src\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp">
       <Filter>Src\SysEvents</Filter>
     </ClCompile>
@@ -164,9 +167,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Init\Init.cpp">
       <Filter>Src\Init</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Misc\FileUtil.cpp">
-      <Filter>Src\Misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\IO\IOInternal.h">
       <Filter>Src\IO</Filter>
@@ -225,6 +225,15 @@
     <ClCompile Include="..\..\Src\Misc\FileWriter.cpp">
       <Filter>Src\Misc</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\String\String.cpp">
+      <Filter>Src\String</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\String\Unicode.cpp">
+      <Filter>Src\String</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Math\Math.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -269,9 +278,6 @@
     <ClInclude Include="..\..\Include\Mesh\Mesh.h">
       <Filter>Include\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\String.h">
-      <Filter>Include\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\UserInput\UserInput.h">
       <Filter>Include\UserInput</Filter>
     </ClInclude>
@@ -295,9 +301,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\SysEvents\SysEvents.h">
       <Filter>Include\SysEvents</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\FileUtil.h">
-      <Filter>Include\Misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Misc\FilePath.h">
       <Filter>Include\Misc</Filter>
@@ -329,7 +332,7 @@
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ResourceManagement\ResourceReference.h">
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceView.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\DX11.h">
@@ -338,7 +341,7 @@
     <ClInclude Include="..\..\Include\ResourceManagement\Resource.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ResourceManagement\ResourceReferenceVector.h">
+    <ClInclude Include="..\..\Include\ResourceManagement\ResourceViewVector.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\OGL3.h">
@@ -368,14 +371,29 @@
     <ClInclude Include="..\..\Src\ResourceManagement\VK.h">
       <Filter>Src\ResourceManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Misc\Info.h">
-      <Filter>Include\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\Misc\Info.h">
       <Filter>Include\Misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Misc\FileWriter.h">
       <Filter>Include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\String\String.h">
+      <Filter>Include\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\String\Unicode.h">
+      <Filter>Src\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Misc\Byte.h">
+      <Filter>Include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\String\Key.h">
+      <Filter>Include\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Math\Math.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\ResourceManagement\RawWrapper.h">
+      <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

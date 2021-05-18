@@ -8,7 +8,7 @@
 
 using namespace PGE;
 
-MeshVK::MeshVK(Graphics* gfx, Primitive::TYPE pt) : resourceManager(gfx, 3) {
+MeshVK::MeshVK(Graphics* gfx, Primitive::Type pt) : resourceManager(gfx, 3) {
 	graphics = gfx;
 	primitiveType = pt;
 
@@ -29,7 +29,7 @@ void MeshVK::updateInternalData() {
 	resourceManager.deleteResourcefromReference(dataBuffer);
 
 	totalVertexSize = shader->getVertexStride() * vertexCount;
-	indicesCount = primitiveCount * (primitiveType == Primitive::TYPE::TRIANGLE ? 3 : 2);
+	indicesCount = primitiveCount * (primitiveType == Primitive::Type::TRIANGLE ? 3 : 2);
 	int finalTotalSize = totalVertexSize + sizeof(uint16_t) * indicesCount;
 
 	VKBuffer stagingBuffer = VKBuffer(device, finalTotalSize, vk::BufferUsageFlagBits::eTransferSrc);
@@ -40,23 +40,23 @@ void MeshVK::updateInternalData() {
 	float* vertexCursor = (float*)device.mapMemory(stagingMemory, 0, finalTotalSize);
 	for (int i = 0; i < vertexCount; i++) {
 		for (int j = 0; j < (int)vertexInputNames.size(); j++) {
-			const Vertex::Property& prop = vertices[i].getProperty(vertexInputNames[j], hintIndices[j]);
+			const Vertex::Property& prop = vertices[i].getProperty(vertexInputNames[j]);
 			switch (prop.type) {
-				case Vertex::PROPERTY_TYPE::FLOAT: {
+				case Vertex::Property::Type::FLOAT: {
 					*vertexCursor = prop.value.floatVal;
 					vertexCursor++;
 				} break;
-				case Vertex::PROPERTY_TYPE::UINT: {
+				case Vertex::Property::Type::UINT: {
 					*((uint32_t*)vertexCursor) = prop.value.uintVal;
 					vertexCursor++;
 				} break;
-				case Vertex::PROPERTY_TYPE::VECTOR2F: {
+				case Vertex::Property::Type::VECTOR2F: {
 					*vertexCursor = prop.value.vector2fVal.x;
 					vertexCursor++;
 					*vertexCursor = prop.value.vector2fVal.y;
 					vertexCursor++;
 				} break;
-				case Vertex::PROPERTY_TYPE::VECTOR3F: {
+				case Vertex::Property::Type::VECTOR3F: {
 					*vertexCursor = prop.value.vector3fVal.x;
 					vertexCursor++;
 					*vertexCursor = prop.value.vector3fVal.y;
@@ -64,7 +64,7 @@ void MeshVK::updateInternalData() {
 					*vertexCursor = prop.value.vector3fVal.z;
 					vertexCursor++;
 				} break;
-				case Vertex::PROPERTY_TYPE::VECTOR4F: {
+				case Vertex::Property::Type::VECTOR4F: {
 					*vertexCursor = prop.value.vector4fVal.x;
 					vertexCursor++;
 					*vertexCursor = prop.value.vector4fVal.y;
@@ -74,7 +74,7 @@ void MeshVK::updateInternalData() {
 					*vertexCursor = prop.value.vector4fVal.w;
 					vertexCursor++;
 				} break;
-				case Vertex::PROPERTY_TYPE::COLOR: {
+				case Vertex::Property::Type::COLOR: {
 					*vertexCursor = prop.value.colorVal.red;
 					vertexCursor++;
 					*vertexCursor = prop.value.colorVal.green;
@@ -94,7 +94,7 @@ void MeshVK::updateInternalData() {
 		indexCursor++;
 		*indexCursor = (uint16_t)primitives[i].b;
 		indexCursor++;
-		if (primitiveType == Primitive::TYPE::TRIANGLE) {
+		if (primitiveType == Primitive::Type::TRIANGLE) {
 			*indexCursor = (uint16_t)primitives[i].c;
 			indexCursor++;
 		}
@@ -118,7 +118,7 @@ void MeshVK::render() {
 
 	vk::CommandBuffer comBuffer = ((GraphicsVK*)graphics)->getCurrentCommandBuffer();
 	// TODO: How the fuck does the buffer know how much vertex data there is???
-	comBuffer.bindVertexBuffers(0, dataBuffer(), (vk::DeviceSize)0);
+	comBuffer.bindVertexBuffers(0, dataBuffer.get(), (vk::DeviceSize)0);
 	comBuffer.bindIndexBuffer(dataBuffer, totalVertexSize, vk::IndexType::eUint16);
 	comBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
 	comBuffer.drawIndexed(indicesCount, 1, 0, 0, 0);

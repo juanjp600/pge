@@ -6,11 +6,11 @@ class SysEvents {
         static void update();
         class Subscriber {
             protected:
-                Subscriber(){}
+                Subscriber() = default;
         };
 
     protected:
-        SysEvents(){}
+        SysEvents() = default;
 };
 
 #endif // PGE_SYSEVENTS_H_INCLUDED

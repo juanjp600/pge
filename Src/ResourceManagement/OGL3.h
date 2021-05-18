@@ -5,8 +5,10 @@
 
 #include <ResourceManagement/ResourceManager.h>
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <SDL.h>
+
+#include "../ResourceManagement/Misc.h"
 
 namespace PGE {
 
@@ -28,7 +30,7 @@ class GLFramebuffer : public Resource<GLuint> {
         GLFramebuffer() {
             glGenFramebuffers(1, &resource);
             GLenum glError = glGetError();
-            __ASSERT(glError == GL_NO_ERROR, "Failed to generate frame buffer (GLERROR: " + String::format(glError, "%u") + ")");
+            PGE_ASSERT(glError == GL_NO_ERROR, "Failed to generate frame buffer (GLERROR: " + String::format(glError, "%u") + ")");
         }
         
         ~GLFramebuffer() {
@@ -99,7 +101,7 @@ class GLShader : public Resource<GLuint> {
 
             int result;
             glGetShaderiv(resource, GL_COMPILE_STATUS, &result);
-            __ASSERT(result == GL_TRUE, "Failed to create shader (stage: " + String::format(stage, "%u") + "; error:" + err + ")");
+            PGE_ASSERT(result == GL_TRUE, "Failed to create shader (stage: " + String::format(stage, "%u") + "; error:" + err + ")");
         }
 
         ~GLShader() {
@@ -117,7 +119,7 @@ class GLProgram : public Resource<GLuint> {
             glLinkProgram(resource);
             GLint result;
             glGetProgramiv(resource, GL_LINK_STATUS, &result);
-            __ASSERT(result == GL_TRUE, "Failed to link shader (GLERROR:" + String::format(glGetError(), "%u") + ")");
+            PGE_ASSERT(result == GL_TRUE, "Failed to link shader (GLERROR:" + String::format(glGetError(), "%u") + ")");
         }
 
         ~GLProgram() {
