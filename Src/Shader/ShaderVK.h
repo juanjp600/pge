@@ -3,7 +3,8 @@
 
 #include <Shader/Shader.h>
 
-#include <map>
+#include <unordered_map>
+#include <unordered_set>
 
 #include <vulkan/vulkan.hpp>
 
@@ -18,6 +19,8 @@ namespace PGE {
 
             Constant* getVertexShaderConstant(const String& name) override;
             Constant* getFragmentShaderConstant(const String& name) override;
+
+            void pushConstants();
 
             int getVertexStride() const;
             const std::vector<String>& getVertexInputNames() const;
@@ -44,7 +47,7 @@ namespace PGE {
 
             class ConstantVK : public Constant {
                 public:
-                    ConstantVK(Graphics* gfx, ShaderVK* she, vk::ShaderStageFlags stg, int off);
+                    ConstantVK(ShaderVK* she, vk::ShaderStageFlags stg, int off);
 
                     void setValue(const Matrix4x4f& value) override;
                     void setValue(const Vector2f& value) override;
@@ -54,14 +57,36 @@ namespace PGE {
                     void setValue(float value) override;
                     void setValue(int value) override;
 
+                    void push(GraphicsVK* gfx);
+
                 private:
-                    Graphics* graphics;
+                    // TODO: Remove stinky, this is only temporary.
+                    enum class Type {
+                        MATRIX,
+                        VECTOR2F,
+                        VECTOR3F,
+                        VECTOR4F,
+                        COLOR,
+                        FLOAT,
+                        INT
+                    } valueType;
+                    union {
+                        Matrix4x4f matrixVal = Matrix4x4f::ZERO;
+                        Vector2f vector2fVal;
+                        Vector3f vector3fVal;
+                        Vector4f vector4fVal;
+                        Color colorVal;
+                        float floatVal;
+                        int intVal;
+                    } val;
+
                     ShaderVK* shader;
                     vk::ShaderStageFlags stage;
                     int offset;
             };
-            std::map<long long, ConstantVK> vertexConstantMap;
-            std::map<long long, ConstantVK> fragmentConstantMap;
+            std::unordered_map<String::Key, ConstantVK> vertexConstantMap;
+            std::unordered_map<String::Key, ConstantVK> fragmentConstantMap;
+            std::unordered_set<ConstantVK*> updatedConstants;
 
             ResourceManagerVK resourceManager;
     };

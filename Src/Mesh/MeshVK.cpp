@@ -115,6 +115,8 @@ void MeshVK::render() {
 		updateInternalData();
 	}
 
+	((ShaderVK*)material->getShader())->pushConstants();
+
 	vk::CommandBuffer comBuffer = ((GraphicsVK*)graphics)->getCurrentCommandBuffer();
 	// TODO: How the fuck does the buffer know how much vertex data there is???
 	comBuffer.bindVertexBuffers(0, dataBuffer.get(), (vk::DeviceSize)0);

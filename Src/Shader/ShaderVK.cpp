@@ -51,12 +51,12 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
         for (int j = 0; j < (int)pushConstant.member_count; j++) {
             String name = pushConstant.members[j].name;
             if (name.substr(0, 4) == "vert") {
-                vertexConstantMap.emplace(name.substr(5).getHashCode(), ConstantVK(graphics, this, vk::ShaderStageFlagBits::eVertex, pushConstant.members[j].absolute_offset));
+                vertexConstantMap.emplace(name.substr(5), ConstantVK(this, vk::ShaderStageFlagBits::eVertex, pushConstant.members[j].absolute_offset));
             } else {
                 if (fragmentConstantMap.size() == 0) {
                     fragmentOffset = pushConstant.members[j].absolute_offset;
                 }
-                fragmentConstantMap.emplace(name.substr(5).getHashCode(), ConstantVK(graphics, this, vk::ShaderStageFlagBits::eFragment, pushConstant.members[j].absolute_offset));
+                fragmentConstantMap.emplace(name.substr(5), ConstantVK(this, vk::ShaderStageFlagBits::eFragment, pushConstant.members[j].absolute_offset));
             }
         }
         if (!vertexConstantMap.empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eVertex }, 0, fragmentOffset)); }
@@ -78,7 +78,7 @@ ShaderVK::ShaderVK(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 2
 }
 
 Shader::Constant* ShaderVK::getVertexShaderConstant(const String& name) {
-    auto it = vertexConstantMap.find(name.getHashCode());
+    auto it = vertexConstantMap.find(name);
     if (it == vertexConstantMap.end()) {
         return nullptr;
     } else {
@@ -87,7 +87,7 @@ Shader::Constant* ShaderVK::getVertexShaderConstant(const String& name) {
 }
 
 Shader::Constant* ShaderVK::getFragmentShaderConstant(const String& name) {
-    auto it = fragmentConstantMap.find(name.getHashCode());
+    auto it = fragmentConstantMap.find(name);
     if (it == fragmentConstantMap.end()) {
         return nullptr;
     } else {
@@ -95,44 +95,86 @@ Shader::Constant* ShaderVK::getFragmentShaderConstant(const String& name) {
     }
 }
 
-ShaderVK::ConstantVK::ConstantVK(Graphics* gfx, ShaderVK* she, vk::ShaderStageFlags stg, int off) {
-    graphics = gfx;
+static int lololol;
+
+void ShaderVK::pushConstants() {
+    for (ConstantVK* c : updatedConstants) {
+        c->push((GraphicsVK*)graphics);
+    }
+    // TODO: Why.
+    //updatedConstants.clear();
+}
+
+ShaderVK::ConstantVK::ConstantVK(ShaderVK* she, vk::ShaderStageFlags stg, int off) {
     shader = she;
     stage = stg;
     offset = off;
 }
 
 void ShaderVK::ConstantVK::setValue(const Matrix4x4f& value) {
-    // TODO: Look into matrix order bullshit, I hate my life.
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), value.transpose().elements);
+    val.matrixVal = value; valueType = Type::MATRIX;
+    shader->updatedConstants.emplace(this);
 }
 
 void ShaderVK::ConstantVK::setValue(const Vector2f& value) {
-    float val[] = { value.x, value.y };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 2 * sizeof(float), val);
+    val.vector2fVal = value; valueType = Type::VECTOR2F;
+    shader->updatedConstants.emplace(this);
 }
 
 void ShaderVK::ConstantVK::setValue(const Vector3f& value) {
-    float val[] = { value.x, value.y, value.z };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 3 * sizeof(float), val);
+    val.vector3fVal = value; valueType = Type::VECTOR3F;
+    shader->updatedConstants.emplace(this);
 }
 
 void ShaderVK::ConstantVK::setValue(const Vector4f& value) {
-    float val[] = { value.x, value.y, value.z, value.w };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * sizeof(float), val);
+    val.vector4fVal = value; valueType = Type::VECTOR4F;
+    shader->updatedConstants.emplace(this);
 }
 
 void ShaderVK::ConstantVK::setValue(const Color& value) {
-    float val[] = { value.red, value.green, value.blue, value.alpha };
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * sizeof(float), val);
+    val.colorVal = value; valueType = Type::COLOR;
+    shader->updatedConstants.emplace(this);
 }
 
 void ShaderVK::ConstantVK::setValue(float value) {
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, sizeof(float), &value);
+    val.floatVal = value; valueType = Type::FLOAT;
+    shader->updatedConstants.emplace(this);
 }
 
 void ShaderVK::ConstantVK::setValue(int value) {
-    ((GraphicsVK*)graphics)->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, sizeof(int), &value);
+    val.intVal = value; valueType = Type::INT;
+    shader->updatedConstants.emplace(this);
+}
+
+void ShaderVK::ConstantVK::push(GraphicsVK* gfx) {
+    switch (valueType) {
+        case Type::MATRIX: {
+            // TODO: Look into matrix order bullshit, I hate my life.
+            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), val.matrixVal.transpose().elements);
+        } break;
+        case Type::COLOR: {
+            float value[] = { val.colorVal.red, val.colorVal.green, val.colorVal.blue, val.colorVal.alpha };
+            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * sizeof(float), value);
+        } break;
+        case Type::FLOAT: {
+            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, sizeof(float), &val.floatVal);
+        } break;
+        case Type::INT: {
+            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, sizeof(int), &val.intVal);
+        } break;
+        case Type::VECTOR2F: {
+            float value[] = { val.vector2fVal.x, val.vector2fVal.y };
+            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 2 * sizeof(float), value);
+        } break;
+        case Type::VECTOR3F: {
+            float value[] = { val.vector3fVal.x, val.vector3fVal.y, val.vector3fVal.z };
+            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 3 * sizeof(float), value);
+        } break;
+        case Type::VECTOR4F: {
+            float value[] = { val.vector4fVal.x, val.vector4fVal.y, val.vector4fVal.z, val.vector4fVal.w };
+            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * sizeof(float), value);
+        } break;
+    }
 }
 
 int ShaderVK::getVertexStride() const {
