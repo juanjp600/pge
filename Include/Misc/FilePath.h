@@ -22,6 +22,7 @@ class FilePath {
         static const FilePath& getDataPath();
 
         bool isValid() const;
+        bool isDirectory() const;
 
         // Causes a path to be interpreted as a directory, does not actually create the directory.
         FilePath makeDirectory() const;
@@ -57,7 +58,6 @@ class FilePath {
 };
 
 const FilePath operator+(const FilePath& a, const String& b);
-std::ostream& operator<<(std::ostream& os, const FilePath& fn);
 
 }
 

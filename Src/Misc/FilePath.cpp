@@ -97,6 +97,14 @@ bool FilePath::isValid() const {
     return valid;
 }
 
+bool FilePath::isDirectory() const {
+    PGE_ASSERT(valid, INVALID_STR);
+    std::error_code err;
+    bool isDir = std::filesystem::is_directory(cstr(), err);
+    PGE_ASSERT(err.value() == 0, "Couldn't check if path is directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
+    return isDir;
+}
+
 FilePath FilePath::makeDirectory() const {
     PGE_ASSERT(valid, INVALID_STR);
     if (*str().charAt(length() - 1) != '/') {
@@ -114,12 +122,10 @@ String FilePath::getExtension() const {
 
 bool FilePath::exists() const {
     PGE_ASSERT(valid, INVALID_STR);
-#ifdef __APPLE__
-    struct stat buf;
-    return (stat(path.cstr(), &buf) == 0);
-#else
-    return std::filesystem::exists(cstr());
-#endif
+    std::error_code err;
+    bool exists = std::filesystem::exists(cstr(), err);
+    PGE_ASSERT(err.value() == 0, "Couldn't check if directory exists (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
+    return exists;
 }
 
 bool FilePath::createDirectory() const {
@@ -127,152 +133,43 @@ bool FilePath::createDirectory() const {
         return false;
     }
 
-#ifdef _WIN32
-    SECURITY_ATTRIBUTES attrs;
-    attrs.bInheritHandle = false;
-    attrs.nLength = 0;
-    wchar* wstr = new wchar[length() + 1];
-    str().wstr(wstr);
-    bool success = CreateDirectoryW(wstr, NULL);
-    delete[] wstr;
-    PGE_ASSERT(success, "Couldn't create directory (dir: " + str() + "; err: " + PGE::String::fromInt((int)GetLastError()) + ")");
-    return true;
-#else
-    return mkdir(path.cstr(), S_IRWXU) == 0;
-#endif
+    std::vector<wchar> wstr = std::vector<wchar>(length() + 1);
+    str().wstr(wstr.data());
+
+    std::error_code err;
+    bool created = std::filesystem::create_directories(wstr.data(), err);
+    PGE_ASSERT(err.value() == 0, "Couldn't create directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
+    return created;
 }
 
 void FilePath::enumerateFolders(std::vector<FilePath>& folders) const {
-#if _WIN32
-    HANDLE hFind;
-    WIN32_FIND_DATAW ffd;
-
-    FilePath filePath = makeDirectory();
-
-    FilePath anyPath = filePath + "*";
-    wchar* wstr = new wchar[anyPath.length() + 1];
-    anyPath.wstr(wstr);
-    hFind = FindFirstFileW(wstr, &ffd);
-    delete[] wstr;
-
-    PGE_ASSERT(hFind != INVALID_HANDLE_VALUE, "Couldn't enumerate directory (dir: " + str() + "; err: " + PGE::String::fromInt((int)GetLastError()) + ")");
-
-    do {
-        String fileName = ffd.cFileName;
-        if (fileName.equals(".") || fileName.equals("..")) {
-            continue;
-        }
-
-        FilePath newPath = FilePath(filePath, fileName);
-        if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
-            folders.push_back(newPath.makeDirectory());
-        }
-    } while (FindNextFileW(hFind, &ffd));
-
-    FindClose(hFind);
-#else
-    DIR* dir;
-    struct dirent* currentEntry;
-
-    dir = opendir(path.cstr());
-
-    PGE_ASSERT(dir != NULL, "Couldn't open directory (dir: " + str() + ")");
-
-    while ((currentEntry = readdir(dir)) != NULL) {
-        if (currentEntry->d_type == DT_DIR) {
-            // Skip '.' and '..'.
-            if ((strcmp(currentEntry->d_name, ".")) != 0 && strcmp(currentEntry->d_name, "..") != 0) {
-                folder.push_back(FilePath(path, currentEntry->d_name).validateAsDirectory());
-            } else {
-                continue;
-            }
-        }
+    for (const auto& it : std::filesystem::directory_iterator(this->cstr())) {
+        folders.push_back(FilePath::fromStr(it.path().c_str()));
     }
-    closedir(dir);
-#endif
 }
 
 void FilePath::enumerateFiles(std::vector<FilePath>& files) const {
-#if _WIN32
-    HANDLE hFind;
-    WIN32_FIND_DATAW ffd;
-
-    FilePath filePath = makeDirectory();
-
-    FilePath anyPath = filePath + "*";
-    wchar* wstr = new wchar[anyPath.length() + 1];
-    anyPath.wstr(wstr);
-    hFind = FindFirstFileW(wstr, &ffd);
-    delete[] wstr;
-
-    PGE_ASSERT(hFind != INVALID_HANDLE_VALUE, "Couldn't enumerate directory (dir: " + str() + "; err: " + PGE::String::fromInt((int)GetLastError()) + ")");
-
-    do {
-        String fileName = ffd.cFileName;
-        if (fileName.equals(".") || fileName.equals("..")) {
-            continue;
-        }
-
-        FilePath newPath = FilePath(filePath, fileName);
-        if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
-            newPath.enumerateFiles(files);
-        } else {
-            files.push_back(newPath);
-        }
-    } while (FindNextFileW(hFind, &ffd));
-
-    FindClose(hFind);
-#else
-    DIR* dir;
-    struct dirent* currentEntry;
-
-    dir = opendir(path.cstr());
-
-    PGE_ASSERT(dir != NULL, "Couldn't open directory (dir: " + str() + ")");
-
-    while ((currentEntry = readdir(dir)) != NULL) {
-        if (currentEntry->d_type == DT_DIR) { // If item is a directory, print its contents.
-//            char path[1024];
-            // Skip '.' and '..'.
-            if ((strcmp(currentEntry->d_name, ".")) != 0 && strcmp(currentEntry->d_name, "..") != 0) {
-                //                printf("[%s]\n","", currentEntry->d_name);
-                FilePath newPath = FilePath(path);
-                newPath = FilePath(newPath, currentEntry->d_name);
-                enumerateFiles(newPath, files);
-            } else {
-                continue;
-            }
-        } else {
-            files.push_back(FilePath(path, currentEntry->d_name));
-        }
+    for (const std::filesystem::directory_entry& it : std::filesystem::recursive_directory_iterator(this->cstr())) {
+        files.push_back(FilePath::fromStr(it.path().c_str()));
     }
-    closedir(dir);
-#endif
 }
 
 void FilePath::readLines(std::vector<String>& lines, bool includeEmptyLines) const {
-    std::ifstream file; file.open(cstr(), std::ios_base::in);
+    std::ifstream file; file.open(cstr());
 
-    char* tempBuf = new char[1024];
-
-    file.getline(tempBuf, sizeof(char) * 1024);
-    while (true) {
-        if (file.eof()) { break; }
-        String str = tempBuf;
-        str = str.replace("\n", "").replace("\r", "");
-        file.getline(tempBuf, sizeof(char) * 1024);
-        if ((!includeEmptyLines) && (str.length() <= 0)) { continue; }
-        lines.push_back(str);
+    String line;
+    while (!file.eof()) {
+        line = String();
+        file >> line;
+        if ((!includeEmptyLines) && (line.length() == 0)) { continue; }
+        lines.push_back(line);
     }
-
-    delete[] tempBuf;
 
     file.close();
 }
 
 void FilePath::readBytes(std::vector<byte>& bytes) const {
-    std::ifstream file;
-    file.open(cstr(), std::ios::ate | std::ios::binary);
+    std::ifstream file; file.open(cstr(), std::ios::ate | std::ios::binary);
     PGE_ASSERT(file.good(), "File is not good (file: \"" + str() + "\")");
     size_t vertSize = (size_t)file.tellg();
     bytes.resize(bytes.size() + vertSize);
@@ -311,8 +208,4 @@ bool FilePath::equals(const FilePath& other) const {
 
 const FilePath PGE::operator+(const FilePath& a, const String& b) {
     return FilePath(a, b);
-}
-
-std::ostream& PGE::operator<<(std::ostream& os, const FilePath& fn) {
-    return os.write(fn.cstr(), fn.byteLength());
 }
