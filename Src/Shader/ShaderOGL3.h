@@ -4,6 +4,7 @@
 #include <Graphics/Graphics.h>
 #include <Shader/Shader.h>
 #include <String/String.h>
+#include <String/Key.h>
 #include <Math/Matrix.h>
 
 #include "../ResourceManagement/OGL3.h"
@@ -25,7 +26,7 @@ class ShaderOGL3 : public Shader {
     private:
         class ConstantOGL3 : public Constant {
             public:
-                ConstantOGL3(Graphics* gfx, const String& nm, int loc);
+                ConstantOGL3(Graphics* gfx, int loc);
 
                 void setValue(const Matrix4x4f& value) override;
                 void setValue(const Vector2f& value) override;
@@ -37,8 +38,6 @@ class ShaderOGL3 : public Shader {
 
                 void setUniform();
 
-                String getName() const;
-
             private:
                 enum class ValueType {
                     MATRIX,
@@ -47,11 +46,11 @@ class ShaderOGL3 : public Shader {
                     VECTOR4F,
                     COLOR,
                     FLOAT,
-                    INT
-                };
+                    INT,
+                    INVALID
+                } valueType = ValueType::INVALID;
                 union Value {
-                    Value();
-                    Matrix4x4f matrixVal;
+                    Matrix4x4f matrixVal = Matrix4x4f::ZERO;
                     Vector2f vector2fVal;
                     Vector3f vector3fVal;
                     Vector4f vector4fVal;
@@ -59,15 +58,14 @@ class ShaderOGL3 : public Shader {
                     float floatVal;
                     int intVal;
                 } val;
-                ValueType valueType;
+
                 Graphics* graphics;
-                String name;
                 int location;
         };
 
-        std::vector<ConstantOGL3> vertexShaderConstants;
-        std::vector<ConstantOGL3> fragmentShaderConstants;
-        std::vector<ConstantOGL3> samplerConstants;
+        std::unordered_map<String::Key, ConstantOGL3> vertexShaderConstants;
+        std::unordered_map<String::Key, ConstantOGL3> fragmentShaderConstants;
+        std::unordered_map<String::Key, ConstantOGL3> samplerConstants;
 
         struct VertexAttrib {
             String name;

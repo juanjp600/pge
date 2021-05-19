@@ -31,16 +31,16 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
     glShaderProgram = resourceManager.addNewResource<GLProgram>(std::vector{ glVertexShader.get(), glFragmentShader.get() });
 
     for (int i = 0; i < (int)vertexUniforms.size(); i++) {
-        vertexShaderConstants.push_back(ConstantOGL3(graphics,vertexUniforms[i].name,glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr())));
+        vertexShaderConstants.emplace(vertexUniforms[i].name, ConstantOGL3(graphics,glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr())));
     }
 
     for (int i = 0; i < (int)fragmentUniforms.size(); i++) {
-        ConstantOGL3 constant = ConstantOGL3(graphics,fragmentUniforms[i].name,glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr()));
+        ConstantOGL3 constant = ConstantOGL3(graphics,glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr()));
         if (fragmentUniforms[i].type.equals("sampler2D")) {
             constant.setValue((int)samplerConstants.size());
-            samplerConstants.push_back(constant);
+            samplerConstants.emplace(fragmentUniforms[i].name, constant);
         } else {
-            fragmentShaderConstants.push_back(constant);
+            fragmentShaderConstants.emplace(fragmentUniforms[i].name, constant);
         }
     }
 
@@ -111,16 +111,16 @@ void ShaderOGL3::useShader() {
         PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + vertexAttribs[i].name + ")");
     }
 
-    for (int i = 0; i < (int)vertexShaderConstants.size(); i++) {
-        vertexShaderConstants[i].setUniform();
+    for (auto& it : vertexShaderConstants) {
+        it.second.setUniform();
     }
 
-    for (int i = 0; i < (int)fragmentShaderConstants.size(); i++) {
-        fragmentShaderConstants[i].setUniform();
+    for (auto& it : fragmentShaderConstants) {
+        it.second.setUniform();
     }
 
-    for (int i = 0; i < (int)samplerConstants.size(); i++) {
-        samplerConstants[i].setUniform();
+    for (auto& it : samplerConstants) {
+        it.second.setUniform();
     }
 }
 
@@ -133,19 +133,17 @@ void ShaderOGL3::unbindGLAttribs() {
 }
 
 Shader::Constant* ShaderOGL3::getVertexShaderConstant(const String& name) {
-    for (int i = 0; i < (int)vertexShaderConstants.size(); i++) {
-        if (vertexShaderConstants[i].getName().equals(name)) {
-            return &vertexShaderConstants[i];
-        }
+    auto it = vertexShaderConstants.find(name);
+    if (it != vertexShaderConstants.end()) {
+        return &it->second;
     }
     return nullptr;
 }
 
 Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
-    for (int i = 0; i < (int)fragmentShaderConstants.size(); i++) {
-        if (fragmentShaderConstants[i].getName().equals(name)) {
-            return &fragmentShaderConstants[i];
-        }
+    auto it = fragmentShaderConstants.find(name);
+    if (it != fragmentShaderConstants.end()) {
+        return &it->second;
     }
     return nullptr;
 }
@@ -189,14 +187,9 @@ void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::
     }
 }
 
-ShaderOGL3::ConstantOGL3::ConstantOGL3(Graphics* gfx, const String& nm, int loc) {
+ShaderOGL3::ConstantOGL3::ConstantOGL3(Graphics* gfx, int loc) {
     graphics = gfx;
-    name = nm;
     location = loc;
-}
-
-ShaderOGL3::ConstantOGL3::Value::Value() {
-    matrixVal = Matrix4x4f();
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Matrix4x4f& value) {
@@ -256,9 +249,5 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
     }
 
     glError = glGetError();
-    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set uniform value (constant: " + getName() + "; GLERROR: " + String::fromInt(glError) +")");
-}
-
-String ShaderOGL3::ConstantOGL3::getName() const {
-    return name;
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set uniform value (GLERROR: " + String::fromInt(glError) +")");
 }
