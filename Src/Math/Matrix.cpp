@@ -84,18 +84,6 @@ Matrix4x4f Matrix4x4f::transpose() const {
     return retVal;
 }
 
-Matrix4x4f Matrix4x4f::product(const Matrix4x4f& other) const {
-    Matrix4x4f retVal = ZERO;
-    for (int i = 0; i < 4; i++) {
-        for (int k = 0; k < 4; k++) {
-            for (int j = 0; j < 4; j++) {
-                retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
-            }
-        }
-    }
-    return retVal;
-}
-
 Vector4f Matrix4x4f::transform(const Vector4f& other) const {
     Vector4f retVal = Vector4f::ZERO;
     retVal.x = other.x*elements[0][0]+other.y*elements[1][0]+other.z*elements[2][0]+other.w*elements[3][0];
@@ -159,7 +147,7 @@ Matrix4x4f Matrix4x4f::rotate(const Vector3f& rotation) {
                                     0.f,0.f,1.f,0.f,
                                     0.f,0.f,0.f,1.f);
     
-    return rollMat.product(pitchMat.product(yawMat));
+    return rollMat * pitchMat * yawMat;
 }
 
 Matrix4x4f Matrix4x4f::constructWorldMat(const Vector3f& position,const Vector3f& scale,const Vector3f& rotation) {
@@ -167,7 +155,7 @@ Matrix4x4f Matrix4x4f::constructWorldMat(const Vector3f& position,const Vector3f
     Matrix4x4f scaleMat = Matrix4x4f::scale(scale);
     Matrix4x4f rotationMat = Matrix4x4f::rotate(rotation);
     
-    return scaleMat.product(rotationMat.product(translationMat));
+    return scaleMat * rotationMat * translationMat;
 }
 
 Matrix4x4f Matrix4x4f::constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector) {
