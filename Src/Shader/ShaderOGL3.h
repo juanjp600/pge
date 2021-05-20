@@ -40,6 +40,7 @@ class ShaderOGL3 : public Shader {
                 String getName() const;
 
             private:
+                // TODO: Remove stinky!
                 enum class ValueType {
                     MATRIX,
                     VECTOR2F,
