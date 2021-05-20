@@ -159,18 +159,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include</IncludePath>
+    <IncludePath>$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include</IncludePath>
+    <IncludePath>$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include</IncludePath>
+    <IncludePath>$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include</IncludePath>
+    <IncludePath>$(WindowsSDK_IncludePath);../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
