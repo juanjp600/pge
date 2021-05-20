@@ -50,7 +50,7 @@ HRESULT compileShader(const wchar_t* input) {
 	};
 	std::vector<InputNameSemanticRelation> inputNameSemanticRelations;
 
-	std::ifstream hlslFile; hlslFile.open(input, std::ios_base::in);
+	std::ifstream hlslFile; hlslFile.open(input);
 	while (!hlslFile.eof()) {
 		InputNameSemanticRelation insr;
 

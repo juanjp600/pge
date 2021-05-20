@@ -12,7 +12,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
 
     filepath = path;
 
-    std::ifstream reflectionInfo; reflectionInfo.open((path.str() + "reflection.dxri").cstr(), std::ios_base::in | std::ios_base::binary);
+    std::ifstream reflectionInfo; reflectionInfo.open((path.str() + "reflection.dxri").cstr(), std::ios_base::binary);
 
     readConstantBuffers(reflectionInfo,vertexConstantBuffers);
 
