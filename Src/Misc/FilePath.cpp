@@ -170,7 +170,7 @@ void FilePath::readLines(std::vector<String>& lines, bool includeEmptyLines) con
 
 void FilePath::readBytes(std::vector<byte>& bytes) const {
     std::ifstream file; file.open(cstr(), std::ios::ate | std::ios::binary);
-    PGE_ASSERT(file.good(), "File is not good (file: \"" + str() + "\")");
+    PGE_ASSERT(file.is_open(), "Could not open (file: \"" + str() + "\")");
     size_t vertSize = (size_t)file.tellg();
     bytes.resize(bytes.size() + vertSize);
     file.seekg(0);
