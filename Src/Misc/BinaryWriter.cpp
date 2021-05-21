@@ -5,7 +5,7 @@
 namespace PGE {
 
 BinaryWriter::BinaryWriter(const FilePath& file) {
-    stream.open(file.cstr(), std::ios_base::binary);
+    stream.open(file.cstr(), std::ios::binary);
     PGE_ASSERT(stream.is_open(), "Could not open file");
 }
 

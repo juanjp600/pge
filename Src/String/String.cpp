@@ -449,10 +449,10 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
         s += (char)ch;
     }
     if (ch == EOF) {
-        is.setstate(std::ios_base::eofbit);
+        is.setstate(std::ios::eofbit);
     // Pure carriage return linebreak are a thing!
     } else if (ch == '\r' && is.rdbuf()->sbumpc() != '\n') {
-        is.rdbuf()->pubseekoff(-1, std::ios_base::cur);
+        is.rdbuf()->pubseekoff(-1, std::ios::cur);
     }
     return is;
 }
@@ -463,10 +463,10 @@ std::wistream& PGE::operator>>(std::wistream& is, String& s) {
         s += (char)ch;
     }
     if (ch == WEOF) {
-        is.setstate(std::ios_base::eofbit);
+        is.setstate(std::ios::eofbit);
     // Pure carriage return linebreak are a thing!
     } else if (ch == L'\r' && is.rdbuf()->sbumpc() != L'\n') {
-        is.rdbuf()->pubseekoff(-1, std::ios_base::cur);
+        is.rdbuf()->pubseekoff(-1, std::ios::cur);
     }
     return is;
 }
