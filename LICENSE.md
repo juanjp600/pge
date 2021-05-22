@@ -1,4 +1,4 @@
-Copyright (c) 2019 Juan Pablo Arce
+Copyright (c) 2019-2021 Juan Pablo Arce, Mark Jarjour, Stefan Koch
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -18,3 +18,4 @@ freely, subject to the following restrictions:
 
    3. This notice may not be removed or altered from any source
    distribution.
+   
