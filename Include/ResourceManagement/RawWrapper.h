@@ -1,5 +1,5 @@
-#ifndef PGE_RAW_WRAPPER_H_INCLUDED
-#define PGE_RAW_WRAPPER_H_INCLUDED
+#ifndef PGE_RAWWRAPPER_H_INCLUDED
+#define PGE_RAWWRAPPER_H_INCLUDED
 
 #include <ResourceManagement/Resource.h>
 
@@ -24,4 +24,4 @@ class RawWrapper : public Resource<T*> {
 
 }
 
-#endif // PGE_RAW_WRAPPER_H_INCLUDED
+#endif // PGE_RAWWRAPPER_H_INCLUDED

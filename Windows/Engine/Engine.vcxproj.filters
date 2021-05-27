@@ -13,17 +13,11 @@
     <Filter Include="Src\Math">
       <UniqueIdentifier>{6842d52a-fff5-48e8-b85d-a53443c9f4c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\IO">
-      <UniqueIdentifier>{81d3cef7-bfd3-4fc2-a2fe-b060a32518cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Material">
       <UniqueIdentifier>{bf014d44-d573-4d35-a02f-18fde17649fc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Mesh">
       <UniqueIdentifier>{0950afbc-52c4-4f23-ac2f-c6a346e67691}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\UserInput">
-      <UniqueIdentifier>{6f3b5972-7d01-4ac1-8eec-8932b36f0ebe}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Texture">
       <UniqueIdentifier>{f3fcd56e-04e1-44d1-8c38-40d54a38f069}</UniqueIdentifier>
@@ -43,9 +37,6 @@
     <Filter Include="Include\Graphics">
       <UniqueIdentifier>{6ca61777-3da8-4774-8ef1-097be111f71b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\IO">
-      <UniqueIdentifier>{cb2f87fe-bb18-46f0-a772-1246f897e509}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\Material">
       <UniqueIdentifier>{57fb4bbc-8ef9-4d50-b731-e6bc7442fe6c}</UniqueIdentifier>
     </Filter>
@@ -63,9 +54,6 @@
     </Filter>
     <Filter Include="Include\Texture">
       <UniqueIdentifier>{a2cf931f-79e6-4f8c-8a55-ecda598805a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\UserInput">
-      <UniqueIdentifier>{dd80612f-92bd-47a2-9b47-b92643a2fc4e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\SysEvents">
       <UniqueIdentifier>{8861551c-1482-4205-8649-e471619f6b87}</UniqueIdentifier>
@@ -103,6 +91,12 @@
     <Filter Include="Include\String">
       <UniqueIdentifier>{484bdd3a-89f5-4fe8-a771-23248a864aaa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Input">
+      <UniqueIdentifier>{cb2f87fe-bb18-46f0-a772-1246f897e509}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Input">
+      <UniqueIdentifier>{81d3cef7-bfd3-4fc2-a2fe-b060a32518cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -110,9 +104,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp">
       <Filter>Src\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\IO\IO.cpp">
-      <Filter>Src\IO</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Math\AABBox.cpp">
       <Filter>Src\Math</Filter>
@@ -134,9 +125,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Material\Material.cpp">
       <Filter>Src\Material</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\UserInput\UserInput.cpp">
-      <Filter>Src\UserInput</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Texture\TextureDX11.cpp">
       <Filter>Src\Texture</Filter>
@@ -167,9 +155,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Init\Init.cpp">
       <Filter>Src\Init</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\IO\IOInternal.h">
-      <Filter>Src\IO</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Misc\FilePath.cpp">
       <Filter>Src\Misc</Filter>
@@ -222,6 +207,12 @@
     <ClCompile Include="..\..\Src\Misc\BinaryWriter.cpp">
       <Filter>Src\Misc</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Input\Input.cpp">
+      <Filter>Src\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Input\InputManager.cpp">
+      <Filter>Src\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -241,9 +232,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Graphics\Graphics.h">
       <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\IO\IO.h">
-      <Filter>Include\IO</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Material\Material.h">
       <Filter>Include\Material</Filter>
@@ -265,9 +253,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Mesh\Mesh.h">
       <Filter>Include\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\UserInput\UserInput.h">
-      <Filter>Include\UserInput</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Texture\Texture.h">
       <Filter>Include\Texture</Filter>
@@ -367,6 +352,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Misc\BinaryWriter.h">
       <Filter>Include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Input\Input.h">
+      <Filter>Include\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Input\InputManager.h">
+      <Filter>Include\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Input\InputManagerInternal.h">
+      <Filter>Src\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

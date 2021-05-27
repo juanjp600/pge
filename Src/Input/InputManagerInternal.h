@@ -1,18 +1,18 @@
-#ifndef PGEINTERNAL_IOINTERNAL_H_INCLUDED
-#define PGEINTERNAL_IOINTERNAL_H_INCLUDED
+#ifndef PGEINTERNAL_INPUTMANAGERINTERNAL_H_INCLUDED
+#define PGEINTERNAL_INPUTMANAGERINTERNAL_H_INCLUDED
 
 #include <unordered_set>
 #include <vector>
 
 #include <SDL.h>
 
-#include <IO/IO.h>
+#include <Input/InputManager.h>
 
 namespace PGE {
 
 class Graphics;
 
-class IOInternal : public IO {
+class InputManagerInternal : public InputManager {
     private:
         Graphics* graphics;
 
@@ -21,7 +21,7 @@ class IOInternal : public IO {
         SysEvents::Subscriber* controllerSubscriber;
         SysEvents::Subscriber* textSubscriber;
 
-        std::unordered_set<UserInput*> inputs;
+        std::unordered_set<Input*> inputs;
         Vector2f mousePos;
         Vector2i mouseWheelPos;
 
@@ -31,13 +31,13 @@ class IOInternal : public IO {
         String textInput;
 
     public:
-        IOInternal(Graphics* gfx);
-        ~IOInternal();
+        InputManagerInternal(Graphics* gfx);
+        ~InputManagerInternal();
 
         void update() override;
 
-        void trackInput(UserInput* input) override;
-        void untrackInput(UserInput* input) override;
+        void trackInput(Input* input) override;
+        void untrackInput(Input* input) override;
 
         int getControllerCount() const override;
         Controller* getController(int index) const override;
@@ -59,13 +59,13 @@ class IOInternal : public IO {
 class ControllerInternal : public Controller {
     private:
         bool removed;
-        const IOInternal* io;
+        const InputManagerInternal* io;
         SDL_GameController* sdlController;
         String name;
 
     public:
         ~ControllerInternal() override;
-        ControllerInternal(const IOInternal* inIo, SDL_GameController* inSdlController);
+        ControllerInternal(const InputManagerInternal* inIo, SDL_GameController* inSdlController);
         const String& getName() const override;
         void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) override;
         SDL_GameController* getSdlController() const;
@@ -74,4 +74,4 @@ class ControllerInternal : public Controller {
 
 }
 
-#endif // PGEINTERNAL_IOINTERNAL_H_INCLUDED
+#endif // PGEINTERNAL_INPUTMANAGERINTERNAL_H_INCLUDED

@@ -1,25 +1,25 @@
-#include <UserInput/UserInput.h>
+#include <Input/Input.h>
 
 using namespace PGE;
 
-UserInput::UserInput() {
+Input::Input() {
     inputDown = false;
     inputHit = false;
 }
 
-bool UserInput::isDown() const {
+bool Input::isDown() const {
     return inputDown;
 }
 
-bool UserInput::isHit() const {
+bool Input::isHit() const {
     return inputHit;
 }
 
-void UserInput::setDown(bool down) {
+void Input::setDown(bool down) {
     inputDown = down;
 }
 
-void UserInput::setHit(bool hit) {
+void Input::setHit(bool hit) {
     inputHit = hit;
 }
 
@@ -27,8 +27,8 @@ KeyboardInput::KeyboardInput(KeyboardInput::Keycode inKeyCode) {
     keyCode = inKeyCode;
 }
 
-UserInput::Device KeyboardInput::getDevice() const {
-    return UserInput::Device::KEYBOARD;
+Input::Device KeyboardInput::getDevice() const {
+    return Input::Device::KEYBOARD;
 }
 
 int KeyboardInput::getKey() const {
@@ -44,8 +44,8 @@ MouseInput::MouseInput(MouseInput::Button inMouseButton) {
     clicks = 0;
 }
 
-UserInput::Device MouseInput::getDevice() const {
-    return UserInput::Device::MOUSE;
+Input::Device MouseInput::getDevice() const {
+    return Input::Device::MOUSE;
 }
 
 int MouseInput::getKey() const {
@@ -72,8 +72,8 @@ ControllerInput::ControllerInput(Controller* ctrlr, ControllerInput::Button inCo
     downThreshold = threshold;
 }
 
-UserInput::Device ControllerInput::getDevice() const {
-    return UserInput::Device::CONTROLLER;
+Input::Device ControllerInput::getDevice() const {
+    return Input::Device::CONTROLLER;
 }
 
 int ControllerInput::getKey() const {

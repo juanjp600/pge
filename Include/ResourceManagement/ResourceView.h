@@ -1,5 +1,5 @@
-#ifndef PGE_RESOURCE_VIEW_H_INCLUDED
-#define PGE_RESOURCE_VIEW_H_INCLUDED
+#ifndef PGE_RESOURCEVIEW_H_INCLUDED
+#define PGE_RESOURCEVIEW_H_INCLUDED
 
 #include <type_traits>
 
@@ -33,4 +33,4 @@ class ResourceView {
 
 }
 
-#endif // PGE_RESOURCE_VIEW_H_INCLUDED
+#endif // PGE_RESOURCEVIEW_H_INCLUDED

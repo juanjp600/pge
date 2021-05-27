@@ -26,8 +26,8 @@
     <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsOGL3.cpp" />
     <ClCompile Include="..\..\Src\Init\Init.cpp" />
-    <ClCompile Include="..\..\Src\IO\IO.cpp" />
-    <ClCompile Include="..\..\Src\IO\IOInternal.h" />
+    <ClCompile Include="..\..\Src\Input\Input.cpp" />
+    <ClCompile Include="..\..\Src\Input\InputManager.cpp" />
     <ClCompile Include="..\..\Src\Material\Material.cpp" />
     <ClCompile Include="..\..\Src\Math\AABBox.cpp" />
     <ClCompile Include="..\..\Src\Math\Line.cpp" />
@@ -57,14 +57,14 @@
     <ClCompile Include="..\..\Src\Texture\TextureDX11.cpp" />
     <ClCompile Include="..\..\Src\Texture\TextureOGL3.cpp" />
     <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp" />
-    <ClCompile Include="..\..\Src\UserInput\UserInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\Color\Color.h" />
     <ClInclude Include="..\..\Include\Exception\Exception.h" />
     <ClInclude Include="..\..\Include\Graphics\Graphics.h" />
     <ClInclude Include="..\..\Include\Init\Init.h" />
-    <ClInclude Include="..\..\Include\IO\IO.h" />
+    <ClInclude Include="..\..\Include\Input\Input.h" />
+    <ClInclude Include="..\..\Include\Input\InputManager.h" />
     <ClInclude Include="..\..\Include\Material\Material.h" />
     <ClInclude Include="..\..\Include\Math\AABBox.h" />
     <ClInclude Include="..\..\Include\Math\Line.h" />
@@ -92,10 +92,10 @@
     <ClInclude Include="..\..\Include\SysEvents\SysEvents.h" />
     <ClInclude Include="..\..\Include\Texture\Texture.h" />
     <ClInclude Include="..\..\Include\Threading\ThreadManager.h" />
-    <ClInclude Include="..\..\Include\UserInput\UserInput.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />
+    <ClInclude Include="..\..\Src\Input\InputManagerInternal.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\DX11.h" />

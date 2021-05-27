@@ -1,22 +1,23 @@
+#include "InputManagerInternal.h"
+
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <AppKit/AppKit.h>
 #include <SDL_syswm.h>
 #endif
 
-#include "../SysEvents/SysEventsInternal.h"
-#include <IO/IO.h>
-#include "IOInternal.h"
 #include <Exception/Exception.h>
 #include <Graphics/Graphics.h>
+
+#include "../SysEvents/SysEventsInternal.h"
 #include "../Graphics/GraphicsInternal.h"
 
 using namespace PGE;
 
-IO* IO::create(Graphics* graphics) {
-    return new IOInternal(graphics);
+InputManager* InputManager::create(Graphics* graphics) {
+    return new InputManagerInternal(graphics);
 }
 
-IOInternal::IOInternal(Graphics* gfx) {
+InputManagerInternal::InputManagerInternal(Graphics* gfx) {
     graphics = gfx;
 
     keyboardSubscriber = new SysEventsInternal::SubscriberInternal(graphics,SysEventsInternal::SubscriberInternal::EventType::KEYBOARD);
@@ -35,7 +36,7 @@ IOInternal::IOInternal(Graphics* gfx) {
     textInput = "";
 }
 
-IOInternal::~IOInternal() {
+InputManagerInternal::~InputManagerInternal() {
     for (int i = 0; i < (int)openControllers.size(); i++) {
         delete openControllers[i];
     }
@@ -52,27 +53,27 @@ IOInternal::~IOInternal() {
     delete textSubscriber;
 }
 
-void IOInternal::startTextInputCapture() const {
+void InputManagerInternal::startTextInputCapture() const {
     SDL_StartTextInput();
 }
 
-void IOInternal::stopTextInputCapture() const {
+void InputManagerInternal::stopTextInputCapture() const {
     SDL_StopTextInput();
 }
 
-const String& IOInternal::getTextInput() const {
+const String& InputManagerInternal::getTextInput() const {
     return textInput;
 }
 
-void IOInternal::setClipboardText(const String& str) const {
+void InputManagerInternal::setClipboardText(const String& str) const {
     SDL_SetClipboardText(str.cstr());
 }
 
-String IOInternal::getClipboardText() const {
+String InputManagerInternal::getClipboardText() const {
     return String(SDL_GetClipboardText());
 }
 
-ControllerInternal::ControllerInternal(const IOInternal* inIo, SDL_GameController* inSdlController) {
+ControllerInternal::ControllerInternal(const InputManagerInternal* inIo, SDL_GameController* inSdlController) {
     removed = false;
     io = inIo;
     sdlController = inSdlController;
@@ -101,12 +102,12 @@ void ControllerInternal::setName(const String& inName) {
     name = inName;
 }
 
-void IOInternal::update() {
+void InputManagerInternal::update() {
     textInput = "";
-    for (UserInput* input : inputs) {
+    for (Input* input : inputs) {
         input->setHit(false);
 
-        if (input->getDevice() == UserInput::Device::MOUSE) {
+        if (input->getDevice() == Input::Device::MOUSE) {
             MouseInput* mouse = (MouseInput*)input;
             mouse->setClickCount(0);
         }
@@ -115,8 +116,8 @@ void IOInternal::update() {
     SDL_Event event;
     while (((SysEventsInternal::SubscriberInternal*)keyboardSubscriber)->popEvent(event)) {
         SDL_KeyboardEvent keyEvent = event.key;
-        for (UserInput* input : inputs) {
-            if (input->getDevice()==UserInput::Device::KEYBOARD) {
+        for (Input* input : inputs) {
+            if (input->getDevice()==Input::Device::KEYBOARD) {
                 KeyboardInput* keyboardInput = (KeyboardInput*)input;
                 if ((int)keyEvent.keysym.sym==(int)keyboardInput->getButton()) {
                     if (event.type == SDL_KEYDOWN) {
@@ -154,8 +155,8 @@ void IOInternal::update() {
             }
         } else if (event.type==SDL_MOUSEBUTTONDOWN || event.type==SDL_MOUSEBUTTONUP) {
             SDL_MouseButtonEvent mouseButtonEvent = event.button;
-            for (UserInput* input : inputs) {
-                if (input->getDevice()==UserInput::Device::MOUSE) {
+            for (Input* input : inputs) {
+                if (input->getDevice()==Input::Device::MOUSE) {
                     MouseInput* mouseInput = (MouseInput*)input;
                     MouseInput::Button button;
                     switch (mouseButtonEvent.button) {
@@ -211,8 +212,8 @@ void IOInternal::update() {
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(deviceEvent.which);
             for (int i = 0; i < (int)openControllers.size(); i++) {
                 if (openControllers[i]->getSdlController() == sdlController) {
-                    for (UserInput* input : inputs) {
-                        if (input->getDevice()==UserInput::Device::CONTROLLER) {
+                    for (Input* input : inputs) {
+                        if (input->getDevice()==Input::Device::CONTROLLER) {
                             ControllerInput* controllerInput = (ControllerInput*)input;
                             if (controllerInput->getController() == openControllers[i]) {
                                 controllerInput->removeController();
@@ -227,8 +228,8 @@ void IOInternal::update() {
         } else if (event.type == SDL_CONTROLLERAXISMOTION) {
             SDL_ControllerAxisEvent axisEvent = event.caxis;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(axisEvent.which);
-            for (UserInput* input : inputs) {
-                if (input->getDevice()==UserInput::Device::CONTROLLER) {
+            for (Input* input : inputs) {
+                if (input->getDevice()==Input::Device::CONTROLLER) {
                     ControllerInput* controllerInput = (ControllerInput*)input;
                     if (controllerInput->getController() == nullptr) { continue; }
                     if (((ControllerInternal*)controllerInput->getController())->getSdlController() != sdlController) { continue; }
@@ -277,8 +278,8 @@ void IOInternal::update() {
         } else if (event.type == SDL_CONTROLLERBUTTONDOWN || event.type == SDL_CONTROLLERBUTTONUP) {
             SDL_ControllerButtonEvent buttonEvent = event.cbutton;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(buttonEvent.which);
-            for (UserInput* input : inputs) {
-                if (input->getDevice()==UserInput::Device::CONTROLLER) {
+            for (Input* input : inputs) {
+                if (input->getDevice()==Input::Device::CONTROLLER) {
                     ControllerInput* controllerInput = (ControllerInput*)input;
                     if (controllerInput->getController() == nullptr) { continue; }
                     if (((ControllerInternal*)controllerInput->getController())->getSdlController() != sdlController) { continue; }
@@ -350,11 +351,11 @@ void IOInternal::update() {
     }
 }
 
-const Vector2f& IOInternal::getMousePosition() const {
+const Vector2f& InputManagerInternal::getMousePosition() const {
     return mousePos;
 }
 
-void IOInternal::setMousePosition(const Vector2f& position) {
+void InputManagerInternal::setMousePosition(const Vector2f& position) {
     if (!graphics->isWindowFocused()) { return; }
 
     mousePos = position;
@@ -377,37 +378,37 @@ void IOInternal::setMousePosition(const Vector2f& position) {
 #endif
 }
 
-void IOInternal::setMouseVisibility(bool visible) {
+void InputManagerInternal::setMouseVisibility(bool visible) {
     SDL_ShowCursor(visible ? 1 : 0);
 }
 
-Vector2i IOInternal::getMouseWheelDelta() {
+Vector2i InputManagerInternal::getMouseWheelDelta() {
     Vector2i mwp = mouseWheelPos;
     mouseWheelPos = Vector2i::ZERO;
     return mwp;
 }
 
 // TODO: Keep all contents unique to increase performance?
-void IOInternal::trackInput(UserInput* input) {
+void InputManagerInternal::trackInput(Input* input) {
     inputs.emplace(input);
 }
 
-void IOInternal::untrackInput(UserInput* input) {
-    std::unordered_set<UserInput*>::iterator it = inputs.find(input);
+void InputManagerInternal::untrackInput(Input* input) {
+    std::unordered_set<Input*>::iterator it = inputs.find(input);
     if (it != inputs.end()) {
         inputs.erase(it);
     }
 }
 
-int IOInternal::getControllerCount() const {
+int InputManagerInternal::getControllerCount() const {
     return openControllers.size();
 }
 
-Controller* IOInternal::getController(int index) const {
+Controller* InputManagerInternal::getController(int index) const {
     return index >= 0 && index < (int)openControllers.size() ? openControllers[index] : nullptr;
 }
 
-bool IOInternal::isControllerValid(Controller* controller) const {
+bool InputManagerInternal::isControllerValid(Controller* controller) const {
     for (int i = 0; i < (int)openControllers.size(); i++) {
         if (openControllers[i]==controller) { return true; }
     }

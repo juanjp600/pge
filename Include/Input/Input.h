@@ -6,7 +6,7 @@
 
 namespace PGE {
 
-class UserInput {
+class Input {
     public:
         enum class Device {
             KEYBOARD,
@@ -14,7 +14,7 @@ class UserInput {
             CONTROLLER
         };
 
-        virtual ~UserInput() = default;
+        virtual ~Input() = default;
 
         virtual Device getDevice() const = 0;
         virtual int getKey() const = 0;
@@ -25,13 +25,13 @@ class UserInput {
         void setHit(bool hit);
 
     protected:
-        UserInput();
+        Input();
 
         bool inputDown;
         bool inputHit;
 };
 
-class KeyboardInput : public UserInput {
+class KeyboardInput : public Input {
     public:
         //carbon copy of SDL's keycode enum
         enum class Keycode {
@@ -286,7 +286,7 @@ class KeyboardInput : public UserInput {
         Keycode keyCode;
 };
 
-class MouseInput : public UserInput {
+class MouseInput : public Input {
     public:
         enum class Button {
             LEFT,
@@ -319,7 +319,7 @@ class Controller {
         virtual void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) = 0;
 };
 
-class ControllerInput : public UserInput {
+class ControllerInput : public Input {
     public:
         enum class Button {
             INVALID = -1,

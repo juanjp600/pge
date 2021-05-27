@@ -18,7 +18,7 @@ Color::Color() {
 }
 
 Color::Color(byte r, byte g, byte b, byte a) {
-    red = ((float)r)/255.f; green = ((float)g)/255.f; blue = ((float)b)/255.f; alpha = ((float)a)/255.f;
+    red = r/255.f; green = g/255.f; blue = b/255.f; alpha = a/255.f;
     validateColor(*this);
 }
 

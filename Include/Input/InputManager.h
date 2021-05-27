@@ -1,25 +1,26 @@
-#ifndef PGE_IO_H_INCLUDED
-#define PGE_IO_H_INCLUDED
+#ifndef PGE_INPUTMANAGER_H_INCLUDED
+#define PGE_INPUTMANAGER_H_INCLUDED
 
 #include <set>
 
 #include <SysEvents/SysEvents.h>
-#include <UserInput/UserInput.h>
 #include <Math/Vector.h>
+
+#include "Input.h"
 
 namespace PGE {
 
 class Graphics;
 
-class IO {
+class InputManager {
     public:
-        static IO* create(Graphics* gfx);
-        virtual ~IO() = default;
+        static InputManager* create(Graphics* gfx);
+        virtual ~InputManager() = default;
 
         virtual void update() = 0;
 
-        virtual void trackInput(UserInput* input) = 0;
-        virtual void untrackInput(UserInput* input) = 0;
+        virtual void trackInput(Input* input) = 0;
+        virtual void untrackInput(Input* input) = 0;
 
         virtual int getControllerCount() const = 0;
         virtual Controller* getController(int index) const = 0;
@@ -40,5 +41,4 @@ class IO {
 
 }
 
-#endif // PGE_IO_H_INCLUDED
-
+#endif // PGE_INPUTMANAGER_H_INCLUDED
