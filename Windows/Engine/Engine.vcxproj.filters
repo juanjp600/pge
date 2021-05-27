@@ -13,9 +13,6 @@
     <Filter Include="Src\Math">
       <UniqueIdentifier>{6842d52a-fff5-48e8-b85d-a53443c9f4c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Misc">
-      <UniqueIdentifier>{f37b0fe0-35f1-41cb-bca8-97ab7d2e6a98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include">
       <UniqueIdentifier>{5d791677-02a4-46b9-8db9-f707bf9673f0}</UniqueIdentifier>
     </Filter>
@@ -27,9 +24,6 @@
     </Filter>
     <Filter Include="Include\Math">
       <UniqueIdentifier>{f43d4785-3e59-4096-9618-e32b4f1e535e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\Misc">
-      <UniqueIdentifier>{48d11694-f8d3-4188-ae83-fe3f369d444c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\SysEvents">
       <UniqueIdentifier>{8861551c-1482-4205-8649-e471619f6b87}</UniqueIdentifier>
@@ -94,6 +88,12 @@
     <Filter Include="Src\Graphics\Material">
       <UniqueIdentifier>{1f2b8b8d-894d-443d-bb27-c6924debd23d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Info">
+      <UniqueIdentifier>{b7024983-2d50-4c71-b3a1-bc03f13d54d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Info">
+      <UniqueIdentifier>{a53ee220-cda5-43e9-83c4-4c225069fd0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -153,9 +153,6 @@
     <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp">
       <Filter>Src\ResourceManagement</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Misc\Info.cpp">
-      <Filter>Src\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\String\String.cpp">
       <Filter>Src\String</Filter>
     </ClCompile>
@@ -209,6 +206,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\Material\Material.cpp">
       <Filter>Src\Graphics\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Info\Info.cpp">
+      <Filter>Src\Info</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,9 +287,6 @@
     <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h">
       <Filter>Src\ResourceManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\Info.h">
-      <Filter>Include\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\String\String.h">
       <Filter>Include\String</Filter>
     </ClInclude>
@@ -358,6 +355,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Graphics\Texture\TextureOGL3.h">
       <Filter>Src\Graphics\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Info\Info.h">
+      <Filter>Include\Info</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
