@@ -155,7 +155,7 @@ void FilePath::enumerateFiles(std::vector<FilePath>& files) const {
 }
 
 void FilePath::readLines(std::vector<String>& lines, bool includeEmptyLines) const {
-    std::ifstream file; file.open(cstr());
+    std::ifstream file(cstr());
 
     String line;
     while (!file.eof()) {
@@ -169,7 +169,7 @@ void FilePath::readLines(std::vector<String>& lines, bool includeEmptyLines) con
 }
 
 void FilePath::readBytes(std::vector<byte>& bytes) const {
-    std::ifstream file; file.open(cstr(), std::ios::ate | std::ios::binary);
+    std::ifstream file(cstr(), std::ios::ate | std::ios::binary);
     PGE_ASSERT(file.is_open(), "Could not open (file: \"" + str() + "\")");
     size_t vertSize = (size_t)file.tellg();
     bytes.resize(bytes.size() + vertSize);
