@@ -194,7 +194,9 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <PreBuildEvent>
-      <Command>cd ../../Src/Info/
+      <Command>cd ../../Src/
+mkdir Info
+cd Info
 for /F "tokens=*" %%a in ('git config --get remote.origin.url') do set GIT_URL=%%a
 echo %GIT_URL%
 for /F "tokens=*" %%a in ('git branch --show-current') do set GIT_BRANCH=%%a
@@ -213,7 +215,7 @@ echo const String Info::REPO_LINK = "%GIT_URL%";
 echo const String Info::BRANCH = "%GIT_BRANCH%";
 echo const String Info::COMMIT = "%GIT_COMMIT%";
 ) &gt; Info.cpp
-echo Generated %CD%\Info.cpp!</Command>
+echo Generated %25CD%\Info.cpp!</Command>
     </PreBuildEvent>
     <Lib>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;$(SolutionDir)$(Platform)/$(Configuration)/glad.lib;$(SolutionDir)$(Platform)/$(Configuration)/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -237,7 +239,9 @@ echo Generated %CD%\Info.cpp!</Command>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <PreBuildEvent>
-      <Command>cd ../../Src/Info/
+      <Command>cd ../../Src/
+mkdir Info
+cd Info
 for /F "tokens=*" %%a in ('git config --get remote.origin.url') do set GIT_URL=%%a
 echo %GIT_URL%
 for /F "tokens=*" %%a in ('git branch --show-current') do set GIT_BRANCH=%%a
@@ -256,7 +260,7 @@ echo const String Info::REPO_LINK = "%GIT_URL%";
 echo const String Info::BRANCH = "%GIT_BRANCH%";
 echo const String Info::COMMIT = "%GIT_COMMIT%";
 ) &gt; Info.cpp
-echo Generated %CD%\Info.cpp!</Command>
+echo Generated %25CD%\Info.cpp!</Command>
     </PreBuildEvent>
     <Lib>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;$(SolutionDir)$(Platform)/$(Configuration)/glad.lib;$(SolutionDir)$(Platform)/$(Configuration)/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -285,7 +289,9 @@ echo Generated %CD%\Info.cpp!</Command>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>cd ../../Src/Info/
+      <Command>cd ../../Src/
+mkdir Info
+cd Info
 for /F "tokens=*" %%a in ('git config --get remote.origin.url') do set GIT_URL=%%a
 echo %GIT_URL%
 for /F "tokens=*" %%a in ('git branch --show-current') do set GIT_BRANCH=%%a
@@ -304,7 +310,7 @@ echo const String Info::REPO_LINK = "%GIT_URL%";
 echo const String Info::BRANCH = "%GIT_BRANCH%";
 echo const String Info::COMMIT = "%GIT_COMMIT%";
 ) &gt; Info.cpp
-echo Generated %CD%\Info.cpp!</Command>
+echo Generated %25CD%\Info.cpp!</Command>
     </PreBuildEvent>
     <Lib>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;$(SolutionDir)$(Platform)/$(Configuration)/glad.lib;$(SolutionDir)$(Platform)/$(Configuration)/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -333,7 +339,9 @@ echo Generated %CD%\Info.cpp!</Command>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>cd ../../Src/Info/
+      <Command>cd ../../Src/
+mkdir Info
+cd Info
 for /F "tokens=*" %%a in ('git config --get remote.origin.url') do set GIT_URL=%%a
 echo %GIT_URL%
 for /F "tokens=*" %%a in ('git branch --show-current') do set GIT_BRANCH=%%a
@@ -352,7 +360,7 @@ echo const String Info::REPO_LINK = "%GIT_URL%";
 echo const String Info::BRANCH = "%GIT_BRANCH%";
 echo const String Info::COMMIT = "%GIT_COMMIT%";
 ) &gt; Info.cpp
-echo Generated %CD%\Info.cpp!</Command>
+echo Generated %25CD%\Info.cpp!</Command>
     </PreBuildEvent>
     <Lib>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;$(SolutionDir)$(Platform)/$(Configuration)/glad.lib;$(SolutionDir)$(Platform)/$(Configuration)/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
