@@ -22,8 +22,8 @@ class BinaryWriter {
         void writeByte(byte b);
         void writeBytes(byte* bytes, int count);
         void writeBoolean(bool b);
-        void writeInt(int32_t i);
-        void writeUInt(uint32_t u);
+        void writeInt(i32 i);
+        void writeUInt(u32 u);
         void writeFloat(float f);
         void writeDouble(double d);
         void writeNullTerminatedString(const String& str);

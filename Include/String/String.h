@@ -6,6 +6,8 @@
 #include <string>
 #include <regex>
 
+#include <Types/Types.h>
+
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/NSString.h>
 #endif
@@ -127,7 +129,7 @@ class String {
 
         //String unHex() const;
 
-        uint64_t getHashCode() const;
+        u64 getHashCode() const;
 
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
@@ -139,7 +141,7 @@ class String {
 
         // Lazily evaluated.
         mutable bool _hashCodeEvaluted;
-        mutable uint64_t _hashCode;
+        mutable u64 _hashCode;
         mutable int _strLength;
 
         int strByteLength = -1;

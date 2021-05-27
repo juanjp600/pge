@@ -21,7 +21,7 @@ class WindowEventSubscriber : public Resource<SysEvents::Subscriber*> {
 
 class SDLWindow : public Resource<SDL_Window*> {
     public:
-        SDLWindow(const String& title, int width, int height, uint32_t flags);
+        SDLWindow(const String& title, int width, int height, u32 flags);
         ~SDLWindow();
 };
 

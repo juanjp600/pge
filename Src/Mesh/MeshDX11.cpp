@@ -41,11 +41,11 @@ void MeshDX11::updateInternalData() {
                     memcpy(&(dxVertexData[offset]),&(prop.value.floatVal),sizeof(float));
                 } break;
                 case Vertex::Property::Type::UINT: {
-                    if (recalculateStride) { stride += sizeof(uint32_t); }
+                    if (recalculateStride) { stride += sizeof(u32); }
                     int offset = (int)dxVertexData.size();
-                    dxVertexData.resize(offset+sizeof(uint32_t));
-                    uint32_t uint = prop.value.uintVal;
-                    memcpy(&(dxVertexData[offset]),&uint,sizeof(uint32_t));
+                    dxVertexData.resize(offset+sizeof(u32));
+                    u32 uint = prop.value.uintVal;
+                    memcpy(&(dxVertexData[offset]),&uint,sizeof(u32));
                 } break;
                 case Vertex::Property::Type::VECTOR2F: {
                     if (recalculateStride) { stride += sizeof(float)*2; }

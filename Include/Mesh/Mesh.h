@@ -5,7 +5,7 @@
 
 #include <String/Key.h>
 
-#include <Misc/Byte.h>
+#include <Types/Types.h>
 #include <Material/Material.h>
 #include <Color/Color.h>
 #include <Math/Vector.h>

@@ -15,7 +15,7 @@ class String::Key {
         Key(const String& str) : hash(str.getHashCode()) { }
 
     private:
-        uint64_t hash;
+        u64 hash;
 };
 
 class String::RedundantKey {
@@ -34,7 +34,7 @@ class String::RedundantKey {
     private:
         String str;
 
-        uint64_t hash() const {
+        u64 hash() const {
             return str.getHashCode();
         }
 };
@@ -55,7 +55,7 @@ class String::SafeKey {
     private:
         String str;
 
-        uint64_t hash() const {
+        u64 hash() const {
             return str.getHashCode();
         }
 

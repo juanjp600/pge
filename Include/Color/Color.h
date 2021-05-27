@@ -1,7 +1,7 @@
 #ifndef PGE_COLOR_H_INCLUDED
 #define PGE_COLOR_H_INCLUDED
 
-#include <Misc/Byte.h>
+#include <Types/Types.h>
 
 namespace PGE {
 

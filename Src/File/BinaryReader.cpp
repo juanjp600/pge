@@ -1,4 +1,4 @@
-#include <Misc/BinaryReader.h>
+#include <File/BinaryReader.h>
 
 namespace PGE {
 
@@ -32,12 +32,12 @@ byte BinaryReader::readByte() {
     return read<byte>();
 }
 
-int32_t BinaryReader::readInt() {
-    return read<int32_t>();
+i32 BinaryReader::readInt() {
+    return read<i32>();
 }
 
-uint32_t BinaryReader::readUInt() {
-    return read<uint32_t>();
+u32 BinaryReader::readUInt() {
+    return read<u32>();
 }
 
 float BinaryReader::readFloat() {

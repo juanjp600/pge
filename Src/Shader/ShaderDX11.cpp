@@ -300,8 +300,8 @@ void ShaderDX11::ConstantDX11::setValue(float value) {
 }
 
 void ShaderDX11::ConstantDX11::setValue(int value) {
-    uint32_t valUi32 = value;
-    memcpy(constantBuffer->getData()+offset,&valUi32,sizeof(uint32_t));
+    u32 valUi32 = value;
+    memcpy(constantBuffer->getData()+offset,&valUi32,sizeof(u32));
     constantBuffer->markAsDirty();
 }
 

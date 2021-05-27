@@ -22,8 +22,8 @@ class BinaryReader {
         byte readByte();
         byte* readBytes(int count);
         bool readBoolean();
-        int32_t readInt();
-        uint32_t readUInt();
+        i32 readInt();
+        u32 readUInt();
         float readFloat();
         double readDouble();
         String readNullTerminatedString();

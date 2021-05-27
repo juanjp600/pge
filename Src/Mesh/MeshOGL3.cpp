@@ -46,9 +46,9 @@ void MeshOGL3::updateInternalData() {
                 } break;
                 case Vertex::Property::Type::UINT: {
                     int offset = (int)glVertexData.size();
-                    glVertexData.resize(offset+sizeof(uint32_t));
-                    uint32_t uint = prop.value.uintVal;
-                    memcpy(&(glVertexData[offset]),&uint,sizeof(uint32_t));
+                    glVertexData.resize(offset+sizeof(u32));
+                    u32 uint = prop.value.uintVal;
+                    memcpy(&(glVertexData[offset]),&uint,sizeof(u32));
                 } break;
                 case Vertex::Property::Type::VECTOR2F: {
                     int offset = (int)glVertexData.size();

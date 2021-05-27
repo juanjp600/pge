@@ -103,6 +103,9 @@
     <Filter Include="Src\File">
       <UniqueIdentifier>{0292d1d9-692d-48d0-9413-9da4458418a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Types">
+      <UniqueIdentifier>{15705217-b986-40f0-b840-c8152866cc6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -335,9 +338,6 @@
     <ClInclude Include="..\..\Src\String\Unicode.h">
       <Filter>Src\String</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\Byte.h">
-      <Filter>Include\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\String\Key.h">
       <Filter>Include\String</Filter>
     </ClInclude>
@@ -367,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\File\FileWriter.h">
       <Filter>Include\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Types\Types.h">
+      <Filter>Include\Types</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

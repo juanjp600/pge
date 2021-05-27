@@ -28,7 +28,7 @@ class Graphics {
 
         static const std::list<Graphics*>& getActiveInstances();
 
-        Graphics(const String& name, int w, int h, bool fs, uint32_t windowFlags);
+        Graphics(const String& name, int w, int h, bool fs, u32 windowFlags);
         virtual ~Graphics();
         
         virtual void update();

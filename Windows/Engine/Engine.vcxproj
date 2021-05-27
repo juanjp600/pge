@@ -79,7 +79,6 @@
     <ClInclude Include="..\..\Include\Math\Rectangle.h" />
     <ClInclude Include="..\..\Include\Math\Vector.h" />
     <ClInclude Include="..\..\Include\Mesh\Mesh.h" />
-    <ClInclude Include="..\..\Include\Misc\Byte.h" />
     <ClInclude Include="..\..\Include\Misc\Info.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\RawWrapper.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h" />
@@ -92,6 +91,7 @@
     <ClInclude Include="..\..\Include\SysEvents\SysEvents.h" />
     <ClInclude Include="..\..\Include\Texture\Texture.h" />
     <ClInclude Include="..\..\Include\Threading\ThreadManager.h" />
+    <ClInclude Include="..\..\Include\Types\Types.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />

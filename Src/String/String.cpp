@@ -7,12 +7,11 @@
 #import <Foundation/Foundation.h>
 #endif
 
-#include <Misc/Byte.h>
 #include <Exception/Exception.h>
 
 using namespace PGE;
 
-constexpr uint64_t FNV_SEED = 0xcbf29ce484222325;
+constexpr u64 FNV_SEED = 0xcbf29ce484222325;
 
 //
 // Utility
@@ -471,7 +470,7 @@ std::wistream& PGE::operator>>(std::wistream& is, String& s) {
     return is;
 }
 
-uint64_t String::getHashCode() const {
+u64 String::getHashCode() const {
     if (!_hashCodeEvaluted) {
         // FNV-1a
         // Public domain

@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include <Types/Types.h>
 #include <Exception/Exception.h>
 #include "../SysEvents/SysEventsInternal.h"
 
@@ -13,7 +14,7 @@ const std::list<Graphics*>& Graphics::getActiveInstances() {
     return activeGraphics;
 }
 
-Graphics::Graphics(const String& name, int w, int h, bool fs, uint32_t windowFlags) : resourceManager(2) {
+Graphics::Graphics(const String& name, int w, int h, bool fs, u32 windowFlags) : resourceManager(2) {
     caption = name;
     width = w; height = h; fullscreen = fs;
 

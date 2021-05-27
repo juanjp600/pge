@@ -1,7 +1,7 @@
 #ifndef PGE_RANDOM_H_INCLUDED
 #define PGE_RANDOM_H_INCLUDED
 
-#include <cstdint>
+#include <Types/Types.h>
 
 namespace PGE {
 
@@ -11,16 +11,16 @@ namespace PGE {
 class Random {
     public:
         Random();
-        Random(uint64_t seed);
+        Random(u64 seed);
 
-        uint32_t next();
+        u32 next();
         bool nextBool();
         float nextFloat();
-        uint32_t nextInt(uint32_t max);
-        uint32_t nextInt(uint32_t min, uint32_t max);
+        u32 nextInt(u32 max);
+        u32 nextInt(u32 min, u32 max);
 
     private:
-        uint32_t state[4];
+        u32 state[4];
 };
 
 }

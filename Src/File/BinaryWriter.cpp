@@ -1,4 +1,4 @@
-#include <Misc/BinaryWriter.h>
+#include <File/BinaryWriter.h>
 
 // TODO: Add more types to this and reader?
 
@@ -30,11 +30,11 @@ void BinaryWriter::writeByte(byte b) {
     write(b);
 }
 
-void BinaryWriter::writeInt(int32_t i) {
+void BinaryWriter::writeInt(i32 i) {
     write(i);
 }
 
-void BinaryWriter::writeUInt(uint32_t u) {
+void BinaryWriter::writeUInt(u32 u) {
     write(u);
 }
 
