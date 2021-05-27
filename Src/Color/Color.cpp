@@ -17,7 +17,7 @@ Color::Color() {
     red = 1.f; green = 1.f; blue = 1.f; alpha = 1.f;
 }
 
-Color::Color(int r, int g, int b, int a) {
+Color::Color(byte r, byte g, byte b, byte a) {
     red = ((float)r)/255.f; green = ((float)g)/255.f; blue = ((float)b)/255.f; alpha = ((float)a)/255.f;
     validateColor(*this);
 }
@@ -71,38 +71,38 @@ bool Color::operator!=(const Color& other) const {
     return red != other.red || blue != other.blue || green != other.green || alpha != other.alpha;
 }
 
-int Color::getRedInt() const {
-    return (int)(red*255.f);
+byte Color::getRed() const {
+    return (byte)(red*255.f);
 }
 
-int Color::getGreenInt() const {
-    return (int)(green*255.f);
+byte Color::getGreen() const {
+    return (byte)(green*255.f);
 }
 
-int Color::getBlueInt() const {
-    return (int)(blue*255.f);
+byte Color::getBlue() const {
+    return (byte)(blue*255.f);
 }
 
-int Color::getAlphaInt() const {
-    return (int)(alpha*255.f);
+byte Color::getAlpha() const {
+    return (byte)(alpha*255.f);
 }
 
-void Color::setRedInt(int r) {
+void Color::setRed(byte r) {
     red = ((float)r)/255.f;
     PGE_ASSERT_COLOR(*this, red);
 }
 
-void Color::setGreenInt(int g) {
+void Color::setGreen(byte g) {
     green = ((float)g)/255.f;
     PGE_ASSERT_COLOR(*this, green);
 }
 
-void Color::setBlueInt(int b) {
+void Color::setBlue(byte b) {
     blue = ((float)b)/255.f;
     PGE_ASSERT_COLOR(*this, blue);
 }
 
-void Color::setAlphaInt(int a) {
+void Color::setAlpha(byte a) {
     alpha = ((float)a)/255.f;
     PGE_ASSERT_COLOR(*this, alpha);
 }

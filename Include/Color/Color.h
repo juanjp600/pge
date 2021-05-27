@@ -1,12 +1,14 @@
 #ifndef PGE_COLOR_H_INCLUDED
 #define PGE_COLOR_H_INCLUDED
 
+#include <Misc/Byte.h>
+
 namespace PGE {
 
 class Color {
     public:
         Color();
-        Color(int r, int g, int b, int a = 255);
+        Color(byte r, byte g, byte b, byte a = 255);
         Color(float r, float g, float b, float a = 1.f);
 
         static Color fromHSV(float h, float s, float v, float a = 1.f);
@@ -14,8 +16,8 @@ class Color {
         bool operator==(const Color& other) const;
         bool operator!=(const Color& other) const;
 
-        int getRedInt() const; int getGreenInt() const; int getBlueInt() const; int getAlphaInt() const;
-        void setRedInt(int r); void setGreenInt(int g); void setBlueInt(int b); void setAlphaInt(int a);
+        byte getRed() const; byte getGreen() const; byte getBlue() const; byte getAlpha() const;
+        void setRed(byte r); void setGreen(byte g); void setBlue(byte b); void setAlpha(byte a);
 
         float red; float green; float blue; float alpha;
 
