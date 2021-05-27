@@ -1,12 +1,12 @@
 #include "GraphicsInternal.h"
 #include "GraphicsDX11.h"
 #include "GraphicsOGL3.h"
-#include "../Shader/ShaderDX11.h"
-#include "../Shader/ShaderOGL3.h"
-#include "../Mesh/MeshDX11.h"
-#include "../Mesh/MeshOGL3.h"
-#include "../Texture/TextureDX11.h"
-#include "../Texture/TextureOGL3.h"
+#include "Shader/ShaderDX11.h"
+#include "Shader/ShaderOGL3.h"
+#include "Mesh/MeshDX11.h"
+#include "Mesh/MeshOGL3.h"
+#include "Texture/TextureDX11.h"
+#include "Texture/TextureOGL3.h"
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>

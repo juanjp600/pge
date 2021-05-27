@@ -1,7 +1,7 @@
 #include "TextureDX11.h"
 #include <Exception/Exception.h>
 #include <Threading/ThreadManager.h>
-#include "../Graphics/GraphicsDX11.h"
+#include "../GraphicsDX11.h"
 
 using namespace PGE;
 

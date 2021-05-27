@@ -1,6 +1,6 @@
 #include <Graphics/Graphics.h>
-#include "../Graphics/GraphicsOGL3.h"
-#include <Texture/Texture.h>
+#include "../GraphicsOGL3.h"
+#include <Graphics/Texture.h>
 #include "TextureOGL3.h"
 #include <Exception/Exception.h>
 

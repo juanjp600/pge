@@ -3,9 +3,9 @@
 #include <SDL_syswm.h>
 #include <stdlib.h>
 
-#include "../Shader/ShaderDX11.h"
-#include "../Mesh/MeshDX11.h"
-#include "../Texture/TextureDX11.h"
+#include "Shader/ShaderDX11.h"
+#include "Mesh/MeshDX11.h"
+#include "Texture/TextureDX11.h"
 
 using namespace PGE;
 

@@ -1,11 +1,11 @@
 #ifndef PGEINTERNAL_TEXTUREOGL3_H_INCLUDED
 #define PGEINTERNAL_TEXTUREOGL3_H_INCLUDED
 
-#include <Texture/Texture.h>
+#include <Graphics/Texture.h>
 #include <Threading/ThreadManager.h>
 
-#include "../ResourceManagement/OGL3.h"
-#include "../ResourceManagement/ResourceManagerOGL3.h"
+#include "../../ResourceManagement/OGL3.h"
+#include "../../ResourceManagement/ResourceManagerOGL3.h"
 
 namespace PGE {
 

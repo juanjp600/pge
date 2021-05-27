@@ -1,7 +1,7 @@
 #ifndef PGEINTERNAL_MESH_DX11_H_INCLUDED
 #define PGEINTERNAL_MESH_DX11_H_INCLUDED
 
-#include <Mesh/Mesh.h>
+#include <Graphics/Mesh.h>
 
 #include <vector>
 
@@ -11,7 +11,7 @@
 
 #include <Windows.h>
 
-#include "../ResourceManagement/DX11.h"
+#include "../../ResourceManagement/DX11.h"
 
 namespace PGE {
 

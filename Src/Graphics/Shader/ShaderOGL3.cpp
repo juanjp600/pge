@@ -2,7 +2,7 @@
 
 #include <Graphics/Graphics.h>
 #include <Exception/Exception.h>
-#include "../Graphics/GraphicsOGL3.h"
+#include "../GraphicsOGL3.h"
 
 using namespace PGE;
 

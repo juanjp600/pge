@@ -1,10 +1,10 @@
-#include <Mesh/Mesh.h>
+#include <Graphics/Mesh.h>
 #include "MeshOGL3.h"
 #include <Graphics/Graphics.h>
-#include "../Graphics/GraphicsOGL3.h"
-#include <Shader/Shader.h>
+#include "../GraphicsOGL3.h"
+#include <Graphics/Shader.h>
 #include "../Shader/ShaderOGL3.h"
-#include <Texture/Texture.h>
+#include <Graphics/Texture.h>
 #include "../Texture/TextureOGL3.h"
 #include <Exception/Exception.h>
 

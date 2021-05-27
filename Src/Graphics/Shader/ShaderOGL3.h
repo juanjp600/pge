@@ -2,13 +2,13 @@
 #define PGEINTERNAL_SHADEROGL3_H_INCLUDED
 
 #include <Graphics/Graphics.h>
-#include <Shader/Shader.h>
+#include <Graphics/Shader.h>
 #include <String/String.h>
 #include <String/Key.h>
 #include <Math/Matrix.h>
 
-#include "../ResourceManagement/OGL3.h"
-#include "../ResourceManagement/ResourceManagerOGL3.h"
+#include "../../ResourceManagement/OGL3.h"
+#include "../../ResourceManagement/ResourceManagerOGL3.h"
 
 namespace PGE {
 

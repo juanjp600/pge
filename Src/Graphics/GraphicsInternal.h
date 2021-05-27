@@ -8,8 +8,8 @@
 #endif
 
 #include <File/FilePath.h>
-#include <Mesh/Mesh.h>
-#include <Texture/Texture.h>
+#include <Graphics/Mesh.h>
+#include <Graphics/Texture.h>
 
 #define PGE_GFX_OBJ_DEC \
 Shader* loadShader(const FilePath& path) override; \

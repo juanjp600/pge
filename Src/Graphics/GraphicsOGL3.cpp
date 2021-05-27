@@ -1,8 +1,8 @@
 #include "GraphicsOGL3.h"
 
-#include "../Shader/ShaderOGL3.h"
-#include "../Mesh/MeshOGL3.h"
-#include "../Texture/TextureOGL3.h"
+#include "Shader/ShaderOGL3.h"
+#include "Mesh/MeshOGL3.h"
+#include "Texture/TextureOGL3.h"
 
 #include <glad/gl.h>
 

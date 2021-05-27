@@ -8,10 +8,10 @@
 #include <d3d11.h>
 
 #include <ResourceManagement/ResourceView.h>
-#include <Shader/Shader.h>
+#include <Graphics/Shader.h>
 #include <String/String.h>
 
-#include "../Graphics/GraphicsDX11.h"
+#include "../GraphicsDX11.h"
 
 namespace PGE {
 

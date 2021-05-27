@@ -1,9 +1,9 @@
 #include "MeshDX11.h"
 #include <Graphics/Graphics.h>
-#include "../Graphics/GraphicsDX11.h"
-#include <Shader/Shader.h>
+#include "../GraphicsDX11.h"
+#include <Graphics/Shader.h>
 #include "../Shader/ShaderDX11.h"
-#include <Texture/Texture.h>
+#include <Graphics/Texture.h>
 #include "../Texture/TextureDX11.h"
 #include <Exception/Exception.h>
 

@@ -1,9 +1,9 @@
-#include <Material/Material.h>
+#include <Graphics/Material.h>
 
 using namespace PGE;
 
-#include <Shader/Shader.h>
-#include <Texture/Texture.h>
+#include <Graphics/Shader.h>
+#include <Graphics/Texture.h>
 
 Material::Material(Shader* sh, const std::vector<Texture*>& t, bool opaq) {
     shader = sh; textures = t; opaque = opaq;

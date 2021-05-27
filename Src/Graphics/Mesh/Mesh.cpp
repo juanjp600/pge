@@ -1,4 +1,4 @@
-#include <Mesh/Mesh.h>
+#include <Graphics/Mesh.h>
 
 #include <Graphics/Graphics.h>
 #include <Exception/Exception.h>

@@ -13,18 +13,6 @@
     <Filter Include="Src\Math">
       <UniqueIdentifier>{6842d52a-fff5-48e8-b85d-a53443c9f4c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Material">
-      <UniqueIdentifier>{bf014d44-d573-4d35-a02f-18fde17649fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Mesh">
-      <UniqueIdentifier>{0950afbc-52c4-4f23-ac2f-c6a346e67691}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Texture">
-      <UniqueIdentifier>{f3fcd56e-04e1-44d1-8c38-40d54a38f069}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Shader">
-      <UniqueIdentifier>{4ade2d4f-3bde-4d04-9b95-ddc1a3154d8e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Misc">
       <UniqueIdentifier>{f37b0fe0-35f1-41cb-bca8-97ab7d2e6a98}</UniqueIdentifier>
     </Filter>
@@ -37,23 +25,11 @@
     <Filter Include="Include\Graphics">
       <UniqueIdentifier>{6ca61777-3da8-4774-8ef1-097be111f71b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Material">
-      <UniqueIdentifier>{57fb4bbc-8ef9-4d50-b731-e6bc7442fe6c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\Math">
       <UniqueIdentifier>{f43d4785-3e59-4096-9618-e32b4f1e535e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Mesh">
-      <UniqueIdentifier>{88b125e6-e64f-4e1e-8b00-b4344282f528}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\Misc">
       <UniqueIdentifier>{48d11694-f8d3-4188-ae83-fe3f369d444c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\Shader">
-      <UniqueIdentifier>{48dd5594-1690-496a-9d1f-530b307a5050}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\Texture">
-      <UniqueIdentifier>{a2cf931f-79e6-4f8c-8a55-ecda598805a3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\SysEvents">
       <UniqueIdentifier>{8861551c-1482-4205-8649-e471619f6b87}</UniqueIdentifier>
@@ -106,6 +82,18 @@
     <Filter Include="Include\Types">
       <UniqueIdentifier>{15705217-b986-40f0-b840-c8152866cc6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Graphics\Texture">
+      <UniqueIdentifier>{ec15fbc2-8e1f-40ee-8736-612f2b6a0991}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Graphics\Shader">
+      <UniqueIdentifier>{0341c7af-1885-40c3-b940-6ff29d425afd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Graphics\Mesh">
+      <UniqueIdentifier>{6fc2247b-e4d4-4684-a5b1-76d254bd7abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Graphics\Material">
+      <UniqueIdentifier>{1f2b8b8d-894d-443d-bb27-c6924debd23d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -129,26 +117,8 @@
     <ClCompile Include="..\..\Src\Math\Vector.cpp">
       <Filter>Src\Math</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Mesh\MeshDX11.cpp">
-      <Filter>Src\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Material\Material.cpp">
-      <Filter>Src\Material</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Texture\TextureDX11.cpp">
-      <Filter>Src\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Shader\ShaderDX11.cpp">
-      <Filter>Src\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\Graphics.cpp">
       <Filter>Src\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Mesh\Mesh.cpp">
-      <Filter>Src\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Texture\Texture.cpp">
-      <Filter>Src\Texture</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp">
       <Filter>Src\SysEvents</Filter>
@@ -170,15 +140,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\GraphicsOGL3.cpp">
       <Filter>Src\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Mesh\MeshOGL3.cpp">
-      <Filter>Src\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Shader\ShaderOGL3.cpp">
-      <Filter>Src\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Texture\TextureOGL3.cpp">
-      <Filter>Src\Texture</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp">
       <Filter>Src\Graphics</Filter>
@@ -222,28 +183,43 @@
     <ClCompile Include="..\..\Src\File\FileWriter.cpp">
       <Filter>Src\File</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Mesh\Mesh.cpp">
+      <Filter>Src\Graphics\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Mesh\MeshDX11.cpp">
+      <Filter>Src\Graphics\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Mesh\MeshOGL3.cpp">
+      <Filter>Src\Graphics\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Shader\ShaderDX11.cpp">
+      <Filter>Src\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Shader\ShaderOGL3.cpp">
+      <Filter>Src\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Texture\Texture.cpp">
+      <Filter>Src\Graphics\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Texture\TextureDX11.cpp">
+      <Filter>Src\Graphics\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Texture\TextureOGL3.cpp">
+      <Filter>Src\Graphics\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Material\Material.cpp">
+      <Filter>Src\Graphics\Material</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
       <Filter>Src\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Mesh\MeshDX11.h">
-      <Filter>Src\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Texture\TextureDX11.h">
-      <Filter>Src\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Shader\ShaderDX11.h">
-      <Filter>Src\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Color\Color.h">
       <Filter>Include\Color</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Graphics\Graphics.h">
       <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Material\Material.h">
-      <Filter>Include\Material</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Math\AABBox.h">
       <Filter>Include\Math</Filter>
@@ -259,15 +235,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Math\Vector.h">
       <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Mesh\Mesh.h">
-      <Filter>Include\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Texture\Texture.h">
-      <Filter>Include\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Shader\Shader.h">
-      <Filter>Include\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Init\Init.h">
       <Filter>Include\Init</Filter>
@@ -292,15 +259,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h">
       <Filter>Src\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Mesh\MeshOGL3.h">
-      <Filter>Src\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Shader\ShaderOGL3.h">
-      <Filter>Src\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Texture\TextureOGL3.h">
-      <Filter>Src\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h">
       <Filter>Src\Graphics</Filter>
@@ -370,6 +328,36 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\Types\Types.h">
       <Filter>Include\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Graphics\Material.h">
+      <Filter>Include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Graphics\Mesh.h">
+      <Filter>Include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Graphics\Shader.h">
+      <Filter>Include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Graphics\Texture.h">
+      <Filter>Include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Graphics\Mesh\MeshDX11.h">
+      <Filter>Src\Graphics\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Graphics\Mesh\MeshOGL3.h">
+      <Filter>Src\Graphics\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Graphics\Shader\ShaderDX11.h">
+      <Filter>Src\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Graphics\Shader\ShaderOGL3.h">
+      <Filter>Src\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Graphics\Texture\TextureDX11.h">
+      <Filter>Src\Graphics\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Graphics\Texture\TextureOGL3.h">
+      <Filter>Src\Graphics\Texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

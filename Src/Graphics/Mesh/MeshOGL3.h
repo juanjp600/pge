@@ -1,14 +1,14 @@
 #ifndef PGEINTERNAL_MESHOGL3_H_INCLUDED
 #define PGEINTERNAL_MESHOGL3_H_INCLUDED
 
-#include <Mesh/Mesh.h>
+#include <Graphics/Mesh.h>
 
 #include <vector>
 
 #include <glad/gl.h>
 
-#include "../ResourceManagement/OGL3.h"
-#include "../ResourceManagement/ResourceManagerOGL3.h"
+#include "../../ResourceManagement/OGL3.h"
+#include "../../ResourceManagement/ResourceManagerOGL3.h"
 
 namespace PGE {
 
