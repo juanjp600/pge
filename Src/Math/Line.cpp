@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <Math/Line.h>
+#include <PGE/Math/Line.h>
 
 using namespace PGE;
 

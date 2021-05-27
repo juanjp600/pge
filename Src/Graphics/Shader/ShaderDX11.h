@@ -7,9 +7,9 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 
-#include <ResourceManagement/ResourceView.h>
-#include <Graphics/Shader.h>
-#include <String/String.h>
+#include <PGE/ResourceManagement/ResourceView.h>
+#include <PGE/Graphics/Shader.h>
+#include <PGE/String/String.h>
 
 #include "../GraphicsDX11.h"
 

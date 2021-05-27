@@ -1,10 +1,9 @@
 #include <SDL.h>
-#include <Init/Init.h>
-#include <Graphics/Graphics.h>
-#include <Exception/Exception.h>
-#include <File/FileWriter.h>
-#include <Misc/Info.h>
-#include <wtypes.h>
+#include <PGE/Init/Init.h>
+#include <PGE/Graphics/Graphics.h>
+#include <PGE/Exception/Exception.h>
+#include <PGE/File/FileWriter.h>
+#include <PGE/Info/Info.h>
 
 using namespace PGE;
 

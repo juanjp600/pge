@@ -1,7 +1,7 @@
-#include <Graphics/Shader.h>
-#include <Graphics/Graphics.h>
+#include <PGE/Graphics/Shader.h>
+#include <PGE/Graphics/Graphics.h>
 #include "ShaderDX11.h"
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 #include <fstream>
 #include "../GraphicsDX11.h"
 

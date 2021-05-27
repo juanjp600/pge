@@ -1,4 +1,4 @@
-#include <Math/Rectangle.h>
+#include <PGE/Math/Rectangle.h>
 
 using namespace PGE;
 

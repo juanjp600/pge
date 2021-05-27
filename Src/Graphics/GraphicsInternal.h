@@ -1,15 +1,15 @@
 #ifndef PGEINTERNAL_WINDOWINTERNAL_H_INCLUDED
 #define PGEINTERNAL_WINDOWINTERNAL_H_INCLUDED
 
-#include <Graphics/Graphics.h>
+#include <PGE/Graphics/Graphics.h>
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <AppKit/AppKit.h>
 #endif
 
-#include <File/FilePath.h>
-#include <Graphics/Mesh.h>
-#include <Graphics/Texture.h>
+#include <PGE/File/FilePath.h>
+#include <PGE/Graphics/Mesh.h>
+#include <PGE/Graphics/Texture.h>
 
 #define PGE_GFX_OBJ_DEC \
 Shader* loadShader(const FilePath& path) override; \

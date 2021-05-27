@@ -1,4 +1,4 @@
-#include <Input/Input.h>
+#include <PGE/Input/Input.h>
 
 using namespace PGE;
 

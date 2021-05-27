@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 **/
 
-#include <Math/Plane.h>
+#include <PGE/Math/Plane.h>
 
 #include <stdlib.h>
 #include <math.h>

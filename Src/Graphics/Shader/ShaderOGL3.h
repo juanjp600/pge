@@ -1,11 +1,11 @@
 #ifndef PGEINTERNAL_SHADEROGL3_H_INCLUDED
 #define PGEINTERNAL_SHADEROGL3_H_INCLUDED
 
-#include <Graphics/Graphics.h>
-#include <Graphics/Shader.h>
-#include <String/String.h>
-#include <String/Key.h>
-#include <Math/Matrix.h>
+#include <PGE/Graphics/Graphics.h>
+#include <PGE/Graphics/Shader.h>
+#include <PGE/String/String.h>
+#include <PGE/String/Key.h>
+#include <PGE/Math/Matrix.h>
 
 #include "../../ResourceManagement/OGL3.h"
 #include "../../ResourceManagement/ResourceManagerOGL3.h"

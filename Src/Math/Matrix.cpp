@@ -1,6 +1,5 @@
-#include <Math/Matrix.h>
+#include <PGE/Math/Matrix.h>
 #include <math.h>
-#include <algorithm>
 
 using namespace PGE;
 

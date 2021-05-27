@@ -1,11 +1,11 @@
 #include "MeshDX11.h"
-#include <Graphics/Graphics.h>
+#include <PGE/Graphics/Graphics.h>
 #include "../GraphicsDX11.h"
-#include <Graphics/Shader.h>
+#include <PGE/Graphics/Shader.h>
 #include "../Shader/ShaderDX11.h"
-#include <Graphics/Texture.h>
+#include <PGE/Graphics/Texture.h>
 #include "../Texture/TextureDX11.h"
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 
 using namespace PGE;
 

@@ -1,7 +1,7 @@
-#include <ResourceManagement/ResourceManager.h>
+#include <PGE/ResourceManagement/ResourceManager.h>
 
 #ifdef DEBUG
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 #endif
 
 using namespace PGE;

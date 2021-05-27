@@ -1,4 +1,4 @@
-#include <Graphics/Texture.h>
+#include <PGE/Graphics/Texture.h>
 
 using namespace PGE;
 

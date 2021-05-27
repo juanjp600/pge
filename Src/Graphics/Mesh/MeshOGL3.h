@@ -1,7 +1,7 @@
 #ifndef PGEINTERNAL_MESHOGL3_H_INCLUDED
 #define PGEINTERNAL_MESHOGL3_H_INCLUDED
 
-#include <Graphics/Mesh.h>
+#include <PGE/Graphics/Mesh.h>
 
 #include <vector>
 

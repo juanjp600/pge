@@ -6,7 +6,7 @@
 
 #include <SDL.h>
 
-#include <Input/InputManager.h>
+#include <PGE/Input/InputManager.h>
 
 namespace PGE {
 

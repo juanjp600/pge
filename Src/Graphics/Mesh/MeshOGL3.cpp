@@ -1,12 +1,12 @@
-#include <Graphics/Mesh.h>
+#include <PGE/Graphics/Mesh.h>
 #include "MeshOGL3.h"
-#include <Graphics/Graphics.h>
+#include <PGE/Graphics/Graphics.h>
 #include "../GraphicsOGL3.h"
-#include <Graphics/Shader.h>
+#include <PGE/Graphics/Shader.h>
 #include "../Shader/ShaderOGL3.h"
-#include <Graphics/Texture.h>
+#include <PGE/Graphics/Texture.h>
 #include "../Texture/TextureOGL3.h"
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 
 using namespace PGE;
 

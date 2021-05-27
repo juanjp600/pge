@@ -1,8 +1,8 @@
-#include <Math/Random.h>
+#include <PGE/Math/Random.h>
 
 #include <chrono>
 
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 
 using namespace PGE;
 

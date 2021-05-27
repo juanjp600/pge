@@ -6,7 +6,7 @@
 
 #include <SDL.h>
 
-#include <SysEvents/SysEvents.h>
+#include <PGE/SysEvents/SysEvents.h>
 
 namespace PGE {
 

@@ -1,4 +1,4 @@
-#include <SysEvents/SysEvents.h>
+#include <PGE/SysEvents/SysEvents.h>
 #include "SysEventsInternal.h"
 #include "../Graphics/GraphicsInternal.h"
 

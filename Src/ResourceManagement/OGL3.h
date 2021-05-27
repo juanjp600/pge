@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include <ResourceManagement/ResourceManager.h>
+#include <PGE/ResourceManagement/ResourceManager.h>
 
 #include <glad/gl.h>
 #include <SDL.h>

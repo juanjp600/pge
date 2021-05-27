@@ -1,11 +1,11 @@
 #ifndef PGEINTERNAL_RESOURCEMANAGEMENT_SDL
 #define PGEINTERNAL_RESOURCEMANAGEMENT_SDL
 
-#include <String/String.h>
+#include <PGE/String/String.h>
 
-#include <ResourceManagement/ResourceManager.h>
+#include <PGE/ResourceManagement/ResourceManager.h>
 
-#include <SysEvents/SysEvents.h>
+#include <PGE/SysEvents/SysEvents.h>
 
 struct SDL_Window;
 

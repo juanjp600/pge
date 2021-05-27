@@ -1,7 +1,7 @@
 #ifndef PGEINTERNAL_RESOURCEMANAGER_OGL3
 #define PGEINTERNAL_RESOURCEMANAGER_OGL3
 
-#include <ResourceManagement/ResourceManager.h>
+#include <PGE/ResourceManagement/ResourceManager.h>
 
 namespace PGE {
 

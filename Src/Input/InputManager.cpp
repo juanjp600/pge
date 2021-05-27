@@ -2,11 +2,11 @@
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <AppKit/AppKit.h>
-#include <SDL_syswm.h>
+#include <PGE/SDL_syswm.h>
 #endif
 
-#include <Exception/Exception.h>
-#include <Graphics/Graphics.h>
+#include <PGE/Exception/Exception.h>
+#include <PGE/Graphics/Graphics.h>
 
 #include "../SysEvents/SysEventsInternal.h"
 #include "../Graphics/GraphicsInternal.h"

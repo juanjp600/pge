@@ -1,7 +1,7 @@
 #include "Misc.h"
 
-#include <Types/Types.h>
-#include <Exception/Exception.h>
+#include <PGE/Types/Types.h>
+#include <PGE/Exception/Exception.h>
 
 #include "../SysEvents/SysEventsInternal.h"
 

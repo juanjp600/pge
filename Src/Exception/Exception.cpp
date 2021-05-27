@@ -1,4 +1,4 @@
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 
 #ifdef DEBUG
 #include <iostream>

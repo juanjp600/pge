@@ -88,11 +88,11 @@
     <Filter Include="Src\Graphics\Material">
       <UniqueIdentifier>{1f2b8b8d-894d-443d-bb27-c6924debd23d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Info">
-      <UniqueIdentifier>{b7024983-2d50-4c71-b3a1-bc03f13d54d7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\Info">
       <UniqueIdentifier>{a53ee220-cda5-43e9-83c4-4c225069fd0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Info">
+      <UniqueIdentifier>{b7024983-2d50-4c71-b3a1-bc03f13d54d7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -215,47 +215,8 @@
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
       <Filter>Src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Color\Color.h">
-      <Filter>Include\Color</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Graphics\Graphics.h">
-      <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Math\AABBox.h">
-      <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Math\Line.h">
-      <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Math\Matrix.h">
-      <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Math\Rectangle.h">
-      <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Math\Vector.h">
-      <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Init\Init.h">
-      <Filter>Include\Init</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Threading\ThreadManager.h">
-      <Filter>Include\Threading</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Math\Plane.h">
-      <Filter>Include\Math</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\SysEvents\SysEventsInternal.h">
       <Filter>Src\SysEvents</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\SysEvents\SysEvents.h">
-      <Filter>Include\SysEvents</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Exception\Exception.h">
-      <Filter>Include\Exception</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Math\Random.h">
-      <Filter>Include\Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h">
       <Filter>Src\Graphics</Filter>
@@ -263,20 +224,8 @@
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h">
       <Filter>Src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h">
-      <Filter>Include\ResourceManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\ResourceManagement\ResourceView.h">
-      <Filter>Include\ResourceManagement</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\DX11.h">
       <Filter>Src\ResourceManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\ResourceManagement\Resource.h">
-      <Filter>Include\ResourceManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\ResourceManagement\ResourceViewVector.h">
-      <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\OGL3.h">
       <Filter>Src\ResourceManagement</Filter>
@@ -287,56 +236,11 @@
     <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h">
       <Filter>Src\ResourceManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\String\String.h">
-      <Filter>Include\String</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\String\Unicode.h">
       <Filter>Src\String</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\String\Key.h">
-      <Filter>Include\String</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Math\Math.h">
-      <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\ResourceManagement\RawWrapper.h">
-      <Filter>Include\ResourceManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Input\Input.h">
-      <Filter>Include\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Input\InputManager.h">
-      <Filter>Include\Input</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\Input\InputManagerInternal.h">
       <Filter>Src\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\File\BinaryReader.h">
-      <Filter>Include\File</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\File\BinaryWriter.h">
-      <Filter>Include\File</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\File\FilePath.h">
-      <Filter>Include\File</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\File\FileWriter.h">
-      <Filter>Include\File</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Types\Types.h">
-      <Filter>Include\Types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Graphics\Material.h">
-      <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Graphics\Mesh.h">
-      <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Graphics\Shader.h">
-      <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Graphics\Texture.h">
-      <Filter>Include\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Graphics\Mesh\MeshDX11.h">
       <Filter>Src\Graphics\Mesh</Filter>
@@ -356,8 +260,104 @@
     <ClInclude Include="..\..\Src\Graphics\Texture\TextureOGL3.h">
       <Filter>Src\Graphics\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Info\Info.h">
+    <ClInclude Include="..\..\Include\PGE\Color\Color.h">
+      <Filter>Include\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Exception\Exception.h">
+      <Filter>Include\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\File\BinaryReader.h">
+      <Filter>Include\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\File\BinaryWriter.h">
+      <Filter>Include\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\File\FilePath.h">
+      <Filter>Include\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\File\FileWriter.h">
+      <Filter>Include\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Graphics\Graphics.h">
+      <Filter>Include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Graphics\Material.h">
+      <Filter>Include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Graphics\Mesh.h">
+      <Filter>Include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Graphics\Shader.h">
+      <Filter>Include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Graphics\Texture.h">
+      <Filter>Include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Info\Info.h">
       <Filter>Include\Info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Init\Init.h">
+      <Filter>Include\Init</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Input\Input.h">
+      <Filter>Include\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Input\InputManager.h">
+      <Filter>Include\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Math\AABBox.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Math\Line.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Math\Math.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Math\Matrix.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Math\Plane.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Math\Random.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Math\Rectangle.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Math\Vector.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Types\Types.h">
+      <Filter>Include\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\ResourceManagement\RawWrapper.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\ResourceManagement\Resource.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceManager.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceView.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceViewVector.h">
+      <Filter>Include\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\String\Key.h">
+      <Filter>Include\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\String\String.h">
+      <Filter>Include\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h">
+      <Filter>Include\SysEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Threading\ThreadManager.h">
+      <Filter>Include\Threading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

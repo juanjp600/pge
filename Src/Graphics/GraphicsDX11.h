@@ -7,7 +7,7 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 
-#include <ResourceManagement/ResourceViewVector.h>
+#include <PGE/ResourceManagement/ResourceViewVector.h>
 #include "../ResourceManagement/DX11.h"
 
 namespace PGE {

@@ -1,4 +1,4 @@
-#include <String/String.h>
+#include <PGE/String/String.h>
 #include "Unicode.h"
 
 #include <iostream>
@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 #endif
 
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 
 using namespace PGE;
 

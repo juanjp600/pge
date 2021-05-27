@@ -1,7 +1,7 @@
 #include "ShaderOGL3.h"
 
-#include <Graphics/Graphics.h>
-#include <Exception/Exception.h>
+#include <PGE/Graphics/Graphics.h>
+#include <PGE/Exception/Exception.h>
 #include "../GraphicsOGL3.h"
 
 using namespace PGE;

@@ -1,4 +1,4 @@
-#include <File/FilePath.h>
+#include <PGE/File/FilePath.h>
 
 #include <fstream>
 
@@ -16,7 +16,7 @@
 #include <dirent.h>
 #endif
 
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 
 using namespace PGE;
 

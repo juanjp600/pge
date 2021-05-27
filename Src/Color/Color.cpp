@@ -1,6 +1,6 @@
-#include <Color/Color.h>
+#include <PGE/Color/Color.h>
 
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 
 using namespace PGE;
 

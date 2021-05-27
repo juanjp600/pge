@@ -10,7 +10,7 @@
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
-#include <SDL_syswm.h>
+#include <PGE/SDL_syswm.h>
 #endif
 
 using namespace PGE;

@@ -1,7 +1,7 @@
-#include <Graphics/Mesh.h>
+#include <PGE/Graphics/Mesh.h>
 
-#include <Graphics/Graphics.h>
-#include <Exception/Exception.h>
+#include <PGE/Graphics/Graphics.h>
+#include <PGE/Exception/Exception.h>
 
 using namespace PGE;
 

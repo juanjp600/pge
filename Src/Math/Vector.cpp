@@ -1,6 +1,6 @@
-#include <Math/Vector.h>
+#include <PGE/Math/Vector.h>
 
-#include <Math/Math.h>
+#include <PGE/Math/Math.h>
 
 using namespace PGE;
 
