@@ -2,7 +2,7 @@
 #define PGE_TEXTURE_H_INCLUDED
 
 #include <String/String.h>
-#include <Misc/FilePath.h>
+#include <File/FilePath.h>
 #include <Graphics/Graphics.h>
 #include <Threading/ThreadManager.h>
 

@@ -7,7 +7,7 @@
 #import <AppKit/AppKit.h>
 #endif
 
-#include <Misc/FilePath.h>
+#include <File/FilePath.h>
 #include <Mesh/Mesh.h>
 #include <Texture/Texture.h>
 

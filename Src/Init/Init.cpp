@@ -2,7 +2,7 @@
 #include <Init/Init.h>
 #include <Graphics/Graphics.h>
 #include <Exception/Exception.h>
-#include <Misc/FileWriter.h>
+#include <File/FileWriter.h>
 #include <Misc/Info.h>
 #include <wtypes.h>
 

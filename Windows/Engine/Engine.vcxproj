@@ -21,6 +21,10 @@
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp" />
     <ClCompile Include="..\..\Src\Exception\Exception.cpp" />
+    <ClCompile Include="..\..\Src\File\BinaryReader.cpp" />
+    <ClCompile Include="..\..\Src\File\BinaryWriter.cpp" />
+    <ClCompile Include="..\..\Src\File\FilePath.cpp" />
+    <ClCompile Include="..\..\Src\File\FileWriter.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Graphics.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp" />
@@ -40,10 +44,6 @@
     <ClCompile Include="..\..\Src\Mesh\Mesh.cpp" />
     <ClCompile Include="..\..\Src\Mesh\MeshDX11.cpp" />
     <ClCompile Include="..\..\Src\Mesh\MeshOGL3.cpp" />
-    <ClCompile Include="..\..\Src\Misc\BinaryReader.cpp" />
-    <ClCompile Include="..\..\Src\Misc\BinaryWriter.cpp" />
-    <ClCompile Include="..\..\Src\Misc\FilePath.cpp" />
-    <ClCompile Include="..\..\Src\Misc\FileWriter.cpp" />
     <ClCompile Include="..\..\Src\Misc\Info.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp" />
@@ -61,6 +61,10 @@
   <ItemGroup>
     <ClInclude Include="..\..\Include\Color\Color.h" />
     <ClInclude Include="..\..\Include\Exception\Exception.h" />
+    <ClInclude Include="..\..\Include\File\BinaryReader.h" />
+    <ClInclude Include="..\..\Include\File\BinaryWriter.h" />
+    <ClInclude Include="..\..\Include\File\FilePath.h" />
+    <ClInclude Include="..\..\Include\File\FileWriter.h" />
     <ClInclude Include="..\..\Include\Graphics\Graphics.h" />
     <ClInclude Include="..\..\Include\Init\Init.h" />
     <ClInclude Include="..\..\Include\Input\Input.h" />
@@ -75,11 +79,7 @@
     <ClInclude Include="..\..\Include\Math\Rectangle.h" />
     <ClInclude Include="..\..\Include\Math\Vector.h" />
     <ClInclude Include="..\..\Include\Mesh\Mesh.h" />
-    <ClInclude Include="..\..\Include\Misc\BinaryReader.h" />
-    <ClInclude Include="..\..\Include\Misc\BinaryWriter.h" />
     <ClInclude Include="..\..\Include\Misc\Byte.h" />
-    <ClInclude Include="..\..\Include\Misc\FilePath.h" />
-    <ClInclude Include="..\..\Include\Misc\FileWriter.h" />
     <ClInclude Include="..\..\Include\Misc\Info.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\RawWrapper.h" />
     <ClInclude Include="..\..\Include\ResourceManagement\ResourceManager.h" />

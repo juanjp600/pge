@@ -2,7 +2,7 @@
 #define PGE_SHADER_H_INCLUDED
 
 #include <String/String.h>
-#include <Misc/FilePath.h>
+#include <File/FilePath.h>
 #include <Math/Matrix.h>
 #include <Math/Vector.h>
 #include <Color/Color.h>

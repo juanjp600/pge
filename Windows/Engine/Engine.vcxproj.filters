@@ -97,6 +97,12 @@
     <Filter Include="Src\Input">
       <UniqueIdentifier>{81d3cef7-bfd3-4fc2-a2fe-b060a32518cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\File">
+      <UniqueIdentifier>{02ff5a9a-b8ca-4bae-ac33-a1d1a92cc5d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\File">
+      <UniqueIdentifier>{0292d1d9-692d-48d0-9413-9da4458418a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Color\Color.cpp">
@@ -156,14 +162,8 @@
     <ClCompile Include="..\..\Src\Init\Init.cpp">
       <Filter>Src\Init</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Misc\FilePath.cpp">
-      <Filter>Src\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Math\Random.cpp">
       <Filter>Src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Misc\BinaryReader.cpp">
-      <Filter>Src\Misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\GraphicsOGL3.cpp">
       <Filter>Src\Graphics</Filter>
@@ -192,9 +192,6 @@
     <ClCompile Include="..\..\Src\Misc\Info.cpp">
       <Filter>Src\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Misc\FileWriter.cpp">
-      <Filter>Src\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\String\String.cpp">
       <Filter>Src\String</Filter>
     </ClCompile>
@@ -204,14 +201,23 @@
     <ClCompile Include="..\..\Src\Math\Math.cpp">
       <Filter>Src\Math</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Misc\BinaryWriter.cpp">
-      <Filter>Src\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Input\Input.cpp">
       <Filter>Src\Input</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Input\InputManager.cpp">
       <Filter>Src\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\File\BinaryReader.cpp">
+      <Filter>Src\File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\File\BinaryWriter.cpp">
+      <Filter>Src\File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\File\FilePath.cpp">
+      <Filter>Src\File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\File\FileWriter.cpp">
+      <Filter>Src\File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -275,17 +281,11 @@
     <ClInclude Include="..\..\Include\SysEvents\SysEvents.h">
       <Filter>Include\SysEvents</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\FilePath.h">
-      <Filter>Include\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\Exception\Exception.h">
       <Filter>Include\Exception</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\Math\Random.h">
       <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\BinaryReader.h">
-      <Filter>Include\Misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h">
       <Filter>Src\Graphics</Filter>
@@ -329,9 +329,6 @@
     <ClInclude Include="..\..\Include\Misc\Info.h">
       <Filter>Include\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\FileWriter.h">
-      <Filter>Include\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\String\String.h">
       <Filter>Include\String</Filter>
     </ClInclude>
@@ -350,9 +347,6 @@
     <ClInclude Include="..\..\Include\ResourceManagement\RawWrapper.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\Misc\BinaryWriter.h">
-      <Filter>Include\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\Input\Input.h">
       <Filter>Include\Input</Filter>
     </ClInclude>
@@ -361,6 +355,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Input\InputManagerInternal.h">
       <Filter>Src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\File\BinaryReader.h">
+      <Filter>Include\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\File\BinaryWriter.h">
+      <Filter>Include\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\File\FilePath.h">
+      <Filter>Include\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\File\FileWriter.h">
+      <Filter>Include\File</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
