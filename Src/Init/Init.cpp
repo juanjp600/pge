@@ -30,7 +30,7 @@ static void showError(const String& exceptionType, const String& what) {
 #ifdef DEBUG
 int main(int argc, char** argv) {
 #else
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow) {
+int WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PSTR lpCmdLine, _In_ INT nCmdShow) {
     try {
 #endif
         SDL_SetMainReady();
