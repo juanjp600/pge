@@ -1,4 +1,9 @@
 #include <SDL.h>
+
+#ifndef DEBUG
+#include <wtypes.h>
+#endif
+
 #include <PGE/Init/Init.h>
 #include <PGE/Graphics/Graphics.h>
 #include <PGE/Exception/Exception.h>
