@@ -154,8 +154,24 @@ void FilePath::enumerateFiles(std::vector<FilePath>& files) const {
     }
 }
 
+String FilePath::read() const {
+    std::ifstream file(cstr());
+    PGE_ASSERT(file.is_open(), "Could not open (file: \"" + str() + "\")");
+
+    String cnt;
+    while (!file.eof()) {
+        file >> cnt;
+        cnt += '\n';
+    }
+
+    file.close();
+
+    return cnt;
+}
+
 void FilePath::readLines(std::vector<String>& lines, bool includeEmptyLines) const {
     std::ifstream file(cstr());
+    PGE_ASSERT(file.is_open(), "Could not open (file: \"" + str() + "\")");
 
     String line;
     while (!file.eof()) {
@@ -171,6 +187,7 @@ void FilePath::readLines(std::vector<String>& lines, bool includeEmptyLines) con
 void FilePath::readBytes(std::vector<byte>& bytes) const {
     std::ifstream file(cstr(), std::ios::ate | std::ios::binary);
     PGE_ASSERT(file.is_open(), "Could not open (file: \"" + str() + "\")");
+
     size_t vertSize = (size_t)file.tellg();
     bytes.resize(bytes.size() + vertSize);
     file.seekg(0);

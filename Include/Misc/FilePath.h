@@ -41,6 +41,9 @@ class FilePath {
         // Enumerates subdirectories.
         void enumerateFiles(std::vector<FilePath>& files) const;
 
+        // Returns the entire file with normalized line-endings.
+        String read() const;
+
         // Returns all lines from a file.
         void readLines(std::vector<String>& lines, bool includeEmptyLines = false) const;
 
