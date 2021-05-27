@@ -36,7 +36,7 @@ class Vertex {
             // TODO: Replace all this with set byte layout.
             union {
                 float floatVal;
-                unsigned int uintVal;
+                unsigned uintVal;
                 Vector2f vector2fVal;
                 Vector3f vector3fVal;
                 Vector4f vector4fVal = Vector4f::ZERO;
@@ -47,7 +47,7 @@ class Vertex {
         const Property& getProperty(const String& name) const;
         
         void setFloat(const String& name,float val);
-        void setUInt(const String& name,unsigned int val);
+        void setUInt(const String& name,unsigned val);
         void setVector2f(const String& name, const Vector2f& val);
         void setVector3f(const String& name, const Vector3f& val);
         void setVector4f(const String& name, const Vector4f& val);

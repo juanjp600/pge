@@ -324,7 +324,7 @@ template String String::format<long>(long t, const PGE::String& format);
 template String String::format<long long>(long long t, const PGE::String& format);
 template String String::format<unsigned char>(unsigned char t, const PGE::String& format);
 template String String::format<unsigned short>(unsigned short t, const PGE::String& format);
-template String String::format<unsigned int>(unsigned int t, const PGE::String& format);
+template String String::format<unsigned>(unsigned t, const PGE::String& format);
 template String String::format<unsigned long>(unsigned long t, const PGE::String& format);
 template String String::format<unsigned long long>(unsigned long long t, const PGE::String& format);
 template String String::format<float>(float t, const PGE::String& format);

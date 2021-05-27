@@ -42,7 +42,7 @@ void Vertex::setFloat(const String& name, float val) {
     prop.type = Property::Type::FLOAT;
 }
 
-void Vertex::setUInt(const String& name, unsigned int val) {
+void Vertex::setUInt(const String& name, unsigned val) {
     Property& prop = properties[name];
     prop.value.uintVal = val;
     prop.type = Property::Type::UINT;

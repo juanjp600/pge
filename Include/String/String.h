@@ -29,7 +29,7 @@ class String {
 
         struct Iterator {
             using iterator_category = std::forward_iterator_tag;
-            using difference_type = unsigned int;
+            using difference_type = unsigned;
             using value_type = wchar;
             using pointer = value_type*;
             using reference = value_type&;
