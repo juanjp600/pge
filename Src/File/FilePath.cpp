@@ -113,6 +113,11 @@ FilePath FilePath::makeDirectory() const {
     return *this;
 }
 
+FilePath FilePath::up() const {
+    PGE_ASSERT(valid, INVALID_STR);
+    return FilePath(this->name.substr(this->name.begin(), ++this->name.findLast("/")));
+}
+
 String FilePath::getExtension() const {
     PGE_ASSERT(valid, INVALID_STR);
     String::Iterator startIndex = name.findLast(".");
@@ -158,7 +163,39 @@ String FilePath::read() const {
     std::ifstream file(cstr());
     PGE_ASSERT(file.is_open(), "Could not open (file: \"" + str() + "\")");
 
+    byte begin[4] = {};
+    file.read((char*)begin, 3);
+
     String cnt;
+    // NOT UTF-8 BOM.
+    if (!(begin[0] == 0xEF && begin[1] == 0xBB && begin[2] == 0xBF)) {
+        // UTF-16 BOM.
+        if (begin[0] == 0xFF && begin[1] == 0xFE) {
+            file.close();
+
+            std::wifstream wfile(cstr());
+            PGE_ASSERT(wfile.is_open(), "Could not open (file: \"" + str() + "\")");
+
+            // Skip BOM.
+            wfile.ignore(2);
+
+            while (!wfile.eof()) {
+                wfile >> cnt;
+                cnt += L'\n';
+            }
+
+            wfile.close();
+
+            return cnt;
+        // UTF-16 BOM with unsupported endianness.
+        } else if (begin[0] == 0xFE && begin[1] == 0xFF) {
+            throw PGE_CREATE_EX("File had wrong endianness!");
+        // No BOM!
+        } else {
+            cnt = (char*)begin;
+        }
+    }
+
     while (!file.eof()) {
         file >> cnt;
         cnt += '\n';

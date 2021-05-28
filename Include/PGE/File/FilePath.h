@@ -26,6 +26,8 @@ class FilePath {
 
         // Causes a path to be interpreted as a directory, does not actually create the directory.
         FilePath makeDirectory() const;
+        // Goes up one step in the hierarchy.
+        FilePath up() const;
 
         String getExtension() const;
 

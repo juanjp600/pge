@@ -18,6 +18,10 @@ Rectanglef::Rectanglef(const Rectanglei& ri) {
     tl = Vector2f(ri.topLeftCorner()); br = Vector2f(ri.bottomRightCorner());
 }
 
+Rectanglef Rectanglef::fromDims(float x, float y, float width, float height) {
+    return Rectanglef(x, y, x + width, y + height);
+}
+
 bool Rectanglef::operator==(const Rectanglef& other) const {
     return topLeftCorner() == other.topLeftCorner() && bottomRightCorner() == other.bottomRightCorner();
 }
@@ -113,6 +117,10 @@ Rectanglei::Rectanglei(int il,int it,int ir,int ib) {
 
 Rectanglei::Rectanglei(const Rectanglef& rf) {
     tl = Vector2i(rf.topLeftCorner()); br = Vector2i(rf.bottomRightCorner());
+}
+
+Rectanglei Rectanglei::fromDims(int x, int y, int width, int height) {
+    return Rectanglei(x, y, x + width, y + height);
 }
 
 bool Rectanglei::operator==(const Rectanglei& other) const {
