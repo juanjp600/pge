@@ -13,6 +13,7 @@ class Rectanglef {
         Rectanglef(const Vector2f& itl,const Vector2f& ibr);
         Rectanglef(float il,float it,float ir,float ib);
         Rectanglef(const Rectanglei& ri);
+        static Rectanglef fromDims(float x, float y, float width, float height);
 
         bool operator==(const Rectanglef& other) const;
         bool operator!=(const Rectanglef& other) const;
@@ -39,6 +40,7 @@ class Rectanglei {
         Rectanglei(const Vector2i& itl,const Vector2i& ibr);
         Rectanglei(int il,int it,int ir,int ib);
         Rectanglei(const Rectanglef& rf);
+        static Rectanglei fromDims(int x, int y, int width, int height);
 
         bool operator==(const Rectanglei& other) const;
         bool operator!=(const Rectanglei& other) const;

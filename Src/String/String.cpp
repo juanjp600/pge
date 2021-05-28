@@ -458,8 +458,9 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
 
 std::wistream& PGE::operator>>(std::wistream& is, String& s) {
     wchar ch;
-    while ((ch = is.rdbuf()->sbumpc()) != WEOF && ch != L'\r' && ch != L'\n') {
-        s += (char)ch;
+    // I'm pretty sure this is stinky? I'm not sure, C++ sucks ass when it comes to Unicode support.
+    while ((ch = is.rdbuf()->sbumpc() | (is.rdbuf()->sbumpc() >> 8)) != WEOF && ch != L'\r' && ch != L'\n') {
+        s += ch;
     }
     if (ch == WEOF) {
         is.setstate(std::ios::eofbit);
