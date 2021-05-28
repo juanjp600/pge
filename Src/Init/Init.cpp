@@ -27,26 +27,45 @@ static void showError(const String& exceptionType, const String& what) {
         "An exception has been thrown, please send \"exception.txt\" to a developer.", NULL);
 }
 
+void Init::init() {
+    SDL_SetMainReady();
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC);
+
+    SDL_GameControllerEventState(SDL_ENABLE);
+    SDL_JoystickEventState(SDL_ENABLE);
+
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+}
+
+void Init::quit() {
+    SDL_Quit();
+}
+
 #ifdef DEBUG
 int main(int argc, char** argv) {
 #else
 int WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PSTR lpCmdLine, _In_ INT nCmdShow) {
     try {
 #endif
-        SDL_SetMainReady();
-        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC);
+        Init::init();
 
-        SDL_GameControllerEventState(SDL_ENABLE);
-        SDL_JoystickEventState(SDL_ENABLE);
+#ifndef DEBUG
+        int argc;
+        wchar** argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+#endif
 
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-        SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+        std::vector<String> args(argc);
+        for (int i = 0; i < argc; i++) {
+            args[i] = argv[i];
+        }
 
-        int retVal = PGEMain::Main();
+        int retVal = Init::main(args);
 
-        SDL_Quit();
+        Init::quit();
+        
         return retVal;
 #ifndef DEBUG
     } catch (const Exception& e) {

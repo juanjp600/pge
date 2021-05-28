@@ -1,9 +1,18 @@
 #ifndef PGE_INIT_H_INCLUDED
 #define PGE_INIT_H_INCLUDED
 
-namespace PGEMain {
+#include <vector>
 
-int Main();
+#include <PGE/String/String.h>
+
+namespace PGE {
+
+namespace Init {
+    void init();
+    void quit();
+
+    int main(const std::vector<String>& args);
+}
 
 }
 
