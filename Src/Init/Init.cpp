@@ -12,6 +12,8 @@
 
 using namespace PGE;
 
+#define PGE_ASSERT_SDL(CALL) PGE_ASSERT(CALL >= 0, SDL_GetError())
+
 static void showError(const String& exceptionType, const String& what) {
     FileWriter writer = FileWriter(FilePath::fromStr("exception.txt"));
     writer.writeLine(Info::REPO_LINK);
@@ -27,17 +29,18 @@ static void showError(const String& exceptionType, const String& what) {
         "An exception has been thrown, please send \"exception.txt\" to a developer.", NULL);
 }
 
+// Throws PGE::Exception on error.
 void Init::init() {
     SDL_SetMainReady();
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC);
+    PGE_ASSERT_SDL(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC));
 
     SDL_GameControllerEventState(SDL_ENABLE);
-    SDL_JoystickEventState(SDL_ENABLE);
+    PGE_ASSERT_SDL(SDL_JoystickEventState(SDL_ENABLE) >= 0, SDL_GetError());
 
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE));
+    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3));
+    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3));
+    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8));
 }
 
 void Init::quit() {
