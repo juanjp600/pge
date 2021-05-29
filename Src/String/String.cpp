@@ -370,6 +370,7 @@ void String::operator+=(const String& other) {
 }
 
 void String::operator+=(wchar ch) {
+    PGE_ASSERT(ch != L'\0', "Tried appending null");
     int aLen = byteLength();
     reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
@@ -444,10 +445,10 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
     // See xstring for reference.
 
     int ch;
-    while ((ch = is.rdbuf()->sbumpc()) != EOF && ch != '\r' && ch != '\n') {
+    while ((ch = is.rdbuf()->sbumpc()) != std::istream::traits_type::eof() && ch != '\r' && ch != '\n') {
         s += (char)ch;
     }
-    if (ch == EOF) {
+    if (ch == std::istream::traits_type::eof()) {
         is.setstate(std::ios::eofbit);
     // Pure carriage return linebreak are a thing!
     } else if (ch == '\r' && is.rdbuf()->sbumpc() != '\n') {
@@ -456,18 +457,42 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
     return is;
 }
 
+static bool readUTF16(std::wistream& is, wchar& ch) {
+    // I'm pretty sure this is stinky? I'm not sure, C++ sucks ass when it comes to Unicode support.
+    ch = is.rdbuf()->sbumpc();
+    if (ch == std::wistream::traits_type::eof()) {
+        return true;
+    }
+    wchar ch2 = is.rdbuf()->sbumpc();
+    // Little endian.
+    ch = ch | (ch2 << 8);
+    if (ch2 == std::wistream::traits_type::eof()) {
+        return true;
+    }
+    std::cout << "NEXT UP: " << is.rdbuf()->sgetc() << std::endl;
+    return false;
+}
+
 std::wistream& PGE::operator>>(std::wistream& is, String& s) {
     wchar ch;
-    // I'm pretty sure this is stinky? I'm not sure, C++ sucks ass when it comes to Unicode support.
-    while ((ch = is.rdbuf()->sbumpc() | (is.rdbuf()->sbumpc() >> 8)) != WEOF && ch != L'\r' && ch != L'\n') {
+    bool eof = false;
+    while (!(eof = readUTF16(is, ch)) && ch != L'\r' && ch != L'\n') {
         s += ch;
     }
-    if (ch == WEOF) {
-        is.setstate(std::ios::eofbit);
-    // Pure carriage return linebreak are a thing!
-    } else if (ch == L'\r' && is.rdbuf()->sbumpc() != L'\n') {
-        is.rdbuf()->pubseekoff(-1, std::ios::cur);
+    if (eof) {
+        is.setstate(std::wios::eofbit);
+    } else {
+        // Pure carriage return linebreaks are a thing!
+        wchar checkChar = ch == L'\r' ? L'\n' : L'\r';
+        // Eat the next character and spit it out if its not a continuaton of the EOL.
+        if (!readUTF16(is, ch) && ch != checkChar) {
+            std::cout << is.rdbuf()->sgetc() << std::endl;
+            is.rdbuf()->pubseekoff(-2, std::wios::cur);
+            is.rdbuf()->pubsync();
+            std::cout << is.rdbuf()->sgetc() << std::endl << std::endl;
+        }
     }
+    std::cout << s << std::endl;
     return is;
 }
 
