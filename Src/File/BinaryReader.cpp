@@ -1,10 +1,12 @@
 #include <PGE/File/BinaryReader.h>
 
+#include <PGE/Exception/Exception.h>
+
 namespace PGE {
 
 BinaryReader::BinaryReader(const FilePath& file) {
     stream.open(file.cstr(), std::ios::binary);
-    PGE_ASSERT(stream.is_open(), "Could not open file");
+    PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
 }
 
 BinaryReader::~BinaryReader() {

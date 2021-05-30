@@ -16,7 +16,7 @@ class BinaryWriter {
         void write(T t);
 
     public:
-        BinaryWriter(const FilePath& file);
+        BinaryWriter(const FilePath& path);
         ~BinaryWriter();
 
         void writeByte(byte b);
