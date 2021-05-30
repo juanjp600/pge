@@ -116,7 +116,7 @@ void FileReader::spitOut(wchar ch) {
 			backwards = 1;
 		} break;
 		case Encoding::UTF8: {
-			backwards = Unicode::convertWCharToUtf8(ch, nullptr);
+			backwards = Unicode::wCharToUtf8(ch, nullptr);
 		} break;
 		case Encoding::UTF16BE:
 		case Encoding::UTF16LE: {

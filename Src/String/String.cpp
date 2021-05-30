@@ -155,7 +155,7 @@ void String::wCharToUtf8Str(const wchar* wbuffer) {
     // Determine the capacity of the cbuffer by measuring the number of bytes required for each codepoint.
     int newCap = 0;
     for (int i = 0; wbuffer[i] != L'\0'; i++) {
-        newCap += Unicode::convertWCharToUtf8(wbuffer[i], nullptr);
+        newCap += Unicode::wCharToUtf8(wbuffer[i], nullptr);
     }
     reallocate(newCap);
 
@@ -164,7 +164,7 @@ void String::wCharToUtf8Str(const wchar* wbuffer) {
     int cIndex = 0;
     // We get _strLength "for free" here.
     for (_strLength = 0; wbuffer[_strLength] != L'\0'; _strLength++) {
-        cIndex += Unicode::convertWCharToUtf8(wbuffer[_strLength], &buf[cIndex]);
+        cIndex += Unicode::wCharToUtf8(wbuffer[_strLength], &buf[cIndex]);
     }
     buf[newCap] = '\0';
     strByteLength = newCap;
@@ -184,7 +184,7 @@ String::String(char c) {
     char* buf = cstrNoConst();
     if (c < 0) {
         reallocate(2);
-        strByteLength = Unicode::convertWCharToUtf8((wchar)(unsigned char)c, buf);
+        strByteLength = Unicode::wCharToUtf8((wchar)(unsigned char)c, buf);
         buf[strByteLength] = '\0';
     } else {
         reallocate(1);
@@ -198,7 +198,7 @@ String::String(char c) {
 String::String(wchar w) {
     reallocate(4);
     char* buf = cstrNoConst();
-    strByteLength = Unicode::convertWCharToUtf8(w, buf);
+    strByteLength = Unicode::wCharToUtf8(w, buf);
     _strLength = 1;
     buf[strByteLength] = '\0';
 }
@@ -284,11 +284,10 @@ void String::operator+=(const String& other) {
 }
 
 void String::operator+=(wchar ch) {
-    PGE_ASSERT(ch != 0 && ch != 0xFFFF && ch != 0xFFFE, "Tried appending invalid character (" + String::fromInt(ch) + ")");
     int aLen = byteLength();
     reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
-    int actualSize = aLen + Unicode::convertWCharToUtf8(ch, buf + aLen);
+    int actualSize = aLen + Unicode::wCharToUtf8(ch, buf + aLen);
     buf[actualSize] = '\0';
     strByteLength = actualSize;
     if (_strLength >= 0) {
@@ -326,7 +325,7 @@ const String PGE::operator+(const String& a, wchar b) {
     String ret = String(aLen + 4);
     char* buf = ret.cstrNoConst();
     memcpy(buf, a.cstr(), aLen);
-    int actualSize = aLen + Unicode::convertWCharToUtf8(b, buf + aLen);
+    int actualSize = aLen + Unicode::wCharToUtf8(b, buf + aLen);
     buf[actualSize] = '\0';
     ret.strByteLength = actualSize;
     if (a._strLength >= 0) {
@@ -352,7 +351,7 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
     // See xstring for reference.
 
     int ch;
-    while ((ch = is.rdbuf()->sbumpc()) != std::istream::traits_type::eof() && ch != '\r' && ch != '\n') {
+    while ((ch = is.rdbuf()->sbumpc()) != EOF && ch != '\r' && ch != '\n') {
         s += (char)ch;
     }
     if (ch == EOF) {

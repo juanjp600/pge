@@ -1,5 +1,8 @@
 #include "UnicodeHelper.h"
 
+#include <PGE/Exception/Exception.h>
+#define PGE_ASSERT_CHAR(chr) wchar PGE_TMP = chr; PGE_ASSERT(PGE_TMP != 0 && PGE_TMP != 0xFFFF && PGE_TMP != 0xFFFE, "Invalid character (" + String::fromInt(PGE_TMP) + ")")
+
 using namespace PGE;
 
 int Unicode::measureCodepoint(unsigned char chr) {
@@ -27,13 +30,16 @@ wchar Unicode::utf8ToWChar(const char* cbuffer) {
             // Decode all of the following bytes, fixed 6 bits per byte.
             newChar = (newChar << 6) | (cbuffer[j] & 0x3f);
         }
+        PGE_ASSERT_CHAR(newChar);
         return newChar;
     }
 }
 
 
 // TODO: Take into account UTF-16 surrogate pairs.
-int Unicode::convertWCharToUtf8(wchar chr, char* result) {
+int Unicode::wCharToUtf8(wchar chr, char* result) {
+    PGE_ASSERT_CHAR(chr);
+
     // Fits in standard ASCII, just return the char as-is.
     if ((chr & 0x7f) == chr) {
         if (result != nullptr) { result[0] = (char)chr; }

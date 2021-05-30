@@ -8,7 +8,7 @@ namespace PGE {
 namespace Unicode {
     int measureCodepoint(unsigned char chr);
     wchar utf8ToWChar(const char* cbuffer);
-    int convertWCharToUtf8(wchar chr, char* result);
+    int wCharToUtf8(wchar chr, char* result);
 }
 
 }
