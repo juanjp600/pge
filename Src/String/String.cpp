@@ -391,7 +391,8 @@ bool String::equals(const String& other) const {
 
 static void fold(const char*& buf, std::queue<wchar>& queue) {
     if (queue.empty() && *buf != '\0') {
-        wchar ch = Unicode::utf8ToWChar(buf);
+        int codepoint = Unicode::measureCodepoint(*buf);
+        wchar ch = Unicode::utf8ToWChar(buf, codepoint);
         auto it = Unicode::FOLDING.find(ch);
         if (it == Unicode::FOLDING.end()) {
             queue.push(ch);
@@ -406,7 +407,7 @@ static void fold(const char*& buf, std::queue<wchar>& queue) {
                 }
             }
         }
-        buf += Unicode::measureCodepoint(*buf);
+        buf += codepoint;
     }
 }
 

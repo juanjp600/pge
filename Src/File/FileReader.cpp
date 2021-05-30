@@ -85,7 +85,7 @@ wchar FileReader::readChar() {
 					}
 					chs[i] = newCh;
 				}
-				return Unicode::utf8ToWChar(chs);
+				return Unicode::utf8ToWChar(chs, codepoint);
 			}
 		}
 		case Encoding::UTF16LE:

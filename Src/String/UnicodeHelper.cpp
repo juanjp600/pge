@@ -7,11 +7,11 @@ using namespace PGE;
 
 int Unicode::measureCodepoint(unsigned char chr) {
     if ((chr & 0x80) == 0x00) {
-        //first bit is 0: treat as ASCII
+        // First bit is 0: treat as ASCII.
         return 1;
     }
 
-    //first bit is 1, number of consecutive 1 bits at the start is length of codepoint
+    // First bit is 1: Number of consecutive 1 bits at the start is length of codepoint.
     int len = 0;
     while (((chr >> (7 - len)) & 0x01) == 0x01) {
         len++;
@@ -20,7 +20,10 @@ int Unicode::measureCodepoint(unsigned char chr) {
 }
 
 wchar Unicode::utf8ToWChar(const char* cbuffer) {
-    int codepointLen = measureCodepoint(cbuffer[0]);
+    return utf8ToWChar(cbuffer, measureCodepoint(*cbuffer));
+}
+
+wchar Unicode::utf8ToWChar(const char* cbuffer, int codepointLen) {
     if (codepointLen == 1) {
         return cbuffer[0];
     } else {
