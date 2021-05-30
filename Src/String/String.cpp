@@ -691,6 +691,43 @@ String String::trim() const {
     return ret;
 }
 
+String String::reverse() const {
+    int len = byteLength();
+    String ret(len);
+    char* buf = ret.cstrNoConst();
+    buf[len] = '\0';
+    buf += len;
+    for (int i = 0; i < len;) {
+        int codepoint = Unicode::measureCodepoint(cstr()[i]);
+        buf -= codepoint;
+        memcpy(buf, cstr() + i, codepoint);
+        i += codepoint;
+    }
+    ret.strByteLength = len;
+    ret._strLength = _strLength;
+    return ret;
+}
+
+String String::multiply(int count, const String& separator) const {
+    int curLength = byteLength();
+    int sepLength = separator.byteLength();
+    int newLength = curLength * count + sepLength * (count - 1);
+    String ret(newLength);
+    char* buf = ret.cstrNoConst();
+    buf[newLength] = '\0';
+    for (int i = 0; i < count; i++) {
+        if (i != 0) {
+            memcpy(buf, separator.cstr(), sepLength);
+            buf += sepLength;
+        }
+        memcpy(buf, cstr(), curLength);
+        buf += curLength;
+    }
+    ret.strByteLength = newLength;
+    if (_strLength >= 0) { ret._strLength = length() * count + separator.length() * (count - 1); }
+    return ret;
+}
+
 std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
     std::vector<String> retVal;
     const char* haystack = cstr();

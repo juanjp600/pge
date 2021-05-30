@@ -121,6 +121,8 @@ class String {
         String toUpper() const;
         String toLower() const;
         String trim() const;
+        String reverse() const;
+        String multiply(int count, const String& separator = "") const;
         std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
         static String join(const std::vector<String>& vect, const String& separator);
 
