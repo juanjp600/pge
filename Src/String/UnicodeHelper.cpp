@@ -1,0 +1,82 @@
+#include "UnicodeHelper.h"
+
+using namespace PGE;
+
+int Unicode::measureCodepoint(unsigned char chr) {
+    if ((chr & 0x80) == 0x00) {
+        //first bit is 0: treat as ASCII
+        return 1;
+    }
+
+    //first bit is 1, number of consecutive 1 bits at the start is length of codepoint
+    int len = 0;
+    while (((chr >> (7 - len)) & 0x01) == 0x01) {
+        len++;
+    }
+    return len;
+}
+
+wchar Unicode::utf8ToWChar(const char* cbuffer) {
+    int codepointLen = measureCodepoint(cbuffer[0]);
+    if (codepointLen == 1) {
+        return cbuffer[0];
+    } else {
+        // Decode first byte by skipping all bits that indicate the length of the codepoint.
+        wchar newChar = cbuffer[0] & (0x7f >> codepointLen);
+        for (int j = 1; j < codepointLen; j++) {
+            // Decode all of the following bytes, fixed 6 bits per byte.
+            newChar = (newChar << 6) | (cbuffer[j] & 0x3f);
+        }
+        return newChar;
+    }
+}
+
+
+// TODO: Take into account UTF-16 surrogate pairs.
+int Unicode::convertWCharToUtf8(wchar chr, char* result) {
+    // Fits in standard ASCII, just return the char as-is.
+    if ((chr & 0x7f) == chr) {
+        if (result != nullptr) { result[0] = (char)chr; }
+        return 1;
+    }
+
+    int len = 1;
+
+    // Determine most of the bytes after the first one.
+    while ((chr & (~0x3f)) != 0x00) {
+        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
+        chr >>= 6;
+        len++;
+    }
+
+    // Determine the remaining byte(s): if the number of free bits in
+    // the first byte isn't enough to fit the remaining bits,
+    // add another byte.
+    char firstByte = 0x00;
+    for (int i = 0; i < len; i++) {
+        firstByte |= (0x1 << (7 - i));
+    }
+
+    if (((firstByte | (0x1 << (7 - len))) & chr) == 0x00) {
+        // It fits!
+        firstByte |= chr;
+    } else {
+        // It doesn't fit: add another byte.
+        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
+        chr >>= 6;
+        firstByte = (firstByte | (0x1 << (7 - len))) | chr;
+        len++;
+    }
+
+    if (result != nullptr) {
+        result[len - 1] = firstByte;
+        // Flip the result.
+        for (int i = 0; i < len / 2; i++) {
+            char b = result[i];
+            result[i] = result[len - 1 - i];
+            result[len - 1 - i] = b;
+        }
+    }
+
+    return len;
+}

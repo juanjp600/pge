@@ -1,4 +1,5 @@
 #include <PGE/String/String.h>
+#include "UnicodeHelper.h"
 #include "Unicode.h"
 
 #include <iostream>
@@ -12,88 +13,6 @@
 using namespace PGE;
 
 constexpr u64 FNV_SEED = 0xcbf29ce484222325;
-
-//
-// Utility
-//
-
-static int measureCodepoint(unsigned char chr) {
-    if ((chr & 0x80) == 0x00) {
-        //first bit is 0: treat as ASCII
-        return 1;
-    }
-
-    //first bit is 1, number of consecutive 1 bits at the start is length of codepoint
-    int len = 0;
-    while (((chr >> (7 - len)) & 0x01) == 0x01) {
-        len++;
-    }
-    return len;
-}
-
-static wchar utf8ToWChar(const char* cbuffer) {
-    int codepointLen = measureCodepoint(cbuffer[0]);
-    if (codepointLen == 1) {
-        return cbuffer[0];
-    } else {
-        // Decode first byte by skipping all bits that indicate the length of the codepoint.
-        wchar newChar = cbuffer[0] & (0x7f >> codepointLen);
-        for (int j = 1; j < codepointLen; j++) {
-            // Decode all of the following bytes, fixed 6 bits per byte.
-            newChar = (newChar << 6) | (cbuffer[j] & 0x3f);
-        }
-        return newChar;
-    }
-}
-
-// TODO: Take into account UTF-16 surrogate pairs.
-static int convertWCharToUtf8(wchar chr, char* result) {
-    // Fits in standard ASCII, just return the char as-is.
-    if ((chr & 0x7f) == chr) {
-        if (result != nullptr) { result[0] = (char)chr; }
-        return 1;
-    }
-
-    int len = 1;
-
-    // Determine most of the bytes after the first one.
-    while ((chr & (~0x3f)) != 0x00) {
-        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
-        chr >>= 6;
-        len++;
-    }
-
-    // Determine the remaining byte(s): if the number of free bits in
-    // the first byte isn't enough to fit the remaining bits,
-    // add another byte.
-    char firstByte = 0x00;
-    for (int i = 0; i < len; i++) {
-        firstByte |= (0x1 << (7 - i));
-    }
-
-    if (((firstByte | (0x1 << (7 - len))) & chr) == 0x00) {
-        // It fits!
-        firstByte |= chr;
-    } else {
-        // It doesn't fit: add another byte.
-        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
-        chr >>= 6;
-        firstByte = (firstByte | (0x1 << (7 - len))) | chr;
-        len++;
-    }
-
-    if (result != nullptr) {
-        result[len - 1] = firstByte;
-        // Flip the result.
-        for (int i = 0; i < len / 2; i++) {
-            char b = result[i];
-            result[i] = result[len - 1 - i];
-            result[len - 1 - i] = b;
-        }
-    }
-
-    return len;
-}
 
 //
 // Iterator
@@ -119,7 +38,7 @@ String::Iterator::Iterator(const String& str, int byteIndex, int chIndex) {
 
 String::Iterator& String::Iterator::operator++() {
     PGE_ASSERT(index < ref->byteLength(), "Can't increment iterator past string end");
-    index += measureCodepoint(ref->cstr()[index]);
+    index += Unicode::measureCodepoint(ref->cstr()[index]);
     charIndex++;
     // We reached the end and get the str length for free.
     if (index == ref->byteLength()) {
@@ -170,7 +89,7 @@ int String::Iterator::getPosition() const {
 
 void String::Iterator::genChar() const {
     if (_ch == L'\uFFFF') {
-        _ch = utf8ToWChar(ref->cstr() + index);
+        _ch = Unicode::utf8ToWChar(ref->cstr() + index);
     }
 }
 
@@ -236,7 +155,7 @@ void String::wCharToUtf8Str(const wchar* wbuffer) {
     // Determine the capacity of the cbuffer by measuring the number of bytes required for each codepoint.
     int newCap = 0;
     for (int i = 0; wbuffer[i] != L'\0'; i++) {
-        newCap += convertWCharToUtf8(wbuffer[i], nullptr);
+        newCap += Unicode::convertWCharToUtf8(wbuffer[i], nullptr);
     }
     reallocate(newCap);
 
@@ -245,7 +164,7 @@ void String::wCharToUtf8Str(const wchar* wbuffer) {
     int cIndex = 0;
     // We get _strLength "for free" here.
     for (_strLength = 0; wbuffer[_strLength] != L'\0'; _strLength++) {
-        cIndex += convertWCharToUtf8(wbuffer[_strLength], &buf[cIndex]);
+        cIndex += Unicode::convertWCharToUtf8(wbuffer[_strLength], &buf[cIndex]);
     }
     buf[newCap] = '\0';
     strByteLength = newCap;
@@ -265,7 +184,7 @@ String::String(char c) {
     char* buf = cstrNoConst();
     if (c < 0) {
         reallocate(2);
-        strByteLength = convertWCharToUtf8((wchar)(unsigned char)c, buf);
+        strByteLength = Unicode::convertWCharToUtf8((wchar)(unsigned char)c, buf);
         buf[strByteLength] = '\0';
     } else {
         reallocate(1);
@@ -279,7 +198,7 @@ String::String(char c) {
 String::String(wchar w) {
     reallocate(4);
     char* buf = cstrNoConst();
-    strByteLength = convertWCharToUtf8(w, buf);
+    strByteLength = Unicode::convertWCharToUtf8(w, buf);
     _strLength = 1;
     buf[strByteLength] = '\0';
 }
@@ -365,11 +284,11 @@ void String::operator+=(const String& other) {
 }
 
 void String::operator+=(wchar ch) {
-    PGE_ASSERT(ch != L'\0', "Tried appending null");
+    PGE_ASSERT(ch != 0 && ch != 0xFFFF && ch != 0xFFFE, "Tried appending invalid character (" + String::fromInt(ch) + ")");
     int aLen = byteLength();
     reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
-    int actualSize = aLen + convertWCharToUtf8(ch, buf + aLen);
+    int actualSize = aLen + Unicode::convertWCharToUtf8(ch, buf + aLen);
     buf[actualSize] = '\0';
     strByteLength = actualSize;
     if (_strLength >= 0) {
@@ -407,7 +326,7 @@ const String PGE::operator+(const String& a, wchar b) {
     String ret = String(aLen + 4);
     char* buf = ret.cstrNoConst();
     memcpy(buf, a.cstr(), aLen);
-    int actualSize = aLen + convertWCharToUtf8(b, buf + aLen);
+    int actualSize = aLen + Unicode::convertWCharToUtf8(b, buf + aLen);
     buf[actualSize] = '\0';
     ret.strByteLength = actualSize;
     if (a._strLength >= 0) {
@@ -446,7 +365,6 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
             is.rdbuf()->sungetc();
         }
     }
-    std::cout << s << std::endl;
     return is;
 }
 
@@ -474,7 +392,7 @@ bool String::equals(const String& other) const {
 
 static void fold(const char*& buf, std::queue<wchar>& queue) {
     if (queue.empty() && *buf != '\0') {
-        wchar ch = utf8ToWChar(buf);
+        wchar ch = Unicode::utf8ToWChar(buf);
         auto it = Unicode::FOLDING.find(ch);
         if (it == Unicode::FOLDING.end()) {
             queue.push(ch);
@@ -489,7 +407,7 @@ static void fold(const char*& buf, std::queue<wchar>& queue) {
                 }
             }
         }
-        buf += measureCodepoint(*buf);
+        buf += Unicode::measureCodepoint(*buf);
     }
 }
 
@@ -604,7 +522,7 @@ int String::length() const {
     if (_strLength < 0) {
         const char* buf = cstr();
         _strLength = 0;
-        for (int i = 0; buf[i] != '\0'; i += measureCodepoint(buf[i])) {
+        for (int i = 0; buf[i] != '\0'; i += Unicode::measureCodepoint(buf[i])) {
             _strLength++;
         }
     }
@@ -781,7 +699,7 @@ std::vector<String> String::split(const String& needleStr, bool removeEmptyEntri
     int codepoint;
     int cut = 0;
     for (int i = 0; i <= byteLength() - needleStr.byteLength(); i += codepoint) {
-        codepoint = measureCodepoint(haystack[i]);
+        codepoint = Unicode::measureCodepoint(haystack[i]);
         if (memcmp(haystack + i, needle, codepoint) == 0) {
             int addSize = i - cut;
             if (!removeEmptyEntries || addSize != 0) {

@@ -210,6 +210,9 @@
     <ClCompile Include="..\..\Src\Info\Info.cpp">
       <Filter>Src\Info</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\String\UnicodeHelper.cpp">
+      <Filter>Src\String</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -358,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\PGE\Threading\ThreadManager.h">
       <Filter>Include\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\String\UnicodeHelper.h">
+      <Filter>Src\String</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

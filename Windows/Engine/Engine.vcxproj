@@ -55,6 +55,7 @@
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
     <ClCompile Include="..\..\Src\String\String.cpp" />
     <ClCompile Include="..\..\Src\String\Unicode.cpp" />
+    <ClCompile Include="..\..\Src\String\UnicodeHelper.cpp" />
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
     <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp" />
   </ItemGroup>
@@ -107,6 +108,7 @@
     <ClInclude Include="..\..\Src\ResourceManagement\Misc.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h" />
     <ClInclude Include="..\..\Src\String\Unicode.h" />
+    <ClInclude Include="..\..\Src\String\UnicodeHelper.h" />
     <ClInclude Include="..\..\Src\SysEvents\SysEventsInternal.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
