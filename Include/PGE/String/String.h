@@ -46,7 +46,6 @@ class String {
             void operator+=(int steps);
 
             wchar operator*() const;
-            const wchar* operator->() const;
 
             // Member avoids friend.
             bool operator==(const Iterator& other) const;
@@ -164,9 +163,7 @@ class String {
 bool operator==(const String& a, const String& b);
 bool operator!=(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);
-std::wostream& operator<<(std::wostream& wos, const String& s);
 std::istream& operator>>(std::istream& is, String& s);
-std::wistream& operator>>(std::wistream& is, String& s);
 
 }
 
