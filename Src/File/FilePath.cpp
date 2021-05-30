@@ -18,6 +18,8 @@
 
 #include <PGE/Exception/Exception.h>
 
+#include <PGE/File/FileReader.h>
+
 using namespace PGE;
 
 const String INVALID_STR = "Tried using an invalid path";
@@ -160,50 +162,13 @@ void FilePath::enumerateFiles(std::vector<FilePath>& files) const {
 }
 
 String FilePath::read() const {
-    std::ifstream file(cstr());
-    PGE_ASSERT(file.is_open(), "Could not open (file: \"" + str() + "\")");
-
-    byte begin[4] = {};
-    file.read((char*)begin, 3);
-
-    String cnt;
-    // NOT UTF-8 BOM.
-    if (!(begin[0] == 0xEF && begin[1] == 0xBB && begin[2] == 0xBF)) {
-        // UTF-16 BOM.
-        if (begin[0] == 0xFF && begin[1] == 0xFE) {
-            file.close();
-
-            std::wifstream wfile(cstr());
-            PGE_ASSERT(wfile.is_open(), "Could not open (file: \"" + str() + "\")");
-
-            // Skip BOM.
-            wfile.ignore(2);
-
-            while (!wfile.eof()) {
-                wfile >> cnt;
-                cnt += L'\n';
-            }
-
-            wfile.close();
-
-            return cnt;
-        // UTF-16 BOM with unsupported endianness.
-        } else if (begin[0] == 0xFE && begin[1] == 0xFF) {
-            throw PGE_CREATE_EX("File had wrong endianness!");
-        // No BOM!
-        } else {
-            cnt = (char*)begin;
-        }
+    FileReader reader(*this);
+    String ret;
+    while (!reader.eof()) {
+        reader.readLine(ret);
+        ret += '\n';
     }
-
-    while (!file.eof()) {
-        file >> cnt;
-        cnt += '\n';
-    }
-
-    file.close();
-
-    return cnt;
+    return ret;
 }
 
 void FilePath::readLines(std::vector<String>& lines, bool includeEmptyLines) const {
