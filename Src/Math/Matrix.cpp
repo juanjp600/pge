@@ -27,6 +27,24 @@ Matrix4x4f::Matrix4x4f(float aa,float ab,float ac,float ad,
     elements[3][0] = da; elements[3][1] = db; elements[3][2] = dc; elements[3][3] = dd;
 }
 
+void Matrix4x4f::operator+=(const Matrix4x4f& other) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            this->elements[i][j] += other.elements[i][j];
+        }
+    }
+}
+
+Matrix4x4f Matrix4x4f::operator+(const Matrix4x4f& other) const {
+    Matrix4x4f retVal = *this;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            retVal.elements[i][j] += other.elements[i][j];
+        }
+    }
+    return retVal;
+}
+
 void Matrix4x4f::operator*=(const Matrix4x4f& other) {
     Matrix4x4f retVal = ZERO;
     for (int i = 0; i < 4; i++) {
@@ -45,6 +63,28 @@ Matrix4x4f Matrix4x4f::operator*(const Matrix4x4f& other) const {
         for (int k = 0; k < 4; k++) {
             for (int j = 0; j < 4; j++) {
                 retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
+            }
+        }
+    }
+    return retVal;
+}
+
+void Matrix4x4f::operator*=(float scalar) {
+    for (int i = 0; i < 4; i++) {
+        for (int k = 0; k < 4; k++) {
+            for (int j = 0; j < 4; j++) {
+                this->elements[i][j] *= scalar;
+            }
+        }
+    }
+}
+
+Matrix4x4f Matrix4x4f::operator*(float scalar) const {
+    Matrix4x4f retVal = *this;
+    for (int i = 0; i < 4; i++) {
+        for (int k = 0; k < 4; k++) {
+            for (int j = 0; j < 4; j++) {
+                retVal.elements[i][j] *= scalar;
             }
         }
     }
