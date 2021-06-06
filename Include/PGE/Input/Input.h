@@ -21,14 +21,17 @@ class Input {
 
         bool isDown() const;
         bool isHit() const;
+        bool isReleased() const;
         void setDown(bool down);
         void setHit(bool hit);
+        void setReleased(bool released);
 
     protected:
         Input();
 
         bool inputDown;
         bool inputHit;
+        bool inputReleased;
 };
 
 class KeyboardInput : public Input {

@@ -5,6 +5,7 @@ using namespace PGE;
 Input::Input() {
     inputDown = false;
     inputHit = false;
+    inputReleased = false;
 }
 
 bool Input::isDown() const {
@@ -15,12 +16,20 @@ bool Input::isHit() const {
     return inputHit;
 }
 
+bool Input::isReleased() const {
+    return inputReleased;
+}
+
 void Input::setDown(bool down) {
     inputDown = down;
 }
 
 void Input::setHit(bool hit) {
     inputHit = hit;
+}
+
+void Input::setReleased(bool released) {
+    inputReleased = released;
 }
 
 KeyboardInput::KeyboardInput(KeyboardInput::Keycode inKeyCode) {

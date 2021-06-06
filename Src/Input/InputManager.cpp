@@ -106,6 +106,7 @@ void InputManagerInternal::update() {
     textInput = "";
     for (Input* input : inputs) {
         input->setHit(false);
+        input->setReleased(false);
 
         if (input->getDevice() == Input::Device::MOUSE) {
             MouseInput* mouse = (MouseInput*)input;
@@ -124,6 +125,7 @@ void InputManagerInternal::update() {
                         if (!input->isDown()) { input->setHit(true); }
                         input->setDown(true);
                     } else if (event.type == SDL_KEYUP) {
+                        if (input->isDown()) { input->setReleased(true); }
                         input->setDown(false);
                     }
                 }
@@ -185,6 +187,7 @@ void InputManagerInternal::update() {
                             input->setDown(true);
                             mouseInput->setClickCount(mouseButtonEvent.clicks);
                         } else if (event.type==SDL_MOUSEBUTTONUP) {
+                            if (input->isDown()) { input->setReleased(true); }
                             input->setDown(false);
                         }
                     }
@@ -270,6 +273,7 @@ void InputManagerInternal::update() {
                                 bool prevDown = controllerInput->isDown();
                                 controllerInput->setPressDepth((((float)axisEvent.value)+0.5f)/32767.5f);
                                 if (!prevDown && controllerInput->isDown()) { input->setHit(true); }
+                                else if (prevDown && !controllerInput->isDown()) { input->setReleased(true); }
                             } break;
                         }
                     }
@@ -337,6 +341,7 @@ void InputManagerInternal::update() {
                             if (!input->isDown()) { input->setHit(true); }
                             input->setDown(true);
                         } else if (event.type==SDL_CONTROLLERBUTTONUP) {
+                            if (input->isDown()) { input->setReleased(true); }
                             input->setDown(false);
                         }
                     }
