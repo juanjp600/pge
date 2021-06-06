@@ -26,17 +26,9 @@ class ShaderDX11 : public Shader {
         void useVertexInputLayout();
         void useSamplers();
 
-        byte* getDxVsCode(); int getDxVsCodeLen() const;
-        byte* getDxFsCode(); int getDxFsCodeLen() const;
-
         const std::vector<String>& getVertexInputElems() const;
 
     private:
-        std::vector<byte> vertexShaderBytecode;
-        std::vector<byte> fragmentShaderBytecode;
-
-        std::vector<String> vertexInputElemSemanticNames;
-        std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc;
         D3D11InputLayout::View dxVertexInputLayout;
 
         std::vector<String> vertexInputElems;

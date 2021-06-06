@@ -17,7 +17,8 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     readConstantBuffers(reflectionInfo,vertexConstantBuffers);
 
     int inputParamCount = 0; reflectionInfo.read((char*)(void*)&inputParamCount,1);
-    vertexInputElemSemanticNames.resize(inputParamCount);
+    std::vector<String> vertexInputElemSemanticNames(inputParamCount);
+    std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc(inputParamCount);
     for (int i=0;i<inputParamCount;i++) {
         String propertyName = "";
         char chr; reflectionInfo.read(&chr,1);
@@ -50,7 +51,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
         vertexInputElemDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
         vertexInputElemDesc.InstanceDataStepRate = 0;
 
-        dxVertexInputElemDesc.push_back(vertexInputElemDesc);
+        dxVertexInputElemDesc[i] = vertexInputElemDesc;
     }
 
     readConstantBuffers(reflectionInfo, fragmentConstantBuffers);
@@ -78,9 +79,11 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
 
     reflectionInfo.close();
 
+    std::vector<byte> vertexShaderBytecode;
     (path + "vertex.dxbc").readBytes(vertexShaderBytecode);
     PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
 
+    std::vector<byte> fragmentShaderBytecode;
     (path + "fragment.dxbc").readBytes(fragmentShaderBytecode);
     PGE_ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str() + ")");
 
@@ -139,22 +142,6 @@ Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
         }
     }
     return nullptr;
-}
-
-byte* ShaderDX11::getDxVsCode() {
-    return vertexShaderBytecode.data();
-}
-
-int ShaderDX11::getDxVsCodeLen() const {
-    return (int)vertexShaderBytecode.size();
-}
-
-byte* ShaderDX11::getDxFsCode() {
-    return fragmentShaderBytecode.data();
-}
-
-int ShaderDX11::getDxFsCodeLen() const {
-    return (int)fragmentShaderBytecode.size();
 }
 
 const std::vector<String>& ShaderDX11::getVertexInputElems() const {
