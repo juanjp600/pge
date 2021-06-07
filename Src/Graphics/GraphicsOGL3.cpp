@@ -34,7 +34,8 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : Graphics
 
     depthTest = true;
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE); glCullFace(GL_BACK);
+    backfaceCulling = Culling::NONE;
+    setBackfaceCulling(Culling::BACK);
     glEnable(GL_BLEND);
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
     glClearDepth(1.0);
@@ -92,6 +93,34 @@ void GraphicsOGL3::setDepthTest(bool isEnabled) {
             glDisable(GL_DEPTH_TEST);
         }
     }
+}
+
+// TODO: Test.
+void GraphicsOGL3::setBackfaceCulling(Culling mode) {
+    if (mode == backfaceCulling) { return; }
+
+    if (mode == Culling::NONE) {
+        glDisable(GL_CULL_FACE);
+    } else {
+        if (backfaceCulling == Culling::NONE) {
+            glEnable(GL_CULL_FACE);
+        }
+        
+        GLenum glMode;
+        switch (mode) {
+            default:
+            case Culling::BACK: {
+                glMode = GL_BACK;
+            } break;
+            case Culling::FRONT: {
+                glMode = GL_FRONT;
+            } break;
+        }
+        
+        glCullFace(glMode);
+    }
+
+    backfaceCulling = mode;
 }
 
 void GraphicsOGL3::setRenderTarget(Texture* renderTarget) {

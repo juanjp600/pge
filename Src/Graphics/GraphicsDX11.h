@@ -20,6 +20,8 @@ class GraphicsDX11 : public GraphicsInternal {
 
         void clear(Color color) override;
 
+        void setBackfaceCulling(Culling mode) override;
+
         void setRenderTarget(Texture* renderTarget) override;
         void setRenderTargets(const std::vector<Texture*>& renderTargets) override;
         void resetRenderTarget() override;

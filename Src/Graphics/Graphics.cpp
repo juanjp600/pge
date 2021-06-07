@@ -81,6 +81,14 @@ bool Graphics::getVsync() const {
     return vsync;
 }
 
+void Graphics::setBackfaceCulling(Culling mode) {
+    backfaceCulling = mode;
+}
+
+Graphics::Culling Graphics::getBackfaceCulling() const {
+    return backfaceCulling;
+}
+
 #define APPEND(name) '\n' + #name + ": " + String::fromInt(name)
 
 String Graphics::getInfo() const {

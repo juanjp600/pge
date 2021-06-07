@@ -22,6 +22,7 @@ class GraphicsOGL3 : public GraphicsInternal {
         void clear(Color color) override;
     
         void setDepthTest(bool enabled) override;
+        void setBackfaceCulling(Culling mode) override;
 
         void setRenderTarget(Texture* renderTarget) override;
         void setRenderTargets(const std::vector<Texture*>& renderTargets) override;
