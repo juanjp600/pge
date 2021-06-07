@@ -21,6 +21,11 @@ static void textureImage(int width, int height, byte* buffer, Texture::Format fo
             glFormat = GL_RED;
             glPixelType = GL_FLOAT;
         } break;
+        case Texture::Format::R8: {
+            glInternalFormat = GL_R8;
+            glFormat = GL_RED;
+            glPixelType = GL_UNSIGNED_BYTE;
+        } break;
     }
 
     glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, buffer);

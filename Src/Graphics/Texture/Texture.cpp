@@ -2,6 +2,18 @@
 
 using namespace PGE;
 
+int Texture::getBytesPerPixel(Format fmt) {
+    switch (fmt) {
+        case Format::RGBA32:
+        case Format::R32F: {
+            return 4;
+        }
+        case Format::R8: {
+            return 1;
+        }
+    }
+}
+
 Texture::Texture(Graphics* gfx, int w, int h, bool rt, Format fmt) {
     graphics = gfx;
     dimensions = Vector2i(w,h);

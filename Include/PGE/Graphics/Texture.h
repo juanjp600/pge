@@ -12,8 +12,10 @@ class Texture {
     public:
         enum class Format {
             RGBA32,
-            R32F
+            R32F,
+            R8,
         };
+        static int getBytesPerPixel(Format fmt);
 
         bool isRenderTarget() const;
 

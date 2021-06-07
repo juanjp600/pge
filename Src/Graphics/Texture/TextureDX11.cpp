@@ -13,6 +13,9 @@ static DXGI_FORMAT getDXFormat(Texture::Format format) {
         case Texture::Format::R32F: {
             return DXGI_FORMAT_R32_FLOAT;
         } break;
+        case Texture::Format::R8: {
+            return DXGI_FORMAT_R8_UNORM;
+        } break;
         default: {
             return DXGI_FORMAT_UNKNOWN;
         }
@@ -42,7 +45,7 @@ TextureDX11::TextureDX11(Graphics* gfx, int w, int h, byte* buffer, Format fmt) 
     DXGI_FORMAT dxFormat = getDXFormat(fmt);
 
     dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::NORMAL, w, h, dxFormat);
-    dxContext->UpdateSubresource(dxTexture, 0, NULL, buffer, w * 4, 0);
+    dxContext->UpdateSubresource(dxTexture, 0, NULL, buffer, w * getBytesPerPixel(fmt), 0);
 
     dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat, false);
     dxContext->GenerateMips(dxShaderResourceView);
