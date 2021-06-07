@@ -84,45 +84,6 @@ void GraphicsOGL3::clear(Color color) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void GraphicsOGL3::setDepthTest(bool isEnabled) {
-    if (isEnabled != depthTest) {
-        depthTest = isEnabled;
-        if (isEnabled) {
-            glEnable(GL_DEPTH_TEST);
-        } else {
-            glDisable(GL_DEPTH_TEST);
-        }
-    }
-}
-
-// TODO: Test.
-void GraphicsOGL3::setBackfaceCulling(Culling mode) {
-    if (mode == backfaceCulling) { return; }
-
-    if (mode == Culling::NONE) {
-        glDisable(GL_CULL_FACE);
-    } else {
-        if (backfaceCulling == Culling::NONE) {
-            glEnable(GL_CULL_FACE);
-        }
-        
-        GLenum glMode;
-        switch (mode) {
-            default:
-            case Culling::BACK: {
-                glMode = GL_BACK;
-            } break;
-            case Culling::FRONT: {
-                glMode = GL_FRONT;
-            } break;
-        }
-        
-        glCullFace(glMode);
-    }
-
-    backfaceCulling = mode;
-}
-
 void GraphicsOGL3::setRenderTarget(Texture* renderTarget) {
     takeGlContext();
 
@@ -184,6 +145,17 @@ void GraphicsOGL3::setViewport(const Rectanglei& vp) {
     }
 }
 
+void GraphicsOGL3::setDepthTest(bool isEnabled) {
+    if (isEnabled != depthTest) {
+        depthTest = isEnabled;
+        if (isEnabled) {
+            glEnable(GL_DEPTH_TEST);
+        } else {
+            glDisable(GL_DEPTH_TEST);
+        }
+    }
+}
+
 void GraphicsOGL3::setVsync(bool isEnabled) {
     if (isEnabled != vsync) {
         takeGlContext();
@@ -191,6 +163,34 @@ void GraphicsOGL3::setVsync(bool isEnabled) {
         vsync = isEnabled;
         SDL_GL_SetSwapInterval(vsync ? 1 : 0);
     }
+}
+
+// TODO: Test.
+void GraphicsOGL3::setBackfaceCulling(Culling mode) {
+    if (mode == backfaceCulling) { return; }
+
+    if (mode == Culling::NONE) {
+        glDisable(GL_CULL_FACE);
+    } else {
+        if (backfaceCulling == Culling::NONE) {
+            glEnable(GL_CULL_FACE);
+        }
+
+        GLenum glMode;
+        switch (mode) {
+            default:
+            case Culling::BACK: {
+                glMode = GL_BACK;
+            } break;
+            case Culling::FRONT: {
+                glMode = GL_FRONT;
+            } break;
+        }
+
+        glCullFace(glMode);
+    }
+
+    backfaceCulling = mode;
 }
 
 PGE_GFX_OBJ_DEF(OGL3)

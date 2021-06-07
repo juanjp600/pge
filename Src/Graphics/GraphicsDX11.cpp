@@ -123,41 +123,6 @@ void GraphicsDX11::clear(Color color) {
     dxContext->ClearDepthStencilView( currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
 }
 
-void GraphicsDX11::setBackfaceCulling(Culling mode) {
-    if (mode == backfaceCulling) { return; }
-
-    if (dxRasterizerState.isHoldingResource()) {
-        resourceManager.deleteResourcefromReference(dxRasterizerState);
-    }
-
-    ZeroMemory(&dxRasterizerStateDesc, sizeof(D3D11_RASTERIZER_DESC));
-    dxRasterizerStateDesc.AntialiasedLineEnable = false;
-    D3D11_CULL_MODE dxMode;
-    switch (mode) {
-        default:
-        case Culling::BACK: {
-            dxMode = D3D11_CULL_BACK;
-        } break;
-        case Culling::FRONT: {
-            dxMode = D3D11_CULL_FRONT;
-        } break;
-        case Culling::NONE: {
-            dxMode = D3D11_CULL_NONE;
-        } break;
-    }
-    dxRasterizerStateDesc.CullMode = dxMode;
-    dxRasterizerStateDesc.DepthClipEnable = true;
-    dxRasterizerStateDesc.FillMode = D3D11_FILL_SOLID;
-    dxRasterizerStateDesc.ScissorEnable = false;
-    dxRasterizerStateDesc.MultisampleEnable = false;
-    dxRasterizerStateDesc.FrontCounterClockwise = true;
-    dxRasterizerState = resourceManager.addNewResource<D3D11RasterizerState>(dxDevice, dxRasterizerStateDesc);
-
-    dxContext->RSSetState(dxRasterizerState);
-
-    backfaceCulling = mode;
-}
-
 void GraphicsDX11::setRenderTarget(Texture* renderTarget) {
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
@@ -216,6 +181,41 @@ void GraphicsDX11::setViewport(const Rectanglei& vp) {
         dxViewport.TopLeftY = (FLOAT)viewport.topLeftCorner().y;
         dxContext->RSSetViewports( 1, &dxViewport );
     }
+}
+
+void GraphicsDX11::setBackfaceCulling(Culling mode) {
+    if (mode == backfaceCulling) { return; }
+
+    if (dxRasterizerState.isHoldingResource()) {
+        resourceManager.deleteResourcefromReference(dxRasterizerState);
+    }
+
+    ZeroMemory(&dxRasterizerStateDesc, sizeof(D3D11_RASTERIZER_DESC));
+    dxRasterizerStateDesc.AntialiasedLineEnable = false;
+    D3D11_CULL_MODE dxMode;
+    switch (mode) {
+        default:
+        case Culling::BACK: {
+            dxMode = D3D11_CULL_BACK;
+        } break;
+        case Culling::FRONT: {
+            dxMode = D3D11_CULL_FRONT;
+        } break;
+        case Culling::NONE: {
+            dxMode = D3D11_CULL_NONE;
+        } break;
+    }
+    dxRasterizerStateDesc.CullMode = dxMode;
+    dxRasterizerStateDesc.DepthClipEnable = true;
+    dxRasterizerStateDesc.FillMode = D3D11_FILL_SOLID;
+    dxRasterizerStateDesc.ScissorEnable = false;
+    dxRasterizerStateDesc.MultisampleEnable = false;
+    dxRasterizerStateDesc.FrontCounterClockwise = true;
+    dxRasterizerState = resourceManager.addNewResource<D3D11RasterizerState>(dxDevice, dxRasterizerStateDesc);
+
+    dxContext->RSSetState(dxRasterizerState);
+
+    backfaceCulling = mode;
 }
 
 ID3D11Device* GraphicsDX11::getDxDevice() const {

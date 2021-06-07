@@ -20,9 +20,6 @@ class GraphicsOGL3 : public GraphicsInternal {
         void swap() override;
 
         void clear(Color color) override;
-    
-        void setDepthTest(bool enabled) override;
-        void setBackfaceCulling(Culling mode) override;
 
         void setRenderTarget(Texture* renderTarget) override;
         void setRenderTargets(const std::vector<Texture*>& renderTargets) override;
@@ -30,7 +27,9 @@ class GraphicsOGL3 : public GraphicsInternal {
 
         void setViewport(const Rectanglei& vp) override;
 
+        void setDepthTest(bool isEnabled) override;
         void setVsync(bool isEnabled) override;
+        void setBackfaceCulling(Culling mode) override;
 
         void takeGlContext();
         SDL_GLContext getGlContext() const;

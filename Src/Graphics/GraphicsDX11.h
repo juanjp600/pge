@@ -20,13 +20,13 @@ class GraphicsDX11 : public GraphicsInternal {
 
         void clear(Color color) override;
 
-        void setBackfaceCulling(Culling mode) override;
-
         void setRenderTarget(Texture* renderTarget) override;
         void setRenderTargets(const std::vector<Texture*>& renderTargets) override;
         void resetRenderTarget() override;
 
         void setViewport(const Rectanglei& vp) override;
+
+        void setBackfaceCulling(Culling mode) override;
 
         ID3D11Device* getDxDevice() const;
         ID3D11DeviceContext* getDxContext() const;
