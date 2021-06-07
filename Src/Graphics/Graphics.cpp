@@ -81,12 +81,12 @@ bool Graphics::getVsync() const {
     return vsync;
 }
 
-void Graphics::setBackfaceCulling(Culling mode) {
-    backfaceCulling = mode;
+void Graphics::setCulling(Culling mode) {
+    cullingMode = mode;
 }
 
-Graphics::Culling Graphics::getBackfaceCulling() const {
-    return backfaceCulling;
+Graphics::Culling Graphics::getCulling() const {
+    return cullingMode;
 }
 
 #define APPEND(name) '\n' + #name + ": " + String::fromInt(name)

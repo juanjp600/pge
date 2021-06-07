@@ -60,8 +60,8 @@ class Graphics {
             FRONT,
             NONE
         };
-        virtual void setBackfaceCulling(Culling mode);
-        virtual Culling getBackfaceCulling() const;
+        virtual void setCulling(Culling mode);
+        virtual Culling getCulling() const;
 
         String getInfo() const;
         virtual String getRendererName() const = 0;
@@ -78,7 +78,7 @@ class Graphics {
 
         bool depthTest;
         bool vsync;
-        Culling backfaceCulling;
+        Culling cullingMode;
 
         // Base class always automatically takes care of SysEvents and the window.
         WindowEventSubscriber::View eventSubscriber;

@@ -34,8 +34,8 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : Graphics
 
     depthTest = true;
     glEnable(GL_DEPTH_TEST);
-    backfaceCulling = Culling::NONE;
-    setBackfaceCulling(Culling::BACK);
+    cullingMode = Culling::NONE;
+    setCulling(Culling::BACK);
     glEnable(GL_BLEND);
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
     glClearDepth(1.0);
@@ -166,13 +166,13 @@ void GraphicsOGL3::setVsync(bool isEnabled) {
 }
 
 // TODO: Test.
-void GraphicsOGL3::setBackfaceCulling(Culling mode) {
-    if (mode == backfaceCulling) { return; }
+void GraphicsOGL3::setCulling(Culling mode) {
+    if (mode == cullingMode) { return; }
 
     if (mode == Culling::NONE) {
         glDisable(GL_CULL_FACE);
     } else {
-        if (backfaceCulling == Culling::NONE) {
+        if (cullingMode == Culling::NONE) {
             glEnable(GL_CULL_FACE);
         }
 
@@ -190,7 +190,7 @@ void GraphicsOGL3::setBackfaceCulling(Culling mode) {
         glCullFace(glMode);
     }
 
-    backfaceCulling = mode;
+    cullingMode = mode;
 }
 
 PGE_GFX_OBJ_DEF(OGL3)

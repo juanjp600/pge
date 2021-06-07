@@ -56,8 +56,8 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture, DXGI_FORMAT_D24_UNORM_S8_UINT);
     dxContext->OMSetRenderTargets(1, &dxBackBufferRtv, dxZBufferView);
 
-    backfaceCulling = Culling::NONE;
-    setBackfaceCulling(Culling::BACK);
+    cullingMode = Culling::NONE;
+    setCulling(Culling::BACK);
 
     ZeroMemory(&dxBlendStateDesc, sizeof(D3D11_BLEND_DESC));
     dxBlendStateDesc.RenderTarget[0].BlendEnable = true;
@@ -183,8 +183,8 @@ void GraphicsDX11::setViewport(const Rectanglei& vp) {
     }
 }
 
-void GraphicsDX11::setBackfaceCulling(Culling mode) {
-    if (mode == backfaceCulling) { return; }
+void GraphicsDX11::setCulling(Culling mode) {
+    if (mode == cullingMode) { return; }
 
     if (dxRasterizerState.isHoldingResource()) {
         resourceManager.deleteResourcefromReference(dxRasterizerState);
@@ -215,7 +215,7 @@ void GraphicsDX11::setBackfaceCulling(Culling mode) {
 
     dxContext->RSSetState(dxRasterizerState);
 
-    backfaceCulling = mode;
+    cullingMode = mode;
 }
 
 ID3D11Device* GraphicsDX11::getDxDevice() const {

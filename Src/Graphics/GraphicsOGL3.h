@@ -29,7 +29,7 @@ class GraphicsOGL3 : public GraphicsInternal {
 
         void setDepthTest(bool isEnabled) override;
         void setVsync(bool isEnabled) override;
-        void setBackfaceCulling(Culling mode) override;
+        void setCulling(Culling mode) override;
 
         void takeGlContext();
         SDL_GLContext getGlContext() const;

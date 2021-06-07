@@ -26,7 +26,7 @@ class GraphicsDX11 : public GraphicsInternal {
 
         void setViewport(const Rectanglei& vp) override;
 
-        void setBackfaceCulling(Culling mode) override;
+        void setCulling(Culling mode) override;
 
         ID3D11Device* getDxDevice() const;
         ID3D11DeviceContext* getDxContext() const;
