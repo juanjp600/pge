@@ -14,7 +14,7 @@ class TextureOGL3 : public Texture {
         // Render target.
         TextureOGL3(Graphics* gfx, int w, int h, Format fmt);
         // Loaded texture.
-        TextureOGL3(Graphics* gfx, int w, int h, byte* buffer, Format fmt);
+        TextureOGL3(Graphics* gfx, int w, int h, const byte* buffer, Format fmt);
 
         Texture* copy() const override;
 
