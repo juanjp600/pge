@@ -127,6 +127,13 @@ String FilePath::getExtension() const {
     return name.substr(startIndex+1);
 }
 
+FilePath FilePath::trimExtension() const {
+    PGE_ASSERT(valid, INVALID_STR);
+    String::Iterator startIndex = name.findLast(".");
+    if (startIndex == name.end()) { return *this; }
+    return name.substr(name.begin(), startIndex);
+}
+
 bool FilePath::exists() const {
     PGE_ASSERT(valid, INVALID_STR);
     std::error_code err;

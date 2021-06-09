@@ -30,6 +30,7 @@ class FilePath {
         FilePath up() const;
 
         String getExtension() const;
+        FilePath trimExtension() const;
 
         // Check if a path exists on the system.
         bool exists() const;
