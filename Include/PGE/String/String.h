@@ -88,9 +88,9 @@ class String {
         static String fromInt(int i);
         static String fromFloat(float f);
 
-        void operator=(const String& other);
-        void operator+=(const String& other);
-        void operator+=(wchar ch);
+        String operator=(const String& other);
+        String operator+=(const String& other);
+        String operator+=(wchar ch);
 
         // TODO: Remove (juan hates his friends).
         friend const String operator+(const String& a, const String& b);

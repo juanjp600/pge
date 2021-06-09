@@ -261,17 +261,18 @@ String String::fromFloat(float f) {
     return ret;
 }
 
-void String::operator=(const String& other) {
-    if (cstr()[0] == '\0' && other.cstr()[0] == '\0') { return; }
+String String::operator=(const String& other) {
+    if (cstr()[0] == '\0' && other.cstr()[0] == '\0') { return *this; }
     reallocate(other.byteLength());
     memcpy(cstrNoConst(), other.cstr(), other.byteLength() + 1);
     strByteLength = other.strByteLength;
     _strLength = other._strLength;
     _hashCodeEvaluted = other._hashCodeEvaluted;
     _hashCode = other._hashCode;
+    return *this;
 }
 
-void String::operator+=(const String& other) {
+String String::operator+=(const String& other) {
     int oldByteSize = byteLength();
     int newSize = oldByteSize + other.byteLength();
     reallocate(newSize, true);
@@ -281,9 +282,10 @@ void String::operator+=(const String& other) {
     if (_strLength >= 0 && other._strLength >= 0) {
         _strLength += other.length();
     }
+    return *this;
 }
 
-void String::operator+=(wchar ch) {
+String String::operator+=(wchar ch) {
     int aLen = byteLength();
     reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
@@ -293,6 +295,7 @@ void String::operator+=(wchar ch) {
     if (_strLength >= 0) {
         _strLength++;
     }
+    return *this;
 }
 
 const String PGE::operator+(const String& a, const String& b) {
@@ -356,13 +359,6 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
     }
     if (ch == EOF) {
         is.setstate(std::ios::eofbit | std::ios::failbit);
-    } else {
-        // Pure carriage return linebreak are a thing!
-        char checkChar = ch == '\r' ? '\n' : '\r';
-        // Eat the next character and spit it out if its not a continuaton of the EOL.
-        if (checkChar != is.rdbuf()->sbumpc()) {
-            is.rdbuf()->sungetc();
-        }
     }
     return is;
 }
