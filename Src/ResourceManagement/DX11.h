@@ -89,7 +89,8 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
         enum class Type {
             RENDER_TARGET,
             DEPTH_STENCIL,
-            NORMAL
+            NO_MIPMAPS,
+            NORMAL,
         };
         
         D3D11Texture2D(ID3D11Device* device, Type type, int width, int height, DXGI_FORMAT format) {
@@ -97,7 +98,7 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
             ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
             textureDesc.Width = (UINT)width;
             textureDesc.Height = (UINT)height;
-            if (type == Type::DEPTH_STENCIL) {
+            if (type == Type::DEPTH_STENCIL || type == Type::NO_MIPMAPS) {
                 textureDesc.MipLevels = 1;
             }
             textureDesc.ArraySize = 1;

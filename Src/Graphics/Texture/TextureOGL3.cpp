@@ -52,11 +52,11 @@ TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, Format fmt) : Texture(gfx,
     //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, glDepthbuffer);
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, const byte* buffer, Format fmt) : Texture(gfx, w, h, false, fmt), resourceManager(gfx, 2) {
+TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) : Texture(gfx, w, h, false, fmt), resourceManager(gfx, 2) {
     ((GraphicsOGL3*)gfx)->takeGlContext();
     glTexture = resourceManager.addNewResource<GLTexture>();
     textureImage(w, h, buffer, fmt);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    if (mipmaps) { glGenerateMipmap(GL_TEXTURE_2D); }
     applyTextureParameters(false);
 }
 

@@ -64,12 +64,12 @@ Texture* Texture::createRenderTarget(Graphics* gfx, int w, int h, Format fmt) {
     return ((GraphicsInternal*)gfx)->createRenderTargetTexture(w, h, fmt);
 }
 
-Texture* Texture::createBlank(Graphics* gfx, int w, int h, Format fmt) {
+Texture* Texture::createBlank(Graphics* gfx, int w, int h, Format fmt, bool mipmaps) {
     std::vector<byte> bufferData = std::vector<byte>(w * h * 4, 0);
-    return ((GraphicsInternal*)gfx)->loadTexture(w, h, bufferData.data(), fmt);
+    return ((GraphicsInternal*)gfx)->loadTexture(w, h, bufferData.data(), fmt, mipmaps);
 }
 
-Texture* Texture::load(Graphics* gfx, int w, int h, const byte* buffer, Format fmt) {
+Texture* Texture::load(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) {
     PGE_ASSERT(buffer != nullptr, "Tried to load texture from nullptr");
-    return ((GraphicsInternal*)gfx)->loadTexture(w, h, buffer, fmt);
+    return ((GraphicsInternal*)gfx)->loadTexture(w, h, buffer, fmt, mipmaps);
 }

@@ -16,7 +16,7 @@ class TextureDX11 : public Texture {
         // Render target.
         TextureDX11(Graphics* gfx, int w, int h, Format fmt);
         // Loaded texture.
-        TextureDX11(Graphics* gfx, int w, int h, const byte* buffer, Format fmt);
+        TextureDX11(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps);
 
         void useTexture(int index);
 
