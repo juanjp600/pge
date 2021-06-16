@@ -6,7 +6,7 @@
 
 using namespace PGE;
 
-ResourceManager::ResourceManager(int sz) {
+ResourceManager::ResourceManager(size_t sz) {
     resources.reserve(sz);
 #ifdef DEBUG
     size = sz;

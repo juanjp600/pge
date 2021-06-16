@@ -106,6 +106,9 @@ wchar FileReader::readChar() {
 				return (wchar)((ch << 8) | ch2);
 			}
 		}
+		default: {
+			throw PGE_CREATE_EX("Invalid encoding");
+		}
 	}
 }
 

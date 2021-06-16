@@ -11,6 +11,9 @@ int Texture::getBytesPerPixel(Format fmt) {
         case Format::R8: {
             return 1;
         }
+        default: {
+            throw PGE_CREATE_EX("Invalid format");
+        }
     }
 }
 

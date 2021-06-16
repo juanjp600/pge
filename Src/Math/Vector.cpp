@@ -378,5 +378,5 @@ float Vector2i::distance(const Vector2i& b) const {
 }
 
 String Vector2i::toString() const {
-    return "Vector2i(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ")";
+    return "Vector2i(" + String::fromInt(x) + ", " + String::fromInt(y) + ")";
 }

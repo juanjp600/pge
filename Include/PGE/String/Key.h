@@ -90,7 +90,7 @@ class String::OrderedKey {
 
 template <> struct std::hash<PGE::String::Key> {
     size_t operator()(const PGE::String::Key& key) const {
-        return key.hash;
+        return (size_t)key.hash;
     }
 };
 
@@ -102,7 +102,7 @@ template <> struct std::equal_to<PGE::String::Key> {
 
 template <> struct std::hash<PGE::String::RedundantKey> {
     size_t operator()(const PGE::String::RedundantKey& key) const {
-        return key.hash();
+        return (size_t)key.hash();
     }
 };
 
@@ -114,7 +114,7 @@ template <> struct std::equal_to<PGE::String::RedundantKey> {
 
 template <> struct std::hash<PGE::String::SafeKey> {
     size_t operator()(const PGE::String::SafeKey& key) const {
-        return key.hash();
+        return (size_t)key.hash();
     }
 };
 

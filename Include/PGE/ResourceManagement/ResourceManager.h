@@ -14,11 +14,11 @@ class ResourceManager {
 
 #ifdef DEBUG
         // We need this, because the C++ specification states that reserve on a vector might increase the capacity beyond the specified size.
-        int size;
+        size_t size;
 #endif
 
     public:
-        ResourceManager(int sz);
+        ResourceManager(size_t sz);
         virtual ~ResourceManager();
 
         template <class T, class... Args>
