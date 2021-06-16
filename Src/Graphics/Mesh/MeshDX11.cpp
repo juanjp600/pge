@@ -11,27 +11,19 @@ using namespace PGE;
 
 MeshDX11::MeshDX11(Graphics* gfx,Primitive::Type pt) : resourceManager(2) {
     graphics = gfx;
-
     primitiveType = pt;
-
-    dxVertexData.clear();
-    dxIndexData.clear();
-    vertices.clear(); vertexCount = 0;
-    primitives.clear(); primitiveCount = 0;
 }
 
 void MeshDX11::updateInternalData() {
     if (!mustUpdateInternalData) { return; }
     
-    dxVertexData.clear();
-    dxIndexData.clear();
+    dxVertexData.clear(); dxIndexData.clear();
 
     bool recalculateStride = true;
     stride = 0;
     const std::vector<String>& vertexInputElems = ((ShaderDX11*)material->getShader())->getVertexInputElems();
-    int vertexInputElemCount = (int)vertexInputElems.size();
-    for (int i=0;i<vertexCount;i++) {
-        for (int j=0;j<vertexInputElemCount;j++) {
+    for (size_t i=0;i<vertices.size();i++) {
+        for (size_t j=0;j<vertexInputElems.size();j++) {
             const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j]);
             switch (prop.type) {
                 case Vertex::Property::Type::FLOAT: {
@@ -85,7 +77,7 @@ void MeshDX11::updateInternalData() {
         recalculateStride = false;
     }
 
-    for (int i=0;i<primitiveCount;i++) {
+    for (int i=0;i<primitives.size();i++) {
         dxIndexData.push_back((WORD)primitives[i].a);
         dxIndexData.push_back((WORD)primitives[i].b);
         if (primitiveType==Primitive::Type::TRIANGLE) {
@@ -167,10 +159,10 @@ void MeshDX11::render() {
 
     ((GraphicsDX11*)graphics)->setZBufferState(
         graphics->getDepthTest()
-                ? (opaque ? GraphicsDX11::ZBufferStateIndex::ENABLED_WRITE : GraphicsDX11::ZBufferStateIndex::ENABLED_NOWRITE)
+                ? (isOpaque() ? GraphicsDX11::ZBufferStateIndex::ENABLED_WRITE : GraphicsDX11::ZBufferStateIndex::ENABLED_NOWRITE)
                 : GraphicsDX11::ZBufferStateIndex::DISABLED);
     
-    dxContext->DrawIndexed(primitiveCount*dxIndexMultiplier,0,0);
+    dxContext->DrawIndexed(primitives.size()*dxIndexMultiplier,0,0);
 
     ID3D11ShaderResourceView* nullResource = nullptr;
     for (int i=0;i<material->getTextureCount();i++) {

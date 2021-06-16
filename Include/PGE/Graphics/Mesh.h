@@ -76,13 +76,16 @@ class Mesh {
         Mesh* clone();
         virtual ~Mesh() = default;
 
-        void setGeometry(int vertexCount, const std::vector<Vertex>& verts, int primCount, const std::vector<Primitive>& prims);
         void setGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims);
+        // TODO: Possibly delegate this to the implementations.
+        // In general it is worth investigating if we can optimize changes to meshes by offloading more work to the implementations.
+        // Also e.g. encapsulating update and upload methods a bit would make for a better design. 
+        void addGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims);
         void clearGeometry();
         void setMaterial(Material* m);
 
-        const std::vector<Vertex>& getVertices(int& vertCount) const;
-        const std::vector<Primitive>& getPrimitives(int& primCount) const;
+        const std::vector<Vertex>& getVertices() const;
+        const std::vector<Primitive>& getPrimitives() const;
         bool isOpaque() const;
 
         // Must be threadsafe.
@@ -91,7 +94,6 @@ class Mesh {
         virtual void render() = 0;
 
     protected:
-        bool opaque;
         bool mustUpdateInternalData = true;
         bool mustReuploadInternalData = true;
 
@@ -104,7 +106,6 @@ class Mesh {
         Graphics* graphics;
         Primitive::Type primitiveType;
 
-        int vertexCount; int primitiveCount;
         std::vector<Vertex> vertices;
         std::vector<Primitive> primitives;
 };

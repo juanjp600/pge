@@ -82,55 +82,41 @@ Primitive::Primitive(long ia,long ib,long ic) {
 
 Mesh* Mesh::clone() {
     Mesh* newMesh = create(graphics, primitiveType);
-    newMesh->setGeometry(vertexCount, vertices, primitiveCount, primitives);
+    newMesh->setGeometry(vertices, primitives);
     newMesh->setMaterial(material);
     return newMesh;
 }
 
-void Mesh::setGeometry(int vertCount, const std::vector<Vertex>& verts, int primCount, const std::vector<Primitive>& prims) {
+void Mesh::setGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims) {
     mustUpdateInternalData = true; mustReuploadInternalData = true;
     //TODO: check for property mismatches?
-    for (int i = 0; i < vertCount; i++) {
-        if (i >= (int)vertices.size()) {
-            vertices.push_back(verts[i]);
-        } else {
-            vertices[i] = verts[i];
-        }
-    }
-    vertexCount = vertCount;
-
-    //TODO: optimize this too?
-    primitiveCount = primCount;
-    primitives = prims;
-    opaque = material!=nullptr ? material->isOpaque() : true;
+    vertices = verts; primitives = prims;
 }
 
-void Mesh::setGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims) {
-    setGeometry(verts.size(), verts, prims.size(), prims);
+void Mesh::addGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims) {
+    mustUpdateInternalData = true; mustReuploadInternalData = true;
+    vertices.insert(vertices.end(), verts.begin(), verts.end());
+    primitives.insert(primitives.end(), prims.begin(), prims.end());
 }
 
 void Mesh::clearGeometry() {
     mustUpdateInternalData = true; mustReuploadInternalData = true;
-    vertexCount = 0; primitiveCount = 0;
-    opaque = material!=nullptr ? material->isOpaque() : true;
+    vertices.clear(); primitives.clear();
 }
 
 void Mesh::setMaterial(Material* m) {
-    //mustUpdateInternalData = true; mustReuploadInternalData = true;
+    mustUpdateInternalData = true; mustReuploadInternalData = true;
     material = m;
-    opaque = material != nullptr ? material->isOpaque() : true;
 }
 
-const std::vector<Vertex>& Mesh::getVertices(int& vertCount) const {
-    vertCount = vertexCount;
+const std::vector<Vertex>& Mesh::getVertices() const {
     return vertices;
 }
 
-const std::vector<Primitive>& Mesh::getPrimitives(int& primCount) const {
-    primCount = primitiveCount;
+const std::vector<Primitive>& Mesh::getPrimitives() const {
     return primitives;
 }
 
 bool Mesh::isOpaque() const {
-    return opaque;
+    return material->isOpaque();
 }

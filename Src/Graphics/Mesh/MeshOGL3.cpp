@@ -15,13 +15,6 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::Type pt) : resourceManager(gfx, 3) {
 
     primitiveType = pt;
 
-    material = nullptr;
-
-    glVertexData.clear(); glIndexData.clear();
-
-    vertices.clear(); vertexCount = 0;
-    primitives.clear(); primitiveCount = 0;
-
     glVertexBufferObject = resourceManager.addNewResource<GLBuffer>();
     glIndexBufferObject = resourceManager.addNewResource<GLBuffer>();
 
@@ -34,9 +27,8 @@ void MeshOGL3::updateInternalData() {
     glVertexData.clear(); glIndexData.clear();
 
     const std::vector<String>& vertexInputElems = ((ShaderOGL3*)material->getShader())->getVertexInputElems();
-    int vertexInputElemCount = (int)vertexInputElems.size();
-    for (int i=0;i<vertexCount;i++) {
-        for (int j=0;j<vertexInputElemCount;j++) {
+    for (size_t i=0;i<vertices.size();i++) {
+        for (size_t j=0;j<vertexInputElems.size();j++) {
             const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j]);
             switch (prop.type) {
                 case Vertex::Property::Type::FLOAT: {
@@ -83,7 +75,7 @@ void MeshOGL3::updateInternalData() {
         }
     }
 
-    for (int i=0;i<primitiveCount;i++) {
+    for (int i=0;i<primitives.size();i++) {
         glIndexData.push_back((GLuint)primitives[i].a);
         glIndexData.push_back((GLuint)primitives[i].b);
         if (primitiveType==Primitive::Type::TRIANGLE) {
@@ -149,7 +141,7 @@ void MeshOGL3::render() {
     glDepthMask(isOpaque());
     glColorMask(true,true,true,!isOpaque());
 
-    glDrawElements(glPrimitiveType,primitiveCount*glIndexMultiplier,GL_UNSIGNED_INT,nullptr);
+    glDrawElements(glPrimitiveType,primitives.size()*glIndexMultiplier,GL_UNSIGNED_INT,nullptr);
 
     ((ShaderOGL3*)material->getShader())->unbindGLAttribs();
     glBindVertexArray(0);
