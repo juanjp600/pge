@@ -43,8 +43,7 @@ class Graphics {
         virtual void setViewport(const Rectanglei& vp) = 0;
         const Rectanglei& getViewport() const;
 
-        int getWidth() const;
-        int getHeight() const;
+        const Vector2i& getDimensions() const; float getAspectRatio() const;
 
         bool isWindowOpen() const;
         bool isWindowFocused() const;
@@ -71,7 +70,8 @@ class Graphics {
 
         Rectanglei viewport;
 
-        int width; int height; bool fullscreen;
+        Vector2i dimensions; float aspectRatio;
+        bool fullscreen;
 
         bool open;
         bool focused;

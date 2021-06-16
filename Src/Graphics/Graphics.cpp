@@ -16,7 +16,8 @@ const std::list<Graphics*>& Graphics::getActiveInstances() {
 
 Graphics::Graphics(const String& name, int w, int h, bool fs, u32 windowFlags) : resourceManager(2) {
     caption = name;
-    width = w; height = h; fullscreen = fs;
+    dimensions = Vector2i(w, h); aspectRatio = (float)w / h;
+    fullscreen = fs;
 
     eventSubscriber = resourceManager.addNewResource<WindowEventSubscriber>(this);
 
@@ -49,12 +50,12 @@ const Rectanglei& Graphics::getViewport() const {
     return viewport;
 }
 
-int Graphics::getWidth() const {
-    return width;
+const Vector2i& Graphics::getDimensions() const {
+    return dimensions;
 }
 
-int Graphics::getHeight() const {
-    return height;
+float Graphics::getAspectRatio() const {
+    return aspectRatio;
 }
 
 bool Graphics::isWindowOpen() const {
@@ -93,6 +94,6 @@ Graphics::Culling Graphics::getCulling() const {
 
 String Graphics::getInfo() const {
     return caption + " (" + getRendererName() + ") "
-        + String::fromInt(width) + 'x' + String::fromInt(height) + " / " + String::fromInt(viewport.width()) + 'x' + String::fromInt(viewport.height())
+        + dimensions.toString() + " / " + String::fromInt(viewport.width()) + 'x' + String::fromInt(viewport.height())
         + APPEND(open) + APPEND(focused) + APPEND(fullscreen) + APPEND(vsync) + APPEND(depthTest);
 }
