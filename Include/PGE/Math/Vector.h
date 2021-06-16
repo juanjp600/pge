@@ -150,6 +150,8 @@ class Vector2i {
         int distanceSquared(const Vector2i& b) const;
         float distance(const Vector2i& b) const;
 
+        String toString() const;
+
         static const Vector2i ZERO;
         static const Vector2i ONE;
 };

@@ -376,3 +376,7 @@ int Vector2i::distanceSquared(const Vector2i& b) const {
 float Vector2i::distance(const Vector2i& b) const {
     return (*this - b).length();
 }
+
+String Vector2i::toString() const {
+    return "Vector2i(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ")";
+}
