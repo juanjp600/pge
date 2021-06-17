@@ -75,7 +75,7 @@ void MeshOGL3::updateInternalData() {
         }
     }
 
-    for (int i=0;i<primitives.size();i++) {
+    for (size_t i=0;i<primitives.size();i++) {
         glIndexData.push_back((GLuint)primitives[i].a);
         glIndexData.push_back((GLuint)primitives[i].b);
         if (primitiveType==Primitive::Type::TRIANGLE) {

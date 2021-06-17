@@ -77,7 +77,7 @@ void MeshDX11::updateInternalData() {
         recalculateStride = false;
     }
 
-    for (int i=0;i<primitives.size();i++) {
+    for (size_t i=0;i<primitives.size();i++) {
         dxIndexData.push_back((WORD)primitives[i].a);
         dxIndexData.push_back((WORD)primitives[i].b);
         if (primitiveType==Primitive::Type::TRIANGLE) {
