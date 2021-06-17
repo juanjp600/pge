@@ -85,6 +85,10 @@ Vector2f Vector2f::operator*(float f) const {
     return Vector2f(x * f, y * f);
 }
 
+Vector2f operator*(float f, const Vector2f& vec) {
+    return vec * f;
+}
+
 Vector2f Vector2f::operator/(float f) const {
     return Vector2f(x / f, y / f);
 }
@@ -128,10 +132,6 @@ float Vector2f::dotProduct(const Vector2f& b) const {
 
 String Vector2f::toString() const {
     return "Vector2f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ")";
-}
-
-Vector2f Vector2f::lerp(const Vector2f& oldValue, const Vector2f& newValue, float interpolation) {
-    return oldValue + (newValue - oldValue) * interpolation;
 }
 
 const Vector3f Vector3f::ZERO = Vector3f(0.f,0.f,0.f);
@@ -209,6 +209,10 @@ Vector3f Vector3f::operator*(float f) const {
     return Vector3f(x * f, y * f, z * f);
 }
 
+Vector3f operator*(float f, const Vector3f& vec) {
+    return vec * f;
+}
+
 Vector3f Vector3f::operator/(float f) const {
     return Vector3f(x / f, y / f, z / f);
 }
@@ -260,10 +264,6 @@ Vector3f Vector3f::crossProduct(const Vector3f& b) const {
 
 String Vector3f::toString() const {
     return "Vector3f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ", " + String::fromFloat(z) + ")";
-}
-
-Vector3f Vector3f::lerp(const Vector3f& oldValue, const Vector3f& newValue, float interpolation) {
-    return oldValue + (newValue - oldValue) * interpolation;
 }
 
 Vector4f::Vector4f() {
@@ -359,6 +359,10 @@ Vector2i Vector2i::operator-(int i) const {
 
 Vector2i Vector2i::operator*(int i) const {
     return Vector2i(x * i, y * i);
+}
+
+Vector2i operator*(int i, const Vector2i& vec) {
+    return vec * i;
 }
 
 int Vector2i::lengthSquared() const {

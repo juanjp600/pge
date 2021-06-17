@@ -52,11 +52,11 @@ class Vector2f {
 
         String toString() const;
 
-        static Vector2f lerp(const Vector2f& oldValue, const Vector2f& newValue, float interpolation);
-
         static const Vector2f ZERO;
         static const Vector2f ONE;
 };
+
+Vector2f operator*(float f, const Vector2f& vec);
 
 class Vector3f {
     public:
@@ -99,11 +99,11 @@ class Vector3f {
 
         String toString() const;
 
-        static Vector3f lerp(const Vector3f& oldValue, const Vector3f& newValue, float interpolation);
-
         static const Vector3f ZERO;
         static const Vector3f ONE;
 };
+
+Vector3f operator*(float f, const Vector3f& vec);
 
 class Vector4f {
     public:
@@ -155,6 +155,8 @@ class Vector2i {
         static const Vector2i ZERO;
         static const Vector2i ONE;
 };
+
+Vector2i operator*(int i, const Vector2i& vec);
 
 }
 
