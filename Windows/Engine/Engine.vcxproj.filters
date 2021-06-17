@@ -371,5 +371,8 @@
     <ClInclude Include="..\..\Src\String\UnicodeHelper.h">
       <Filter>Src\String</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Math\Interpolator.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
