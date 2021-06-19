@@ -106,7 +106,7 @@ String::Iterator String::end() const {
 
 void String::copy(String& dst, const String& src) {
     dst.internalData = src.internalData;
-    if (src.data->cCapacity == shortStrCapacity) {
+    if (src.data->cCapacity == SHORT_STR_CAPACITY) {
         Unique& u = std::get<Unique>(dst.internalData);
         dst.chs = u.chs;
         dst.data = &u.data;
@@ -441,7 +441,7 @@ void String::reallocate(int size, bool copyOldChs) {
     size++;
 
     if (size <= data->cCapacity) {
-        if (data->cCapacity == shortStrCapacity) {
+        if (data->cCapacity == SHORT_STR_CAPACITY) {
             return;
         }
         std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
