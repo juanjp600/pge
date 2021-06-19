@@ -374,6 +374,7 @@ u64 String::getHashCode() const {
 }
 
 bool String::equals(const String& other) const {
+    if (chs == other.chs) { return true; }
     if (byteLength() != other.byteLength()) { return false; }
     if (data->_strLength >= 0 && other.data->_strLength >= 0 && length() != other.length()) { return false; }
     if (data->_hashCodeEvaluted && other.data->_hashCodeEvaluted) { return getHashCode() == other.getHashCode(); }
@@ -403,6 +404,7 @@ static void fold(const char*& buf, std::queue<wchar>& queue) {
 }
 
 bool String::equalsIgnoreCase(const String& other) const {
+    if (chs == other.chs) { return true; }
     if (data->_hashCodeEvaluted && other.data->_hashCodeEvaluted && getHashCode() == other.getHashCode()) { return true; }
 
     const char* buf[2] = { cstr(), other.cstr() };
