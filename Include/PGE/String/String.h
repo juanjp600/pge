@@ -70,9 +70,8 @@ class String {
         Iterator begin() const;
         Iterator end() const;
 
-        ~String();
+        ~String() = default; // TODO: WHY THE FUCK IS THIS NEEDED??
         String();
-        String(const String& a);
         String(const char* cstr);
         String(const std::string& cppstr);
         String(const wchar* wstr);
@@ -140,25 +139,24 @@ class String {
         String(int size);
         String(const String& other, int from, int cnt);
 
-        // Lazily evaluated.
-        mutable bool _hashCodeEvaluted;
-        mutable u64 _hashCode;
-        mutable int _strLength;
+        struct Data {
+            // Lazily evaluated.
+            mutable bool _hashCodeEvaluted = false;
+            mutable u64 _hashCode;
+            mutable int _strLength = -1;
 
-        int strByteLength = -1;
+            int strByteLength = -1;
 
-        constexpr static int shortStrCapacity = 16;
-        int cCapacity = shortStrCapacity;
+            int cCapacity;
+            std::unique_ptr<char[]> chs;
+        };
 
-        union {
-            char shortStr[shortStrCapacity];
-            char* longStr;
-        } data;
+        std::shared_ptr<Data> data;
 
         String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
 
         void wCharToUtf8Str(const wchar* wbuffer);
-        void reallocate(int size, bool copyOldData = false);
+        void reallocate(int size, bool copyOldChs = false);
         char* cstrNoConst();
 };
 
