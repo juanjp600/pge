@@ -473,7 +473,7 @@ const char* String::cstr() const {
     return chs;
 }
 
-__declspec(noinline) char* String::cstrNoConst() {
+char* String::cstrNoConst() {
     return chs;
 }
 
