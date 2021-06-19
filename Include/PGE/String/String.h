@@ -142,7 +142,7 @@ class String {
         String(int size);
         String(const String& other, int from, int cnt);
 
-        constexpr static int shortStrCapacity = 16;
+        static constexpr int SHORT_STR_CAPACITY = 16;
 
         struct Data {
             // Lazily evaluated.
@@ -152,7 +152,7 @@ class String {
 
             int strByteLength = -1;
 
-            int cCapacity = shortStrCapacity;
+            int cCapacity = SHORT_STR_CAPACITY;
         };
 
         struct Shared {
@@ -162,7 +162,7 @@ class String {
 
         struct Unique {
             Data data;
-            char chs[shortStrCapacity];
+            char chs[SHORT_STR_CAPACITY];
         };
 
         // Default initialized with Unique.
