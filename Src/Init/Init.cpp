@@ -50,7 +50,7 @@ void Init::quit() {
 #ifdef DEBUG
 int main(int argc, char** argv) {
 #else
-int WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PSTR lpCmdLine, _In_ INT nCmdShow) {
+int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PSTR lpCmdLine, _In_ INT nCmdShow) {
     try {
 #endif
         Init::init();
