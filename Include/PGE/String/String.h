@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <regex>
+#include <variant>
 
 #include <PGE/Types/Types.h>
 
@@ -70,7 +71,8 @@ class String {
         Iterator begin() const;
         Iterator end() const;
 
-        ~String();
+        ~String() = default; // WHY THE FUCK DO WE NEED THIS??
+        static void copy(String& dst, const String& src);
         String();
         String(const String& other);
         String(const char* cstr);
@@ -149,26 +151,24 @@ class String {
             mutable int _strLength = -1;
 
             int strByteLength = -1;
+
+            int cCapacity = shortStrCapacity;
         };
 
-        struct Combined {
+        struct Shared {
             Data data;
             std::unique_ptr<char[]> chs;
         };
 
-        union p {
-            ~p() {}
-            void operator=(const p& other) { memcpy(this, &other, sizeof(p)); }
-            std::shared_ptr<Combined> shared;
-            struct {
-                Data data;
-                char chs[shortStrCapacity];
-            } unique = {};
-        } internalData;
+        struct Unique {
+            Data data;
+            char chs[shortStrCapacity];
+        };
 
-        Data* data = &internalData.unique.data;
-
-        int cCapacity = shortStrCapacity;
+        // Default initialized with Unique.
+        std::variant<Unique, std::shared_ptr<Shared>> internalData;
+        char* chs = std::get<Unique>(internalData).chs;
+        Data* data = &std::get<Unique>(internalData).data;
 
         String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
 

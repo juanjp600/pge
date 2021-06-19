@@ -104,9 +104,15 @@ String::Iterator String::end() const {
 
 //
 
-String::~String() {
-    if (cCapacity > shortStrCapacity) {
-        internalData.shared.reset();
+void String::copy(String& dst, const String& src) {
+    dst.internalData = src.internalData;
+    if (src.data->cCapacity == shortStrCapacity) {
+        Unique& u = std::get<Unique>(dst.internalData);
+        dst.chs = u.chs;
+        dst.data = &u.data;
+    } else {
+        dst.chs = src.chs;
+        dst.data = src.data;
     }
 }
 
@@ -121,16 +127,7 @@ String::String() {
 }
 
 String::String(const String& other) {
-    if (other.cCapacity > shortStrCapacity) {
-        internalData = p{ other.internalData.shared };
-        cCapacity = other.cCapacity;
-        data = other.data;
-    } else {
-        char asd[20];
-        char d[20];
-        internalData.unique.data = other.internalData.unique.data;
-        memcpy(internalData.unique.chs, other.internalData.unique.chs, other.byteLength());
-    }
+    copy(*this, other);
 }
 
 String::String(const char* cstri) {
@@ -266,25 +263,7 @@ String String::fromFloat(float f) {
 }
 
 String String::operator=(const String& other) {
-    if (other.cCapacity > shortStrCapacity) {
-        if (cCapacity > shortStrCapacity) {
-            internalData.shared.reset();
-            internalData.shared = other.internalData.shared;
-        } else {
-            internalData = p{ other.internalData.shared };
-        }
-        cCapacity = other.cCapacity;
-        data = other.data;
-    }
-    else {
-        if (cCapacity > shortStrCapacity) {
-            internalData.shared.reset();
-        }
-        cCapacity = other.cCapacity;
-        internalData.unique.data = other.internalData.unique.data;
-        data = &internalData.unique.data;
-        memcpy(internalData.unique.chs, other.internalData.unique.chs, other.byteLength());
-    }
+    copy(*this, other);
     return *this;
 }
 
@@ -461,44 +440,41 @@ void String::reallocate(int size, bool copyOldChs) {
     // Accounting for the terminating byte.
     size++;
 
-    if (size <= cCapacity) {
-        if (cCapacity == shortStrCapacity) {
+    if (size <= data->cCapacity) {
+        if (data->cCapacity == shortStrCapacity) {
             return;
         }
-        if (internalData.shared.use_count() == 1) {
-            data = &internalData.shared->data;
+        std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
+        if (s.use_count() == 1) {
+            chs = s->chs.get();
+            data = &s->data;
             return;
         }
     }
 
-    int targetCapacity = cCapacity;
+    int targetCapacity = data->cCapacity;
     while (targetCapacity < size) { targetCapacity <<= 1; }
 
     char* newChs = new char[targetCapacity];
     if (copyOldChs) {
-        // Must be initialized here.
         memcpy(newChs, cstr(), data->strByteLength);
     }
 
-    if (cCapacity == shortStrCapacity) {
-        // First time initialization.
-        internalData = p{ std::make_shared<Combined>() };
-    } else {
-        internalData.shared = std::make_shared<Combined>();
-    }
+    internalData = std::make_shared<Shared>();
+    std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
+    s->chs = std::unique_ptr<char[]>(newChs);
 
-    internalData.shared->chs = std::unique_ptr<char[]>(newChs);
-
-    cCapacity = targetCapacity;
-    data = &internalData.shared->data;
+    chs = newChs;
+    data = &s->data;
+    data->cCapacity = targetCapacity;
 }
 
 const char* String::cstr() const {
-    return cCapacity > shortStrCapacity ? internalData.shared->chs.get() : internalData.unique.chs;
+    return chs;
 }
 
-char* String::cstrNoConst() {
-    return cCapacity > shortStrCapacity ? internalData.shared->chs.get() : internalData.unique.chs;
+__declspec(noinline) char* String::cstrNoConst() {
+    return chs;
 }
 
 void String::wstr(wchar* buffer) const {
