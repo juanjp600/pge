@@ -70,8 +70,9 @@ class String {
         Iterator begin() const;
         Iterator end() const;
 
-        ~String() = default; // TODO: WHY THE FUCK IS THIS NEEDED??
+        ~String();
         String();
+        String(const String& other);
         String(const char* cstr);
         String(const std::string& cppstr);
         String(const wchar* wstr);
@@ -139,6 +140,8 @@ class String {
         String(int size);
         String(const String& other, int from, int cnt);
 
+        constexpr static int shortStrCapacity = 16;
+
         struct Data {
             // Lazily evaluated.
             mutable bool _hashCodeEvaluted = false;
@@ -146,12 +149,26 @@ class String {
             mutable int _strLength = -1;
 
             int strByteLength = -1;
+        };
 
-            int cCapacity;
+        struct Combined {
+            Data data;
             std::unique_ptr<char[]> chs;
         };
 
-        std::shared_ptr<Data> data;
+        union p {
+            ~p() {}
+            void operator=(const p& other) { memcpy(this, &other, sizeof(p)); }
+            std::shared_ptr<Combined> shared;
+            struct {
+                Data data;
+                char chs[shortStrCapacity];
+            } unique = {};
+        } internalData;
+
+        Data* data = &internalData.unique.data;
+
+        int cCapacity = shortStrCapacity;
 
         String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
 
