@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\Color\Color.cpp" />
     <ClCompile Include="..\..\Src\Exception\Exception.cpp" />
     <ClCompile Include="..\..\Src\File\BinaryReader.cpp" />
     <ClCompile Include="..\..\Src\File\BinaryWriter.cpp" />

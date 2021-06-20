@@ -82,18 +82,20 @@ class Color {
         constexpr void setAlpha(byte a) { alpha = ((float)a) / 255.f; PGE_ASSERT_COLOR(*this, alpha); }
 
         float red; float green; float blue; float alpha;
-
-        static const Color RED;
-        static const Color GREEN;
-        static const Color BLUE;
-        static const Color ORANGE;
-        static const Color YELLOW;
-        static const Color CYAN;
-        static const Color MAGENTA;
-        static const Color WHITE;
-        static const Color GRAY;
-        static const Color BLACK;
 };
+
+namespace Colors {
+    constexpr Color RED = Color(1.f, 0.f, 0.f);
+    constexpr Color GREEN = Color(0.f, 1.f, 0.f);
+    constexpr Color BLUE = Color(0.f, 0.f, 1.f);
+    constexpr Color ORANGE = Color(1.f, 0.5f, 0.f);
+    constexpr Color YELLOW = Color(1.f, 1.f, 0.f);
+    constexpr Color CYAN = Color(0.f, 1.f, 1.f);
+    constexpr Color MAGENTA = Color(1.f, 0.f, 1.f);
+    constexpr Color WHITE = Color(1.f, 1.f, 1.f);
+    constexpr Color GRAY = Color(0.5f, 0.5f, 0.5f);
+    constexpr Color BLACK = Color(0.f, 0.f, 0.f);
+}
 
 }
 

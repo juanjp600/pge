@@ -96,9 +96,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\Color\Color.cpp">
-      <Filter>Src\Color</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp">
       <Filter>Src\Graphics</Filter>
     </ClCompile>
