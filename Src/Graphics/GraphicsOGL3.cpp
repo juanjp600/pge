@@ -75,7 +75,7 @@ SDL_GLContext GraphicsOGL3::getGlContext() const {
     return glContext;
 }
 
-void GraphicsOGL3::clear(Color color) {
+void GraphicsOGL3::clear(const Color& color) {
     takeGlContext();
 
     glDepthMask(GL_TRUE);

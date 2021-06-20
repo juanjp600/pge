@@ -34,7 +34,7 @@ class Graphics {
         virtual void update();
         virtual void swap() = 0;
 
-        virtual void clear(Color color) = 0;
+        virtual void clear(const Color& color) = 0;
 
         virtual void setRenderTarget(Texture* renderTarget) = 0;
         virtual void setRenderTargets(const std::vector<Texture*>& renderTargets) = 0;

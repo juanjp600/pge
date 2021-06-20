@@ -19,7 +19,7 @@ class GraphicsOGL3 : public GraphicsInternal {
         void update() override;
         void swap() override;
 
-        void clear(Color color) override;
+        void clear(const Color& color) override;
 
         void setRenderTarget(Texture* renderTarget) override;
         void setRenderTargets(const std::vector<Texture*>& renderTargets) override;

@@ -18,7 +18,7 @@ class GraphicsDX11 : public GraphicsInternal {
 
         void swap() override;
 
-        void clear(Color color) override;
+        void clear(const Color& color) override;
 
         void setRenderTarget(Texture* renderTarget) override;
         void setRenderTargets(const std::vector<Texture*>& renderTargets) override;

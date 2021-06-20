@@ -115,7 +115,7 @@ void GraphicsDX11::swap() {
     dxSwapChain->Present(vsync ? 1 : 0, 0);
 }
 
-void GraphicsDX11::clear(Color color) {
+void GraphicsDX11::clear(const Color& color) {
     float clearColor[4] = {color.red,color.green,color.blue,color.alpha};
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         dxContext->ClearRenderTargetView( currentRenderTargetViews[i], clearColor );
