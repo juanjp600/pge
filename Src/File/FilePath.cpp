@@ -44,9 +44,8 @@ static String& getResourceStr() {
     return resourceStr;
 }
 
-static FilePath dataPath;
-
 const FilePath& FilePath::getDataPath() {
+    static FilePath dataPath;
     if (!dataPath.isValid()) {
         // TODO: Linux.
 #if defined(__APPLE__) && defined(__OBJC__)
