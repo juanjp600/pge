@@ -2,6 +2,7 @@
 #define PGE_COLOR_H_INCLUDED
 
 #include <PGE/Types/Types.h>
+#include <PGE/Exception/Exception.h>
 
 namespace PGE {
 
