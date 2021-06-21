@@ -6,7 +6,7 @@
 using namespace PGE;
 
 Line2f::Line2f() {
-    pointA = Vector2f::ZERO; pointB = Vector2f::ZERO;
+
 }
 
 Line2f::Line2f(const Vector2f& a,const Vector2f& b) {
@@ -18,7 +18,7 @@ Line2f::Line2f(float ax,float ay,float bx,float by) {
 }
 
 Line2f::Line2f(const Line2i& li) {
-    pointA = Vector2f(li.pointA); pointB = Vector2f(li.pointB);
+    pointA = li.pointA; pointB = li.pointB;
 }
 
 Rectanglef Line2f::boundingBox() const {
@@ -56,7 +56,7 @@ Vector2f Line2f::closestPoint(const Vector2f& point,bool segmentOnly) const {
 }
 
 Line2i::Line2i() {
-    pointA = Vector2i::ZERO; pointB = Vector2i::ZERO;
+    pointA = Vectors::ZERO2I; pointB = Vectors::ZERO2I;
 }
 
 Line2i::Line2i(const Vector2i& a,const Vector2i& b) {
@@ -89,11 +89,11 @@ bool Line2i::intersects(const Line2i& other,Vector2f& point,bool segmentOnly) co
     point = point/denominator;
 
     if (!segmentOnly) { return true; }
-    return boundingBox().isPointInside(point) && other.boundingBox().isPointInside(point);
+    return boundingBox().isPointInside(Vector2i(point)) && other.boundingBox().isPointInside(Vector2i(point));
 }
 
 Line3f::Line3f() {
-    pointA = Vector3f::ZERO; pointB = Vector3f::ZERO;
+
 }
 
 Line3f::Line3f(const Vector3f& a,const Vector3f& b) {

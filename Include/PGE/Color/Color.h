@@ -8,10 +8,8 @@ namespace PGE {
 
 class Color {
     public:
-        Color() = default;
-        
+        constexpr Color() : red(1.f), green(1.f), blue(1.f), alpha(1.f) { }
         constexpr Color(byte r, byte g, byte b, byte a = 255) : red(r / 255.f), green(g / 255.f), blue(b / 255.f), alpha(a / 255.f) { }
-
         constexpr Color(float r, float g, float b, float a = 1.f) : red(r), green(g), blue(b), alpha(a) { }
 
         static constexpr Color fromHSV(float h, float s, float v, float a = 1.f) {

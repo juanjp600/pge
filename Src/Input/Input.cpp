@@ -76,7 +76,7 @@ int MouseInput::getClickCount() const {
 ControllerInput::ControllerInput(Controller* ctrlr, ControllerInput::Button inControllerButton, float threshold) {
     controller = ctrlr;
     controllerButton = inControllerButton;
-    stickPosition = Vector2f::ZERO;
+    stickPosition = Vectors::ZERO2F;
     pressDepth = 0.f;
     downThreshold = threshold;
 }
@@ -111,7 +111,7 @@ Controller* ControllerInput::getController() const {
 
 void ControllerInput::removeController() {
     controller = nullptr;
-    stickPosition = Vector2f::ZERO;
+    stickPosition = Vectors::ZERO2F;
     inputHit = false; inputDown = false;
     pressDepth = 0.f;
 }
