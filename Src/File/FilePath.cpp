@@ -28,10 +28,9 @@ static String sanitizeFileSeperator(const String& str) {
     return str.replace("\\", "/");
 }
 
-static String resourceStr;
-
 // Already sanitized.
-static String getResourceStr() {
+static String& getResourceStr() {
+    static String resourceStr;
     if (resourceStr.byteLength() == 0) {
 #if defined(__APPLE__) && defined(__OBJC__)
         NSBundle* bundle = [NSBundle mainBundle];
