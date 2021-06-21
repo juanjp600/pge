@@ -2,7 +2,6 @@
 #include <PGE/Graphics/Graphics.h>
 #include "ShaderDX11.h"
 #include <PGE/Exception/Exception.h>
-#include <fstream>
 #include "../GraphicsDX11.h"
 
 using namespace PGE;
@@ -12,39 +11,25 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
 
     filepath = path;
 
-    std::ifstream reflectionInfo((path.str() + "reflection.dxri").cstr(), std::ios::binary);
+    BinaryReader reader(path + "reflection.dxri");
 
-    readConstantBuffers(reflectionInfo,vertexConstantBuffers);
+    readConstantBuffers(reader, "cbVertex", vertexConstantBuffers);
 
-    int inputParamCount = 0; reflectionInfo.read((char*)(void*)&inputParamCount,1);
-    std::vector<String> vertexInputElemSemanticNames(inputParamCount);
-    std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc(inputParamCount);
-    for (int i=0;i<inputParamCount;i++) {
-        String propertyName = "";
-        char chr; reflectionInfo.read(&chr,1);
-        while (chr!=0) {
-            propertyName += chr;
-            reflectionInfo.read(&chr, 1);
-        }
-        vertexInputElems.push_back(propertyName);
+    u32 propertyCount = reader.readUInt();
+    vertexInputElems.resize(propertyCount);
+    // We have to keep the names in memory.
+    std::vector<String> semanticNames(propertyCount);
+    std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc(propertyCount);
+    for (u32 i = 0; i < propertyCount; ++i) {
+        vertexInputElems[i] = reader.readNullTerminatedString();
 
-        String semanticName = "";
-        reflectionInfo.read(&chr,1);
-        while (chr!=0) {
-            semanticName += chr;
-            reflectionInfo.read(&chr, 1);
-        }
-        vertexInputElemSemanticNames[i] = semanticName;
-        const char* nameBuf = vertexInputElemSemanticNames[i].cstr();
-        int index = 0;
-        reflectionInfo.read((char*)(void*)&index,1);
-        DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN;
-        reflectionInfo.read((char*)(void*)&format,1);
+        semanticNames[i] = reader.readNullTerminatedString();
+        byte semanticIndex = reader.readByte();
+        DXGI_FORMAT format = (DXGI_FORMAT)reader.readByte();
 
         D3D11_INPUT_ELEMENT_DESC vertexInputElemDesc;
-
-        vertexInputElemDesc.SemanticName = nameBuf;
-        vertexInputElemDesc.SemanticIndex = index;
+        vertexInputElemDesc.SemanticName = semanticNames[i].cstr();
+        vertexInputElemDesc.SemanticIndex = semanticIndex;
         vertexInputElemDesc.Format = format;
         vertexInputElemDesc.InputSlot = 0;
         vertexInputElemDesc.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
@@ -54,9 +39,9 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
         dxVertexInputElemDesc[i] = vertexInputElemDesc;
     }
 
-    readConstantBuffers(reflectionInfo, fragmentConstantBuffers);
+    readConstantBuffers(reader, "cbPixel", pixelConstantBuffers);
 
-    int samplerCount = 0; reflectionInfo.read((char*)(void*)&samplerCount, 1);
+    u32 samplerCount = reader.readUInt();
 
     D3D11_SAMPLER_DESC samplerDesc;
     ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
@@ -77,48 +62,37 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
         dxSamplerState[i] = resourceManager.addNewResource<D3D11SamplerState>(dxDevice, samplerDesc);
     }
 
-    reflectionInfo.close();
-
     std::vector<byte> vertexShaderBytecode;
     (path + "vertex.dxbc").readBytes(vertexShaderBytecode);
     PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
 
-    std::vector<byte> fragmentShaderBytecode;
-    (path + "fragment.dxbc").readBytes(fragmentShaderBytecode);
-    PGE_ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str() + ")");
+    std::vector<byte> pixelShaderBytecode;
+    (path + "pixel.dxbc").readBytes(pixelShaderBytecode);
+    PGE_ASSERT(pixelShaderBytecode.size() > 0, "pixel shader is empty (filename: " + path.str() + ")");
 
     dxVertexShader = resourceManager.addNewResource<D3D11VertexShader>(dxDevice, vertexShaderBytecode);
-    dxFragmentShader = resourceManager.addNewResource<D3D11PixelShader>(dxDevice, fragmentShaderBytecode);
+    dxPixelShader = resourceManager.addNewResource<D3D11PixelShader>(dxDevice, pixelShaderBytecode);
     dxVertexInputLayout = resourceManager.addNewResource<D3D11InputLayout>(dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
 }
 
-void ShaderDX11::readConstantBuffers(std::ifstream& reflectionInfo, ResourceViewVector<CBufferInfo*>& constantBuffers) {
-    int cBufferCount = 0; reflectionInfo.read((char*)(void*)&cBufferCount, 1);
-    resourceManager.increaseSize(cBufferCount * 2);
-    for (int i = 0; i < cBufferCount; i++) {
-        String cBufferName = "";
-        char chr; reflectionInfo.read(&chr, 1);
-        while (chr != 0) {
-            cBufferName += chr;
-            reflectionInfo.read(&chr, 1);
-        }
-        int cBufferSize = 0; reflectionInfo.read((char*)(void*)&cBufferSize, 1);
-        
-        CBufferInfoRef constantBuffer = resourceManager.addNewResource<CBufferInfoOwner>(graphics, cBufferName, cBufferSize, &resourceManager);
-        constantBuffers.add(constantBuffer);
+void ShaderDX11::readConstantBuffers(BinaryReader& reader, const String& bufferName, ResourceViewVector<CBufferInfo*>& constantBuffers) {
+    u32 cBufferSize = reader.readUInt();
+    if (cBufferSize == 0) {
+        return;
+    }
 
-        int varCount = 0; reflectionInfo.read((char*)(void*)&varCount, 1);
-        for (int j = 0; j < varCount; j++) {
-            String varName = "";
-            reflectionInfo.read(&chr, 1);
-            while (chr != 0) {
-                varName += chr;
-                reflectionInfo.read(&chr, 1);
-            }
-            int varOffset = 0; reflectionInfo.read((char*)(void*)&varOffset, 1);
-            int varSize = 0; reflectionInfo.read((char*)(void*)&varSize, 1);
-            constantBuffer->addConstant(varName, ConstantDX11(constantBuffer,varOffset,varSize));
-        }
+    resourceManager.increaseSize(2);
+
+    CBufferInfoView constantBuffer = resourceManager.addNewResource<CBufferInfoOwner>(graphics, bufferName, cBufferSize, &resourceManager);
+    constantBuffers.add(constantBuffer);
+
+    String varName;
+    u32 varCount = reader.readUInt();
+    for (u32 i = 0; i < varCount; i++) {
+        varName = reader.readNullTerminatedString();
+        u32 varOffset = reader.readUInt();
+        u32 varSize = reader.readUInt();
+        constantBuffer->addConstant(varName, ConstantDX11(constantBuffer, varOffset, varSize));
     }
 }
 
@@ -134,7 +108,7 @@ Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
 }
 
 Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
-    for (auto cBuffer : fragmentConstantBuffers) {
+    for (auto cBuffer : pixelConstantBuffers) {
         auto map = cBuffer->getConstants();
         auto it = map->find(name);
         if (it != map->end()) {
@@ -156,13 +130,13 @@ void ShaderDX11::useShader() {
         dxContext->VSSetConstantBuffers(i,1,&vertexConstantBuffers[i]->getDxCBuffer());
     }
 
-    for (int i = 0; i < (int)fragmentConstantBuffers.size(); i++) {
-        fragmentConstantBuffers[i]->update();
-        dxContext->PSSetConstantBuffers(i,1,&fragmentConstantBuffers[i]->getDxCBuffer());
+    for (int i = 0; i < (int)pixelConstantBuffers.size(); i++) {
+        pixelConstantBuffers[i]->update();
+        dxContext->PSSetConstantBuffers(i,1,&pixelConstantBuffers[i]->getDxCBuffer());
     }
     
     dxContext->VSSetShader(dxVertexShader,NULL,0);
-    dxContext->PSSetShader(dxFragmentShader,NULL,0);
+    dxContext->PSSetShader(dxPixelShader,NULL,0);
 }
 
 void ShaderDX11::useVertexInputLayout() {
@@ -242,7 +216,7 @@ D3D11Buffer::View ShaderDX11::CBufferInfo::getDxCBuffer() {
     return dxCBuffer;
 }
 
-ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoRef cBuffer, int offst, int sz) {
+ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoView cBuffer, int offst, int sz) {
     constantBuffer = cBuffer;
     offset = offst;
     size = sz;

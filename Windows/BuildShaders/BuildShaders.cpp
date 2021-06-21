@@ -1,283 +1,263 @@
-#include <stdio.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
-#include <string>
-#include <fstream>
-#include <vector>
 
-DXGI_FORMAT computeDxgiFormat(const D3D11_SIGNATURE_PARAMETER_DESC& paramDesc) {
-    //https://takinginitiative.wordpress.com/2011/12/11/directx-1011-basic-shader-reflection-automatic-input-layout-creation/
+#include <iostream>
+#include <filesystem>
+
+#include <PGE/File/BinaryWriter.h>
+#include <PGE/String/Key.h>
+
+using namespace PGE;
+
+static DXGI_FORMAT computeDxgiFormat(const D3D11_SIGNATURE_PARAMETER_DESC& paramDesc) {
+    // https://takinginitiative.wordpress.com/2011/12/11/directx-1011-basic-shader-reflection-automatic-input-layout-creation/
     if (paramDesc.Mask == 1) {
-        if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) { return DXGI_FORMAT_R32_UINT; }
-        else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) { return DXGI_FORMAT_R32_SINT; }
-        else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) { return DXGI_FORMAT_R32_FLOAT; }
+        switch (paramDesc.ComponentType) {
+            case D3D_REGISTER_COMPONENT_UINT32: { return DXGI_FORMAT_R32_UINT; }
+            case D3D_REGISTER_COMPONENT_SINT32: { return DXGI_FORMAT_R32_SINT; }
+            case D3D_REGISTER_COMPONENT_FLOAT32: { return DXGI_FORMAT_R32_FLOAT; }
+        }
     } else if (paramDesc.Mask <= 3) {
-        if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) { return DXGI_FORMAT_R32G32_UINT; }
-        else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) { return DXGI_FORMAT_R32G32_SINT; }
-        else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) { return DXGI_FORMAT_R32G32_FLOAT; }
+        switch (paramDesc.ComponentType) {
+            case D3D_REGISTER_COMPONENT_UINT32: { return DXGI_FORMAT_R32G32_UINT; }
+            case D3D_REGISTER_COMPONENT_SINT32: { return DXGI_FORMAT_R32G32_SINT; }
+            case D3D_REGISTER_COMPONENT_FLOAT32: { return DXGI_FORMAT_R32G32_FLOAT; }
+        }
     } else if (paramDesc.Mask <= 7) {
-        if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) { return DXGI_FORMAT_R32G32B32_UINT; }
-        else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) { return DXGI_FORMAT_R32G32B32_SINT; }
-        else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) { return DXGI_FORMAT_R32G32B32_FLOAT; }
+        switch (paramDesc.ComponentType) {
+            case D3D_REGISTER_COMPONENT_UINT32: { return DXGI_FORMAT_R32G32B32_UINT; }
+            case D3D_REGISTER_COMPONENT_SINT32: { return DXGI_FORMAT_R32G32B32_SINT; }
+            case D3D_REGISTER_COMPONENT_FLOAT32: { return DXGI_FORMAT_R32G32B32_FLOAT; }
+        }
     } else if (paramDesc.Mask <= 15) {
-        if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) { return DXGI_FORMAT_R32G32B32A32_UINT; }
-        else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) { return DXGI_FORMAT_R32G32B32A32_SINT; }
-        else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) { return DXGI_FORMAT_R32G32B32A32_FLOAT; }
-	}
-	return DXGI_FORMAT_UNKNOWN;
+        switch (paramDesc.ComponentType) {
+            case D3D_REGISTER_COMPONENT_UINT32: { return DXGI_FORMAT_R32G32B32A32_UINT; }
+            case D3D_REGISTER_COMPONENT_SINT32: { return DXGI_FORMAT_R32G32B32A32_SINT; }
+            case D3D_REGISTER_COMPONENT_FLOAT32: { return DXGI_FORMAT_R32G32B32A32_FLOAT; }
+        }
+    }
+    throw PGE_CREATE_EX("Invalid DXGI format! (" + String::fromInt(paramDesc.Mask) + ", " + String::fromInt(paramDesc.ComponentType) + ")");
 }
 
-HRESULT compileShader(const wchar_t* input) {
-	ID3DBlob* errorBlob = nullptr;
-
-	HRESULT hr = S_OK;
-
-	ID3DBlob* vsBlob = nullptr;
-	hr = D3DCompileFromFile(input, NULL, NULL, "VS", "vs_4_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3, 0, &vsBlob, &errorBlob);
-
-	if (FAILED(hr)) {
-		if (errorBlob) {
-			printf("%s\n", (char*)errorBlob->GetBufferPointer());
-		}
-		printf("FAILED TO COMPILE %ls:\n%d\n", input, hr);
-		return hr;
-	}
-
-	struct InputNameSemanticRelation {
-		std::string memberName;
-		std::string semanticName;
-		int semanticIndex;
-	};
-	std::vector<InputNameSemanticRelation> inputNameSemanticRelations;
-
-	std::ifstream hlslFile(input);
-	while (!hlslFile.eof()) {
-		InputNameSemanticRelation insr;
-
-		char line[256]; hlslFile.getline(line, 256);
-		std::string lineStr = line;
-		if (lineStr.find("struct VS_INPUT") != std::string::npos) {
-			while (true) {
-				hlslFile.getline(line, 256);
-				lineStr = line;
-				size_t colonPos = lineStr.find(":");
-				if (colonPos != std::string::npos) {
-					std::string memberName = "";
-					std::string semanticName = "";
-					bool capturingName = false;
-					for (int i = colonPos - 1; i >= 0; i--) {
-						if (lineStr[i] == ' ' || lineStr[i] == '\t') {
-							if (capturingName) {
-								break;
-							}
-							else {
-								continue;
-							}
-						}
-						memberName = lineStr[i] + memberName;
-						capturingName = true;
-					}
-					for (int i = colonPos + 1; i < (int)lineStr.size(); i++) {
-						if (lineStr[i] != ' ' && lineStr[i] != '\t') {
-							if (lineStr[i] >= '0' && lineStr[i] <= '9') {
-								insr.memberName = memberName;
-								insr.semanticName = semanticName;
-								insr.semanticIndex = lineStr[i] - '0';
-								inputNameSemanticRelations.push_back(insr);
-								printf("%s %s%d\n", memberName.c_str(), semanticName.c_str(), insr.semanticIndex);
-								break;
-							}
-							semanticName = semanticName + lineStr[i];
-							if (i >= (int)lineStr.size() - 1) {
-								insr.memberName = memberName;
-								insr.semanticName = semanticName;
-								insr.semanticIndex = 0;
-								inputNameSemanticRelations.push_back(insr);
-								printf("%s %s%d\n", memberName.c_str(), semanticName.c_str(), insr.semanticIndex);
-							}
-						}
-					}
-				}
-				size_t closingBracketPos = lineStr.find("}");
-				if (closingBracketPos != std::string::npos) {
-					break;
-				}
-			}
-			break;
-		}
-	}
-	hlslFile.close();
-
-	std::wstring riOutFn = input;
-	riOutFn = riOutFn.replace(riOutFn.find(L"shader.hlsl"), strlen("shader.hlsl"), L"reflection.dxri");
-
-	FILE* riOutFile; _wfopen_s(&riOutFile, riOutFn.c_str(), L"wb");
-
-	ID3D11ShaderReflection* vsReflectionInterface = NULL;
-	D3DReflect(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&vsReflectionInterface);
-
-	D3D11_SHADER_DESC vsShaderDesc;
-	vsReflectionInterface->GetDesc(&vsShaderDesc);
-
-	unsigned char vsCBufferCount = vsShaderDesc.ConstantBuffers;
-	fwrite(&vsCBufferCount, 1, 1, riOutFile);
-	for (int i = 0; i < (int)vsShaderDesc.ConstantBuffers; i++) {
-		ID3D11ShaderReflectionConstantBuffer* cBuffer = vsReflectionInterface->GetConstantBufferByIndex(i);
-		D3D11_SHADER_BUFFER_DESC cBufferDesc;
-		cBuffer->GetDesc(&cBufferDesc);
-		fwrite(cBufferDesc.Name, sizeof(char), strlen(cBufferDesc.Name) + 1, riOutFile);
-		unsigned char cBufferSize = cBufferDesc.Size;
-		fwrite(&cBufferSize, 1, 1, riOutFile);
-		unsigned char cBufferVars = cBufferDesc.Variables;
-		fwrite(&cBufferVars, 1, 1, riOutFile);
-		for (int j = 0; j < (int)cBufferDesc.Variables; j++) {
-			ID3D11ShaderReflectionVariable* cBufferVar = cBuffer->GetVariableByIndex(j);
-			D3D11_SHADER_VARIABLE_DESC cBufferVarDesc;
-			cBufferVar->GetDesc(&cBufferVarDesc);
-			fwrite(cBufferVarDesc.Name, sizeof(char), strlen(cBufferVarDesc.Name) + 1, riOutFile);
-			unsigned char cBufferVarOffset = cBufferVarDesc.StartOffset;
-			fwrite(&cBufferVarOffset, 1, 1, riOutFile);
-			unsigned char cBufferVarSize = cBufferVarDesc.Size;
-			fwrite(&cBufferVarSize, 1, 1, riOutFile);
-		}
-	}
-
-	unsigned char inputParamCount = vsShaderDesc.InputParameters;
-	fwrite(&inputParamCount, 1, 1, riOutFile);
-
-	for (int i = 0; i < (int)vsShaderDesc.InputParameters; i++) {
-		D3D11_SIGNATURE_PARAMETER_DESC vsSignatureParameterDesc;
-		vsReflectionInterface->GetInputParameterDesc(i, &vsSignatureParameterDesc);
-
-		std::string memberName = "unknown";
-		for (int j = 0; j < (int)inputNameSemanticRelations.size(); j++) {
-			if (inputNameSemanticRelations[j].semanticName == vsSignatureParameterDesc.SemanticName &&
-				inputNameSemanticRelations[j].semanticIndex == vsSignatureParameterDesc.SemanticIndex) {
-				memberName = inputNameSemanticRelations[j].memberName;
-				break;
-			}
-		}
-
-		fwrite(memberName.c_str(), sizeof(char), memberName.size() + 1, riOutFile);
-
-		int strLen = strlen(vsSignatureParameterDesc.SemanticName);
-		fwrite(vsSignatureParameterDesc.SemanticName, sizeof(char), strLen + 1, riOutFile);
-
-		unsigned char paramIndex = vsSignatureParameterDesc.SemanticIndex;
-		fwrite(&paramIndex, 1, 1, riOutFile);
-
-		unsigned char paramFormat = (unsigned char)computeDxgiFormat(vsSignatureParameterDesc);
-		fwrite(&paramFormat, 1, 1, riOutFile);
-	}
-
-	vsReflectionInterface->Release();
-
-	std::wstring vsOutFn = input;
-	vsOutFn = vsOutFn.replace(vsOutFn.find(L"shader.hlsl"), strlen("shader.hlsl"), L"vertex.dxbc");
-
-	FILE* vsOutFile; _wfopen_s(&vsOutFile, vsOutFn.c_str(), L"wb");
-
-	fwrite(vsBlob->GetBufferPointer(), 1, vsBlob->GetBufferSize(), vsOutFile);
-	fclose(vsOutFile);
-
-	ID3DBlob* psBlob = nullptr;
-	hr = D3DCompileFromFile(input, NULL, NULL, "PS", "ps_4_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3, 0, &psBlob, NULL);
-
-	if (FAILED(hr)) {
-		if (errorBlob) {
-			printf("%s\n", (char*)errorBlob->GetBufferPointer());
-		}
-		printf("FAILED TO COMPILE %ls:\n%d\n", input, hr);
-		return hr;
-	}
-
-	ID3D11ShaderReflection* psReflectionInterface = NULL;
-	D3DReflect(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&psReflectionInterface);
-
-	D3D11_SHADER_DESC psShaderDesc;
-	psReflectionInterface->GetDesc(&psShaderDesc);
-
-	unsigned char psCBufferCount = psShaderDesc.ConstantBuffers;
-	fwrite(&psCBufferCount, 1, 1, riOutFile);
-	for (int i = 0; i < (int)psShaderDesc.ConstantBuffers; i++) {
-		ID3D11ShaderReflectionConstantBuffer* cBuffer = psReflectionInterface->GetConstantBufferByIndex(i);
-		D3D11_SHADER_BUFFER_DESC cBufferDesc;
-		cBuffer->GetDesc(&cBufferDesc);
-		fwrite(cBufferDesc.Name, sizeof(char), strlen(cBufferDesc.Name) + 1, riOutFile);
-		unsigned char cBufferSize = cBufferDesc.Size;
-		fwrite(&cBufferSize, 1, 1, riOutFile);
-		unsigned char cBufferVars = cBufferDesc.Variables;
-		fwrite(&cBufferVars, 1, 1, riOutFile);
-		for (int j = 0; j < (int)cBufferDesc.Variables; j++) {
-			ID3D11ShaderReflectionVariable* cBufferVar = cBuffer->GetVariableByIndex(j);
-			D3D11_SHADER_VARIABLE_DESC cBufferVarDesc;
-			cBufferVar->GetDesc(&cBufferVarDesc);
-			fwrite(cBufferVarDesc.Name, sizeof(char), strlen(cBufferVarDesc.Name) + 1, riOutFile);
-			unsigned char cBufferVarOffset = cBufferVarDesc.StartOffset;
-			fwrite(&cBufferVarOffset, 1, 1, riOutFile);
-			unsigned char cBufferVarSize = cBufferVarDesc.Size;
-			fwrite(&cBufferVarSize, 1, 1, riOutFile);
-		}
-	}
-
-	unsigned char samplerCount = 0;
-
-	for (int i = 0; i < (int)psShaderDesc.BoundResources; i++) {
-		D3D11_SHADER_INPUT_BIND_DESC psInputBindDesc;
-		psReflectionInterface->GetResourceBindingDesc(i, &psInputBindDesc);
-		if (psInputBindDesc.Type == D3D_SIT_SAMPLER) {
-			samplerCount++;
-		}
-	}
-	fwrite(&samplerCount, 1, 1, riOutFile);
-
-	psReflectionInterface->Release();
-
-	fclose(riOutFile);
-
-	std::wstring psOutFn = input;
-	psOutFn = psOutFn.replace(psOutFn.find(L"shader.hlsl"), strlen("shader.hlsl"), L"fragment.dxbc");
-
-	FILE* psOutFile; _wfopen_s(&psOutFile, psOutFn.c_str(), L"wb");
-	fwrite(psBlob->GetBufferPointer(), 1, psBlob->GetBufferSize(), psOutFile);
-	fclose(psOutFile);
-
-	return S_OK;
+static u64 combineStringUInt(const String& str, u64 u) {
+    return std::hash<String::Key>()(String::Key(str)) + u * 3;
 }
 
-int main(int argc, char* argv[]) {
-	wchar_t folderName[512];
-	if (argc < 2) {
-		printf("Folder containing the shaders: ");
-		fgetws(folderName, 511, stdin);
-		folderName[lstrlenW(folderName) - 1] = '\0';
-	}
-	else {
-		for (int i = 0; i < 512; i++) {
-			folderName[i] = argv[1][i];
-			if (folderName[i] == '\0') {
-				break;
-			}
-		}
-	}
+class ReflectionInfo {
+    public:
+        ReflectionInfo(ID3DBlob* shader) {
+            HRESULT hr = D3DReflect(shader->GetBufferPointer(), shader->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection);
+            PGE_ASSERT(!FAILED(hr), "Epic reflection fail " + String::fromInt(hr));
+        }
 
-	WIN32_FIND_DATA findData;
-	ZeroMemory(&findData, sizeof(WIN32_FIND_DATA));
-	HANDLE fHandle = FindFirstFileW((std::wstring(folderName)+L"/*").c_str(), &findData);
+        ReflectionInfo(const ReflectionInfo& other) {
+            reflection = other.reflection;
+            reflection->AddRef();
+        }
 
-	if (fHandle == 0) { return 0; }
+        ReflectionInfo& operator=(const ReflectionInfo& other) {
+            reflection = other.reflection;
+            reflection->AddRef();
+        }
 
-	do {
-		printf("%ls\n", findData.cFileName);
-		DWORD attribs = GetFileAttributesW(findData.cFileName);
-		if ((attribs & FILE_ATTRIBUTE_DIRECTORY) != 0 && findData.cFileName[0] != '.') {
-			std::wstring fileName = (std::wstring(folderName) + L"/" + std::wstring(findData.cFileName) + L"/shader.hlsl");
-			printf("Compiling %ls...\n",fileName.c_str());
-			compileShader(fileName.c_str());
-		}
-	} while (FindNextFileW(fHandle, &findData) != 0);
+        ~ReflectionInfo() {
+            reflection->Release();
+        }
 
-	FindClose(fHandle);
+        operator ID3D11ShaderReflection*() {
+            return reflection;
+        }
 
-	return 0;
+        ID3D11ShaderReflection* operator->() {
+            return reflection;
+        }
+
+    private:
+        ID3D11ShaderReflection* reflection;
+};
+
+static void writeConstants(BinaryWriter& writer, const String& cBufferName, ReflectionInfo info) {
+    ID3D11ShaderReflectionConstantBuffer* cBuffer = info->GetConstantBufferByIndex(0);
+    D3D11_SHADER_BUFFER_DESC cBufferDesc;
+    cBuffer->GetDesc(&cBufferDesc);
+    PGE_ASSERT(String(cBufferDesc.Name) == cBufferName, "Wrong constant name! (" + String(cBufferDesc.Name) + ")");
+
+    writer.writeUInt(cBufferDesc.Size);
+    writer.writeUInt(cBufferDesc.Variables);
+    for (unsigned i = 0; i < cBufferDesc.Variables; ++i) {
+        ID3D11ShaderReflectionVariable* cBufferVar = cBuffer->GetVariableByIndex(i);
+        D3D11_SHADER_VARIABLE_DESC cBufferVarDesc;
+        cBufferVar->GetDesc(&cBufferVarDesc);
+        writer.writeNullTerminatedString(cBufferVarDesc.Name);
+        writer.writeUInt(cBufferVarDesc.StartOffset);
+        writer.writeUInt(cBufferVarDesc.Size);
+    }
+}
+
+static std::unordered_map<u64, String> parseVertexInput(const String& input) {
+    // struct VS_INPUT {
+    //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME''SEMANTIC_INDEX';
+    //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME';
+    //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME''SEMANTIC_INDEX';
+    // }
+
+    std::unordered_map<u64, String> inputNameSemanticRelation;
+
+    String vsInput = "struct VS_INPUT";
+    String::Iterator before = input.findFirst(vsInput) + vsInput.length();
+    // Space before {
+    while (isspace(*++before));
+    // {
+    PGE_ASSERT(*before == '{', "Expected \"{\", found \"" + *before + '"');
+    ++before;
+    // Whitespace before first type
+    while (isspace(*++before));
+    while (*before != '}') {
+        // Type skip
+        while (!isspace(*++before));
+        // Whitespace after type
+        while (isspace(*++before));
+        
+        // Type
+        String::Iterator after = before;
+        while (!isspace(*++after));
+        String inputName = input.substr(before, after);
+
+        before = after;
+        // Whitespace before colon
+        while (isspace(*++before));
+        PGE_ASSERT(*before == ':', "Expected \":\", found \"" + *before + '"');
+        ++before;
+        // Whitespace after colon
+        while (isspace(*++before));
+
+        after = before;
+        while (!isdigit(*++after) && *after != ';');
+
+        String semanticName = input.substr(before, after);
+        byte semanticIndex;
+        if (*after == ';') {
+            semanticIndex = 0;
+        } else {
+            semanticIndex = *after - '0';
+        }
+        inputNameSemanticRelation.emplace(combineStringUInt(semanticName, semanticIndex), inputName);
+
+        before = after;
+        // Skip ;
+        ++before;
+        // Whitespace before type
+        while (isspace(*++before));
+    }
+
+    return inputNameSemanticRelation;
+}
+
+static void compileDX11Reflection(const FilePath& path, const String& input, ID3DBlob* vsBlob, ID3DBlob* psBlob) {
+    // Parsing Vertex input.
+    std::unordered_map<u64, String> inputNameSemanticRelation = parseVertexInput(input);
+
+    BinaryWriter writer(path);
+
+    D3D11_SHADER_DESC desc;
+
+    ReflectionInfo vsInfo(vsBlob);
+    vsInfo->GetDesc(&desc);
+    if (desc.ConstantBuffers == 1) {
+        writeConstants(writer, "cbVertex", vsInfo);
+    } else if (desc.ConstantBuffers == 0) {
+        writer.writeUInt(0);
+    } else {
+        throw PGE_CREATE_EX("Too many vertex constant buffers!");
+    }
+
+    writer.writeUInt(desc.InputParameters);
+    for (UINT i = 0; i < desc.InputParameters; ++i) {
+        D3D11_SIGNATURE_PARAMETER_DESC vsParamDesc;
+        vsInfo->GetInputParameterDesc(i, &vsParamDesc);
+
+        const auto& it = inputNameSemanticRelation.find(combineStringUInt(vsParamDesc.SemanticName, vsParamDesc.SemanticIndex));
+        PGE_ASSERT(it != inputNameSemanticRelation.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::fromInt(vsParamDesc.SemanticIndex) + ")");
+        writer.writeNullTerminatedString(it->second);
+        writer.writeNullTerminatedString(vsParamDesc.SemanticName);
+        writer.writeByte(vsParamDesc.SemanticIndex);
+
+        writer.writeByte(computeDxgiFormat(vsParamDesc));
+    }
+
+    vsBlob->Release();
+
+    ReflectionInfo psInfo(psBlob);
+    psInfo->GetDesc(&desc);
+    if (desc.ConstantBuffers == 1) {
+        writeConstants(writer, "cbPixel", psInfo);
+    } else if (desc.ConstantBuffers == 0) {
+        writer.writeUInt(0);
+    } else {
+        throw PGE_CREATE_EX("Too many pixel constant buffers!");
+    }
+
+    u32 samplerCount = 0;
+    for (UINT i = 0; i < desc.BoundResources; i++) {
+        D3D11_SHADER_INPUT_BIND_DESC inputBindDesc;
+        psInfo->GetResourceBindingDesc(i, &inputBindDesc);
+        if (inputBindDesc.Type == D3D_SIT_SAMPLER) {
+            samplerCount++;
+        }
+    }
+    writer.writeUInt(samplerCount);
+
+    psBlob->Release();
+}
+
+static ID3DBlob* compileDX11(const FilePath& path, const String& dxEntryPoint, const String& input) {
+    ID3DBlob* compiledBlob; ID3DBlob* errorBlob;
+    HRESULT hr = D3DCompile(input.cstr(), input.byteLength(), NULL, NULL, NULL, dxEntryPoint.cstr(), (dxEntryPoint.toLower() + "_5_0").cstr(), D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3 | D3DCOMPILE_WARNINGS_ARE_ERRORS, 0, &compiledBlob, &errorBlob);
+    if (FAILED(hr)) {
+        String failure = "Compilation failed (" + String::fromInt(hr) + ")";
+        if (errorBlob != NULL) {
+            failure += ":\n";
+            failure += (char*)errorBlob->GetBufferPointer();
+            errorBlob->Release();
+        }
+        throw PGE_CREATE_EX(failure);
+    } else {
+        BinaryWriter writer(path);
+        writer.writeBytes((byte*)compiledBlob->GetBufferPointer(), compiledBlob->GetBufferSize());
+    }
+    return compiledBlob;
+}
+
+static void compileShader(const FilePath& path) {
+    String input = path.read();
+
+    FilePath compiledPath = path.trimExtension().makeDirectory();
+    compiledPath.createDirectory();
+
+    ID3DBlob* vsBlob = compileDX11(compiledPath + "vertex.dxbc", "VS", input);
+    ID3DBlob* psBlob = compileDX11(compiledPath + "pixel.dxbc", "PS", input);
+    compileDX11Reflection(compiledPath + "reflection.dxri", input, vsBlob, psBlob);
+}
+
+int main(int argc, char** argv) {
+    String folderName;
+    if (argc < 2) {
+        std::cout << "Folder containing the shaders: ";
+        std::cin >> folderName;
+    } else {
+        folderName = argv[1];
+    }
+
+    std::vector<FilePath> shaders;
+    FilePath::fromStr(folderName).enumerateFiles(shaders);
+
+    for (const FilePath& shader : shaders) {
+        if (shader.getExtension() == "hlsl") {
+            std::cout << "Compiling: " << shader.str() << std::endl;
+            compileShader(shader);
+            std::cout << "Success!" << std::endl;
+        }
+    }
+
+    return 0;
 }
