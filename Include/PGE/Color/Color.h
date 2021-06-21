@@ -2,31 +2,16 @@
 #define PGE_COLOR_H_INCLUDED
 
 #include <PGE/Types/Types.h>
-#include <PGE/Exception/Exception.h>
-
-#define PGE_ASSERT_COLOR(color, name) PGE_ASSERT((color).name >= 0.f && (color).name <= 1.f, "Value is outside of valid range (" #name ": " + String::fromFloat((color).name) + ")")
 
 namespace PGE {
 
 class Color {
-    private:
-        constexpr void validateColor(const Color& color) {
-            PGE_ASSERT_COLOR(color, red);
-            PGE_ASSERT_COLOR(color, green);
-            PGE_ASSERT_COLOR(color, blue);
-            PGE_ASSERT_COLOR(color, alpha);
-        }
-
     public:
         Color() = default;
         
-        constexpr Color(byte r, byte g, byte b, byte a = 255) : red(r / 255.f), green(g / 255.f), blue(b / 255.f), alpha(a / 255.f) {
-            validateColor(*this);
-        }
+        constexpr Color(byte r, byte g, byte b, byte a = 255) : red(r / 255.f), green(g / 255.f), blue(b / 255.f), alpha(a / 255.f) { }
 
-        constexpr Color(float r, float g, float b, float a = 1.f) : red(r), green(g), blue(b), alpha(a) {
-            validateColor(*this);
-        }
+        constexpr Color(float r, float g, float b, float a = 1.f) : red(r), green(g), blue(b), alpha(a) { }
 
         static constexpr Color fromHSV(float h, float s, float v, float a = 1.f) {
             PGE_ASSERT(h >= 0 && h <= 360.f, "Hue is outside of valid range (hue: " + String::fromFloat(h) + ")");
@@ -76,10 +61,10 @@ class Color {
         constexpr byte getGreen() const { return (byte)(green * 255.f); }
         constexpr byte getBlue() const { return (byte)(blue * 255.f); }
         constexpr byte getAlpha() const { return (byte)(alpha * 255.f); }
-        constexpr void setRed(byte r) { red = ((float)r) / 255.f; PGE_ASSERT_COLOR(*this, red); }
-        constexpr void setGreen(byte g) { green = ((float)g) / 255.f; PGE_ASSERT_COLOR(*this, green); }
-        constexpr void setBlue(byte b) { blue = ((float)b) / 255.f; PGE_ASSERT_COLOR(*this, blue); }
-        constexpr void setAlpha(byte a) { alpha = ((float)a) / 255.f; PGE_ASSERT_COLOR(*this, alpha); }
+        constexpr void setRed(byte r) { red = ((float)r) / 255.f; }
+        constexpr void setGreen(byte g) { green = ((float)g) / 255.f; }
+        constexpr void setBlue(byte b) { blue = ((float)b) / 255.f; }
+        constexpr void setAlpha(byte a) { alpha = ((float)a) / 255.f; }
 
         float red; float green; float blue; float alpha;
 };
