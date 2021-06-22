@@ -136,6 +136,7 @@ class String {
 
         u64 getHashCode() const;
 
+        bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
         bool isEmpty() const;
 
