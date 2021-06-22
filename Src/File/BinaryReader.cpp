@@ -66,7 +66,7 @@ String BinaryReader::readFixedLengthString(int length) {
         chars[i] = readByte();
     }
     chars[length] = 0;
-    String s = String(chars);
+    String s(chars);
     delete[] chars;
     return s;
 }
