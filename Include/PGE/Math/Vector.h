@@ -18,33 +18,33 @@ class Vector2f {
         constexpr bool operator==(const Vector2f& other) const { return x == other.x && y == other.y; }
         constexpr bool operator!=(const Vector2f& other) const { return x != other.x || y != other.y ; }
 
-        constexpr Vector2f operator-() const { return Vector2f(-x, -y); }
+        constexpr const Vector2f operator-() const { return Vector2f(-x, -y); }
 
-        constexpr void operator+=(const Vector2f& other) { x += other.x; y += other.y; }
-        constexpr void operator+=(float f) { x += f; y += f; }
-        constexpr void operator-=(const Vector2f& other) { x -= other.x; y -= other.y; }
-        constexpr void operator-=(float f) { x -= f; y -= f; }
-        constexpr void operator*=(float f) { x *= f; y *= f; }
-        constexpr void operator/=(float f) { x /= f; y /= f; }
+        constexpr Vector2f& operator+=(const Vector2f& other) { x += other.x; y += other.y; return *this; }
+        constexpr Vector2f& operator-=(const Vector2f& other) { x -= other.x; y -= other.y; return *this; }
+        constexpr Vector2f& operator+=(float f) { x += f; y += f; return *this; }
+        constexpr Vector2f& operator-=(float f) { x -= f; y -= f; return *this; }
+        constexpr Vector2f& operator*=(float f) { x *= f; y *= f; return *this; }
+        constexpr Vector2f& operator/=(float f) { x /= f; y /= f; return *this; }
 
-        constexpr Vector2f operator+(const Vector2f& other) const { return Vector2f(x + other.x, y + other.y); }
-        constexpr Vector2f operator-(const Vector2f& other) const { return Vector2f(x - other.x, y - other.y); }
-        constexpr Vector2f operator+(float f) const { return Vector2f(x + f, y + f); }
-        constexpr Vector2f operator-(float f) const { return Vector2f(x - f, y - f); }
-        constexpr Vector2f operator*(float f) const { return Vector2f(x * f, y * f); }
-        constexpr Vector2f operator/(float f) const { return Vector2f(x / f, y / f); }
+        constexpr const Vector2f operator+(const Vector2f& other) const { return Vector2f(x + other.x, y + other.y); }
+        constexpr const Vector2f operator-(const Vector2f& other) const { return Vector2f(x - other.x, y - other.y); }
+        constexpr const Vector2f operator+(float f) const { return Vector2f(x + f, y + f); }
+        constexpr const Vector2f operator-(float f) const { return Vector2f(x - f, y - f); }
+        constexpr const Vector2f operator*(float f) const { return Vector2f(x * f, y * f); }
+        constexpr const Vector2f operator/(float f) const { return Vector2f(x / f, y / f); }
 
         constexpr float dotProduct(const Vector2f& other) const { return x * other.x + y * other.y; }
-        constexpr Vector2f entrywiseProduct(const Vector2f& other) const { return Vector2f(x * other.x, y * other.y); }
+        constexpr const Vector2f entrywiseProduct(const Vector2f& other) const { return Vector2f(x * other.x, y * other.y); }
 
-        constexpr Vector2f normalize() const {
+        constexpr const Vector2f normalize() const {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector2f(); }
             if (Math::equalFloats(1.f, lenSqr)) { return *this; }
             return *this / sqrtf(lenSqr);
         }
 
-        constexpr Vector2f reflect(const Vector2f& normal) const {
+        constexpr const Vector2f reflect(const Vector2f& normal) const {
             Vector2f reflectedVector = normalize();
             reflectedVector = normal * 2.f * reflectedVector.dotProduct(normal) - reflectedVector;
             return reflectedVector.normalize();
@@ -60,7 +60,7 @@ class Vector2f {
             return "Vector2f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ")";
         }
 };
-constexpr Vector2f operator*(float f, const Vector2f& vec) { return vec * f; }
+constexpr const Vector2f operator*(float f, const Vector2f& vec) { return vec * f; }
 
 class Vector3f {
     public:
@@ -75,34 +75,34 @@ class Vector3f {
         constexpr bool operator==(const Vector3f& other) const { return x == other.x && y == other.y && z == other.z; }
         constexpr bool operator!=(const Vector3f& other) const { return x != other.x || y != other.y || z != other.z; }
 
-        constexpr Vector3f operator-() const { return Vector3f(-x, -y, -z); }
+        constexpr const Vector3f operator-() const { return Vector3f(-x, -y, -z); }
 
-        constexpr void operator+=(const Vector3f& other) { x += other.x; y += other.y; z += other.z; }
-        constexpr void operator-=(const Vector3f& other) { x -= other.x; y -= other.y; z -= other.z; }
-        constexpr void operator+=(float f) { x += f; y += f; z += f; }
-        constexpr void operator-=(float f) { x -= f; y -= f; z -= f; }
-        constexpr void operator*=(float f) { x *= f; y *= f; z *= f; }
-        constexpr void operator/=(float f) { x /= f; y /= f; z /= f; }
+        constexpr Vector3f& operator+=(const Vector3f& other) { x += other.x; y += other.y; z += other.z; return *this; }
+        constexpr Vector3f& operator-=(const Vector3f& other) { x -= other.x; y -= other.y; z -= other.z; return *this; }
+        constexpr Vector3f& operator+=(float f) { x += f; y += f; z += f; return *this; }
+        constexpr Vector3f& operator-=(float f) { x -= f; y -= f; z -= f; return *this; }
+        constexpr Vector3f& operator*=(float f) { x *= f; y *= f; z *= f; return *this; }
+        constexpr Vector3f& operator/=(float f) { x /= f; y /= f; z /= f; return *this; }
 
-        constexpr Vector3f operator+(const Vector3f& other) const { return Vector3f(x + other.x, y + other.y, z + other.z); }
-        constexpr Vector3f operator-(const Vector3f& other) const { return Vector3f(x - other.x, y - other.y, z - other.z); }
-        constexpr Vector3f operator+(float f) const { return Vector3f(x + f, y + f, z + f); }
-        constexpr Vector3f operator-(float f) const { return Vector3f(x - f, y - f, z - f); }
-        constexpr Vector3f operator*(float f) const { return Vector3f(x * f, y * f, z * f); }
-        constexpr Vector3f operator/(float f) const { return Vector3f(x / f, y / f, z / f); }
+        constexpr const Vector3f operator+(const Vector3f& other) const { return Vector3f(x + other.x, y + other.y, z + other.z); }
+        constexpr const Vector3f operator-(const Vector3f& other) const { return Vector3f(x - other.x, y - other.y, z - other.z); }
+        constexpr const Vector3f operator+(float f) const { return Vector3f(x + f, y + f, z + f); }
+        constexpr const Vector3f operator-(float f) const { return Vector3f(x - f, y - f, z - f); }
+        constexpr const Vector3f operator*(float f) const { return Vector3f(x * f, y * f, z * f); }
+        constexpr const Vector3f operator/(float f) const { return Vector3f(x / f, y / f, z / f); }
 
         constexpr float dotProduct(const Vector3f& other) const { return x * other.x + y * other.y + z * other.z; }
-        constexpr Vector3f entrywiseProduct(const Vector3f& other) const { return Vector3f(x * other.x, y * other.y, z * other.z); }
-        constexpr Vector3f crossProduct(const Vector3f& other) const { return Vector3f(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x); }
+        constexpr const Vector3f entrywiseProduct(const Vector3f& other) const { return Vector3f(x * other.x, y * other.y, z * other.z); }
+        constexpr const Vector3f crossProduct(const Vector3f& other) const { return Vector3f(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x); }
 
-        constexpr Vector3f normalize() const {
+        constexpr const Vector3f normalize() const {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector3f(); }
             if (Math::equalFloats(1.f, lenSqr)) { return *this; }
             return *this / sqrtf(lenSqr);
         }
 
-        constexpr Vector3f reflect(const Vector3f& normal) const {
+        constexpr const Vector3f reflect(const Vector3f& normal) const {
             Vector3f reflectedVector = normalize();
             reflectedVector = normal * 2.f * reflectedVector.dotProduct(normal) - reflectedVector;
             return reflectedVector.normalize();
@@ -118,7 +118,7 @@ class Vector3f {
             return "Vector3f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ", " + String::fromFloat(z) + ")";
         }
 };
-constexpr Vector3f operator*(float f, const Vector3f& vec) { return vec * f; }
+constexpr const Vector3f operator*(float f, const Vector3f& vec) { return vec * f; }
 
 class Vector4f {
     public:
@@ -134,33 +134,33 @@ class Vector4f {
         constexpr bool operator==(const Vector4f& other) const { return x == other.x && y == other.y && z == other.z && w == other.w; }
         constexpr bool operator!=(const Vector4f& other) const { return x != other.x || y != other.y || z != other.z || w != other.w; }
 
-        constexpr Vector4f operator-() const { return Vector4f(-x, -y, -z, -w); }
+        constexpr const Vector4f operator-() const { return Vector4f(-x, -y, -z, -w); }
 
-        constexpr void operator+=(const Vector4f& other) { x += other.x; y += other.y; z += other.z; w += other.w; }
-        constexpr void operator-=(const Vector4f& other) { x -= other.x; y -= other.y; z -= other.z; w -= other.w; }
-        constexpr void operator+=(float f) { x += f; y += f; z += f; w += f; }
-        constexpr void operator-=(float f) { x -= f; y -= f; z -= f; w -= f; }
-        constexpr void operator*=(float f) { x *= f; y *= f; z *= f; w *= f; }
-        constexpr void operator/=(float f) { x /= f; y /= f; z /= f; w /= f; }
+        constexpr Vector4f& operator+=(const Vector4f& other) { x += other.x; y += other.y; z += other.z; w += other.w; return *this; }
+        constexpr Vector4f& operator-=(const Vector4f& other) { x -= other.x; y -= other.y; z -= other.z; w -= other.w; return *this; }
+        constexpr Vector4f& operator+=(float f) { x += f; y += f; z += f; w += f; return *this; }
+        constexpr Vector4f& operator-=(float f) { x -= f; y -= f; z -= f; w -= f; return *this; }
+        constexpr Vector4f& operator*=(float f) { x *= f; y *= f; z *= f; w *= f; return *this; }
+        constexpr Vector4f& operator/=(float f) { x /= f; y /= f; z /= f; w /= f; return *this; }
 
-        constexpr Vector4f operator+(const Vector4f& other) const { return Vector4f(x + other.x, y + other.y, z + other.z, w + other.w); }
-        constexpr Vector4f operator-(const Vector4f& other) const { return Vector4f(x - other.x, y - other.y, z - other.z, w - other.w); }
-        constexpr Vector4f operator+(float f) const { return Vector4f(x + f, y + f, z + f, w + f); }
-        constexpr Vector4f operator-(float f) const { return Vector4f(x - f, y - f, z - f, w - f); }
-        constexpr Vector4f operator*(float f) const { return Vector4f(x * f, y * f, z * f, w * f); }
-        constexpr Vector4f operator/(float f) const { return Vector4f(x / f, y / f, z / f, w / f); }
+        constexpr const Vector4f operator+(const Vector4f& other) const { return Vector4f(x + other.x, y + other.y, z + other.z, w + other.w); }
+        constexpr const Vector4f operator-(const Vector4f& other) const { return Vector4f(x - other.x, y - other.y, z - other.z, w - other.w); }
+        constexpr const Vector4f operator+(float f) const { return Vector4f(x + f, y + f, z + f, w + f); }
+        constexpr const Vector4f operator-(float f) const { return Vector4f(x - f, y - f, z - f, w - f); }
+        constexpr const Vector4f operator*(float f) const { return Vector4f(x * f, y * f, z * f, w * f); }
+        constexpr const Vector4f operator/(float f) const { return Vector4f(x / f, y / f, z / f, w / f); }
 
         constexpr float dotProduct(const Vector4f& other) const { return x * other.x + y * other.y + z * other.z + w * other.w; }
-        constexpr Vector4f entrywiseProduct(const Vector4f& other) const { return Vector4f(x * other.x, y * other.y, z * other.z, w * other.w); }
+        constexpr const Vector4f entrywiseProduct(const Vector4f& other) const { return Vector4f(x * other.x, y * other.y, z * other.z, w * other.w); }
 
-        constexpr Vector4f normalize() const {
+        constexpr const Vector4f normalize() const {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector4f(); }
             if (Math::equalFloats(1.f, lenSqr)) { return *this; }
             return *this / sqrtf(lenSqr);
         }
 
-        constexpr Vector4f reflect(const Vector4f& normal) const {
+        constexpr const Vector4f reflect(const Vector4f& normal) const {
             Vector4f reflectedVector = normalize();
             reflectedVector = normal * 2.f * reflectedVector.dotProduct(normal) - reflectedVector;
             return reflectedVector.normalize();
@@ -176,7 +176,7 @@ class Vector4f {
             return "Vector4f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ", " + String::fromFloat(z) + ", " + String::fromFloat(w) + ")";
         }
 };
-constexpr Vector4f operator*(float f, const Vector4f& vec) { return vec * f; }
+constexpr const Vector4f operator*(float f, const Vector4f& vec) { return vec * f; }
 
 class Vector2i {
     public:
@@ -187,27 +187,27 @@ class Vector2i {
         constexpr Vector2i(int ix, int iy) : x(ix), y(iy) { }
         constexpr explicit Vector2i(const Vector2f& vf) : x((int)vf.x), y((int)vf.y) { }
 
-        constexpr operator Vector2f() const { return Vector2f((float)x, (float)y); }
+        constexpr operator const Vector2f() const { return Vector2f((float)x, (float)y); }
 
         constexpr bool operator==(const Vector2i& other) const { return x == other.x && y == other.y; }
         constexpr bool operator!=(const Vector2i& other) const { return x != other.x || y != other.y; }
 
-        constexpr Vector2i operator-() const { return Vector2i(-x, -y); }
+        constexpr const Vector2i operator-() const { return Vector2i(-x, -y); }
 
-        constexpr void operator+=(const Vector2i& other) { x += other.x; y += other.y; }
-        constexpr void operator-=(const Vector2i& other) { x -= other.x; y -= other.y; }
-        constexpr void operator+=(int i) { x += i; y += i; }
-        constexpr void operator-=(int i) { x -= i; y -= i; }
-        constexpr void operator*=(int i) { x *= i; y *= i; }
+        constexpr Vector2i& operator+=(const Vector2i& other) { x += other.x; y += other.y; return *this; }
+        constexpr Vector2i& operator-=(const Vector2i& other) { x -= other.x; y -= other.y; return *this; }
+        constexpr Vector2i& operator+=(int i) { x += i; y += i; return *this; }
+        constexpr Vector2i& operator-=(int i) { x -= i; y -= i; return *this; }
+        constexpr Vector2i& operator*=(int i) { x *= i; y *= i; return *this; }
 
-        constexpr Vector2i operator+(const Vector2i& other) const { return Vector2i(x + other.x, y + other.y); }
-        constexpr Vector2i operator-(const Vector2i& other) const { return Vector2i(x - other.x, y - other.y); }
-        constexpr Vector2i operator+(int i) const { return Vector2i(x + i, y + i); }
-        constexpr Vector2i operator-(int i) const { return Vector2i(x - i, y - i); }
-        constexpr Vector2i operator*(int i) const { return Vector2i(x * i, y * i); }
+        constexpr const Vector2i operator+(const Vector2i& other) const { return Vector2i(x + other.x, y + other.y); }
+        constexpr const Vector2i operator-(const Vector2i& other) const { return Vector2i(x - other.x, y - other.y); }
+        constexpr const Vector2i operator+(int i) const { return Vector2i(x + i, y + i); }
+        constexpr const Vector2i operator-(int i) const { return Vector2i(x - i, y - i); }
+        constexpr const Vector2i operator*(int i) const { return Vector2i(x * i, y * i); }
 
         constexpr int dotProduct(const Vector2i& other) { return x * other.x + y * other.y; }
-        constexpr Vector2i entrywiseProduct(const Vector2i& other) const { return Vector2i(x * other.x, y * other.y); }
+        constexpr const Vector2i entrywiseProduct(const Vector2i& other) const { return Vector2i(x * other.x, y * other.y); }
 
         constexpr int lengthSquared() const { return x * x + y * y; }
         // Sacrificing vendor specific sqrt optimizations are not worth the constexpr here.
@@ -222,7 +222,7 @@ class Vector2i {
             return "Vector2i(" + String::fromInt(x) + ", " + String::fromInt(y) + ")";
         }
 };
-constexpr Vector2i operator*(int i, const Vector2i& vec) { return vec * i; }
+constexpr const Vector2i operator*(int i, const Vector2i& vec) { return vec * i; }
 
 namespace Vectors {
     constexpr Vector2f ZERO2F(0.f, 0.f);
