@@ -3,6 +3,8 @@
 
 namespace PGE {
 
+/// Various mathematical utility that is either not present,
+/// or unsatisfactory in the standard library.
 namespace Math {
 	constexpr float PI = 3.1415926535f;
 	constexpr float E =  2.7182818284f;
@@ -16,6 +18,7 @@ namespace Math {
         return radians * 180.0f / Math::PI;
     }
 
+    /// Two values are considered equal if |val - other| < epsilon.
     constexpr bool equalFloats(float val, float other, float epsilon = EPSILON_DEFAULT) {
         float diff = val - other;
         if (diff >= 0) {
