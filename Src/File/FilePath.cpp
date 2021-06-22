@@ -39,7 +39,7 @@ static String& getResourceStr() {
         resourceStr = String(std::filesystem::current_path().c_str());
 #endif
         resourceStr = sanitizeFileSeperator(resourceStr);
-        resourceStr += "/";
+        resourceStr += '/';
     }
     return resourceStr;
 }
