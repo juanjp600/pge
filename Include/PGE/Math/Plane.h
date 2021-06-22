@@ -62,26 +62,26 @@ class Plane {
             : normal(norm.normalize()),
               distanceFromOrigin(distOrig) { }
 
-        constexpr bool operator==(const Plane& other) {
+        constexpr bool operator==(const Plane& other) const {
             return normal == other.normal && distanceFromOrigin == other.distanceFromOrigin;
         }
 
-        constexpr bool operator!=(const Plane& other) {
+        constexpr bool operator!=(const Plane& other) const {
             return normal != other.normal || distanceFromOrigin != other.distanceFromOrigin;
         }
 
-        constexpr bool equals(const Plane& other, float epsilon = Math::EPSILON_DEFAULT) {
+        constexpr bool equals(const Plane& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return normal.equals(other.normal, epsilon) && Math::equalFloats(distanceFromOrigin, other.distanceFromOrigin, epsilon);
         }
 
-        constexpr int onPlane(const Vector3f& co, float epsilon = Math::EPSILON_DEFAULT) {
+        constexpr int onPlane(const Vector3f& co, float epsilon = Math::EPSILON_DEFAULT) const {
             float res = normal.dotProduct(co) - distanceFromOrigin;;
             if (Math::equalFloats(epsilon, 0.f)) { return 0; }
             if (res < 0) { return -1; }
             return 1;
         }
         
-        constexpr bool intersects(const Line3f& line, Vector3f& intersectionPoint, float& coveredAmount, bool ignoreDirection = false, bool ignoreSegment = false) {
+        constexpr bool intersects(const Line3f& line, Vector3f& intersectionPoint, float& coveredAmount, bool ignoreDirection = false, bool ignoreSegment = false) const {
             // http://softsurfer.com/Archive/algorithm_0104/algorithm_0104B.htm#Line%20Intersections
             // http://paulbourke.net/geometry/planeline/
 

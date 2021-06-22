@@ -14,22 +14,20 @@ class Line2f {
         constexpr Line2f(const Vector2f& a, const Vector2f& b) : pointA(a), pointB(b) { }
         constexpr Line2f(float ax, float ay, float bx, float by) : pointA(ax, ay), pointB(bx, by) { }
 
-        constexpr bool operator==(const Line2f& other) {
+        constexpr bool operator==(const Line2f& other) const {
             return pointA == other.pointA && pointB == other.pointB || pointA == other.pointB && pointB == other.pointA;
         }
 
-        constexpr bool operator!=(const Line2f& other) {
+        constexpr bool operator!=(const Line2f& other) const {
             return pointA != other.pointA || pointB != other.pointB && pointA != other.pointB || pointB != other.pointA;
         }
 
-        constexpr bool equals(const Line2f& other, float epsilon = Math::EPSILON_DEFAULT) {
+        constexpr bool equals(const Line2f& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return pointA.equals(other.pointA, epsilon) && pointB.equals(other.pointB, epsilon)
                 || pointA.equals(other.pointB, epsilon) && pointB.equals(other.pointA, epsilon);
         }
 
-        constexpr const Rectanglef boundingBox() const {
-            return Rectanglef(pointA, pointB);
-        }
+        constexpr const Rectanglef boundingBox() const { return Rectanglef(pointA, pointB); }
 
         constexpr bool intersects(const Line2f& other, Vector2f& point, bool segmentOnly = true) const {
             Vector2f p1a(pointA); Vector2f p1b(pointB);
@@ -72,11 +70,9 @@ class Line2i {
         constexpr Line2i(int ax, int ay, int bx, int by) : pointA(ax, ay), pointB(bx, by) { }
         constexpr explicit Line2i(const Line2f& lf) : pointA(lf.pointA), pointB(lf.pointB) { }
 
-        constexpr operator const Line2f() { return Line2f(pointA, pointB); }
+        constexpr operator const Line2f() const { return Line2f(pointA, pointB); }
 
-        constexpr const Rectanglei boundingBox() const {
-            return Rectanglei(pointA, pointB);
-        }
+        constexpr const Rectanglei boundingBox() const { return Rectanglei(pointA, pointB); }
 
         constexpr bool intersects(const Line2i& other, Vector2f& point, bool segmentOnly = true) const {
             Vector2i p1a = pointA; Vector2i p1b = pointB;
@@ -104,9 +100,7 @@ class Line3f {
         constexpr Line3f(const Vector3f& a, const Vector3f& b) : pointA(a), pointB(b) { }
         constexpr Line3f(float ax, float ay, float az, float bx, float by, float bz) : pointA(ax, ay, az), pointB(bx, by, bz) { }
 
-        constexpr const AABBox boundingBox() const {
-            return AABBox(pointA).addPoint(pointB);
-        }
+        constexpr const AABBox boundingBox() const { return AABBox(pointA).addPoint(pointB); }
 
         constexpr const Vector3f closestPoint(const Vector3f& point, bool segmentOnly = true) const {
             Vector3f aToP = point - pointA;

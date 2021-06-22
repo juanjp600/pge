@@ -1,6 +1,7 @@
 #ifndef PGE_COLOR_H_INCLUDED
 #define PGE_COLOR_H_INCLUDED
 
+#include <PGE/Math/Math.h>
 #include <PGE/Types/Types.h>
 #include <PGE/Exception/Exception.h>
 
@@ -54,6 +55,13 @@ class Color {
 
         constexpr bool operator!=(const Color& other) const {
             return red != other.red || blue != other.blue || green != other.green || alpha != other.alpha;
+        }
+
+        constexpr bool equals(const Color& other, float epsilon = Math::EPSILON_DEFAULT) const {
+            return Math::equalFloats(red, other.red, epsilon)
+                && Math::equalFloats(green, other.green, epsilon)
+                && Math::equalFloats(blue, other.blue, epsilon)
+                && Math::equalFloats(alpha, other.alpha, epsilon);
         }
 
         constexpr byte getRed() const { return (byte)(red * 255.f); }
