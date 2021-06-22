@@ -8,8 +8,9 @@
 
 using namespace PGE;
 
+std::list<Graphics*> Graphics::activeGraphics;
+
 const std::list<Graphics*>& Graphics::getActiveInstances() {
-    static std::list<Graphics*> activeGraphics;
     return activeGraphics;
 }
 

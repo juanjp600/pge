@@ -86,6 +86,7 @@ class Graphics {
 
     private:
         ResourceManager resourceManager;
+        static std::list<Graphics*> activeGraphics;
 };
 
 }
