@@ -1,4 +1,5 @@
 #include <PGE/File/BinaryWriter.h>
+#include <PGE/Exception/Exception.h>
 
 // TODO: Add more types to this and reader?
 
