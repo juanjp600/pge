@@ -44,7 +44,6 @@
     <ClCompile Include="..\..\Src\Input\InputManager.cpp" />
     <ClCompile Include="..\..\Src\Math\AABBox.cpp" />
     <ClCompile Include="..\..\Src\Math\Line.cpp" />
-    <ClCompile Include="..\..\Src\Math\Matrix.cpp" />
     <ClCompile Include="..\..\Src\Math\Plane.cpp" />
     <ClCompile Include="..\..\Src\Math\Random.cpp" />
     <ClCompile Include="..\..\Src\Math\Rectangle.cpp" />

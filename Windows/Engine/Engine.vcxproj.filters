@@ -105,9 +105,6 @@
     <ClCompile Include="..\..\Src\Math\Line.cpp">
       <Filter>Src\Math</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Math\Matrix.cpp">
-      <Filter>Src\Math</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Math\Rectangle.cpp">
       <Filter>Src\Math</Filter>
     </ClCompile>
