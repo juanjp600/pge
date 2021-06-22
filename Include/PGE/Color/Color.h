@@ -13,7 +13,7 @@ class Color {
         constexpr Color(byte r, byte g, byte b, byte a = 255) : red(r / 255.f), green(g / 255.f), blue(b / 255.f), alpha(a / 255.f) { }
         constexpr Color(float r, float g, float b, float a = 1.f) : red(r), green(g), blue(b), alpha(a) { }
 
-        static constexpr Color fromHSV(float h, float s, float v, float a = 1.f) {
+        static constexpr const Color fromHSV(float h, float s, float v, float a = 1.f) {
             PGE_ASSERT(h >= 0 && h <= 360.f, "Hue is outside of valid range (hue: " + String::fromFloat(h) + ")");
             PGE_ASSERT(s >= 0 && s <= 1.f, "Saturation is outside of valid range (saturation: " + String::fromFloat(s) + ")");
             PGE_ASSERT(v >= 0 && v <= 1.f, "Value is outside of valid range (value: " + String::fromFloat(v) + ")");

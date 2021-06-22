@@ -30,8 +30,8 @@ class AABBox {
             Vector3f otherMin = other.getMin();
             Vector3f otherMax = other.getMax();
 
-            return otherMax.x >= min.x && otherMax.y >= min.y && otherMax.z >= min.z &&
-                otherMin.x <= max.x && otherMin.y <= max.y && otherMin.z <= max.z;
+            return otherMax.x >= min.x && otherMax.y >= min.y && otherMax.z >= min.z
+                && otherMin.x <= max.x && otherMin.y <= max.y && otherMin.z <= max.z;
         }
 
         constexpr AABBox& addPoint(const Vector3f& point) {
