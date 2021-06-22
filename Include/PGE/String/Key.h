@@ -60,7 +60,7 @@ class String::SafeKey {
         }
 
         bool lengthEvaluated() const {
-            return str._strLength >= 0;
+            return str.data->_strLength >= 0;
         }
 };
 

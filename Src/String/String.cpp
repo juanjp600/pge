@@ -42,19 +42,19 @@ String::Iterator& String::Iterator::operator++() {
     charIndex++;
     // We reached the end and get the str length for free.
     if (index == ref->byteLength()) {
-        ref->_strLength = charIndex;
+        ref->data->_strLength = charIndex;
     }
     _ch = L'\uFFFF';
     return *this;
 }
 
-String::Iterator String::Iterator::operator++(int) {
+const String::Iterator String::Iterator::operator++(int) {
     Iterator temp = *this;
     ++(*this);
     return temp;
 }
 
-String::Iterator String::Iterator::operator+(int steps) {
+const String::Iterator String::Iterator::operator+(int steps) const {
     PGE_ASSERT(steps >= 0, "String iterators cannot go backwards");
     String::Iterator ret = *this;
     for (int i = 0; i < steps; i++) {
@@ -93,53 +93,53 @@ void String::Iterator::genChar() const {
     }
 }
 
-String::Iterator String::begin() const {
+const String::Iterator String::begin() const {
     return Iterator(*this);
 }
 
-String::Iterator String::end() const {
+const String::Iterator String::end() const {
     // We need byteLength for functionality, but length is optional.
-    return Iterator(*this, byteLength(), _strLength);
+    return Iterator(*this, byteLength(), data->_strLength);
 }
 
 //
 
-String::~String() {
-    if (cCapacity > shortStrCapacity) {
-        delete[] data.longStr;
+void String::copy(String& dst, const String& src) {
+    dst.internalData = src.internalData;
+    if (src.data->cCapacity == SHORT_STR_CAPACITY) {
+        Unique& u = std::get<Unique>(dst.internalData);
+        dst.chs = u.chs;
+        dst.data = &u.data;
+    } else {
+        dst.chs = src.chs;
+        dst.data = src.data;
     }
 }
 
 String::String() {
-    reallocate(0);
     // Manual metadata:
-    strByteLength = 0;
-    _strLength = 0;
-    _hashCode = FNV_SEED;
-    _hashCodeEvaluted = true;
+    data->strByteLength = 0;
+    data->_strLength = 0;
+    data->_hashCode = FNV_SEED;
+    data->_hashCodeEvaluted = true;
     cstrNoConst()[0] = '\0';
 }
 
-String::String(const String& a) {
-    reallocate(a.byteLength());
-    strByteLength = a.strByteLength;
-    _strLength = a._strLength;
-    _hashCodeEvaluted = a._hashCodeEvaluted;
-    _hashCode = a._hashCode;
-    memcpy(cstrNoConst(), a.cstr(), a.byteLength() + 1);
+String::String(const String& other) {
+    copy(*this, other);
 }
 
 String::String(const char* cstri) {
     int len = (int)strlen(cstri);
     reallocate(len);
-    strByteLength = len;
+    data->strByteLength = len;
     memcpy(cstrNoConst(), cstri, len + 1);
 }
 
 String::String(const std::string& cppstr) {
     int len = (int)cppstr.size();
     reallocate(len);
-    strByteLength = len;
+    data->strByteLength = len;
     memcpy(cstrNoConst(), cppstr.c_str(), len + 1);
 }
 
@@ -163,11 +163,11 @@ void String::wCharToUtf8Str(const wchar* wbuffer) {
     char* buf = cstrNoConst();
     int cIndex = 0;
     // We get _strLength "for free" here.
-    for (_strLength = 0; wbuffer[_strLength] != L'\0'; _strLength++) {
-        cIndex += Unicode::wCharToUtf8(wbuffer[_strLength], &buf[cIndex]);
+    for (data->_strLength = 0; wbuffer[data->_strLength] != L'\0'; data->_strLength++) {
+        cIndex += Unicode::wCharToUtf8(wbuffer[data->_strLength], &buf[cIndex]);
     }
     buf[newCap] = '\0';
-    strByteLength = newCap;
+    data->strByteLength = newCap;
 }
 
 #if defined(__APPLE__) && defined(__OBJC__)
@@ -184,23 +184,23 @@ String::String(char c) {
     char* buf = cstrNoConst();
     if (c < 0) {
         reallocate(2);
-        strByteLength = Unicode::wCharToUtf8((wchar)(unsigned char)c, buf);
-        buf[strByteLength] = '\0';
+        data->strByteLength = Unicode::wCharToUtf8((wchar)(unsigned char)c, buf);
+        buf[data->strByteLength] = '\0';
     } else {
         reallocate(1);
-        strByteLength = 1;
+        data->strByteLength = 1;
         buf[0] = c;
         buf[1] = '\0';
     }
-    _strLength = 1;
+    data->_strLength = 1;
 }
 
 String::String(wchar w) {
     reallocate(4);
     char* buf = cstrNoConst();
-    strByteLength = Unicode::wCharToUtf8(w, buf);
-    _strLength = 1;
-    buf[strByteLength] = '\0';
+    data->strByteLength = Unicode::wCharToUtf8(w, buf);
+    data->_strLength = 1;
+    buf[data->strByteLength] = '\0';
 }
 
 //
@@ -214,41 +214,41 @@ String::String(int size) {
 // Byte substr.
 String::String(const String& other, int from, int cnt) {
     reallocate(cnt);
-    strByteLength = cnt;
+    data->strByteLength = cnt;
     char* buf = cstrNoConst();
     memcpy(buf, other.cstr() + from, cnt);
     buf[cnt] = '\0';
 }
 
 template <class T>
-String String::format(T t, const String& format) {
+const String String::format(T t, const String& format) {
     int size = snprintf(nullptr, 0, format.cstr(), t);
     String ret(size);
     // From my (limited) research these should be safe to use, even with UTF-8 strings, as 0x25 never appears in any UTF-8 character.
     sprintf(ret.cstrNoConst(), format.cstr(), t);
-    ret.strByteLength = size;
+    ret.data->strByteLength = size;
     return ret;
 }
 
-template String String::format<char>(char t, const PGE::String& format);
-template String String::format<short>(short t, const PGE::String& format);
-template String String::format<int>(int t, const PGE::String& format);
-template String String::format<long>(long t, const PGE::String& format);
-template String String::format<long long>(long long t, const PGE::String& format);
-template String String::format<unsigned char>(unsigned char t, const PGE::String& format);
-template String String::format<unsigned short>(unsigned short t, const PGE::String& format);
-template String String::format<unsigned>(unsigned t, const PGE::String& format);
-template String String::format<unsigned long>(unsigned long t, const PGE::String& format);
-template String String::format<unsigned long long>(unsigned long long t, const PGE::String& format);
-template String String::format<float>(float t, const PGE::String& format);
-template String String::format<double>(double t, const PGE::String& format);
-template String String::format<long double>(long double t, const PGE::String& format);
+template const String String::format<char>(char t, const PGE::String& format);
+template const String String::format<short>(short t, const PGE::String& format);
+template const String String::format<int>(int t, const PGE::String& format);
+template const String String::format<long>(long t, const PGE::String& format);
+template const String String::format<long long>(long long t, const PGE::String& format);
+template const String String::format<unsigned char>(unsigned char t, const PGE::String& format);
+template const String String::format<unsigned short>(unsigned short t, const PGE::String& format);
+template const String String::format<unsigned>(unsigned t, const PGE::String& format);
+template const String String::format<unsigned long>(unsigned long t, const PGE::String& format);
+template const String String::format<unsigned long long>(unsigned long long t, const PGE::String& format);
+template const String String::format<float>(float t, const PGE::String& format);
+template const String String::format<double>(double t, const PGE::String& format);
+template const String String::format<long double>(long double t, const PGE::String& format);
 
-String String::fromInt(int i) {
+const String String::fromInt(int i) {
     // "-2147483648" has 11 characters.
     String ret(11);
-    ret._strLength = sprintf(ret.cstrNoConst(), "%d", i);
-    ret.strByteLength = ret._strLength;
+    ret.data->_strLength = sprintf(ret.cstrNoConst(), "%d", i);
+    ret.data->strByteLength = ret.data->_strLength;
     return ret;
 }
 
@@ -256,44 +256,38 @@ String String::fromFloat(float f) {
     // Scientific notation to severly limit maximum output length.
     // sign + 6 * digits + point + e + expsign + 2 * expdigits
     String ret(12);
-    ret._strLength = sprintf(ret.cstrNoConst(), "%g", f);
-    ret.strByteLength = ret._strLength;
+    ret.data->_strLength = sprintf(ret.cstrNoConst(), "%g", f);
+    ret.data->strByteLength = ret.data->_strLength;
     return ret;
 }
 
-String String::operator=(const String& other) {
-    if (cstr()[0] == '\0' && other.cstr()[0] == '\0') { return *this; }
-    reallocate(other.byteLength());
-    memcpy(cstrNoConst(), other.cstr(), other.byteLength() + 1);
-    strByteLength = other.strByteLength;
-    _strLength = other._strLength;
-    _hashCodeEvaluted = other._hashCodeEvaluted;
-    _hashCode = other._hashCode;
+String& String::operator=(const String& other) {
+    copy(*this, other);
     return *this;
 }
 
-String String::operator+=(const String& other) {
+String& String::operator+=(const String& other) {
     int oldByteSize = byteLength();
     int newSize = oldByteSize + other.byteLength();
     reallocate(newSize, true);
     char* buf = cstrNoConst();
     memcpy(buf + oldByteSize, other.cstr(), other.byteLength() + 1);
-    strByteLength = newSize;
-    if (_strLength >= 0 && other._strLength >= 0) {
-        _strLength += other.length();
+    data->strByteLength = newSize;
+    if (data->_strLength >= 0 && other.data->_strLength >= 0) {
+        data->_strLength += other.length();
     }
     return *this;
 }
 
-String String::operator+=(wchar ch) {
+String& String::operator+=(wchar ch) {
     int aLen = byteLength();
     reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
     int actualSize = aLen + Unicode::wCharToUtf8(ch, buf + aLen);
     buf[actualSize] = '\0';
-    strByteLength = actualSize;
-    if (_strLength >= 0) {
-        _strLength++;
+    data->strByteLength = actualSize;
+    if (data->_strLength >= 0) {
+        data->_strLength++;
     }
     return *this;
 }
@@ -301,13 +295,13 @@ String String::operator+=(wchar ch) {
 const String PGE::operator+(const String& a, const String& b) {
     int aLen = a.byteLength();
     int bLen = b.byteLength();
-    String ret = String(aLen + bLen);
+    String ret(aLen + bLen);
     char* buf = ret.cstrNoConst();
     memcpy(buf, a.cstr(), aLen);
     memcpy(buf + aLen, b.cstr(), bLen + 1);
-    ret.strByteLength = aLen + bLen;
-    if (a._strLength >= 0 && b._strLength >= 0) {
-        ret._strLength = a.length() + b.length();
+    ret.data->strByteLength = aLen + bLen;
+    if (a.data->_strLength >= 0 && b.data->_strLength >= 0) {
+        ret.data->_strLength = a.length() + b.length();
     }
     return ret;
 }
@@ -315,24 +309,50 @@ const String PGE::operator+(const String& a, const String& b) {
 const String PGE::operator+(const char* a, const String& b) {
     int aLen = strlen(a);
     int bLen = b.byteLength();
-    String ret = String(aLen + bLen);
+    String ret(aLen + bLen);
     char* buf = ret.cstrNoConst();
     memcpy(buf, a, aLen);
     memcpy(buf + aLen, b.cstr(), bLen + 1);
-    ret.strByteLength = aLen + bLen;
+    ret.data->strByteLength = aLen + bLen;
+    return ret;
+}
+
+const String PGE::operator+(const String& a, const char* b) {
+    int aLen = a.byteLength();
+    int bLen = strlen(b);
+    String ret(aLen + bLen);
+    char* buf = ret.cstrNoConst();
+    memcpy(buf, a.cstr(), aLen);
+    memcpy(buf + aLen, b, bLen + 1);
+    ret.data->strByteLength = aLen + bLen;
     return ret;
 }
 
 const String PGE::operator+(const String& a, wchar b) {
     int aLen = a.byteLength();
-    String ret = String(aLen + 4);
+    String ret(aLen + 4);
     char* buf = ret.cstrNoConst();
     memcpy(buf, a.cstr(), aLen);
     int actualSize = aLen + Unicode::wCharToUtf8(b, buf + aLen);
     buf[actualSize] = '\0';
-    ret.strByteLength = actualSize;
-    if (a._strLength >= 0) {
-        ret._strLength = a.length() + 1;
+    ret.data->strByteLength = actualSize;
+    if (a.data->_strLength >= 0) {
+        ret.data->_strLength = a.length() + 1;
+    }
+    return ret;
+}
+
+const String PGE::operator+(wchar a, const String& b) {
+    int bLen = b.byteLength();
+    String ret(4 + bLen);
+    char* buf = ret.cstrNoConst();
+    int writtenChars = Unicode::wCharToUtf8(a, buf);
+    memcpy(buf + writtenChars, b.cstr(), bLen);
+    int actualSize = writtenChars + bLen;
+    buf[actualSize] = '\0';
+    ret.data->strByteLength = actualSize;
+    if (b.data->_strLength >= 0) {
+        ret.data->_strLength = b.length() + 1;
     }
     return ret;
 }
@@ -364,24 +384,25 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
 }
 
 u64 String::getHashCode() const {
-    if (!_hashCodeEvaluted) {
+    if (!data->_hashCodeEvaluted) {
         // FNV-1a
         // Public domain
         byte* buf = (byte*)cstr();
-        _hashCode = FNV_SEED;
+        data->_hashCode = FNV_SEED;
         for (int i = 0; buf[i] != '\0'; i++) {
-            _hashCode ^= buf[i];
-            _hashCode *= 0x00000100000001b3u;
+            data->_hashCode ^= buf[i];
+            data->_hashCode *= 0x00000100000001b3u;
         }
-        _hashCodeEvaluted = true;
+        data->_hashCodeEvaluted = true;
     }
-    return _hashCode;
+    return data->_hashCode;
 }
 
 bool String::equals(const String& other) const {
+    if (chs == other.chs) { return true; }
     if (byteLength() != other.byteLength()) { return false; }
-    if (_strLength >= 0 && other._strLength >= 0 && length() != other.length()) { return false; }
-    if (_hashCodeEvaluted && other._hashCodeEvaluted) { return getHashCode() == other.getHashCode(); }
+    if (data->_strLength >= 0 && other.data->_strLength >= 0 && length() != other.length()) { return false; }
+    if (data->_hashCodeEvaluted && other.data->_hashCodeEvaluted) { return getHashCode() == other.getHashCode(); }
     return strcmp(cstr(), other.cstr()) == 0;
 }
 
@@ -408,7 +429,8 @@ static void fold(const char*& buf, std::queue<wchar>& queue) {
 }
 
 bool String::equalsIgnoreCase(const String& other) const {
-    if (_hashCodeEvaluted && other._hashCodeEvaluted && getHashCode() == other.getHashCode()) { return true; }
+    if (chs == other.chs) { return true; }
+    if (data->_hashCodeEvaluted && other.data->_hashCodeEvaluted && getHashCode() == other.getHashCode()) { return true; }
 
     const char* buf[2] = { cstr(), other.cstr() };
     std::queue<wchar> queue[2];
@@ -441,39 +463,45 @@ bool String::isEmpty() const {
     return byteLength() == 0;
 }
 
-void String::reallocate(int size, bool copyOldData) {
+void String::reallocate(int size, bool copyOldChs) {
     // Accounting for the terminating byte.
     size++;
 
-    // Invalidating metadata.
-    _hashCodeEvaluted = false;
-    _strLength = -1;
+    if (size <= data->cCapacity) {
+        if (data->cCapacity == SHORT_STR_CAPACITY) {
+            return;
+        }
+        std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
+        if (s.use_count() == 1) {
+            chs = s->chs.get();
+            data = &s->data;
+            return;
+        }
+    }
 
-    if (size <= shortStrCapacity || size <= cCapacity) { return; }
-
-    // TODO: This is an unfit solution to the static initialization order fiasco.
-    int targetCapacity = std::max(cCapacity, shortStrCapacity);
+    int targetCapacity = data->cCapacity;
     while (targetCapacity < size) { targetCapacity <<= 1; }
 
-    char* newData = new char[targetCapacity];
-
-    if (copyOldData) {
-        memcpy(newData, cstr(), byteLength());
+    char* newChs = new char[targetCapacity];
+    if (copyOldChs) {
+        memcpy(newChs, cstr(), data->strByteLength);
     }
 
-    if (cCapacity > shortStrCapacity) {
-        delete[] data.longStr;
-    }
-    cCapacity = targetCapacity;
-    data.longStr = newData;
+    internalData = std::make_shared<Shared>();
+    std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
+    s->chs = std::unique_ptr<char[]>(newChs);
+
+    chs = newChs;
+    data = &s->data;
+    data->cCapacity = targetCapacity;
 }
 
 const char* String::cstr() const {
-    return cCapacity > shortStrCapacity ? data.longStr : data.shortStr;
+    return chs;
 }
 
 char* String::cstrNoConst() {
-    return cCapacity > shortStrCapacity ? data.longStr : data.shortStr;
+    return chs;
 }
 
 void String::wstr(wchar* buffer) const {
@@ -515,26 +543,26 @@ float String::toFloat() const {
 }
 
 int String::length() const {
-    if (_strLength < 0) {
+    if (data->_strLength < 0) {
         const char* buf = cstr();
-        _strLength = 0;
+        data->_strLength = 0;
         for (int i = 0; buf[i] != '\0'; i += Unicode::measureCodepoint(buf[i])) {
-            _strLength++;
+            data->_strLength++;
         }
     }
-    return _strLength;
+    return data->_strLength;
 }
 
 int String::byteLength() const {
-    PGE_ASSERT(strByteLength >= 0, "String byte length must always be valid");
-    return strByteLength;
+    PGE_ASSERT(data->strByteLength >= 0, "String byte length must always be valid");
+    return data->strByteLength;
 }
 
-String::Iterator String::findFirst(const String& fnd, int from) const {
+const String::Iterator String::findFirst(const String& fnd, int from) const {
     return findFirst(fnd, begin() + from);
 }
 
-String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
+const String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
     PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
     for (auto it = from; it != end(); ++it) {
         if (memcmp(fnd.cstr(), cstr() + it.index, fnd.byteLength()) == 0) { return it; }
@@ -542,11 +570,11 @@ String::Iterator String::findFirst(const String& fnd, const Iterator& from) cons
     return end();
 }
 
-String::Iterator String::findLast(const String& fnd, int from) const {
+const String::Iterator String::findLast(const String& fnd, int from) const {
     return findLast(fnd, begin() + from);
 }
 
-String::Iterator String::findLast(const String& fnd, const Iterator& from) const {
+const String::Iterator String::findLast(const String& fnd, const Iterator& from) const {
     PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
     String::Iterator found = end();
     for (auto it = from; it != end(); ++it) {
@@ -555,28 +583,28 @@ String::Iterator String::findLast(const String& fnd, const Iterator& from) const
     return found;
 }
 
-String String::substr(int start) const {
+const String String::substr(int start) const {
     return substr(begin() + start);
 }
 
-String String::substr(int start, int cnt) const {
+const String String::substr(int start, int cnt) const {
     Iterator from = begin() + start;
     return substr(from, from + cnt);
 }
 
-String String::substr(const Iterator& start) const {
+const String String::substr(const Iterator& start) const {
     return substr(start, end());
 }
 
-String String::substr(const Iterator& start, const Iterator& to) const {
+const String String::substr(const Iterator& start, const Iterator& to) const {
     PGE_ASSERT(start.index <= to.index, "Start iterator can't come after to iterator (start: " + fromInt(start.index) + "; to: " + fromInt(to.index) + "; str: " + *this + ")");
     PGE_ASSERT(to.index <= end().index, "To iterator can't come after end iterator (to: " + fromInt(to.index) + "; end: " + fromInt(end().index) + "; str: " + *this + ")");
 
     int newSize = to.index - start.index;
     String retVal(newSize);
-    retVal.strByteLength = newSize;
+    retVal.data->strByteLength = newSize;
     if (to.charIndex >= 0) {
-        retVal._strLength = to.charIndex - start.charIndex;
+        retVal.data->_strLength = to.charIndex - start.charIndex;
     }
     char* retBuf = retVal.cstrNoConst();
     memcpy(retBuf, cstr() + start.index, newSize);
@@ -584,13 +612,13 @@ String String::substr(const Iterator& start, const Iterator& to) const {
     return retVal;
 }
 
-String::Iterator String::charAt(int pos) const {
+const String::Iterator String::charAt(int pos) const {
     Iterator it;
     for (it = begin(); it != end() && it.charIndex != pos; ++it);
     return it;
 }
 
-String String::replace(const String& fnd, const String& rplace) const {
+const String String::replace(const String& fnd, const String& rplace) const {
     PGE_ASSERT(fnd.byteLength() != 0, "Find string can't be empty");
 
     const char* fndStr = fnd.cstr();
@@ -609,7 +637,7 @@ String String::replace(const String& fnd, const String& rplace) const {
     
     int newSize = byteLength() + foundPositions.size() * (rplace.byteLength() - fnd.byteLength());
     String retVal(newSize);
-    retVal.strByteLength = newSize;
+    retVal.data->strByteLength = newSize;
 
     char* retBuf = retVal.cstrNoConst();
     int retPos = 0;
@@ -626,17 +654,17 @@ String String::replace(const String& fnd, const String& rplace) const {
     memcpy(retBuf + retPos, thisStr + thisPos, byteLength() - thisPos + 1);
    
     // If the string that is being operated on already has had its length calculated, we assume it to be worth it to pre-calculate the new string's length.
-    if (_strLength >= 0) {
-        retVal._strLength = _strLength + foundPositions.size() * (rplace.length() - fnd.length());
+    if (data->_strLength >= 0) {
+        retVal.data->_strLength = data->_strLength + foundPositions.size() * (rplace.length() - fnd.length());
     }
     return retVal;
 }
 
 // TODO: Funny special cases!
-String String::performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const {
-    String ret = String(byteLength());
-    ret.strByteLength = 0;
-    ret._strLength = 0;
+const String String::performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const {
+    String ret(byteLength());
+    ret.data->strByteLength = 0;
+    ret.data->_strLength = 0;
     for (wchar ch : *this) {
         const auto& find = conv.find(ch);
         if (find == conv.end()) {
@@ -653,15 +681,15 @@ String String::performCaseConversion(const std::unordered_map<wchar, wchar>& con
     return ret;
 }
 
-String String::toUpper() const {
+const String String::toUpper() const {
     return performCaseConversion(Unicode::UP, Unicode::MULTI_UP);
 }
 
-String String::toLower() const {
+const String String::toLower() const {
     return performCaseConversion(Unicode::DOWN, Unicode::MULTI_DOWN);
 }
 
-String String::trim() const {
+const String String::trim() const {
     if (byteLength() == 0) { return *this; }
 
     const char* buf = cstr();
@@ -684,11 +712,11 @@ String String::trim() const {
     int newSize = trailingPos - leadingPos + 1;
     String ret(*this, leadingPos, newSize);
     // If the length has been calculated, good, it remains valid, if not, it just goes more into the negative.
-    ret._strLength = _strLength - (byteLength() - newSize);
+    ret.data->_strLength = data->_strLength - (byteLength() - newSize);
     return ret;
 }
 
-String String::reverse() const {
+const String String::reverse() const {
     int len = byteLength();
     String ret(len);
     char* buf = ret.cstrNoConst();
@@ -700,12 +728,12 @@ String String::reverse() const {
         memcpy(buf, cstr() + i, codepoint);
         i += codepoint;
     }
-    ret.strByteLength = len;
-    ret._strLength = _strLength;
+    ret.data->strByteLength = len;
+    ret.data->_strLength = data->_strLength;
     return ret;
 }
 
-String String::multiply(int count, const String& separator) const {
+const String String::multiply(int count, const String& separator) const {
     int curLength = byteLength();
     int sepLength = separator.byteLength();
     int newLength = curLength * count + sepLength * (count - 1);
@@ -720,13 +748,12 @@ String String::multiply(int count, const String& separator) const {
         memcpy(buf, cstr(), curLength);
         buf += curLength;
     }
-    ret.strByteLength = newLength;
-    if (_strLength >= 0) { ret._strLength = length() * count + separator.length() * (count - 1); }
+    ret.data->strByteLength = newLength;
+    if (data->_strLength >= 0) { ret.data->_strLength = length() * count + separator.length() * (count - 1); }
     return ret;
 }
 
-std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
-    std::vector<String> retVal;
+void String::split(const String& needleStr, std::vector<String>& into, bool removeEmptyEntries) const {
     const char* haystack = cstr();
     const char* needle = needleStr.cstr();
     int codepoint;
@@ -736,7 +763,7 @@ std::vector<String> String::split(const String& needleStr, bool removeEmptyEntri
         if (memcmp(haystack + i, needle, codepoint) == 0) {
             int addSize = i - cut;
             if (!removeEmptyEntries || addSize != 0) {
-                retVal.push_back(String(*this, cut, addSize));
+                into.push_back(String(*this, cut, addSize));
             }
             cut = i + needleStr.byteLength();
         }
@@ -744,13 +771,11 @@ std::vector<String> String::split(const String& needleStr, bool removeEmptyEntri
     // Add the rest of the string to the vector.
     int endAddSize = byteLength() - cut;
     if (endAddSize != 0) {
-        retVal.push_back(String(*this, cut, endAddSize));
+        into.push_back(String(*this, cut, endAddSize));
     }
-
-    return retVal;
 }
 
-String String::join(const std::vector<String>& vect, const String& separator) {
+const String String::join(const std::vector<String>& vect, const String& separator) {
     if (vect.size() == 0) {
         return String();
     }
@@ -763,7 +788,7 @@ String String::join(const std::vector<String>& vect, const String& separator) {
     return retVal;
 }
 
-std::cmatch String::regexMatch(const std::regex& pattern) const {
+const std::cmatch String::regexMatch(const std::regex& pattern) const {
     const char* s = cstr();
     std::cmatch m;
     std::regex_search(s, m, pattern);

@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <regex>
+#include <variant>
 
 #include <PGE/Types/Types.h>
 
@@ -40,9 +41,9 @@ class String {
             Iterator(const String& str);
 
             Iterator& operator++();
-            Iterator operator++(int);
+            const Iterator operator++(int);
 
-            Iterator operator+(int steps);
+            const Iterator operator+(int steps) const;
             void operator+=(int steps);
 
             wchar operator*() const;
@@ -67,12 +68,13 @@ class String {
             friend String;
         };
 
-        Iterator begin() const;
-        Iterator end() const;
+        const Iterator begin() const;
+        const Iterator end() const;
 
-        ~String();
+        ~String() = default; // WHY THE FUCK DO WE NEED THIS??
+        static void copy(String& dst, const String& src);
         String();
-        String(const String& a);
+        String(const String& other);
         String(const char* cstr);
         String(const std::string& cppstr);
         String(const wchar* wstr);
@@ -84,18 +86,20 @@ class String {
         String(wchar w);
 
         template <class T>
-        static String format(T t, const String& format);
-        static String fromInt(int i);
+        static const String format(T t, const String& format);
+        static const String fromInt(int i);
         static String fromFloat(float f);
 
-        String operator=(const String& other);
-        String operator+=(const String& other);
-        String operator+=(wchar ch);
+        String& operator=(const String& other);
+        String& operator+=(const String& other);
+        String& operator+=(wchar ch);
 
         // TODO: Remove (juan hates his friends).
         friend const String operator+(const String& a, const String& b);
         friend const String operator+(const char* a, const String& b);
+        friend const String operator+(const String& a, const char* b);
         friend const String operator+(const String& a, wchar b);
+        friend const String operator+(wchar a, const String& b);
 
         const char* cstr() const;
         void wstr(wchar* buffer) const;
@@ -107,26 +111,26 @@ class String {
         int length() const;
         int byteLength() const;
 
-        Iterator findFirst(const String& fnd, int from = 0) const;
-        Iterator findFirst(const String& fnd, const Iterator& from) const;
-        Iterator findLast(const String& fnd, int from = 0) const;
-        Iterator findLast(const String& fnd, const Iterator& from) const;
+        const Iterator findFirst(const String& fnd, int from = 0) const;
+        const Iterator findFirst(const String& fnd, const Iterator& from) const;
+        const Iterator findLast(const String& fnd, int from = 0) const;
+        const Iterator findLast(const String& fnd, const Iterator& from) const;
 
-        String substr(int start) const;
-        String substr(int start, int cnt) const;
-        String substr(const Iterator& start) const;
-        String substr(const Iterator& start, const Iterator& to) const;
-        Iterator charAt(int pos) const;
-        String replace(const String& fnd, const String& rplace) const;
-        String toUpper() const;
-        String toLower() const;
-        String trim() const;
-        String reverse() const;
-        String multiply(int count, const String& separator = "") const;
-        std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
-        static String join(const std::vector<String>& vect, const String& separator);
+        const String substr(int start) const;
+        const String substr(int start, int cnt) const;
+        const String substr(const Iterator& start) const;
+        const String substr(const Iterator& start, const Iterator& to) const;
+        const Iterator charAt(int pos) const;
+        const String replace(const String& fnd, const String& rplace) const;
+        const String toUpper() const;
+        const String toLower() const;
+        const String trim() const;
+        const String reverse() const;
+        const String multiply(int count, const String& separator = "") const;
+        void split(const String& needleStr, std::vector<String>& into, bool removeEmptyEntries) const;
+        static const String join(const std::vector<String>& vect, const String& separator);
 
-        std::cmatch regexMatch(const std::regex& pattern) const;
+        const std::cmatch regexMatch(const std::regex& pattern) const;
 
         //String unHex() const;
 
@@ -140,28 +144,40 @@ class String {
         String(int size);
         String(const String& other, int from, int cnt);
 
-        // Lazily evaluated.
-        mutable bool _hashCodeEvaluted;
-        mutable u64 _hashCode;
-        mutable int _strLength;
+        static constexpr int SHORT_STR_CAPACITY = 16;
 
-        int strByteLength = -1;
+        struct Data {
+            // Lazily evaluated.
+            mutable bool _hashCodeEvaluted = false;
+            mutable u64 _hashCode;
+            mutable int _strLength = -1;
 
-        constexpr static int shortStrCapacity = 16;
-        int cCapacity = shortStrCapacity;
+            int strByteLength = -1;
 
-        union {
-            char shortStr[shortStrCapacity];
-            char* longStr;
-        } data;
+            int cCapacity = SHORT_STR_CAPACITY;
+        };
 
-        String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
+        struct Shared {
+            Data data;
+            std::unique_ptr<char[]> chs;
+        };
+
+        struct Unique {
+            Data data;
+            char chs[SHORT_STR_CAPACITY];
+        };
+
+        // Default initialized with Unique.
+        std::variant<Unique, std::shared_ptr<Shared>> internalData;
+        char* chs = std::get<Unique>(internalData).chs;
+        Data* data = &std::get<Unique>(internalData).data;
+
+        const String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
 
         void wCharToUtf8Str(const wchar* wbuffer);
-        void reallocate(int size, bool copyOldData = false);
+        void reallocate(int size, bool copyOldChs = false);
         char* cstrNoConst();
 };
-
 bool operator==(const String& a, const String& b);
 bool operator!=(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);

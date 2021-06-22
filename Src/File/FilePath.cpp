@@ -39,7 +39,7 @@ static String& getResourceStr() {
         resourceStr = String(std::filesystem::current_path().c_str());
 #endif
         resourceStr = sanitizeFileSeperator(resourceStr);
-        resourceStr += "/";
+        resourceStr += '/';
     }
     return resourceStr;
 }
@@ -115,7 +115,7 @@ FilePath FilePath::makeDirectory() const {
 
 FilePath FilePath::up() const {
     PGE_ASSERT(valid, INVALID_STR);
-    return FilePath(this->name.substr(this->name.begin(), ++this->name.findLast("/")));
+    return FilePath(this->name.substr(this->name.begin(), this->name.findLast("/") + 1));
 }
 
 String FilePath::getExtension() const {
