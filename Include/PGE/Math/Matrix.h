@@ -8,9 +8,9 @@ namespace PGE {
 class Matrix4x4f {
     private:
         static constexpr int SIZE = 4;
+        float elements[SIZE][SIZE];
 
     public:
-        float elements[SIZE][SIZE];
 
         constexpr Matrix4x4f() : elements() { }
         constexpr Matrix4x4f(
@@ -115,6 +115,14 @@ class Matrix4x4f {
                 0.f, 0.f, -1.f / (nearZ - farZ), 0.f,
                 0.f, 0.f, -farZ / (nearZ - farZ), 1.f
             );
+        }
+
+        constexpr float* operator[](int x) {
+            return elements[x];
+        }
+
+        constexpr const float* operator[](int x) const {
+            return elements[x];
         }
 
         constexpr bool operator==(const Matrix4x4f& other) const {
