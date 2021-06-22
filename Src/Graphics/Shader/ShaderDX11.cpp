@@ -249,7 +249,7 @@ ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoRef cBuffer, int o
 }
 
 void ShaderDX11::ConstantDX11::setValue(const Matrix4x4f& value) {
-    memcpy(constantBuffer->getData()+offset,value.transpose().elements,16*sizeof(float));
+    memcpy(constantBuffer->getData()+offset,value.transpose()[0],16*sizeof(float));
     constantBuffer->markAsDirty();
 }
 

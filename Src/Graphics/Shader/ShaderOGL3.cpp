@@ -226,7 +226,7 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
     ((GraphicsOGL3*)graphics)->takeGlContext();
     switch (valueType) {
         case ValueType::MATRIX: {
-            glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)val.matrixVal.elements);
+            glUniformMatrix4fv(location, 1, GL_FALSE, val.matrixVal[0]);
         } break;
         case ValueType::VECTOR2F: {
             glUniform2f(location,val.vector2fVal.x,val.vector2fVal.y);
