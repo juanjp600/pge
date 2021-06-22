@@ -4,6 +4,7 @@
 #include <iostream>
 #include <filesystem>
 
+#include <PGE/Exception/Exception.h>
 #include <PGE/File/BinaryWriter.h>
 #include <PGE/String/Key.h>
 
