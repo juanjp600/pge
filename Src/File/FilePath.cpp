@@ -117,7 +117,7 @@ FilePath FilePath::makeDirectory() const {
 
 FilePath FilePath::up() const {
     PGE_ASSERT(valid, INVALID_STR);
-    return FilePath(this->name.substr(this->name.begin(), ++this->name.findLast("/")));
+    return FilePath(this->name.substr(this->name.begin(), this->name.findLast("/") + 1));
 }
 
 String FilePath::getExtension() const {

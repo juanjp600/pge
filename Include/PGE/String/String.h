@@ -41,9 +41,9 @@ class String {
             Iterator(const String& str);
 
             Iterator& operator++();
-            Iterator operator++(int);
+            const Iterator operator++(int);
 
-            Iterator operator+(int steps);
+            const Iterator operator+(int steps) const;
             void operator+=(int steps);
 
             wchar operator*() const;
@@ -68,8 +68,8 @@ class String {
             friend String;
         };
 
-        Iterator begin() const;
-        Iterator end() const;
+        const Iterator begin() const;
+        const Iterator end() const;
 
         ~String() = default; // WHY THE FUCK DO WE NEED THIS??
         static void copy(String& dst, const String& src);
@@ -86,18 +86,20 @@ class String {
         String(wchar w);
 
         template <class T>
-        static String format(T t, const String& format);
-        static String fromInt(int i);
+        static const String format(T t, const String& format);
+        static const String fromInt(int i);
         static String fromFloat(float f);
 
-        String operator=(const String& other);
-        String operator+=(const String& other);
-        String operator+=(wchar ch);
+        String& operator=(const String& other);
+        String& operator+=(const String& other);
+        String& operator+=(wchar ch);
 
         // TODO: Remove (juan hates his friends).
         friend const String operator+(const String& a, const String& b);
         friend const String operator+(const char* a, const String& b);
+        friend const String operator+(const String& a, const char* b);
         friend const String operator+(const String& a, wchar b);
+        friend const String operator+(wchar a, const String& b);
 
         const char* cstr() const;
         void wstr(wchar* buffer) const;
@@ -109,32 +111,31 @@ class String {
         int length() const;
         int byteLength() const;
 
-        Iterator findFirst(const String& fnd, int from = 0) const;
-        Iterator findFirst(const String& fnd, const Iterator& from) const;
-        Iterator findLast(const String& fnd, int from = 0) const;
-        Iterator findLast(const String& fnd, const Iterator& from) const;
+        const Iterator findFirst(const String& fnd, int from = 0) const;
+        const Iterator findFirst(const String& fnd, const Iterator& from) const;
+        const Iterator findLast(const String& fnd, int from = 0) const;
+        const Iterator findLast(const String& fnd, const Iterator& from) const;
 
-        String substr(int start) const;
-        String substr(int start, int cnt) const;
-        String substr(const Iterator& start) const;
-        String substr(const Iterator& start, const Iterator& to) const;
-        Iterator charAt(int pos) const;
-        String replace(const String& fnd, const String& rplace) const;
-        String toUpper() const;
-        String toLower() const;
-        String trim() const;
-        String reverse() const;
-        String multiply(int count, const String& separator = "") const;
-        std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
-        static String join(const std::vector<String>& vect, const String& separator);
+        const String substr(int start) const;
+        const String substr(int start, int cnt) const;
+        const String substr(const Iterator& start) const;
+        const String substr(const Iterator& start, const Iterator& to) const;
+        const Iterator charAt(int pos) const;
+        const String replace(const String& fnd, const String& rplace) const;
+        const String toUpper() const;
+        const String toLower() const;
+        const String trim() const;
+        const String reverse() const;
+        const String multiply(int count, const String& separator = "") const;
+        void split(const String& needleStr, std::vector<String>& into, bool removeEmptyEntries) const;
+        static const String join(const std::vector<String>& vect, const String& separator);
 
-        std::cmatch regexMatch(const std::regex& pattern) const;
+        const std::cmatch regexMatch(const std::regex& pattern) const;
 
         //String unHex() const;
 
         u64 getHashCode() const;
 
-        bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
         bool isEmpty() const;
 
@@ -170,13 +171,12 @@ class String {
         char* chs = std::get<Unique>(internalData).chs;
         Data* data = &std::get<Unique>(internalData).data;
 
-        String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
+        const String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
 
         void wCharToUtf8Str(const wchar* wbuffer);
         void reallocate(int size, bool copyOldChs = false);
         char* cstrNoConst();
 };
-
 bool operator==(const String& a, const String& b);
 bool operator!=(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);

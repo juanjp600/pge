@@ -48,13 +48,13 @@ String::Iterator& String::Iterator::operator++() {
     return *this;
 }
 
-String::Iterator String::Iterator::operator++(int) {
+const String::Iterator String::Iterator::operator++(int) {
     Iterator temp = *this;
     ++(*this);
     return temp;
 }
 
-String::Iterator String::Iterator::operator+(int steps) {
+const String::Iterator String::Iterator::operator+(int steps) const {
     PGE_ASSERT(steps >= 0, "String iterators cannot go backwards");
     String::Iterator ret = *this;
     for (int i = 0; i < steps; i++) {
@@ -93,11 +93,11 @@ void String::Iterator::genChar() const {
     }
 }
 
-String::Iterator String::begin() const {
+const String::Iterator String::begin() const {
     return Iterator(*this);
 }
 
-String::Iterator String::end() const {
+const String::Iterator String::end() const {
     // We need byteLength for functionality, but length is optional.
     return Iterator(*this, byteLength(), data->_strLength);
 }
@@ -117,7 +117,6 @@ void String::copy(String& dst, const String& src) {
 }
 
 String::String() {
-    reallocate(0);
     // Manual metadata:
     data->strByteLength = 0;
     data->_strLength = 0;
@@ -222,7 +221,7 @@ String::String(const String& other, int from, int cnt) {
 }
 
 template <class T>
-String String::format(T t, const String& format) {
+const String String::format(T t, const String& format) {
     int size = snprintf(nullptr, 0, format.cstr(), t);
     String ret(size);
     // From my (limited) research these should be safe to use, even with UTF-8 strings, as 0x25 never appears in any UTF-8 character.
@@ -231,21 +230,21 @@ String String::format(T t, const String& format) {
     return ret;
 }
 
-template String String::format<char>(char t, const PGE::String& format);
-template String String::format<short>(short t, const PGE::String& format);
-template String String::format<int>(int t, const PGE::String& format);
-template String String::format<long>(long t, const PGE::String& format);
-template String String::format<long long>(long long t, const PGE::String& format);
-template String String::format<unsigned char>(unsigned char t, const PGE::String& format);
-template String String::format<unsigned short>(unsigned short t, const PGE::String& format);
-template String String::format<unsigned>(unsigned t, const PGE::String& format);
-template String String::format<unsigned long>(unsigned long t, const PGE::String& format);
-template String String::format<unsigned long long>(unsigned long long t, const PGE::String& format);
-template String String::format<float>(float t, const PGE::String& format);
-template String String::format<double>(double t, const PGE::String& format);
-template String String::format<long double>(long double t, const PGE::String& format);
+template const String String::format<char>(char t, const PGE::String& format);
+template const String String::format<short>(short t, const PGE::String& format);
+template const String String::format<int>(int t, const PGE::String& format);
+template const String String::format<long>(long t, const PGE::String& format);
+template const String String::format<long long>(long long t, const PGE::String& format);
+template const String String::format<unsigned char>(unsigned char t, const PGE::String& format);
+template const String String::format<unsigned short>(unsigned short t, const PGE::String& format);
+template const String String::format<unsigned>(unsigned t, const PGE::String& format);
+template const String String::format<unsigned long>(unsigned long t, const PGE::String& format);
+template const String String::format<unsigned long long>(unsigned long long t, const PGE::String& format);
+template const String String::format<float>(float t, const PGE::String& format);
+template const String String::format<double>(double t, const PGE::String& format);
+template const String String::format<long double>(long double t, const PGE::String& format);
 
-String String::fromInt(int i) {
+const String String::fromInt(int i) {
     // "-2147483648" has 11 characters.
     String ret(11);
     ret.data->_strLength = sprintf(ret.cstrNoConst(), "%d", i);
@@ -262,12 +261,12 @@ String String::fromFloat(float f) {
     return ret;
 }
 
-String String::operator=(const String& other) {
+String& String::operator=(const String& other) {
     copy(*this, other);
     return *this;
 }
 
-String String::operator+=(const String& other) {
+String& String::operator+=(const String& other) {
     int oldByteSize = byteLength();
     int newSize = oldByteSize + other.byteLength();
     reallocate(newSize, true);
@@ -280,7 +279,7 @@ String String::operator+=(const String& other) {
     return *this;
 }
 
-String String::operator+=(wchar ch) {
+String& String::operator+=(wchar ch) {
     int aLen = byteLength();
     reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
@@ -296,7 +295,7 @@ String String::operator+=(wchar ch) {
 const String PGE::operator+(const String& a, const String& b) {
     int aLen = a.byteLength();
     int bLen = b.byteLength();
-    String ret = String(aLen + bLen);
+    String ret(aLen + bLen);
     char* buf = ret.cstrNoConst();
     memcpy(buf, a.cstr(), aLen);
     memcpy(buf + aLen, b.cstr(), bLen + 1);
@@ -310,7 +309,7 @@ const String PGE::operator+(const String& a, const String& b) {
 const String PGE::operator+(const char* a, const String& b) {
     int aLen = strlen(a);
     int bLen = b.byteLength();
-    String ret = String(aLen + bLen);
+    String ret(aLen + bLen);
     char* buf = ret.cstrNoConst();
     memcpy(buf, a, aLen);
     memcpy(buf + aLen, b.cstr(), bLen + 1);
@@ -318,9 +317,20 @@ const String PGE::operator+(const char* a, const String& b) {
     return ret;
 }
 
+const String PGE::operator+(const String& a, const char* b) {
+    int aLen = a.byteLength();
+    int bLen = strlen(b);
+    String ret(aLen + bLen);
+    char* buf = ret.cstrNoConst();
+    memcpy(buf, a.cstr(), aLen);
+    memcpy(buf + aLen, b, bLen + 1);
+    ret.data->strByteLength = aLen + bLen;
+    return ret;
+}
+
 const String PGE::operator+(const String& a, wchar b) {
     int aLen = a.byteLength();
-    String ret = String(aLen + 4);
+    String ret(aLen + 4);
     char* buf = ret.cstrNoConst();
     memcpy(buf, a.cstr(), aLen);
     int actualSize = aLen + Unicode::wCharToUtf8(b, buf + aLen);
@@ -328,6 +338,21 @@ const String PGE::operator+(const String& a, wchar b) {
     ret.data->strByteLength = actualSize;
     if (a.data->_strLength >= 0) {
         ret.data->_strLength = a.length() + 1;
+    }
+    return ret;
+}
+
+const String PGE::operator+(wchar a, const String& b) {
+    int bLen = b.byteLength();
+    String ret(4 + bLen);
+    char* buf = ret.cstrNoConst();
+    int writtenChars = Unicode::wCharToUtf8(a, buf);
+    memcpy(buf + writtenChars, b.cstr(), bLen);
+    int actualSize = writtenChars + bLen;
+    buf[actualSize] = '\0';
+    ret.data->strByteLength = actualSize;
+    if (b.data->_strLength >= 0) {
+        ret.data->_strLength = b.length() + 1;
     }
     return ret;
 }
@@ -533,11 +558,11 @@ int String::byteLength() const {
     return data->strByteLength;
 }
 
-String::Iterator String::findFirst(const String& fnd, int from) const {
+const String::Iterator String::findFirst(const String& fnd, int from) const {
     return findFirst(fnd, begin() + from);
 }
 
-String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
+const String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
     PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
     for (auto it = from; it != end(); ++it) {
         if (memcmp(fnd.cstr(), cstr() + it.index, fnd.byteLength()) == 0) { return it; }
@@ -545,11 +570,11 @@ String::Iterator String::findFirst(const String& fnd, const Iterator& from) cons
     return end();
 }
 
-String::Iterator String::findLast(const String& fnd, int from) const {
+const String::Iterator String::findLast(const String& fnd, int from) const {
     return findLast(fnd, begin() + from);
 }
 
-String::Iterator String::findLast(const String& fnd, const Iterator& from) const {
+const String::Iterator String::findLast(const String& fnd, const Iterator& from) const {
     PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
     String::Iterator found = end();
     for (auto it = from; it != end(); ++it) {
@@ -558,20 +583,20 @@ String::Iterator String::findLast(const String& fnd, const Iterator& from) const
     return found;
 }
 
-String String::substr(int start) const {
+const String String::substr(int start) const {
     return substr(begin() + start);
 }
 
-String String::substr(int start, int cnt) const {
+const String String::substr(int start, int cnt) const {
     Iterator from = begin() + start;
     return substr(from, from + cnt);
 }
 
-String String::substr(const Iterator& start) const {
+const String String::substr(const Iterator& start) const {
     return substr(start, end());
 }
 
-String String::substr(const Iterator& start, const Iterator& to) const {
+const String String::substr(const Iterator& start, const Iterator& to) const {
     PGE_ASSERT(start.index <= to.index, "Start iterator can't come after to iterator (start: " + fromInt(start.index) + "; to: " + fromInt(to.index) + "; str: " + *this + ")");
     PGE_ASSERT(to.index <= end().index, "To iterator can't come after end iterator (to: " + fromInt(to.index) + "; end: " + fromInt(end().index) + "; str: " + *this + ")");
 
@@ -587,13 +612,13 @@ String String::substr(const Iterator& start, const Iterator& to) const {
     return retVal;
 }
 
-String::Iterator String::charAt(int pos) const {
+const String::Iterator String::charAt(int pos) const {
     Iterator it;
     for (it = begin(); it != end() && it.charIndex != pos; ++it);
     return it;
 }
 
-String String::replace(const String& fnd, const String& rplace) const {
+const String String::replace(const String& fnd, const String& rplace) const {
     PGE_ASSERT(fnd.byteLength() != 0, "Find string can't be empty");
 
     const char* fndStr = fnd.cstr();
@@ -636,8 +661,8 @@ String String::replace(const String& fnd, const String& rplace) const {
 }
 
 // TODO: Funny special cases!
-String String::performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const {
-    String ret = String(byteLength());
+const String String::performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const {
+    String ret(byteLength());
     ret.data->strByteLength = 0;
     ret.data->_strLength = 0;
     for (wchar ch : *this) {
@@ -656,15 +681,15 @@ String String::performCaseConversion(const std::unordered_map<wchar, wchar>& con
     return ret;
 }
 
-String String::toUpper() const {
+const String String::toUpper() const {
     return performCaseConversion(Unicode::UP, Unicode::MULTI_UP);
 }
 
-String String::toLower() const {
+const String String::toLower() const {
     return performCaseConversion(Unicode::DOWN, Unicode::MULTI_DOWN);
 }
 
-String String::trim() const {
+const String String::trim() const {
     if (byteLength() == 0) { return *this; }
 
     const char* buf = cstr();
@@ -691,7 +716,7 @@ String String::trim() const {
     return ret;
 }
 
-String String::reverse() const {
+const String String::reverse() const {
     int len = byteLength();
     String ret(len);
     char* buf = ret.cstrNoConst();
@@ -708,7 +733,7 @@ String String::reverse() const {
     return ret;
 }
 
-String String::multiply(int count, const String& separator) const {
+const String String::multiply(int count, const String& separator) const {
     int curLength = byteLength();
     int sepLength = separator.byteLength();
     int newLength = curLength * count + sepLength * (count - 1);
@@ -728,8 +753,7 @@ String String::multiply(int count, const String& separator) const {
     return ret;
 }
 
-std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
-    std::vector<String> retVal;
+void String::split(const String& needleStr, std::vector<String>& into, bool removeEmptyEntries) const {
     const char* haystack = cstr();
     const char* needle = needleStr.cstr();
     int codepoint;
@@ -739,7 +763,7 @@ std::vector<String> String::split(const String& needleStr, bool removeEmptyEntri
         if (memcmp(haystack + i, needle, codepoint) == 0) {
             int addSize = i - cut;
             if (!removeEmptyEntries || addSize != 0) {
-                retVal.push_back(String(*this, cut, addSize));
+                into.push_back(String(*this, cut, addSize));
             }
             cut = i + needleStr.byteLength();
         }
@@ -747,13 +771,11 @@ std::vector<String> String::split(const String& needleStr, bool removeEmptyEntri
     // Add the rest of the string to the vector.
     int endAddSize = byteLength() - cut;
     if (endAddSize != 0) {
-        retVal.push_back(String(*this, cut, endAddSize));
+        into.push_back(String(*this, cut, endAddSize));
     }
-
-    return retVal;
 }
 
-String String::join(const std::vector<String>& vect, const String& separator) {
+const String String::join(const std::vector<String>& vect, const String& separator) {
     if (vect.size() == 0) {
         return String();
     }
@@ -766,7 +788,7 @@ String String::join(const std::vector<String>& vect, const String& separator) {
     return retVal;
 }
 
-std::cmatch String::regexMatch(const std::regex& pattern) const {
+const std::cmatch String::regexMatch(const std::regex& pattern) const {
     const char* s = cstr();
     std::cmatch m;
     std::regex_search(s, m, pattern);
