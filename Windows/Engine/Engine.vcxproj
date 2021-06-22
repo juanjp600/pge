@@ -47,7 +47,6 @@
     <ClCompile Include="..\..\Src\Math\Plane.cpp" />
     <ClCompile Include="..\..\Src\Math\Random.cpp" />
     <ClCompile Include="..\..\Src\Math\Rectangle.cpp" />
-    <ClCompile Include="..\..\Src\Math\Vector.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
