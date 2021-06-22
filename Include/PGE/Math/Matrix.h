@@ -25,107 +25,6 @@ class Matrix4x4f {
                 da, db, dc, dd,
             } { }
 
-        constexpr void operator+=(const Matrix4x4f& other) {
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    this->elements[i][j] += other.elements[i][j];
-                }
-            }
-        }
-        constexpr Matrix4x4f operator+(const Matrix4x4f& other) const {
-            Matrix4x4f retVal = *this;
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    retVal.elements[i][j] += other.elements[i][j];
-                }
-            }
-            return retVal;
-        }
-
-        constexpr void operator*=(const Matrix4x4f& other) {
-            Matrix4x4f retVal;
-            for (int i = 0; i < SIZE; i++) {
-                for (int k = 0; k < SIZE; k++) {
-                    for (int j = 0; j < SIZE; j++) {
-                        retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
-                    }
-                }
-            }
-            *this = retVal;
-        }
-        constexpr Matrix4x4f operator*(const Matrix4x4f& other) const {
-            Matrix4x4f retVal;
-            for (int i = 0; i < SIZE; i++) {
-                for (int k = 0; k < SIZE; k++) {
-                    for (int j = 0; j < SIZE; j++) {
-                        retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
-                    }
-                }
-            }
-            return retVal;
-        }
-        constexpr void operator*=(float scalar) {
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    this->elements[i][j] *= scalar;
-                }
-            }
-        }
-        constexpr Matrix4x4f operator*(float scalar) const {
-            Matrix4x4f retVal = *this;
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    retVal.elements[i][j] *= scalar;
-                }
-            }
-            return retVal;
-        }
-
-        constexpr bool operator==(const Matrix4x4f& other) const {
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    if (elements[i][j] != other.elements[i][j]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        constexpr bool operator!=(const Matrix4x4f& other) const {
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    if (elements[i][j] != other.elements[i][j]) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        constexpr Matrix4x4f transpose() const {
-            Matrix4x4f retVal;
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    retVal.elements[i][j] = elements[j][i];
-                }
-            }
-            return retVal;
-        }
-
-        constexpr Vector4f operator*(const Vector4f& vec) const {
-            Vector4f retVal;
-            retVal.x = vec.x * elements[0][0] + vec.y * elements[1][0] + vec.z * elements[2][0] + vec.w * elements[3][0];
-            retVal.y = vec.x * elements[0][1] + vec.y * elements[1][1] + vec.z * elements[2][1] + vec.w * elements[3][1];
-            retVal.z = vec.x * elements[0][2] + vec.y * elements[1][2] + vec.z * elements[2][2] + vec.w * elements[3][2];
-            retVal.w = vec.x * elements[0][3] + vec.y * elements[1][3] + vec.z * elements[2][3] + vec.w * elements[3][3];
-            return retVal;
-        }
-        constexpr Vector3f transform(const Vector3f& other) const {
-            Vector4f retVal(other.x, other.y, other.z, 1.f);
-            retVal = *this * retVal;
-            return Vector3f(retVal.x, retVal.y, retVal.z);
-        }
-
         static constexpr Matrix4x4f translate(const Vector3f& position) {
             return Matrix4x4f(
                 1.f, 0.f, 0.f, 0.f,
@@ -134,6 +33,7 @@ class Matrix4x4f {
                 position.x, position.y, position.z, 1.f
             );
         }
+
         // TODO: Custom trigonometric function implementation?
         static Matrix4x4f rotate(const Vector3f& rotation) {
             float sinPitch = sin(rotation.x);
@@ -166,6 +66,7 @@ class Matrix4x4f {
 
             return rollMat * pitchMat * yawMat;
         }
+
         static constexpr Matrix4x4f scale(const Vector3f& scale) {
             return Matrix4x4f(
                 scale.x, 0.f, 0.f, 0.f,
@@ -178,6 +79,7 @@ class Matrix4x4f {
         static constexpr Matrix4x4f constructWorldMat(const Vector3f& position, const Vector3f& scale, const Vector3f& rotation) {
             return Matrix4x4f::scale(scale) * Matrix4x4f::rotate(rotation) * Matrix4x4f::translate(position);
         }
+
         static constexpr Matrix4x4f constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector) {
             Vector3f zAxis = -forwardVector;
             zAxis = zAxis.normalize();
@@ -194,36 +96,148 @@ class Matrix4x4f {
                 -xAxis.dotProduct(position), -yAxis.dotProduct(position), -zAxis.dotProduct(position), 1.f
             );
         }
-        constexpr Vector3f extractViewTarget() const {
-            return Vector3f(-elements[0][2], -elements[1][2], -elements[2][2]);
-        }
-        constexpr Vector3f extractViewUp() const {
-            return Vector3f(elements[0][1], elements[1][1], elements[2][1]);
-        }
-        constexpr Vector3f extractViewPosition() const {
-            Vector3f xAxis = Vector3f(elements[0][0], elements[1][0], elements[2][0]);
-            Vector3f yAxis = Vector3f(elements[0][1], elements[1][1], elements[2][1]);
-            Vector3f zAxis = Vector3f(elements[0][2], elements[1][2], elements[2][2]);
-            return -(xAxis * elements[3][0] + yAxis * elements[3][1] + zAxis * elements[3][2]);
-        }
+
         static Matrix4x4f constructPerspectiveMat(float horizontalfov, float aspectRatio, float nearZ, float farZ) {
             float rad = horizontalfov * 0.5f;
             float nad = cos(rad) / sin(rad);
 
             return Matrix4x4f(
-                nad * (-1.0f / aspectRatio), 0.f, 0.f,                             0.f,
-                0.f,                         nad, 0.f,                             0.f,
-                0.f,                         0.f, farZ / (nearZ - farZ),           -1.f,
-                0.f,                         0.f, (nearZ * farZ / (nearZ - farZ)), 1.f
+                nad * (-1.0f / aspectRatio), 0.f, 0.f, 0.f,
+                0.f, nad, 0.f, 0.f,
+                0.f, 0.f, farZ / (nearZ - farZ), -1.f,
+                0.f, 0.f, (nearZ * farZ / (nearZ - farZ)), 1.f
             );
         }
+
         static constexpr Matrix4x4f constructOrthographicMat(float width, float height, float nearZ, float farZ) {
             return Matrix4x4f(
-                -2.f / width, 0.f,          0.f,                    0.f,
-                0.f,          2.f / height, 0.f,                    0.f,
-                0.f,          0.f,          -1.f / (nearZ - farZ),  0.f,
-                0.f,          0.f,          -farZ / (nearZ - farZ), 1.f
+                -2.f / width, 0.f, 0.f, 0.f,
+                0.f, 2.f / height, 0.f, 0.f,
+                0.f, 0.f, -1.f / (nearZ - farZ), 0.f,
+                0.f, 0.f, -farZ / (nearZ - farZ), 1.f
             );
+        }
+
+        constexpr bool operator==(const Matrix4x4f& other) const {
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    if (elements[i][j] != other.elements[i][j]) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        constexpr bool operator!=(const Matrix4x4f& other) const {
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    if (elements[i][j] != other.elements[i][j]) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        constexpr void operator+=(const Matrix4x4f& other) {
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    this->elements[i][j] += other.elements[i][j];
+                }
+            }
+        }
+
+        constexpr void operator*=(const Matrix4x4f& other) {
+            Matrix4x4f retVal;
+            for (int i = 0; i < SIZE; i++) {
+                for (int k = 0; k < SIZE; k++) {
+                    for (int j = 0; j < SIZE; j++) {
+                        retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
+                    }
+                }
+            }
+            *this = retVal;
+        }
+
+        constexpr void operator*=(float scalar) {
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    this->elements[i][j] *= scalar;
+                }
+            }
+        }
+
+        constexpr Matrix4x4f operator+(const Matrix4x4f& other) const {
+            Matrix4x4f retVal = *this;
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    retVal.elements[i][j] += other.elements[i][j];
+                }
+            }
+            return retVal;
+        }
+
+        constexpr Matrix4x4f operator*(const Matrix4x4f& other) const {
+            Matrix4x4f retVal;
+            for (int i = 0; i < SIZE; i++) {
+                for (int k = 0; k < SIZE; k++) {
+                    for (int j = 0; j < SIZE; j++) {
+                        retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
+                    }
+                }
+            }
+            return retVal;
+        }
+
+        constexpr Matrix4x4f operator*(float scalar) const {
+            Matrix4x4f retVal = *this;
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    retVal.elements[i][j] *= scalar;
+                }
+            }
+            return retVal;
+        }
+
+        constexpr Vector4f operator*(const Vector4f& vec) const {
+            Vector4f retVal;
+            retVal.x = vec.x * elements[0][0] + vec.y * elements[1][0] + vec.z * elements[2][0] + vec.w * elements[3][0];
+            retVal.y = vec.x * elements[0][1] + vec.y * elements[1][1] + vec.z * elements[2][1] + vec.w * elements[3][1];
+            retVal.z = vec.x * elements[0][2] + vec.y * elements[1][2] + vec.z * elements[2][2] + vec.w * elements[3][2];
+            retVal.w = vec.x * elements[0][3] + vec.y * elements[1][3] + vec.z * elements[2][3] + vec.w * elements[3][3];
+            return retVal;
+        }
+
+        constexpr Vector3f transform(const Vector3f& vec) const {
+            Vector4f retVal(vec.x, vec.y, vec.z, 1.f);
+            retVal = *this * retVal;
+            return Vector3f(retVal.x, retVal.y, retVal.z);
+        }
+
+        constexpr Matrix4x4f transpose() const {
+            Matrix4x4f retVal;
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    retVal.elements[i][j] = elements[j][i];
+                }
+            }
+            return retVal;
+        }
+
+        constexpr Vector3f extractViewTarget() const {
+            return Vector3f(-elements[0][2], -elements[1][2], -elements[2][2]);
+        }
+
+        constexpr Vector3f extractViewUp() const {
+            return Vector3f(elements[0][1], elements[1][1], elements[2][1]);
+        }
+
+        constexpr Vector3f extractViewPosition() const {
+            Vector3f xAxis = Vector3f(elements[0][0], elements[1][0], elements[2][0]);
+            Vector3f yAxis = Vector3f(elements[0][1], elements[1][1], elements[2][1]);
+            Vector3f zAxis = Vector3f(elements[0][2], elements[1][2], elements[2][2]);
+            return -(xAxis * elements[3][0] + yAxis * elements[3][1] + zAxis * elements[3][2]);
         }
 
         String toString() const {

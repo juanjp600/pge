@@ -18,6 +18,8 @@ class Vector2f {
         constexpr bool operator==(const Vector2f& other) const { return x == other.x && y == other.y; }
         constexpr bool operator!=(const Vector2f& other) const { return x != other.x || y != other.y ; }
 
+        constexpr Vector2f operator-() const { return Vector2f(-x, -y); }
+
         constexpr void operator+=(const Vector2f& other) { x += other.x; y += other.y; }
         constexpr void operator+=(float f) { x += f; y += f; }
         constexpr void operator-=(const Vector2f& other) { x -= other.x; y -= other.y; }
@@ -25,23 +27,15 @@ class Vector2f {
         constexpr void operator*=(float f) { x *= f; y *= f; }
         constexpr void operator/=(float f) { x /= f; y /= f; }
 
-        constexpr Vector2f operator-() const { return Vector2f(-x, -y); }
-
         constexpr Vector2f operator+(const Vector2f& other) const { return Vector2f(x + other.x, y + other.y); }
-        constexpr Vector2f operator+(float f) const { return Vector2f(x + f, y + f); }
         constexpr Vector2f operator-(const Vector2f& other) const { return Vector2f(x - other.x, y - other.y); }
+        constexpr Vector2f operator+(float f) const { return Vector2f(x + f, y + f); }
         constexpr Vector2f operator-(float f) const { return Vector2f(x - f, y - f); }
         constexpr Vector2f operator*(float f) const { return Vector2f(x * f, y * f); }
         constexpr Vector2f operator/(float f) const { return Vector2f(x / f, y / f); }
 
-        constexpr float dotProduct(const Vector2f& b) const { return x * b.x + y * b.y; }
-        constexpr Vector2f entrywiseProduct(const Vector2f& b) const { return Vector2f(x * b.x, y * b.y); }
-
-        constexpr float lengthSquared() const { return x * x + y * y; }
-        inline float length() const { return sqrtf(lengthSquared()); }
-
-        constexpr float distanceSquared(const Vector2f& b) const { return (*this - b).lengthSquared(); }
-        inline float distance(const Vector2f& b) const { return sqrtf(distanceSquared(b)); }
+        constexpr float dotProduct(const Vector2f& other) const { return x * other.x + y * other.y; }
+        constexpr Vector2f entrywiseProduct(const Vector2f& other) const { return Vector2f(x * other.x, y * other.y); }
 
         constexpr Vector2f normalize() const {
             float lenSqr = lengthSquared();
@@ -56,7 +50,15 @@ class Vector2f {
             return reflectedVector.normalize();
         }
 
-        String toString() const;
+        constexpr float lengthSquared() const { return x * x + y * y; }
+        inline float length() const { return sqrtf(lengthSquared()); }
+
+        constexpr float distanceSquared(const Vector2f& other) const { return (*this - other).lengthSquared(); }
+        inline float distance(const Vector2f& other) const { return sqrtf(distanceSquared(other)); }
+
+        String toString() const {
+            return "Vector2f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ")";
+        }
 };
 constexpr Vector2f operator*(float f, const Vector2f& vec) { return vec * f; }
 
@@ -73,31 +75,25 @@ class Vector3f {
         constexpr bool operator==(const Vector3f& other) const { return x == other.x && y == other.y && z == other.z; }
         constexpr bool operator!=(const Vector3f& other) const { return x != other.x || y != other.y || z != other.z; }
 
+        constexpr Vector3f operator-() const { return Vector3f(-x, -y, -z); }
+
         constexpr void operator+=(const Vector3f& other) { x += other.x; y += other.y; z += other.z; }
-        constexpr void operator+=(float f) { x += f; y += f; z += f; }
         constexpr void operator-=(const Vector3f& other) { x -= other.x; y -= other.y; z -= other.z; }
+        constexpr void operator+=(float f) { x += f; y += f; z += f; }
         constexpr void operator-=(float f) { x -= f; y -= f; z -= f; }
         constexpr void operator*=(float f) { x *= f; y *= f; z *= f; }
         constexpr void operator/=(float f) { x /= f; y /= f; z /= f; }
 
-        constexpr Vector3f operator-() const { return Vector3f(-x, -y, -z); }
-
         constexpr Vector3f operator+(const Vector3f& other) const { return Vector3f(x + other.x, y + other.y, z + other.z); }
-        constexpr Vector3f operator+(float f) const { return Vector3f(x + f, y + f, z + f); }
         constexpr Vector3f operator-(const Vector3f& other) const { return Vector3f(x - other.x, y - other.y, z - other.z); }
+        constexpr Vector3f operator+(float f) const { return Vector3f(x + f, y + f, z + f); }
         constexpr Vector3f operator-(float f) const { return Vector3f(x - f, y - f, z - f); }
         constexpr Vector3f operator*(float f) const { return Vector3f(x * f, y * f, z * f); }
         constexpr Vector3f operator/(float f) const { return Vector3f(x / f, y / f, z / f); }
 
-        constexpr float dotProduct(const Vector3f& b) const { return x * b.x + y * b.y + z * b.z; }
-        constexpr Vector3f entrywiseProduct(const Vector3f& b) const { return Vector3f(x * b.x, y * b.y, z * b.z); }
-        constexpr Vector3f crossProduct(const Vector3f& b) const { return Vector3f(y * b.z - z * b.y, z * b.x - x * b.z, x * b.y - y * b.x); }
-
-        constexpr float lengthSquared() const { return x * x + y * y + z * z; }
-        inline float length() const { return sqrtf(lengthSquared()); }
-
-        constexpr float distanceSquared(const Vector3f& b) const { return (*this - b).lengthSquared(); }
-        inline float distance(const Vector3f& b) const { return sqrtf(distanceSquared(b)); }
+        constexpr float dotProduct(const Vector3f& other) const { return x * other.x + y * other.y + z * other.z; }
+        constexpr Vector3f entrywiseProduct(const Vector3f& other) const { return Vector3f(x * other.x, y * other.y, z * other.z); }
+        constexpr Vector3f crossProduct(const Vector3f& other) const { return Vector3f(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x); }
 
         constexpr Vector3f normalize() const {
             float lenSqr = lengthSquared();
@@ -112,7 +108,15 @@ class Vector3f {
             return reflectedVector.normalize();
         }
 
-        String toString() const;
+        constexpr float lengthSquared() const { return x * x + y * y + z * z; }
+        inline float length() const { return sqrtf(lengthSquared()); }
+
+        constexpr float distanceSquared(const Vector3f& other) const { return (*this - other).lengthSquared(); }
+        inline float distance(const Vector3f& other) const { return sqrtf(distanceSquared(other)); }
+
+        String toString() const {
+            return "Vector3f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ", " + String::fromFloat(z) + ")";
+        }
 };
 constexpr Vector3f operator*(float f, const Vector3f& vec) { return vec * f; }
 
@@ -130,30 +134,24 @@ class Vector4f {
         constexpr bool operator==(const Vector4f& other) const { return x == other.x && y == other.y && z == other.z && w == other.w; }
         constexpr bool operator!=(const Vector4f& other) const { return x != other.x || y != other.y || z != other.z || w != other.w; }
 
+        constexpr Vector4f operator-() const { return Vector4f(-x, -y, -z, -w); }
+
         constexpr void operator+=(const Vector4f& other) { x += other.x; y += other.y; z += other.z; w += other.w; }
-        constexpr void operator+=(float f) { x += f; y += f; z += f; w += f; }
         constexpr void operator-=(const Vector4f& other) { x -= other.x; y -= other.y; z -= other.z; w -= other.w; }
+        constexpr void operator+=(float f) { x += f; y += f; z += f; w += f; }
         constexpr void operator-=(float f) { x -= f; y -= f; z -= f; w -= f; }
         constexpr void operator*=(float f) { x *= f; y *= f; z *= f; w *= f; }
         constexpr void operator/=(float f) { x /= f; y /= f; z /= f; w /= f; }
 
-        constexpr Vector4f operator-() const { return Vector4f(-x, -y, -z, -w); }
-
         constexpr Vector4f operator+(const Vector4f& other) const { return Vector4f(x + other.x, y + other.y, z + other.z, w + other.w); }
-        constexpr Vector4f operator+(float f) const { return Vector4f(x + f, y + f, z + f, w + f); }
         constexpr Vector4f operator-(const Vector4f& other) const { return Vector4f(x - other.x, y - other.y, z - other.z, w - other.w); }
+        constexpr Vector4f operator+(float f) const { return Vector4f(x + f, y + f, z + f, w + f); }
         constexpr Vector4f operator-(float f) const { return Vector4f(x - f, y - f, z - f, w - f); }
         constexpr Vector4f operator*(float f) const { return Vector4f(x * f, y * f, z * f, w * f); }
         constexpr Vector4f operator/(float f) const { return Vector4f(x / f, y / f, z / f, w / f); }
 
-        constexpr float dotProduct(const Vector4f& b) const { return x * b.x + y * b.y + z * b.z + w * b.w; }
-        constexpr Vector4f entrywiseProduct(const Vector4f& b) const { return Vector4f(x * b.x, y * b.y, z * b.z, w * b.w); }
-
-        constexpr float lengthSquared() const { return x * x + y * y + z * z + w * w; }
-        inline float length() const { return sqrtf(lengthSquared()); }
-
-        constexpr float distanceSquared(const Vector4f& b) const { return (*this - b).lengthSquared(); }
-        inline float distance(const Vector4f& b) const { return sqrtf(distanceSquared(b)); }
+        constexpr float dotProduct(const Vector4f& other) const { return x * other.x + y * other.y + z * other.z + w * other.w; }
+        constexpr Vector4f entrywiseProduct(const Vector4f& other) const { return Vector4f(x * other.x, y * other.y, z * other.z, w * other.w); }
 
         constexpr Vector4f normalize() const {
             float lenSqr = lengthSquared();
@@ -168,7 +166,15 @@ class Vector4f {
             return reflectedVector.normalize();
         }
 
-        String toString() const;
+        constexpr float lengthSquared() const { return x * x + y * y + z * z + w * w; }
+        inline float length() const { return sqrtf(lengthSquared()); }
+
+        constexpr float distanceSquared(const Vector4f& other) const { return (*this - other).lengthSquared(); }
+        inline float distance(const Vector4f& other) const { return sqrtf(distanceSquared(other)); }
+
+        String toString() const {
+            return "Vector4f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ", " + String::fromFloat(z) + ", " + String::fromFloat(w) + ")";
+        }
 };
 constexpr Vector4f operator*(float f, const Vector4f& vec) { return vec * f; }
 
@@ -186,21 +192,21 @@ class Vector2i {
         constexpr bool operator==(const Vector2i& other) const { return x == other.x && y == other.y; }
         constexpr bool operator!=(const Vector2i& other) const { return x != other.x || y != other.y; }
 
+        constexpr Vector2i operator-() const { return Vector2i(-x, -y); }
+
         constexpr void operator+=(const Vector2i& other) { x += other.x; y += other.y; }
-        constexpr void operator+=(int i) { x += i; y += i; }
         constexpr void operator-=(const Vector2i& other) { x -= other.x; y -= other.y; }
+        constexpr void operator+=(int i) { x += i; y += i; }
         constexpr void operator-=(int i) { x -= i; y -= i; }
         constexpr void operator*=(int i) { x *= i; y *= i; }
 
-        constexpr Vector2i operator-() const { return Vector2i(-x, -y); }
-
         constexpr Vector2i operator+(const Vector2i& other) const { return Vector2i(x + other.x, y + other.y); }
-        constexpr Vector2i operator+(int i) const { return Vector2i(x + i, y + i); }
         constexpr Vector2i operator-(const Vector2i& other) const { return Vector2i(x - other.x, y - other.y); }
+        constexpr Vector2i operator+(int i) const { return Vector2i(x + i, y + i); }
         constexpr Vector2i operator-(int i) const { return Vector2i(x - i, y - i); }
         constexpr Vector2i operator*(int i) const { return Vector2i(x * i, y * i); }
 
-        constexpr int dotProduct(const Vector2i& b) { return x * b.x + y * b.y; }
+        constexpr int dotProduct(const Vector2i& other) { return x * other.x + y * other.y; }
         constexpr Vector2i entrywiseProduct(const Vector2i& other) const { return Vector2i(x * other.x, y * other.y); }
 
         constexpr int lengthSquared() const { return x * x + y * y; }
@@ -208,11 +214,13 @@ class Vector2i {
         // Fuck you, C++ standard!
         inline float length() const { return sqrtf((float)lengthSquared()); }
 
-        constexpr int distanceSquared(const Vector2i& b) const { return ((*this) - b).lengthSquared(); }
-        inline float distance(const Vector2i& b) const { return sqrtf((float)distanceSquared(b)); }
+        constexpr int distanceSquared(const Vector2i& other) const { return ((*this) - other).lengthSquared(); }
+        inline float distance(const Vector2i& other) const { return sqrtf((float)distanceSquared(other)); }
 
         // TODO: Make constexpr after String.
-        String toString() const;
+        String toString() const {
+            return "Vector2i(" + String::fromInt(x) + ", " + String::fromInt(y) + ")";
+        }
 };
 constexpr Vector2i operator*(int i, const Vector2i& vec) { return vec * i; }
 
