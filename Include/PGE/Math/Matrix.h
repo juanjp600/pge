@@ -66,6 +66,7 @@ class Matrix4x4f {
 
             return rollMat * pitchMat * yawMat;
         }
+
         static constexpr const Matrix4x4f scale(const Vector3f& scale) {
             return Matrix4x4f(
                 scale.x, 0.f, 0.f, 0.f,
@@ -78,6 +79,7 @@ class Matrix4x4f {
         static constexpr const Matrix4x4f constructWorldMat(const Vector3f& position, const Vector3f& scale, const Vector3f& rotation) {
             return Matrix4x4f::scale(scale) * Matrix4x4f::rotate(rotation) * Matrix4x4f::translate(position);
         }
+
         static constexpr const Matrix4x4f constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector) {
             Vector3f zAxis = -forwardVector;
             zAxis = zAxis.normalize();
@@ -131,6 +133,17 @@ class Matrix4x4f {
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     if (elements[i][j] != other.elements[i][j]) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        constexpr bool equals(const Matrix4x4f& other, float epsilon = Math::EPSILON_DEFAULT) const {
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    if (Math::equalFloats(elements[i][j], other.elements[i][j], epsilon)) {
                         return true;
                     }
                 }
@@ -239,20 +252,6 @@ class Matrix4x4f {
             Vector3f yAxis = Vector3f(elements[0][1], elements[1][1], elements[2][1]);
             Vector3f zAxis = Vector3f(elements[0][2], elements[1][2], elements[2][2]);
             return -(xAxis * elements[3][0] + yAxis * elements[3][1] + zAxis * elements[3][2]);
-        }
-
-        String toString() const {
-            String ret;
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    if (j != 0) {
-                        ret += ", ";
-                    }
-                    ret += String::fromFloat(elements[i][j]);
-                }
-                ret = ret + '\n';
-            }
-            return ret;
         }
 };
 

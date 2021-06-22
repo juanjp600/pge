@@ -42,11 +42,7 @@
     <ClCompile Include="..\..\Src\Init\Init.cpp" />
     <ClCompile Include="..\..\Src\Input\Input.cpp" />
     <ClCompile Include="..\..\Src\Input\InputManager.cpp" />
-    <ClCompile Include="..\..\Src\Math\AABBox.cpp" />
-    <ClCompile Include="..\..\Src\Math\Line.cpp" />
-    <ClCompile Include="..\..\Src\Math\Plane.cpp" />
     <ClCompile Include="..\..\Src\Math\Random.cpp" />
-    <ClCompile Include="..\..\Src\Math\Rectangle.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />

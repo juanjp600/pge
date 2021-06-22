@@ -1,8 +1,6 @@
 #ifndef PGE_MATH_H_INCLUDED
 #define PGE_MATH_H_INCLUDED
 
-#include <PGE/Exception/Exception.h>
-
 namespace PGE {
 
 namespace Math {

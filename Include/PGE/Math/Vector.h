@@ -18,6 +18,10 @@ class Vector2f {
         constexpr bool operator==(const Vector2f& other) const { return x == other.x && y == other.y; }
         constexpr bool operator!=(const Vector2f& other) const { return x != other.x || y != other.y ; }
 
+        constexpr bool equals(const Vector2f& other, float epsilon = Math::EPSILON_DEFAULT) const {
+            return Math::equalFloats(x, other.x, epsilon) && Math::equalFloats(y, other.y, epsilon);
+        }
+
         constexpr const Vector2f operator-() const { return Vector2f(-x, -y); }
 
         constexpr Vector2f& operator+=(const Vector2f& other) { x += other.x; y += other.y; return *this; }
@@ -55,10 +59,6 @@ class Vector2f {
 
         constexpr float distanceSquared(const Vector2f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector2f& other) const { return sqrtf(distanceSquared(other)); }
-
-        String toString() const {
-            return "Vector2f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ")";
-        }
 };
 constexpr const Vector2f operator*(float f, const Vector2f& vec) { return vec * f; }
 
@@ -74,6 +74,10 @@ class Vector3f {
 
         constexpr bool operator==(const Vector3f& other) const { return x == other.x && y == other.y && z == other.z; }
         constexpr bool operator!=(const Vector3f& other) const { return x != other.x || y != other.y || z != other.z; }
+        
+        constexpr bool equals(const Vector3f& other, float epsilon = Math::EPSILON_DEFAULT) const {
+            return Math::equalFloats(x, other.x, epsilon) && Math::equalFloats(y, other.y, epsilon) && Math::equalFloats(z, other.z, epsilon);
+        }
 
         constexpr const Vector3f operator-() const { return Vector3f(-x, -y, -z); }
 
@@ -113,10 +117,6 @@ class Vector3f {
 
         constexpr float distanceSquared(const Vector3f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector3f& other) const { return sqrtf(distanceSquared(other)); }
-
-        String toString() const {
-            return "Vector3f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ", " + String::fromFloat(z) + ")";
-        }
 };
 constexpr const Vector3f operator*(float f, const Vector3f& vec) { return vec * f; }
 
@@ -133,6 +133,10 @@ class Vector4f {
 
         constexpr bool operator==(const Vector4f& other) const { return x == other.x && y == other.y && z == other.z && w == other.w; }
         constexpr bool operator!=(const Vector4f& other) const { return x != other.x || y != other.y || z != other.z || w != other.w; }
+
+        constexpr bool equals(const Vector4f& other, float epsilon = Math::EPSILON_DEFAULT) const {
+            return Math::equalFloats(x, other.x, epsilon) && Math::equalFloats(y, other.y, epsilon) && Math::equalFloats(z, other.z, epsilon) && Math::equalFloats(w, other.w, epsilon);
+        }
 
         constexpr const Vector4f operator-() const { return Vector4f(-x, -y, -z, -w); }
 
@@ -171,10 +175,6 @@ class Vector4f {
 
         constexpr float distanceSquared(const Vector4f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector4f& other) const { return sqrtf(distanceSquared(other)); }
-
-        String toString() const {
-            return "Vector4f(" + String::fromFloat(x) + ", " + String::fromFloat(y) + ", " + String::fromFloat(z) + ", " + String::fromFloat(w) + ")";
-        }
 };
 constexpr const Vector4f operator*(float f, const Vector4f& vec) { return vec * f; }
 
@@ -216,11 +216,6 @@ class Vector2i {
 
         constexpr int distanceSquared(const Vector2i& other) const { return ((*this) - other).lengthSquared(); }
         inline float distance(const Vector2i& other) const { return sqrtf((float)distanceSquared(other)); }
-
-        // TODO: Make constexpr after String.
-        String toString() const {
-            return "Vector2i(" + String::fromInt(x) + ", " + String::fromInt(y) + ")";
-        }
 };
 constexpr const Vector2i operator*(int i, const Vector2i& vec) { return vec * i; }
 
