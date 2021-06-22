@@ -3,7 +3,7 @@
 using namespace PGE;
 
 Rectanglef::Rectanglef() {
-    tl = Vector2f::ZERO; br = Vector2f::ZERO;
+    
 }
 
 Rectanglef::Rectanglef(const Vector2f& itl,const Vector2f& ibr) {
@@ -104,7 +104,7 @@ bool Rectanglef::intersects(const Rectanglef& other) const {
 }
 
 Rectanglei::Rectanglei() {
-    tl = Vector2i::ZERO; br = Vector2i::ZERO;
+
 }
 
 Rectanglei::Rectanglei(const Vector2i& itl,const Vector2i& ibr) {

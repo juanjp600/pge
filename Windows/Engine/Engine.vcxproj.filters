@@ -96,9 +96,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\Color\Color.cpp">
-      <Filter>Src\Color</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp">
       <Filter>Src\Graphics</Filter>
     </ClCompile>
@@ -158,9 +155,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\String\Unicode.cpp">
       <Filter>Src\String</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Math\Math.cpp">
-      <Filter>Src\Math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Input\Input.cpp">
       <Filter>Src\Input</Filter>
