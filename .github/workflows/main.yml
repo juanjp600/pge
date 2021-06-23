@@ -1,0 +1,32 @@
+name: Documentation
+
+on:
+  push:
+    paths:
+      - "Include/**"
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v2
+    
+      - name: Doxygen
+        uses: mattnotmitt/doxygen-action@v1.3.1
+        with:
+          doxyfile-path: ./Documentation/Doxyfile
+          working-directory: ./Documentation/
+          
+      - name: Commit and push
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add .
+          git commit -m "Update Build from [%GITHUB_SHA:~0,7%]"
+          git push
