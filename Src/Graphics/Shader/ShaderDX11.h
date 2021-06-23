@@ -8,8 +8,8 @@
 #include <d3d11.h>
 
 #include <PGE/ResourceManagement/ResourceView.h>
+#include <PGE/File/BinaryReader.h>
 #include <PGE/Graphics/Shader.h>
-#include <PGE/String/String.h>
 
 #include "../GraphicsDX11.h"
 
@@ -19,8 +19,8 @@ class ShaderDX11 : public Shader {
     public:
         ShaderDX11(Graphics* gfx, const FilePath& path);
 
-        Constant* getVertexShaderConstant(const String& name);
-        Constant* getFragmentShaderConstant(const String& name);
+        Constant* getVertexShaderConstant(const String& name) override;
+        Constant* getFragmentShaderConstant(const String& name) override;
 
         void useShader();
         void useVertexInputLayout();
@@ -34,10 +34,10 @@ class ShaderDX11 : public Shader {
         std::vector<String> vertexInputElems;
 
         class CBufferInfo;
-        typedef ResourceView<CBufferInfo*> CBufferInfoRef;
+        typedef ResourceView<CBufferInfo*> CBufferInfoView;
         class ConstantDX11 : public Constant {
             public:
-                ConstantDX11(CBufferInfoRef cBuffer, int offst, int sz);
+                ConstantDX11(CBufferInfoView cBuffer, int offst, int sz);
 
                 void setValue(const Matrix4x4f& value) override;
                 void setValue(const Vector2f& value) override;
@@ -48,7 +48,7 @@ class ShaderDX11 : public Shader {
                 void setValue(int value) override;
 
             private:
-                CBufferInfoRef constantBuffer;
+                CBufferInfoView constantBuffer;
                 int offset;
                 int size;
         };
@@ -76,20 +76,20 @@ class ShaderDX11 : public Shader {
                 bool dirty;
         };
         
-        // TODO: Move.
+        // TODO: Rid the world of this atrocity.
         class CBufferInfoOwner : public Resource<CBufferInfo*> {
             public:
                 CBufferInfoOwner(Graphics* gfx, const String& nm, int sz, ResourceManager* rm);
         };
 
         ResourceViewVector<CBufferInfo*> vertexConstantBuffers;
-        ResourceViewVector<CBufferInfo*> fragmentConstantBuffers;
-        void readConstantBuffers(std::ifstream& reflectionInfo, ResourceViewVector<CBufferInfo*>& constantBuffers);
+        ResourceViewVector<CBufferInfo*> pixelConstantBuffers;
+        void readConstantBuffers(BinaryReader& reflectionInfo, const String& bufferName, ResourceViewVector<CBufferInfo*>& constantBuffers);
 
         ResourceViewVector<ID3D11SamplerState*> dxSamplerState;
 
         D3D11VertexShader::View dxVertexShader;
-        D3D11PixelShader::View dxFragmentShader;
+        D3D11PixelShader::View dxPixelShader;
 
         Graphics* graphics;
 

@@ -33,7 +33,6 @@ class Matrix4x4f {
                 position.x, position.y, position.z, 1.f
             );
         }
-
         // TODO: Custom trigonometric function implementation?
         static inline const Matrix4x4f rotate(const Vector3f& rotation) {
             float sinPitch = sin(rotation.x);
