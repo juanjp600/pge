@@ -1,11 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"class_p_g_e_1_1_input_manager.html#a4f9b34c7133a714be087722ea4f47936":[1,0,0,19,14],
-"class_p_g_e_1_1_input_manager.html#a52b51b75832e071b484ce792b9598a64":[1,0,0,19,10],
-"class_p_g_e_1_1_input_manager.html#a551806e7422c83420dfe5feafaea24b2":[1,0,0,19,1],
-"class_p_g_e_1_1_input_manager.html#a59f8dbeac25e35f21594c83787d31d0b":[1,0,0,19,6],
-"class_p_g_e_1_1_input_manager.html#a5a3cf09a710c5a9f05eda1783382f13c":[1,0,0,19,2],
-"class_p_g_e_1_1_input_manager.html#a9410038a73d1c0735fc0f9676433825d":[1,0,0,19,11],
 "class_p_g_e_1_1_input_manager.html#ab0220841c2594e098f439ee34a723c30":[1,0,0,19,0],
 "class_p_g_e_1_1_input_manager.html#ab165b1ecd2f6426f6a8f756d02c3c539":[1,0,0,19,13],
 "class_p_g_e_1_1_input_manager.html#ac40f4823baa82e766d1fe88aefd9795c":[1,0,0,19,9],
@@ -249,5 +243,11 @@ var NAVTREEINDEX1 =
 "class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046afa868488740aa25870ced6b9169951fb":[1,0,0,15,0,37],
 "class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046afbaedde498cdead4f2780217646e9ba1":[1,0,0,15,0,95],
 "class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046afc335adb3d69d3d8270769e1923ea4dc":[1,0,0,15,0,123],
-"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046afdcbdc22f7e22388bf5905c290bcfe4b":[1,0,0,15,0,102]
+"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046afdcbdc22f7e22388bf5905c290bcfe4b":[1,0,0,15,0,102],
+"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046afe14790f84a465d667c896a642402767":[1,0,0,15,0,143],
+"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046afe5c3684dce76cdd9f7f42430868aa74":[1,0,0,15,0,72],
+"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046aff44570aca8241914870afbc310cdb85":[1,0,0,15,0,53],
+"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046affa5882d1ddcf903bf0d0dbc30bfc604":[1,0,0,15,0,120],
+"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046affac168bf7931bbdd83559bff27452d0":[1,0,0,15,0,40],
+"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046affb2ce8868d49c78376bf7e76c88fd52":[1,0,0,15,0,111]
 };
