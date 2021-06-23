@@ -12,7 +12,7 @@ namespace PGE {
 /// Bla bla bla bla.
 /// More Bla.
 /// 
-/// See: Colors
+/// @see Colors
 class Color {
     public:
         // Default constructs fully opaque white (Colors::WHITE).
@@ -22,12 +22,13 @@ class Color {
         /// Values should be in range [0, 1].
         constexpr Color(float r, float g, float b, float a = 1.f) : red(r), green(g), blue(b), alpha(a) { }
 
-        /// Converts <a href= https://en.wikipedia.org/wiki/HSL_and_HSV >HSV</a>A to RGBA.
-        /// /param[in] h The hue, must be in range [0, 360].
+        /// Converts HSV(A) to RGBA.
+        /// @param[in] h The hue, must be in range [0, 360].
         /// @param[in] s The saturation, must be in range [0, 1].
         /// @param[in] v The value, must be in range [0, 1].
         /// @param[in] a The alpha, should be in range [0, 1].
         /// @exception PGE::Exception If hue, saturation or value are outside their expected range.
+        /// @see https://en.wikipedia.org/wiki/HSL_and_HSV
         static constexpr const Color fromHSV(float h, float s, float v, float a = 1.f) {
             PGE_ASSERT(h >= 0 && h <= 360.f, "Hue is outside of valid range (hue: " + String::fromFloat(h) + ")");
             PGE_ASSERT(s >= 0 && s <= 1.f, "Saturation is outside of valid range (saturation: " + String::fromFloat(s) + ")");
@@ -72,7 +73,7 @@ class Color {
             return red != other.red || blue != other.blue || green != other.green || alpha != other.alpha;
         }
 
-        /// See: Math::equalFloats()
+        /// @see Math::equalFloats()
         constexpr bool equals(const Color& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return Math::equalFloats(red, other.red, epsilon)
                 && Math::equalFloats(green, other.green, epsilon)
@@ -94,18 +95,18 @@ class Color {
 
 /// A few common colors.
 ///
-/// See: Color
+/// @see Color
 namespace Colors {
-    constexpr Color RED = Color(1.f, 0.f, 0.f); ///< #FF0000.
-    constexpr Color GREEN = Color(0.f, 1.f, 0.f); ///< #00FF00.
-    constexpr Color BLUE = Color(0.f, 0.f, 1.f); ///< #0000FF.
-    constexpr Color ORANGE = Color(1.f, 0.5f, 0.f); ///< #FF7F00.
-    constexpr Color YELLOW = Color(1.f, 1.f, 0.f); ///< #FFFF00.
-    constexpr Color CYAN = Color(0.f, 1.f, 1.f); ///< #00FFFF.
-    constexpr Color MAGENTA = Color(1.f, 0.f, 1.f); ///< #FF00FF.
-    constexpr Color WHITE = Color(1.f, 1.f, 1.f); ///< #FFFFFF.
-    constexpr Color GRAY = Color(0.5f, 0.5f, 0.5f); ///< #7F7F7F.
-    constexpr Color BLACK = Color(0.f, 0.f, 0.f); ///< #000000.
+    constexpr Color RED = Color(1.f, 0.f, 0.f); ///< #FF0000
+    constexpr Color GREEN = Color(0.f, 1.f, 0.f); ///< #00FF00
+    constexpr Color BLUE = Color(0.f, 0.f, 1.f); ///< #0000FF
+    constexpr Color ORANGE = Color(1.f, 0.5f, 0.f); ///< #FF7F00
+    constexpr Color YELLOW = Color(1.f, 1.f, 0.f); ///< #FFFF00
+    constexpr Color CYAN = Color(0.f, 1.f, 1.f); ///< #00FFFF
+    constexpr Color MAGENTA = Color(1.f, 0.f, 1.f); ///< #FF00FF
+    constexpr Color WHITE = Color(1.f, 1.f, 1.f); ///< #FFFFFF
+    constexpr Color GRAY = Color(0.5f, 0.5f, 0.5f); ///< #7F7F7F
+    constexpr Color BLACK = Color(0.f, 0.f, 0.f); ///< #000000
 }
 
 }
