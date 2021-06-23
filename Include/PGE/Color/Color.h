@@ -10,7 +10,7 @@ namespace PGE {
 /// An RGBA color represented via 4 floating point numbers.
 
 /// Bla bla bla bla.
-/// More Bla.
+/// More bla.
 /// 
 /// @see Colors
 class Color {
