@@ -12,8 +12,6 @@
 
 using namespace PGE;
 
-constexpr u64 FNV_SEED = 0xcbf29ce484222325;
-
 //
 // Iterator
 //
@@ -116,24 +114,8 @@ void String::copy(String& dst, const String& src) {
     }
 }
 
-String::String() {
-    // Manual metadata:
-    data->strByteLength = 0;
-    data->_strLength = 0;
-    data->_hashCode = FNV_SEED;
-    data->_hashCodeEvaluted = true;
-    cstrNoConst()[0] = '\0';
-}
-
 String::String(const String& other) {
     copy(*this, other);
-}
-
-String::String(const char* cstri) {
-    int len = (int)strlen(cstri);
-    reallocate(len);
-    data->strByteLength = len;
-    memcpy(cstrNoConst(), cstri, len + 1);
 }
 
 String::String(const std::string& cppstr) {
@@ -307,7 +289,7 @@ const String PGE::operator+(const String& a, const String& b) {
 }
 
 const String PGE::operator+(const char* a, const String& b) {
-    int aLen = strlen(a);
+    int aLen = (int)strlen(a);
     int bLen = b.byteLength();
     String ret(aLen + bLen);
     char* buf = ret.cstrNoConst();
@@ -319,7 +301,7 @@ const String PGE::operator+(const char* a, const String& b) {
 
 const String PGE::operator+(const String& a, const char* b) {
     int aLen = a.byteLength();
-    int bLen = strlen(b);
+    int bLen = (int)strlen(b);
     String ret(aLen + bLen);
     char* buf = ret.cstrNoConst();
     memcpy(buf, a.cstr(), aLen);
@@ -459,23 +441,23 @@ bool String::equalsIgnoreCase(const String& other) const {
     return *buf[0] == *buf[1];
 }
 
-bool String::isEmpty() const {
-    return byteLength() == 0;
-}
-
 void String::reallocate(int size, bool copyOldChs) {
     // Accounting for the terminating byte.
     size++;
 
-    if (size <= data->cCapacity) {
-        if (data->cCapacity == SHORT_STR_CAPACITY) {
-            return;
-        }
-        std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
-        if (s.use_count() == 1) {
-            chs = s->chs.get();
-            data = &s->data;
-            return;
+    if (data->cCapacity == 0) {
+        data->cCapacity = 16;
+    } else {
+        if (size <= data->cCapacity) {
+            if (data->cCapacity == SHORT_STR_CAPACITY) {
+                return;
+            }
+            std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
+            if (s.use_count() == 1) {
+                chs = s->chs.get();
+                data = &s->data;
+                return;
+            }
         }
     }
 
@@ -494,14 +476,6 @@ void String::reallocate(int size, bool copyOldChs) {
     chs = newChs;
     data = &s->data;
     data->cCapacity = targetCapacity;
-}
-
-const char* String::cstr() const {
-    return chs;
-}
-
-char* String::cstrNoConst() {
-    return chs;
 }
 
 void String::wstr(wchar* buffer) const {
@@ -635,7 +609,7 @@ const String String::replace(const String& fnd, const String& rplace) const {
         }
     }
     
-    int newSize = byteLength() + foundPositions.size() * (rplace.byteLength() - fnd.byteLength());
+    int newSize = byteLength() + (int)foundPositions.size() * (rplace.byteLength() - fnd.byteLength());
     String retVal(newSize);
     retVal.data->strByteLength = newSize;
 
@@ -655,7 +629,7 @@ const String String::replace(const String& fnd, const String& rplace) const {
    
     // If the string that is being operated on already has had its length calculated, we assume it to be worth it to pre-calculate the new string's length.
     if (data->_strLength >= 0) {
-        retVal.data->_strLength = data->_strLength + foundPositions.size() * (rplace.length() - fnd.length());
+        retVal.data->_strLength = data->_strLength + (int)foundPositions.size() * (rplace.length() - fnd.length());
     }
     return retVal;
 }

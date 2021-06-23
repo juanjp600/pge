@@ -14,12 +14,12 @@ ResourceManager::ResourceManager(size_t sz) {
 }
 
 ResourceManager::~ResourceManager() {
-    for (int i = resources.size() - 1; i >= 0; i--) {
-        delete resources[i];
+    for (auto it = resources.rbegin(); it != resources.rend(); ++it) {
+        delete *it;
     }
 }
 
-void ResourceManager::increaseSize(int count) {
+void ResourceManager::increaseSize(size_t count) {
 #ifdef DEBUG
     size += count;
 #endif

@@ -34,7 +34,7 @@ class Resource : public ResourceBase {
             return resource;
         }
 
-        template <class = typename std::enable_if<!std::is_pointer<T>::value>::type>
+        template <class = typename std::enable_if<std::negation<std::is_pointer<T>>::value>::type>
         const T* operator->() const {
             return &resource;
         }

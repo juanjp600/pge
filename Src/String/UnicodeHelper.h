@@ -1,7 +1,7 @@
 #ifndef PGE_INTERNAL_UNICODEHELPER_H_INCLUDED
 #define PGE_INTERNAL_UNICODEHELPER_H_INCLUDED
 
-#include <PGE/String/String.h>
+#include <PGE/Types/Types.h>
 
 namespace PGE {
 

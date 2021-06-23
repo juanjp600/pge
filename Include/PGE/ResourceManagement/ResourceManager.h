@@ -54,7 +54,7 @@ class ResourceManager {
             deleteResource(view.get());
         }
 
-        void increaseSize(int count);
+        void increaseSize(size_t count);
 };
 
 }

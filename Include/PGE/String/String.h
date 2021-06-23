@@ -15,14 +15,6 @@
 
 namespace PGE {
 
-// We always want 16 bits, but Windows functions expect wchar_t, so this only acts as to avoid unnecessary casting.
-// wchar_t is always 16 bits on Windows.
-#ifdef _WIN32
-typedef wchar_t wchar;
-#else
-typedef char16_t wchar;
-#endif
-
 class String {
     public:
         class Key;
@@ -73,9 +65,40 @@ class String {
 
         ~String() = default; // WHY THE FUCK DO WE NEED THIS??
         static void copy(String& dst, const String& src);
-        String();
+        
+        constexpr String() {
+            // Manual metadata:
+            data->strByteLength = 0;
+            data->_strLength = 0;
+            data->_hashCode = FNV_SEED;
+            data->_hashCodeEvaluted = true;
+            cstrNoConst()[0] = '\0';
+        }
+
         String(const String& other);
-        String(const char* cstr);
+
+        template <size_t S>
+        constexpr String(const char(&cstri)[S]) : chs((char*)&cstri) {
+            data->strByteLength = S - 1;
+            data->cCapacity = 0;
+        }
+
+        template <class T, class = typename std::enable_if<
+            std::conjunction<
+                std::is_pointer<T>,
+                std::disjunction<
+                    std::is_same<char*, T>,
+                    std::is_same<const char*, T>
+                >
+            >::value
+        >::type>
+        String(T cstri) {
+            int len = (int)strlen(cstri);
+            reallocate(len);
+            data->strByteLength = len;
+            memcpy(cstrNoConst(), cstri, len + 1);
+        }
+
         String(const std::string& cppstr);
         String(const wchar* wstr);
         String(const std::wstring& cppwstr);
@@ -101,7 +124,7 @@ class String {
         friend const String operator+(const String& a, wchar b);
         friend const String operator+(wchar a, const String& b);
 
-        const char* cstr() const;
+        constexpr const char* cstr() const { return chs; }
         void wstr(wchar* buffer) const;
         int toInt(bool& success) const;
         float toFloat(bool& success) const;
@@ -138,9 +161,11 @@ class String {
 
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
-        bool isEmpty() const;
+        constexpr bool isEmpty() const { return chs[0] == '\0'; }
 
     private:
+        static constexpr u64 FNV_SEED = 0xcbf29ce484222325;
+
         String(int size);
         String(const String& other, int from, int cnt);
 
@@ -176,7 +201,7 @@ class String {
 
         void wCharToUtf8Str(const wchar* wbuffer);
         void reallocate(int size, bool copyOldChs = false);
-        char* cstrNoConst();
+        constexpr char* cstrNoConst() { return chs; }
 };
 bool operator==(const String& a, const String& b);
 bool operator!=(const String& a, const String& b);
