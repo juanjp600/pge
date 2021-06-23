@@ -2,6 +2,7 @@
 #include <d3dcompiler.h>
 
 #include <iostream>
+#include <execution>
 #include <filesystem>
 
 #include <PGE/Exception/Exception.h>
@@ -252,13 +253,13 @@ int main(int argc, char** argv) {
     std::vector<FilePath> shaders;
     FilePath::fromStr(folderName).enumerateFiles(shaders);
 
-    for (const FilePath& shader : shaders) {
+    std::for_each(std::execution::par_unseq, shaders.begin(), shaders.end(), [](const FilePath& shader) {
         if (shader.getExtension() == "hlsl") {
-            std::cout << "Compiling: " << shader.str() << std::endl;
+            std::cout << "Compiling: " + shader.str() + '\n';
             compileShader(shader);
-            std::cout << "Success!" << std::endl;
+            std::cout << "Success: " + shader.str() + '\n';
         }
-    }
+    });
 
     return 0;
 }
