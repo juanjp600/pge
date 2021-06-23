@@ -29,6 +29,7 @@ class Color {
         /// @param[in] a The alpha, should be in range [0, 1].
         /// @exception PGE::Exception If hue, saturation or value are outside their expected range.
         /// @see https://en.wikipedia.org/wiki/HSL_and_HSV
+        /// @see https://www.englishclub.com/kids/colours-learn.htm
         static constexpr const Color fromHSV(float h, float s, float v, float a = 1.f) {
             PGE_ASSERT(h >= 0 && h <= 360.f, "Hue is outside of valid range (hue: " + String::fromFloat(h) + ")");
             PGE_ASSERT(s >= 0 && s <= 1.f, "Saturation is outside of valid range (saturation: " + String::fromFloat(s) + ")");
