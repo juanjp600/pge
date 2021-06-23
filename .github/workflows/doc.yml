@@ -23,5 +23,5 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
           git add .
-          git commit -m "Update Build from ${GITHUB_SHA::7}"
+          git commit -m "Update Build from [${GITHUB_SHA::7}]"
           git push
