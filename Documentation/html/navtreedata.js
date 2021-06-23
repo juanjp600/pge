@@ -24,12 +24,34 @@
 */
 var NAVTREE =
 [
-  [ "\u202Apulsegun engine", "index.html", ]
+  [ "\u202Apulsegun engine", "index.html", [
+    [ "\u202ANamespaces", "namespaces.html", [
+      [ "\u202ANamespace List", "namespaces.html", "namespaces_dup" ],
+      [ "\u202ANamespace Members", "namespacemembers.html", [
+        [ "\u202AAll", "namespacemembers.html", null ],
+        [ "\u202AFunctions", "namespacemembers_func.html", null ],
+        [ "\u202AVariables", "namespacemembers_vars.html", null ]
+      ] ]
+    ] ],
+    [ "\u202AClasses", "annotated.html", [
+      [ "\u202AClass List", "annotated.html", "annotated_dup" ],
+      [ "\u202AClass Index", "classes.html", null ],
+      [ "\u202AClass Hierarchy", "hierarchy.html", "hierarchy" ],
+      [ "\u202AClass Members", "functions.html", [
+        [ "\u202AAll", "functions.html", null ],
+        [ "\u202AFunctions", "functions_func.html", null ]
+      ] ]
+    ] ]
+  ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"index.html"
+"_file_path_8h.html#a6d83d3433556fa6bf3b85d0790f1bd75",
+"class_p_g_e_1_1_input_manager.html#ab0220841c2594e098f439ee34a723c30",
+"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046affc0d9b54a1fe677c4c9e6b050e67c81",
+"class_p_g_e_1_1_string.html#aa78ae8da3295d44e0633b5ca8a5f040f",
+"struct_p_g_e_1_1_string_1_1_iterator.html#a4d5aed73ecdb6bb08176b86d88cdbc7d"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
