@@ -2,9 +2,12 @@ name: Documentation
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "Include/**"
-      - "Documentation/Doxyfile"
+      - "Documentation/**"
+      - ".github/workflows/doc.yml"
 
 jobs:
   doc:
@@ -23,5 +26,5 @@ jobs:
         env:
           REPO: self
           BRANCH: gh-pages
-          FOLDER: Documentation/html
+          FOLDER: Documentation/html/
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
