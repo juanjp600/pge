@@ -16,8 +16,8 @@ jobs:
       - name: Doxygen
         uses: mattnotmitt/doxygen-action@v1.3.1
         with:
-          doxyfile-path: ./Documentation/Doxyfile
-          working-directory: ./Documentation/
+          doxyfile-path: Documentation/Doxyfile
+          working-directory: Documentation/
           
       - name: Commit and push
         run: |
