@@ -91,49 +91,232 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_binary_reader.html',''
 <div class="title">PGE::BinaryReader Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>&#x202A;Utility to read binary data from a file.  
+ <a href="class_p_g_e_1_1_binary_reader.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_binary_reader_8h_source.html">PGE/File/BinaryReader.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9d992421b554b132adc67fb8158f5608"><td class="memItemLeft" align="right" valign="top"><a id="a9d992421b554b132adc67fb8158f5608"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>BinaryReader</b> (const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> &amp;file)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a9d992421b554b132adc67fb8158f5608">BinaryReader</a> (const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> &amp;file)</td></tr>
+<tr class="memdesc:a9d992421b554b132adc67fb8158f5608"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Opens the file handle. <br /></td></tr>
 <tr class="separator:a9d992421b554b132adc67fb8158f5608"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38d40b5a789196593ad9f2b519d2a167"><td class="memItemLeft" align="right" valign="top"><a id="a38d40b5a789196593ad9f2b519d2a167"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a38d40b5a789196593ad9f2b519d2a167">~BinaryReader</a> ()</td></tr>
+<tr class="memdesc:a38d40b5a789196593ad9f2b519d2a167"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Closes the file handle. <br /></td></tr>
+<tr class="separator:a38d40b5a789196593ad9f2b519d2a167"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80422a9b799749323dd198571d59a4e4"><td class="memItemLeft" align="right" valign="top"><a id="a80422a9b799749323dd198571d59a4e4"></a>
-byte&#160;</td><td class="memItemRight" valign="bottom"><b>readByte</b> ()</td></tr>
+byte&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a80422a9b799749323dd198571d59a4e4">readByte</a> ()</td></tr>
+<tr class="memdesc:a80422a9b799749323dd198571d59a4e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads a byte from the file. <br /></td></tr>
 <tr class="separator:a80422a9b799749323dd198571d59a4e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ccfebf3a272c5018846741b35703704"><td class="memItemLeft" align="right" valign="top"><a id="a7ccfebf3a272c5018846741b35703704"></a>
-byte *&#160;</td><td class="memItemRight" valign="bottom"><b>readBytes</b> (int count)</td></tr>
-<tr class="separator:a7ccfebf3a272c5018846741b35703704"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d18b295925afbcb21dab9e6be34d23c"><td class="memItemLeft" align="right" valign="top"><a id="a8d18b295925afbcb21dab9e6be34d23c"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>readBoolean</b> ()</td></tr>
+<tr class="memitem:a30ebef2992dfc52ea512dfe667021867"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a30ebef2992dfc52ea512dfe667021867">readBytes</a> (int count, std::vector&lt; byte &gt; &amp;into)</td></tr>
+<tr class="memdesc:a30ebef2992dfc52ea512dfe667021867"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads a specified amount of bytes into a vector.  <a href="class_p_g_e_1_1_binary_reader.html#a30ebef2992dfc52ea512dfe667021867">More...</a><br /></td></tr>
+<tr class="separator:a30ebef2992dfc52ea512dfe667021867"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d18b295925afbcb21dab9e6be34d23c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a8d18b295925afbcb21dab9e6be34d23c">readBoolean</a> ()</td></tr>
+<tr class="memdesc:a8d18b295925afbcb21dab9e6be34d23c"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets a single byte as a boolean.  <a href="class_p_g_e_1_1_binary_reader.html#a8d18b295925afbcb21dab9e6be34d23c">More...</a><br /></td></tr>
 <tr class="separator:a8d18b295925afbcb21dab9e6be34d23c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80f3cf6c92f5af531c780f07bdc4e6ce"><td class="memItemLeft" align="right" valign="top"><a id="a80f3cf6c92f5af531c780f07bdc4e6ce"></a>
-i32&#160;</td><td class="memItemRight" valign="bottom"><b>readInt</b> ()</td></tr>
+i32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a80f3cf6c92f5af531c780f07bdc4e6ce">readInt</a> ()</td></tr>
+<tr class="memdesc:a80f3cf6c92f5af531c780f07bdc4e6ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets 4 bytes as a signed integer. <br /></td></tr>
 <tr class="separator:a80f3cf6c92f5af531c780f07bdc4e6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa24cad9baa9c4db77e3576cfc46c52a0"><td class="memItemLeft" align="right" valign="top"><a id="aa24cad9baa9c4db77e3576cfc46c52a0"></a>
-u32&#160;</td><td class="memItemRight" valign="bottom"><b>readUInt</b> ()</td></tr>
+u32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#aa24cad9baa9c4db77e3576cfc46c52a0">readUInt</a> ()</td></tr>
+<tr class="memdesc:aa24cad9baa9c4db77e3576cfc46c52a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets 4 bytes as an unsigned integer. <br /></td></tr>
 <tr class="separator:aa24cad9baa9c4db77e3576cfc46c52a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef6580a44ef8ccd6a1de3f4e407bfa3a"><td class="memItemLeft" align="right" valign="top"><a id="aef6580a44ef8ccd6a1de3f4e407bfa3a"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>readFloat</b> ()</td></tr>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#aef6580a44ef8ccd6a1de3f4e407bfa3a">readFloat</a> ()</td></tr>
+<tr class="memdesc:aef6580a44ef8ccd6a1de3f4e407bfa3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets 4 bytes as a 32-bit floating point number. <br /></td></tr>
 <tr class="separator:aef6580a44ef8ccd6a1de3f4e407bfa3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57b443840bf2d4bf4bfc88936b03e15d"><td class="memItemLeft" align="right" valign="top"><a id="a57b443840bf2d4bf4bfc88936b03e15d"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>readDouble</b> ()</td></tr>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a57b443840bf2d4bf4bfc88936b03e15d">readDouble</a> ()</td></tr>
+<tr class="memdesc:a57b443840bf2d4bf4bfc88936b03e15d"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets 8 bytes as a 64-bit floating point number. <br /></td></tr>
 <tr class="separator:a57b443840bf2d4bf4bfc88936b03e15d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74ff3251e3c1b277f4540d0264691c02"><td class="memItemLeft" align="right" valign="top"><a id="a74ff3251e3c1b277f4540d0264691c02"></a>
-<a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>readNullTerminatedString</b> ()</td></tr>
+<tr class="memitem:a74ff3251e3c1b277f4540d0264691c02"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a74ff3251e3c1b277f4540d0264691c02">readNullTerminatedString</a> ()</td></tr>
+<tr class="memdesc:a74ff3251e3c1b277f4540d0264691c02"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a> until a terminating null byte is encountered.  <a href="class_p_g_e_1_1_binary_reader.html#a74ff3251e3c1b277f4540d0264691c02">More...</a><br /></td></tr>
 <tr class="separator:a74ff3251e3c1b277f4540d0264691c02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a299c7a2983b8324454d116a60c814baf"><td class="memItemLeft" align="right" valign="top"><a id="a299c7a2983b8324454d116a60c814baf"></a>
-<a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>readFixedLengthString</b> (int length)</td></tr>
+<tr class="memitem:a299c7a2983b8324454d116a60c814baf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a299c7a2983b8324454d116a60c814baf">readFixedLengthString</a> (int length)</td></tr>
+<tr class="memdesc:a299c7a2983b8324454d116a60c814baf"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads the given amount of bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a>.  <a href="class_p_g_e_1_1_binary_reader.html#a299c7a2983b8324454d116a60c814baf">More...</a><br /></td></tr>
 <tr class="separator:a299c7a2983b8324454d116a60c814baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9166b01ad4cbde1393c425843fa012d1"><td class="memItemLeft" align="right" valign="top"><a id="a9166b01ad4cbde1393c425843fa012d1"></a>
-<a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a>&#160;</td><td class="memItemRight" valign="bottom"><b>readVector2f</b> ()</td></tr>
+<tr class="memitem:a9166b01ad4cbde1393c425843fa012d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a9166b01ad4cbde1393c425843fa012d1">readVector2f</a> ()</td></tr>
+<tr class="memdesc:a9166b01ad4cbde1393c425843fa012d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets two floats as a 2 component vector.  <a href="class_p_g_e_1_1_binary_reader.html#a9166b01ad4cbde1393c425843fa012d1">More...</a><br /></td></tr>
 <tr class="separator:a9166b01ad4cbde1393c425843fa012d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e73d2fbfa7c21e21cf5cc1a4dcacbba"><td class="memItemLeft" align="right" valign="top"><a id="a9e73d2fbfa7c21e21cf5cc1a4dcacbba"></a>
-<a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><b>readVector3f</b> ()</td></tr>
+<tr class="memitem:a9e73d2fbfa7c21e21cf5cc1a4dcacbba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a9e73d2fbfa7c21e21cf5cc1a4dcacbba">readVector3f</a> ()</td></tr>
+<tr class="memdesc:a9e73d2fbfa7c21e21cf5cc1a4dcacbba"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets three floats as a 3 component vector.  <a href="class_p_g_e_1_1_binary_reader.html#a9e73d2fbfa7c21e21cf5cc1a4dcacbba">More...</a><br /></td></tr>
 <tr class="separator:a9e73d2fbfa7c21e21cf5cc1a4dcacbba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a900e87b23551a3a2d4dd95c029b2592d"><td class="memItemLeft" align="right" valign="top"><a id="a900e87b23551a3a2d4dd95c029b2592d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>skip</b> (int length)</td></tr>
+<tr class="memitem:a900e87b23551a3a2d4dd95c029b2592d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a900e87b23551a3a2d4dd95c029b2592d">skip</a> (int length)</td></tr>
+<tr class="memdesc:a900e87b23551a3a2d4dd95c029b2592d"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Skips a given amount of bytes from the file, simply discarding them.  <a href="class_p_g_e_1_1_binary_reader.html#a900e87b23551a3a2d4dd95c029b2592d">More...</a><br /></td></tr>
 <tr class="separator:a900e87b23551a3a2d4dd95c029b2592d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p class="DocNodeLTR">Utility to read binary data from a file. </p>
+<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_binary_writer.html" title="&#x202A;Utility to write binary data to a file.">BinaryWriter</a> </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8d18b295925afbcb21dab9e6be34d23c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d18b295925afbcb21dab9e6be34d23c">&#9670;&nbsp;</a></span>readBoolean()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PGE::BinaryReader::readBoolean </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Interprets a single byte as a boolean. </p>
+<dl class="section return"><dt>Returns</dt><dd>&#x202A;<code>false</code> if the read byte is <code>0</code>, <code>true</code> otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="a30ebef2992dfc52ea512dfe667021867"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30ebef2992dfc52ea512dfe667021867">&#9670;&nbsp;</a></span>readBytes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PGE::BinaryReader::readBytes </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; byte &gt; &amp;&#160;</td>
+          <td class="paramname"><em>into</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Reads a specified amount of bytes into a vector. </p>
+<p class="DocNodeLTR">The vector is resized as necessary. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">count</td><td>&#x202A;The amount of bytes to read. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">into</td><td>&#x202A;The vector into which the bytes will be read. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a299c7a2983b8324454d116a60c814baf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a299c7a2983b8324454d116a60c814baf">&#9670;&nbsp;</a></span>readFixedLengthString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_p_g_e_1_1_string.html">String</a> PGE::BinaryReader::readFixedLengthString </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>length</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Reads the given amount of bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a>. </p>
+<p class="DocNodeLTR">Interpreted as UTF-8. </p><dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_file_reader.html">FileReader</a> for more control over encoding. </dd></dl>
+
+</div>
+</div>
+<a id="a74ff3251e3c1b277f4540d0264691c02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74ff3251e3c1b277f4540d0264691c02">&#9670;&nbsp;</a></span>readNullTerminatedString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_p_g_e_1_1_string.html">String</a> PGE::BinaryReader::readNullTerminatedString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Reads bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a> until a terminating null byte is encountered. </p>
+<p class="DocNodeLTR">Interpreted as UTF-8. </p><dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_file_reader.html">FileReader</a> for more control over encoding. </dd></dl>
+
+</div>
+</div>
+<a id="a9166b01ad4cbde1393c425843fa012d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9166b01ad4cbde1393c425843fa012d1">&#9670;&nbsp;</a></span>readVector2f()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a> PGE::BinaryReader::readVector2f </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Interprets two floats as a 2 component vector. </p>
+<p class="DocNodeLTR">32-bit floating point numbers read in order x, y. </p>
+
+</div>
+</div>
+<a id="a9e73d2fbfa7c21e21cf5cc1a4dcacbba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e73d2fbfa7c21e21cf5cc1a4dcacbba">&#9670;&nbsp;</a></span>readVector3f()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> PGE::BinaryReader::readVector3f </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Interprets three floats as a 3 component vector. </p>
+<p class="DocNodeLTR">32-bit floating point numbers read in order x, y, z. </p>
+
+</div>
+</div>
+<a id="a900e87b23551a3a2d4dd95c029b2592d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a900e87b23551a3a2d4dd95c029b2592d">&#9670;&nbsp;</a></span>skip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PGE::BinaryReader::skip </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>length</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Skips a given amount of bytes from the file, simply discarding them. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">length</td><td>&#x202A;The amount of bytes to skip. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

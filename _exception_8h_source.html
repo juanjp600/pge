@@ -95,29 +95,32 @@ $(document).ready(function(){initNavTree('_exception_8h_source.html',''); initRe
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>PGE {</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_exception.html">    8</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_exception.html">Exception</a> {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="comment">// Invalid exception.</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <a class="code" href="class_p_g_e_1_1_exception.html">Exception</a>();</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="comment">// Never use this directly.</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <a class="code" href="class_p_g_e_1_1_exception.html">Exception</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line, <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; extra);</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_exception.html">   10</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_exception.html">Exception</a> {</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_exception.html#a44fb091328cfa18f04ef81ae6e4b7c7e">   14</a></span>&#160;        <a class="code" href="class_p_g_e_1_1_exception.html#a44fb091328cfa18f04ef81ae6e4b7c7e">Exception</a>();</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; what() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="class_p_g_e_1_1_string.html">String</a> info;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;};</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_exception.html#a220a02e4b874dc38e9ecd00f0f29ca2e">   20</a></span>&#160;        <a class="code" href="class_p_g_e_1_1_exception.html#a220a02e4b874dc38e9ecd00f0f29ca2e">Exception</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line, <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; extra);</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;}</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#define PGE_CREATE_EX(INFO) PGE::Exception(__FILE__, __LINE__, INFO)</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#define PGE_ASSERT(COND, INFO) if (!(COND)) throw PGE_CREATE_EX(INFO)</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_EXCEPTION_H_INCLUDED</span></div>
-<div class="ttc" id="aclass_p_g_e_1_1_exception_html"><div class="ttname"><a href="class_p_g_e_1_1_exception.html">PGE::Exception</a></div><div class="ttdef"><b>Definition:</b> Exception.h:8</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_string_html"><div class="ttname"><a href="class_p_g_e_1_1_string.html">PGE::String</a></div><div class="ttdef"><b>Definition:</b> String.h:18</div></div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_exception.html#a8cbb102ee16adf90b56f1132cc777dff">   23</a></span>&#160;        <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; <a class="code" href="class_p_g_e_1_1_exception.html#a8cbb102ee16adf90b56f1132cc777dff">what</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <a class="code" href="class_p_g_e_1_1_string.html">String</a> info;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;};</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">// TODO: No worky.</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"></span><span class="preprocessor">#define PGE_CREATE_EX(INFO) PGE::Exception(__FILE__, __LINE__, INFO)</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#define PGE_ASSERT(COND, INFO) if (!(COND)) throw PGE_CREATE_EX(INFO)</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_EXCEPTION_H_INCLUDED</span></div>
+<div class="ttc" id="aclass_p_g_e_1_1_exception_html"><div class="ttname"><a href="class_p_g_e_1_1_exception.html">PGE::Exception</a></div><div class="ttdoc">Singular exception class thrown by PGE.</div><div class="ttdef"><b>Definition:</b> Exception.h:10</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_exception_html_a220a02e4b874dc38e9ecd00f0f29ca2e"><div class="ttname"><a href="class_p_g_e_1_1_exception.html#a220a02e4b874dc38e9ecd00f0f29ca2e">PGE::Exception::Exception</a></div><div class="ttdeci">Exception(const char *file, int line, const String &amp;extra)</div><div class="ttdoc">DO NOT USE.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_exception_html_a44fb091328cfa18f04ef81ae6e4b7c7e"><div class="ttname"><a href="class_p_g_e_1_1_exception.html#a44fb091328cfa18f04ef81ae6e4b7c7e">PGE::Exception::Exception</a></div><div class="ttdeci">Exception()</div><div class="ttdoc">Invalid exception.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_exception_html_a8cbb102ee16adf90b56f1132cc777dff"><div class="ttname"><a href="class_p_g_e_1_1_exception.html#a8cbb102ee16adf90b56f1132cc777dff">PGE::Exception::what</a></div><div class="ttdeci">const String &amp; what() const</div><div class="ttdoc">Returns information about the exception, including the file and line it occured on and the user provi...</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_string_html"><div class="ttname"><a href="class_p_g_e_1_1_string.html">PGE::String</a></div><div class="ttdoc">A UTF-8 character sequence guaranteed to be terminated by a null byte.</div><div class="ttdef"><b>Definition:</b> String.h:19</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

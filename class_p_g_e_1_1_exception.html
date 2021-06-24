@@ -91,16 +91,86 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_exception.html',''); i
 <div class="title">PGE::Exception Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>&#x202A;Singular exception class thrown by PGE.  
+ <a href="class_p_g_e_1_1_exception.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_exception_8h_source.html">PGE/Exception/Exception.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a220a02e4b874dc38e9ecd00f0f29ca2e"><td class="memItemLeft" align="right" valign="top"><a id="a220a02e4b874dc38e9ecd00f0f29ca2e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Exception</b> (const char *file, int line, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;extra)</td></tr>
+<tr class="memitem:a44fb091328cfa18f04ef81ae6e4b7c7e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_exception.html#a44fb091328cfa18f04ef81ae6e4b7c7e">Exception</a> ()</td></tr>
+<tr class="memdesc:a44fb091328cfa18f04ef81ae6e4b7c7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Invalid exception.  <a href="class_p_g_e_1_1_exception.html#a44fb091328cfa18f04ef81ae6e4b7c7e">More...</a><br /></td></tr>
+<tr class="separator:a44fb091328cfa18f04ef81ae6e4b7c7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a220a02e4b874dc38e9ecd00f0f29ca2e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_exception.html#a220a02e4b874dc38e9ecd00f0f29ca2e">Exception</a> (const char *file, int line, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;extra)</td></tr>
+<tr class="memdesc:a220a02e4b874dc38e9ecd00f0f29ca2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;DO NOT USE.  <a href="class_p_g_e_1_1_exception.html#a220a02e4b874dc38e9ecd00f0f29ca2e">More...</a><br /></td></tr>
 <tr class="separator:a220a02e4b874dc38e9ecd00f0f29ca2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cbb102ee16adf90b56f1132cc777dff"><td class="memItemLeft" align="right" valign="top"><a id="a8cbb102ee16adf90b56f1132cc777dff"></a>
-const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>what</b> () const</td></tr>
+const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_exception.html#a8cbb102ee16adf90b56f1132cc777dff">what</a> () const</td></tr>
+<tr class="memdesc:a8cbb102ee16adf90b56f1132cc777dff"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Returns information about the exception, including the file and line it occured on and the user provided info. <br /></td></tr>
 <tr class="separator:a8cbb102ee16adf90b56f1132cc777dff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p class="DocNodeLTR">Singular exception class thrown by PGE. </p>
+<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;PGE_CREATE_EX, PGE_ASSERT </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a44fb091328cfa18f04ef81ae6e4b7c7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44fb091328cfa18f04ef81ae6e4b7c7e">&#9670;&nbsp;</a></span>Exception() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PGE::Exception::Exception </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Invalid exception. </p>
+<p class="DocNodeLTR">Only ever use for value storing of exceptions. </p>
+
+</div>
+</div>
+<a id="a220a02e4b874dc38e9ecd00f0f29ca2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a220a02e4b874dc38e9ecd00f0f29ca2e">&#9670;&nbsp;</a></span>Exception() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PGE::Exception::Exception </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>extra</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;DO NOT USE. </p>
+<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;::PGE_CREATE_EX(INFO), ::PGE_ASSERT </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -4,7 +4,7 @@ var class_p_g_e_1_1_binary_reader =
     [ "\u202A~BinaryReader", "class_p_g_e_1_1_binary_reader.html#a38d40b5a789196593ad9f2b519d2a167", null ],
     [ "\u202AreadBoolean", "class_p_g_e_1_1_binary_reader.html#a8d18b295925afbcb21dab9e6be34d23c", null ],
     [ "\u202AreadByte", "class_p_g_e_1_1_binary_reader.html#a80422a9b799749323dd198571d59a4e4", null ],
-    [ "\u202AreadBytes", "class_p_g_e_1_1_binary_reader.html#a7ccfebf3a272c5018846741b35703704", null ],
+    [ "\u202AreadBytes", "class_p_g_e_1_1_binary_reader.html#a30ebef2992dfc52ea512dfe667021867", null ],
     [ "\u202AreadDouble", "class_p_g_e_1_1_binary_reader.html#a57b443840bf2d4bf4bfc88936b03e15d", null ],
     [ "\u202AreadFixedLengthString", "class_p_g_e_1_1_binary_reader.html#a299c7a2983b8324454d116a60c814baf", null ],
     [ "\u202AreadFloat", "class_p_g_e_1_1_binary_reader.html#aef6580a44ef8ccd6a1de3f4e407bfa3a", null ],

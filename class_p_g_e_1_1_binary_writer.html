@@ -91,46 +91,202 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_binary_writer.html',''
 <div class="title">PGE::BinaryWriter Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>&#x202A;Utility to write binary data to a file.  
+ <a href="class_p_g_e_1_1_binary_writer.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_binary_writer_8h_source.html">PGE/File/BinaryWriter.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2dfcfda2190faf6907c17bd5070e1b26"><td class="memItemLeft" align="right" valign="top"><a id="a2dfcfda2190faf6907c17bd5070e1b26"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>BinaryWriter</b> (const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> &amp;path)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a2dfcfda2190faf6907c17bd5070e1b26">BinaryWriter</a> (const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> &amp;path)</td></tr>
+<tr class="memdesc:a2dfcfda2190faf6907c17bd5070e1b26"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Opens the file handle. <br /></td></tr>
 <tr class="separator:a2dfcfda2190faf6907c17bd5070e1b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13517c0a14377b15c1d9d49d7526262c"><td class="memItemLeft" align="right" valign="top"><a id="a13517c0a14377b15c1d9d49d7526262c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a13517c0a14377b15c1d9d49d7526262c">~BinaryWriter</a> ()</td></tr>
+<tr class="memdesc:a13517c0a14377b15c1d9d49d7526262c"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Closes the file handle. <br /></td></tr>
+<tr class="separator:a13517c0a14377b15c1d9d49d7526262c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d0ee06868b9756a9797ffa001c42307"><td class="memItemLeft" align="right" valign="top"><a id="a0d0ee06868b9756a9797ffa001c42307"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeByte</b> (byte b)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a0d0ee06868b9756a9797ffa001c42307">writeByte</a> (byte b)</td></tr>
+<tr class="memdesc:a0d0ee06868b9756a9797ffa001c42307"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes a byte to the file. <br /></td></tr>
 <tr class="separator:a0d0ee06868b9756a9797ffa001c42307"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2acfaabd8bc12e2c211f28c4b03d1837"><td class="memItemLeft" align="right" valign="top"><a id="a2acfaabd8bc12e2c211f28c4b03d1837"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeBytes</b> (byte *bytes, int count)</td></tr>
-<tr class="separator:a2acfaabd8bc12e2c211f28c4b03d1837"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac514002a097bf40ca2e9288954d1e512"><td class="memItemLeft" align="right" valign="top"><a id="ac514002a097bf40ca2e9288954d1e512"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeBoolean</b> (bool b)</td></tr>
+<tr class="memitem:a7ca6bee50c390112dceb72b5ad75a084"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a7ca6bee50c390112dceb72b5ad75a084">writeBytes</a> (const std::vector&lt; byte &gt; &amp;bytes)</td></tr>
+<tr class="memdesc:a7ca6bee50c390112dceb72b5ad75a084"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes a given amount of bytes to the file.  <a href="class_p_g_e_1_1_binary_writer.html#a7ca6bee50c390112dceb72b5ad75a084">More...</a><br /></td></tr>
+<tr class="separator:a7ca6bee50c390112dceb72b5ad75a084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac514002a097bf40ca2e9288954d1e512"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#ac514002a097bf40ca2e9288954d1e512">writeBoolean</a> (bool b)</td></tr>
+<tr class="memdesc:ac514002a097bf40ca2e9288954d1e512"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes byte representing a boolean.  <a href="class_p_g_e_1_1_binary_writer.html#ac514002a097bf40ca2e9288954d1e512">More...</a><br /></td></tr>
 <tr class="separator:ac514002a097bf40ca2e9288954d1e512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b4fb39c0a051f60b18154b8b82a3eeb"><td class="memItemLeft" align="right" valign="top"><a id="a2b4fb39c0a051f60b18154b8b82a3eeb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeInt</b> (i32 i)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a2b4fb39c0a051f60b18154b8b82a3eeb">writeInt</a> (i32 i)</td></tr>
+<tr class="memdesc:a2b4fb39c0a051f60b18154b8b82a3eeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes 4 bytes representing a signed integer. <br /></td></tr>
 <tr class="separator:a2b4fb39c0a051f60b18154b8b82a3eeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f88a93cb02904bad657e65ab8a30f33"><td class="memItemLeft" align="right" valign="top"><a id="a3f88a93cb02904bad657e65ab8a30f33"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeUInt</b> (u32 u)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a3f88a93cb02904bad657e65ab8a30f33">writeUInt</a> (u32 u)</td></tr>
+<tr class="memdesc:a3f88a93cb02904bad657e65ab8a30f33"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes 4 bytes representing an unsigned integer. <br /></td></tr>
 <tr class="separator:a3f88a93cb02904bad657e65ab8a30f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e0a2cccd1353ee15a5a48f7f393a077"><td class="memItemLeft" align="right" valign="top"><a id="a4e0a2cccd1353ee15a5a48f7f393a077"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeFloat</b> (float f)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a4e0a2cccd1353ee15a5a48f7f393a077">writeFloat</a> (float f)</td></tr>
+<tr class="memdesc:a4e0a2cccd1353ee15a5a48f7f393a077"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes 4 bytes representing a 32-bit floating point number. <br /></td></tr>
 <tr class="separator:a4e0a2cccd1353ee15a5a48f7f393a077"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17ec16d03495ee0bcd15c378dd7395ce"><td class="memItemLeft" align="right" valign="top"><a id="a17ec16d03495ee0bcd15c378dd7395ce"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeDouble</b> (double d)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a17ec16d03495ee0bcd15c378dd7395ce">writeDouble</a> (double d)</td></tr>
+<tr class="memdesc:a17ec16d03495ee0bcd15c378dd7395ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes 4 bytes representing a 64-bit floating point number. <br /></td></tr>
 <tr class="separator:a17ec16d03495ee0bcd15c378dd7395ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b6bd0dcea9ed0b18f1dc5f64b5e2fb3"><td class="memItemLeft" align="right" valign="top"><a id="a3b6bd0dcea9ed0b18f1dc5f64b5e2fb3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeNullTerminatedString</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;str)</td></tr>
+<tr class="memitem:a3b6bd0dcea9ed0b18f1dc5f64b5e2fb3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a3b6bd0dcea9ed0b18f1dc5f64b5e2fb3">writeNullTerminatedString</a> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;str)</td></tr>
+<tr class="memdesc:a3b6bd0dcea9ed0b18f1dc5f64b5e2fb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes <a class="el" href="class_p_g_e_1_1_string.html#ac3e19338d386c9009001969a4169c4b9" title="&#x202A;The amount of bytes the string is composed of, excluding the terminating null byte.">String::byteLength()</a> amount of bytes from <a class="el" href="class_p_g_e_1_1_string.html#afb05494784024b0bdc3408cf1e621eac" title="&#x202A;Gets the UTF-8 data the string is composd of, without transferring ownership.">String::cstr()</a> to the file, in addition to a null terminating byte.  <a href="class_p_g_e_1_1_binary_writer.html#a3b6bd0dcea9ed0b18f1dc5f64b5e2fb3">More...</a><br /></td></tr>
 <tr class="separator:a3b6bd0dcea9ed0b18f1dc5f64b5e2fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b504ffbcf9ee1df2e70c427324ba119"><td class="memItemLeft" align="right" valign="top"><a id="a2b504ffbcf9ee1df2e70c427324ba119"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeFixedLengthString</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;str)</td></tr>
+<tr class="memitem:a2b504ffbcf9ee1df2e70c427324ba119"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a2b504ffbcf9ee1df2e70c427324ba119">writeFixedLengthString</a> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;str)</td></tr>
+<tr class="memdesc:a2b504ffbcf9ee1df2e70c427324ba119"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes <a class="el" href="class_p_g_e_1_1_string.html#ac3e19338d386c9009001969a4169c4b9" title="&#x202A;The amount of bytes the string is composed of, excluding the terminating null byte.">String::byteLength()</a> amount of bytes from <a class="el" href="class_p_g_e_1_1_string.html#afb05494784024b0bdc3408cf1e621eac" title="&#x202A;Gets the UTF-8 data the string is composd of, without transferring ownership.">String::cstr()</a> to a file, without a terminating null byte.  <a href="class_p_g_e_1_1_binary_writer.html#a2b504ffbcf9ee1df2e70c427324ba119">More...</a><br /></td></tr>
 <tr class="separator:a2b504ffbcf9ee1df2e70c427324ba119"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ed6d8c13e74f85a550437385b72cffa"><td class="memItemLeft" align="right" valign="top"><a id="a6ed6d8c13e74f85a550437385b72cffa"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeVector2f</b> (const <a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a> &amp;vec)</td></tr>
+<tr class="memitem:a6ed6d8c13e74f85a550437385b72cffa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a6ed6d8c13e74f85a550437385b72cffa">writeVector2f</a> (const <a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a> &amp;vec)</td></tr>
+<tr class="memdesc:a6ed6d8c13e74f85a550437385b72cffa"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes 2 floats to the file, representing a 2 component vector.  <a href="class_p_g_e_1_1_binary_writer.html#a6ed6d8c13e74f85a550437385b72cffa">More...</a><br /></td></tr>
 <tr class="separator:a6ed6d8c13e74f85a550437385b72cffa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a56f6ff60d058fc23c07af7c5f5270c"><td class="memItemLeft" align="right" valign="top"><a id="a1a56f6ff60d058fc23c07af7c5f5270c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeVector3f</b> (const <a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> &amp;vec)</td></tr>
+<tr class="memitem:a1a56f6ff60d058fc23c07af7c5f5270c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a1a56f6ff60d058fc23c07af7c5f5270c">writeVector3f</a> (const <a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> &amp;vec)</td></tr>
+<tr class="memdesc:a1a56f6ff60d058fc23c07af7c5f5270c"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes 3 floats to the file, representing a 3 component vector.  <a href="class_p_g_e_1_1_binary_writer.html#a1a56f6ff60d058fc23c07af7c5f5270c">More...</a><br /></td></tr>
 <tr class="separator:a1a56f6ff60d058fc23c07af7c5f5270c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p class="DocNodeLTR">Utility to write binary data to a file. </p>
+<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_binary_reader.html" title="&#x202A;Utility to read binary data from a file.">BinaryReader</a> </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac514002a097bf40ca2e9288954d1e512"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac514002a097bf40ca2e9288954d1e512">&#9670;&nbsp;</a></span>writeBoolean()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PGE::BinaryWriter::writeBoolean </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>b</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Writes byte representing a boolean. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>&#x202A;<code>false</code> is written as <code>0</code>, <code>true</code> as <code>1</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7ca6bee50c390112dceb72b5ad75a084"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ca6bee50c390112dceb72b5ad75a084">&#9670;&nbsp;</a></span>writeBytes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PGE::BinaryWriter::writeBytes </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; byte &gt; &amp;&#160;</td>
+          <td class="paramname"><em>bytes</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Writes a given amount of bytes to the file. </p>
+<p class="DocNodeLTR">In order to be read again, the amount of bytes must be known, so it should either be constant, or stored with the byte data manually. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">bytes</td><td>&#x202A;The bytes to write. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2b504ffbcf9ee1df2e70c427324ba119"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b504ffbcf9ee1df2e70c427324ba119">&#9670;&nbsp;</a></span>writeFixedLengthString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PGE::BinaryWriter::writeFixedLengthString </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Writes <a class="el" href="class_p_g_e_1_1_string.html#ac3e19338d386c9009001969a4169c4b9" title="&#x202A;The amount of bytes the string is composed of, excluding the terminating null byte.">String::byteLength()</a> amount of bytes from <a class="el" href="class_p_g_e_1_1_string.html#afb05494784024b0bdc3408cf1e621eac" title="&#x202A;Gets the UTF-8 data the string is composd of, without transferring ownership.">String::cstr()</a> to a file, without a terminating null byte. </p>
+<p class="DocNodeLTR">Encoded using UTF-8.</p>
+<p class="DocNodeLTR">In order to be read again, its byte length must be known, so it should either be constant, or stored together with the string manually. </p><dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_file_writer.html">FileWriter</a> for more control over encoding. </dd></dl>
+
+</div>
+</div>
+<a id="a3b6bd0dcea9ed0b18f1dc5f64b5e2fb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b6bd0dcea9ed0b18f1dc5f64b5e2fb3">&#9670;&nbsp;</a></span>writeNullTerminatedString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PGE::BinaryWriter::writeNullTerminatedString </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Writes <a class="el" href="class_p_g_e_1_1_string.html#ac3e19338d386c9009001969a4169c4b9" title="&#x202A;The amount of bytes the string is composed of, excluding the terminating null byte.">String::byteLength()</a> amount of bytes from <a class="el" href="class_p_g_e_1_1_string.html#afb05494784024b0bdc3408cf1e621eac" title="&#x202A;Gets the UTF-8 data the string is composd of, without transferring ownership.">String::cstr()</a> to the file, in addition to a null terminating byte. </p>
+<p class="DocNodeLTR">Encoded using UTF-8. </p><dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_file_writer.html">FileWriter</a> for more control over encoding. </dd></dl>
+
+</div>
+</div>
+<a id="a6ed6d8c13e74f85a550437385b72cffa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ed6d8c13e74f85a550437385b72cffa">&#9670;&nbsp;</a></span>writeVector2f()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PGE::BinaryWriter::writeVector2f </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a> &amp;&#160;</td>
+          <td class="paramname"><em>vec</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Writes 2 floats to the file, representing a 2 component vector. </p>
+<p class="DocNodeLTR">32-bit floating point numbers written in order x, y. </p>
+
+</div>
+</div>
+<a id="a1a56f6ff60d058fc23c07af7c5f5270c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a56f6ff60d058fc23c07af7c5f5270c">&#9670;&nbsp;</a></span>writeVector3f()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PGE::BinaryWriter::writeVector3f </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> &amp;&#160;</td>
+          <td class="paramname"><em>vec</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Writes 3 floats to the file, representing a 3 component vector. </p>
+<p class="DocNodeLTR">32-bit floating point numbers written in order x, y, z. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

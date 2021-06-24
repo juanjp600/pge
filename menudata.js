@@ -35,5 +35,25 @@ var menudata={children:[
 {text:"\u202AClass Index",url:"classes.html"},
 {text:"\u202AClass Hierarchy",url:"hierarchy.html"},
 {text:"\u202AClass Members",url:"functions.html",children:[
-{text:"\u202AAll",url:"functions.html"},
-{text:"\u202AFunctions",url:"functions_func.html"}]}]}]}
+{text:"\u202AAll",url:"functions.html",children:[
+{text:"\u202Ab",url:"functions.html#index_b"},
+{text:"\u202Ac",url:"functions.html#index_c"},
+{text:"\u202Ae",url:"functions.html#index_e"},
+{text:"\u202Af",url:"functions.html#index_f"},
+{text:"\u202Al",url:"functions.html#index_l"},
+{text:"\u202Ao",url:"functions.html#index_o"},
+{text:"\u202Ar",url:"functions.html#index_r"},
+{text:"\u202As",url:"functions.html#index_s"},
+{text:"\u202Aw",url:"functions.html#index_w"},
+{text:"~",url:"functions.html#index__7E"}]},
+{text:"\u202AFunctions",url:"functions_func.html",children:[
+{text:"\u202Ab",url:"functions_func.html#index_b"},
+{text:"\u202Ac",url:"functions_func.html#index_c"},
+{text:"\u202Ae",url:"functions_func.html#index_e"},
+{text:"\u202Af",url:"functions_func.html#index_f"},
+{text:"\u202Al",url:"functions_func.html#index_l"},
+{text:"\u202Ao",url:"functions_func.html#index_o"},
+{text:"\u202Ar",url:"functions_func.html#index_r"},
+{text:"\u202As",url:"functions_func.html#index_s"},
+{text:"\u202Aw",url:"functions_func.html#index_w"},
+{text:"~",url:"functions_func.html#index__7E"}]}]}]}]}

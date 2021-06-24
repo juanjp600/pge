@@ -94,6 +94,11 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_string.html',''); init
 <div class="title">PGE::String Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.  
+ <a href="class_p_g_e_1_1_string.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_string_8h_source.html">PGE/String/String.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -151,8 +156,8 @@ template&lt;class T , class  = typename std::enable_if&lt;            std::conju
 <tr class="memitem:aff79d7d33c05c4fedc4d88e32881b7d1"><td class="memItemLeft" align="right" valign="top"><a id="aff79d7d33c05c4fedc4d88e32881b7d1"></a>
 <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator+=</b> (wchar ch)</td></tr>
 <tr class="separator:aff79d7d33c05c4fedc4d88e32881b7d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb05494784024b0bdc3408cf1e621eac"><td class="memItemLeft" align="right" valign="top"><a id="afb05494784024b0bdc3408cf1e621eac"></a>
-constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><b>cstr</b> () const</td></tr>
+<tr class="memitem:afb05494784024b0bdc3408cf1e621eac"><td class="memItemLeft" align="right" valign="top">constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_string.html#afb05494784024b0bdc3408cf1e621eac">cstr</a> () const</td></tr>
+<tr class="memdesc:afb05494784024b0bdc3408cf1e621eac"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Gets the UTF-8 data the string is composd of, without transferring ownership.  <a href="class_p_g_e_1_1_string.html#afb05494784024b0bdc3408cf1e621eac">More...</a><br /></td></tr>
 <tr class="separator:afb05494784024b0bdc3408cf1e621eac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac86d78112baf086d5eff709f7a5a79f"><td class="memItemLeft" align="right" valign="top"><a id="aac86d78112baf086d5eff709f7a5a79f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>wstr</b> (wchar *buffer) const</td></tr>
@@ -169,11 +174,11 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>toInt</b> () const</td
 <tr class="memitem:a23d4061c122e0e806bd30cec3acfe786"><td class="memItemLeft" align="right" valign="top"><a id="a23d4061c122e0e806bd30cec3acfe786"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>toFloat</b> () const</td></tr>
 <tr class="separator:a23d4061c122e0e806bd30cec3acfe786"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c0da5319ef56356fa252848a9faf9d8"><td class="memItemLeft" align="right" valign="top"><a id="a8c0da5319ef56356fa252848a9faf9d8"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>length</b> () const</td></tr>
+<tr class="memitem:a8c0da5319ef56356fa252848a9faf9d8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_string.html#a8c0da5319ef56356fa252848a9faf9d8">length</a> () const</td></tr>
+<tr class="memdesc:a8c0da5319ef56356fa252848a9faf9d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;The amount of characters the string is composed of, excluding the terminating null byte.  <a href="class_p_g_e_1_1_string.html#a8c0da5319ef56356fa252848a9faf9d8">More...</a><br /></td></tr>
 <tr class="separator:a8c0da5319ef56356fa252848a9faf9d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3e19338d386c9009001969a4169c4b9"><td class="memItemLeft" align="right" valign="top"><a id="ac3e19338d386c9009001969a4169c4b9"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>byteLength</b> () const</td></tr>
+<tr class="memitem:ac3e19338d386c9009001969a4169c4b9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_string.html#ac3e19338d386c9009001969a4169c4b9">byteLength</a> () const</td></tr>
+<tr class="memdesc:ac3e19338d386c9009001969a4169c4b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;The amount of bytes the string is composed of, excluding the terminating null byte.  <a href="class_p_g_e_1_1_string.html#ac3e19338d386c9009001969a4169c4b9">More...</a><br /></td></tr>
 <tr class="separator:ac3e19338d386c9009001969a4169c4b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11c1f66ec59543e338d47d2aaf93d3c3"><td class="memItemLeft" align="right" valign="top"><a id="a11c1f66ec59543e338d47d2aaf93d3c3"></a>
 const <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>findFirst</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;fnd, int from=0) const</td></tr>
@@ -276,6 +281,79 @@ const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td 
 const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (wchar a, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;b)</td></tr>
 <tr class="separator:a323a22070461a23d2759b197abd759ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p class="DocNodeLTR">A UTF-8 character sequence guaranteed to be terminated by a null byte. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac3e19338d386c9009001969a4169c4b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3e19338d386c9009001969a4169c4b9">&#9670;&nbsp;</a></span>byteLength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int PGE::String::byteLength </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;The amount of bytes the string is composed of, excluding the terminating null byte. </p>
+<p class="DocNodeLTR">Not necessarily equal to <a class="el" href="class_p_g_e_1_1_string.html#a8c0da5319ef56356fa252848a9faf9d8" title="&#x202A;The amount of characters the string is composed of, excluding the terminating null byte.">length()</a> when dealing with non-ASCII characters.</p>
+<p class="DocNodeLTR">O(1) </p>
+
+</div>
+</div>
+<a id="afb05494784024b0bdc3408cf1e621eac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb05494784024b0bdc3408cf1e621eac">&#9670;&nbsp;</a></span>cstr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const char* PGE::String::cstr </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&#x202A;Gets the UTF-8 data the string is composd of, without transferring ownership. </p>
+<p class="DocNodeLTR">Guaranteed to have a null byte appended to the string's content.</p>
+<p class="DocNodeLTR">O(1) </p>
+
+</div>
+</div>
+<a id="a8c0da5319ef56356fa252848a9faf9d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c0da5319ef56356fa252848a9faf9d8">&#9670;&nbsp;</a></span>length()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int PGE::String::length </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;The amount of characters the string is composed of, excluding the terminating null byte. </p>
+<p class="DocNodeLTR">First call on same data: O(n), successive calls: O(1) </p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

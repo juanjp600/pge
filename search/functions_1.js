@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['equalfloats_124',['equalFloats',['../namespace_p_g_e_1_1_math.html#a515993db46f69e2f70c3af58a7b7369f',1,'PGE::Math']]],
-  ['equals_125',['equals',['../class_p_g_e_1_1_color.html#ad775dfaec2463681e093b18ca644b80b',1,'PGE::Color']]]
+  ['color_157',['Color',['../class_p_g_e_1_1_color.html#a7428291c7233b5f818a6b2bb24ffe5ec',1,'PGE::Color::Color()'],['../class_p_g_e_1_1_color.html#a0f58b27b5be5654ae24cda87771cd82d',1,'PGE::Color::Color(byte r, byte g, byte b, byte a=255)'],['../class_p_g_e_1_1_color.html#ab156d55670c4ac6b671d1fe99758132f',1,'PGE::Color::Color(float r, float g, float b, float a=1.f)']]],
+  ['cstr_158',['cstr',['../class_p_g_e_1_1_string.html#afb05494784024b0bdc3408cf1e621eac',1,'PGE::String']]]
 ];

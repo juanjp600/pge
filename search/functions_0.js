@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['color_123',['Color',['../class_p_g_e_1_1_color.html#a0f58b27b5be5654ae24cda87771cd82d',1,'PGE::Color::Color(byte r, byte g, byte b, byte a=255)'],['../class_p_g_e_1_1_color.html#ab156d55670c4ac6b671d1fe99758132f',1,'PGE::Color::Color(float r, float g, float b, float a=1.f)']]]
+  ['binaryreader_154',['BinaryReader',['../class_p_g_e_1_1_binary_reader.html#a9d992421b554b132adc67fb8158f5608',1,'PGE::BinaryReader']]],
+  ['binarywriter_155',['BinaryWriter',['../class_p_g_e_1_1_binary_writer.html#a2dfcfda2190faf6907c17bd5070e1b26',1,'PGE::BinaryWriter']]],
+  ['bytelength_156',['byteLength',['../class_p_g_e_1_1_string.html#ac3e19338d386c9009001969a4169c4b9',1,'PGE::String']]]
 ];
