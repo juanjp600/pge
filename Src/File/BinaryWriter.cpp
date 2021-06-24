@@ -19,8 +19,8 @@ void BinaryWriter::write(T t) {
     stream.write((char*)&t, sizeof(T));
 }
 
-void BinaryWriter::writeBytes(byte* bytes, int count) {
-    stream.write((char*)bytes, count);
+void BinaryWriter::writeBytes(const std::vector<byte>& bytes) {
+    stream.write((char*)bytes.data(), bytes.size());
 }
 
 void BinaryWriter::writeBoolean(bool b) {

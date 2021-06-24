@@ -20,7 +20,7 @@ class BinaryReader {
         ~BinaryReader();
 
         byte readByte();
-        byte* readBytes(int count);
+        void readBytes(int count, std::vector<byte>& into);
         bool readBoolean();
         i32 readInt();
         u32 readUInt();

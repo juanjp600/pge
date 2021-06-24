@@ -20,7 +20,7 @@ class BinaryWriter {
         ~BinaryWriter();
 
         void writeByte(byte b);
-        void writeBytes(byte* bytes, int count);
+        void writeBytes(const std::vector<byte>& bytes);
         void writeBoolean(bool b);
         void writeInt(i32 i);
         void writeUInt(u32 u);
