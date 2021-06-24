@@ -6,7 +6,7 @@
 
 using namespace PGE;
 
-// TODO: Remove after ThreadManager refactor.
+// TODO: Add utility to differentiate between valid and invalid exceptions.
 Exception::Exception() {
     info = ">>> INVALID EXCEPTION <<<";
 }
