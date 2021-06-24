@@ -4,9 +4,6 @@
     <Filter Include="Src">
       <UniqueIdentifier>{545d3eef-2696-4b2c-a09d-bf6ae7c60913}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Color">
-      <UniqueIdentifier>{613605a8-11c0-4532-8dc0-0ae31ccd923b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Graphics">
       <UniqueIdentifier>{e8f52a80-7691-4e35-97c0-637455232187}</UniqueIdentifier>
     </Filter>

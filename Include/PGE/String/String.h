@@ -15,6 +15,7 @@
 
 namespace PGE {
 
+/// A UTF-8 character sequence guaranteed to be terminated by a null byte.
 class String {
     public:
         class Key;
@@ -124,6 +125,10 @@ class String {
         friend const String operator+(const String& a, wchar b);
         friend const String operator+(wchar a, const String& b);
 
+        /// Gets the UTF-8 data the string is composd of, without transferring ownership.
+        /// Guaranteed to have a null byte appended to the string's content.
+        /// 
+        /// O(1)
         constexpr const char* cstr() const { return chs; }
         void wstr(wchar* buffer) const;
         int toInt(bool& success) const;
@@ -131,7 +136,14 @@ class String {
         int toInt() const;
         float toFloat() const;
 
+        /// The amount of characters the string is composed of, excluding the terminating null byte.
+        /// 
+        /// First call on same data: O(n), successive calls: O(1)
         int length() const;
+        /// The amount of bytes the string is composed of, excluding the terminating null byte.
+        /// Not necessarily equal to length() when dealing with non-ASCII characters.
+        /// 
+        /// O(1)
         int byteLength() const;
 
         const Iterator findFirst(const String& fnd, int from = 0) const;

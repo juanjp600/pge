@@ -8,14 +8,11 @@
 namespace PGE {
 
 /// An RGBA color represented via 4 floating point numbers.
-
-/// Bla bla bla bla.
-/// More bla.
-/// 
+/// Attributes are public.
 /// @see Colors
 class Color {
     public:
-        // Default constructs fully opaque white (Colors::WHITE).
+        /// Default constructs fully opaque white (Colors::WHITE).
         constexpr Color() : red(1.f), green(1.f), blue(1.f), alpha(1.f) { }
         /// Converts bytes in range [0, 255] to floats in range [0, 1].
         constexpr Color(byte r, byte g, byte b, byte a = 255) : red(r / 255.f), green(g / 255.f), blue(b / 255.f), alpha(a / 255.f) { }
@@ -65,10 +62,12 @@ class Color {
             }
         }
 
+        /// Uses regular float equality.
         constexpr bool operator==(const Color& other) const {
             return red == other.red && blue == other.blue && green == other.green && alpha == other.alpha;
         }
 
+        /// Uses regular float equality.
         constexpr bool operator!=(const Color& other) const {
             return red != other.red || blue != other.blue || green != other.green || alpha != other.alpha;
         }
@@ -94,19 +93,18 @@ class Color {
 };
 
 /// A few common colors.
-///
 /// @see Color
 namespace Colors {
-    constexpr Color RED = Color(1.f, 0.f, 0.f); ///< #FF0000
-    constexpr Color GREEN = Color(0.f, 1.f, 0.f); ///< #00FF00
-    constexpr Color BLUE = Color(0.f, 0.f, 1.f); ///< #0000FF
-    constexpr Color ORANGE = Color(1.f, 0.5f, 0.f); ///< #FF7F00
-    constexpr Color YELLOW = Color(1.f, 1.f, 0.f); ///< #FFFF00
-    constexpr Color CYAN = Color(0.f, 1.f, 1.f); ///< #00FFFF
-    constexpr Color MAGENTA = Color(1.f, 0.f, 1.f); ///< #FF00FF
-    constexpr Color WHITE = Color(1.f, 1.f, 1.f); ///< #FFFFFF
-    constexpr Color GRAY = Color(0.5f, 0.5f, 0.5f); ///< #7F7F7F
-    constexpr Color BLACK = Color(0.f, 0.f, 0.f); ///< #000000
+    constexpr Color RED = Color(1.f, 0.f, 0.f); ///< \#FF0000
+    constexpr Color GREEN = Color(0.f, 1.f, 0.f); ///< \#00FF00
+    constexpr Color BLUE = Color(0.f, 0.f, 1.f); ///< \#0000FF
+    constexpr Color ORANGE = Color(1.f, 0.5f, 0.f); ///< \#FF7F00
+    constexpr Color YELLOW = Color(1.f, 1.f, 0.f); ///< \#FFFF00
+    constexpr Color CYAN = Color(0.f, 1.f, 1.f); ///< \#00FFFF
+    constexpr Color MAGENTA = Color(1.f, 0.f, 1.f); ///< \#FF00FF
+    constexpr Color WHITE = Color(1.f, 1.f, 1.f); ///< \#FFFFFF
+    constexpr Color GRAY = Color(0.5f, 0.5f, 0.5f); ///< \#7F7F7F
+    constexpr Color BLACK = Color(0.f, 0.f, 0.f); ///< \#000000
 }
 
 }
