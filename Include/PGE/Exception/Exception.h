@@ -10,7 +10,7 @@ namespace PGE {
 class Exception {
     public:
         /// Invalid exception.
-        /// Only ever use for value storing of exceptions.
+        /// Only ever use for storing exceptions by value.
         Exception();
 
 

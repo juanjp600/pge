@@ -47,7 +47,7 @@ static String& getResourceStr() {
 const FilePath& FilePath::getDataPath() {
     static FilePath dataPath;
     if (!dataPath.isValid()) {
-        // TODO: Linux.
+    // TODO: Linux.
 #if defined(__APPLE__) && defined(__OBJC__)
     // Volumes/User/*user*/Library/Application Support/
         NSArray* filePaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
@@ -87,12 +87,6 @@ FilePath FilePath::fromStr(const String& str) {
     }
 }
 
-FilePath::FilePath(const FilePath& a, const String& b) {
-    PGE_ASSERT(a.valid, INVALID_STR);
-    name = a.str() + sanitizeFileSeperator(b);
-    valid = true;
-}
-
 bool FilePath::isValid() const {
     return valid;
 }
@@ -105,10 +99,10 @@ bool FilePath::isDirectory() const {
     return isDir;
 }
 
-FilePath FilePath::makeDirectory() const {
+const FilePath FilePath::makeDirectory() const {
     PGE_ASSERT(valid, INVALID_STR);
-    if (*str().charAt(length() - 1) != '/') {
-        return *this + "/";
+    if (*str().charAt(name.length() - 1) != '/') {
+        return *this + String("/");
     }
     return *this;
 }
@@ -125,14 +119,14 @@ const FilePath FilePath::up() const {
     return FilePath(name.substr(0, index + 1));
 }
 
-String FilePath::getExtension() const {
+const String FilePath::getExtension() const {
     PGE_ASSERT(valid, INVALID_STR);
     String::Iterator startIndex = name.findLast(".");
     if (startIndex == name.end()) { return ""; }
     return name.substr(startIndex+1);
 }
 
-FilePath FilePath::trimExtension() const {
+const FilePath FilePath::trimExtension() const {
     PGE_ASSERT(valid, INVALID_STR);
     String::Iterator startIndex = name.findLast(".");
     if (startIndex == name.end()) { return *this; }
@@ -152,7 +146,7 @@ bool FilePath::createDirectory() const {
         return false;
     }
 
-    std::vector<wchar> wstr = std::vector<wchar>(length() + 1);
+    std::vector<wchar> wstr = std::vector<wchar>(name.length() + 1);
     str().wstr(wstr.data());
 
     std::error_code err;
@@ -161,16 +155,32 @@ bool FilePath::createDirectory() const {
     return created;
 }
 
-void FilePath::enumerateFolders(std::vector<FilePath>& folders) const {
-    for (const auto& it : std::filesystem::directory_iterator(this->cstr())) {
-        folders.push_back(FilePath::fromStr(it.path().c_str()));
+std::vector<FilePath> FilePath::enumerateFolders() const {
+    std::vector<FilePath> folders;
+    for (const auto& it : std::filesystem::directory_iterator(cstr())) {
+        if (it.is_directory()) {
+            folders.push_back(FilePath::fromStr(it.path().c_str()));
+        }
     }
+    return folders;
 }
 
-void FilePath::enumerateFiles(std::vector<FilePath>& files) const {
-    for (const std::filesystem::directory_entry& it : std::filesystem::recursive_directory_iterator(this->cstr())) {
-        files.push_back(FilePath::fromStr(it.path().c_str()));
+std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
+    std::vector<FilePath> files;
+    if (recursive) {
+        for (const auto& it : std::filesystem::recursive_directory_iterator(cstr())) {
+            if (it.is_regular_file()) {
+                files.push_back(FilePath::fromStr(it.path().c_str()));
+            }
+        }
+    } else {
+        for (const auto& it : std::filesystem::directory_iterator(cstr())) {
+            if (it.is_regular_file()) {
+                files.push_back(FilePath::fromStr(it.path().c_str()));
+            }
+        }
     }
+    return files;
 }
 
 String FilePath::read() const {
@@ -209,14 +219,6 @@ void FilePath::readBytes(std::vector<byte>& bytes) const {
     file.close();
 }
 
-int FilePath::byteLength() const {
-    return name.byteLength();
-}
-
-int FilePath::length() const {
-    return name.length();
-}
-
 const String& FilePath::str() const {
     return name;
 }
@@ -225,18 +227,27 @@ const char* FilePath::cstr() const {
     return name.cstr();
 }
 
-void FilePath::wstr(wchar* buffer) const {
-    name.wstr(buffer);
-}
-
-bool FilePath::equals(const FilePath& other) const {
-    // Invalid paths never equal one-another.
+bool FilePath::operator==(const FilePath& other) const {
     if (!isValid() || !other.isValid()) {
         return false;
     }
-    return name.equals(other.name);
+    return name == other.name;
 }
 
-const FilePath PGE::operator+(const FilePath& a, const String& b) {
-    return FilePath(a, b);
+bool FilePath::operator!=(const FilePath& other) const {
+    if (!isValid() || !other.isValid()) {
+        return true;
+    }
+    return name != other.name;
+}
+
+FilePath& FilePath::operator+=(const String& str) {
+    PGE_ASSERT(valid, INVALID_STR);
+    name += sanitizeFileSeperator(str);
+    return *this;
+}
+
+const FilePath FilePath::operator+(const String& str) const {
+    PGE_ASSERT(valid, INVALID_STR);
+    return FilePath(name + sanitizeFileSeperator(str));
 }

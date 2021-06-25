@@ -250,8 +250,7 @@ int main(int argc, char** argv) {
         folderName = argv[1];
     }
 
-    std::vector<FilePath> shaders;
-    FilePath::fromStr(folderName).enumerateFiles(shaders);
+    std::vector<FilePath> shaders = FilePath::fromStr(folderName).enumerateFiles();
 
     std::for_each(std::execution::par_unseq, shaders.begin(), shaders.end(), [](const FilePath& shader) {
         if (shader.getExtension() == "hlsl") {
