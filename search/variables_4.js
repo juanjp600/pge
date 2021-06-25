@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['orange_221',['ORANGE',['../namespace_p_g_e_1_1_colors.html#a2beb8c7b13cd23ddaf960546e7cc9d21',1,'PGE::Colors']]]
+  ['magenta_230',['MAGENTA',['../namespace_p_g_e_1_1_colors.html#a857185a17c4ae5424b220607fea4dd42',1,'PGE::Colors']]]
 ];

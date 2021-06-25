@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['gray_218',['GRAY',['../namespace_p_g_e_1_1_colors.html#ab15431133cff9647e91da21264fb5209',1,'PGE::Colors']]],
-  ['green_219',['GREEN',['../namespace_p_g_e_1_1_colors.html#a7dff19cbe18e740f2f61f244c6c96202',1,'PGE::Colors']]]
+  ['epsilon_5fdefault_227',['EPSILON_DEFAULT',['../namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05',1,'PGE::Math']]]
 ];

@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['filepath_174',['FilePath',['../class_p_g_e_1_1_file_path.html#a35454e0beb28ee8475a2cbb240a4a89d',1,'PGE::FilePath']]],
-  ['fromhsv_175',['fromHSV',['../class_p_g_e_1_1_color.html#ac971deaf75803c534a110e46c9c0bcaa',1,'PGE::Color']]],
-  ['fromstr_176',['fromStr',['../class_p_g_e_1_1_file_path.html#a02ea35a833f5a7bf44cfd50aff1178e0',1,'PGE::FilePath']]]
+  ['earlyclose_177',['earlyClose',['../class_p_g_e_1_1_binary_reader.html#aa5bd07365b9447659c0dd42b6ad2dc70',1,'PGE::BinaryReader::earlyClose()'],['../class_p_g_e_1_1_binary_writer.html#a46a8a6aab3be07ed9669a28533b53ae7',1,'PGE::BinaryWriter::earlyClose()']]],
+  ['endoffile_178',['endOfFile',['../class_p_g_e_1_1_binary_reader.html#a9397f0cc758a587c9b40c1a618e9e109',1,'PGE::BinaryReader']]],
+  ['equalfloats_179',['equalFloats',['../namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77',1,'PGE::Math']]],
+  ['equals_180',['equals',['../class_p_g_e_1_1_color.html#a79a508235894e022b4c2a54ff79900a2',1,'PGE::Color']]],
+  ['exception_181',['Exception',['../class_p_g_e_1_1_exception.html#aa317f6af2a501553fa2f3f7a77b509e9',1,'PGE::Exception::Exception() noexcept'],['../class_p_g_e_1_1_exception.html#a2d424ce01a65e6effdfc42a64555cb25',1,'PGE::Exception::Exception(const char *file, int line, const String &amp;extra) noexcept']]],
+  ['exists_182',['exists',['../class_p_g_e_1_1_file_path.html#a829fc19a7281573d543b9b16f7210d66',1,'PGE::FilePath']]]
 ];

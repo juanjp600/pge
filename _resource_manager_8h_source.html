@@ -126,30 +126,32 @@ $(document).ready(function(){initNavTree('_resource_manager_8h_source.html','');
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="comment">// Static assertion is likely not possible here due to ResourceViews&#39;s template.</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = resources.end(); it &gt; resources.begin();) {</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                it--;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                <a class="code" href="class_p_g_e_1_1_resource.html">Resource&lt;T&gt;</a>* specifiedResource = <span class="keyword">dynamic_cast&lt;</span><a class="code" href="class_p_g_e_1_1_resource.html">Resource&lt;T&gt;</a>*<span class="keyword">&gt;</span>(*it);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                <span class="keywordflow">if</span> (specifiedResource != <span class="keyword">nullptr</span> &amp;&amp; specifiedResource-&gt;get() == internalResource) {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                    <span class="keyword">delete</span> specifiedResource;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                    resources.erase(it);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                    <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                }</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            }</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        }</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> deleteResourcefromReference(<a class="code" href="class_p_g_e_1_1_resource_view.html">ResourceView&lt;T&gt;</a> view) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <span class="keywordflow">if</span> (!view.isHoldingResource()) {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            }</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            deleteResource(view.get());</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        }</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">void</span> increaseSize(<span class="keywordtype">size_t</span> count);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;};</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                <span class="comment">// TODO: We likely want to replace the dynamic cast here.</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                <span class="comment">// This method itself isn&#39;t really used anyways, so giving views a ptr to their resource will probably be good enough.</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                <a class="code" href="class_p_g_e_1_1_resource.html">Resource&lt;T&gt;</a>* specifiedResource = <span class="keyword">dynamic_cast&lt;</span><a class="code" href="class_p_g_e_1_1_resource.html">Resource&lt;T&gt;</a>*<span class="keyword">&gt;</span>(*it);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                <span class="keywordflow">if</span> (specifiedResource != <span class="keyword">nullptr</span> &amp;&amp; specifiedResource-&gt;get() == internalResource) {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                    <span class="keyword">delete</span> specifiedResource;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                    resources.erase(it);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                }</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordtype">void</span> deleteResourcefromReference(<a class="code" href="class_p_g_e_1_1_resource_view.html">ResourceView&lt;T&gt;</a> view) {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="keywordflow">if</span> (!view.isHoldingResource()) {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            }</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            deleteResource(view.get());</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        }</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordtype">void</span> increaseSize(<span class="keywordtype">size_t</span> count);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;};</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_RESOURCEMANAGER_H_INCLUDED</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_RESOURCEMANAGER_H_INCLUDED</span></div>
 <div class="ttc" id="aclass_p_g_e_1_1_resource_html"><div class="ttname"><a href="class_p_g_e_1_1_resource.html">PGE::Resource</a></div><div class="ttdef"><b>Definition:</b> Resource.h:17</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_resource_manager_html"><div class="ttname"><a href="class_p_g_e_1_1_resource_manager.html">PGE::ResourceManager</a></div><div class="ttdef"><b>Definition:</b> ResourceManager.h:11</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_resource_view_html"><div class="ttname"><a href="class_p_g_e_1_1_resource_view.html">PGE::ResourceView</a></div><div class="ttdef"><b>Definition:</b> ResourceView.h:11</div></div>

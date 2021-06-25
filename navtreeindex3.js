@@ -1,6 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"class_p_g_e_1_1_string.html#aae0194713ce3169cd8b59acb4c577d1e":[1,0,0,39,30],
 "class_p_g_e_1_1_string.html#aafcbfd5d38734f7eb09dda84410a7873":[1,0,0,39,24],
 "class_p_g_e_1_1_string.html#ab277dfc4196cdbb54dc2a4968e24ecfd":[1,0,0,39,21],
 "class_p_g_e_1_1_string.html#ab2f3037699e29cdfde14f7066f580991":[1,0,0,39,25],
@@ -229,14 +228,14 @@ var NAVTREEINDEX3 =
 "namespace_p_g_e_1_1_colors.html#ab15431133cff9647e91da21264fb5209":[0,0,0,0,3],
 "namespace_p_g_e_1_1_colors.html#abb07043309725510814286dd9bdc4556":[0,0,0,0,2],
 "namespace_p_g_e_1_1_math.html":[0,0,0,4],
-"namespace_p_g_e_1_1_math.html#a1f9563d92e840524ceb43cc17e700868":[0,0,0,4,3],
-"namespace_p_g_e_1_1_math.html#a1fe71fcf4617137226e36760a790fdd9":[0,0,0,4,0],
+"namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78":[0,0,0,4,0],
 "namespace_p_g_e_1_1_math.html#a24b876f1c65434d6645c0b87c252dbab":[0,0,0,4,7],
-"namespace_p_g_e_1_1_math.html#a3cf3c6bc67e58d6370abef443a9c34ac":[0,0,0,4,1],
-"namespace_p_g_e_1_1_math.html#a515993db46f69e2f70c3af58a7b7369f":[0,0,0,4,2],
+"namespace_p_g_e_1_1_math.html#a24ce35a5ad40879ca3a9498e73ecc606":[0,0,0,4,1],
+"namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77":[0,0,0,4,2],
 "namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05":[0,0,0,4,6],
 "namespace_p_g_e_1_1_math.html#ab76aa745b2e0aa7029e7c0c832ed70e3":[0,0,0,4,5],
-"namespace_p_g_e_1_1_math.html#af8af13ac1b70522eb196078ce4ca2276":[0,0,0,4,4],
+"namespace_p_g_e_1_1_math.html#ad64e0f41b409c339ed5644f6b24e44d8":[0,0,0,4,3],
+"namespace_p_g_e_1_1_math.html#aec5240ab51ce3a2760c11ebe761950f4":[0,0,0,4,4],
 "namespacemembers.html":[0,1,0],
 "namespacemembers_func.html":[0,1,1],
 "namespacemembers_vars.html":[0,1,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX3 =
 "struct_p_g_e_1_1_string_1_1_iterator.html#a38e0cd130d6f8746602885e00049163c":[1,0,0,39,0,13],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a42f7b29049e3ad25a566b130756c74b8":[1,0,0,39,0,3],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a4d5aed73ecdb6bb08176b86d88cdbc7d":[1,0,0,39,0,9],
-"struct_p_g_e_1_1_string_1_1_iterator.html#a61b537f0aedb01ce19f49a9d5b9a75c3":[1,0,0,39,0,11]
+"struct_p_g_e_1_1_string_1_1_iterator.html#a61b537f0aedb01ce19f49a9d5b9a75c3":[1,0,0,39,0,11],
+"struct_p_g_e_1_1_string_1_1_iterator.html#a6426afe4bb757fb38ce7308f51a8d42e":[1,0,0,39,0,5]
 };

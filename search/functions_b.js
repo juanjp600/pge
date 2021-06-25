@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['trimextension_199',['trimExtension',['../class_p_g_e_1_1_file_path.html#ad27af26601dd4f83629b748cf65d19f7',1,'PGE::FilePath']]]
+  ['skip_209',['skip',['../class_p_g_e_1_1_binary_reader.html#a900e87b23551a3a2d4dd95c029b2592d',1,'PGE::BinaryReader']]]
 ];

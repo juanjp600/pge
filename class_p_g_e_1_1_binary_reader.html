@@ -99,14 +99,15 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_binary_reader.html',''
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9d992421b554b132adc67fb8158f5608"><td class="memItemLeft" align="right" valign="top"><a id="a9d992421b554b132adc67fb8158f5608"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a9d992421b554b132adc67fb8158f5608">BinaryReader</a> (const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> &amp;file)</td></tr>
-<tr class="memdesc:a9d992421b554b132adc67fb8158f5608"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Opens the file handle. <br /></td></tr>
+<tr class="memitem:a9d992421b554b132adc67fb8158f5608"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a9d992421b554b132adc67fb8158f5608">BinaryReader</a> (const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> &amp;file)</td></tr>
+<tr class="memdesc:a9d992421b554b132adc67fb8158f5608"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Opens the file handle.  <a href="class_p_g_e_1_1_binary_reader.html#a9d992421b554b132adc67fb8158f5608">More...</a><br /></td></tr>
 <tr class="separator:a9d992421b554b132adc67fb8158f5608"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38d40b5a789196593ad9f2b519d2a167"><td class="memItemLeft" align="right" valign="top"><a id="a38d40b5a789196593ad9f2b519d2a167"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a38d40b5a789196593ad9f2b519d2a167">~BinaryReader</a> ()</td></tr>
-<tr class="memdesc:a38d40b5a789196593ad9f2b519d2a167"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Closes the file handle. <br /></td></tr>
-<tr class="separator:a38d40b5a789196593ad9f2b519d2a167"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5bd07365b9447659c0dd42b6ad2dc70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#aa5bd07365b9447659c0dd42b6ad2dc70">earlyClose</a> ()</td></tr>
+<tr class="memdesc:aa5bd07365b9447659c0dd42b6ad2dc70"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Closes the stream prematurely.  <a href="class_p_g_e_1_1_binary_reader.html#aa5bd07365b9447659c0dd42b6ad2dc70">More...</a><br /></td></tr>
+<tr class="separator:aa5bd07365b9447659c0dd42b6ad2dc70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9397f0cc758a587c9b40c1a618e9e109"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a9397f0cc758a587c9b40c1a618e9e109">endOfFile</a> () const noexcept</td></tr>
+<tr class="memdesc:a9397f0cc758a587c9b40c1a618e9e109"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Whether a previous function call attempted to read past the end of the file.  <a href="class_p_g_e_1_1_binary_reader.html#a9397f0cc758a587c9b40c1a618e9e109">More...</a><br /></td></tr>
+<tr class="separator:a9397f0cc758a587c9b40c1a618e9e109"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80422a9b799749323dd198571d59a4e4"><td class="memItemLeft" align="right" valign="top"><a id="a80422a9b799749323dd198571d59a4e4"></a>
 byte&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a80422a9b799749323dd198571d59a4e4">readByte</a> ()</td></tr>
 <tr class="memdesc:a80422a9b799749323dd198571d59a4e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads a single byte from the file. <br /></td></tr>
@@ -152,8 +153,97 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p class="DocNodeLTR">Utility to read binary data from a file. </p>
-<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_binary_writer.html" title="&#x202A;Utility to write binary data to a file.">PGE::BinaryWriter</a> </dd></dl>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;Any read operation can raise an exception if reading failed or the reader is in an invalid state. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_binary_reader.html#a9397f0cc758a587c9b40c1a618e9e109" title="&#x202A;Whether a previous function call attempted to read past the end of the file.">endOfFile</a> </dd>
+<dd>
+&#x202A;<a class="el" href="class_p_g_e_1_1_binary_writer.html" title="&#x202A;Utility to write binary data to a file.">PGE::BinaryWriter</a> </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a9d992421b554b132adc67fb8158f5608"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d992421b554b132adc67fb8158f5608">&#9670;&nbsp;</a></span>BinaryReader()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PGE::BinaryReader::BinaryReader </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> &amp;&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Opens the file handle. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;if the file could not be opened. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa5bd07365b9447659c0dd42b6ad2dc70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5bd07365b9447659c0dd42b6ad2dc70">&#9670;&nbsp;</a></span>earlyClose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PGE::BinaryReader::earlyClose </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Closes the stream prematurely. </p>
+<p class="DocNodeLTR">Calling this is <em>not</em> necessary, the destructor will clean everything up appropriately, however, possible failure of the close operation will be swallowed in the destructor, while it will be thrown here.</p>
+<p class="DocNodeLTR">Calling <em>any</em> further methods after attempting to close a reader (including attempting to close it again) will have no ill effects, but will cause an exception to be raised every call. </p><dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;if closing fails. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9397f0cc758a587c9b40c1a618e9e109"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9397f0cc758a587c9b40c1a618e9e109">&#9670;&nbsp;</a></span>endOfFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PGE::BinaryReader::endOfFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&#x202A;Whether a previous function call attempted to read past the end of the file. </p>
+<p class="DocNodeLTR">The first call to read past the end of the file will cause <a class="el" href="class_p_g_e_1_1_binary_reader.html#a9397f0cc758a587c9b40c1a618e9e109" title="&#x202A;Whether a previous function call attempted to read past the end of the file.">endOfFile</a> to return true thereafter. In this case undefined data will be returned, which is not to be used. Any further attempts at reading data will raise an exception. </p>
+
+</div>
+</div>
 <a id="a8d18b295925afbcb21dab9e6be34d23c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8d18b295925afbcb21dab9e6be34d23c">&#9670;&nbsp;</a></span>readBoolean()</h2>
 
