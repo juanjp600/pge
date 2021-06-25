@@ -1,4 +1,4 @@
-#ifndef PGE_MATH_H_INCLUDED
+﻿#ifndef PGE_MATH_H_INCLUDED
 #define PGE_MATH_H_INCLUDED
 
 namespace PGE {
@@ -34,6 +34,8 @@ namespace Math {
     }
 
     /// Round down a float.
+    /// Rounding down is defined as always rounding towards 0.
+    /// 
     /// The standard implementation returns a float, which we consider cringe.
     constexpr int floor(float val) noexcept {
         int i = (int)val;
@@ -42,6 +44,8 @@ namespace Math {
     }
 
     /// Round up a float.
+    /// Rounding up is defined as always rounding towards +/-∞.
+    /// 
     /// The standard implementation returns a float, which we consider cringe.
     constexpr int ceil(float val) noexcept {
         int i = (int)val;
