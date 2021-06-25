@@ -167,7 +167,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:a02ea35a833f5a7bf44cfd50aff1178e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Constructs a path from a string.  <a href="class_p_g_e_1_1_file_path.html#a02ea35a833f5a7bf44cfd50aff1178e0">More...</a><br /></td></tr>
 <tr class="separator:a02ea35a833f5a7bf44cfd50aff1178e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a632897770deb37e06c659d5db62656a5"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_file_path.html#a632897770deb37e06c659d5db62656a5">getDataPath</a> ()</td></tr>
-<tr class="memdesc:a632897770deb37e06c659d5db62656a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Gets the OS-dependant folder for storing external data.  <a href="class_p_g_e_1_1_file_path.html#a632897770deb37e06c659d5db62656a5">More...</a><br /></td></tr>
+<tr class="memdesc:a632897770deb37e06c659d5db62656a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Gets an OS-dependant folder for storing external data.  <a href="class_p_g_e_1_1_file_path.html#a632897770deb37e06c659d5db62656a5">More...</a><br /></td></tr>
 <tr class="separator:a632897770deb37e06c659d5db62656a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -273,7 +273,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>&#x202A;Gets the OS-dependant folder for storing external data. </p>
+<p>&#x202A;Gets an OS-dependant folder for storing external data. </p>
 <p class="DocNodeLTR">Windows: C:/Users/*user*&zwj;/AppData/Roaming/</p>
 <p class="DocNodeLTR">MacOS: Volumes/User/*user*&zwj;/Library/Application Support/</p>
 <p class="DocNodeLTR">Linux: TODO </p>
@@ -483,6 +483,12 @@ Static Public Member Functions</h2></td></tr>
 
 <p>&#x202A;Returns a path, without its extension. </p>
 <p class="DocNodeLTR">A file's extension is defined as the suffix after the last occurence of the "." character. </p><dl class="section return"><dt>Returns</dt><dd>&#x202A;The path, without the extension <em>and</em> without the trailing dot. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;If the path is not initialized. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
