@@ -20,9 +20,10 @@ T BinaryReader::read() {
     return val;
 }
 
-void BinaryReader::readBytes(int count, std::vector<byte>& into) {
-    into.resize(into.size() + count);
-    stream.read((char*)into.data(), count);
+std::vector<byte> BinaryReader::readBytes(int count) {
+    std::vector<byte> bytes(count);
+    stream.read((char*)bytes.data(), count);
+    return bytes;
 }
 
 bool BinaryReader::readBoolean() {

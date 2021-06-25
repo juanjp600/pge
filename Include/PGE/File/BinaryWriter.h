@@ -25,11 +25,9 @@ class BinaryWriter {
 
         /// Writes a byte to the file.
         void writeByte(byte b);
-        // TODO: Write/Read bytes with null termination?
         /// Writes a given amount of bytes to the file.
         /// In order to be read again, the amount of bytes must be known, so it should either be constant, or stored with the byte data manually.
-        /// @param[in] bytes The bytes to write.
-        void writeBytes(const std::vector<byte>& bytes);
+        void writeBytes(byte* bytes, int count);
         /// Writes byte representing a boolean.
         /// @param[in] b `false` is written as `0`, `true` as `1`.
         void writeBoolean(bool b);

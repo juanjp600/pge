@@ -25,11 +25,8 @@ class BinaryReader {
 
         /// Reads a byte from the file.
         byte readByte();
-        /// Reads a specified amount of bytes into a vector.
-        /// The vector is resized as necessary.
-        /// @param[in] count The amount of bytes to read.
-        /// @param[out] into The vector into which the bytes will be read.
-        void readBytes(int count, std::vector<byte>& into);
+        /// Reads a specified amount of bytes.
+        std::vector<byte> readBytes(int count);
         /// Interprets a single byte as a boolean.
         /// @returns `false` if the read byte is `0`, `true` otherwise.
         bool readBoolean();
