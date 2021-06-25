@@ -9,7 +9,7 @@
 namespace PGE {
 
 /// Utility to read binary data from a file.
-/// @see BinaryWriter
+/// @see #PGE::BinaryWriter
 class BinaryReader {
     private:
         std::ifstream stream;
@@ -23,7 +23,7 @@ class BinaryReader {
         /// Closes the file handle.
         ~BinaryReader();
 
-        /// Reads a byte from the file.
+        /// Reads a single byte from the file.
         byte readByte();
         /// Reads a specified amount of bytes.
         std::vector<byte> readBytes(int count);
@@ -40,11 +40,11 @@ class BinaryReader {
         double readDouble();
         /// Reads bytes into a String until a terminating null byte is encountered.
         /// Interpreted as UTF-8.
-        /// @see FileReader for more control over encoding.
+        /// @see #PGE::FileReader for more control over encoding.
         String readNullTerminatedString();
         /// Reads the given amount of bytes into a String.
         /// Interpreted as UTF-8.
-        /// @see FileReader for more control over encoding.
+        /// @see #PGE::FileReader for more control over encoding.
         String readFixedLengthString(int length);
         /// Interprets two floats as a 2 component vector.
         /// 32-bit floating point numbers read in order x, y.

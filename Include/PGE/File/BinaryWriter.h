@@ -9,7 +9,7 @@
 namespace PGE {
 
 /// Utility to write binary data to a file.
-/// @see BinaryReader
+/// @see #PGE::BinaryReader
 class BinaryWriter {
     private:
         std::ofstream stream;
@@ -23,7 +23,7 @@ class BinaryWriter {
         /// Closes the file handle.
         ~BinaryWriter();
 
-        /// Writes a byte to the file.
+        /// Writes a single byte to the file.
         void writeByte(byte b);
         /// Writes a given amount of bytes to the file.
         /// In order to be read again, the amount of bytes must be known, so it should either be constant, or stored with the byte data manually.
@@ -39,15 +39,15 @@ class BinaryWriter {
         void writeFloat(float f);
         /// Writes 4 bytes representing a 64-bit floating point number.
         void writeDouble(double d);
-        /// Writes String::byteLength() amount of bytes from String::cstr() to the file, in addition to a null terminating byte.
+        /// Writes #PGE::String::byteLength amount of bytes from #PGE::String::cstr to the file, in addition to a null terminating byte.
         /// Encoded using UTF-8.
-        /// @see FileWriter for more control over encoding.
+        /// @see #PGE::FileWriter for more control over encoding.
         void writeNullTerminatedString(const String& str);
-        /// Writes String::byteLength() amount of bytes from String::cstr() to a file, without a terminating null byte.
+        /// Writes #PGE::String::byteLength amount of bytes from #PGE::String::cstr to a file, without a terminating null byte.
         /// Encoded using UTF-8.
         /// 
         /// In order to be read again, its byte length must be known, so it should either be constant, or stored together with the string manually.
-        /// @see FileWriter for more control over encoding.
+        /// @see #PGE::FileWriter for more control over encoding.
         void writeFixedLengthString(const String& str);
         /// Writes 2 floats to the file, representing a 2 component vector.
         /// 32-bit floating point numbers written in order x, y.

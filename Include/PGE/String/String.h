@@ -141,7 +141,7 @@ class String {
         /// First call on same data: O(n), successive calls: O(1)
         int length() const;
         /// The amount of bytes the string is composed of, excluding the terminating null byte.
-        /// Not necessarily equal to length() when dealing with non-ASCII characters.
+        /// Not necessarily equal to #length() when dealing with non-ASCII characters.
         /// 
         /// O(1)
         int byteLength() const;

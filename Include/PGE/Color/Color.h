@@ -9,10 +9,10 @@ namespace PGE {
 
 /// An RGBA color represented via 4 floating point numbers.
 /// Attributes are public.
-/// @see Colors
+/// @see #PGE::Colors
 class Color {
     public:
-        /// Default constructs fully opaque white (Colors::WHITE).
+        /// Default constructs fully opaque white (#PGE::Colors::WHITE).
         constexpr Color() : red(1.f), green(1.f), blue(1.f), alpha(1.f) { }
         /// Converts bytes in range [0, 255] to floats in range [0, 1].
         constexpr Color(byte r, byte g, byte b, byte a = 255) : red(r / 255.f), green(g / 255.f), blue(b / 255.f), alpha(a / 255.f) { }
@@ -24,7 +24,7 @@ class Color {
         /// @param[in] s The saturation, must be in range [0, 1].
         /// @param[in] v The value, must be in range [0, 1].
         /// @param[in] a The alpha, should be in range [0, 1].
-        /// @exception PGE::Exception If hue, saturation or value are outside their expected range.
+        /// @exception #PGE::Exception If hue, saturation or value are outside their expected range.
         /// @see https://en.wikipedia.org/wiki/HSL_and_HSV
         static constexpr const Color fromHSV(float h, float s, float v, float a = 1.f) {
             PGE_ASSERT(h >= 0 && h <= 360.f, "Hue is outside of valid range (hue: " + String::fromFloat(h) + ")");
@@ -72,7 +72,7 @@ class Color {
             return red != other.red || blue != other.blue || green != other.green || alpha != other.alpha;
         }
 
-        /// @see Math::equalFloats()
+        /// @see #PGE::Math::equalFloats()
         constexpr bool equals(const Color& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return Math::equalFloats(red, other.red, epsilon)
                 && Math::equalFloats(green, other.green, epsilon)
@@ -93,7 +93,7 @@ class Color {
 };
 
 /// A few common colors.
-/// @see Color
+/// @see #PGE::Color
 namespace Colors {
     constexpr Color RED = Color(1.f, 0.f, 0.f); ///< \#FF0000
     constexpr Color GREEN = Color(0.f, 1.f, 0.f); ///< \#00FF00

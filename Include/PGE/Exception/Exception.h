@@ -6,16 +6,15 @@
 namespace PGE {
 
 /// Singular exception class thrown by PGE.
-/// @see PGE_CREATE_EX, PGE_ASSERT
+/// @see #PGE::PGE_CREATE_EX, #PGE::PGE_ASSERT
 class Exception {
     public:
         /// Invalid exception.
         /// Only ever use for storing exceptions by value.
         Exception();
 
-
         /// DO NOT USE.
-        /// @see ::PGE_CREATE_EX(INFO), ::PGE_ASSERT
+        /// @see #PGE_CREATE_EX, #PGE_ASSERT
         /// @deprecated Use associated macros.
         Exception(const char* file, int line, const String& extra);
 

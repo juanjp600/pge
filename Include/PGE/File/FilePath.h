@@ -27,7 +27,7 @@ class FilePath {
         /// File seperators will be sanitized.
         static FilePath fromStr(const String& str);
 
-        /// Gets the OS-dependant folder for storing external data.
+        /// Gets an OS-dependant folder for storing external data.
         /// Windows: C:/Users/*user*/AppData/Roaming/
         /// 
         /// MacOS: Volumes/User/*user*/Library/Application Support/
@@ -50,7 +50,7 @@ class FilePath {
         /// If you want to simply go down in the hierarchy it is advisable to assign the value of #makeDirectory before appending in order
         /// to make sure that your path is correctly suffixed with a path seperator.
         /// @param[in] str Will have its path seperators sanitized.
-        /// @throws PGE::Exception If the path is not initialized.
+        /// @throws #PGE::Exception If the path is not initialized.
         FilePath& operator+=(const String& str);
         /// Appends str to a valid path.
         /// The path must be valid.
@@ -89,6 +89,7 @@ class FilePath {
         /// Returns a path, without its extension.
         /// A file's extension is defined as the suffix after the last occurence of the "." character.
         /// @returns The path, without the extension *and* without the trailing dot.
+        /// @throws #PGE::Exception If the path is not initialized.
         const FilePath trimExtension() const;
 
         // TODO: Reconsider design.
