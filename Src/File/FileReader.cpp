@@ -32,10 +32,6 @@ FileReader::FileReader(const FilePath& file, Encoding enc) {
 	}
 }
 
-FileReader::~FileReader() {
-	stream.close();
-}
-
 bool FileReader::eof() const {
 	return stream.eof();
 }

@@ -8,18 +8,22 @@ namespace PGE {
 namespace Math {
 	constexpr float PI = 3.1415926535f;
 	constexpr float E =  2.7182818284f;
+    /// The default difference two floats are allowed to have in order to be considered "equal".
+    /// @see #PGE::Math::equalFloats
     constexpr float EPSILON_DEFAULT = 0.001f;
 
-    constexpr float degToRad(float degree) {
+    /// Converts degrees to radians.
+    constexpr float degToRad(float degree) noexcept {
         return degree * Math::PI / 180.0f;
     }
 
-    constexpr float radToDeg(float radians) {
+    /// Converts radians to degrees.
+    constexpr float radToDeg(float radians) noexcept {
         return radians * 180.0f / Math::PI;
     }
 
     /// Two values are considered equal if |val - other| < epsilon.
-    constexpr bool equalFloats(float val, float other, float epsilon = EPSILON_DEFAULT) {
+    constexpr bool equalFloats(float val, float other, float epsilon = EPSILON_DEFAULT) noexcept {
         float diff = val - other;
         if (diff >= 0) {
             return diff < epsilon;
@@ -29,13 +33,17 @@ namespace Math {
         }
     }
 
-    constexpr int floor(float val) {
+    /// Round down a float.
+    /// The standard implementation returns a float, which we consider cringe.
+    constexpr int floor(float val) noexcept {
         int i = (int)val;
         if (i > val) { i--; }
         return i;
     }
 
-    constexpr int ceil(float val) {
+    /// Round up a float.
+    /// The standard implementation returns a float, which we consider cringe.
+    constexpr int ceil(float val) noexcept {
         int i = (int)val;
         if (i < val) { i++; }
         return i;

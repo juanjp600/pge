@@ -9,6 +9,9 @@
 namespace PGE {
 
 /// Utility to write binary data to a file.
+/// After any call raises an exception the stream will be closed, any further operations will raise an exception again.
+/// 
+/// @throws #PGE::Exception Any write operation can raise an exception if writing failed or the writer is in an invalid state.
 /// @see #PGE::BinaryReader
 class BinaryWriter {
     private:
@@ -17,13 +20,26 @@ class BinaryWriter {
         template <class T>
         void write(T t);
 
+        void validateStream();
+
     public:
-        /// Opens the file handle.
-        BinaryWriter(const FilePath& path);
-        /// Closes the file handle.
-        ~BinaryWriter();
+        /// Opens the stream.
+        /// @throws #PGE::Exception if the file could not be opened.
+        /// @param[in] path The file to open for writing.
+        /// @param[in] append Whether data should be appended to the file or it should be overwritten.
+        BinaryWriter(const FilePath& path, bool append = false);
+
+        /// Closes the stream prematurely.
+        /// Calling this is *not* necessary, the destructor will clean everything up appropriately,
+        /// however, possible failure of the close operation will be swallowed in the destructor, while it will be thrown here.
+        /// 
+        /// Calling *any* further methods after attempting to close a writer (including attempting to close it again)
+        /// will have no ill effects, but will cause an exception to be raised every call.
+        /// @throws #PGE::Exception if closing was not wholly successful.
+        void earlyClose();
 
         /// Writes a single byte to the file.
+        /// @throws #PGE::Exception if something unexpected happens.
         void writeByte(byte b);
         /// Writes a given amount of bytes to the file.
         /// In order to be read again, the amount of bytes must be known, so it should either be constant, or stored with the byte data manually.

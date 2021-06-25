@@ -2,6 +2,8 @@
 
 #include <PGE/Exception/Exception.h>
 
+#include "StreamUtil.h"
+
 namespace PGE {
 
 BinaryReader::BinaryReader(const FilePath& file) {
@@ -9,20 +11,41 @@ BinaryReader::BinaryReader(const FilePath& file) {
     PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
 }
 
-BinaryReader::~BinaryReader() {
+void BinaryReader::earlyClose() {
     stream.close();
+    PGE_ASSERT(stream.good(), StreamUtil::BAD_STREAM);
+}
+
+// Two strikes and you're out.
+bool BinaryReader::validateStream() noexcept {
+    if (stream.eof()) {
+        if (!eof) {
+            eof = true;
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return stream.good();
+    }
+}
+
+bool BinaryReader::endOfFile() const noexcept {
+    return eof;
 }
 
 template <class T>
 T BinaryReader::read() {
     T val;
     stream.read((char*)&val, sizeof(T));
+    PGE_ASSERT(validateStream(), StreamUtil::BAD_STREAM);
     return val;
 }
 
 std::vector<byte> BinaryReader::readBytes(int count) {
     std::vector<byte> bytes(count);
     stream.read((char*)bytes.data(), count);
+    PGE_ASSERT(validateStream(), StreamUtil::BAD_STREAM);
     return bytes;
 }
 
@@ -53,36 +76,41 @@ double BinaryReader::readDouble() {
 String BinaryReader::readNullTerminatedString() {
     std::vector<char> chars;
     char c;
-    while ((c = readByte()) != 0) {
+    do {
+        c = readByte();
+        PGE_ASSERT(!endOfFile(), "End of file reached");
         chars.push_back(c);
-    }
-    chars.push_back(0);
+    } while (c != 0);
     return String(chars.data());
 }
 
 String BinaryReader::readFixedLengthString(int length) {
-    char* chars = new char[length+1];
-    for (int i = 0; i < length; i++) {
-        chars[i] = readByte();
-    }
+    std::vector<char> chars(length + 1);
+    stream.read(chars.data(), length);
+    PGE_ASSERT(validateStream(), StreamUtil::BAD_STREAM);
     chars[length] = 0;
-    String s(chars);
-    delete[] chars;
-    return s;
+    return String(chars.data());
 }
 
 Vector2f BinaryReader::readVector2f() {
-    float x = readFloat(); float y = readFloat();
-    return Vector2f(x,y);
+    float x = readFloat();
+    if (endOfFile()) { return Vector2f(); }
+    float y = readFloat();
+    return Vector2f(x, y);
 }
 
 Vector3f BinaryReader::readVector3f() {
-    float x = readFloat(); float y = readFloat(); float z = readFloat();
-    return Vector3f(x,y,z);
+    float x = readFloat();
+    if (endOfFile()) { return Vector3f(); }
+    float y = readFloat();
+    if (endOfFile()) { return Vector3f(); }
+    float z = readFloat();
+    return Vector3f(x, y, z);
 }
 
 void BinaryReader::skip(int length) {
     stream.ignore(length);
+    PGE_ASSERT(validateStream(), StreamUtil::BAD_STREAM);
 }
 
 }

@@ -13,11 +13,11 @@ namespace PGE {
 class Color {
     public:
         /// Default constructs fully opaque white (#PGE::Colors::WHITE).
-        constexpr Color() : red(1.f), green(1.f), blue(1.f), alpha(1.f) { }
+        constexpr Color() noexcept : red(1.f), green(1.f), blue(1.f), alpha(1.f) { }
         /// Converts bytes in range [0, 255] to floats in range [0, 1].
-        constexpr Color(byte r, byte g, byte b, byte a = 255) : red(r / 255.f), green(g / 255.f), blue(b / 255.f), alpha(a / 255.f) { }
+        constexpr Color(byte r, byte g, byte b, byte a = 255) noexcept : red(r / 255.f), green(g / 255.f), blue(b / 255.f), alpha(a / 255.f) { }
         /// Values should be in range [0, 1].
-        constexpr Color(float r, float g, float b, float a = 1.f) : red(r), green(g), blue(b), alpha(a) { }
+        constexpr Color(float r, float g, float b, float a = 1.f) noexcept : red(r), green(g), blue(b), alpha(a) { }
 
         /// Converts HSV(A) to RGBA.
         /// @param[in] h The hue, must be in range [0, 360].
@@ -63,31 +63,31 @@ class Color {
         }
 
         /// Uses regular float equality.
-        constexpr bool operator==(const Color& other) const {
+        constexpr bool operator==(const Color& other) const noexcept {
             return red == other.red && blue == other.blue && green == other.green && alpha == other.alpha;
         }
 
         /// Uses regular float equality.
-        constexpr bool operator!=(const Color& other) const {
+        constexpr bool operator!=(const Color& other) const noexcept {
             return red != other.red || blue != other.blue || green != other.green || alpha != other.alpha;
         }
 
         /// @see #PGE::Math::equalFloats()
-        constexpr bool equals(const Color& other, float epsilon = Math::EPSILON_DEFAULT) const {
+        constexpr bool equals(const Color& other, float epsilon = Math::EPSILON_DEFAULT) const noexcept {
             return Math::equalFloats(red, other.red, epsilon)
                 && Math::equalFloats(green, other.green, epsilon)
                 && Math::equalFloats(blue, other.blue, epsilon)
                 && Math::equalFloats(alpha, other.alpha, epsilon);
         }
 
-        constexpr byte getRed() const { return (byte)(red * 255.f); }
-        constexpr byte getGreen() const { return (byte)(green * 255.f); }
-        constexpr byte getBlue() const { return (byte)(blue * 255.f); }
-        constexpr byte getAlpha() const { return (byte)(alpha * 255.f); }
-        constexpr void setRed(byte r) { red = ((float)r) / 255.f; }
-        constexpr void setGreen(byte g) { green = ((float)g) / 255.f; }
-        constexpr void setBlue(byte b) { blue = ((float)b) / 255.f; }
-        constexpr void setAlpha(byte a) { alpha = ((float)a) / 255.f; }
+        constexpr byte getRed() const noexcept { return (byte)(red * 255.f); }
+        constexpr byte getGreen() const noexcept { return (byte)(green * 255.f); }
+        constexpr byte getBlue() const noexcept { return (byte)(blue * 255.f); }
+        constexpr byte getAlpha() const noexcept { return (byte)(alpha * 255.f); }
+        constexpr void setRed(byte r) noexcept { red = ((float)r) / 255.f; }
+        constexpr void setGreen(byte g) noexcept { green = ((float)g) / 255.f; }
+        constexpr void setBlue(byte b) noexcept { blue = ((float)b) / 255.f; }
+        constexpr void setAlpha(byte a) noexcept { alpha = ((float)a) / 255.f; }
 
         float red; float green; float blue; float alpha;
 };

@@ -88,37 +88,37 @@ class String::OrderedKey {
 
 }
 
-template <> struct std::hash<PGE::String::Key> {
+template<> struct std::hash<PGE::String::Key> {
     size_t operator()(const PGE::String::Key& key) const {
         return (size_t)key.hash;
     }
 };
 
-template <> struct std::equal_to<PGE::String::Key> {
+template<> struct std::equal_to<PGE::String::Key> {
     bool operator()(const PGE::String::Key& a, const PGE::String::Key& b) const {
         return a.hash == b.hash;
     }
 };
 
-template <> struct std::hash<PGE::String::RedundantKey> {
+template<> struct std::hash<PGE::String::RedundantKey> {
     size_t operator()(const PGE::String::RedundantKey& key) const {
         return (size_t)key.hash();
     }
 };
 
-template <> struct std::equal_to<PGE::String::RedundantKey> {
+template<> struct std::equal_to<PGE::String::RedundantKey> {
     bool operator()(const PGE::String::RedundantKey& a, const PGE::String::RedundantKey& b) const {
         return a.hash() == b.hash();
     }
 };
 
-template <> struct std::hash<PGE::String::SafeKey> {
+template<> struct std::hash<PGE::String::SafeKey> {
     size_t operator()(const PGE::String::SafeKey& key) const {
         return (size_t)key.hash();
     }
 };
 
-template <> struct std::equal_to<PGE::String::SafeKey> {
+template<> struct std::equal_to<PGE::String::SafeKey> {
     bool operator()(const PGE::String::SafeKey& a, const PGE::String::SafeKey& b) const {
         if (a.str.byteLength() != b.str.byteLength()) { return false; }
         if (a.lengthEvaluated() && b.lengthEvaluated() && a.str.length() != b.str.length()) { return false; }

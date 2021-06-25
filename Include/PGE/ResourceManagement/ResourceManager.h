@@ -36,6 +36,8 @@ class ResourceManager {
             // Static assertion is likely not possible here due to ResourceViews's template.
             for (auto it = resources.end(); it > resources.begin();) {
                 it--;
+                // TODO: We likely want to replace the dynamic cast here.
+                // This method itself isn't really used anyways, so giving views a ptr to their resource will probably be good enough.
                 Resource<T>* specifiedResource = dynamic_cast<Resource<T>*>(*it);
                 if (specifiedResource != nullptr && specifiedResource->get() == internalResource) {
                     delete specifiedResource;

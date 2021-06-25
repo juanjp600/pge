@@ -2,6 +2,8 @@
 
 #include <PGE/Exception/Exception.h>
 
+#include "StreamUtil.h"
+
 using namespace PGE;
 
 FileWriter::FileWriter(const FilePath& path) {
@@ -9,15 +11,14 @@ FileWriter::FileWriter(const FilePath& path) {
 	PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + path.str() + "\")");
 }
 
-FileWriter::~FileWriter() {
-	stream.close();
-}
-
 void FileWriter::write(const String& content) {
 	stream.write(content.cstr(), content.byteLength());
+	PGE_ASSERT_STREAM(stream);
 }
 
 void FileWriter::writeLine(const String& content) {
 	write(content);
+	PGE_ASSERT_STREAM(stream);
 	stream.write("\n", 1);
+	PGE_ASSERT_STREAM(stream);
 }

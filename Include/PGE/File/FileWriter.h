@@ -13,7 +13,6 @@ class FileWriter {
 
 	public:
 		FileWriter(const FilePath& path);
-		~FileWriter();
 
 		void write(const String& content);
 		void writeLine(const String& content);

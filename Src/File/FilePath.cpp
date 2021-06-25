@@ -202,7 +202,6 @@ std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
         if ((!includeEmptyLines) && (line.length() == 0)) { continue; }
         lines.push_back(line);
     }
-    file.close();
     return lines;
 }
 
@@ -214,7 +213,6 @@ std::vector<byte> FilePath::readBytes() const {
     bytes.resize(bytes.size() + vertSize);
     file.seekg(0);
     file.read((char*)bytes.data(), vertSize);
-    file.close();
     return bytes;
 }
 

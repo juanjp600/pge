@@ -17,7 +17,6 @@ class FileReader {
         };
 
         FileReader(const FilePath& file, Encoding encoding = Encoding::ASCII);
-        ~FileReader();
 
         bool eof() const;
 

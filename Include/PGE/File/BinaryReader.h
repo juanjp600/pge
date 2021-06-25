@@ -9,19 +9,38 @@
 namespace PGE {
 
 /// Utility to read binary data from a file.
+/// @throws #PGE::Exception Any read operation can raise an exception if reading failed or the reader is in an invalid state.
+/// @see #endOfFile
 /// @see #PGE::BinaryWriter
 class BinaryReader {
     private:
         std::ifstream stream;
+        bool eof = false;
+
+        bool validateStream() noexcept;
 
         template <class T>
         T read();
 
     public:
         /// Opens the file handle.
+        /// @throws #PGE::Exception if the file could not be opened.
         BinaryReader(const FilePath& file);
-        /// Closes the file handle.
-        ~BinaryReader();
+
+        /// Closes the stream prematurely.
+        /// Calling this is *not* necessary, the destructor will clean everything up appropriately,
+        /// however, possible failure of the close operation will be swallowed in the destructor, while it will be thrown here.
+        /// 
+        /// Calling *any* further methods after attempting to close a reader (including attempting to close it again)
+        /// will have no ill effects, but will cause an exception to be raised every call.
+        /// @throws #PGE::Exception if closing fails.
+        void earlyClose();
+
+        /// Whether a previous function call attempted to read past the end of the file.
+        /// The first call to read past the end of the file will cause #endOfFile to return true thereafter.
+        /// In this case undefined data will be returned, which is not to be used.
+        /// Any further attempts at reading data will raise an exception.
+        bool endOfFile() const noexcept;
 
         /// Reads a single byte from the file.
         byte readByte();

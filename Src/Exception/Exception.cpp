@@ -7,11 +7,11 @@
 using namespace PGE;
 
 // TODO: Add utility to differentiate between valid and invalid exceptions.
-Exception::Exception() {
+Exception::Exception() noexcept {
     info = ">>> INVALID EXCEPTION <<<";
 }
 
-Exception::Exception(const char* file, int line, const String& extra) {
+Exception::Exception(const char* file, int line, const String& extra) noexcept {
     info = file;
     info += ':';
     info += String::fromInt(line);
@@ -24,6 +24,6 @@ Exception::Exception(const char* file, int line, const String& extra) {
 #endif
 }
 
-const String& Exception::what() const {
+const String& Exception::what() const noexcept {
     return info;
 }
