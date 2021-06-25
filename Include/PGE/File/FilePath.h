@@ -27,7 +27,6 @@ class FilePath {
         // Causes a path to be interpreted as a directory, does not actually create the directory.
         FilePath makeDirectory() const;
         // Goes up one step in the hierarchy.
-        FilePath up() const;
 
         String getExtension() const;
         FilePath trimExtension() const;
@@ -36,6 +35,7 @@ class FilePath {
         bool exists() const;
 
         // Attempts to create a folder in the given path, returns whether it suceeds.
+        const FilePath up() const;
         bool createDirectory() const;
 
         // Returns all direct subdirectories.
