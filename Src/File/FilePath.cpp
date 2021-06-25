@@ -47,15 +47,13 @@ static String& getResourceStr() {
 const FilePath& FilePath::getDataPath() {
     static FilePath dataPath;
     if (!dataPath.isValid()) {
-    // TODO: Linux.
+        // TODO: Linux.
 #if defined(__APPLE__) && defined(__OBJC__)
-    // Volumes/User/*user*/Library/Application Support/
         NSArray* filePaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
         NSString* appSupportDir = [filePaths firstObject];
 
         dataPath = FilePath::fromStr([appSupportDir cStringUsingEncoding : NSUTF8StringEncoding]);
 #elif defined(_WIN32)
-    // Users/*user*/AppData/Roaming/ 
         PWSTR filePath;
         SHGetKnownFolderPath(FOLDERID_RoamingAppData, KF_FLAG_DEFAULT, NULL, &filePath);
         PGE::String path = filePath;
@@ -193,10 +191,10 @@ String FilePath::read() const {
     return ret;
 }
 
-void FilePath::readLines(std::vector<String>& lines, bool includeEmptyLines) const {
+std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
     std::ifstream file(cstr());
     PGE_ASSERT(file.is_open(), "Could not open (file: \"" + str() + "\")");
-
+    std::vector<String> lines;
     String line;
     while (!file.eof()) {
         line = String();
@@ -204,19 +202,20 @@ void FilePath::readLines(std::vector<String>& lines, bool includeEmptyLines) con
         if ((!includeEmptyLines) && (line.length() == 0)) { continue; }
         lines.push_back(line);
     }
-
     file.close();
+    return lines;
 }
 
-void FilePath::readBytes(std::vector<byte>& bytes) const {
+std::vector<byte> FilePath::readBytes() const {
     std::ifstream file(cstr(), std::ios::ate | std::ios::binary);
     PGE_ASSERT(file.is_open(), "Could not open (file: \"" + str() + "\")");
-
+    std::vector<byte> bytes;
     size_t vertSize = (size_t)file.tellg();
     bytes.resize(bytes.size() + vertSize);
     file.seekg(0);
     file.read((char*)bytes.data(), vertSize);
     file.close();
+    return bytes;
 }
 
 const String& FilePath::str() const {

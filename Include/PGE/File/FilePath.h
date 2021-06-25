@@ -7,6 +7,7 @@
 namespace PGE {
 
 // TODO: Possibly restructure iteration.
+// TODO: Use wstr() for path construction consistently, or utilize C++20 char8_t for direct construction from UTF-8.
 /// String wrapper utility to deal with paths.
 /// Paths are always absolute and have sanitized path seperators.
 class FilePath {
@@ -103,10 +104,10 @@ class FilePath {
         String read() const;
 
         // Returns all lines from a file.
-        void readLines(std::vector<String>& lines, bool includeEmptyLines = false) const;
+        std::vector<String> readLines(bool includeEmptyLines = false) const;
 
         // Returns all bytes in a file.
-        void readBytes(std::vector<byte>& bytes) const;
+        std::vector<byte> readBytes() const;
 
         const String& str() const;
         const char* cstr() const;

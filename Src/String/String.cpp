@@ -727,7 +727,8 @@ const String String::multiply(int count, const String& separator) const {
     return ret;
 }
 
-void String::split(const String& needleStr, std::vector<String>& into, bool removeEmptyEntries) const {
+std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
+    std::vector<String> split;
     const char* haystack = cstr();
     const char* needle = needleStr.cstr();
     int codepoint;
@@ -737,7 +738,7 @@ void String::split(const String& needleStr, std::vector<String>& into, bool remo
         if (memcmp(haystack + i, needle, codepoint) == 0) {
             int addSize = i - cut;
             if (!removeEmptyEntries || addSize != 0) {
-                into.push_back(String(*this, cut, addSize));
+                split.push_back(String(*this, cut, addSize));
             }
             cut = i + needleStr.byteLength();
         }
@@ -745,8 +746,9 @@ void String::split(const String& needleStr, std::vector<String>& into, bool remo
     // Add the rest of the string to the vector.
     int endAddSize = byteLength() - cut;
     if (endAddSize != 0) {
-        into.push_back(String(*this, cut, endAddSize));
+        split.push_back(String(*this, cut, endAddSize));
     }
+    return split;
 }
 
 const String String::join(const std::vector<String>& vect, const String& separator) {

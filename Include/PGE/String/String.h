@@ -162,7 +162,7 @@ class String {
         const String trim() const;
         const String reverse() const;
         const String multiply(int count, const String& separator = "") const;
-        void split(const String& needleStr, std::vector<String>& into, bool removeEmptyEntries) const;
+        std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
         static const String join(const std::vector<String>& vect, const String& separator);
 
         const std::cmatch regexMatch(const std::regex& pattern) const;
