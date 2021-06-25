@@ -111,9 +111,9 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a0d0ee06868b9756a9797ffa001c42307">writeByte</a> (byte b)</td></tr>
 <tr class="memdesc:a0d0ee06868b9756a9797ffa001c42307"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes a byte to the file. <br /></td></tr>
 <tr class="separator:a0d0ee06868b9756a9797ffa001c42307"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ca6bee50c390112dceb72b5ad75a084"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a7ca6bee50c390112dceb72b5ad75a084">writeBytes</a> (const std::vector&lt; byte &gt; &amp;bytes)</td></tr>
-<tr class="memdesc:a7ca6bee50c390112dceb72b5ad75a084"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes a given amount of bytes to the file.  <a href="class_p_g_e_1_1_binary_writer.html#a7ca6bee50c390112dceb72b5ad75a084">More...</a><br /></td></tr>
-<tr class="separator:a7ca6bee50c390112dceb72b5ad75a084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2acfaabd8bc12e2c211f28c4b03d1837"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a2acfaabd8bc12e2c211f28c4b03d1837">writeBytes</a> (byte *bytes, int count)</td></tr>
+<tr class="memdesc:a2acfaabd8bc12e2c211f28c4b03d1837"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes a given amount of bytes to the file.  <a href="class_p_g_e_1_1_binary_writer.html#a2acfaabd8bc12e2c211f28c4b03d1837">More...</a><br /></td></tr>
+<tr class="separator:a2acfaabd8bc12e2c211f28c4b03d1837"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac514002a097bf40ca2e9288954d1e512"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#ac514002a097bf40ca2e9288954d1e512">writeBoolean</a> (bool b)</td></tr>
 <tr class="memdesc:ac514002a097bf40ca2e9288954d1e512"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes byte representing a boolean.  <a href="class_p_g_e_1_1_binary_writer.html#ac514002a097bf40ca2e9288954d1e512">More...</a><br /></td></tr>
 <tr class="separator:ac514002a097bf40ca2e9288954d1e512"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,8 +176,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="a7ca6bee50c390112dceb72b5ad75a084"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ca6bee50c390112dceb72b5ad75a084">&#9670;&nbsp;</a></span>writeBytes()</h2>
+<a id="a2acfaabd8bc12e2c211f28c4b03d1837"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2acfaabd8bc12e2c211f28c4b03d1837">&#9670;&nbsp;</a></span>writeBytes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -185,20 +185,25 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         <tr>
           <td class="memname">void PGE::BinaryWriter::writeBytes </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; byte &gt; &amp;&#160;</td>
-          <td class="paramname"><em>bytes</em></td><td>)</td>
+          <td class="paramtype">byte *&#160;</td>
+          <td class="paramname"><em>bytes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>&#x202A;Writes a given amount of bytes to the file. </p>
-<p class="DocNodeLTR">In order to be read again, the amount of bytes must be known, so it should either be constant, or stored with the byte data manually. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">bytes</td><td>&#x202A;The bytes to write. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p class="DocNodeLTR">In order to be read again, the amount of bytes must be known, so it should either be constant, or stored with the byte data manually. </p>
 
 </div>
 </div>

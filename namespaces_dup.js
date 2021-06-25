@@ -108,7 +108,6 @@ var namespaces_dup =
       [ "\u202Aoperator*", "_vector_8h.html#ac6f0de44e835b79052cff41c95a71f69", null ],
       [ "\u202Aoperator*", "_vector_8h.html#a409a53c8665ffdf904d0ab7873e411e4", null ],
       [ "\u202Aoperator*", "_vector_8h.html#a35f3cf5601e82c74465bf18db57c667e", null ],
-      [ "\u202Aoperator+", "_file_path_8h.html#a6d83d3433556fa6bf3b85d0790f1bd75", null ],
       [ "\u202Aoperator<<", "_string_8h.html#a16cf69148d6888a3a15f7fbd879d4325", null ],
       [ "\u202Aoperator==", "_string_8h.html#a93165ff0bbfe3d5a7fe2c351a81cab29", null ],
       [ "\u202Aoperator>>", "_string_8h.html#a9593b30614c942154e11567af2cf0ae9", null ]

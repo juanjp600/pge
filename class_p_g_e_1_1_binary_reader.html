@@ -111,9 +111,10 @@ Public Member Functions</h2></td></tr>
 byte&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a80422a9b799749323dd198571d59a4e4">readByte</a> ()</td></tr>
 <tr class="memdesc:a80422a9b799749323dd198571d59a4e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads a byte from the file. <br /></td></tr>
 <tr class="separator:a80422a9b799749323dd198571d59a4e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30ebef2992dfc52ea512dfe667021867"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a30ebef2992dfc52ea512dfe667021867">readBytes</a> (int count, std::vector&lt; byte &gt; &amp;into)</td></tr>
-<tr class="memdesc:a30ebef2992dfc52ea512dfe667021867"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads a specified amount of bytes into a vector.  <a href="class_p_g_e_1_1_binary_reader.html#a30ebef2992dfc52ea512dfe667021867">More...</a><br /></td></tr>
-<tr class="separator:a30ebef2992dfc52ea512dfe667021867"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4907b0fb6869240bf85d721dbea1ffc"><td class="memItemLeft" align="right" valign="top"><a id="aa4907b0fb6869240bf85d721dbea1ffc"></a>
+std::vector&lt; byte &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#aa4907b0fb6869240bf85d721dbea1ffc">readBytes</a> (int count)</td></tr>
+<tr class="memdesc:aa4907b0fb6869240bf85d721dbea1ffc"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads a specified amount of bytes. <br /></td></tr>
+<tr class="separator:aa4907b0fb6869240bf85d721dbea1ffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d18b295925afbcb21dab9e6be34d23c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a8d18b295925afbcb21dab9e6be34d23c">readBoolean</a> ()</td></tr>
 <tr class="memdesc:a8d18b295925afbcb21dab9e6be34d23c"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets a single byte as a boolean.  <a href="class_p_g_e_1_1_binary_reader.html#a8d18b295925afbcb21dab9e6be34d23c">More...</a><br /></td></tr>
 <tr class="separator:a8d18b295925afbcb21dab9e6be34d23c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,43 +171,6 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 
 <p>&#x202A;Interprets a single byte as a boolean. </p>
 <dl class="section return"><dt>Returns</dt><dd>&#x202A;<code>false</code> if the read byte is <code>0</code>, <code>true</code> otherwise. </dd></dl>
-
-</div>
-</div>
-<a id="a30ebef2992dfc52ea512dfe667021867"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30ebef2992dfc52ea512dfe667021867">&#9670;&nbsp;</a></span>readBytes()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void PGE::BinaryReader::readBytes </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; byte &gt; &amp;&#160;</td>
-          <td class="paramname"><em>into</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>&#x202A;Reads a specified amount of bytes into a vector. </p>
-<p class="DocNodeLTR">The vector is resized as necessary. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">count</td><td>&#x202A;The amount of bytes to read. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">into</td><td>&#x202A;The vector into which the bytes will be read. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>

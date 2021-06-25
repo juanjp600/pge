@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['operator_21_3d_164',['operator!=',['../class_p_g_e_1_1_color.html#adc353883c413bac66b5478beeffd677f',1,'PGE::Color']]],
-  ['operator_3d_3d_165',['operator==',['../class_p_g_e_1_1_color.html#ad7ab7dabe9feba66e32ddb12251db6a0',1,'PGE::Color']]]
+  ['isdirectory_179',['isDirectory',['../class_p_g_e_1_1_file_path.html#a82a3f38aa2aec4ab42a2aa6d04c9f9d2',1,'PGE::FilePath']]],
+  ['isvalid_180',['isValid',['../class_p_g_e_1_1_file_path.html#af2d020d84f53fe0915bb8ef4659556da',1,'PGE::FilePath']]]
 ];
