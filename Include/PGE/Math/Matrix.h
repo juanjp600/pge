@@ -23,6 +23,8 @@ class Matrix4x4f {
         void operator*=(float scalar);
         Matrix4x4f operator*(float scalar) const;
 
+        const float* operator[](int row) const;
+
         bool operator==(const Matrix4x4f& other) const;
         bool operator!=(const Matrix4x4f& other) const;
 

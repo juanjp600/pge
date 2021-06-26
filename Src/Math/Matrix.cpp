@@ -17,14 +17,14 @@ Matrix4x4f::Matrix4x4f() {
     *this = IDENTITY;
 }
 
-Matrix4x4f::Matrix4x4f(float aa,float ab,float ac,float ad,
-                       float ba,float bb,float bc,float bd,
-                       float ca,float cb,float cc,float cd,
-                       float da,float db,float dc,float dd) {
-    elements[0][0] = aa; elements[0][1] = ab; elements[0][2] = ac; elements[0][3] = ad;
-    elements[1][0] = ba; elements[1][1] = bb; elements[1][2] = bc; elements[1][3] = bd;
-    elements[2][0] = ca; elements[2][1] = cb; elements[2][2] = cc; elements[2][3] = cd;
-    elements[3][0] = da; elements[3][1] = db; elements[3][2] = dc; elements[3][3] = dd;
+Matrix4x4f::Matrix4x4f(float row0col0,float row0col1,float row0col2,float row0col3,
+                       float row1col0,float row1col1,float row1col2,float row1col3,
+                       float row2col0,float row2col1,float row2col2,float row2col3,
+                       float row3col0,float row3col1,float row3col2,float row3col3) {
+    elements[0][0] = row0col0; elements[0][1] = row0col1; elements[0][2] = row0col2; elements[0][3] = row0col3;
+    elements[1][0] = row1col0; elements[1][1] = row1col1; elements[1][2] = row1col2; elements[1][3] = row1col3;
+    elements[2][0] = row2col0; elements[2][1] = row2col1; elements[2][2] = row2col2; elements[2][3] = row2col3;
+    elements[3][0] = row3col0; elements[3][1] = row3col1; elements[3][2] = row3col2; elements[3][3] = row3col3;
 }
 
 void Matrix4x4f::operator+=(const Matrix4x4f& other) {
@@ -89,6 +89,10 @@ Matrix4x4f Matrix4x4f::operator*(float scalar) const {
         }
     }
     return retVal;
+}
+
+const float* Matrix4x4f::operator[](int row) const {
+    return elements[row];
 }
 
 bool Matrix4x4f::operator==(const Matrix4x4f& other) const {
