@@ -17,7 +17,7 @@ var hierarchy =
       [ "\u202APGE::MouseInput", "class_p_g_e_1_1_mouse_input.html", null ]
     ] ],
     [ "\u202APGE::InputManager", "class_p_g_e_1_1_input_manager.html", null ],
-    [ "\u202APGE::String::Iterator", "struct_p_g_e_1_1_string_1_1_iterator.html", null ],
+    [ "\u202APGE::String::Iterator", "class_p_g_e_1_1_string_1_1_iterator.html", null ],
     [ "\u202APGE::String::Key", "class_p_g_e_1_1_string_1_1_key.html", null ],
     [ "\u202APGE::Line2f", "class_p_g_e_1_1_line2f.html", null ],
     [ "\u202APGE::Line2i", "class_p_g_e_1_1_line2i.html", null ],

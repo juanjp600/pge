@@ -75,12 +75,12 @@ var namespace_p_g_e =
     [ "\u202Au32", "namespace_p_g_e.html#ae4c0a08d0ba18219fdd1973a4261700f", null ],
     [ "\u202Au64", "namespace_p_g_e.html#a00958b13de540f84cba5203c05413514", null ],
     [ "\u202Au8", "namespace_p_g_e.html#a063be4759818b2e9fcf9ca1cf95e83e2", null ],
-    [ "\u202Awchar", "namespace_p_g_e.html#a97c20234fd0cda1d2ddbe441b9f5aad9", null ],
     [ "\u202Aoperator!=", "namespace_p_g_e.html#ae97572a5fbe3765c468caccc90d77222", null ],
     [ "\u202Aoperator*", "namespace_p_g_e.html#ad6a222463bdcab61e508548fde5509ba", null ],
     [ "\u202Aoperator*", "namespace_p_g_e.html#a9ccc7d835d14cfd3325ab1b64f6ea58d", null ],
     [ "\u202Aoperator*", "namespace_p_g_e.html#ae3a297b90571955d7f80591e996153ff", null ],
+    [ "\u202Aoperator+", "namespace_p_g_e.html#ad1d2ba04f7e60416b57817a4e39d09b3", null ],
+    [ "\u202Aoperator+", "namespace_p_g_e.html#a5dae5af91c8e4814dbf8514fe66b7a26", null ],
     [ "\u202Aoperator<<", "namespace_p_g_e.html#a16cf69148d6888a3a15f7fbd879d4325", null ],
-    [ "\u202Aoperator==", "namespace_p_g_e.html#a93165ff0bbfe3d5a7fe2c351a81cab29", null ],
-    [ "\u202Aoperator>>", "namespace_p_g_e.html#a9593b30614c942154e11567af2cf0ae9", null ]
+    [ "\u202Aoperator==", "namespace_p_g_e.html#a93165ff0bbfe3d5a7fe2c351a81cab29", null ]
 ];

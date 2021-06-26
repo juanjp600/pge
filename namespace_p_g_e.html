@@ -225,9 +225,6 @@ typedef int64_t&#160;</td><td class="memItemRight" valign="bottom"><b>i64</b></t
 <tr class="memitem:a00958b13de540f84cba5203c05413514"><td class="memItemLeft" align="right" valign="top"><a id="a00958b13de540f84cba5203c05413514"></a>
 typedef uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>u64</b></td></tr>
 <tr class="separator:a00958b13de540f84cba5203c05413514"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97c20234fd0cda1d2ddbe441b9f5aad9"><td class="memItemLeft" align="right" valign="top"><a id="a97c20234fd0cda1d2ddbe441b9f5aad9"></a>
-typedef char16_t&#160;</td><td class="memItemRight" valign="bottom"><b>wchar</b></td></tr>
-<tr class="separator:a97c20234fd0cda1d2ddbe441b9f5aad9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -246,12 +243,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const
 <tr class="memitem:ae97572a5fbe3765c468caccc90d77222"><td class="memItemLeft" align="right" valign="top"><a id="ae97572a5fbe3765c468caccc90d77222"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;a, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;b)</td></tr>
 <tr class="separator:ae97572a5fbe3765c468caccc90d77222"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dae5af91c8e4814dbf8514fe66b7a26"><td class="memItemLeft" align="right" valign="top"><a id="a5dae5af91c8e4814dbf8514fe66b7a26"></a>
+const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;a, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;b)</td></tr>
+<tr class="separator:a5dae5af91c8e4814dbf8514fe66b7a26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1d2ba04f7e60416b57817a4e39d09b3"><td class="memItemLeft" align="right" valign="top"><a id="ad1d2ba04f7e60416b57817a4e39d09b3"></a>
+const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (const char *a, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;b)</td></tr>
+<tr class="separator:ad1d2ba04f7e60416b57817a4e39d09b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16cf69148d6888a3a15f7fbd879d4325"><td class="memItemLeft" align="right" valign="top"><a id="a16cf69148d6888a3a15f7fbd879d4325"></a>
 std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;s)</td></tr>
 <tr class="separator:a16cf69148d6888a3a15f7fbd879d4325"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9593b30614c942154e11567af2cf0ae9"><td class="memItemLeft" align="right" valign="top"><a id="a9593b30614c942154e11567af2cf0ae9"></a>
-std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;&gt;</b> (std::istream &amp;is, <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;s)</td></tr>
-<tr class="separator:a9593b30614c942154e11567af2cf0ae9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p class="DocNodeLTR">Ported from Sledge, see <a href="https://github.com/LogicAndTrick/sledge/">https://github.com/LogicAndTrick/sledge/</a> Altered for use in pge. </p>
