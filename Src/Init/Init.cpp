@@ -57,7 +57,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 #ifndef DEBUG
         int convArgc;
-        wchar_t** convArgv = CommandLineToArgvW(GetCommandLineW(), &convArgc);
+        wchar** convArgv = CommandLineToArgvW(GetCommandLineW(), &convArgc);
 #else
         int convArgc = argc;
         char** convArgv = argv;

@@ -144,8 +144,7 @@ bool FilePath::createDirectory() const {
         return false;
     }
 
-    std::vector<char32_t> wstr = std::vector<char32_t>(name.length() + 1);
-    str().wstr(wstr.data());
+    std::vector<wchar> wstr = str().wstr();
 
     std::error_code err;
     bool created = std::filesystem::create_directories(wstr.data(), err);
@@ -196,6 +195,7 @@ std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
     std::vector<String> lines;
     String line;
     while (!file.eof()) {
+        line = String();
         file.readLine(line);
         if ((!includeEmptyLines) && (line.length() == 0)) { continue; }
         lines.push_back(line);

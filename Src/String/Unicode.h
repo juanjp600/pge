@@ -8,12 +8,12 @@
 namespace PGE {
 
 namespace Unicode {
-	extern const std::unordered_map<char32_t, char32_t> FOLDING;
-	extern const std::unordered_map<char32_t, std::vector<char32_t>> MULTI_FOLDING;
-	extern const std::unordered_map<char32_t, char32_t> UP;
-	extern const std::unordered_map<char32_t, std::vector<char32_t>> MULTI_UP;
-	extern const std::unordered_map<char32_t, char32_t> DOWN;
-	extern const std::unordered_map<char32_t, std::vector<char32_t>> MULTI_DOWN;
+	extern const std::unordered_map<wchar, wchar> FOLDING;
+	extern const std::unordered_map<wchar, std::vector<wchar>> MULTI_FOLDING;
+	extern const std::unordered_map<wchar, wchar> UP;
+	extern const std::unordered_map<wchar, std::vector<wchar>> MULTI_UP;
+	extern const std::unordered_map<wchar, wchar> DOWN;
+	extern const std::unordered_map<wchar, std::vector<wchar>> MULTI_DOWN;
 }
 
 }

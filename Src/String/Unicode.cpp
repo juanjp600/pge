@@ -5,7 +5,7 @@
 
 using namespace PGE;
 
-const std::unordered_map<char32_t, char32_t> Unicode::FOLDING = std::unordered_map<char32_t, char32_t> {
+const std::unordered_map<wchar, wchar> Unicode::FOLDING = std::unordered_map<wchar, wchar> {
     { u'\u0041', u'\u0061' },
     { u'\u0042', u'\u0062' },
     { u'\u0043', u'\u0063' },
@@ -1273,7 +1273,7 @@ const std::unordered_map<char32_t, char32_t> Unicode::FOLDING = std::unordered_m
     { u'\uFF3A', u'\uFF5A' },
 };
 
-const std::unordered_map<char32_t, std::vector<char32_t>> Unicode::MULTI_FOLDING = std::unordered_map<char32_t, std::vector<char32_t>> {
+const std::unordered_map<wchar, std::vector<wchar>> Unicode::MULTI_FOLDING = std::unordered_map<wchar, std::vector<wchar>> {
     { u'\u00DF', { u'\u0073', u'\u0073', } },
     { u'\u0130', { u'\u0069', u'\u0307', } },
     { u'\u0149', { u'\u02BC', u'\u006E', } },
@@ -1380,7 +1380,7 @@ const std::unordered_map<char32_t, std::vector<char32_t>> Unicode::MULTI_FOLDING
     { u'\uFB17', { u'\u0574', u'\u056D', } },
 };
 
-const std::unordered_map<char32_t, char32_t> Unicode::UP = std::unordered_map<char32_t, char32_t> {
+const std::unordered_map<wchar, wchar> Unicode::UP = std::unordered_map<wchar, wchar> {
     { u'\u00DF', u'\u1E9E' },
     { u'\uFB00', u'\uFFFF' },
     { u'\uFB01', u'\uFFFF' },
@@ -2643,7 +2643,7 @@ const std::unordered_map<char32_t, char32_t> Unicode::UP = std::unordered_map<ch
     { u'\uFF5A', u'\uFF3A' },
 };
 
-const std::unordered_map<char32_t, char32_t> Unicode::DOWN = std::unordered_map<char32_t, char32_t> {
+const std::unordered_map<wchar, wchar> Unicode::DOWN = std::unordered_map<wchar, wchar> {
     { u'\u0130', u'\uFFFF' },
     { u'\u0041', u'\u0061' },
     { u'\u0042', u'\u0062' },
@@ -3814,7 +3814,7 @@ const std::unordered_map<char32_t, char32_t> Unicode::DOWN = std::unordered_map<
     { u'\uFF3A', u'\uFF5A' },
 };
 
-const std::unordered_map<char32_t, std::vector<char32_t>> Unicode::MULTI_UP = std::unordered_map<char32_t, std::vector<char32_t>> {
+const std::unordered_map<wchar, std::vector<wchar>> Unicode::MULTI_UP = std::unordered_map<wchar, std::vector<wchar>> {
     { u'\uFB00', { u'\u0046', u'\u0046', } },
     { u'\uFB01', { u'\u0046', u'\u0049', } },
     { u'\uFB02', { u'\u0046', u'\u004C', } },
@@ -3918,6 +3918,6 @@ const std::unordered_map<char32_t, std::vector<char32_t>> Unicode::MULTI_UP = st
     { u'\u1FF7', { u'\u03A9', u'\u0342', u'\u0399', } },
 };
 
-const std::unordered_map<char32_t, std::vector<char32_t>> Unicode::MULTI_DOWN = std::unordered_map<char32_t, std::vector<char32_t>> {
+const std::unordered_map<wchar, std::vector<wchar>> Unicode::MULTI_DOWN = std::unordered_map<wchar, std::vector<wchar>> {
     { u'\u0130', { u'\u0069', u'\u0307', } },
 };

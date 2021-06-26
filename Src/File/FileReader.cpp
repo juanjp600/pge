@@ -6,7 +6,7 @@
 
 using namespace PGE;
 
-FileReader::FileReader(const FilePath& file) {
+FileReader::FileReader(const FilePath& file, Encoding enc) {
 	stream.open(file.cstr());
 	PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
 
@@ -24,7 +24,7 @@ FileReader::FileReader(const FilePath& file) {
 		encoding = Encoding::UTF16BE;
 		rewind = 1;
 	} else {
-		encoding = Encoding::UTF8;
+		encoding = enc;
 		rewind = 3;
 	}
 	for (int i = 0; i < rewind; i++) {
@@ -37,14 +37,14 @@ bool FileReader::eof() const {
 }
 
 void FileReader::readLine(String& dest) {
-	char32_t ch = readChar();
+	wchar ch = readChar();
 	while (!eof() && ch != L'\r' && ch != L'\n') {
 		dest += ch;
 		ch = readChar();
 	}
 	if (!eof()) {
 		// Pure carriage return linebreak are a thing!
-		char32_t checkChar = ch == L'\r' ? L'\n' : L'\r';
+		wchar checkChar = ch == L'\r' ? L'\n' : L'\r';
 		// Eat the next character and spit it out if its not a continuaton of the EOL.
 		if (checkChar != readChar()) {
 			spitOut(checkChar);
@@ -52,8 +52,15 @@ void FileReader::readLine(String& dest) {
 	}
 }
 
-char32_t FileReader::readChar() {
+wchar FileReader::readChar() {
 	switch (encoding) {
+		case Encoding::ASCII: {
+			int ch = stream.rdbuf()->sbumpc();
+			if (ch == EOF) {
+				reportEOF();
+			}
+			return ch;
+		}
 		case Encoding::UTF8: {
 			int ch = stream.rdbuf()->sbumpc();
 			if (ch == EOF) {
@@ -90,9 +97,9 @@ char32_t FileReader::readChar() {
 				throw PGE_CREATE_EX("Unexpected EOF");
 			}
 			if (encoding == Encoding::UTF16LE) {
-				return (char32_t)(ch | (ch2 << 8));
+				return (wchar)(ch | (ch2 << 8));
 			} else {
-				return (char32_t)((ch << 8) | ch2);
+				return (wchar)((ch << 8) | ch2);
 			}
 		}
 		default: {
@@ -101,9 +108,12 @@ char32_t FileReader::readChar() {
 	}
 }
 
-void FileReader::spitOut(char32_t ch) {
+void FileReader::spitOut(wchar ch) {
 	int backwards;
 	switch (encoding) {
+		case Encoding::ASCII: {
+			backwards = 1;
+		} break;
 		case Encoding::UTF8: {
 			backwards = Unicode::wCharToUtf8(ch, nullptr);
 		} break;

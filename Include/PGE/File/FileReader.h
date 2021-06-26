@@ -10,23 +10,24 @@ namespace PGE {
 class FileReader {
     public:
         enum class Encoding {
+            ASCII,
             UTF8,
             UTF16LE,
             UTF16BE,
         };
 
-        FileReader(const FilePath& file);
+        FileReader(const FilePath& file, Encoding encoding = Encoding::UTF8);
 
         bool eof() const;
 
         void readLine(String& dest);
-        char32_t readChar();
+        wchar readChar();
 
     private:
         std::ifstream stream;
         Encoding encoding;
 
-        void spitOut(char32_t ch);
+        void spitOut(wchar ch);
 
         void reportEOF();
 };
