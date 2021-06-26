@@ -347,5 +347,8 @@
     <ClInclude Include="..\..\Include\PGE\Math\Interpolator.h">
       <Filter>Include\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\File\StreamUtil.h">
+      <Filter>Src\File</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

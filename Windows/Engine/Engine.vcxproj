@@ -88,6 +88,7 @@
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h" />
     <ClInclude Include="..\..\Include\PGE\Threading\ThreadManager.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Types.h" />
+    <ClInclude Include="..\..\Src\File\StreamUtil.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />
