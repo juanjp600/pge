@@ -1,5 +1,11 @@
 var NAVTREEINDEX1 =
 {
+"class_p_g_e_1_1_input_manager.html#a59f8dbeac25e35f21594c83787d31d0b":[1,0,0,19,6],
+"class_p_g_e_1_1_input_manager.html#a5a3cf09a710c5a9f05eda1783382f13c":[1,0,0,19,2],
+"class_p_g_e_1_1_input_manager.html#a9410038a73d1c0735fc0f9676433825d":[1,0,0,19,11],
+"class_p_g_e_1_1_input_manager.html#ab0220841c2594e098f439ee34a723c30":[1,0,0,19,0],
+"class_p_g_e_1_1_input_manager.html#ab165b1ecd2f6426f6a8f756d02c3c539":[1,0,0,19,13],
+"class_p_g_e_1_1_input_manager.html#ac40f4823baa82e766d1fe88aefd9795c":[1,0,0,19,9],
 "class_p_g_e_1_1_input_manager.html#accef38f387808ba7ead4e4c0b824bbd0":[1,0,0,19,4],
 "class_p_g_e_1_1_input_manager.html#af1260c24c125b53d42633670921616d1":[1,0,0,19,12],
 "class_p_g_e_1_1_keyboard_input.html":[1,0,0,15],
@@ -243,11 +249,5 @@ var NAVTREEINDEX1 =
 "class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046afdcbdc22f7e22388bf5905c290bcfe4b":[1,0,0,15,0,102],
 "class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046afe14790f84a465d667c896a642402767":[1,0,0,15,0,143],
 "class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046afe5c3684dce76cdd9f7f42430868aa74":[1,0,0,15,0,72],
-"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046aff44570aca8241914870afbc310cdb85":[1,0,0,15,0,53],
-"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046affa5882d1ddcf903bf0d0dbc30bfc604":[1,0,0,15,0,120],
-"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046affac168bf7931bbdd83559bff27452d0":[1,0,0,15,0,40],
-"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046affb2ce8868d49c78376bf7e76c88fd52":[1,0,0,15,0,111],
-"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046affc0d9b54a1fe677c4c9e6b050e67c81":[1,0,0,15,0,18],
-"class_p_g_e_1_1_line2f.html":[1,0,0,21],
-"class_p_g_e_1_1_line2f.html#a07a183ffe0d20780c20b2507219a1641":[1,0,0,21,5]
+"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046aff44570aca8241914870afbc310cdb85":[1,0,0,15,0,53]
 };
