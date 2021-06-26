@@ -13,6 +13,7 @@ var class_p_g_e_1_1_matrix4x4f =
     [ "\u202Aoperator+", "class_p_g_e_1_1_matrix4x4f.html#ac92c819874fccf88e800bf231bb8ac16", null ],
     [ "\u202Aoperator+=", "class_p_g_e_1_1_matrix4x4f.html#ac390ac13e94fc6b806169d1280b10524", null ],
     [ "\u202Aoperator==", "class_p_g_e_1_1_matrix4x4f.html#ae836aec7df8b6219d7ef56e1e61c9ecb", null ],
+    [ "\u202Aoperator[]", "class_p_g_e_1_1_matrix4x4f.html#a9dcba4dfdc138a91d08b94efb6a6fdf9", null ],
     [ "\u202AtoString", "class_p_g_e_1_1_matrix4x4f.html#ab9179a005ebfeb1e4f9c0191d5c67964", null ],
     [ "\u202Atransform", "class_p_g_e_1_1_matrix4x4f.html#aa5b9a864bf6d1c7378b7a8e36edef5a1", null ],
     [ "\u202Atransform", "class_p_g_e_1_1_matrix4x4f.html#a9d05fa34ba024c47242e53ab225f0086", null ],
