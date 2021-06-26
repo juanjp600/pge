@@ -9,9 +9,9 @@ var class_p_g_e_1_1_binary_reader =
     [ "\u202AreadDouble", "class_p_g_e_1_1_binary_reader.html#a57b443840bf2d4bf4bfc88936b03e15d", null ],
     [ "\u202AreadFixedLengthString", "class_p_g_e_1_1_binary_reader.html#a299c7a2983b8324454d116a60c814baf", null ],
     [ "\u202AreadFloat", "class_p_g_e_1_1_binary_reader.html#aef6580a44ef8ccd6a1de3f4e407bfa3a", null ],
-    [ "\u202AreadInt", "class_p_g_e_1_1_binary_reader.html#a80f3cf6c92f5af531c780f07bdc4e6ce", null ],
+    [ "\u202AreadInt32", "class_p_g_e_1_1_binary_reader.html#a076f3636dc0d3dadc3e735a97cb9901c", null ],
     [ "\u202AreadNullTerminatedString", "class_p_g_e_1_1_binary_reader.html#a74ff3251e3c1b277f4540d0264691c02", null ],
-    [ "\u202AreadUInt", "class_p_g_e_1_1_binary_reader.html#aa24cad9baa9c4db77e3576cfc46c52a0", null ],
+    [ "\u202AreadUInt32", "class_p_g_e_1_1_binary_reader.html#a8f3c755e9c5cbb71cc79c15d2631e24e", null ],
     [ "\u202AreadVector2f", "class_p_g_e_1_1_binary_reader.html#a9166b01ad4cbde1393c425843fa012d1", null ],
     [ "\u202AreadVector3f", "class_p_g_e_1_1_binary_reader.html#a9e73d2fbfa7c21e21cf5cc1a4dcacbba", null ],
     [ "\u202Askip", "class_p_g_e_1_1_binary_reader.html#a900e87b23551a3a2d4dd95c029b2592d", null ]

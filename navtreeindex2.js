@@ -1,8 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"class_p_g_e_1_1_material.html#a3797c6db3df6245ab25c851772b8bb3c":[1,0,0,8,6],
-"class_p_g_e_1_1_material.html#a481dbb486e396e18d992a199a16f40d8":[1,0,0,8,8],
-"class_p_g_e_1_1_material.html#a53069ce64cf944d1c7cc0c050ed0884e":[1,0,0,8,2],
 "class_p_g_e_1_1_material.html#a971eb420c00530ea54d46e9911b9fba4":[1,0,0,8,0],
 "class_p_g_e_1_1_material.html#aa48456ed59f236345104e6cfd50f0af0":[1,0,0,8,10],
 "class_p_g_e_1_1_material.html#ac75ba79506d1d3f3d06b37fc8974cdf7":[1,0,0,8,5],
@@ -144,12 +141,11 @@ var NAVTREEINDEX2 =
 "class_p_g_e_1_1_resource_base.html":[1,0,0,34],
 "class_p_g_e_1_1_resource_base.html#a1fe640570fb0011bc19e05fce7d33a04":[1,0,0,34,0],
 "class_p_g_e_1_1_resource_manager.html":[1,0,0,36],
-"class_p_g_e_1_1_resource_manager.html#a126c6b12020d2fd841e3405dabce164a":[1,0,0,36,4],
+"class_p_g_e_1_1_resource_manager.html#a0d35fef0964b57870f6218e9c3defa6a":[1,0,0,36,0],
 "class_p_g_e_1_1_resource_manager.html#a46779c4a4ab9d2e50e4d678444cb3ad8":[1,0,0,36,3],
 "class_p_g_e_1_1_resource_manager.html#a5ca0ad64eb9e94e3d105a74f14d4ffcd":[1,0,0,36,2],
 "class_p_g_e_1_1_resource_manager.html#a730fa82e567d319b3783abb5d7173f0c":[1,0,0,36,1],
-"class_p_g_e_1_1_resource_manager.html#ab51c1e8ec5296a66f1e3cc1de30530b8":[1,0,0,36,5],
-"class_p_g_e_1_1_resource_manager.html#ad484815389665082d86745e1d85f931f":[1,0,0,36,0],
+"class_p_g_e_1_1_resource_manager.html#ab51c1e8ec5296a66f1e3cc1de30530b8":[1,0,0,36,4],
 "class_p_g_e_1_1_resource_view.html":[1,0,0,37],
 "class_p_g_e_1_1_resource_view.html#a08da5f363ae3a18eb2fac9c94f174383":[1,0,0,37,2],
 "class_p_g_e_1_1_resource_view.html#a479720d7d01d65dd07774d176428e2bc":[1,0,0,37,1],
@@ -249,5 +245,9 @@ var NAVTREEINDEX2 =
 "class_p_g_e_1_1_string_1_1_ordered_key.html#a81271fa78f79662e96f975be1bec0087":[1,0,0,39,2,2],
 "class_p_g_e_1_1_string_1_1_ordered_key.html#afd3c65656fe877af5f3ed1bccaa88026":[1,0,0,39,2,3],
 "class_p_g_e_1_1_string_1_1_redundant_key.html":[1,0,0,39,3],
-"class_p_g_e_1_1_string_1_1_redundant_key.html#a8c93284fdb101f60b17b817beb5ddb80":[1,0,0,39,3,0]
+"class_p_g_e_1_1_string_1_1_redundant_key.html#a8c93284fdb101f60b17b817beb5ddb80":[1,0,0,39,3,0],
+"class_p_g_e_1_1_string_1_1_redundant_key.html#aa41b1b5677f96e98df9eba6c8ef74e04":[1,0,0,39,3,1],
+"class_p_g_e_1_1_string_1_1_safe_key.html":[1,0,0,39,4],
+"class_p_g_e_1_1_string_1_1_safe_key.html#a61739a101497f4faaaf8ad279a1da315":[1,0,0,39,4,1],
+"class_p_g_e_1_1_string_1_1_safe_key.html#a620eb75595c977c0e740895664da7ab5":[1,0,0,39,4,0]
 };
