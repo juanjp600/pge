@@ -34,7 +34,7 @@ String::Iterator::Iterator(const String& str, int byteIndex, int chIndex) {
     charIndex = chIndex;
 }
 
-String::Iterator& String::Iterator::operator++() {
+void String::Iterator::increment() {
     PGE_ASSERT(index < ref->byteLength(), "Can't increment iterator past string end");
     index += Unicode::measureCodepoint(ref->cstr()[index]);
     charIndex++;
@@ -43,20 +43,25 @@ String::Iterator& String::Iterator::operator++() {
         ref->data->_strLength = charIndex;
     }
     _ch = L'\uFFFF';
+}
+
+String::Iterator& String::Iterator::operator++() {
+    increment();
     return *this;
 }
 
 const String::Iterator String::Iterator::operator++(int) {
     Iterator temp = *this;
-    ++(*this);
+    increment();
     return temp;
 }
 
 const String::Iterator String::Iterator::operator+(int steps) const {
+    //TODO: UTF-8 easily allows us to go backwards
     PGE_ASSERT(steps >= 0, "String iterators cannot go backwards");
     String::Iterator ret = *this;
     for (int i = 0; i < steps; i++) {
-        ++ret;
+        ret.increment();
     }
     return ret;
 }
@@ -68,7 +73,7 @@ void String::Iterator::operator+=(int steps) {
     }
 }
 
-wchar String::Iterator::operator*() const {
+char32_t String::Iterator::operator*() const {
     genChar();
     return _ch;
 }
@@ -114,6 +119,13 @@ void String::copy(String& dst, const String& src) {
     }
 }
 
+String::String(const char* cstri) {
+    int len = (int)strlen(cstri);
+    reallocate(len);
+    data->strByteLength = len;
+    memcpy(cstrNoConst(), cstri, len + 1);
+}
+
 String::String(const String& other) {
     copy(*this, other);
 }
@@ -125,15 +137,22 @@ String::String(const std::string& cppstr) {
     memcpy(cstrNoConst(), cppstr.c_str(), len + 1);
 }
 
-String::String(const wchar* wstri) {
+String::String(const char32_t* wstri) {
     wCharToUtf8Str(wstri);
 }
 
-String::String(const std::wstring& cppwstr) {
-    wCharToUtf8Str(cppwstr.c_str());
+String::String(const wchar_t* wstri) {
+    std::vector<char32_t> chr32buf; chr32buf.resize(wcslen(wstri)+1);
+    for (int i = 0; i < chr32buf.size(); i++) {
+        chr32buf[i] = wstri[i];
+    }
+#if WIN32
+    //TODO: convert from UTF-16 to UTF-32
+#endif
+    wCharToUtf8Str(chr32buf.data());
 }
 
-void String::wCharToUtf8Str(const wchar* wbuffer) {
+void String::wCharToUtf8Str(const char32_t* wbuffer) {
     // Determine the capacity of the cbuffer by measuring the number of bytes required for each codepoint.
     int newCap = 0;
     for (int i = 0; wbuffer[i] != L'\0'; i++) {
@@ -166,7 +185,7 @@ String::String(char c) {
     char* buf = cstrNoConst();
     if (c < 0) {
         reallocate(2);
-        data->strByteLength = Unicode::wCharToUtf8((wchar)(unsigned char)c, buf);
+        data->strByteLength = Unicode::wCharToUtf8((char32_t)(unsigned char)c, buf);
         buf[data->strByteLength] = '\0';
     } else {
         reallocate(1);
@@ -177,7 +196,7 @@ String::String(char c) {
     data->_strLength = 1;
 }
 
-String::String(wchar w) {
+String::String(char32_t w) {
     reallocate(4);
     char* buf = cstrNoConst();
     data->strByteLength = Unicode::wCharToUtf8(w, buf);
@@ -234,7 +253,7 @@ const String String::fromInt(int i) {
     return ret;
 }
 
-String String::fromFloat(float f) {
+const String String::fromFloat(float f) {
     // Scientific notation to severly limit maximum output length.
     // sign + 6 * digits + point + e + expsign + 2 * expdigits
     String ret(12);
@@ -243,12 +262,11 @@ String String::fromFloat(float f) {
     return ret;
 }
 
-String& String::operator=(const String& other) {
+void String::operator=(const String& other) {
     copy(*this, other);
-    return *this;
 }
 
-String& String::operator+=(const String& other) {
+void String::operator+=(const String& other) {
     int oldByteSize = byteLength();
     int newSize = oldByteSize + other.byteLength();
     reallocate(newSize, true);
@@ -258,10 +276,9 @@ String& String::operator+=(const String& other) {
     if (data->_strLength >= 0 && other.data->_strLength >= 0) {
         data->_strLength += other.length();
     }
-    return *this;
 }
 
-String& String::operator+=(wchar ch) {
+void String::operator+=(char32_t ch) {
     int aLen = byteLength();
     reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
@@ -271,72 +288,22 @@ String& String::operator+=(wchar ch) {
     if (data->_strLength >= 0) {
         data->_strLength++;
     }
-    return *this;
+}
+
+const String String::concat(const String& a, const String& b) {
+    int len = a.byteLength() + b.byteLength();
+    std::vector<char> buffer; buffer.resize(len + 1);
+    memcpy(buffer.data(), a.cstr(), a.byteLength());
+    memcpy(buffer.data() + a.byteLength(), b.cstr(), (b.byteLength() + 1));
+    return String(buffer.data());
 }
 
 const String PGE::operator+(const String& a, const String& b) {
-    int aLen = a.byteLength();
-    int bLen = b.byteLength();
-    String ret(aLen + bLen);
-    char* buf = ret.cstrNoConst();
-    memcpy(buf, a.cstr(), aLen);
-    memcpy(buf + aLen, b.cstr(), bLen + 1);
-    ret.data->strByteLength = aLen + bLen;
-    if (a.data->_strLength >= 0 && b.data->_strLength >= 0) {
-        ret.data->_strLength = a.length() + b.length();
-    }
-    return ret;
+    return String::concat(a, b);
 }
 
 const String PGE::operator+(const char* a, const String& b) {
-    int aLen = (int)strlen(a);
-    int bLen = b.byteLength();
-    String ret(aLen + bLen);
-    char* buf = ret.cstrNoConst();
-    memcpy(buf, a, aLen);
-    memcpy(buf + aLen, b.cstr(), bLen + 1);
-    ret.data->strByteLength = aLen + bLen;
-    return ret;
-}
-
-const String PGE::operator+(const String& a, const char* b) {
-    int aLen = a.byteLength();
-    int bLen = (int)strlen(b);
-    String ret(aLen + bLen);
-    char* buf = ret.cstrNoConst();
-    memcpy(buf, a.cstr(), aLen);
-    memcpy(buf + aLen, b, bLen + 1);
-    ret.data->strByteLength = aLen + bLen;
-    return ret;
-}
-
-const String PGE::operator+(const String& a, wchar b) {
-    int aLen = a.byteLength();
-    String ret(aLen + 4);
-    char* buf = ret.cstrNoConst();
-    memcpy(buf, a.cstr(), aLen);
-    int actualSize = aLen + Unicode::wCharToUtf8(b, buf + aLen);
-    buf[actualSize] = '\0';
-    ret.data->strByteLength = actualSize;
-    if (a.data->_strLength >= 0) {
-        ret.data->_strLength = a.length() + 1;
-    }
-    return ret;
-}
-
-const String PGE::operator+(wchar a, const String& b) {
-    int bLen = b.byteLength();
-    String ret(4 + bLen);
-    char* buf = ret.cstrNoConst();
-    int writtenChars = Unicode::wCharToUtf8(a, buf);
-    memcpy(buf + writtenChars, b.cstr(), bLen);
-    int actualSize = writtenChars + bLen;
-    buf[actualSize] = '\0';
-    ret.data->strByteLength = actualSize;
-    if (b.data->_strLength >= 0) {
-        ret.data->_strLength = b.length() + 1;
-    }
-    return ret;
+    return String::concat(String(a), b);
 }
 
 bool PGE::operator==(const String& a, const String& b) {
@@ -349,20 +316,6 @@ bool PGE::operator!=(const String& a, const String& b) {
 
 std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
     return os.write(s.cstr(), s.byteLength());
-}
-
-// ASCII, fuck you.
-std::istream& PGE::operator>>(std::istream& is, String& s) {
-    // See xstring for reference.
-
-    int ch;
-    while ((ch = is.rdbuf()->sbumpc()) != EOF && ch != '\r' && ch != '\n') {
-        s += (char)ch;
-    }
-    if (ch == EOF) {
-        is.setstate(std::ios::eofbit | std::ios::failbit);
-    }
-    return is;
 }
 
 u64 String::getHashCode() const {
@@ -388,20 +341,20 @@ bool String::equals(const String& other) const {
     return strcmp(cstr(), other.cstr()) == 0;
 }
 
-static void fold(const char*& buf, std::queue<wchar>& queue) {
+static void fold(const char*& buf, std::queue<char32_t>& queue) {
     if (queue.empty() && *buf != '\0') {
         int codepoint = Unicode::measureCodepoint(*buf);
-        wchar ch = Unicode::utf8ToWChar(buf, codepoint);
+        char32_t ch = Unicode::utf8ToWChar(buf, codepoint);
         auto it = Unicode::FOLDING.find(ch);
         if (it == Unicode::FOLDING.end()) {
             queue.push(ch);
         } else {
-            wchar folded = it->second;
+            char32_t folded = it->second;
             if (folded != L'\uFFFF') {
                 queue.push(folded);
             } else {
-                const std::vector<wchar>& addChars = Unicode::MULTI_FOLDING.find(ch)->second;
-                for (wchar add : addChars) {
+                const std::vector<char32_t>& addChars = Unicode::MULTI_FOLDING.find(ch)->second;
+                for (char32_t add : addChars) {
                     queue.push(add);
                 }
             }
@@ -415,7 +368,7 @@ bool String::equalsIgnoreCase(const String& other) const {
     if (data->_hashCodeEvaluted && other.data->_hashCodeEvaluted && getHashCode() == other.getHashCode()) { return true; }
 
     const char* buf[2] = { cstr(), other.cstr() };
-    std::queue<wchar> queue[2];
+    std::queue<char32_t> queue[2];
 
     // Feed first char.
     for (int i = 0; i < 2; i++) {
@@ -478,7 +431,7 @@ void String::reallocate(int size, bool copyOldChs) {
     data->cCapacity = targetCapacity;
 }
 
-void String::wstr(wchar* buffer) const {
+void String::wstr(char32_t* buffer) const {
     // Convert all the codepoints to wchars.
     for (Iterator it = begin(); it != end(); ++it) {
         buffer[it.getPosition()] = *it;
@@ -635,17 +588,17 @@ const String String::replace(const String& fnd, const String& rplace) const {
 }
 
 // TODO: Funny special cases!
-const String String::performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const {
+const String String::performCaseConversion(const std::unordered_map<char32_t, char32_t>& conv, const std::unordered_map<char32_t, std::vector<char32_t>>& multiConv) const {
     String ret(byteLength());
     ret.data->strByteLength = 0;
     ret.data->_strLength = 0;
-    for (wchar ch : *this) {
+    for (char32_t ch : *this) {
         const auto& find = conv.find(ch);
         if (find == conv.end()) {
             ret += ch;
         } else if (find->second == L'\uFFFF') {
-            const std::vector<wchar>& multiFind = multiConv.find(ch)->second;
-            for (wchar writeChar : multiFind) {
+            const std::vector<char32_t>& multiFind = multiConv.find(ch)->second;
+            for (char32_t writeChar : multiFind) {
                 ret += writeChar;
             }
         } else {

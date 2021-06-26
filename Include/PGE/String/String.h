@@ -23,29 +23,24 @@ class String {
         class SafeKey;
         class OrderedKey;
 
-        struct Iterator {
-            using iterator_category = std::forward_iterator_tag;
-            using difference_type = unsigned;
-            using value_type = wchar;
-            using pointer = value_type*;
-            using reference = value_type&;
+        class Iterator {
+            public:
+                Iterator();
+                Iterator(const String& str);
 
-            Iterator();
-            Iterator(const String& str);
+                void increment();
+                Iterator& operator++();
+                const Iterator operator++(int);
 
-            Iterator& operator++();
-            const Iterator operator++(int);
+                const Iterator operator+(int steps) const;
+                void operator+=(int steps);
 
-            const Iterator operator+(int steps) const;
-            void operator+=(int steps);
+                char32_t operator*() const;
 
-            wchar operator*() const;
+                bool operator==(const Iterator& other) const;
+                bool operator!=(const Iterator& other) const;
 
-            // Member avoids friend.
-            bool operator==(const Iterator& other) const;
-            bool operator!=(const Iterator& other) const;
-
-            int getPosition() const;
+                int getPosition() const;
 
             private:
                 Iterator(const String& str, int byteIndex, int chIndex);
@@ -54,7 +49,7 @@ class String {
 
                 const String* ref;
                 // Lazily evaluated, Unicode invalid character by default.
-                mutable wchar _ch = L'\uFFFF';
+                mutable char32_t _ch = L'\uFFFF';
                 int index;
                 int charIndex;
 
@@ -77,60 +72,34 @@ class String {
         }
 
         String(const String& other);
-
-        template <size_t S>
-        constexpr String(const char(&cstri)[S]) : chs((char*)&cstri) {
-            data->strByteLength = S - 1;
-            data->cCapacity = 0;
-        }
-
-        template <class T, class = typename std::enable_if<
-            std::conjunction<
-                std::is_pointer<T>,
-                std::disjunction<
-                    std::is_same<char*, T>,
-                    std::is_same<const char*, T>
-                >
-            >::value
-        >::type>
-        String(T cstri) {
-            int len = (int)strlen(cstri);
-            reallocate(len);
-            data->strByteLength = len;
-            memcpy(cstrNoConst(), cstri, len + 1);
-        }
+        String(const char* cstri);
 
         String(const std::string& cppstr);
-        String(const wchar* wstr);
-        String(const std::wstring& cppwstr);
+        String(const wchar_t* wstr);
+        String(const char32_t* wstr);
 #if defined(__APPLE__) && defined(__OBJC__)
         String(const NSString* nsstr);
 #endif
         String(char c);
-        String(wchar w);
+        String(char32_t w);
 
         template <class T>
         static const String format(T t, const String& format);
         static const String fromInt(int i);
-        static String fromFloat(float f);
+        static const String fromFloat(float f);
 
-        String& operator=(const String& other);
-        String& operator+=(const String& other);
-        String& operator+=(wchar ch);
+        void operator=(const String& other);
+        void operator+=(const String& other);
+        void operator+=(char32_t ch);
 
-        // TODO: Remove (juan hates his friends).
-        friend const String operator+(const String& a, const String& b);
-        friend const String operator+(const char* a, const String& b);
-        friend const String operator+(const String& a, const char* b);
-        friend const String operator+(const String& a, wchar b);
-        friend const String operator+(wchar a, const String& b);
+        static const String concat(const String& a, const String& b);
 
         /// Gets the UTF-8 data the string is composd of, without transferring ownership.
         /// Guaranteed to have a null byte appended to the string's content.
         /// 
         /// O(1)
         constexpr const char* cstr() const { return chs; }
-        void wstr(wchar* buffer) const;
+        void wstr(char32_t* buffer) const;
         int toInt(bool& success) const;
         float toFloat(bool& success) const;
         int toInt() const;
@@ -209,16 +178,17 @@ class String {
         char* chs = std::get<Unique>(internalData).chs;
         Data* data = &std::get<Unique>(internalData).data;
 
-        const String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
+        const String performCaseConversion(const std::unordered_map<char32_t, char32_t>& conv, const std::unordered_map<char32_t, std::vector<char32_t>>& multiConv) const;
 
-        void wCharToUtf8Str(const wchar* wbuffer);
+        void wCharToUtf8Str(const char32_t* wbuffer);
         void reallocate(int size, bool copyOldChs = false);
         constexpr char* cstrNoConst() { return chs; }
 };
 bool operator==(const String& a, const String& b);
 bool operator!=(const String& a, const String& b);
+const String operator+(const String& a, const String& b);
+const String operator+(const char* a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);
-std::istream& operator>>(std::istream& is, String& s);
 
 }
 

@@ -56,13 +56,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
         Init::init();
 
 #ifndef DEBUG
-        int argc;
-        wchar** argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+        int convArgc;
+        wchar_t** convArgv = CommandLineToArgvW(GetCommandLineW(), &convArgc);
+#else
+        int convArgc = argc;
+        char** convArgv = argv;
 #endif
 
-        std::vector<String> args(argc);
-        for (int i = 0; i < argc; i++) {
-            args[i] = argv[i];
+        std::vector<String> args(convArgc);
+        for (int i = 0; i < convArgc; i++) {
+            args[i] = convArgv[i];
         }
 
         int retVal = Init::main(args);

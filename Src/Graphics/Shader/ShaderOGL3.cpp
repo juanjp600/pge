@@ -151,7 +151,7 @@ Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
 void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::vector<ShaderVar>& varList) {
     String line = "";
     String varStr = varKind + " ";
-    for (wchar chr : src) {
+    for (char32_t chr : src) {
         if (chr!='\r' && chr!='\n') {
             line += chr;
         } else {
@@ -162,7 +162,7 @@ void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::
                 var.name = "";
                 auto it = line.begin() + (varStr.length() - 1);
                 while (++it != line.end()) {
-                    wchar chr = *it;
+                    char32_t chr = *it;
                     if (chr==' ') {
                         if (readType && var.name.length()>0) {
                             break;

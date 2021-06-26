@@ -245,7 +245,9 @@ int main(int argc, char** argv) {
     String folderName;
     if (argc < 2) {
         std::cout << "Folder containing the shaders: ";
-        std::cin >> folderName;
+        char chrs[128];
+        std::cin >> chrs;
+        folderName = chrs;
     } else {
         folderName = argv[1];
     }

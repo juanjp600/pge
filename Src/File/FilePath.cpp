@@ -144,7 +144,7 @@ bool FilePath::createDirectory() const {
         return false;
     }
 
-    std::vector<wchar> wstr = std::vector<wchar>(name.length() + 1);
+    std::vector<char32_t> wstr = std::vector<char32_t>(name.length() + 1);
     str().wstr(wstr.data());
 
     std::error_code err;
@@ -192,13 +192,11 @@ String FilePath::read() const {
 }
 
 std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
-    std::ifstream file(cstr());
-    PGE_ASSERT(file.is_open(), "Could not open (file: \"" + str() + "\")");
+    FileReader file = FileReader(*this);
     std::vector<String> lines;
     String line;
     while (!file.eof()) {
-        line = String();
-        file >> line;
+        file.readLine(line);
         if ((!includeEmptyLines) && (line.length() == 0)) { continue; }
         lines.push_back(line);
     }

@@ -6,7 +6,7 @@
 
 using namespace PGE;
 
-FileReader::FileReader(const FilePath& file, Encoding enc) {
+FileReader::FileReader(const FilePath& file) {
 	stream.open(file.cstr());
 	PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
 
@@ -24,7 +24,7 @@ FileReader::FileReader(const FilePath& file, Encoding enc) {
 		encoding = Encoding::UTF16BE;
 		rewind = 1;
 	} else {
-		encoding = Encoding::ASCII;
+		encoding = Encoding::UTF8;
 		rewind = 3;
 	}
 	for (int i = 0; i < rewind; i++) {
@@ -37,14 +37,14 @@ bool FileReader::eof() const {
 }
 
 void FileReader::readLine(String& dest) {
-	wchar ch = readChar();
+	char32_t ch = readChar();
 	while (!eof() && ch != L'\r' && ch != L'\n') {
 		dest += ch;
 		ch = readChar();
 	}
 	if (!eof()) {
 		// Pure carriage return linebreak are a thing!
-		wchar checkChar = ch == L'\r' ? L'\n' : L'\r';
+		char32_t checkChar = ch == L'\r' ? L'\n' : L'\r';
 		// Eat the next character and spit it out if its not a continuaton of the EOL.
 		if (checkChar != readChar()) {
 			spitOut(checkChar);
@@ -52,15 +52,8 @@ void FileReader::readLine(String& dest) {
 	}
 }
 
-wchar FileReader::readChar() {
+char32_t FileReader::readChar() {
 	switch (encoding) {
-		case Encoding::ASCII: {
-			int ch = stream.rdbuf()->sbumpc();
-			if (ch == EOF) {
-				reportEOF();
-			}
-			return ch;
-		}
 		case Encoding::UTF8: {
 			int ch = stream.rdbuf()->sbumpc();
 			if (ch == EOF) {
@@ -97,9 +90,9 @@ wchar FileReader::readChar() {
 				throw PGE_CREATE_EX("Unexpected EOF");
 			}
 			if (encoding == Encoding::UTF16LE) {
-				return (wchar)(ch | (ch2 << 8));
+				return (char32_t)(ch | (ch2 << 8));
 			} else {
-				return (wchar)((ch << 8) | ch2);
+				return (char32_t)((ch << 8) | ch2);
 			}
 		}
 		default: {
@@ -108,12 +101,9 @@ wchar FileReader::readChar() {
 	}
 }
 
-void FileReader::spitOut(wchar ch) {
+void FileReader::spitOut(char32_t ch) {
 	int backwards;
 	switch (encoding) {
-		case Encoding::ASCII: {
-			backwards = 1;
-		} break;
 		case Encoding::UTF8: {
 			backwards = Unicode::wCharToUtf8(ch, nullptr);
 		} break;
