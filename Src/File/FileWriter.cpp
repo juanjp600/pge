@@ -13,12 +13,9 @@ FileWriter::FileWriter(const FilePath& path) {
 
 void FileWriter::write(const String& content) {
 	stream.write(content.cstr(), content.byteLength());
-	PGE_ASSERT(!stream.bad(), "Failed to write to stream");
 }
 
 void FileWriter::writeLine(const String& content) {
 	write(content);
-	PGE_ASSERT(!stream.bad(), "Failed to write to stream");
 	stream.write("\n", 1);
-	PGE_ASSERT(!stream.bad(), "Failed to write to stream");
 }
