@@ -1,16 +1,11 @@
 #include <PGE/ResourceManagement/ResourceManager.h>
-
-#ifdef DEBUG
 #include <PGE/Exception/Exception.h>
-#endif
 
 using namespace PGE;
 
 ResourceManager::ResourceManager(size_t sz) {
     resources.reserve(sz);
-#ifdef DEBUG
     size = sz;
-#endif
 }
 
 ResourceManager::~ResourceManager() {
@@ -20,8 +15,6 @@ ResourceManager::~ResourceManager() {
 }
 
 void ResourceManager::increaseSize(size_t count) {
-#ifdef DEBUG
     size += count;
-#endif
-    resources.reserve(resources.capacity() + count);
+    resources.reserve(std::max(size, resources.capacity()));
 }

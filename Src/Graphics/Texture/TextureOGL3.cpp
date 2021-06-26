@@ -43,18 +43,18 @@ static void applyTextureParameters(bool rt) {
 
 TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, Format fmt) : Texture(gfx, w, h, true, fmt), resourceManager(gfx, 2) {
     ((GraphicsOGL3*)gfx)->takeGlContext();
-    glTexture = resourceManager.addNewResource<GLTexture>();
+    glTexture = resourceManager.takeOwnership(new GLTexture());
     textureImage(w, h, nullptr, fmt);
     applyTextureParameters(true);
     /*glGenFramebuffers(1,&glFramebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);*/
-    glDepthbuffer = resourceManager.addNewResource<GLDepthBuffer>(w, h);
+    glDepthbuffer = resourceManager.takeOwnership(new GLDepthBuffer(w, h));
     //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, glDepthbuffer);
 }
 
 TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) : Texture(gfx, w, h, false, fmt), resourceManager(gfx, 2) {
     ((GraphicsOGL3*)gfx)->takeGlContext();
-    glTexture = resourceManager.addNewResource<GLTexture>();
+    glTexture = resourceManager.takeOwnership(new GLTexture());
     textureImage(w, h, buffer, fmt);
     if (mipmaps) { glGenerateMipmap(GL_TEXTURE_2D); }
     applyTextureParameters(false);

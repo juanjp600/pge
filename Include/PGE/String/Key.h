@@ -10,8 +10,6 @@ class String::Key {
         friend std::hash<Key>;
         friend std::equal_to<Key>;
 
-        template <class... Args>
-        Key(Args... args) : hash(String(args...).getHashCode()) { }
         Key(const String& str) : hash(str.getHashCode()) { }
 
     private:
@@ -23,8 +21,6 @@ class String::RedundantKey {
         friend std::hash<RedundantKey>;
         friend std::equal_to<RedundantKey>;
 
-        template <class... Args>
-        RedundantKey(Args... args) : str(args...) { }
         RedundantKey(const String& str) : str(str) { }
 
         const String& getStr() const {
@@ -44,8 +40,6 @@ class String::SafeKey {
         friend std::hash<SafeKey>;
         friend std::equal_to<SafeKey>;
 
-        template <class... Args>
-        SafeKey(Args... args) : str(args...) { }
         SafeKey(const String& str) : str(str) { }
 
         const String& getStr() const {
@@ -66,8 +60,6 @@ class String::SafeKey {
 
 class String::OrderedKey {
     public:
-        template <class... Args>
-        OrderedKey(Args... args) : str(args...) { }
         OrderedKey(const String & str) : str(str) { }
 
         const String& getStr() const {

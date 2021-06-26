@@ -12,11 +12,6 @@ class RawWrapper : public Resource<T*> {
             this->resource = ptr;
         }
 
-        template <class... Args>
-        RawWrapper(Args... args) {
-            this->resource = new T(args...);
-        }
-
         ~RawWrapper() {
             delete this->resource;
         }

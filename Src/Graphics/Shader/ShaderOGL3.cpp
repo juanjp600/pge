@@ -18,7 +18,7 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
     String vertexSource((char*)vertexFile.data());
     std::vector<ShaderVar> vertexUniforms;
     extractShaderVars(vertexSource, "uniform", vertexUniforms);
-    glVertexShader = resourceManager.addNewResource<GLShader>(GL_VERTEX_SHADER, vertexSource);
+    glVertexShader = resourceManager.takeOwnership(new GLShader(GL_VERTEX_SHADER, vertexSource));
 
     std::vector<byte> fragmentFile = (path + "fragment.glsl").readBytes();
     PGE_ASSERT(!fragmentFile.empty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
@@ -26,9 +26,9 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
     String fragmentSource((char*)fragmentFile.data());
     std::vector<ShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource, "uniform", fragmentUniforms);
-    glFragmentShader = resourceManager.addNewResource<GLShader>(GL_FRAGMENT_SHADER, fragmentSource);
+    glFragmentShader = resourceManager.takeOwnership(new GLShader(GL_FRAGMENT_SHADER, fragmentSource));
 
-    glShaderProgram = resourceManager.addNewResource<GLProgram>(std::vector{ glVertexShader.get(), glFragmentShader.get() });
+    glShaderProgram = resourceManager.takeOwnership(new GLProgram(std::vector{ glVertexShader.get(), glFragmentShader.get() }));
 
     for (int i = 0; i < (int)vertexUniforms.size(); i++) {
         vertexShaderConstants.emplace(vertexUniforms[i].name, ConstantOGL3(graphics,glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr())));

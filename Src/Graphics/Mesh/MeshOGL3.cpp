@@ -15,10 +15,10 @@ MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::Type pt) : resourceManager(gfx, 3) {
 
     primitiveType = pt;
 
-    glVertexBufferObject = resourceManager.addNewResource<GLBuffer>();
-    glIndexBufferObject = resourceManager.addNewResource<GLBuffer>();
+    glVertexBufferObject = resourceManager.takeOwnership(new GLBuffer());
+    glIndexBufferObject = resourceManager.takeOwnership(new GLBuffer());
 
-    glVertexArrayObject = resourceManager.addNewResource<GLVertexArray>();
+    glVertexArrayObject = resourceManager.takeOwnership(new GLVertexArray());
 }
 
 void MeshOGL3::updateInternalData() {

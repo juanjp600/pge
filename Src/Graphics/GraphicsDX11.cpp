@@ -26,7 +26,7 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
         SDL_SetWindowPosition(sdlWindow, 0, 0);
     }
 
-    dxgiFactory = resourceManager.addNewResource<DXGIFactory1>();
+    dxgiFactory = resourceManager.takeOwnership(new DXGIFactory1());
 
     SDL_SysWMinfo sysWMinfo;
     SDL_VERSION(&sysWMinfo.version); //REMINDER: THIS LINE IS VERY IMPORTANT
@@ -46,14 +46,14 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     dxSwapChainDesc.SampleDesc.Quality = 0;
     dxSwapChainDesc.Windowed = TRUE;
 
-    dxDevice = resourceManager.addNewResource<D3D11Device>();
-    dxContext = resourceManager.addNewResource<D3D11ImmediateContext>(dxDevice);
-    dxSwapChain = resourceManager.addNewResource<DXGISwapChain>(dxgiFactory, dxDevice, dxSwapChainDesc);
-    dxBackBufferRtv = resourceManager.addNewResource<D3D11BackBufferRtv>(dxDevice, dxSwapChain);
+    dxDevice = resourceManager.takeOwnership(new D3D11Device());
+    dxContext = resourceManager.takeOwnership(new D3D11ImmediateContext(dxDevice));
+    dxSwapChain = resourceManager.takeOwnership(new DXGISwapChain(dxgiFactory, dxDevice, dxSwapChainDesc));
+    dxBackBufferRtv = resourceManager.takeOwnership(new D3D11BackBufferRtv(dxDevice, dxSwapChain));
 
-    dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::DEPTH_STENCIL, w, h, DXGI_FORMAT_D24_UNORM_S8_UINT);
+    dxZBufferTexture = resourceManager.takeOwnership(new D3D11Texture2D(dxDevice, D3D11Texture2D::Type::DEPTH_STENCIL, w, h, DXGI_FORMAT_D24_UNORM_S8_UINT));
 
-    dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture, DXGI_FORMAT_D24_UNORM_S8_UINT);
+    dxZBufferView = resourceManager.takeOwnership(new D3D11DepthStencilView(dxDevice, dxZBufferTexture, DXGI_FORMAT_D24_UNORM_S8_UINT));
     dxContext->OMSetRenderTargets(1, &dxBackBufferRtv, dxZBufferView);
 
     cullingMode = Culling::NONE;
@@ -68,7 +68,7 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     dxBlendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
     dxBlendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     dxBlendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    dxBlendState = resourceManager.addNewResource<D3D11BlendState>(dxDevice, dxBlendStateDesc);
+    dxBlendState = resourceManager.takeOwnership(new D3D11BlendState(dxDevice, dxBlendStateDesc));
 
     dxContext->OMSetBlendState(dxBlendState, 0, 0xffffffff);
 
@@ -94,14 +94,14 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_WRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_WRITE] = resourceManager.takeOwnership(new D3D11DepthStencilState(dxDevice, depthStencilDesc));
     dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_WRITE], 0);
 
     depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-    dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_NOWRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_NOWRITE] = resourceManager.takeOwnership(new D3D11DepthStencilState(dxDevice, depthStencilDesc));
 
     depthStencilDesc.DepthEnable = FALSE;
-    dxDepthStencilState[(int)ZBufferStateIndex::DISABLED] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxDepthStencilState[(int)ZBufferStateIndex::DISABLED] = resourceManager.takeOwnership(new D3D11DepthStencilState(dxDevice, depthStencilDesc));
 
     setViewport(Rectanglei(0,0,w,h));
     currentRenderTargetViews.add(dxBackBufferRtv);
@@ -211,7 +211,7 @@ void GraphicsDX11::setCulling(Culling mode) {
     dxRasterizerStateDesc.ScissorEnable = false;
     dxRasterizerStateDesc.MultisampleEnable = false;
     dxRasterizerStateDesc.FrontCounterClockwise = true;
-    dxRasterizerState = resourceManager.addNewResource<D3D11RasterizerState>(dxDevice, dxRasterizerStateDesc);
+    dxRasterizerState = resourceManager.takeOwnership(new D3D11RasterizerState(dxDevice, dxRasterizerStateDesc));
 
     dxContext->RSSetState(dxRasterizerState);
 
