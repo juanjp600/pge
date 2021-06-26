@@ -96,21 +96,6 @@
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp">
       <Filter>Src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Math\AABBox.cpp">
-      <Filter>Src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Math\Line.cpp">
-      <Filter>Src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Math\Matrix.cpp">
-      <Filter>Src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Math\Rectangle.cpp">
-      <Filter>Src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Math\Vector.cpp">
-      <Filter>Src\Math</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\Graphics.cpp">
       <Filter>Src\Graphics</Filter>
     </ClCompile>
@@ -119,9 +104,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp">
       <Filter>Src\Threading</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Math\Plane.cpp">
-      <Filter>Src\Math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Exception\Exception.cpp">
       <Filter>Src\Exception</Filter>
@@ -149,9 +131,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\String\Unicode.cpp">
       <Filter>Src\String</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Math\Math.cpp">
-      <Filter>Src\Math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Input\Input.cpp">
       <Filter>Src\Input</Filter>
