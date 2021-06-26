@@ -51,7 +51,7 @@ class ShaderOGL3 : public Shader {
                     INVALID
                 } valueType = ValueType::INVALID;
                 union Value {
-                    Matrix4x4f matrixVal = Matrix4x4f();
+                    Matrix4x4f matrixVal = Matrix4x4f::ZERO;
                     Vector2f vector2fVal;
                     Vector3f vector3fVal;
                     Vector4f vector4fVal;

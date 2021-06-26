@@ -1,6 +1,8 @@
 ﻿#ifndef PGE_MATH_H_INCLUDED
 #define PGE_MATH_H_INCLUDED
 
+#include <PGE/Exception/Exception.h>
+
 namespace PGE {
 
 /// Various mathematical utility that is either not present,
@@ -13,45 +15,17 @@ namespace Math {
     constexpr float EPSILON_DEFAULT = 0.001f;
 
     /// Converts degrees to radians.
-    constexpr float degToRad(float degree) noexcept {
-        return degree * Math::PI / 180.0f;
-    }
-
+    float degToRad(float degrees);
     /// Converts radians to degrees.
-    constexpr float radToDeg(float radians) noexcept {
-        return radians * 180.0f / Math::PI;
-    }
+    float radToDeg(float radians);
 
     /// Two values are considered equal if |val - other| < epsilon.
-    constexpr bool equalFloats(float val, float other, float epsilon = EPSILON_DEFAULT) noexcept {
-        float diff = val - other;
-        if (diff >= 0) {
-            return diff < epsilon;
-        }
-        else {
-            return -diff < epsilon;
-        }
-    }
+    bool equalFloats(float val, float other, float epsilon = EPSILON_DEFAULT);
 
     /// Round down a float.
     /// Rounding down is defined as always rounding towards 0.
-    /// 
-    /// The standard implementation returns a float, which we consider cringe.
-    constexpr int floor(float val) noexcept {
-        int i = (int)val;
-        if (i > val) { i--; }
-        return i;
-    }
-
-    /// Round up a float.
-    /// Rounding up is defined as always rounding towards +/-∞.
-    /// 
-    /// The standard implementation returns a float, which we consider cringe.
-    constexpr int ceil(float val) noexcept {
-        int i = (int)val;
-        if (i < val) { i++; }
-        return i;
-    }
+    float floor(float val);
+    float ceil(float val);
 }
 
 }

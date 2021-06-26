@@ -389,7 +389,7 @@ void InputManagerInternal::setMouseVisibility(bool visible) {
 
 Vector2i InputManagerInternal::getMouseWheelDelta() {
     Vector2i mwp = mouseWheelPos;
-    mouseWheelPos = Vectors::ZERO2I;
+    mouseWheelPos = Vector2i::ZERO;
     return mwp;
 }
 

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\Color\Color.cpp" />
     <ClCompile Include="..\..\Src\Exception\Exception.cpp" />
     <ClCompile Include="..\..\Src\File\BinaryReader.cpp" />
     <ClCompile Include="..\..\Src\File\BinaryWriter.cpp" />
@@ -42,7 +43,14 @@
     <ClCompile Include="..\..\Src\Init\Init.cpp" />
     <ClCompile Include="..\..\Src\Input\Input.cpp" />
     <ClCompile Include="..\..\Src\Input\InputManager.cpp" />
+    <ClCompile Include="..\..\Src\Math\AABBox.cpp" />
+    <ClCompile Include="..\..\Src\Math\Line.cpp" />
+    <ClCompile Include="..\..\Src\Math\Math.cpp" />
+    <ClCompile Include="..\..\Src\Math\Matrix.cpp" />
+    <ClCompile Include="..\..\Src\Math\Plane.cpp" />
     <ClCompile Include="..\..\Src\Math\Random.cpp" />
+    <ClCompile Include="..\..\Src\Math\Rectangle.cpp" />
+    <ClCompile Include="..\..\Src\Math\Vector.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />

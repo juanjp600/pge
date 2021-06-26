@@ -39,7 +39,7 @@ class Vertex {
                 unsigned uintVal;
                 Vector2f vector2fVal;
                 Vector3f vector3fVal;
-                Vector4f vector4fVal = Vectors::ZERO4F;
+                Vector4f vector4fVal = Vector4f::ZERO;
                 Color colorVal;
             } value;
         };

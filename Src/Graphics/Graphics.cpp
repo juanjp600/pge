@@ -94,7 +94,6 @@ Graphics::Culling Graphics::getCulling() const {
 
 String Graphics::getInfo() const {
     return caption + " (" + getRendererName() + ") "
-        + String::fromInt(dimensions.x) + 'x' + String::fromInt(dimensions.y) + " / "
-        + String::fromInt(viewport.width()) + 'x' + String::fromInt(viewport.height())
+        + dimensions.toString() + " / " + String::fromInt(viewport.width()) + 'x' + String::fromInt(viewport.height())
         + APPEND(open) + APPEND(focused) + APPEND(fullscreen) + APPEND(vsync) + APPEND(depthTest);
 }
