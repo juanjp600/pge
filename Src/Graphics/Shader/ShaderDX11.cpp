@@ -64,7 +64,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     std::vector<byte> vertexShaderBytecode = (path + "vertex.dxbc").readBytes();
     PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
 
-    std::vector<byte> fragmentShaderBytecode = (path + "fragment.dxbc").readBytes();
+    std::vector<byte> fragmentShaderBytecode = (path + "pixel.dxbc").readBytes();
     PGE_ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str() + ")");
 
     dxVertexShader = resourceManager.takeOwnership(new D3D11VertexShader(dxDevice, vertexShaderBytecode));
