@@ -102,19 +102,14 @@ $(document).ready(function(){initNavTree('_raw_wrapper_8h_source.html',''); init
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;            this-&gt;resource = ptr;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        }</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">class</span>... Args&gt;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <a class="code" href="class_p_g_e_1_1_raw_wrapper.html">RawWrapper</a>(Args... args) {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            this-&gt;resource = <span class="keyword">new</span> T(args...);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        }</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        ~<a class="code" href="class_p_g_e_1_1_raw_wrapper.html">RawWrapper</a>() {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            <span class="keyword">delete</span> this-&gt;resource;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        }</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;};</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        ~<a class="code" href="class_p_g_e_1_1_raw_wrapper.html">RawWrapper</a>() {</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <span class="keyword">delete</span> this-&gt;resource;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        }</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;};</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;}</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_RAWWRAPPER_H_INCLUDED</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;}</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_RAWWRAPPER_H_INCLUDED</span></div>
 <div class="ttc" id="aclass_p_g_e_1_1_raw_wrapper_html"><div class="ttname"><a href="class_p_g_e_1_1_raw_wrapper.html">PGE::RawWrapper</a></div><div class="ttdef"><b>Definition:</b> RawWrapper.h:9</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_resource_html"><div class="ttname"><a href="class_p_g_e_1_1_resource.html">PGE::Resource</a></div><div class="ttdef"><b>Definition:</b> Resource.h:17</div></div>
 <div class="ttc" id="anamespace_p_g_e_html"><div class="ttname"><a href="namespace_p_g_e.html">PGE</a></div><div class="ttdoc">Ported from Sledge, see https://github.com/LogicAndTrick/sledge/ Altered for use in pge.</div><div class="ttdef"><b>Definition:</b> Color.h:6</div></div>
