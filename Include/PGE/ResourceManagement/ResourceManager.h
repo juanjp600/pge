@@ -12,17 +12,14 @@ class ResourceManager {
     private:
         std::vector<ResourceBase*> resources;
 
-        size_t size;
-
     public:
-        ResourceManager(size_t sz);
+        ResourceManager();
         virtual ~ResourceManager();
 
         template <class T>
         ResourceView<decltype(T::resource)> takeOwnership(T* res) {
             static_assert(std::is_base_of<ResourceBase, T>::value);
             resources.push_back(res);
-            PGE_ASSERT(size >= resources.size(), "Tried to add resource to full ResourceManager");
             return ResourceView<decltype(T::resource)>(*res);
         }
 
@@ -48,8 +45,6 @@ class ResourceManager {
 
             deleteResource(view.get());
         }
-
-        void increaseSize(size_t count);
 };
 
 }

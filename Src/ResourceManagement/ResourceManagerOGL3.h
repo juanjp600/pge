@@ -13,7 +13,7 @@ class ResourceManagerOGL3 : public ResourceManager {
         GraphicsOGL3* graphics;
 
     public:
-        ResourceManagerOGL3(Graphics* gfx, int size);
+        ResourceManagerOGL3(Graphics* gfx);
         ~ResourceManagerOGL3();
 };
 

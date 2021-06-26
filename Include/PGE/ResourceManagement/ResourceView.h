@@ -25,7 +25,7 @@ class ResourceView {
 
         template <class = typename std::enable_if<!std::is_pointer<T>::value>::type>
         const T* operator->() const { return &get(); }
-        
+
         const T* operator&() const { return &get(); }
 
         bool isHoldingResource() const { return holdsResource; }

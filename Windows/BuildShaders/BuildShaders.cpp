@@ -49,7 +49,7 @@ class ReflectionInfo {
     public:
         ReflectionInfo(ID3DBlob* shader) {
             HRESULT hr = D3DReflect(shader->GetBufferPointer(), shader->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection);
-            PGE_ASSERT(!FAILED(hr), "Epic reflection fail " + String::fromInt(hr));
+            PGE_ASSERT(SUCCEEDED(hr), "Epic reflection fail " + String::fromInt(hr));
         }
 
         ReflectionInfo(const ReflectionInfo& other) {
@@ -78,21 +78,26 @@ class ReflectionInfo {
         ID3D11ShaderReflection* reflection;
 };
 
-static void writeConstants(BinaryWriter& writer, const String& cBufferName, ReflectionInfo info) {
-    ID3D11ShaderReflectionConstantBuffer* cBuffer = info->GetConstantBufferByIndex(0);
-    D3D11_SHADER_BUFFER_DESC cBufferDesc;
-    cBuffer->GetDesc(&cBufferDesc);
-    PGE_ASSERT(String(cBufferDesc.Name) == cBufferName, "Wrong constant name! (" + String(cBufferDesc.Name) + ")");
+static void writeConstants(BinaryWriter& writer, ReflectionInfo info) {
+    D3D11_SHADER_DESC shaderDesc;
+    info->GetDesc(&shaderDesc);
+    writer.writeUInt32(shaderDesc.ConstantBuffers);
 
-    writer.writeUInt(cBufferDesc.Size);
-    writer.writeUInt(cBufferDesc.Variables);
-    for (unsigned i = 0; i < cBufferDesc.Variables; ++i) {
-        ID3D11ShaderReflectionVariable* cBufferVar = cBuffer->GetVariableByIndex(i);
-        D3D11_SHADER_VARIABLE_DESC cBufferVarDesc;
-        cBufferVar->GetDesc(&cBufferVarDesc);
-        writer.writeNullTerminatedString(cBufferVarDesc.Name);
-        writer.writeUInt(cBufferVarDesc.StartOffset);
-        writer.writeUInt(cBufferVarDesc.Size);
+    for (int i = 0; i < (int)shaderDesc.ConstantBuffers; i++) {
+        ID3D11ShaderReflectionConstantBuffer* cBuffer = info->GetConstantBufferByIndex(i);
+        D3D11_SHADER_BUFFER_DESC cBufferDesc;
+        cBuffer->GetDesc(&cBufferDesc);
+        writer.writeNullTerminatedString(cBufferDesc.Name);
+        writer.writeUInt32(cBufferDesc.Size);
+        writer.writeUInt32(cBufferDesc.Variables);
+        for (int j = 0; j < (int)cBufferDesc.Variables; j++) {
+            ID3D11ShaderReflectionVariable* cBufferVar = cBuffer->GetVariableByIndex(j);
+            D3D11_SHADER_VARIABLE_DESC cBufferVarDesc;
+            cBufferVar->GetDesc(&cBufferVarDesc);
+            writer.writeNullTerminatedString(cBufferVarDesc.Name);
+            writer.writeUInt32(cBufferVarDesc.StartOffset);
+            writer.writeUInt32(cBufferVarDesc.Size);
+        }
     }
 }
 
@@ -161,19 +166,13 @@ static void compileDX11Reflection(const FilePath& path, const String& input, ID3
 
     BinaryWriter writer(path);
 
-    D3D11_SHADER_DESC desc;
-
     ReflectionInfo vsInfo(vsBlob);
-    vsInfo->GetDesc(&desc);
-    if (desc.ConstantBuffers == 1) {
-        writeConstants(writer, "cbVertex", vsInfo);
-    } else if (desc.ConstantBuffers == 0) {
-        writer.writeUInt(0);
-    } else {
-        throw PGE_CREATE_EX("Too many vertex constant buffers!");
-    }
 
-    writer.writeUInt(desc.InputParameters);
+    D3D11_SHADER_DESC desc;
+    vsInfo->GetDesc(&desc);
+    writeConstants(writer, vsInfo);
+
+    writer.writeUInt32(desc.InputParameters);
     for (UINT i = 0; i < desc.InputParameters; ++i) {
         D3D11_SIGNATURE_PARAMETER_DESC vsParamDesc;
         vsInfo->GetInputParameterDesc(i, &vsParamDesc);
@@ -191,13 +190,7 @@ static void compileDX11Reflection(const FilePath& path, const String& input, ID3
 
     ReflectionInfo psInfo(psBlob);
     psInfo->GetDesc(&desc);
-    if (desc.ConstantBuffers == 1) {
-        writeConstants(writer, "cbPixel", psInfo);
-    } else if (desc.ConstantBuffers == 0) {
-        writer.writeUInt(0);
-    } else {
-        throw PGE_CREATE_EX("Too many pixel constant buffers!");
-    }
+    writeConstants(writer, psInfo);
 
     u32 samplerCount = 0;
     for (UINT i = 0; i < desc.BoundResources; i++) {
@@ -207,7 +200,7 @@ static void compileDX11Reflection(const FilePath& path, const String& input, ID3
             samplerCount++;
         }
     }
-    writer.writeUInt(samplerCount);
+    writer.writeUInt32(samplerCount);
 
     psBlob->Release();
 }

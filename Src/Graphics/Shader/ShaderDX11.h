@@ -83,13 +83,13 @@ class ShaderDX11 : public Shader {
         };
 
         ResourceViewVector<CBufferInfo*> vertexConstantBuffers;
-        ResourceViewVector<CBufferInfo*> pixelConstantBuffers;
-        void readConstantBuffers(BinaryReader& reflectionInfo, const String& bufferName, ResourceViewVector<CBufferInfo*>& constantBuffers);
+        ResourceViewVector<CBufferInfo*> fragmentConstantBuffers;
+        void readConstantBuffers(BinaryReader& reflectionInfo, ResourceViewVector<CBufferInfo*>& constantBuffers);
 
         ResourceViewVector<ID3D11SamplerState*> dxSamplerState;
 
         D3D11VertexShader::View dxVertexShader;
-        D3D11PixelShader::View dxPixelShader;
+        D3D11PixelShader::View dxFragmentShader;
 
         Graphics* graphics;
 

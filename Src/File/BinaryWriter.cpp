@@ -42,11 +42,11 @@ void BinaryWriter::writeByte(byte b) {
     write(b);
 }
 
-void BinaryWriter::writeInt(i32 i) {
+void BinaryWriter::writeInt32(i32 i) {
     write(i);
 }
 
-void BinaryWriter::writeUInt(u32 u) {
+void BinaryWriter::writeUInt32(u32 u) {
     write(u);
 }
 

@@ -10,7 +10,7 @@
 
 using namespace PGE;
 
-MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::Type pt) : resourceManager(gfx, 3) {
+MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::Type pt) : resourceManager(gfx) {
     graphics = gfx; ((GraphicsOGL3*)graphics)->takeGlContext();
 
     primitiveType = pt;

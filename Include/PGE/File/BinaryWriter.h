@@ -48,9 +48,9 @@ class BinaryWriter {
         /// @param[in] b `false` is written as `0`, `true` as `1`.
         void writeBoolean(bool b);
         /// Writes 4 bytes representing a signed integer.
-        void writeInt(i32 i);
+        void writeInt32(i32 i);
         /// Writes 4 bytes representing an unsigned integer.
-        void writeUInt(u32 u);
+        void writeUInt32(u32 u);
         /// Writes 4 bytes representing a 32-bit floating point number.
         void writeFloat(float f);
         /// Writes 4 bytes representing a 64-bit floating point number.

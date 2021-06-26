@@ -4,7 +4,7 @@
 
 using namespace PGE;
 
-ResourceManagerOGL3::ResourceManagerOGL3(Graphics* gfx, int size) : ResourceManager(size) {
+ResourceManagerOGL3::ResourceManagerOGL3(Graphics* gfx) {
     graphics = (GraphicsOGL3*)gfx;
 }
 

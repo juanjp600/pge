@@ -6,21 +6,21 @@
 
 using namespace PGE;
 
-ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) {
+ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     graphics = gfx;
 
     filepath = path;
 
     BinaryReader reader(path + "reflection.dxri");
 
-    readConstantBuffers(reader, "cbVertex", vertexConstantBuffers);
+    readConstantBuffers(reader, vertexConstantBuffers);
 
-    u32 propertyCount = reader.readUInt();
+    u32 propertyCount = reader.readUInt32();
     vertexInputElems.resize(propertyCount);
     // We have to keep the names in memory.
     std::vector<String> semanticNames(propertyCount);
     std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc(propertyCount);
-    for (u32 i = 0; i < propertyCount; ++i) {
+    for (int i = 0; i < (int)propertyCount; i++) {
         vertexInputElems[i] = reader.readNullTerminatedString();
 
         semanticNames[i] = reader.readNullTerminatedString();
@@ -39,9 +39,9 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
         dxVertexInputElemDesc[i] = vertexInputElemDesc;
     }
 
-    readConstantBuffers(reader, "cbPixel", pixelConstantBuffers);
+    readConstantBuffers(reader, fragmentConstantBuffers);
 
-    u32 samplerCount = reader.readUInt();
+    u32 samplerCount = reader.readUInt32();
 
     D3D11_SAMPLER_DESC samplerDesc;
     ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
@@ -56,7 +56,6 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     samplerDesc.MipLODBias = -0.1f;
 
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
-    resourceManager.increaseSize(samplerCount);
     dxSamplerState = ResourceViewVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < samplerCount; i++) {
         dxSamplerState[i] = resourceManager.takeOwnership(new D3D11SamplerState(dxDevice, samplerDesc));
@@ -65,32 +64,31 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : resourceManager(3) 
     std::vector<byte> vertexShaderBytecode = (path + "vertex.dxbc").readBytes();
     PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
 
-    std::vector<byte> pixelShaderBytecode = (path + "pixel.dxbc").readBytes();
-    PGE_ASSERT(pixelShaderBytecode.size() > 0, "pixel shader is empty (filename: " + path.str() + ")");
+    std::vector<byte> fragmentShaderBytecode = (path + "fragment.dxbc").readBytes();
+    PGE_ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str() + ")");
 
     dxVertexShader = resourceManager.takeOwnership(new D3D11VertexShader(dxDevice, vertexShaderBytecode));
-    dxPixelShader = resourceManager.takeOwnership(new D3D11PixelShader(dxDevice, pixelShaderBytecode));
+    dxFragmentShader = resourceManager.takeOwnership(new D3D11PixelShader(dxDevice, fragmentShaderBytecode));
     dxVertexInputLayout = resourceManager.takeOwnership(new D3D11InputLayout(dxDevice, dxVertexInputElemDesc, vertexShaderBytecode));
 }
 
-void ShaderDX11::readConstantBuffers(BinaryReader& reader, const String& bufferName, ResourceViewVector<CBufferInfo*>& constantBuffers) {
-    u32 cBufferSize = reader.readUInt();
-    if (cBufferSize == 0) {
-        return;
-    }
+void ShaderDX11::readConstantBuffers(BinaryReader& reader, ResourceViewVector<CBufferInfo*>& constantBuffers) {
+    u32 cBufferCount = reader.readUInt32();
 
-    resourceManager.increaseSize(2);
+    for (int i = 0; i < cBufferCount; i++) {
+        String bufferName = reader.readNullTerminatedString();
+        u32 cBufferSize = reader.readUInt32();
+        CBufferInfoView constantBuffer = resourceManager.takeOwnership(new CBufferInfoOwner(graphics, bufferName, cBufferSize, &resourceManager));
+        constantBuffers.add(constantBuffer);
 
-    CBufferInfoView constantBuffer = resourceManager.takeOwnership(new CBufferInfoOwner(graphics, bufferName, cBufferSize, &resourceManager));
-    constantBuffers.add(constantBuffer);
-
-    String varName;
-    u32 varCount = reader.readUInt();
-    for (u32 i = 0; i < varCount; i++) {
-        varName = reader.readNullTerminatedString();
-        u32 varOffset = reader.readUInt();
-        u32 varSize = reader.readUInt();
-        constantBuffer->addConstant(varName, ConstantDX11(constantBuffer, varOffset, varSize));
+        String varName;
+        u32 varCount = reader.readUInt32();
+        for (int i = 0; i < (int)varCount; i++) {
+            varName = reader.readNullTerminatedString();
+            u32 varOffset = reader.readUInt32();
+            u32 varSize = reader.readUInt32();
+            constantBuffer->addConstant(varName, ConstantDX11(constantBuffer, varOffset, varSize));
+        }
     }
 }
 
@@ -106,7 +104,7 @@ Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
 }
 
 Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
-    for (auto cBuffer : pixelConstantBuffers) {
+    for (auto cBuffer : fragmentConstantBuffers) {
         auto map = cBuffer->getConstants();
         auto it = map->find(name);
         if (it != map->end()) {
@@ -128,13 +126,13 @@ void ShaderDX11::useShader() {
         dxContext->VSSetConstantBuffers(i,1,&vertexConstantBuffers[i]->getDxCBuffer());
     }
 
-    for (int i = 0; i < (int)pixelConstantBuffers.size(); i++) {
-        pixelConstantBuffers[i]->update();
-        dxContext->PSSetConstantBuffers(i,1,&pixelConstantBuffers[i]->getDxCBuffer());
+    for (int i = 0; i < (int)fragmentConstantBuffers.size(); i++) {
+        fragmentConstantBuffers[i]->update();
+        dxContext->PSSetConstantBuffers(i,1,&fragmentConstantBuffers[i]->getDxCBuffer());
     }
     
     dxContext->VSSetShader(dxVertexShader,NULL,0);
-    dxContext->PSSetShader(dxPixelShader,NULL,0);
+    dxContext->PSSetShader(dxFragmentShader,NULL,0);
 }
 
 void ShaderDX11::useVertexInputLayout() {

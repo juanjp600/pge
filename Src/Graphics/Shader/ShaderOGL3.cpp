@@ -6,7 +6,7 @@
 
 using namespace PGE;
 
-ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gfx, 3) {
+ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gfx) {
     graphics = gfx;
     ((GraphicsOGL3*)graphics)->takeGlContext();
 

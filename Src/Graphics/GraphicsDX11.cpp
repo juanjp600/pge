@@ -11,7 +11,7 @@ using namespace PGE;
 
 //REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
 
-GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_SHOWN), resourceManager(12) {
+GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_SHOWN) {
     HRESULT hResult = 0;
 
     if (fullscreen) {

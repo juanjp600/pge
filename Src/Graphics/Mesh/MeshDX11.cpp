@@ -9,7 +9,7 @@
 
 using namespace PGE;
 
-MeshDX11::MeshDX11(Graphics* gfx,Primitive::Type pt) : resourceManager(2) {
+MeshDX11::MeshDX11(Graphics* gfx,Primitive::Type pt) {
     graphics = gfx;
     primitiveType = pt;
 }

@@ -57,11 +57,11 @@ byte BinaryReader::readByte() {
     return read<byte>();
 }
 
-i32 BinaryReader::readInt() {
+i32 BinaryReader::readInt32() {
     return read<i32>();
 }
 
-u32 BinaryReader::readUInt() {
+u32 BinaryReader::readUInt32() {
     return read<u32>();
 }
 

@@ -14,7 +14,7 @@ const std::list<Graphics*>& Graphics::getActiveInstances() {
     return activeGraphics;
 }
 
-Graphics::Graphics(const String& name, int w, int h, bool fs, u32 windowFlags) : resourceManager(2) {
+Graphics::Graphics(const String& name, int w, int h, bool fs, u32 windowFlags) {
     caption = name;
     dimensions = Vector2i(w, h); aspectRatio = (float)w / h;
     fullscreen = fs;

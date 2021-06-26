@@ -50,9 +50,9 @@ class BinaryReader {
         /// @returns `false` if the read byte is `0`, `true` otherwise.
         bool readBoolean();
         /// Interprets 4 bytes as a signed integer.
-        i32 readInt();
+        i32 readInt32();
         /// Interprets 4 bytes as an unsigned integer.
-        u32 readUInt();
+        u32 readUInt32();
         /// Interprets 4 bytes as a 32-bit floating point number.
         float readFloat();
         /// Interprets 8 bytes as a 64-bit floating point number.
