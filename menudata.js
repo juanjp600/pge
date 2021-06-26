@@ -64,4 +64,5 @@ var menudata={children:[
 {text:"\u202As",url:"functions_func.html#index_s"},
 {text:"\u202At",url:"functions_func.html#index_t"},
 {text:"\u202Au",url:"functions_func.html#index_u"},
-{text:"\u202Aw",url:"functions_func.html#index_w"}]}]}]}]}
+{text:"\u202Aw",url:"functions_func.html#index_w"}]},
+{text:"\u202AVariables",url:"functions_vars.html"}]}]}]}

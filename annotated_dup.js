@@ -1,6 +1,6 @@
 var annotated_dup =
 [
-    [ "\u202APGE", null, [
+    [ "\u202APGE", "namespace_p_g_e.html", [
       [ "\u202AColor", "class_p_g_e_1_1_color.html", "class_p_g_e_1_1_color" ],
       [ "\u202AException", "class_p_g_e_1_1_exception.html", "class_p_g_e_1_1_exception" ],
       [ "\u202ABinaryReader", "class_p_g_e_1_1_binary_reader.html", "class_p_g_e_1_1_binary_reader" ],

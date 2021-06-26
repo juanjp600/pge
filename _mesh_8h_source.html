@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('_mesh_8h_source.html',''); initResizab
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;PGE/Math/Vector.h&gt;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;PGE/Math/Matrix.h&gt;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span>PGE {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_p_g_e.html">PGE</a> {</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">class </span>Graphics;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
@@ -129,7 +129,7 @@ $(document).ready(function(){initNavTree('_mesh_8h_source.html',''); initResizab
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                <span class="keywordtype">unsigned</span> uintVal;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                <a class="code" href="class_p_g_e_1_1_vector2f.html">Vector2f</a> vector2fVal;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> vector3fVal;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                <a class="code" href="class_p_g_e_1_1_vector4f.html">Vector4f</a> vector4fVal = Vectors::ZERO4F;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                <a class="code" href="class_p_g_e_1_1_vector4f.html">Vector4f</a> vector4fVal = Vector4f::ZERO;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                <a class="code" href="class_p_g_e_1_1_color.html">Color</a> colorVal;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            } value;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        };</div>
@@ -203,16 +203,17 @@ $(document).ready(function(){initNavTree('_mesh_8h_source.html',''); initResizab
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;}</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MESH_H_INCLUDED</span></div>
-<div class="ttc" id="aclass_p_g_e_1_1_color_html"><div class="ttname"><a href="class_p_g_e_1_1_color.html">PGE::Color</a></div><div class="ttdoc">An RGBA color represented via 4 floating point numbers.</div><div class="ttdef"><b>Definition:</b> Color.h:13</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_color_html"><div class="ttname"><a href="class_p_g_e_1_1_color.html">PGE::Color</a></div><div class="ttdoc">An RGBA color represented via 4 floating point numbers.</div><div class="ttdef"><b>Definition:</b> Color.h:10</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_graphics_html"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html">PGE::Graphics</a></div><div class="ttdef"><b>Definition:</b> Graphics.h:19</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_material_html"><div class="ttname"><a href="class_p_g_e_1_1_material.html">PGE::Material</a></div><div class="ttdef"><b>Definition:</b> Material.h:11</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_mesh_html"><div class="ttname"><a href="class_p_g_e_1_1_mesh.html">PGE::Mesh</a></div><div class="ttdef"><b>Definition:</b> Mesh.h:73</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_primitive_html"><div class="ttname"><a href="class_p_g_e_1_1_primitive.html">PGE::Primitive</a></div><div class="ttdef"><b>Definition:</b> Mesh.h:60</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_string_html"><div class="ttname"><a href="class_p_g_e_1_1_string.html">PGE::String</a></div><div class="ttdoc">A UTF-8 character sequence guaranteed to be terminated by a null byte.</div><div class="ttdef"><b>Definition:</b> String.h:19</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_vector2f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector2f.html">PGE::Vector2f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:10</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:65</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_vector4f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector4f.html">PGE::Vector4f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:123</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_vector2f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector2f.html">PGE::Vector2f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:12</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:61</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_vector4f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector4f.html">PGE::Vector4f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:108</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_vertex_html"><div class="ttname"><a href="class_p_g_e_1_1_vertex.html">PGE::Vertex</a></div><div class="ttdef"><b>Definition:</b> Mesh.h:18</div></div>
+<div class="ttc" id="anamespace_p_g_e_html"><div class="ttname"><a href="namespace_p_g_e.html">PGE</a></div><div class="ttdoc">Ported from Sledge, see https://github.com/LogicAndTrick/sledge/ Altered for use in pge.</div><div class="ttdef"><b>Definition:</b> Color.h:6</div></div>
 <div class="ttc" id="astruct_p_g_e_1_1_vertex_1_1_property_html"><div class="ttname"><a href="struct_p_g_e_1_1_vertex_1_1_property.html">PGE::Vertex::Property</a></div><div class="ttdef"><b>Definition:</b> Mesh.h:22</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

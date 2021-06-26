@@ -39,7 +39,8 @@ var NAVTREE =
       [ "\u202AClass Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "\u202AClass Members", "functions.html", [
         [ "\u202AAll", "functions.html", null ],
-        [ "\u202AFunctions", "functions_func.html", null ]
+        [ "\u202AFunctions", "functions_func.html", null ],
+        [ "\u202AVariables", "functions_vars.html", null ]
       ] ]
     ] ]
   ] ]
@@ -48,10 +49,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "",
-"class_p_g_e_1_1_input_manager.html#a59f8dbeac25e35f21594c83787d31d0b",
-"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046affa5882d1ddcf903bf0d0dbc30bfc604",
-"class_p_g_e_1_1_string.html#a9a3cbcf569b45b229cb7eee95322825d",
-"struct_p_g_e_1_1_string_1_1_iterator.html#a2a7a3f4de64c4e9cb4634b51526d6a00"
+"class_p_g_e_1_1_keyboard_input.html#adbed6f81de05dbca08de769ab39f6046a2091809ab6bdbc0a1975bf61d6099748",
+"class_p_g_e_1_1_material.html#a21954649fa9fa9fb3a18c93cc7e6b5e2",
+"class_p_g_e_1_1_string_1_1_safe_key.html#a61739a101497f4faaaf8ad279a1da315"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
