@@ -443,10 +443,15 @@ bool String::equalsIgnoreCase(const String& other) const {
     return *buf[0] == *buf[1];
 }
 
+bool String::isEmpty() const {
+    return chs[0] == '\0';
+}
+
 void String::reallocate(int size, bool copyOldChs) {
     // Accounting for the terminating byte.
     size++;
 
+    // Initialized with String literal.
     if (data->cCapacity == 0) {
         data->cCapacity = SHORT_STR_CAPACITY;
         if (size <= SHORT_STR_CAPACITY) {
@@ -482,6 +487,14 @@ void String::reallocate(int size, bool copyOldChs) {
     chs = newChs;
     data = &s->data;
     data->cCapacity = targetCapacity;
+}
+
+const char* String::cstr() const {
+    return chs;
+}
+
+char* String::cstrNoConst() {
+    return chs;
 }
 
 std::vector<wchar> String::wstr() const {

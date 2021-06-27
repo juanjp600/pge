@@ -66,7 +66,7 @@ class String {
         ~String() = default; // WHY THE FUCK DO WE NEED THIS??
         static void copy(String& dst, const String& src);
         
-        constexpr String() {
+        String() {
             // Manual metadata:
             data->strByteLength = 0;
             data->_strLength = 0;
@@ -78,7 +78,7 @@ class String {
         String(const String& other);
 
         template <size_t S>
-        constexpr String(const char(&cstri)[S]) : chs((char*)&cstri) {
+        String(const char(&cstri)[S]) : chs((char*)&cstri) {
             data->strByteLength = S - 1;
             data->cCapacity = 0;
         }
@@ -128,7 +128,7 @@ class String {
         /// Guaranteed to have a null byte appended to the string's content.
         /// 
         /// O(1)
-        constexpr const char* cstr() const { return chs; }
+        const char* cstr() const;
         std::vector<wchar> wstr() const;
         int toInt(bool& success) const;
         float toFloat(bool& success) const;
@@ -172,7 +172,7 @@ class String {
 
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
-        constexpr bool isEmpty() const { return chs[0] == '\0'; }
+        bool isEmpty() const;
 
     private:
         static constexpr u64 FNV_SEED = 0xcbf29ce484222325;
@@ -212,7 +212,7 @@ class String {
 
         void wCharToUtf8Str(const wchar* wbuffer);
         void reallocate(int size, bool copyOldChs = false);
-        constexpr char* cstrNoConst() { return chs; }
+        char* cstrNoConst();
 };
 bool operator==(const String& a, const String& b);
 bool operator!=(const String& a, const String& b);
