@@ -7,7 +7,7 @@
 
 namespace PGE {
 
-class FileReader {
+class TextReader {
     public:
         enum class Encoding {
             ASCII,
@@ -16,7 +16,7 @@ class FileReader {
             UTF16BE,
         };
 
-        FileReader(const FilePath& file, Encoding encoding = Encoding::UTF8);
+        TextReader(const FilePath& file, Encoding encoding = Encoding::UTF8);
 
         bool eof() const;
 

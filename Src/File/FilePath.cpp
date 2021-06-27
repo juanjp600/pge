@@ -18,7 +18,7 @@
 
 #include <PGE/Exception/Exception.h>
 
-#include <PGE/File/FileReader.h>
+#include <PGE/File/TextReader.h>
 
 using namespace PGE;
 
@@ -179,7 +179,7 @@ std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
 
 String FilePath::read() const {
     // TextReader checks if the path is valid.
-    FileReader reader(*this);
+    TextReader reader(*this);
     String ret;
     while (!reader.eof()) {
         reader.readLine(ret);
@@ -190,7 +190,7 @@ String FilePath::read() const {
 
 std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
     // TextReader checks if the path is valid.
-    FileReader reader(*this);
+    TextReader reader(*this);
     std::vector<String> lines;
     String line;
     while (!reader.eof()) {

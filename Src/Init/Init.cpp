@@ -7,7 +7,7 @@
 #include <PGE/Init/Init.h>
 #include <PGE/Graphics/Graphics.h>
 #include <PGE/Exception/Exception.h>
-#include <PGE/File/FileWriter.h>
+#include <PGE/File/TextWriter.h>
 #include <PGE/Info/Info.h>
 
 using namespace PGE;
@@ -15,7 +15,7 @@ using namespace PGE;
 #define PGE_ASSERT_SDL(CALL) PGE_ASSERT(CALL >= 0, SDL_GetError())
 
 static void showError(const String& exceptionType, const String& what) {
-    FileWriter writer = FileWriter(FilePath::fromStr("exception.txt"));
+    TextWriter writer = TextWriter(FilePath::fromStr("exception.txt"));
     writer.writeLine(Info::REPO_LINK);
     writer.writeLine(Info::BRANCH + " - " + Info::COMMIT);
     writer.writeLine(exceptionType);

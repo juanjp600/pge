@@ -1,4 +1,4 @@
-#include <PGE/File/FileReader.h>
+#include <PGE/File/TextReader.h>
 
 #include <PGE/Exception/Exception.h>
 
@@ -7,7 +7,7 @@
 
 using namespace PGE;
 
-FileReader::FileReader(const FilePath& file, Encoding enc) {
+TextReader::TextReader(const FilePath& file, Encoding enc) {
 	PGE_ASSERT(file.isValid(), StreamUtil::INVALID_FILEPATH);
 	stream.open(file.cstr());
 	PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
@@ -34,11 +34,11 @@ FileReader::FileReader(const FilePath& file, Encoding enc) {
 	}
 }
 
-bool FileReader::eof() const {
+bool TextReader::eof() const {
 	return stream.eof();
 }
 
-void FileReader::readLine(String& dest) {
+void TextReader::readLine(String& dest) {
 	wchar ch = readChar();
 	while (!eof() && ch != L'\r' && ch != L'\n') {
 		dest += ch;
@@ -54,7 +54,7 @@ void FileReader::readLine(String& dest) {
 	}
 }
 
-wchar FileReader::readChar() {
+wchar TextReader::readChar() {
 	switch (encoding) {
 		case Encoding::ASCII: {
 			int ch = stream.rdbuf()->sbumpc();
@@ -110,7 +110,7 @@ wchar FileReader::readChar() {
 	}
 }
 
-void FileReader::spitOut(wchar ch) {
+void TextReader::spitOut(wchar ch) {
 	int backwards;
 	switch (encoding) {
 		case Encoding::ASCII: {
@@ -132,7 +132,7 @@ void FileReader::spitOut(wchar ch) {
 	stream.setstate(std::ios::goodbit);
 }
 
-void FileReader::reportEOF() {
+void TextReader::reportEOF() {
 	// Extraction failed, laugh at this reader!
 	stream.setstate(std::ios::eofbit | std::ios::failbit);
 }

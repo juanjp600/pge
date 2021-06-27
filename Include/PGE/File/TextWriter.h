@@ -7,12 +7,12 @@
 
 namespace PGE {
 
-class FileWriter {
+class TextWriter {
 	private:
         std::ofstream stream;
 
 	public:
-		FileWriter(const FilePath& file);
+		TextWriter(const FilePath& file);
 
 		void write(const String& content);
 		void writeLine(const String& content);

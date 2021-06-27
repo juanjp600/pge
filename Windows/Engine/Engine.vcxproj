@@ -23,8 +23,8 @@
     <ClCompile Include="..\..\Src\File\BinaryReader.cpp" />
     <ClCompile Include="..\..\Src\File\BinaryWriter.cpp" />
     <ClCompile Include="..\..\Src\File\FilePath.cpp" />
-    <ClCompile Include="..\..\Src\File\FileReader.cpp" />
-    <ClCompile Include="..\..\Src\File\FileWriter.cpp" />
+    <ClCompile Include="..\..\Src\File\TextReader.cpp" />
+    <ClCompile Include="..\..\Src\File\TextWriter.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Graphics.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp" />
@@ -58,8 +58,8 @@
     <ClInclude Include="..\..\Include\PGE\File\BinaryReader.h" />
     <ClInclude Include="..\..\Include\PGE\File\BinaryWriter.h" />
     <ClInclude Include="..\..\Include\PGE\File\FilePath.h" />
-    <ClInclude Include="..\..\Include\PGE\File\FileReader.h" />
-    <ClInclude Include="..\..\Include\PGE\File\FileWriter.h" />
+    <ClInclude Include="..\..\Include\PGE\File\TextReader.h" />
+    <ClInclude Include="..\..\Include\PGE\File\TextWriter.h" />
     <ClInclude Include="..\..\Include\PGE\Graphics\Graphics.h" />
     <ClInclude Include="..\..\Include\PGE\Graphics\Material.h" />
     <ClInclude Include="..\..\Include\PGE\Graphics\Mesh.h" />

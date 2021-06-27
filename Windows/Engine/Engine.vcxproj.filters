@@ -147,7 +147,7 @@
     <ClCompile Include="..\..\Src\File\FilePath.cpp">
       <Filter>Src\File</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\File\FileWriter.cpp">
+    <ClCompile Include="..\..\Src\File\TextWriter.cpp">
       <Filter>Src\File</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\Mesh\Mesh.cpp">
@@ -180,13 +180,12 @@
     <ClCompile Include="..\..\Src\Info\Info.cpp">
       <Filter>Src\Info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\File\FileReader.cpp">
+    <ClCompile Include="..\..\Src\File\TextReader.cpp">
       <Filter>Src\File</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\String\UnicodeHelper.cpp">
       <Filter>Src\String</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Color\Color.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp">
       <Filter>Src\ResourceManagement</Filter>
     </ClCompile>
@@ -252,7 +251,7 @@
     <ClInclude Include="..\..\Include\PGE\File\FilePath.h">
       <Filter>Include\File</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\PGE\File\FileWriter.h">
+    <ClInclude Include="..\..\Include\PGE\File\TextWriter.h">
       <Filter>Include\File</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\PGE\Graphics\Graphics.h">
@@ -336,7 +335,7 @@
     <ClInclude Include="..\..\Include\PGE\Threading\ThreadManager.h">
       <Filter>Include\Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\PGE\File\FileReader.h">
+    <ClInclude Include="..\..\Include\PGE\File\TextReader.h">
       <Filter>Include\File</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\String\UnicodeHelper.h">
