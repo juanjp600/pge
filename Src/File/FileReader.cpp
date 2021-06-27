@@ -3,10 +3,12 @@
 #include <PGE/Exception/Exception.h>
 
 #include "../String/UnicodeHelper.h"
+#include "StreamUtil.h"
 
 using namespace PGE;
 
 FileReader::FileReader(const FilePath& file, Encoding enc) {
+	PGE_ASSERT(file.isValid(), StreamUtil::INVALID_FILEPATH);
 	stream.open(file.cstr());
 	PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
 

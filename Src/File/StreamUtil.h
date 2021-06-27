@@ -7,6 +7,7 @@ namespace PGE {
 
 namespace StreamUtil {
 	const inline String BAD_STREAM("Stream turned bad");
+	const inline String INVALID_FILEPATH("FilePath is invalid");
 }
 
 }

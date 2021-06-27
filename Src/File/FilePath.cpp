@@ -24,12 +24,12 @@ using namespace PGE;
 
 const String INVALID_STR = "Tried using an invalid path";
 
-static String sanitizeFileSeperator(const String& str) {
+static const String sanitizeFileSeperator(const String& str) {
     return str.replace("\\", "/");
 }
 
 // Already sanitized.
-static String& getResourceStr() {
+static const String& getResourceStr() {
     static String resourceStr;
     if (resourceStr.byteLength() == 0) {
 #if defined(__APPLE__) && defined(__OBJC__)
@@ -56,7 +56,7 @@ const FilePath& FilePath::getDataPath() {
 #elif defined(_WIN32)
         PWSTR filePath;
         SHGetKnownFolderPath(FOLDERID_RoamingAppData, KF_FLAG_DEFAULT, NULL, &filePath);
-        PGE::String path = filePath;
+        String path(filePath);
         CoTaskMemFree(filePath);
         dataPath = FilePath::fromStr(path);
 #endif
@@ -65,18 +65,18 @@ const FilePath& FilePath::getDataPath() {
     return dataPath;
 }
 
-FilePath::FilePath(const String& str) {
+FilePath::FilePath(const String& str) noexcept {
     name = str;
     valid = true;
 }
 
-FilePath::FilePath() {
+FilePath::FilePath() noexcept {
     name = "<n/a>";
     valid = false;
 }
 
-FilePath FilePath::fromStr(const String& str) {
-    std::filesystem::path pth = str.cstr();
+const FilePath FilePath::fromStr(const String& str) {
+    std::filesystem::path pth(str.cstr());
     String sanitizedStr = sanitizeFileSeperator(str);
     if (pth.is_absolute()) {
         return FilePath(sanitizedStr);
@@ -85,7 +85,7 @@ FilePath FilePath::fromStr(const String& str) {
     }
 }
 
-bool FilePath::isValid() const {
+bool FilePath::isValid() const noexcept {
     return valid;
 }
 
@@ -140,19 +140,15 @@ bool FilePath::exists() const {
 }
 
 bool FilePath::createDirectory() const {
-    if (exists()) {
-        return false;
-    }
-
-    std::vector<wchar> wstr = str().wstr();
-
+    PGE_ASSERT(valid, INVALID_STR);
     std::error_code err;
-    bool created = std::filesystem::create_directories(wstr.data(), err);
+    bool created = std::filesystem::create_directories(str().wstr().data(), err);
     PGE_ASSERT(err.value() == 0, "Couldn't create directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
     return created;
 }
 
 std::vector<FilePath> FilePath::enumerateFolders() const {
+    PGE_ASSERT(valid, INVALID_STR);
     std::vector<FilePath> folders;
     for (const auto& it : std::filesystem::directory_iterator(cstr())) {
         if (it.is_directory()) {
@@ -163,6 +159,7 @@ std::vector<FilePath> FilePath::enumerateFolders() const {
 }
 
 std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
+    PGE_ASSERT(valid, INVALID_STR);
     std::vector<FilePath> files;
     if (recursive) {
         for (const auto& it : std::filesystem::recursive_directory_iterator(cstr())) {
@@ -181,6 +178,7 @@ std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
 }
 
 String FilePath::read() const {
+    // TextReader checks if the path is valid.
     FileReader reader(*this);
     String ret;
     while (!reader.eof()) {
@@ -191,19 +189,21 @@ String FilePath::read() const {
 }
 
 std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
-    FileReader file = FileReader(*this);
+    // TextReader checks if the path is valid.
+    FileReader reader(*this);
     std::vector<String> lines;
     String line;
-    while (!file.eof()) {
+    while (!reader.eof()) {
         line = String();
-        file.readLine(line);
-        if ((!includeEmptyLines) && (line.length() == 0)) { continue; }
+        reader.readLine(line);
+        if ((!includeEmptyLines) && line.isEmpty()) { continue; }
         lines.push_back(line);
     }
     return lines;
 }
 
 std::vector<byte> FilePath::readBytes() const {
+    PGE_ASSERT(valid, INVALID_STR);
     std::ifstream file(cstr(), std::ios::ate | std::ios::binary);
     PGE_ASSERT(file.is_open(), "Could not open (file: \"" + str() + "\")");
     std::vector<byte> bytes;
@@ -215,21 +215,23 @@ std::vector<byte> FilePath::readBytes() const {
 }
 
 const String& FilePath::str() const {
+    PGE_ASSERT(valid, INVALID_STR);
     return name;
 }
 
 const char* FilePath::cstr() const {
+    PGE_ASSERT(valid, INVALID_STR);
     return name.cstr();
 }
 
-bool FilePath::operator==(const FilePath& other) const {
+bool FilePath::operator==(const FilePath& other) const noexcept {
     if (!isValid() || !other.isValid()) {
         return false;
     }
     return name == other.name;
 }
 
-bool FilePath::operator!=(const FilePath& other) const {
+bool FilePath::operator!=(const FilePath& other) const noexcept {
     if (!isValid() || !other.isValid()) {
         return true;
     }

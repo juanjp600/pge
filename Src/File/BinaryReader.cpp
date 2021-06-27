@@ -7,6 +7,7 @@
 namespace PGE {
 
 BinaryReader::BinaryReader(const FilePath& file) {
+    PGE_ASSERT(file.isValid(), StreamUtil::INVALID_FILEPATH);
     stream.open(file.cstr(), std::ios::binary);
     PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
 }
@@ -73,7 +74,7 @@ double BinaryReader::readDouble() {
     return read<double>();
 }
 
-String BinaryReader::readNullTerminatedString() {
+const String BinaryReader::readNullTerminatedString() {
     std::vector<char> chars;
     char c;
     do {
@@ -84,7 +85,7 @@ String BinaryReader::readNullTerminatedString() {
     return String(chars.data());
 }
 
-String BinaryReader::readFixedLengthString(int length) {
+const String BinaryReader::readFixedLengthString(int length) {
     std::vector<char> chars(length + 1);
     stream.read(chars.data(), length);
     PGE_ASSERT(validateStream(), StreamUtil::BAD_STREAM);
@@ -92,14 +93,14 @@ String BinaryReader::readFixedLengthString(int length) {
     return String(chars.data());
 }
 
-Vector2f BinaryReader::readVector2f() {
+const Vector2f BinaryReader::readVector2f() {
     float x = readFloat();
     if (endOfFile()) { return Vector2f(); }
     float y = readFloat();
     return Vector2f(x, y);
 }
 
-Vector3f BinaryReader::readVector3f() {
+const Vector3f BinaryReader::readVector3f() {
     float x = readFloat();
     if (endOfFile()) { return Vector3f(); }
     float y = readFloat();

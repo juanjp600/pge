@@ -15,17 +15,17 @@ class FilePath {
         String name;
         bool valid;
 
-        FilePath(const String& str);
+        FilePath(const String& str) noexcept;
 
     public:
         /// Invalid path.
         /// Use for storing a path by value.
-        FilePath();
+        FilePath() noexcept;
         /// Constructs a path from a string.
         /// Absolute paths are taken in as-is, relative paths are appended to the current working directory.
         /// 
         /// File seperators will be sanitized.
-        static FilePath fromStr(const String& str);
+        static const FilePath fromStr(const String& str);
 
         /// Gets an OS-dependant folder for storing external data.
         /// Windows: C:/Users/*user*/AppData/Roaming/
@@ -41,10 +41,10 @@ class FilePath {
         /// Path seperators are always normalized.
         /// 
         /// Two paths differing in a trailing path seperator are not considered equal, as one could be a folder and the other a file.
-        bool operator==(const FilePath& other) const;
-        bool operator!=(const FilePath& other) const;
+        bool operator==(const FilePath& other) const noexcept;
+        bool operator!=(const FilePath& other) const noexcept;
 
-        /// Appends str to a valid path.
+        /// Appends str to a path.
         /// The path must be valid.
         /// 
         /// If you want to simply go down in the hierarchy it is advisable to assign the value of #makeDirectory before appending in order
@@ -63,12 +63,11 @@ class FilePath {
 
         /// Gets if a path is considered valid.
         /// A path object is considered valid if it has been assigned a path. A default constructed path is not valid.
-        bool isValid() const;
+        bool isValid() const noexcept;
         /// Checks if a path is an existing directory.
         /// @throws #PGE::Exception If the path is not initialized.
         bool isDirectory() const;
         /// Check if a path exists on the system.
-        /// Could be folder, file or symbolic link.
         /// @throws #PGE::Exception If the path is not initialized.
         bool exists() const;
 
@@ -83,7 +82,7 @@ class FilePath {
 
         /// Gets a file's extension.
         /// A file's extension is defined as the suffix after the last occurence of the "." character.
-        /// @returns The file extension, without a trailing dot.
+        /// @returns The file extension, without a leading dot.
         /// @throws #PGE::Exception If the path is not initialized.
         const String getExtension() const;
         /// Returns a path, without its extension.
@@ -92,25 +91,45 @@ class FilePath {
         /// @throws #PGE::Exception If the path is not initialized.
         const FilePath trimExtension() const;
 
-        // TODO: Reconsider design.
+        /// Creates a directory and all non-existant superdirectories.
+        /// @returns Whether all directories were created successfully.
+        ///          `false` is encountered if the directory already existed, since in that case no exception is raised.
+        /// @throws #PGE::Exception If the path is not initialized or the directory creation failed.
         bool createDirectory() const;
 
-        // Returns all direct subdirectories.
+        // TODO: Properly wrapping iteration?
+        /// Gets all direct subdirectories.
+        /// @throws #PGE::Exception If the path is not initialized.
         std::vector<FilePath> enumerateFolders() const;
 
-        // Enumerates subdirectories.
+        /// Gets all regular files in a directory.
+        /// @param[in] recursive Whether to recursively search subdirectories for files as well.
+        /// @throws #PGE::Exception If the path is not initialized.
         std::vector<FilePath> enumerateFiles(bool recursive = true) const;
 
-        // Returns the entire file with normalized line-endings.
+        // Shorthand utility.
+
+        /// Reads the entire file with normalized line-endings and UTF-8 encoding.
+        /// Line endings are normalized to '\n'.
+        /// @throws #PGE::Exception If the path is not initialized, the file could not be opened, or errors occured during the reading of the file.
+        /// @see #PGE::TextReader
         String read() const;
 
-        // Returns all lines from a file.
+        /// Reads all lines of a file into a vector.
+        /// @throws #PGE::Exception If the path is not initialized, the file could not be opened, or errors occured during the reading of the file.
+        /// @see #PGE::TextReader
         std::vector<String> readLines(bool includeEmptyLines = false) const;
 
-        // Returns all bytes in a file.
+        /// Reads all bytes of a file into a vector.
+        /// @throws #PGE::Exception If the path is not initialized, or the file could not be opened.
         std::vector<byte> readBytes() const;
 
+        /// Returns the internal string representation of the path.
+        /// Always absolute and path sepeartors are sanitized to '/'.
+        /// @throws #PGE::Exception If the path is not initialized.
         const String& str() const;
+        /// Forwards a call to #PGE::String::cstr.
+        /// @throws #PGE::Exception If the path is not initialized.
         const char* cstr() const;
 };
 

@@ -24,10 +24,9 @@ class BinaryWriter {
 
     public:
         /// Opens the stream.
-        /// @throws #PGE::Exception if the file could not be opened.
-        /// @param[in] path The file to open for writing.
+        /// @throws #PGE::Exception if the path is invalid or the file could not be opened.
         /// @param[in] append Whether data should be appended to the file or it should be overwritten.
-        BinaryWriter(const FilePath& path, bool append = false);
+        BinaryWriter(const FilePath& file, bool append = false);
 
         /// Closes the stream prematurely.
         /// Calling this is *not* necessary, the destructor will clean everything up appropriately,

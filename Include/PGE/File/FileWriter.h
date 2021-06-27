@@ -12,7 +12,7 @@ class FileWriter {
         std::ofstream stream;
 
 	public:
-		FileWriter(const FilePath& path);
+		FileWriter(const FilePath& file);
 
 		void write(const String& content);
 		void writeLine(const String& content);

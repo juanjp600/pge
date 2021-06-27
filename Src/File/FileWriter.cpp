@@ -6,9 +6,10 @@
 
 using namespace PGE;
 
-FileWriter::FileWriter(const FilePath& path) {
-	stream.open(path.cstr(), std::ofstream::trunc);
-	PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + path.str() + "\")");
+FileWriter::FileWriter(const FilePath& file) {
+	PGE_ASSERT(file.isValid(), StreamUtil::INVALID_FILEPATH);
+	stream.open(file.cstr(), std::ofstream::trunc);
+	PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
 }
 
 void FileWriter::write(const String& content) {

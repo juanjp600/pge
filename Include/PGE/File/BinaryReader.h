@@ -24,7 +24,7 @@ class BinaryReader {
 
     public:
         /// Opens the file handle.
-        /// @throws #PGE::Exception if the file could not be opened.
+        /// @throws #PGE::Exception if the path is invalid or the file could not be opened.
         BinaryReader(const FilePath& file);
 
         /// Closes the stream prematurely.
@@ -60,17 +60,17 @@ class BinaryReader {
         /// Reads bytes into a String until a terminating null byte is encountered.
         /// Interpreted as UTF-8.
         /// @see #PGE::FileReader for more control over encoding.
-        String readNullTerminatedString();
+        const String readNullTerminatedString();
         /// Reads the given amount of bytes into a String.
         /// Interpreted as UTF-8.
         /// @see #PGE::FileReader for more control over encoding.
-        String readFixedLengthString(int length);
+        const String readFixedLengthString(int length);
         /// Interprets two floats as a 2 component vector.
         /// 32-bit floating point numbers read in order x, y.
-        Vector2f readVector2f();
+        const Vector2f readVector2f();
         /// Interprets three floats as a 3 component vector.
         /// 32-bit floating point numbers read in order x, y, z.
-        Vector3f readVector3f();
+        const Vector3f readVector3f();
 
         /// Skips a given amount of bytes from the file, simply discarding them.
         /// @param[in] length The amount of bytes to skip.
