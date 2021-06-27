@@ -19,9 +19,9 @@ Graphics::Graphics(const String& name, int w, int h, bool fs, u32 windowFlags) {
     dimensions = Vector2i(w, h); aspectRatio = (float)w / h;
     fullscreen = fs;
 
-    eventSubscriber = resourceManager.takeOwnership(new WindowEventSubscriber(this));
+    eventSubscriber = resourceManager.addNewResource<WindowEventSubscriber>(this);
 
-    sdlWindow = resourceManager.takeOwnership(new SDLWindow(name, w, h, windowFlags));
+    sdlWindow = resourceManager.addNewResource<SDLWindow>(name, w, h, windowFlags);
 
     open = true;
     focused = true;

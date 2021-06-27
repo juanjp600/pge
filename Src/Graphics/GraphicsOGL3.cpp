@@ -30,7 +30,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs)
     //        SDL_SetWindowPosition(sdlWindow,0,0);
     //    }
 
-    glContext = resourceManager.takeOwnership(new GLContext(sdlWindow));
+    glContext = resourceManager.addNewResource<GLContext>(sdlWindow);
 
     PGE_ASSERT(gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress) != 0, "Failed to initialize GLAD (GLERROR: " + String::format(glGetError(), "%u") + ")");
 
@@ -52,7 +52,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs)
 
     setViewport(Rectanglei(0,0,w,h));
 
-    glFramebuffer = resourceManager.takeOwnership(new GLFramebuffer());
+    glFramebuffer = resourceManager.addNewResource<GLFramebuffer>();
 
     vsync = true;
     SDL_GL_SetSwapInterval(1);
