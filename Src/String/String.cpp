@@ -448,7 +448,10 @@ void String::reallocate(int size, bool copyOldChs) {
     size++;
 
     if (data->cCapacity == 0) {
-        data->cCapacity = 16;
+        data->cCapacity = SHORT_STR_CAPACITY;
+        if (size <= SHORT_STR_CAPACITY) {
+            chs = std::get<Unique>(internalData).chs;
+        }
     } else {
         if (size <= data->cCapacity) {
             if (data->cCapacity == SHORT_STR_CAPACITY) {
