@@ -71,7 +71,7 @@ class ShaderDX11 : public Shader {
                 byte* data;
                 int size;
                 std::unordered_map<String::Key, ConstantDX11> constants;
-                D3D11ImmediateContext::View dxContext;
+                ID3D11DeviceContext* dxContext;
                 D3D11Buffer::View dxCBuffer;
                 bool dirty;
         };

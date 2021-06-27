@@ -65,8 +65,8 @@ class GraphicsDX11 : public GraphicsInternal {
 
         D3D11_VIEWPORT dxViewport;
 
-        ResourceViewVector<ID3D11RenderTargetView*> currentRenderTargetViews;
-        D3D11DepthStencilView::View currentDepthStencilView;
+        std::vector<ID3D11RenderTargetView*> currentRenderTargetViews;
+        ID3D11DepthStencilView* currentDepthStencilView;
 
         ResourceManager resourceManager;
 };

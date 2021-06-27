@@ -105,7 +105,7 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxVertexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxVertexBufferData.pSysMem = dxVertexData.data();
 
-        resourceManager.deleteResourcefromReference(dxVertexBuffer);
+        resourceManager.deleteResource(dxVertexBuffer);
         dxVertexBuffer = resourceManager.addNewResource<D3D11Buffer>(dxDevice, dxVertexBufferDesc, dxVertexBufferData);
     }
 
@@ -119,7 +119,7 @@ void MeshDX11::uploadInternalData() {
         ZeroMemory(&dxIndexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
         dxIndexBufferData.pSysMem = dxIndexData.data();
 
-        resourceManager.deleteResourcefromReference(dxIndexBuffer);
+        resourceManager.deleteResource(dxIndexBuffer);
         dxIndexBuffer = resourceManager.addNewResource<D3D11Buffer>(dxDevice, dxIndexBufferDesc, dxIndexBufferData);
     }
 
