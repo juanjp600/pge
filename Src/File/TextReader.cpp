@@ -1,16 +1,12 @@
 #include <PGE/File/TextReader.h>
 
-#include <PGE/Exception/Exception.h>
-
 #include "../String/UnicodeHelper.h"
 #include "StreamUtil.h"
 
 using namespace PGE;
 
 TextReader::TextReader(const FilePath& file, Encoding enc) {
-	PGE_ASSERT(file.isValid(), StreamUtil::INVALID_FILEPATH);
-	stream.open(file.cstr());
-	PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
+	StreamUtil::safeOpen(stream, file, std::ios::binary);
 
 	// Try reading BOM.
 	byte begin[3];
@@ -34,17 +30,28 @@ TextReader::TextReader(const FilePath& file, Encoding enc) {
 	}
 }
 
-bool TextReader::eof() const {
-	return stream.eof();
+void TextReader::earlyClose() {
+	StreamUtil::safeClose(stream);
+}
+
+bool TextReader::endOfFile() const noexcept {
+	return eof;
+}
+
+const String TextReader::readLine() {
+	String str;
+	readLine(str);
+	return str;
 }
 
 void TextReader::readLine(String& dest) {
+	// readChar takes care of checking for EOL.
 	wchar ch = readChar();
-	while (!eof() && ch != L'\r' && ch != L'\n') {
+	while (!eof && ch != L'\r' && ch != L'\n') {
 		dest += ch;
 		ch = readChar();
 	}
-	if (!eof()) {
+	if (!eof) {
 		// Pure carriage return linebreak are a thing!
 		wchar checkChar = ch == L'\r' ? L'\n' : L'\r';
 		// Eat the next character and spit it out if its not a continuaton of the EOL.
@@ -53,6 +60,8 @@ void TextReader::readLine(String& dest) {
 		}
 	}
 }
+
+static const String UNEXPECTED_EOF("Encountered an unexpected end of file");
 
 wchar TextReader::readChar() {
 	switch (encoding) {
@@ -79,7 +88,7 @@ wchar TextReader::readChar() {
 					int newCh = stream.rdbuf()->sbumpc();
 					if (newCh == EOF) {
 						reportEOF();
-						throw PGE_CREATE_EX("Unexpected EOF");
+						throw PGE_CREATE_EX(UNEXPECTED_EOF);
 					}
 					chs[i] = newCh;
 				}
@@ -96,16 +105,13 @@ wchar TextReader::readChar() {
 			int ch2 = stream.rdbuf()->sbumpc();
 			if (ch2 == EOF) {
 				reportEOF();
-				throw PGE_CREATE_EX("Unexpected EOF");
+				throw PGE_CREATE_EX(UNEXPECTED_EOF);
 			}
 			if (encoding == Encoding::UTF16LE) {
 				return (wchar)(ch | (ch2 << 8));
 			} else {
 				return (wchar)((ch << 8) | ch2);
 			}
-		}
-		default: {
-			throw PGE_CREATE_EX("Invalid encoding");
 		}
 	}
 }
@@ -129,10 +135,11 @@ void TextReader::spitOut(wchar ch) {
 		stream.rdbuf()->sungetc();
 	}
 	// Clear EOF.
-	stream.setstate(std::ios::goodbit);
+	eof = false;
 }
 
 void TextReader::reportEOF() {
 	// Extraction failed, laugh at this reader!
-	stream.setstate(std::ios::eofbit | std::ios::failbit);
+	PGE_ASSERT(!eof, "End of file has already been encountered");
+	eof = true;
 }

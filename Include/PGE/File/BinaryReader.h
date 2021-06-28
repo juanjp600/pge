@@ -12,12 +12,13 @@ namespace PGE {
 /// @throws #PGE::Exception Any read operation can raise an exception if reading failed or the reader is in an invalid state.
 /// @see #endOfFile
 /// @see #PGE::BinaryWriter
+/// @see #PGE::TextWriter
 class BinaryReader {
     private:
         std::ifstream stream;
         bool eof = false;
 
-        bool validateStream() noexcept;
+        bool checkEOF() noexcept;
 
         template <class T>
         T read();
@@ -28,17 +29,17 @@ class BinaryReader {
         BinaryReader(const FilePath& file);
 
         /// Closes the stream prematurely.
-        /// Calling this is *not* necessary, the destructor will clean everything up appropriately,
-        /// however, possible failure of the close operation will be swallowed in the destructor, while it will be thrown here.
+        /// Calling this is *not* necessary, the destructor will clean everything up appropriately.
+        /// However, possible failure of the close operation will be swallowed in the destructor, while it will be thrown here.
         /// 
-        /// Calling *any* further methods after attempting to close a reader (including attempting to close it again)
+        /// Calling *any* further methods after attempting to close (including attempting to close again)
         /// will have no ill effects, but will cause an exception to be raised every call.
         /// @throws #PGE::Exception if closing fails.
         void earlyClose();
 
         /// Whether a previous function call attempted to read past the end of the file.
-        /// The first call to read past the end of the file will cause #endOfFile to return true thereafter.
-        /// In this case undefined data will be returned, which is not to be used.
+        /// The first call to read past the end of the file will cause this to return true thereafter.
+        /// In that case undefined data will be returned, which is not to be used.
         /// Any further attempts at reading data will raise an exception.
         bool endOfFile() const noexcept;
 
@@ -59,11 +60,11 @@ class BinaryReader {
         double readDouble();
         /// Reads bytes into a String until a terminating null byte is encountered.
         /// Interpreted as UTF-8.
-        /// @see #PGE::FileReader for more control over encoding.
+        /// @see #PGE::TextReader for more control over encoding.
         const String readNullTerminatedString();
         /// Reads the given amount of bytes into a String.
         /// Interpreted as UTF-8.
-        /// @see #PGE::FileReader for more control over encoding.
+        /// @see #PGE::TextReader for more control over encoding.
         const String readFixedLengthString(int length);
         /// Interprets two floats as a 2 component vector.
         /// 32-bit floating point numbers read in order x, y.

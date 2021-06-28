@@ -116,6 +116,15 @@ void String::copy(String& dst, const String& src) {
     }
 }
 
+String::String() {
+    // Manual metadata:
+    data->strByteLength = 0;
+    data->_strLength = 0;
+    data->_hashCode = FNV_SEED;
+    data->_hashCodeEvaluted = true;
+    cstrNoConst()[0] = '\0';
+}
+
 String::String(const String& other) {
     copy(*this, other);
 }

@@ -1,24 +1,19 @@
 #include <PGE/File/BinaryReader.h>
 
-#include <PGE/Exception/Exception.h>
-
 #include "StreamUtil.h"
 
 namespace PGE {
 
 BinaryReader::BinaryReader(const FilePath& file) {
-    PGE_ASSERT(file.isValid(), StreamUtil::INVALID_FILEPATH);
-    stream.open(file.cstr(), std::ios::binary);
-    PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
+    StreamUtil::safeOpen(stream, file, std::ios::binary);
 }
 
 void BinaryReader::earlyClose() {
-    stream.close();
-    PGE_ASSERT(stream.good(), StreamUtil::BAD_STREAM);
+    StreamUtil::safeClose(stream);
 }
 
 // Two strikes and you're out.
-bool BinaryReader::validateStream() noexcept {
+bool BinaryReader::checkEOF() noexcept {
     if (stream.eof()) {
         if (!eof) {
             eof = true;
@@ -39,14 +34,14 @@ template <class T>
 T BinaryReader::read() {
     T val;
     stream.read((char*)&val, sizeof(T));
-    PGE_ASSERT(validateStream(), StreamUtil::BAD_STREAM);
+    PGE_ASSERT(checkEOF(), StreamUtil::BAD_STREAM);
     return val;
 }
 
 std::vector<byte> BinaryReader::readBytes(int count) {
     std::vector<byte> bytes(count);
     stream.read((char*)bytes.data(), count);
-    PGE_ASSERT(validateStream(), StreamUtil::BAD_STREAM);
+    PGE_ASSERT(checkEOF(), StreamUtil::BAD_STREAM);
     return bytes;
 }
 
@@ -88,7 +83,7 @@ const String BinaryReader::readNullTerminatedString() {
 const String BinaryReader::readFixedLengthString(int length) {
     std::vector<char> chars(length + 1);
     stream.read(chars.data(), length);
-    PGE_ASSERT(validateStream(), StreamUtil::BAD_STREAM);
+    PGE_ASSERT(checkEOF(), StreamUtil::BAD_STREAM);
     chars[length] = 0;
     return String(chars.data());
 }
@@ -111,7 +106,7 @@ const Vector3f BinaryReader::readVector3f() {
 
 void BinaryReader::skip(int length) {
     stream.ignore(length);
-    PGE_ASSERT(validateStream(), StreamUtil::BAD_STREAM);
+    PGE_ASSERT(checkEOF(), StreamUtil::BAD_STREAM);
 }
 
 }

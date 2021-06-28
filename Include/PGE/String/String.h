@@ -63,18 +63,9 @@ class String {
         const Iterator begin() const;
         const Iterator end() const;
 
-        ~String() = default; // WHY THE FUCK DO WE NEED THIS??
         static void copy(String& dst, const String& src);
         
-        String() {
-            // Manual metadata:
-            data->strByteLength = 0;
-            data->_strLength = 0;
-            data->_hashCode = FNV_SEED;
-            data->_hashCodeEvaluted = true;
-            cstrNoConst()[0] = '\0';
-        }
-
+        String();
         String(const String& other);
 
         template <size_t S>

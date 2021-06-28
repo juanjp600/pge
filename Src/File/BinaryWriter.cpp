@@ -1,39 +1,26 @@
 #include <PGE/File/BinaryWriter.h>
-#include <PGE/Exception/Exception.h>
 
 #include "StreamUtil.h"
-
-// TODO: Add more types to this and reader?
 
 namespace PGE {
 
 BinaryWriter::BinaryWriter(const FilePath& file, bool append) {
-    PGE_ASSERT(file.isValid(), StreamUtil::INVALID_FILEPATH);
-    stream.open(file.cstr(), std::ios::binary | (append ? std::ios::app : 0));
-    PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
+    StreamUtil::safeOpen(stream, file, std::ios::binary | (append ? std::ios::app : std::ios::trunc));
 }
 
 void BinaryWriter::earlyClose() {
-    stream.close();
-    PGE_ASSERT(stream.good(), StreamUtil::BAD_STREAM);
-}
-
-void BinaryWriter::validateStream() {
-    if (!stream.good()) {
-        stream.close();
-        throw PGE_CREATE_EX(StreamUtil::BAD_STREAM);
-    }
+    StreamUtil::safeClose(stream);
 }
 
 template <class T>
 void BinaryWriter::write(T t) {
     stream.write((char*)&t, sizeof(T));
-    validateStream();
+    StreamUtil::validate(stream);
 }
 
 void BinaryWriter::writeBytes(byte* bytes, int count) {
     stream.write((char*)bytes, count);
-    validateStream();
+    StreamUtil::validate(stream);
 }
 
 void BinaryWriter::writeBoolean(bool b) {
@@ -62,12 +49,12 @@ void BinaryWriter::writeDouble(double d) {
 
 void BinaryWriter::writeNullTerminatedString(const String& str) {
     stream.write(str.cstr(), str.byteLength() + 1);
-    validateStream();
+    StreamUtil::validate(stream);
 }
 
 void BinaryWriter::writeFixedLengthString(const String& str) {
     stream.write(str.cstr(), str.byteLength());
-    validateStream();
+    StreamUtil::validate(stream);
 }
 
 void BinaryWriter::writeVector2f(const Vector2f& vec) {
