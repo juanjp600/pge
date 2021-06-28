@@ -8,6 +8,8 @@ little more than a graphics api wrapper
 
 At this time PGE is only to be linked statically, as it transfers ownership of raw pointers, which could result in the [cross-DLL problem](https://stackoverflow.com/questions/443147/c-mix-new-delete-between-libs), see [#32](/../../issues/32).
 
+# [Guidelines](GUIDELINES.md)
+
 # License (Zlib)
 
 This project is licensed under the zlib license. Please refer to the [LICENSE.md](LICENSE.md) file for more details.
