@@ -1,9 +1,19 @@
 var NAVTREEINDEX4 =
 {
-"struct_p_g_e_1_1_string_1_1_iterator.html#aac621f6e06f8b390661c265eedf5749b":[1,0,0,39,0,1],
-"struct_p_g_e_1_1_string_1_1_iterator.html#aca9d8aca4496dab4ab3516d5fc66ccdb":[1,0,0,39,0,14],
-"struct_p_g_e_1_1_string_1_1_iterator.html#ad50301707cf55118d7d9f457be17fce7":[1,0,0,39,0,4],
-"struct_p_g_e_1_1_string_1_1_iterator.html#adbfd133127567dcd6d5f44c2949c6baf":[1,0,0,39,0,6],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html":[1,0,0,39,2],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#a3fb5c1d537a68472288c1422638cda5b":[1,0,0,39,2,0],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#a5ed81bb14531c5caa933d2a07f6fce23":[1,0,0,39,2,3],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#a81271fa78f79662e96f975be1bec0087":[1,0,0,39,2,1],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#afd3c65656fe877af5f3ed1bccaa88026":[1,0,0,39,2,2],
+"struct_p_g_e_1_1_string_1_1_redundant_key.html":[1,0,0,39,3],
+"struct_p_g_e_1_1_string_1_1_redundant_key.html#a7a575174570820a8167552151111b43f":[1,0,0,39,3,1],
+"struct_p_g_e_1_1_string_1_1_redundant_key.html#a8c93284fdb101f60b17b817beb5ddb80":[1,0,0,39,3,0],
+"struct_p_g_e_1_1_string_1_1_redundant_key.html#ae5dc51fb2e5aad307af21fb01a6ff685":[1,0,0,39,3,2],
+"struct_p_g_e_1_1_string_1_1_safe_key.html":[1,0,0,39,4],
+"struct_p_g_e_1_1_string_1_1_safe_key.html#a24098b52e52184f5fd57aa4f0e726ff6":[1,0,0,39,4,1],
+"struct_p_g_e_1_1_string_1_1_safe_key.html#a49e0875b7433d01521fb0eae9a099213":[1,0,0,39,4,2],
+"struct_p_g_e_1_1_string_1_1_safe_key.html#a620eb75595c977c0e740895664da7ab5":[1,0,0,39,4,0],
+"struct_p_g_e_1_1_string_1_1_safe_key.html#abf874c16151aba1b779335c1f2c15b26":[1,0,0,39,4,3],
 "struct_p_g_e_1_1_vertex_1_1_property.html":[1,0,0,9,0],
 "struct_p_g_e_1_1_vertex_1_1_property.html#a1f0308084146577b9017665f3b7a2bea":[1,0,0,9,0,1],
 "struct_p_g_e_1_1_vertex_1_1_property.html#a2156431242f07afca8df3cc86a864115":[1,0,0,9,0,2],
@@ -22,11 +32,5 @@ var NAVTREEINDEX4 =
 "struct_p_g_e_1_1_vertex_1_1_property.html#ae0f858e8f238974068f45f5da1235a1daccc0377a8afbf50e7094f5c23a8af223":[1,0,0,9,0,0,6],
 "struct_p_g_e_1_1_vertex_1_1_property.html#ae0f858e8f238974068f45f5da1235a1dae738c26bf4ce1037fa81b039a915cbf6":[1,0,0,9,0,0,0],
 "struct_p_g_e_1_1_vertex_1_1_property.html#af50a65050c75c057422a59f693ab2c78":[1,0,0,9,0,4],
-"struct_p_g_e_1_1_vertex_1_1_property.html#aff9f2d0490a92d58d334b43a48eb5b3f":[1,0,0,9,0,9],
-"":[0,0,0,6],
-"":[0,0,0,1],
-"":[0,0,0,5],
-"":[0,0,0,3],
-"":[0,0,0],
-"":[0,0,0,2]
+"struct_p_g_e_1_1_vertex_1_1_property.html#aff9f2d0490a92d58d334b43a48eb5b3f":[1,0,0,9,0,9]
 };

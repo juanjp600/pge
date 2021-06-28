@@ -21,7 +21,7 @@ var searchData=
   ['rectanglef_84',['Rectanglef',['../class_p_g_e_1_1_rectanglef.html',1,'PGE']]],
   ['rectanglei_85',['Rectanglei',['../class_p_g_e_1_1_rectanglei.html',1,'PGE']]],
   ['red_86',['RED',['../namespace_p_g_e_1_1_colors.html#a323d176fc7ce3fed43b2d3d9a9557afc',1,'PGE::Colors']]],
-  ['redundantkey_87',['RedundantKey',['../class_p_g_e_1_1_string_1_1_redundant_key.html',1,'PGE::String']]],
+  ['redundantkey_87',['RedundantKey',['../struct_p_g_e_1_1_string_1_1_redundant_key.html',1,'PGE::String']]],
   ['resource_88',['Resource',['../class_p_g_e_1_1_resource.html',1,'PGE']]],
   ['resource_3c_20t_20_2a_20_3e_89',['Resource&lt; T * &gt;',['../class_p_g_e_1_1_resource.html',1,'PGE']]],
   ['resourcebase_90',['ResourceBase',['../class_p_g_e_1_1_resource_base.html',1,'PGE']]],

@@ -1,10 +1,10 @@
 var class_p_g_e_1_1_string =
 [
     [ "\u202AIterator", "struct_p_g_e_1_1_string_1_1_iterator.html", "struct_p_g_e_1_1_string_1_1_iterator" ],
-    [ "\u202AKey", "class_p_g_e_1_1_string_1_1_key.html", "class_p_g_e_1_1_string_1_1_key" ],
-    [ "\u202AOrderedKey", "class_p_g_e_1_1_string_1_1_ordered_key.html", "class_p_g_e_1_1_string_1_1_ordered_key" ],
-    [ "\u202ARedundantKey", "class_p_g_e_1_1_string_1_1_redundant_key.html", "class_p_g_e_1_1_string_1_1_redundant_key" ],
-    [ "\u202ASafeKey", "class_p_g_e_1_1_string_1_1_safe_key.html", "class_p_g_e_1_1_string_1_1_safe_key" ],
+    [ "\u202AKey", "struct_p_g_e_1_1_string_1_1_key.html", "struct_p_g_e_1_1_string_1_1_key" ],
+    [ "\u202AOrderedKey", "struct_p_g_e_1_1_string_1_1_ordered_key.html", "struct_p_g_e_1_1_string_1_1_ordered_key" ],
+    [ "\u202ARedundantKey", "struct_p_g_e_1_1_string_1_1_redundant_key.html", "struct_p_g_e_1_1_string_1_1_redundant_key" ],
+    [ "\u202ASafeKey", "struct_p_g_e_1_1_string_1_1_safe_key.html", "struct_p_g_e_1_1_string_1_1_safe_key" ],
     [ "\u202AString", "class_p_g_e_1_1_string.html#ab0a4c49ab9a56f5b4ceb6e37b1fbcb47", null ],
     [ "\u202AString", "class_p_g_e_1_1_string.html#a9a3cbcf569b45b229cb7eee95322825d", null ],
     [ "\u202AString", "class_p_g_e_1_1_string.html#acab3beef14fce2ae2b05d7c1de732f66", null ],
