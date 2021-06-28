@@ -3,7 +3,7 @@
 using namespace PGE;
 
 ResourceManager::~ResourceManager() {
-    for (auto it = resources.rbegin(); it != resources.rend(); ++it) {
+    for (auto it = resources.rbegin(); it != resources.rend(); it++) {
         delete *it;
     }
 }

@@ -58,7 +58,7 @@ const String::Iterator String::Iterator::operator+(int steps) const {
     PGE_ASSERT(steps >= 0, "String iterators cannot go backwards");
     String::Iterator ret = *this;
     for (int i = 0; i < steps; i++) {
-        ++ret;
+        ret++;
     }
     return ret;
 }
@@ -66,7 +66,7 @@ const String::Iterator String::Iterator::operator+(int steps) const {
 void String::Iterator::operator+=(int steps) {
     PGE_ASSERT(steps >= 0, "String iterators cannot go backwards");
     for (int i = 0; i < steps; i++) {
-        ++*this;
+        (*this)++;
     }
 }
 
@@ -512,7 +512,7 @@ std::vector<wchar> String::wstr() const {
         chs.reserve(data->_strLength);
     }
     // Convert all the codepoints to wchars.
-    for (Iterator it = begin(); it != end(); ++it) {
+    for (Iterator it = begin(); it != end(); it++) {
         chs.push_back(*it);
     }
     chs.push_back(L'\0');
@@ -571,7 +571,7 @@ const String::Iterator String::findFirst(const String& fnd, int from) const {
 
 const String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
     PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
-    for (auto it = from; it != end(); ++it) {
+    for (auto it = from; it != end(); it++) {
         if (memcmp(fnd.cstr(), cstr() + it.index, fnd.byteLength()) == 0) { return it; }
     }
     return end();
@@ -584,7 +584,7 @@ const String::Iterator String::findLast(const String& fnd, int from) const {
 const String::Iterator String::findLast(const String& fnd, const Iterator& from) const {
     PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
     String::Iterator found = end();
-    for (auto it = from; it != end(); ++it) {
+    for (auto it = from; it != end(); it++) {
         if (memcmp(fnd.cstr(), cstr() + it.index, fnd.byteLength()) == 0) { found = it; }
     }
     return found;
@@ -621,7 +621,7 @@ const String String::substr(const Iterator& start, const Iterator& to) const {
 
 const String::Iterator String::charAt(int pos) const {
     Iterator it;
-    for (it = begin(); it != end() && it.charIndex != pos; ++it);
+    for (it = begin(); it != end() && it.charIndex != pos; it++);
     return it;
 }
 

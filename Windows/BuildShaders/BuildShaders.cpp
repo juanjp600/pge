@@ -105,13 +105,13 @@ static void writeConstants(BinaryWriter& writer, ReflectionInfo info) {
 namespace Parser {
     static void skip(String::Iterator& it, std::function<bool (wchar)> predicate) {
         while (predicate(*it)) {
-            ++it;
+            it++;
         }
     }
 
     static void expectFixed(String::Iterator& it, wchar ch) {
         PGE_ASSERT(*it == ch, String("Expected \"") + ch + "\", found \"" + *it + '"');
-        ++it;
+        it++;
     }
 }
 
@@ -159,13 +159,13 @@ static std::unordered_map<u64, String> parseVertexInput(const String& input) {
             semanticIndex = 0;
         } else {
             semanticIndex = *after - '0';
-            ++after;
+            after++;
         }
         inputNameSemanticRelation.emplace(combineStringUInt(semanticName, semanticIndex), inputName);
 
         before = after;
         // Skip ;
-        ++before;
+        before++;
         // Whitespace before type
         Parser::skip(before, isspace);
     }
