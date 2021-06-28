@@ -33,9 +33,6 @@ We have enough trust in the compiler to optimize away the unused return value an
 
 Example:
 ```cpp
-Iterator it;
-it++;
-// ^ Yes
-// v No
-++it;
+it++; // < Yes
+++it; // < No
 ```
