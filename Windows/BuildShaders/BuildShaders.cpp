@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <execution>
+#include <functional>
 #include <filesystem>
 
 #include <PGE/Exception/Exception.h>
@@ -101,6 +102,19 @@ static void writeConstants(BinaryWriter& writer, ReflectionInfo info) {
     }
 }
 
+namespace Parser {
+    static void skip(String::Iterator& it, std::function<bool (wchar)> predicate) {
+        while (predicate(*it)) {
+            ++it;
+        }
+    }
+
+    static void expectFixed(String::Iterator& it, wchar ch) {
+        PGE_ASSERT(*it == ch, String("Expected \"") + ch + "\", found \"" + *it + '"');
+        ++it;
+    }
+}
+
 static std::unordered_map<u64, String> parseVertexInput(const String& input) {
     // struct VS_INPUT {
     //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME''SEMANTIC_INDEX';
@@ -113,33 +127,31 @@ static std::unordered_map<u64, String> parseVertexInput(const String& input) {
     String vsInput = "struct VS_INPUT";
     String::Iterator before = input.findFirst(vsInput) + vsInput.length();
     // Space before {
-    while (isspace(*++before));
+    Parser::skip(before, isspace);
     // {
-    PGE_ASSERT(*before == '{', "Expected \"{\", found \"" + *before + '"');
-    ++before;
+    Parser::expectFixed(before, L'{');
     // Whitespace before first type
-    while (isspace(*++before));
-    while (*before != '}') {
+    Parser::skip(before, isspace);
+    while (*before != L'}') {
         // Type skip
-        while (!isspace(*++before));
+        Parser::skip(before, isalnum);
         // Whitespace after type
-        while (isspace(*++before));
+        Parser::skip(before, isspace);
         
         // Type
         String::Iterator after = before;
-        while (!isspace(*++after));
+        Parser::skip(after, isalnum);
         String inputName = input.substr(before, after);
 
         before = after;
         // Whitespace before colon
-        while (isspace(*++before));
-        PGE_ASSERT(*before == ':', "Expected \":\", found \"" + *before + '"');
-        ++before;
+        Parser::skip(before, isspace);
+        Parser::expectFixed(before, L':');
         // Whitespace after colon
-        while (isspace(*++before));
+        Parser::skip(before, isspace);
 
         after = before;
-        while (!isdigit(*++after) && *after != ';');
+        Parser::skip(after, [](wchar ch) { return !isdigit(ch) && ch != L';'; });
 
         String semanticName = input.substr(before, after);
         byte semanticIndex;
@@ -147,6 +159,7 @@ static std::unordered_map<u64, String> parseVertexInput(const String& input) {
             semanticIndex = 0;
         } else {
             semanticIndex = *after - '0';
+            ++after;
         }
         inputNameSemanticRelation.emplace(combineStringUInt(semanticName, semanticIndex), inputName);
 
@@ -154,7 +167,7 @@ static std::unordered_map<u64, String> parseVertexInput(const String& input) {
         // Skip ;
         ++before;
         // Whitespace before type
-        while (isspace(*++before));
+        Parser::skip(before, isspace);
     }
 
     return inputNameSemanticRelation;
