@@ -1,15 +1,20 @@
 var hierarchy =
 [
     [ "\u202APGE::AABBox", "class_p_g_e_1_1_a_a_b_box.html", null ],
-    [ "\u202APGE::BinaryReader", "class_p_g_e_1_1_binary_reader.html", null ],
-    [ "\u202APGE::BinaryWriter", "class_p_g_e_1_1_binary_writer.html", null ],
+    [ "\u202AAbstractIO< T >", "class_abstract_i_o.html", null ],
+    [ "\u202AAbstractIO< std::ifstream >", "class_abstract_i_o.html", [
+      [ "\u202APGE::BinaryReader", "class_p_g_e_1_1_binary_reader.html", null ],
+      [ "\u202APGE::TextReader", "class_p_g_e_1_1_text_reader.html", null ]
+    ] ],
+    [ "\u202AAbstractIO< std::ofstream >", "class_abstract_i_o.html", [
+      [ "\u202APGE::BinaryWriter", "class_p_g_e_1_1_binary_writer.html", null ],
+      [ "\u202APGE::TextWriter", "class_p_g_e_1_1_text_writer.html", null ]
+    ] ],
     [ "\u202APGE::Color", "class_p_g_e_1_1_color.html", null ],
     [ "\u202APGE::Shader::Constant", "class_p_g_e_1_1_shader_1_1_constant.html", null ],
     [ "\u202APGE::Controller", "class_p_g_e_1_1_controller.html", null ],
     [ "\u202APGE::Exception", "class_p_g_e_1_1_exception.html", null ],
     [ "\u202APGE::FilePath", "class_p_g_e_1_1_file_path.html", null ],
-    [ "\u202APGE::FileReader", "class_p_g_e_1_1_file_reader.html", null ],
-    [ "\u202APGE::FileWriter", "class_p_g_e_1_1_file_writer.html", null ],
     [ "\u202APGE::Graphics", "class_p_g_e_1_1_graphics.html", null ],
     [ "\u202APGE::Input", "class_p_g_e_1_1_input.html", [
       [ "\u202APGE::ControllerInput", "class_p_g_e_1_1_controller_input.html", null ],
@@ -17,7 +22,7 @@ var hierarchy =
       [ "\u202APGE::MouseInput", "class_p_g_e_1_1_mouse_input.html", null ]
     ] ],
     [ "\u202APGE::InputManager", "class_p_g_e_1_1_input_manager.html", null ],
-    [ "\u202APGE::String::Iterator", "class_p_g_e_1_1_string_1_1_iterator.html", null ],
+    [ "\u202APGE::String::Iterator", "struct_p_g_e_1_1_string_1_1_iterator.html", null ],
     [ "\u202APGE::String::Key", "class_p_g_e_1_1_string_1_1_key.html", null ],
     [ "\u202APGE::Line2f", "class_p_g_e_1_1_line2f.html", null ],
     [ "\u202APGE::Line2i", "class_p_g_e_1_1_line2i.html", null ],

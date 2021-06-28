@@ -1,7 +1,6 @@
 var class_p_g_e_1_1_binary_writer =
 [
-    [ "\u202ABinaryWriter", "class_p_g_e_1_1_binary_writer.html#a84f96fb924ddb336d2cb816b927f1990", null ],
-    [ "\u202AearlyClose", "class_p_g_e_1_1_binary_writer.html#a46a8a6aab3be07ed9669a28533b53ae7", null ],
+    [ "\u202ABinaryWriter", "class_p_g_e_1_1_binary_writer.html#a6f5a741aae9e62973ba147592051cd7e", null ],
     [ "\u202AwriteBoolean", "class_p_g_e_1_1_binary_writer.html#ac514002a097bf40ca2e9288954d1e512", null ],
     [ "\u202AwriteByte", "class_p_g_e_1_1_binary_writer.html#a0d0ee06868b9756a9797ffa001c42307", null ],
     [ "\u202AwriteBytes", "class_p_g_e_1_1_binary_writer.html#a2acfaabd8bc12e2c211f28c4b03d1837", null ],

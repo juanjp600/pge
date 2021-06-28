@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>&#x202A;pulsegun engine: &#x202A;PGE::String::Iterator Class Reference</title>
+<title>&#x202A;pulsegun engine: &#x202A;PGE::String::Iterator Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -65,7 +65,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('class_p_g_e_1_1_string_1_1_iterator.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('struct_p_g_e_1_1_string_1_1_iterator.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -85,41 +85,57 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_string_1_1_iterator.ht
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="class_p_g_e_1_1_string_1_1_iterator-members.html">List of all members</a>  </div>
+<a href="struct_p_g_e_1_1_string_1_1_iterator-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">PGE::String::Iterator Class Reference</div>  </div>
+<div class="title">PGE::String::Iterator Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:aac621f6e06f8b390661c265eedf5749b"><td class="memItemLeft" align="right" valign="top"><a id="aac621f6e06f8b390661c265eedf5749b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_category</b> = std::forward_iterator_tag</td></tr>
+<tr class="separator:aac621f6e06f8b390661c265eedf5749b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bb42471505779723a51489f9a81684d"><td class="memItemLeft" align="right" valign="top"><a id="a1bb42471505779723a51489f9a81684d"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = unsigned</td></tr>
+<tr class="separator:a1bb42471505779723a51489f9a81684d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad50301707cf55118d7d9f457be17fce7"><td class="memItemLeft" align="right" valign="top"><a id="ad50301707cf55118d7d9f457be17fce7"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = wchar</td></tr>
+<tr class="separator:ad50301707cf55118d7d9f457be17fce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a297e8f016484df3e453ebb55045f3c20"><td class="memItemLeft" align="right" valign="top"><a id="a297e8f016484df3e453ebb55045f3c20"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_type *</td></tr>
+<tr class="separator:a297e8f016484df3e453ebb55045f3c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42f7b29049e3ad25a566b130756c74b8"><td class="memItemLeft" align="right" valign="top"><a id="a42f7b29049e3ad25a566b130756c74b8"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = value_type &amp;</td></tr>
+<tr class="separator:a42f7b29049e3ad25a566b130756c74b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:adbfd133127567dcd6d5f44c2949c6baf"><td class="memItemLeft" align="right" valign="top"><a id="adbfd133127567dcd6d5f44c2949c6baf"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Iterator</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;str)</td></tr>
 <tr class="separator:adbfd133127567dcd6d5f44c2949c6baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c3d6f3a8c2b6f68b1230dfd54979b4d"><td class="memItemLeft" align="right" valign="top"><a id="a2c3d6f3a8c2b6f68b1230dfd54979b4d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>increment</b> ()</td></tr>
-<tr class="separator:a2c3d6f3a8c2b6f68b1230dfd54979b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61b537f0aedb01ce19f49a9d5b9a75c3"><td class="memItemLeft" align="right" valign="top"><a id="a61b537f0aedb01ce19f49a9d5b9a75c3"></a>
-<a class="el" href="class_p_g_e_1_1_string_1_1_iterator.html">Iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> ()</td></tr>
+<a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> ()</td></tr>
 <tr class="separator:a61b537f0aedb01ce19f49a9d5b9a75c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a7a3f4de64c4e9cb4634b51526d6a00"><td class="memItemLeft" align="right" valign="top"><a id="a2a7a3f4de64c4e9cb4634b51526d6a00"></a>
-const <a class="el" href="class_p_g_e_1_1_string_1_1_iterator.html">Iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> (int)</td></tr>
+const <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> (int)</td></tr>
 <tr class="separator:a2a7a3f4de64c4e9cb4634b51526d6a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ee6f608a4f844430884f7096044456f"><td class="memItemLeft" align="right" valign="top"><a id="a6ee6f608a4f844430884f7096044456f"></a>
-const <a class="el" href="class_p_g_e_1_1_string_1_1_iterator.html">Iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (int steps) const</td></tr>
+const <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (int steps) const</td></tr>
 <tr class="separator:a6ee6f608a4f844430884f7096044456f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38e0cd130d6f8746602885e00049163c"><td class="memItemLeft" align="right" valign="top"><a id="a38e0cd130d6f8746602885e00049163c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>operator+=</b> (int steps)</td></tr>
 <tr class="separator:a38e0cd130d6f8746602885e00049163c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5c2b9ded0fb460f39679c6f180e641a"><td class="memItemLeft" align="right" valign="top"><a id="aa5c2b9ded0fb460f39679c6f180e641a"></a>
-char32_t&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> () const</td></tr>
-<tr class="separator:aa5c2b9ded0fb460f39679c6f180e641a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d5aed73ecdb6bb08176b86d88cdbc7d"><td class="memItemLeft" align="right" valign="top"><a id="a4d5aed73ecdb6bb08176b86d88cdbc7d"></a>
+wchar&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> () const</td></tr>
+<tr class="separator:a4d5aed73ecdb6bb08176b86d88cdbc7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca9d8aca4496dab4ab3516d5fc66ccdb"><td class="memItemLeft" align="right" valign="top"><a id="aca9d8aca4496dab4ab3516d5fc66ccdb"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="class_p_g_e_1_1_string_1_1_iterator.html">Iterator</a> &amp;other) const</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a> &amp;other) const</td></tr>
 <tr class="separator:aca9d8aca4496dab4ab3516d5fc66ccdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75105b3726e43469764794cdad2d8118"><td class="memItemLeft" align="right" valign="top"><a id="a75105b3726e43469764794cdad2d8118"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="class_p_g_e_1_1_string_1_1_iterator.html">Iterator</a> &amp;other) const</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a> &amp;other) const</td></tr>
 <tr class="separator:a75105b3726e43469764794cdad2d8118"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d2f6c250a6d958e16bfc4f4936cf606"><td class="memItemLeft" align="right" valign="top"><a id="a8d2f6c250a6d958e16bfc4f4936cf606"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>getPosition</b> () const</td></tr>
@@ -130,7 +146,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>getPosition</b> () con
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespace_p_g_e.html">&#x202A;PGE</a></li><li class="navelem"><a class="el" href="class_p_g_e_1_1_string.html">&#x202A;String</a></li><li class="navelem"><a class="el" href="class_p_g_e_1_1_string_1_1_iterator.html">&#x202A;Iterator</a></li>
+    <li class="navelem"><b>&#x202A;PGE</b></li><li class="navelem"><a class="el" href="class_p_g_e_1_1_string.html">&#x202A;String</a></li><li class="navelem"><a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">&#x202A;Iterator</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>

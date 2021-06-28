@@ -88,7 +88,6 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_color.html',''); initR
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="class_p_g_e_1_1_color-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">PGE::Color Class Reference</div>  </div>
@@ -102,56 +101,58 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_color.html',''); initR
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4e6b8425bf9d831ee50b1ffd4c66ee90"><td class="memItemLeft" align="right" valign="top"><a id="a4e6b8425bf9d831ee50b1ffd4c66ee90"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#a4e6b8425bf9d831ee50b1ffd4c66ee90">Color</a> ()</td></tr>
-<tr class="memdesc:a4e6b8425bf9d831ee50b1ffd4c66ee90"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Default constructs fully opaque white (#PGE::Color::WHITE). <br /></td></tr>
-<tr class="separator:a4e6b8425bf9d831ee50b1ffd4c66ee90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6b408ca036faa692643835fb34882bd"><td class="memItemLeft" align="right" valign="top"><a id="aa6b408ca036faa692643835fb34882bd"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#aa6b408ca036faa692643835fb34882bd">Color</a> (byte r, byte g, byte b, byte a=255)</td></tr>
-<tr class="memdesc:aa6b408ca036faa692643835fb34882bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Converts bytes in range [0, 255] to floats in range [0, 1]. <br /></td></tr>
-<tr class="separator:aa6b408ca036faa692643835fb34882bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06926be228b9c7c1877d3dfd3583dd7a"><td class="memItemLeft" align="right" valign="top"><a id="a06926be228b9c7c1877d3dfd3583dd7a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#a06926be228b9c7c1877d3dfd3583dd7a">Color</a> (float r, float g, float b, float a=1.f)</td></tr>
-<tr class="memdesc:a06926be228b9c7c1877d3dfd3583dd7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Values should be in range [0, 1]. <br /></td></tr>
-<tr class="separator:a06926be228b9c7c1877d3dfd3583dd7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29630732f4933b39c6f63082dd655872"><td class="memItemLeft" align="right" valign="top"><a id="a29630732f4933b39c6f63082dd655872"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#a29630732f4933b39c6f63082dd655872">operator==</a> (const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> &amp;other) const</td></tr>
-<tr class="memdesc:a29630732f4933b39c6f63082dd655872"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Uses regular float equality. <br /></td></tr>
-<tr class="separator:a29630732f4933b39c6f63082dd655872"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff90eb23624514e7e447e7a983c62cac"><td class="memItemLeft" align="right" valign="top"><a id="aff90eb23624514e7e447e7a983c62cac"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#aff90eb23624514e7e447e7a983c62cac">operator!=</a> (const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> &amp;other) const</td></tr>
-<tr class="memdesc:aff90eb23624514e7e447e7a983c62cac"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Uses regular float equality. <br /></td></tr>
-<tr class="separator:aff90eb23624514e7e447e7a983c62cac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa24c98108a2055ab7062128bc81ace5a"><td class="memItemLeft" align="right" valign="top"><a id="aa24c98108a2055ab7062128bc81ace5a"></a>
-byte&#160;</td><td class="memItemRight" valign="bottom"><b>getRed</b> () const</td></tr>
-<tr class="separator:aa24c98108a2055ab7062128bc81ace5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2bc5adfbc3811454d6ba6656bef98e6"><td class="memItemLeft" align="right" valign="top"><a id="ac2bc5adfbc3811454d6ba6656bef98e6"></a>
-byte&#160;</td><td class="memItemRight" valign="bottom"><b>getGreen</b> () const</td></tr>
-<tr class="separator:ac2bc5adfbc3811454d6ba6656bef98e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ebcb9c117acb567592d2e5779aad063"><td class="memItemLeft" align="right" valign="top"><a id="a6ebcb9c117acb567592d2e5779aad063"></a>
-byte&#160;</td><td class="memItemRight" valign="bottom"><b>getBlue</b> () const</td></tr>
-<tr class="separator:a6ebcb9c117acb567592d2e5779aad063"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af79055bc20e1e6f56a920fe23b87f8ab"><td class="memItemLeft" align="right" valign="top"><a id="af79055bc20e1e6f56a920fe23b87f8ab"></a>
-byte&#160;</td><td class="memItemRight" valign="bottom"><b>getAlpha</b> () const</td></tr>
-<tr class="separator:af79055bc20e1e6f56a920fe23b87f8ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74593a9c16e15adca68f9a847a56babd"><td class="memItemLeft" align="right" valign="top"><a id="a74593a9c16e15adca68f9a847a56babd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setRed</b> (byte r)</td></tr>
-<tr class="separator:a74593a9c16e15adca68f9a847a56babd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adaeedf6491ddc5567b8aee0882476457"><td class="memItemLeft" align="right" valign="top"><a id="adaeedf6491ddc5567b8aee0882476457"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setGreen</b> (byte g)</td></tr>
-<tr class="separator:adaeedf6491ddc5567b8aee0882476457"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4162669c369859bf8d9bba95655f8197"><td class="memItemLeft" align="right" valign="top"><a id="a4162669c369859bf8d9bba95655f8197"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setBlue</b> (byte b)</td></tr>
-<tr class="separator:a4162669c369859bf8d9bba95655f8197"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9a773e56739c434aeb9147356ab6fa4"><td class="memItemLeft" align="right" valign="top"><a id="aa9a773e56739c434aeb9147356ab6fa4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setAlpha</b> (byte a)</td></tr>
-<tr class="separator:aa9a773e56739c434aeb9147356ab6fa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaef1ad74abf24df5bebd39ced3a1b760"><td class="memItemLeft" align="right" valign="top"><a id="aaef1ad74abf24df5bebd39ced3a1b760"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#aaef1ad74abf24df5bebd39ced3a1b760">Color</a> () noexcept</td></tr>
+<tr class="memdesc:aaef1ad74abf24df5bebd39ced3a1b760"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Default constructs fully opaque white (<a class="el" href="namespace_p_g_e_1_1_colors.html#a2f2ae893c96771119539a76996ab0e5e" title="&#x202A;#FFFFFF">PGE::Colors::WHITE</a>). <br /></td></tr>
+<tr class="separator:aaef1ad74abf24df5bebd39ced3a1b760"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac603eefb1b69e34643cfec9f490780ac"><td class="memItemLeft" align="right" valign="top"><a id="ac603eefb1b69e34643cfec9f490780ac"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#ac603eefb1b69e34643cfec9f490780ac">Color</a> (byte r, byte g, byte b, byte a=255) noexcept</td></tr>
+<tr class="memdesc:ac603eefb1b69e34643cfec9f490780ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Converts bytes in range [0, 255] to floats in range [0, 1]. <br /></td></tr>
+<tr class="separator:ac603eefb1b69e34643cfec9f490780ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf63cc19e11f2c972d2a02ac3a925826"><td class="memItemLeft" align="right" valign="top"><a id="adf63cc19e11f2c972d2a02ac3a925826"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#adf63cc19e11f2c972d2a02ac3a925826">Color</a> (float r, float g, float b, float a=1.f) noexcept</td></tr>
+<tr class="memdesc:adf63cc19e11f2c972d2a02ac3a925826"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Values should be in range [0, 1]. <br /></td></tr>
+<tr class="separator:adf63cc19e11f2c972d2a02ac3a925826"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24cafb0165b80f14d038bb1b4a807f6a"><td class="memItemLeft" align="right" valign="top"><a id="a24cafb0165b80f14d038bb1b4a807f6a"></a>
+constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#a24cafb0165b80f14d038bb1b4a807f6a">operator==</a> (const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> &amp;other) const noexcept</td></tr>
+<tr class="memdesc:a24cafb0165b80f14d038bb1b4a807f6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Uses regular float equality. <br /></td></tr>
+<tr class="separator:a24cafb0165b80f14d038bb1b4a807f6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bf8359702853693b44bce2b628760d5"><td class="memItemLeft" align="right" valign="top"><a id="a4bf8359702853693b44bce2b628760d5"></a>
+constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#a4bf8359702853693b44bce2b628760d5">operator!=</a> (const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> &amp;other) const noexcept</td></tr>
+<tr class="memdesc:a4bf8359702853693b44bce2b628760d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Uses regular float equality. <br /></td></tr>
+<tr class="separator:a4bf8359702853693b44bce2b628760d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79a508235894e022b4c2a54ff79900a2"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#a79a508235894e022b4c2a54ff79900a2">equals</a> (const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> &amp;other, float epsilon=<a class="el" href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">Math::EPSILON_DEFAULT</a>) const noexcept</td></tr>
+<tr class="separator:a79a508235894e022b4c2a54ff79900a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2d496d5bed830234b0086df4db891b1"><td class="memItemLeft" align="right" valign="top"><a id="af2d496d5bed830234b0086df4db891b1"></a>
+constexpr byte&#160;</td><td class="memItemRight" valign="bottom"><b>getRed</b> () const noexcept</td></tr>
+<tr class="separator:af2d496d5bed830234b0086df4db891b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03992c31bb1846b24054f37995a50c06"><td class="memItemLeft" align="right" valign="top"><a id="a03992c31bb1846b24054f37995a50c06"></a>
+constexpr byte&#160;</td><td class="memItemRight" valign="bottom"><b>getGreen</b> () const noexcept</td></tr>
+<tr class="separator:a03992c31bb1846b24054f37995a50c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64fba39783deca482dfcbd73f4237529"><td class="memItemLeft" align="right" valign="top"><a id="a64fba39783deca482dfcbd73f4237529"></a>
+constexpr byte&#160;</td><td class="memItemRight" valign="bottom"><b>getBlue</b> () const noexcept</td></tr>
+<tr class="separator:a64fba39783deca482dfcbd73f4237529"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b1cad75ed441649353da347625bfd36"><td class="memItemLeft" align="right" valign="top"><a id="a1b1cad75ed441649353da347625bfd36"></a>
+constexpr byte&#160;</td><td class="memItemRight" valign="bottom"><b>getAlpha</b> () const noexcept</td></tr>
+<tr class="separator:a1b1cad75ed441649353da347625bfd36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2f70345ec876e254db2d993b8766055"><td class="memItemLeft" align="right" valign="top"><a id="ae2f70345ec876e254db2d993b8766055"></a>
+constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>setRed</b> (byte r) noexcept</td></tr>
+<tr class="separator:ae2f70345ec876e254db2d993b8766055"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86dfa765d991498dc7995a7e4f7a44d9"><td class="memItemLeft" align="right" valign="top"><a id="a86dfa765d991498dc7995a7e4f7a44d9"></a>
+constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>setGreen</b> (byte g) noexcept</td></tr>
+<tr class="separator:a86dfa765d991498dc7995a7e4f7a44d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae41aef832eca7554ac5c3e295ae2fe2"><td class="memItemLeft" align="right" valign="top"><a id="aae41aef832eca7554ac5c3e295ae2fe2"></a>
+constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>setBlue</b> (byte b) noexcept</td></tr>
+<tr class="separator:aae41aef832eca7554ac5c3e295ae2fe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fb09a5b2d46e4e922cc1bd45bba31bc"><td class="memItemLeft" align="right" valign="top"><a id="a7fb09a5b2d46e4e922cc1bd45bba31bc"></a>
+constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>setAlpha</b> (byte a) noexcept</td></tr>
+<tr class="separator:a7fb09a5b2d46e4e922cc1bd45bba31bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a08b7644b746199d1fcbb32dbb196d28d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#a08b7644b746199d1fcbb32dbb196d28d">fromHSV</a> (float h, float s, float v, float a=1.f)</td></tr>
-<tr class="memdesc:a08b7644b746199d1fcbb32dbb196d28d"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Converts HSV(A) to RGBA.  <a href="class_p_g_e_1_1_color.html#a08b7644b746199d1fcbb32dbb196d28d">More...</a><br /></td></tr>
-<tr class="separator:a08b7644b746199d1fcbb32dbb196d28d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac971deaf75803c534a110e46c9c0bcaa"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#ac971deaf75803c534a110e46c9c0bcaa">fromHSV</a> (float h, float s, float v, float a=1.f)</td></tr>
+<tr class="memdesc:ac971deaf75803c534a110e46c9c0bcaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Converts HSV(A) to RGBA.  <a href="class_p_g_e_1_1_color.html#ac971deaf75803c534a110e46c9c0bcaa">More...</a><br /></td></tr>
+<tr class="separator:ac971deaf75803c534a110e46c9c0bcaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -167,47 +168,13 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>blue</b></td></tr>
 <tr class="memitem:a22ead5ca9b1984c91a593a3f3ac94e93"><td class="memItemLeft" align="right" valign="top"><a id="a22ead5ca9b1984c91a593a3f3ac94e93"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b></td></tr>
 <tr class="separator:a22ead5ca9b1984c91a593a3f3ac94e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:af90083624574f835e48f039e638c6b23"><td class="memItemLeft" align="right" valign="top"><a id="af90083624574f835e48f039e638c6b23"></a>
-static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#af90083624574f835e48f039e638c6b23">RED</a></td></tr>
-<tr class="memdesc:af90083624574f835e48f039e638c6b23"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;A few common colors. <br /></td></tr>
-<tr class="separator:af90083624574f835e48f039e638c6b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31b95dc96f0d12b5b922c61b063fa4c1"><td class="memItemLeft" align="right" valign="top"><a id="a31b95dc96f0d12b5b922c61b063fa4c1"></a>
-static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GREEN</b></td></tr>
-<tr class="separator:a31b95dc96f0d12b5b922c61b063fa4c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c04a47123879dccd45b141718c9a828"><td class="memItemLeft" align="right" valign="top"><a id="a1c04a47123879dccd45b141718c9a828"></a>
-static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>BLUE</b></td></tr>
-<tr class="separator:a1c04a47123879dccd45b141718c9a828"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72705e00e3dd39fe24bcfe2ac6801574"><td class="memItemLeft" align="right" valign="top"><a id="a72705e00e3dd39fe24bcfe2ac6801574"></a>
-static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ORANGE</b></td></tr>
-<tr class="separator:a72705e00e3dd39fe24bcfe2ac6801574"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb84ecc022f8acd8cfa85c9e97c03a16"><td class="memItemLeft" align="right" valign="top"><a id="adb84ecc022f8acd8cfa85c9e97c03a16"></a>
-static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>YELLOW</b></td></tr>
-<tr class="separator:adb84ecc022f8acd8cfa85c9e97c03a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a555e2913f42d9eca25c74ced1d079572"><td class="memItemLeft" align="right" valign="top"><a id="a555e2913f42d9eca25c74ced1d079572"></a>
-static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CYAN</b></td></tr>
-<tr class="separator:a555e2913f42d9eca25c74ced1d079572"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44ea6a226c16ff3ff75bb71b8bee3435"><td class="memItemLeft" align="right" valign="top"><a id="a44ea6a226c16ff3ff75bb71b8bee3435"></a>
-static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>MAGENTA</b></td></tr>
-<tr class="separator:a44ea6a226c16ff3ff75bb71b8bee3435"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97933f54dba42afcef7f1cbaecd810e4"><td class="memItemLeft" align="right" valign="top"><a id="a97933f54dba42afcef7f1cbaecd810e4"></a>
-static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>WHITE</b></td></tr>
-<tr class="separator:a97933f54dba42afcef7f1cbaecd810e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b62ba1990b7da43e617fde52521b0ce"><td class="memItemLeft" align="right" valign="top"><a id="a3b62ba1990b7da43e617fde52521b0ce"></a>
-static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GRAY</b></td></tr>
-<tr class="separator:a3b62ba1990b7da43e617fde52521b0ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e1a5d501c820775cbfd4e2d915c2200"><td class="memItemLeft" align="right" valign="top"><a id="a5e1a5d501c820775cbfd4e2d915c2200"></a>
-static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>BLACK</b></td></tr>
-<tr class="separator:a5e1a5d501c820775cbfd4e2d915c2200"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p class="DocNodeLTR">An RGBA color represented via 4 floating point numbers. </p>
-<p class="DocNodeLTR">Attributes are public. </p>
+<p class="DocNodeLTR">Attributes are public. </p><dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="namespace_p_g_e_1_1_colors.html" title="&#x202A;A few common colors.">PGE::Colors</a> </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a08b7644b746199d1fcbb32dbb196d28d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08b7644b746199d1fcbb32dbb196d28d">&#9670;&nbsp;</a></span>fromHSV()</h2>
+<a id="a79a508235894e022b4c2a54ff79900a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79a508235894e022b4c2a54ff79900a2">&#9670;&nbsp;</a></span>equals()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -216,7 +183,44 @@ static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="class_p_g_e_1_1_color.html">Color</a> PGE::Color::fromHSV </td>
+          <td class="memname">constexpr bool PGE::Color::equals </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>epsilon</em> = <code><a class="el" href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">Math::EPSILON_DEFAULT</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77" title="&#x202A;Two values are considered equal if |val - other| &lt; epsilon.">PGE::Math::equalFloats()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ac971deaf75803c534a110e46c9c0bcaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac971deaf75803c534a110e46c9c0bcaa">&#9670;&nbsp;</a></span>fromHSV()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> PGE::Color::fromHSV </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>h</em>, </td>
@@ -247,7 +251,7 @@ static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -277,7 +281,7 @@ static const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespace_p_g_e.html">&#x202A;PGE</a></li><li class="navelem"><a class="el" href="class_p_g_e_1_1_color.html">&#x202A;Color</a></li>
+    <li class="navelem"><b>&#x202A;PGE</b></li><li class="navelem"><a class="el" href="class_p_g_e_1_1_color.html">&#x202A;Color</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>

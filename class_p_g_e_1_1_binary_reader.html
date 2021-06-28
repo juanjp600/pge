@@ -96,15 +96,21 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_binary_reader.html',''
  <a href="class_p_g_e_1_1_binary_reader.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_binary_reader_8h_source.html">PGE/File/BinaryReader.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for PGE::BinaryReader:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_p_g_e_1_1_binary_reader.png" usemap="#PGE::BinaryReader_map" alt=""/>
+  <map id="PGE::BinaryReader_map" name="PGE::BinaryReader_map">
+<area href="class_abstract_i_o.html" alt="AbstractIO&lt; std::ifstream &gt;" shape="rect" coords="0,0,162,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9d992421b554b132adc67fb8158f5608"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a9d992421b554b132adc67fb8158f5608">BinaryReader</a> (const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> &amp;file)</td></tr>
 <tr class="memdesc:a9d992421b554b132adc67fb8158f5608"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Opens the file handle.  <a href="class_p_g_e_1_1_binary_reader.html#a9d992421b554b132adc67fb8158f5608">More...</a><br /></td></tr>
 <tr class="separator:a9d992421b554b132adc67fb8158f5608"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5bd07365b9447659c0dd42b6ad2dc70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#aa5bd07365b9447659c0dd42b6ad2dc70">earlyClose</a> ()</td></tr>
-<tr class="memdesc:aa5bd07365b9447659c0dd42b6ad2dc70"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Closes the stream prematurely.  <a href="class_p_g_e_1_1_binary_reader.html#aa5bd07365b9447659c0dd42b6ad2dc70">More...</a><br /></td></tr>
-<tr class="separator:aa5bd07365b9447659c0dd42b6ad2dc70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9397f0cc758a587c9b40c1a618e9e109"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a9397f0cc758a587c9b40c1a618e9e109">endOfFile</a> () const noexcept</td></tr>
 <tr class="memdesc:a9397f0cc758a587c9b40c1a618e9e109"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Whether a previous function call attempted to read past the end of the file.  <a href="class_p_g_e_1_1_binary_reader.html#a9397f0cc758a587c9b40c1a618e9e109">More...</a><br /></td></tr>
 <tr class="separator:a9397f0cc758a587c9b40c1a618e9e109"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,18 +141,18 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a57b443840bf2d4bf4bfc88936b03e15d">readDouble</a> ()</td></tr>
 <tr class="memdesc:a57b443840bf2d4bf4bfc88936b03e15d"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets 8 bytes as a 64-bit floating point number. <br /></td></tr>
 <tr class="separator:a57b443840bf2d4bf4bfc88936b03e15d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74ff3251e3c1b277f4540d0264691c02"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a74ff3251e3c1b277f4540d0264691c02">readNullTerminatedString</a> ()</td></tr>
-<tr class="memdesc:a74ff3251e3c1b277f4540d0264691c02"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a> until a terminating null byte is encountered.  <a href="class_p_g_e_1_1_binary_reader.html#a74ff3251e3c1b277f4540d0264691c02">More...</a><br /></td></tr>
-<tr class="separator:a74ff3251e3c1b277f4540d0264691c02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a299c7a2983b8324454d116a60c814baf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a299c7a2983b8324454d116a60c814baf">readFixedLengthString</a> (int length)</td></tr>
-<tr class="memdesc:a299c7a2983b8324454d116a60c814baf"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads the given amount of bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a>.  <a href="class_p_g_e_1_1_binary_reader.html#a299c7a2983b8324454d116a60c814baf">More...</a><br /></td></tr>
-<tr class="separator:a299c7a2983b8324454d116a60c814baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9166b01ad4cbde1393c425843fa012d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a9166b01ad4cbde1393c425843fa012d1">readVector2f</a> ()</td></tr>
-<tr class="memdesc:a9166b01ad4cbde1393c425843fa012d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets two floats as a 2 component vector.  <a href="class_p_g_e_1_1_binary_reader.html#a9166b01ad4cbde1393c425843fa012d1">More...</a><br /></td></tr>
-<tr class="separator:a9166b01ad4cbde1393c425843fa012d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e73d2fbfa7c21e21cf5cc1a4dcacbba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a9e73d2fbfa7c21e21cf5cc1a4dcacbba">readVector3f</a> ()</td></tr>
-<tr class="memdesc:a9e73d2fbfa7c21e21cf5cc1a4dcacbba"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets three floats as a 3 component vector.  <a href="class_p_g_e_1_1_binary_reader.html#a9e73d2fbfa7c21e21cf5cc1a4dcacbba">More...</a><br /></td></tr>
-<tr class="separator:a9e73d2fbfa7c21e21cf5cc1a4dcacbba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af86e53291fa7f08e23bc410d193443e6"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#af86e53291fa7f08e23bc410d193443e6">readNullTerminatedString</a> ()</td></tr>
+<tr class="memdesc:af86e53291fa7f08e23bc410d193443e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a> until a terminating null byte is encountered.  <a href="class_p_g_e_1_1_binary_reader.html#af86e53291fa7f08e23bc410d193443e6">More...</a><br /></td></tr>
+<tr class="separator:af86e53291fa7f08e23bc410d193443e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa424c78b12bc5343e721f8fe90e444bc"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#aa424c78b12bc5343e721f8fe90e444bc">readFixedLengthString</a> (int length)</td></tr>
+<tr class="memdesc:aa424c78b12bc5343e721f8fe90e444bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads the given amount of bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a>.  <a href="class_p_g_e_1_1_binary_reader.html#aa424c78b12bc5343e721f8fe90e444bc">More...</a><br /></td></tr>
+<tr class="separator:aa424c78b12bc5343e721f8fe90e444bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b94bab93c33331757da3fdf630ac135"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a6b94bab93c33331757da3fdf630ac135">readVector2f</a> ()</td></tr>
+<tr class="memdesc:a6b94bab93c33331757da3fdf630ac135"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets two floats as a 2 component vector.  <a href="class_p_g_e_1_1_binary_reader.html#a6b94bab93c33331757da3fdf630ac135">More...</a><br /></td></tr>
+<tr class="separator:a6b94bab93c33331757da3fdf630ac135"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0c74a283394906ddb306029366d2070"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#af0c74a283394906ddb306029366d2070">readVector3f</a> ()</td></tr>
+<tr class="memdesc:af0c74a283394906ddb306029366d2070"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets three floats as a 3 component vector.  <a href="class_p_g_e_1_1_binary_reader.html#af0c74a283394906ddb306029366d2070">More...</a><br /></td></tr>
+<tr class="separator:af0c74a283394906ddb306029366d2070"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a900e87b23551a3a2d4dd95c029b2592d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a900e87b23551a3a2d4dd95c029b2592d">skip</a> (int length)</td></tr>
 <tr class="memdesc:a900e87b23551a3a2d4dd95c029b2592d"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Skips a given amount of bytes from the file, simply discarding them.  <a href="class_p_g_e_1_1_binary_reader.html#a900e87b23551a3a2d4dd95c029b2592d">More...</a><br /></td></tr>
 <tr class="separator:a900e87b23551a3a2d4dd95c029b2592d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,7 +167,9 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </dl>
 <dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_binary_reader.html#a9397f0cc758a587c9b40c1a618e9e109" title="&#x202A;Whether a previous function call attempted to read past the end of the file.">endOfFile</a> </dd>
 <dd>
-&#x202A;<a class="el" href="class_p_g_e_1_1_binary_writer.html" title="&#x202A;Utility to write binary data to a file.">PGE::BinaryWriter</a> </dd></dl>
+&#x202A;<a class="el" href="class_p_g_e_1_1_binary_writer.html" title="&#x202A;Utility to write binary data to a file.">PGE::BinaryWriter</a> </dd>
+<dd>
+&#x202A;<a class="el" href="class_p_g_e_1_1_text_writer.html" title="&#x202A;Utility to write text to a file.">PGE::TextWriter</a> </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9d992421b554b132adc67fb8158f5608"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9d992421b554b132adc67fb8158f5608">&#9670;&nbsp;</a></span>BinaryReader()</h2>
@@ -182,7 +190,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 <p>&#x202A;Opens the file handle. </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;if the file could not be opened. </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;if the path is invalid or the file could not be opened. </td></tr>
   </table>
   </dd>
 </dl>
@@ -190,32 +198,6 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa5bd07365b9447659c0dd42b6ad2dc70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5bd07365b9447659c0dd42b6ad2dc70">&#9670;&nbsp;</a></span>earlyClose()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void PGE::BinaryReader::earlyClose </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>&#x202A;Closes the stream prematurely. </p>
-<p class="DocNodeLTR">Calling this is <em>not</em> necessary, the destructor will clean everything up appropriately, however, possible failure of the close operation will be swallowed in the destructor, while it will be thrown here.</p>
-<p class="DocNodeLTR">Calling <em>any</em> further methods after attempting to close a reader (including attempting to close it again) will have no ill effects, but will cause an exception to be raised every call. </p><dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;if closing fails. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a9397f0cc758a587c9b40c1a618e9e109"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9397f0cc758a587c9b40c1a618e9e109">&#9670;&nbsp;</a></span>endOfFile()</h2>
 
@@ -240,7 +222,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </div><div class="memdoc">
 
 <p>&#x202A;Whether a previous function call attempted to read past the end of the file. </p>
-<p class="DocNodeLTR">The first call to read past the end of the file will cause <a class="el" href="class_p_g_e_1_1_binary_reader.html#a9397f0cc758a587c9b40c1a618e9e109" title="&#x202A;Whether a previous function call attempted to read past the end of the file.">endOfFile</a> to return true thereafter. In this case undefined data will be returned, which is not to be used. Any further attempts at reading data will raise an exception. </p>
+<p class="DocNodeLTR">The first call to read past the end of the file will cause this to return true thereafter. In that case undefined data will be returned, which is not to be used. Any further attempts at reading data will raise an exception. </p>
 
 </div>
 </div>
@@ -264,14 +246,14 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 
 </div>
 </div>
-<a id="a299c7a2983b8324454d116a60c814baf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a299c7a2983b8324454d116a60c814baf">&#9670;&nbsp;</a></span>readFixedLengthString()</h2>
+<a id="aa424c78b12bc5343e721f8fe90e444bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa424c78b12bc5343e721f8fe90e444bc">&#9670;&nbsp;</a></span>readFixedLengthString()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_p_g_e_1_1_string.html">String</a> PGE::BinaryReader::readFixedLengthString </td>
+          <td class="memname">const <a class="el" href="class_p_g_e_1_1_string.html">String</a> PGE::BinaryReader::readFixedLengthString </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>length</em></td><td>)</td>
@@ -281,18 +263,18 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </div><div class="memdoc">
 
 <p>&#x202A;Reads the given amount of bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a>. </p>
-<p class="DocNodeLTR">Interpreted as UTF-8. </p><dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_file_reader.html">PGE::FileReader</a> for more control over encoding. </dd></dl>
+<p class="DocNodeLTR">Interpreted as UTF-8. </p><dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_text_reader.html" title="&#x202A;Utility to read text in different encodings from a file.">PGE::TextReader</a> for more control over encoding. </dd></dl>
 
 </div>
 </div>
-<a id="a74ff3251e3c1b277f4540d0264691c02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74ff3251e3c1b277f4540d0264691c02">&#9670;&nbsp;</a></span>readNullTerminatedString()</h2>
+<a id="af86e53291fa7f08e23bc410d193443e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af86e53291fa7f08e23bc410d193443e6">&#9670;&nbsp;</a></span>readNullTerminatedString()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_p_g_e_1_1_string.html">String</a> PGE::BinaryReader::readNullTerminatedString </td>
+          <td class="memname">const <a class="el" href="class_p_g_e_1_1_string.html">String</a> PGE::BinaryReader::readNullTerminatedString </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -301,18 +283,18 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </div><div class="memdoc">
 
 <p>&#x202A;Reads bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a> until a terminating null byte is encountered. </p>
-<p class="DocNodeLTR">Interpreted as UTF-8. </p><dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_file_reader.html">PGE::FileReader</a> for more control over encoding. </dd></dl>
+<p class="DocNodeLTR">Interpreted as UTF-8. </p><dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_text_reader.html" title="&#x202A;Utility to read text in different encodings from a file.">PGE::TextReader</a> for more control over encoding. </dd></dl>
 
 </div>
 </div>
-<a id="a9166b01ad4cbde1393c425843fa012d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9166b01ad4cbde1393c425843fa012d1">&#9670;&nbsp;</a></span>readVector2f()</h2>
+<a id="a6b94bab93c33331757da3fdf630ac135"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b94bab93c33331757da3fdf630ac135">&#9670;&nbsp;</a></span>readVector2f()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a> PGE::BinaryReader::readVector2f </td>
+          <td class="memname">const <a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a> PGE::BinaryReader::readVector2f </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -325,14 +307,14 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 
 </div>
 </div>
-<a id="a9e73d2fbfa7c21e21cf5cc1a4dcacbba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e73d2fbfa7c21e21cf5cc1a4dcacbba">&#9670;&nbsp;</a></span>readVector3f()</h2>
+<a id="af0c74a283394906ddb306029366d2070"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0c74a283394906ddb306029366d2070">&#9670;&nbsp;</a></span>readVector3f()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> PGE::BinaryReader::readVector3f </td>
+          <td class="memname">const <a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> PGE::BinaryReader::readVector3f </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -376,7 +358,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespace_p_g_e.html">&#x202A;PGE</a></li><li class="navelem"><a class="el" href="class_p_g_e_1_1_binary_reader.html">&#x202A;BinaryReader</a></li>
+    <li class="navelem"><b>&#x202A;PGE</b></li><li class="navelem"><a class="el" href="class_p_g_e_1_1_binary_reader.html">&#x202A;BinaryReader</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
