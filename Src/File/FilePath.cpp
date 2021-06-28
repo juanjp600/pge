@@ -18,9 +18,10 @@
 
 #include <PGE/Exception/Exception.h>
 #include <PGE/File/TextReader.h>
-#include "StreamUtil.h"
 
 using namespace PGE;
+
+static const String INVALID_STR = "Tried using an invalid path";
 
 static const String sanitizeFileSeperator(const String& str) {
     return str.replace("\\", "/");
@@ -88,7 +89,7 @@ bool FilePath::isValid() const noexcept {
 }
 
 bool FilePath::isDirectory() const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     std::error_code err;
     bool isDir = std::filesystem::is_directory(cstr(), err);
     PGE_ASSERT(err.value() == 0, "Couldn't check if path is directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
@@ -96,7 +97,7 @@ bool FilePath::isDirectory() const {
 }
 
 const FilePath FilePath::makeDirectory() const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     if (*str().charAt(name.length() - 1) != '/') {
         return *this + String("/");
     }
@@ -104,7 +105,7 @@ const FilePath FilePath::makeDirectory() const {
 }
 
 const FilePath FilePath::up() const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     String::Iterator to = name.findLast("/");
     int index;
     if (to + 1 == name.end()) {
@@ -116,21 +117,21 @@ const FilePath FilePath::up() const {
 }
 
 const String FilePath::getExtension() const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     String::Iterator startIndex = name.findLast(".");
     if (startIndex == name.end()) { return ""; }
     return name.substr(startIndex+1);
 }
 
 const FilePath FilePath::trimExtension() const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     String::Iterator startIndex = name.findLast(".");
     if (startIndex == name.end()) { return *this; }
     return name.substr(name.begin(), startIndex);
 }
 
 bool FilePath::exists() const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     std::error_code err;
     bool exists = std::filesystem::exists(cstr(), err);
     PGE_ASSERT(err.value() == 0, "Couldn't check if directory exists (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
@@ -138,7 +139,7 @@ bool FilePath::exists() const {
 }
 
 bool FilePath::createDirectory() const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     std::error_code err;
     bool created = std::filesystem::create_directories(str().wstr().data(), err);
     PGE_ASSERT(err.value() == 0, "Couldn't create directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
@@ -146,7 +147,7 @@ bool FilePath::createDirectory() const {
 }
 
 std::vector<FilePath> FilePath::enumerateFolders() const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     std::vector<FilePath> folders;
     for (const auto& it : std::filesystem::directory_iterator(cstr())) {
         if (it.is_directory()) {
@@ -157,7 +158,7 @@ std::vector<FilePath> FilePath::enumerateFolders() const {
 }
 
 std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     std::vector<FilePath> files;
     if (recursive) {
         for (const auto& it : std::filesystem::recursive_directory_iterator(cstr())) {
@@ -201,9 +202,9 @@ std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
 }
 
 std::vector<byte> FilePath::readBytes() const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     std::ifstream file(cstr(), std::ios::ate | std::ios::binary);
-    PGE_ASSERT_OPEN(file, *this);
+    PGE_ASSERT(file.is_open(), "Couldn't read bytes from file (file: \"" + str() + "\")");
     std::vector<byte> bytes;
     size_t vertSize = (size_t)file.tellg();
     bytes.resize(bytes.size() + vertSize);
@@ -213,12 +214,12 @@ std::vector<byte> FilePath::readBytes() const {
 }
 
 const String& FilePath::str() const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     return name;
 }
 
 const char* FilePath::cstr() const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     return name.cstr();
 }
 
@@ -237,12 +238,12 @@ bool FilePath::operator!=(const FilePath& other) const noexcept {
 }
 
 FilePath& FilePath::operator+=(const String& str) {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     name += sanitizeFileSeperator(str);
     return *this;
 }
 
 const FilePath FilePath::operator+(const String& str) const {
-    PGE_ASSERT(valid, StreamUtil::INVALID_FILEPATH);
+    PGE_ASSERT(valid, INVALID_STR);
     return FilePath(name + sanitizeFileSeperator(str));
 }

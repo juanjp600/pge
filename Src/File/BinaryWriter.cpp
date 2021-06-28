@@ -1,26 +1,19 @@
 #include <PGE/File/BinaryWriter.h>
 
-#include "StreamUtil.h"
-
 namespace PGE {
 
-BinaryWriter::BinaryWriter(const FilePath& file, bool append) {
-    StreamUtil::safeOpen(stream, file, std::ios::binary | (append ? std::ios::app : std::ios::trunc));
-}
-
-void BinaryWriter::earlyClose() {
-    StreamUtil::safeClose(stream);
-}
+BinaryWriter::BinaryWriter(const FilePath& file, bool append)
+    : AbstractIO(file, std::ios::binary | (append ? std::ios::app : std::ios::trunc)) { }
 
 template <class T>
 void BinaryWriter::write(T t) {
     stream.write((char*)&t, sizeof(T));
-    StreamUtil::validate(stream);
+    validate();
 }
 
 void BinaryWriter::writeBytes(byte* bytes, int count) {
     stream.write((char*)bytes, count);
-    StreamUtil::validate(stream);
+    validate();
 }
 
 void BinaryWriter::writeBoolean(bool b) {
@@ -49,12 +42,12 @@ void BinaryWriter::writeDouble(double d) {
 
 void BinaryWriter::writeNullTerminatedString(const String& str) {
     stream.write(str.cstr(), str.byteLength() + 1);
-    StreamUtil::validate(stream);
+    validate();
 }
 
 void BinaryWriter::writeFixedLengthString(const String& str) {
     stream.write(str.cstr(), str.byteLength());
-    StreamUtil::validate(stream);
+    validate();
 }
 
 void BinaryWriter::writeVector2f(const Vector2f& vec) {

@@ -1,16 +1,9 @@
 #include <PGE/File/BinaryReader.h>
 
-#include "StreamUtil.h"
-
 namespace PGE {
 
-BinaryReader::BinaryReader(const FilePath& file) {
-    StreamUtil::safeOpen(stream, file, std::ios::binary);
-}
-
-void BinaryReader::earlyClose() {
-    StreamUtil::safeClose(stream);
-}
+BinaryReader::BinaryReader(const FilePath& file)
+    : AbstractIO(file) { }
 
 // Two strikes and you're out.
 bool BinaryReader::checkEOF() noexcept {
@@ -34,14 +27,14 @@ template <class T>
 T BinaryReader::read() {
     T val;
     stream.read((char*)&val, sizeof(T));
-    PGE_ASSERT(checkEOF(), StreamUtil::BAD_STREAM);
+    PGE_ASSERT(checkEOF(), BAD_STREAM);
     return val;
 }
 
 std::vector<byte> BinaryReader::readBytes(int count) {
     std::vector<byte> bytes(count);
     stream.read((char*)bytes.data(), count);
-    PGE_ASSERT(checkEOF(), StreamUtil::BAD_STREAM);
+    PGE_ASSERT(checkEOF(), BAD_STREAM);
     return bytes;
 }
 
@@ -83,7 +76,7 @@ const String BinaryReader::readNullTerminatedString() {
 const String BinaryReader::readFixedLengthString(int length) {
     std::vector<char> chars(length + 1);
     stream.read(chars.data(), length);
-    PGE_ASSERT(checkEOF(), StreamUtil::BAD_STREAM);
+    PGE_ASSERT(checkEOF(), BAD_STREAM);
     chars[length] = 0;
     return String(chars.data());
 }
@@ -106,7 +99,7 @@ const Vector3f BinaryReader::readVector3f() {
 
 void BinaryReader::skip(int length) {
     stream.ignore(length);
-    PGE_ASSERT(checkEOF(), StreamUtil::BAD_STREAM);
+    PGE_ASSERT(checkEOF(), BAD_STREAM);
 }
 
 }

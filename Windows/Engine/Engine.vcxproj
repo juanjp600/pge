@@ -55,6 +55,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Include\PGE\Color\Color.h" />
     <ClInclude Include="..\..\Include\PGE\Exception\Exception.h" />
+    <ClInclude Include="..\..\Include\PGE\File\AbstractIO.h" />
     <ClInclude Include="..\..\Include\PGE\File\BinaryReader.h" />
     <ClInclude Include="..\..\Include\PGE\File\BinaryWriter.h" />
     <ClInclude Include="..\..\Include\PGE\File\FilePath.h" />
@@ -88,7 +89,6 @@
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h" />
     <ClInclude Include="..\..\Include\PGE\Threading\ThreadManager.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Types.h" />
-    <ClInclude Include="..\..\Src\File\StreamUtil.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />

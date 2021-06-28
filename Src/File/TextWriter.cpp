@@ -1,20 +1,13 @@
 #include <PGE/File/TextWriter.h>
 
-#include "StreamUtil.h"
-
 using namespace PGE;
 
-TextWriter::TextWriter(const FilePath& file) {
-	StreamUtil::safeOpen(stream, file);
-}
-
-void TextWriter::earlyClose() {
-	StreamUtil::safeClose(stream);
-}
+TextWriter::TextWriter(const FilePath& file)
+	: AbstractIO(file, 0) { }
 
 void TextWriter::write(const String& content) {
 	stream.write(content.cstr(), content.byteLength());
-	StreamUtil::validate(stream);
+	validate();
 }
 
 void TextWriter::writeLine(const String& content) {

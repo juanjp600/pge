@@ -1,13 +1,14 @@
 #include <PGE/File/TextReader.h>
 
 #include "../String/UnicodeHelper.h"
-#include "StreamUtil.h"
 
 using namespace PGE;
 
-TextReader::TextReader(const FilePath& file, Encoding enc) {
-	StreamUtil::safeOpen(stream, file, std::ios::binary);
+static const String INVALID_ENCODING("Invalid encoding (Don't cast ints to Encoding)");
+static const String UNEXPECTED_EOF("Encountered an unexpected end of file");
 
+TextReader::TextReader(const FilePath& file, Encoding enc)
+	: AbstractIO(file) {
 	// Try reading BOM.
 	byte begin[3];
 	int rewind;
@@ -28,10 +29,6 @@ TextReader::TextReader(const FilePath& file, Encoding enc) {
 	for (int i = 0; i < rewind; i++) {
 		stream.rdbuf()->sungetc();
 	}
-}
-
-void TextReader::earlyClose() {
-	StreamUtil::safeClose(stream);
 }
 
 bool TextReader::endOfFile() const noexcept {
@@ -60,8 +57,6 @@ void TextReader::readLine(String& dest) {
 		}
 	}
 }
-
-static const String UNEXPECTED_EOF("Encountered an unexpected end of file");
 
 wchar TextReader::readChar() {
 	switch (encoding) {
@@ -113,6 +108,10 @@ wchar TextReader::readChar() {
 				return (wchar)((ch << 8) | ch2);
 			}
 		}
+		default: {
+			throw PGE_CREATE_EX(INVALID_ENCODING);
+		}
+
 	}
 }
 
@@ -129,6 +128,9 @@ void TextReader::spitOut(wchar ch) {
 		case Encoding::UTF16LE: {
 			backwards = 2;
 		} break;
+		default: {
+			throw PGE_CREATE_EX(INVALID_ENCODING);
+		}
 	}
 	for (int i = 0; i < backwards; i++) {
 		// Fuck you, pubseekoff.

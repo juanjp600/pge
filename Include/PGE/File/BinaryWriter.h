@@ -1,9 +1,7 @@
 #ifndef PGE_BINARY_WRITER_H_INCLUDED
 #define PGE_BINARY_WRITER_H_INCLUDED
 
-#include <fstream>
-
-#include <PGE/File/FilePath.h>
+#include <PGE/File/AbstractIO.h>
 #include <PGE/Math/Vector.h>
 
 namespace PGE {
@@ -15,10 +13,8 @@ namespace PGE {
 /// @throws #PGE::Exception Any write operation can raise an exception if writing failed or the writer is in an invalid state.
 /// @see #PGE::BinaryReader
 /// @see #PGE::TextWriter
-class BinaryWriter {
+class BinaryWriter : AbstractIO<std::ofstream> {
     private:
-        std::ofstream stream;
-
         template <class T>
         void write(T t);
 
@@ -28,15 +24,6 @@ class BinaryWriter {
         /// @param[in] append Whether data should be appended to the file or it should be overwritten.
         /// @throws #PGE::Exception if the path is invalid or the file could not be opened.
         BinaryWriter(const FilePath& file, bool append = false);
-
-        /// Closes the stream prematurely.
-        /// Calling this is *not* necessary, the destructor will clean everything up appropriately.
-        /// However, possible failure of the close operation will be swallowed in the destructor, while it will be thrown here.
-        /// 
-        /// Calling *any* further methods after attempting to close (including attempting to close again)
-        /// will have no ill effects, but will cause an exception to be raised every call.
-        /// @throws #PGE::Exception if closing was not wholly successful.
-        void earlyClose();
 
         /// Writes a single byte to the file.
         void writeByte(byte b);

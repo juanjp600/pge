@@ -344,11 +344,11 @@
     <ClInclude Include="..\..\Include\PGE\Math\Interpolator.h">
       <Filter>Include\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\File\StreamUtil.h">
-      <Filter>Src\File</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h">
       <Filter>Src\ResourceManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\File\AbstractIO.h">
+      <Filter>Include\File</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,9 +1,7 @@
 #ifndef PGE_BINARY_READER_H_INCLUDED
 #define PGE_BINARY_READER_H_INCLUDED
 
-#include <fstream>
-
-#include <PGE/File/FilePath.h>
+#include <PGE/File/AbstractIO.h>
 #include <PGE/Math/Vector.h>
 
 namespace PGE {
@@ -13,9 +11,8 @@ namespace PGE {
 /// @see #endOfFile
 /// @see #PGE::BinaryWriter
 /// @see #PGE::TextWriter
-class BinaryReader {
+class BinaryReader : AbstractIO<std::ifstream> {
     private:
-        std::ifstream stream;
         bool eof = false;
 
         bool checkEOF() noexcept;
@@ -27,15 +24,6 @@ class BinaryReader {
         /// Opens the file handle.
         /// @throws #PGE::Exception if the path is invalid or the file could not be opened.
         BinaryReader(const FilePath& file);
-
-        /// Closes the stream prematurely.
-        /// Calling this is *not* necessary, the destructor will clean everything up appropriately.
-        /// However, possible failure of the close operation will be swallowed in the destructor, while it will be thrown here.
-        /// 
-        /// Calling *any* further methods after attempting to close (including attempting to close again)
-        /// will have no ill effects, but will cause an exception to be raised every call.
-        /// @throws #PGE::Exception if closing fails.
-        void earlyClose();
 
         /// Whether a previous function call attempted to read past the end of the file.
         /// The first call to read past the end of the file will cause this to return true thereafter.
