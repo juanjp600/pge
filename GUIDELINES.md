@@ -24,3 +24,18 @@ Example:
 const MyClass myFunc();
 myFunc() = MyClass(); // Error: This is no longer possible (which it shouldn't be!)
 ```
+
+# Style
+
+## Prefer postfix operations over prefix operations where the choice presents itself
+
+We have enough trust in the compiler to optimize away the unused return value and consider postfix to be superior visually.
+
+Example:
+```cpp
+Iterator it;
+it++;
+// ^ Yes
+// v No
+++it;
+```
