@@ -18,10 +18,10 @@ namespace PGE {
 /// A UTF-8 character sequence guaranteed to be terminated by a null byte.
 class String {
     public:
-        class Key;
-        class RedundantKey;
-        class SafeKey;
-        class OrderedKey;
+        struct Key;
+        struct RedundantKey;
+        struct SafeKey;
+        struct OrderedKey;
 
         struct Iterator {
             using iterator_category = std::forward_iterator_tag;
