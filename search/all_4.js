@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['earlyclose_18',['earlyClose',['../class_abstract_i_o.html#aa1537fc6b99ec84e361f5f246a9f5608',1,'AbstractIO']]],
+  ['earlyclose_18',['earlyClose',['../class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d',1,'PGE::AbstractIO']]],
   ['endoffile_19',['endOfFile',['../class_p_g_e_1_1_binary_reader.html#a9397f0cc758a587c9b40c1a618e9e109',1,'PGE::BinaryReader::endOfFile()'],['../class_p_g_e_1_1_text_reader.html#a84c50b7abd97d807d3cd60132a7d0caa',1,'PGE::TextReader::endOfFile()']]],
   ['enumeratefiles_20',['enumerateFiles',['../class_p_g_e_1_1_file_path.html#a990f13f3981c61dbebe28d6148c675d4',1,'PGE::FilePath']]],
   ['enumeratefolders_21',['enumerateFolders',['../class_p_g_e_1_1_file_path.html#a2b657a155f33cb2ab323a74f734199b1',1,'PGE::FilePath']]],

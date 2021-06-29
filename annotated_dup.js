@@ -3,6 +3,7 @@ var annotated_dup =
     [ "\u202APGE", null, [
       [ "\u202AColor", "class_p_g_e_1_1_color.html", "class_p_g_e_1_1_color" ],
       [ "\u202AException", "class_p_g_e_1_1_exception.html", "class_p_g_e_1_1_exception" ],
+      [ "\u202AAbstractIO", "class_p_g_e_1_1_abstract_i_o.html", "class_p_g_e_1_1_abstract_i_o" ],
       [ "\u202ABinaryReader", "class_p_g_e_1_1_binary_reader.html", "class_p_g_e_1_1_binary_reader" ],
       [ "\u202ABinaryWriter", "class_p_g_e_1_1_binary_writer.html", "class_p_g_e_1_1_binary_writer" ],
       [ "\u202AFilePath", "class_p_g_e_1_1_file_path.html", "class_p_g_e_1_1_file_path" ],
@@ -43,6 +44,5 @@ var annotated_dup =
       [ "\u202AString", "class_p_g_e_1_1_string.html", "class_p_g_e_1_1_string" ],
       [ "\u202ASysEvents", "class_p_g_e_1_1_sys_events.html", "class_p_g_e_1_1_sys_events" ],
       [ "\u202AThreadManager", "class_p_g_e_1_1_thread_manager.html", "class_p_g_e_1_1_thread_manager" ]
-    ] ],
-    [ "\u202AAbstractIO", "class_abstract_i_o.html", "class_abstract_i_o" ]
+    ] ]
 ];

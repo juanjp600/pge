@@ -53,6 +53,7 @@ var namespaces_dup =
       ] ],
       [ "\u202AColor", "class_p_g_e_1_1_color.html", "class_p_g_e_1_1_color" ],
       [ "\u202AException", "class_p_g_e_1_1_exception.html", "class_p_g_e_1_1_exception" ],
+      [ "\u202AAbstractIO", "class_p_g_e_1_1_abstract_i_o.html", "class_p_g_e_1_1_abstract_i_o" ],
       [ "\u202ABinaryReader", "class_p_g_e_1_1_binary_reader.html", "class_p_g_e_1_1_binary_reader" ],
       [ "\u202ABinaryWriter", "class_p_g_e_1_1_binary_writer.html", "class_p_g_e_1_1_binary_writer" ],
       [ "\u202AFilePath", "class_p_g_e_1_1_file_path.html", "class_p_g_e_1_1_file_path" ],

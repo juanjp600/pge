@@ -1,12 +1,12 @@
 var hierarchy =
 [
     [ "\u202APGE::AABBox", "class_p_g_e_1_1_a_a_b_box.html", null ],
-    [ "\u202AAbstractIO< T >", "class_abstract_i_o.html", null ],
-    [ "\u202AAbstractIO< std::ifstream >", "class_abstract_i_o.html", [
+    [ "\u202APGE::AbstractIO< T >", "class_p_g_e_1_1_abstract_i_o.html", null ],
+    [ "\u202APGE::AbstractIO< std::ifstream >", "class_p_g_e_1_1_abstract_i_o.html", [
       [ "\u202APGE::BinaryReader", "class_p_g_e_1_1_binary_reader.html", null ],
       [ "\u202APGE::TextReader", "class_p_g_e_1_1_text_reader.html", null ]
     ] ],
-    [ "\u202AAbstractIO< std::ofstream >", "class_abstract_i_o.html", [
+    [ "\u202APGE::AbstractIO< std::ofstream >", "class_p_g_e_1_1_abstract_i_o.html", [
       [ "\u202APGE::BinaryWriter", "class_p_g_e_1_1_binary_writer.html", null ],
       [ "\u202APGE::TextWriter", "class_p_g_e_1_1_text_writer.html", null ]
     ] ],
