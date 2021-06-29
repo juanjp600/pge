@@ -379,7 +379,7 @@ void InputManagerInternal::setMousePosition(const Vector2f& position) {
     // For some reason updating the mouse position this way doesn't update the cursor position, so we need to tell Cocoa to sync that.
     CGAssociateMouseAndMouseCursorPosition(true);
 #else
-    SDL_WarpMouseInWindow(((GraphicsInternal*)graphics)->getSdlWindow(), (int)position.x, (int)position.y);
+    SDL_WarpMouseInWindow(((GraphicsInternal*)graphics)->getWindow(), (int)position.x, (int)position.y);
 #endif
 }
 

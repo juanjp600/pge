@@ -26,7 +26,7 @@ void SysEventsInternal::update() {
     while (SDL_PollEvent(&event)) {
         for (auto sub : subscribers) {
             SubscriberInternal* subscriber = (SubscriberInternal*)sub;
-            SDL_Window* sdlWindow = ((GraphicsInternal*)subscriber->getGraphics())->getSdlWindow();
+            SDL_Window* sdlWindow = ((GraphicsInternal*)subscriber->getGraphics())->getWindow();
             bool takeEvent = false;
             if (subscriber->getEventType()==SubscriberInternal::EventType::WINDOW) {
                 if (event.type == SDL_WINDOWEVENT) {

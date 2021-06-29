@@ -15,10 +15,6 @@
 
 using namespace PGE;
 
-SDL_Window* GraphicsInternal::getSdlWindow() const {
-    return sdlWindow;
-}
-
 #if defined(__APPLE__) && defined(__OBJC__)
 NSWindow* GraphicsInternal::getCocoaWindow() const {
     SDL_SysWMinfo info;

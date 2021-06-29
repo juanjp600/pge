@@ -43,7 +43,6 @@
     <ClCompile Include="..\..\Src\Input\Input.cpp" />
     <ClCompile Include="..\..\Src\Input\InputManager.cpp" />
     <ClCompile Include="..\..\Src\Math\Random.cpp" />
-    <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
     <ClCompile Include="..\..\Src\String\String.cpp" />
@@ -101,7 +100,6 @@
     <ClInclude Include="..\..\Src\Input\InputManagerInternal.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\DX11.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\OGL3.h" />
-    <ClInclude Include="..\..\Src\ResourceManagement\Misc.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h" />
     <ClInclude Include="..\..\Src\String\Unicode.h" />
     <ClInclude Include="..\..\Src\String\UnicodeHelper.h" />

@@ -123,9 +123,6 @@
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp">
       <Filter>Src\ResourceManagement</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\ResourceManagement\Misc.cpp">
-      <Filter>Src\ResourceManagement</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\String\String.cpp">
       <Filter>Src\String</Filter>
     </ClCompile>
@@ -207,9 +204,6 @@
       <Filter>Src\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\ResourceManagement\OGL3.h">
-      <Filter>Src\ResourceManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\ResourceManagement\Misc.h">
       <Filter>Src\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\String\Unicode.h">

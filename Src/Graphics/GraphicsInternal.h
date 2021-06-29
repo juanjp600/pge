@@ -49,8 +49,8 @@ class ThreadManager;
 class GraphicsInternal : public Graphics {
     public:
         using Graphics::Graphics;
+        using Graphics::getWindow;
 
-        SDL_Window* getSdlWindow() const;
 #if defined(__APPLE__) && defined(__OBJC__)
         NSWindow* getCocoaWindow() const;
 #endif

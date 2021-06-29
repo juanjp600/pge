@@ -30,7 +30,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs)
     //        SDL_SetWindowPosition(sdlWindow,0,0);
     //    }
 
-    glContext = resourceManager.addNewResource<GLContext>(sdlWindow);
+    glContext = resourceManager.addNewResource<GLContext>(getWindow());
 
     PGE_ASSERT(gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress) != 0, "Failed to initialize GLAD (GLERROR: " + String::format(glGetError(), "%u") + ")");
 
@@ -48,7 +48,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs)
     GLenum glError = glGetError();
     PGE_ASSERT(glError == GL_NO_ERROR, "Failed to initialize window data post-GLAD initialization (GLERROR: " + String::format(glError, "%u") + ")");
 
-    SDL_GL_SwapWindow(sdlWindow);
+    SDL_GL_SwapWindow(getWindow());
 
     setViewport(Rectanglei(0,0,w,h));
 
@@ -64,12 +64,12 @@ void GraphicsOGL3::update() {
 }
 
 void GraphicsOGL3::swap() {
-    SDL_GL_SwapWindow(sdlWindow);
+    SDL_GL_SwapWindow(getWindow());
 }
 
 void GraphicsOGL3::takeGlContext() {
     if (SDL_GL_GetCurrentContext()!=glContext) {
-        SDL_GL_MakeCurrent(sdlWindow,glContext);
+        SDL_GL_MakeCurrent(getWindow(),glContext);
     }
 }
 

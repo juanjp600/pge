@@ -15,22 +15,22 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     HRESULT hResult = 0;
 
     if (fullscreen) {
-        SDL_SetWindowBordered(sdlWindow, SDL_bool::SDL_FALSE);
+        SDL_SetWindowBordered(getWindow(), SDL_bool::SDL_FALSE);
         SDL_Rect displayBounds;
-        int displayIndex = SDL_GetWindowDisplayIndex(sdlWindow);
+        int displayIndex = SDL_GetWindowDisplayIndex(getWindow());
         PGE_ASSERT(displayIndex >= 0, "Failed to determine display index (SDLERROR: " + String(SDL_GetError()) + ")");
         int errorCode = SDL_GetDisplayBounds(displayIndex, &displayBounds);
         PGE_ASSERT(errorCode == 0, "Failed to get display bounds (SDLERROR: " + String(SDL_GetError()) + ")");
         PGE_ASSERT(displayBounds.w > 0 && displayBounds.h > 0, "Display bounds are invalid (" + String::fromInt(displayBounds.w) + "x" + String::fromInt(displayBounds.h) + ")");
-        SDL_SetWindowSize(sdlWindow, displayBounds.w, displayBounds.h);
-        SDL_SetWindowPosition(sdlWindow, 0, 0);
+        SDL_SetWindowSize(getWindow(), displayBounds.w, displayBounds.h);
+        SDL_SetWindowPosition(getWindow(), 0, 0);
     }
 
     dxgiFactory = resourceManager.addNewResource<DXGIFactory1>();
 
     SDL_SysWMinfo sysWMinfo;
     SDL_VERSION(&sysWMinfo.version); //REMINDER: THIS LINE IS VERY IMPORTANT
-    bool validInfo = SDL_GetWindowWMInfo(sdlWindow, &sysWMinfo);
+    bool validInfo = SDL_GetWindowWMInfo(getWindow(), &sysWMinfo);
     PGE_ASSERT(validInfo, "Failed to initialize SDL version info (SDLERROR: " + String(SDL_GetError()) + ")");
 
     ZeroMemory(&dxSwapChainDesc, sizeof(dxSwapChainDesc));

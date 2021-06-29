@@ -4,11 +4,10 @@
 #include <vector>
 #include <list>
 
-#include "../../../Src/ResourceManagement/Misc.h"
-
+#include <PGE/ResourceManagement/ResourceManager.h>
+#include <PGE/SysEvents/SysEvents.h>
 #include <PGE/Math/Rectangle.h>
 #include <PGE/Color/Color.h>
-#include <PGE/SysEvents/SysEvents.h>
 
 struct SDL_Window;
 
@@ -21,10 +20,11 @@ class Graphics {
         enum class Renderer {
             OpenGL,
             DirectX11,
-            Default
+            Default,
         };
 
-        static Graphics* create(const String& name="PGE Application", int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default);
+        /// Factory method.
+        static Graphics* create(const String& name = "PGE Application", int w = 1280, int h = 720, bool fs = false, Renderer r = Renderer::Default);
 
         static const std::list<Graphics*>& getActiveInstances();
 
@@ -57,7 +57,7 @@ class Graphics {
         enum class Culling {
             BACK,
             FRONT,
-            NONE
+            NONE,
         };
         virtual void setCulling(Culling mode);
         virtual Culling getCulling() const;
@@ -80,11 +80,24 @@ class Graphics {
         bool vsync;
         Culling cullingMode;
 
-        // Base class always automatically takes care of SysEvents and the window.
-        WindowEventSubscriber::View eventSubscriber;
-        SDLWindow::View sdlWindow;
+        SDL_Window* getWindow() const noexcept;
 
     private:
+        // Base class always automatically takes care of SysEvents and the window.
+        class WindowEventSubscriber : public Resource<SysEvents::Subscriber*> {
+            public:
+                WindowEventSubscriber(Graphics* gfx);
+                ~WindowEventSubscriber();
+        };
+        WindowEventSubscriber::View eventSubscriber;
+
+        class SDLWindow : public Resource<SDL_Window*> {
+            public:
+                SDLWindow(const String& title, int width, int height, u32 flags);
+                ~SDLWindow();
+        };
+        SDLWindow::View sdlWindow;
+
         ResourceManager resourceManager;
         static std::list<Graphics*> activeGraphics;
 };

@@ -3,12 +3,10 @@
 
 #include <vector>
 
-#include <PGE/ResourceManagement/ResourceManager.h>
-
 #include <glad/gl.h>
 #include <SDL.h>
 
-#include "../ResourceManagement/Misc.h"
+#include <PGE/ResourceManagement/ResourceManager.h>
 
 namespace PGE {
 
