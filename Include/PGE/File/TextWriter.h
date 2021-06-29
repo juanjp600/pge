@@ -15,15 +15,17 @@ namespace PGE {
 /// @throws #PGE::Exception Any write operation can raise an exception if writing failed or the writer is in an invalid state.
 /// @see #PGE::TextReader
 /// @see #PGE::BinaryWriter
-class TextWriter : AbstractIO<std::ofstream> {
+class TextWriter : private AbstractIO<std::ofstream> {
 	public:
+		using AbstractIO::earlyClose;
+
         /// Opens the stream.
         /// @throws #PGE::Exception if the path is invalid or the file could not be opened.
 		TextWriter(const FilePath& file);
 
         /// Writes a string to stream.
 		void write(const String& content);
-        /// Writes a string to stream and appends '\\n'.
+        /// Writes a string to stream and appends `\n`.
 		void writeLine(const String& content);
 };
 

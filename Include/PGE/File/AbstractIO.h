@@ -8,7 +8,8 @@
 
 namespace PGE {
 
-/// Utility to more easily deal with IO streams.
+/// Utility to more easily deal with file IO streams.
+/// Not intended to be polymorphic.
 template <class T>
 class AbstractIO {
 	protected:

@@ -110,7 +110,7 @@ class FilePath {
         // Shorthand utility.
 
         /// Reads the entire file with normalized line-endings and UTF-8 encoding.
-        /// Line endings are normalized to '\\n'.
+        /// Line endings are normalized to `\n`.
         /// @throws #PGE::Exception If the path is not initialized, the file could not be opened, or errors occured during the reading of the file.
         /// @see #PGE::TextReader
         String read() const;

@@ -11,7 +11,7 @@ namespace PGE {
 /// @see #endOfFile
 /// @see #PGE::BinaryWriter
 /// @see #PGE::TextWriter
-class BinaryReader : AbstractIO<std::ifstream> {
+class BinaryReader : private AbstractIO<std::ifstream> {
     private:
         bool eof = false;
 
@@ -21,6 +21,8 @@ class BinaryReader : AbstractIO<std::ifstream> {
         T read();
 
     public:
+        using AbstractIO::earlyClose;
+
         /// Opens the file handle.
         /// @throws #PGE::Exception if the path is invalid or the file could not be opened.
         BinaryReader(const FilePath& file);

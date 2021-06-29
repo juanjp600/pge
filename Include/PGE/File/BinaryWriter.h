@@ -13,12 +13,14 @@ namespace PGE {
 /// @throws #PGE::Exception Any write operation can raise an exception if writing failed or the writer is in an invalid state.
 /// @see #PGE::BinaryReader
 /// @see #PGE::TextWriter
-class BinaryWriter : AbstractIO<std::ofstream> {
+class BinaryWriter : private AbstractIO<std::ofstream> {
     private:
         template <class T>
         void write(T t);
 
     public:
+        using AbstractIO::earlyClose;
+
         /// Opens the stream.
         /// @param[in] file The file to write to.
         /// @param[in] append Whether data should be appended to the file or it should be overwritten.

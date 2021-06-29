@@ -10,8 +10,10 @@ namespace PGE {
 /// @see #endOfFile
 /// @see #PGE::TextWriter
 /// @see #PGE::BinaryReader
-class TextReader : AbstractIO<std::ifstream> {
+class TextReader : private AbstractIO<std::ifstream> {
     public:
+        using AbstractIO::earlyClose;
+
         enum class Encoding {
             ASCII,
             UTF8,
@@ -36,7 +38,7 @@ class TextReader : AbstractIO<std::ifstream> {
         bool endOfFile() const noexcept;
 
         /// Reads a line and returns it.
-        /// '\\n', '\\r', '\\n\\r' and '\\r\\n' are considered to be line endings.
+        /// `\n`, `\r`, `\n\r` and `\r\n` are considered to be line endings.
         const String readLine();
         /// Reads a line into the given string.
         /// This can be used in combination with the property of strings to never contract their internal capacity in order to avoid
