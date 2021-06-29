@@ -94,27 +94,26 @@ $(document).ready(function(){initNavTree('_graphics_8h_source.html',''); initRes
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;list&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;../../../Src/ResourceManagement/Misc.h&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;PGE/ResourceManagement/ResourceManager.h&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;PGE/SysEvents/SysEvents.h&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;PGE/Math/Rectangle.h&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;PGE/Color/Color.h&gt;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;PGE/SysEvents/SysEvents.h&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">struct </span>SDL_Window;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span>PGE {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">class </span>Texture;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html">   19</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a> {</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keyword">enum class</span> Renderer {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            OpenGL,</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            DirectX11,</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            Default</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        };</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keyword">static</span> <a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>* create(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; name=<span class="stringliteral">&quot;PGE Application&quot;</span>, <span class="keywordtype">int</span> w=1280, <span class="keywordtype">int</span> h=720, <span class="keywordtype">bool</span> fs=<span class="keyword">false</span>, Renderer r=Renderer::Default);</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">struct </span>SDL_Window;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span>PGE {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">class </span>Texture;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html">   18</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a> {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">enum class</span> Renderer {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            OpenGL,</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            DirectX11,</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            Default,</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        };</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24">   27</a></span>&#160;        <span class="keyword">static</span> <a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>* <a class="code" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24">create</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; name = <span class="stringliteral">&quot;PGE Application&quot;</span>, <span class="keywordtype">int</span> w = 1280, <span class="keywordtype">int</span> h = 720, <span class="keywordtype">bool</span> fs = <span class="keyword">false</span>, Renderer r = Renderer::Default);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> std::list&lt;Graphics*&gt;&amp; getActiveInstances();</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
@@ -147,7 +146,7 @@ $(document).ready(function(){initNavTree('_graphics_8h_source.html',''); initRes
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">enum class</span> Culling {</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            BACK,</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            FRONT,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            NONE</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            NONE,</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        };</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setCulling(Culling mode);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keyword">virtual</span> Culling getCulling() <span class="keyword">const</span>;</div>
@@ -170,23 +169,38 @@ $(document).ready(function(){initNavTree('_graphics_8h_source.html',''); initRes
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">bool</span> vsync;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        Culling cullingMode;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="comment">// Base class always automatically takes care of SysEvents and the window.</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        WindowEventSubscriber::View eventSubscriber;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        SDLWindow::View sdlWindow;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <a class="code" href="class_p_g_e_1_1_resource_manager.html">ResourceManager</a> resourceManager;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keyword">static</span> std::list&lt;Graphics*&gt; activeGraphics;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;};</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;}</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        SDL_Window* getWindow() const noexcept;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    private:</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="comment">// Base class always automatically takes care of SysEvents and the window.</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        class WindowEventSubscriber : public <a class="code" href="class_p_g_e_1_1_resource.html">Resource</a>&lt;<a class="code" href="class_p_g_e_1_1_sys_events.html">SysEvents</a>::Subscriber*&gt; {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                WindowEventSubscriber(<a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>* gfx);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                ~WindowEventSubscriber();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        };</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        WindowEventSubscriber::View eventSubscriber;</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_GRAPHICS_H_INCLUDED</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keyword">class </span>SDLWindow : <span class="keyword">public</span> Resource&lt;SDL_Window*&gt; {</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                SDLWindow(<span class="keyword">const</span> String&amp; title, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, u32 flags);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                ~SDLWindow();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        };</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        SDLWindow::View sdlWindow;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        ResourceManager resourceManager;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keyword">static</span> std::list&lt;Graphics*&gt; activeGraphics;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;};</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_GRAPHICS_H_INCLUDED</span></div>
 <div class="ttc" id="aclass_p_g_e_1_1_color_html"><div class="ttname"><a href="class_p_g_e_1_1_color.html">PGE::Color</a></div><div class="ttdoc">An RGBA color represented via 4 floating point numbers.</div><div class="ttdef"><b>Definition:</b> Color.h:13</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_graphics_html"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html">PGE::Graphics</a></div><div class="ttdef"><b>Definition:</b> Graphics.h:19</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html">PGE::Graphics</a></div><div class="ttdef"><b>Definition:</b> Graphics.h:18</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_a900adeee80c1f1c5fada1d36ffe75b24"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24">PGE::Graphics::create</a></div><div class="ttdeci">static Graphics * create(const String &amp;name=&quot;PGE Application&quot;, int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default)</div><div class="ttdoc">Factory method.</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_rectanglei_html"><div class="ttname"><a href="class_p_g_e_1_1_rectanglei.html">PGE::Rectanglei</a></div><div class="ttdef"><b>Definition:</b> Rectangle.h:74</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_resource_manager_html"><div class="ttname"><a href="class_p_g_e_1_1_resource_manager.html">PGE::ResourceManager</a></div><div class="ttdef"><b>Definition:</b> ResourceManager.h:11</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_resource_html"><div class="ttname"><a href="class_p_g_e_1_1_resource.html">PGE::Resource</a></div><div class="ttdef"><b>Definition:</b> Resource.h:17</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_string_html"><div class="ttname"><a href="class_p_g_e_1_1_string.html">PGE::String</a></div><div class="ttdoc">A UTF-8 character sequence guaranteed to be terminated by a null byte.</div><div class="ttdef"><b>Definition:</b> String.h:19</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_sys_events_html"><div class="ttname"><a href="class_p_g_e_1_1_sys_events.html">PGE::SysEvents</a></div><div class="ttdef"><b>Definition:</b> SysEvents.h:6</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_texture_html"><div class="ttname"><a href="class_p_g_e_1_1_texture.html">PGE::Texture</a></div><div class="ttdef"><b>Definition:</b> Texture.h:11</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_vector2i_html"><div class="ttname"><a href="class_p_g_e_1_1_vector2i.html">PGE::Vector2i</a></div><div class="ttdef"><b>Definition:</b> Vector.h:181</div></div>
 </div><!-- fragment --></div><!-- contents -->

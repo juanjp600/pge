@@ -41,9 +41,11 @@ var hierarchy =
     [ "\u202APGE::Rectanglei", "class_p_g_e_1_1_rectanglei.html", null ],
     [ "\u202APGE::String::RedundantKey", "struct_p_g_e_1_1_string_1_1_redundant_key.html", null ],
     [ "\u202APGE::ResourceBase", "class_p_g_e_1_1_resource_base.html", [
+      [ "\u202APGE::Resource< SDL_Window * >", "class_p_g_e_1_1_resource.html", null ],
       [ "\u202APGE::Resource< T * >", "class_p_g_e_1_1_resource.html", [
         [ "\u202APGE::RawWrapper< T >", "class_p_g_e_1_1_raw_wrapper.html", null ]
       ] ],
+      [ "\u202APGE::Resource< SysEvents::Subscriber * >", "class_p_g_e_1_1_resource.html", null ],
       [ "\u202APGE::Resource< T >", "class_p_g_e_1_1_resource.html", null ]
     ] ],
     [ "\u202APGE::ResourceManager", "class_p_g_e_1_1_resource_manager.html", null ],

@@ -21,6 +21,7 @@ var class_p_g_e_1_1_graphics =
     [ "\u202AgetRendererName", "class_p_g_e_1_1_graphics.html#a0117dc381e49b9b038c6f30347098ace", null ],
     [ "\u202AgetViewport", "class_p_g_e_1_1_graphics.html#a7cc1946dae4e2b92e19d8f618bb0f96e", null ],
     [ "\u202AgetVsync", "class_p_g_e_1_1_graphics.html#ac95c76a48aba5940b5cca496bec027df", null ],
+    [ "\u202AgetWindow", "class_p_g_e_1_1_graphics.html#a942532b493300f366bd0b938c31fb223", null ],
     [ "\u202AisWindowFocused", "class_p_g_e_1_1_graphics.html#a2f7957ee51137e680b41586faf706a68", null ],
     [ "\u202AisWindowOpen", "class_p_g_e_1_1_graphics.html#a01944221077f653bb693ca7d82524866", null ],
     [ "\u202AresetRenderTarget", "class_p_g_e_1_1_graphics.html#a57f1f66ffdf2e79ecd2581a788e572e8", null ],
@@ -37,11 +38,9 @@ var class_p_g_e_1_1_graphics =
     [ "\u202AcullingMode", "class_p_g_e_1_1_graphics.html#ac6942641e93eb05a3d7c16ad0ff6a78f", null ],
     [ "\u202AdepthTest", "class_p_g_e_1_1_graphics.html#a8029772008e9dfbe15595aaf39fb34fe", null ],
     [ "\u202Adimensions", "class_p_g_e_1_1_graphics.html#aa61245c7459e26034efec15d314bd348", null ],
-    [ "\u202AeventSubscriber", "class_p_g_e_1_1_graphics.html#a21652ff0a295d72c00e21821437666e6", null ],
     [ "\u202Afocused", "class_p_g_e_1_1_graphics.html#a3bf7dac02eb8a4a0a8109a52823a526c", null ],
     [ "\u202Afullscreen", "class_p_g_e_1_1_graphics.html#a1c06dac073ba8dbe781049599267fcf7", null ],
     [ "\u202Aopen", "class_p_g_e_1_1_graphics.html#aa7a3d407bf8dd1d747e833a76acc6f49", null ],
-    [ "\u202AsdlWindow", "class_p_g_e_1_1_graphics.html#a5bac3e5f0c9dc0953b7f08c784091d66", null ],
     [ "\u202Aviewport", "class_p_g_e_1_1_graphics.html#a93c7dd4cd05f09680063a03a2f3bbc35", null ],
     [ "\u202Avsync", "class_p_g_e_1_1_graphics.html#abfdbae6c0809255bbbc1130722a1a2ee", null ]
 ];
