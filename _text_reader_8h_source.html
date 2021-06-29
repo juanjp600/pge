@@ -95,36 +95,39 @@ $(document).ready(function(){initNavTree('_text_reader_8h_source.html',''); init
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>PGE {</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_text_reader.html">TextReader</a> : <a class="code" href="class_p_g_e_1_1_abstract_i_o.html">AbstractIO</a>&lt;std::ifstream&gt; {</div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_text_reader.html">TextReader</a> : <span class="keyword">private</span> <a class="code" href="class_p_g_e_1_1_abstract_i_o.html">AbstractIO</a>&lt;std::ifstream&gt; {</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">enum class</span> Encoding {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            ASCII,</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            UTF8,</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            UTF16LE,</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            UTF16BE,</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        };</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html#add793f41d06eac43920e53a08feff79a">   27</a></span>&#160;        <a class="code" href="class_p_g_e_1_1_text_reader.html#add793f41d06eac43920e53a08feff79a">TextReader</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">FilePath</a>&amp; file, Encoding encoding = Encoding::UTF8);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html#a84c50b7abd97d807d3cd60132a7d0caa">   36</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_p_g_e_1_1_text_reader.html#a84c50b7abd97d807d3cd60132a7d0caa">endOfFile</a>() const noexcept;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html#a5ce17c0da98ff5433beeccafd9c65f07">   40</a></span>&#160;        const <a class="code" href="class_p_g_e_1_1_string.html">String</a> <a class="code" href="class_p_g_e_1_1_text_reader.html#a5ce17c0da98ff5433beeccafd9c65f07">readLine</a>();</div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html#a7112ccb2ec594415791d07279def0ec2">   44</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_text_reader.html#a5ce17c0da98ff5433beeccafd9c65f07">readLine</a>(<a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; dest);</div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html#aa75ca4486092ed0e7a80847b46c1a72e">   49</a></span>&#160;        wchar <a class="code" href="class_p_g_e_1_1_text_reader.html#aa75ca4486092ed0e7a80847b46c1a72e">readChar</a>();</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    private:</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        Encoding encoding;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">bool</span> eof = false;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordtype">void</span> spitOut(wchar ch);</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">using</span> <a class="code" href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">AbstractIO::earlyClose</a>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">enum class</span> Encoding {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            ASCII,</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            UTF8,</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            UTF16LE,</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            UTF16BE,</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        };</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html#add793f41d06eac43920e53a08feff79a">   29</a></span>&#160;        <a class="code" href="class_p_g_e_1_1_text_reader.html#add793f41d06eac43920e53a08feff79a">TextReader</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">FilePath</a>&amp; file, Encoding encoding = Encoding::UTF8);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html#a84c50b7abd97d807d3cd60132a7d0caa">   38</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_p_g_e_1_1_text_reader.html#a84c50b7abd97d807d3cd60132a7d0caa">endOfFile</a>() const noexcept;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html#a5ce17c0da98ff5433beeccafd9c65f07">   42</a></span>&#160;        const <a class="code" href="class_p_g_e_1_1_string.html">String</a> <a class="code" href="class_p_g_e_1_1_text_reader.html#a5ce17c0da98ff5433beeccafd9c65f07">readLine</a>();</div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html#a7112ccb2ec594415791d07279def0ec2">   46</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_text_reader.html#a5ce17c0da98ff5433beeccafd9c65f07">readLine</a>(<a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; dest);</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_text_reader.html#aa75ca4486092ed0e7a80847b46c1a72e">   51</a></span>&#160;        wchar <a class="code" href="class_p_g_e_1_1_text_reader.html#aa75ca4486092ed0e7a80847b46c1a72e">readChar</a>();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    private:</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        Encoding encoding;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordtype">bool</span> eof = false;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">void</span> reportEOF();</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;};</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">void</span> spitOut(wchar ch);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordtype">void</span> reportEOF();</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;};</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_TEXTREADER_H_DEFINED</span></div>
-<div class="ttc" id="aclass_p_g_e_1_1_abstract_i_o_html"><div class="ttname"><a href="class_p_g_e_1_1_abstract_i_o.html">PGE::AbstractIO</a></div><div class="ttdoc">Utility to more easily deal with IO streams.</div><div class="ttdef"><b>Definition:</b> AbstractIO.h:13</div></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_TEXTREADER_H_DEFINED</span></div>
+<div class="ttc" id="aclass_p_g_e_1_1_abstract_i_o_html"><div class="ttname"><a href="class_p_g_e_1_1_abstract_i_o.html">PGE::AbstractIO</a></div><div class="ttdoc">Utility to more easily deal with file IO streams.</div><div class="ttdef"><b>Definition:</b> AbstractIO.h:14</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_abstract_i_o_html_af252120aa787246f2c0f2df43dce0e4d"><div class="ttname"><a href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">PGE::AbstractIO::earlyClose</a></div><div class="ttdeci">void earlyClose()</div><div class="ttdoc">Closes the stream prematurely.</div><div class="ttdef"><b>Definition:</b> AbstractIO.h:43</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_file_path_html"><div class="ttname"><a href="class_p_g_e_1_1_file_path.html">PGE::FilePath</a></div><div class="ttdoc">String wrapper utility to deal with paths.</div><div class="ttdef"><b>Definition:</b> FilePath.h:13</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_string_html"><div class="ttname"><a href="class_p_g_e_1_1_string.html">PGE::String</a></div><div class="ttdoc">A UTF-8 character sequence guaranteed to be terminated by a null byte.</div><div class="ttdef"><b>Definition:</b> String.h:19</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_text_reader_html"><div class="ttname"><a href="class_p_g_e_1_1_text_reader.html">PGE::TextReader</a></div><div class="ttdoc">Utility to read text in different encodings from a file.</div><div class="ttdef"><b>Definition:</b> TextReader.h:13</div></div>

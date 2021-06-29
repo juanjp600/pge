@@ -156,6 +156,9 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 <tr class="memitem:a900e87b23551a3a2d4dd95c029b2592d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a900e87b23551a3a2d4dd95c029b2592d">skip</a> (int length)</td></tr>
 <tr class="memdesc:a900e87b23551a3a2d4dd95c029b2592d"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Skips a given amount of bytes from the file, simply discarding them.  <a href="class_p_g_e_1_1_binary_reader.html#a900e87b23551a3a2d4dd95c029b2592d">More...</a><br /></td></tr>
 <tr class="separator:a900e87b23551a3a2d4dd95c029b2592d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af252120aa787246f2c0f2df43dce0e4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#af252120aa787246f2c0f2df43dce0e4d">earlyClose</a> ()</td></tr>
+<tr class="memdesc:af252120aa787246f2c0f2df43dce0e4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Closes the stream prematurely.  <a href="class_p_g_e_1_1_binary_reader.html#af252120aa787246f2c0f2df43dce0e4d">More...</a><br /></td></tr>
+<tr class="separator:af252120aa787246f2c0f2df43dce0e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p class="DocNodeLTR">Utility to read binary data from a file. </p>
@@ -198,6 +201,37 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="af252120aa787246f2c0f2df43dce0e4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af252120aa787246f2c0f2df43dce0e4d">&#9670;&nbsp;</a></span>earlyClose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_p_g_e_1_1_abstract_i_o.html">PGE::AbstractIO</a>&lt; T &gt;::earlyClose</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&#x202A;Closes the stream prematurely. </p>
+<p class="DocNodeLTR">Calling this is <em>not</em> necessary, the destructor will clean everything up appropriately. However, possible failure of the close operation will be swallowed in the destructor, while it will be thrown here.</p>
+<p class="DocNodeLTR">Calling <em>any</em> further methods after attempting to close (including attempting to close again) will have no ill effects, but will cause an exception to be raised every call. </p><dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;if closing was not wholly successful. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a9397f0cc758a587c9b40c1a618e9e109"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9397f0cc758a587c9b40c1a618e9e109">&#9670;&nbsp;</a></span>endOfFile()</h2>
 
