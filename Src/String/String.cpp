@@ -46,16 +46,35 @@ String::Iterator& String::Iterator::operator++() {
     return *this;
 }
 
+String::Iterator& String::Iterator::operator--() {
+    PGE_ASSERT(index > 0, "Can't decrement iterator prior to string beginning");
+    charIndex--;
+    index--;
+    // First bit 0 means it's a single byte codepoint.
+    if ((ref->cstr()[index] & 0b1000'0000) != 0) {
+        // Otherwise we go backwards until we find the first byte of the character.
+        while ((ref->cstr()[index] & 0b1100'0000) == 0b1000'0000) {
+            index--;
+        }
+    }
+    _ch = L'\uFFFF';
+    return *this;
+}
+
 const String::Iterator String::Iterator::operator++(int) {
     Iterator temp = *this;
     ++(*this);
     return temp;
 }
 
+const String::Iterator String::Iterator::operator--(int) {
+    Iterator temp = *this;
+    --(*this);
+    return temp;
+}
+
 const String::Iterator String::Iterator::operator+(int steps) const {
-    // TODO: UTF-8 easily allows us to go backwards.
-    // If it does, why don't we utilize that for findLast?
-    PGE_ASSERT(steps >= 0, "String iterators cannot go backwards");
+    if (steps < 0) { return *this - (-steps); }
     String::Iterator ret = *this;
     for (int i = 0; i < steps; i++) {
         ret++;
@@ -63,15 +82,35 @@ const String::Iterator String::Iterator::operator+(int steps) const {
     return ret;
 }
 
-void String::Iterator::operator+=(int steps) {
-    PGE_ASSERT(steps >= 0, "String iterators cannot go backwards");
+const String::Iterator String::Iterator::operator-(int steps) const {
+    if (steps > 0) { return *this + (-steps); }
+    String::Iterator ret = *this;
+    for (int i = 0; i < steps; i++) {
+        ret--;
+    }
+    return ret;
+}
+
+String::Iterator& String::Iterator::operator+=(int steps) {
+    if (steps < 0) { return *this -= (-steps); }
     for (int i = 0; i < steps; i++) {
         (*this)++;
     }
+    return *this;
+}
+
+String::Iterator& String::Iterator::operator-=(int steps) {
+    if (steps > 0) { return *this += (-steps); }
+    for (int i = 0; i < steps; i++) {
+        (*this)--;
+    }
+    return *this;
 }
 
 wchar String::Iterator::operator*() const {
-    genChar();
+    if (_ch == L'\uFFFF') {
+        _ch = Unicode::utf8ToWChar(ref->cstr() + index);
+    }
     return _ch;
 }
 
@@ -87,12 +126,6 @@ int String::Iterator::getPosition() const {
     return charIndex == -1 ? ref->length() : charIndex;
 }
 
-void String::Iterator::genChar() const {
-    if (_ch == L'\uFFFF') {
-        _ch = Unicode::utf8ToWChar(ref->cstr() + index);
-    }
-}
-
 const String::Iterator String::begin() const {
     return Iterator(*this);
 }
@@ -100,6 +133,14 @@ const String::Iterator String::begin() const {
 const String::Iterator String::end() const {
     // We need byteLength for functionality, but length is optional.
     return Iterator(*this, byteLength(), data->_strLength);
+}
+
+const String::ReverseIterator String::rbegin() const {
+    return ReverseIterator(end());
+}
+
+const String::ReverseIterator String::rend() const {
+    return ReverseIterator(begin());
 }
 
 //

@@ -24,7 +24,7 @@ class String {
         struct OrderedKey;
 
         struct Iterator {
-            using iterator_category = std::forward_iterator_tag;
+            using iterator_category = std::bidirectional_iterator_tag;
             using difference_type = unsigned;
             using value_type = wchar;
             using pointer = value_type*;
@@ -34,10 +34,14 @@ class String {
             Iterator(const String& str);
 
             Iterator& operator++();
+            Iterator& operator--();
             const Iterator operator++(int);
+            const Iterator operator--(int);
 
             const Iterator operator+(int steps) const;
-            void operator+=(int steps);
+            const Iterator operator-(int steps) const;
+            Iterator& operator+=(int steps);
+            Iterator& operator-=(int steps);
 
             wchar operator*() const;
 
@@ -49,8 +53,6 @@ class String {
             private:
                 Iterator(const String& str, int byteIndex, int chIndex);
 
-                void genChar() const;
-
                 const String* ref;
                 // Lazily evaluated, Unicode invalid character by default.
                 mutable wchar _ch = L'\uFFFF';
@@ -60,8 +62,12 @@ class String {
             friend String;
         };
 
+        using ReverseIterator = std::reverse_iterator<Iterator>;
+
         const Iterator begin() const;
         const Iterator end() const;
+        const ReverseIterator rbegin() const;
+        const ReverseIterator rend() const;
 
         static void copy(String& dst, const String& src);
         
