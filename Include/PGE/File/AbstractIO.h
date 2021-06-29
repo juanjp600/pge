@@ -6,6 +6,8 @@
 #include <PGE/File/FilePath.h>
 #include <PGE/Exception/Exception.h>
 
+namespace PGE {
+
 /// Utility to more easily deal with IO streams.
 template <class T>
 class AbstractIO {
@@ -42,5 +44,7 @@ class AbstractIO {
 			PGE_ASSERT(stream.good(), BAD_STREAM);
 		}
 };
+
+}
 
 #endif // PGE_INTERNAL_ABSTRACTIO_H_DEFINED
