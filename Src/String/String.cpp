@@ -34,8 +34,7 @@ String::Iterator::Iterator(const String& str, int byteIndex, int chIndex) {
     charIndex = chIndex;
 }
 
-String::Iterator& String::Iterator::operator++() {
-    PGE_ASSERT(index < ref->byteLength(), "Can't increment iterator past string end");
+void String::Iterator::increment() {
     index += Unicode::measureCodepoint(ref->cstr()[index]);
     charIndex++;
     // We reached the end and get the str length for free.
@@ -43,11 +42,9 @@ String::Iterator& String::Iterator::operator++() {
         ref->data->_strLength = charIndex;
     }
     _ch = L'\uFFFF';
-    return *this;
 }
 
-String::Iterator& String::Iterator::operator--() {
-    PGE_ASSERT(index > 0, "Can't decrement iterator prior to string beginning");
+void String::Iterator::decrement() {
     charIndex--;
     index--;
     // First bit 0 means it's a single byte codepoint.
@@ -58,6 +55,17 @@ String::Iterator& String::Iterator::operator--() {
         }
     }
     _ch = L'\uFFFF';
+}
+
+String::Iterator& String::Iterator::operator++() {
+    PGE_ASSERT(index < ref->byteLength(), "Can't increment iterator past string end");
+    increment();
+    return *this;
+}
+
+String::Iterator& String::Iterator::operator--() {
+    PGE_ASSERT(index > 0, "Can't decrement iterator prior to string beginning");
+    decrement();
     return *this;
 }
 
@@ -83,7 +91,7 @@ const String::Iterator String::Iterator::operator+(int steps) const {
 }
 
 const String::Iterator String::Iterator::operator-(int steps) const {
-    if (steps > 0) { return *this + (-steps); }
+    if (steps < 0) { return *this + (-steps); }
     String::Iterator ret = *this;
     for (int i = 0; i < steps; i++) {
         ret--;
@@ -100,7 +108,7 @@ String::Iterator& String::Iterator::operator+=(int steps) {
 }
 
 String::Iterator& String::Iterator::operator-=(int steps) {
-    if (steps > 0) { return *this += (-steps); }
+    if (steps < 0) { return *this += (-steps); }
     for (int i = 0; i < steps; i++) {
         (*this)--;
     }
@@ -114,16 +122,38 @@ wchar String::Iterator::operator*() const {
     return _ch;
 }
 
+bool String::Iterator::operator<(const Iterator& other) const {
+    return ref->chs == other.ref->chs && index < other.index;
+}
+
+bool String::Iterator::operator>(const Iterator& other) const {
+    return ref->chs == other.ref->chs && index > other.index;
+}
+
+bool String::Iterator::operator<=(const Iterator& other) const {
+    return ref->chs == other.ref->chs && index <= other.index;
+}
+
+bool String::Iterator::operator>=(const Iterator& other) const {
+    return ref->chs == other.ref->chs && index >= other.index;
+}
+
 bool String::Iterator::operator==(const Iterator& other) const {
-    return ref == other.ref && index == other.index;
+    return ref->chs == other.ref->chs && index == other.index;
 }
 
 bool String::Iterator::operator!=(const Iterator& other) const {
-    return ref != other.ref || index != other.index;
+    return ref->chs != other.ref->chs || index != other.index;
 }
 
 int String::Iterator::getPosition() const {
-    return charIndex == -1 ? ref->length() : charIndex;
+    if (charIndex < 0) {
+        charIndex = 0;
+        for (int i = 0; i < index; i += Unicode::measureCodepoint(ref->cstr()[i])) {
+            charIndex++;
+        }
+    }
+    return charIndex;
 }
 
 const String::Iterator String::begin() const {
@@ -135,12 +165,36 @@ const String::Iterator String::end() const {
     return Iterator(*this, byteLength(), data->_strLength);
 }
 
+String::ReverseIterator& String::ReverseIterator::operator++() {
+    PGE_ASSERT(index >= 0, "Can't decrement iterator prior to string beginning");
+    decrement();
+    return *this;
+}
+
+String::ReverseIterator& String::ReverseIterator::operator--() {
+    PGE_ASSERT(index < ref->byteLength() - 1, "Can't increment iterator past string end");
+    increment();
+    return *this;
+}
+
+const String::ReverseIterator String::ReverseIterator::operator++(int) {
+    Iterator temp = *this;
+    ++(*this);
+    return temp;
+}
+
+const String::ReverseIterator String::ReverseIterator::operator--(int) {
+    Iterator temp = *this;
+    --(*this);
+    return temp;
+}
+
 const String::ReverseIterator String::rbegin() const {
-    return ReverseIterator(end());
+    return end() - 1;
 }
 
 const String::ReverseIterator String::rend() const {
-    return ReverseIterator(begin());
+    return ReverseIterator(*this, -1, -1);
 }
 
 //
@@ -610,25 +664,26 @@ const String::Iterator String::findFirst(const String& fnd, int from) const {
     return findFirst(fnd, begin() + from);
 }
 
+static const String EMPTY_FIND = "Find string can't be empty";
+
 const String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
-    PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
+    PGE_ASSERT(!fnd.isEmpty(), EMPTY_FIND);
     for (auto it = from; it != end(); it++) {
         if (memcmp(fnd.cstr(), cstr() + it.index, fnd.byteLength()) == 0) { return it; }
     }
     return end();
 }
 
-const String::Iterator String::findLast(const String& fnd, int from) const {
-    return findLast(fnd, begin() + from);
+const String::ReverseIterator String::findLast(const String& fnd, int fromEnd) const {
+    return findLast(fnd, rbegin() + fromEnd);
 }
 
-const String::Iterator String::findLast(const String& fnd, const Iterator& from) const {
-    PGE_ASSERT(!fnd.isEmpty(), "Find string can't be empty");
-    String::Iterator found = end();
-    for (auto it = from; it != end(); it++) {
-        if (memcmp(fnd.cstr(), cstr() + it.index, fnd.byteLength()) == 0) { found = it; }
+const String::ReverseIterator String::findLast(const String& fnd, const ReverseIterator& from) const {
+    PGE_ASSERT(!fnd.isEmpty(), EMPTY_FIND);
+    for (auto it = from; it != rend(); it++) {
+        if (memcmp(fnd.cstr(), cstr() + it.index, fnd.byteLength()) == 0) { return it; }
     }
-    return found;
+    return rend();
 }
 
 const String String::substr(int start) const {

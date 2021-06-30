@@ -45,6 +45,10 @@ class String {
 
             wchar operator*() const;
 
+            bool operator>(const Iterator& other) const;
+            bool operator<(const Iterator& other) const;
+            bool operator>=(const Iterator& other) const;
+            bool operator<=(const Iterator& other) const;
             bool operator==(const Iterator& other) const;
             bool operator!=(const Iterator& other) const;
 
@@ -53,16 +57,39 @@ class String {
             private:
                 Iterator(const String& str, int byteIndex, int chIndex);
 
+                void increment();
+                void decrement();
+
                 const String* ref;
                 // Lazily evaluated, Unicode invalid character by default.
                 mutable wchar _ch = L'\uFFFF';
                 int index;
-                int charIndex;
+                mutable int charIndex;
 
             friend String;
         };
 
-        using ReverseIterator = std::reverse_iterator<Iterator>;
+        struct ReverseIterator : public Iterator {
+            ReverseIterator(const Iterator& it) : Iterator(it) { }
+
+            ReverseIterator& operator++();
+            ReverseIterator& operator--();
+            const ReverseIterator operator++(int);
+            const ReverseIterator operator--(int);
+
+            const ReverseIterator operator+(int steps) const { return Iterator::operator-(steps); }
+            const ReverseIterator operator-(int steps) const { return Iterator::operator+(steps); }
+            ReverseIterator& operator+=(int steps) { Iterator::operator-=(steps); return *this; }
+            ReverseIterator& operator-=(int steps) { Iterator::operator+=(steps); return *this; }
+
+            bool operator>(const Iterator& other) const { return Iterator::operator<(other); }
+            bool operator<(const Iterator& other) const { return Iterator::operator>(other); }
+            bool operator>=(const Iterator& other) const { return Iterator::operator<=(other); }
+            bool operator<=(const Iterator& other) const { return Iterator::operator>=(other); }
+
+            private:
+                using Iterator::Iterator;
+        };
 
         const Iterator begin() const;
         const Iterator end() const;
@@ -144,8 +171,8 @@ class String {
 
         const Iterator findFirst(const String& fnd, int from = 0) const;
         const Iterator findFirst(const String& fnd, const Iterator& from) const;
-        const Iterator findLast(const String& fnd, int from = 0) const;
-        const Iterator findLast(const String& fnd, const Iterator& from) const;
+        const ReverseIterator findLast(const String& fnd, int fromEnd = 0) const;
+        const ReverseIterator findLast(const String& fnd, const ReverseIterator& from) const;
 
         const String substr(int start) const;
         const String substr(int start, int cnt) const;
