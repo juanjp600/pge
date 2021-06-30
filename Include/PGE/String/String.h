@@ -30,8 +30,10 @@ class String {
             using pointer = value_type*;
             using reference = value_type&;
 
+            static const Iterator begin(const String& str);
+            static const Iterator end(const String& str);
+
             Iterator();
-            Iterator(const String& str);
 
             Iterator& operator++();
             Iterator& operator--();
@@ -43,6 +45,8 @@ class String {
             Iterator& operator+=(int steps);
             Iterator& operator-=(int steps);
 
+            int operator-(const Iterator& other) const;
+
             wchar operator*() const;
 
             bool operator>(const Iterator& other) const;
@@ -52,9 +56,10 @@ class String {
             bool operator==(const Iterator& other) const;
             bool operator!=(const Iterator& other) const;
 
+            int getBytePosition() const;
             int getPosition() const;
 
-            private:
+            protected:
                 Iterator(const String& str, int byteIndex, int chIndex);
 
                 void increment();
@@ -63,10 +68,8 @@ class String {
                 const String* ref;
                 // Lazily evaluated, Unicode invalid character by default.
                 mutable wchar _ch = L'\uFFFF';
-                int index;
                 mutable int charIndex;
-
-            friend String;
+                int index;
         };
 
         struct ReverseIterator : public Iterator {
@@ -87,8 +90,13 @@ class String {
             bool operator>=(const Iterator& other) const { return Iterator::operator<=(other); }
             bool operator<=(const Iterator& other) const { return Iterator::operator>=(other); }
 
+            static const ReverseIterator rbegin(const String& str);
+            static const ReverseIterator rend(const String& str);
+
             private:
                 using Iterator::Iterator;
+                using Iterator::begin;
+                using Iterator::end;
         };
 
         const Iterator begin() const;

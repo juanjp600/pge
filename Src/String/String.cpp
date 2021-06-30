@@ -22,12 +22,6 @@ String::Iterator::Iterator() {
     charIndex = -1;
 }
 
-String::Iterator::Iterator(const String& str) {
-    ref = &str;
-    index = 0;
-    charIndex = 0;
-}
-
 String::Iterator::Iterator(const String& str, int byteIndex, int chIndex) {
     ref = &str;
     index = byteIndex;
@@ -115,6 +109,10 @@ String::Iterator& String::Iterator::operator-=(int steps) {
     return *this;
 }
 
+int String::Iterator::operator-(const String::Iterator& other) const {
+    return getPosition() - other.getPosition();
+}
+
 wchar String::Iterator::operator*() const {
     if (_ch == L'\uFFFF') {
         _ch = Unicode::utf8ToWChar(ref->cstr() + index);
@@ -146,6 +144,10 @@ bool String::Iterator::operator!=(const Iterator& other) const {
     return ref->chs != other.ref->chs || index != other.index;
 }
 
+int String::Iterator::getBytePosition() const {
+    return index;
+}
+
 int String::Iterator::getPosition() const {
     if (charIndex < 0) {
         charIndex = 0;
@@ -156,13 +158,21 @@ int String::Iterator::getPosition() const {
     return charIndex;
 }
 
+const String::Iterator String::Iterator::begin(const String& str) {
+    return Iterator(str, 0, 0);
+}
+
+const String::Iterator String::Iterator::end(const String& str) {
+    // We need byteLength for functionality, but length is optional.
+    return Iterator(str, str.byteLength(), str.data->_strLength);
+}
+
 const String::Iterator String::begin() const {
-    return Iterator(*this);
+    return Iterator::begin(*this);
 }
 
 const String::Iterator String::end() const {
-    // We need byteLength for functionality, but length is optional.
-    return Iterator(*this, byteLength(), data->_strLength);
+    return Iterator::end(*this);
 }
 
 String::ReverseIterator& String::ReverseIterator::operator++() {
@@ -189,12 +199,20 @@ const String::ReverseIterator String::ReverseIterator::operator--(int) {
     return temp;
 }
 
+const String::ReverseIterator String::ReverseIterator::rbegin(const String& str) {
+    return end(str) - 1;
+}
+
+const String::ReverseIterator String::ReverseIterator::rend(const String& str) {
+    return ReverseIterator(str, -1, -1);
+}
+
 const String::ReverseIterator String::rbegin() const {
-    return end() - 1;
+    return String::ReverseIterator::rbegin(*this);
 }
 
 const String::ReverseIterator String::rend() const {
-    return ReverseIterator(*this, -1, -1);
+    return String::ReverseIterator::rend(*this);
 }
 
 //
@@ -669,7 +687,7 @@ static const String EMPTY_FIND = "Find string can't be empty";
 const String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
     PGE_ASSERT(!fnd.isEmpty(), EMPTY_FIND);
     for (auto it = from; it != end(); it++) {
-        if (memcmp(fnd.cstr(), cstr() + it.index, fnd.byteLength()) == 0) { return it; }
+        if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) { return it; }
     }
     return end();
 }
@@ -681,7 +699,7 @@ const String::ReverseIterator String::findLast(const String& fnd, int fromEnd) c
 const String::ReverseIterator String::findLast(const String& fnd, const ReverseIterator& from) const {
     PGE_ASSERT(!fnd.isEmpty(), EMPTY_FIND);
     for (auto it = from; it != rend(); it++) {
-        if (memcmp(fnd.cstr(), cstr() + it.index, fnd.byteLength()) == 0) { return it; }
+        if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) { return it; }
     }
     return rend();
 }
@@ -700,24 +718,25 @@ const String String::substr(const Iterator& start) const {
 }
 
 const String String::substr(const Iterator& start, const Iterator& to) const {
-    PGE_ASSERT(start.index <= to.index, "Start iterator can't come after to iterator (start: " + fromInt(start.index) + "; to: " + fromInt(to.index) + "; str: " + *this + ")");
-    PGE_ASSERT(to.index <= end().index, "To iterator can't come after end iterator (to: " + fromInt(to.index) + "; end: " + fromInt(end().index) + "; str: " + *this + ")");
+    PGE_ASSERT(start.getBytePosition() <= to.getBytePosition(),
+        "Start iterator can't come after to iterator (start: " + fromInt(start.getBytePosition()) + "; to: " + fromInt(to.getBytePosition()) + "; str: " + *this + ")");
+    PGE_ASSERT(to.getBytePosition() <= end().getBytePosition(),
+        "To iterator can't come after end iterator (to: " + fromInt(to.getBytePosition()) + "; end: " + fromInt(end().getBytePosition()) + "; str: " + *this + ")");
 
-    int newSize = to.index - start.index;
+    int newSize = to.getBytePosition() - start.getBytePosition();
     String retVal(newSize);
     retVal.data->strByteLength = newSize;
-    if (to.charIndex >= 0) {
-        retVal.data->_strLength = to.charIndex - start.charIndex;
-    }
+    // Due to not being friends with Iterators, we just bite the bullet here and hope for the best.
+    retVal.data->_strLength = to.getPosition() - start.getPosition();
     char* retBuf = retVal.cstrNoConst();
-    memcpy(retBuf, cstr() + start.index, newSize);
+    memcpy(retBuf, cstr() + start.getBytePosition(), newSize);
     retBuf[newSize] = '\0';
     return retVal;
 }
 
 const String::Iterator String::charAt(int pos) const {
     Iterator it;
-    for (it = begin(); it != end() && it.charIndex != pos; it++);
+    for (it = begin(); it != end() && it.getPosition() != pos; it++);
     return it;
 }
 
