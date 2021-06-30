@@ -87,6 +87,9 @@ $(document).ready(function(){initNavTree('struct_p_g_e_1_1_string_1_1_iterator.h
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="struct_p_g_e_1_1_string_1_1_iterator-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">PGE::String::Iterator Struct Reference</div>  </div>
@@ -122,9 +125,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = valu
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adbfd133127567dcd6d5f44c2949c6baf"><td class="memItemLeft" align="right" valign="top"><a id="adbfd133127567dcd6d5f44c2949c6baf"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Iterator</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;str)</td></tr>
-<tr class="separator:adbfd133127567dcd6d5f44c2949c6baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61b537f0aedb01ce19f49a9d5b9a75c3"><td class="memItemLeft" align="right" valign="top"><a id="a61b537f0aedb01ce19f49a9d5b9a75c3"></a>
 <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> ()</td></tr>
 <tr class="separator:a61b537f0aedb01ce19f49a9d5b9a75c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,6 +149,9 @@ const <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a
 <tr class="memitem:a22b26dbfa254c43e93e1e59e270f373e"><td class="memItemLeft" align="right" valign="top"><a id="a22b26dbfa254c43e93e1e59e270f373e"></a>
 <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator-=</b> (int steps)</td></tr>
 <tr class="separator:a22b26dbfa254c43e93e1e59e270f373e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4894eedf014ed522ff21a3177fb621d6"><td class="memItemLeft" align="right" valign="top"><a id="a4894eedf014ed522ff21a3177fb621d6"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>operator-</b> (const <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a> &amp;other) const</td></tr>
+<tr class="separator:a4894eedf014ed522ff21a3177fb621d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d5aed73ecdb6bb08176b86d88cdbc7d"><td class="memItemLeft" align="right" valign="top"><a id="a4d5aed73ecdb6bb08176b86d88cdbc7d"></a>
 wchar&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> () const</td></tr>
 <tr class="separator:a4d5aed73ecdb6bb08176b86d88cdbc7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,9 +173,48 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const
 <tr class="memitem:a75105b3726e43469764794cdad2d8118"><td class="memItemLeft" align="right" valign="top"><a id="a75105b3726e43469764794cdad2d8118"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a> &amp;other) const</td></tr>
 <tr class="separator:a75105b3726e43469764794cdad2d8118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd97d2a9d9e9a80ab0b795bcc64fc659"><td class="memItemLeft" align="right" valign="top"><a id="acd97d2a9d9e9a80ab0b795bcc64fc659"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>getBytePosition</b> () const</td></tr>
+<tr class="separator:acd97d2a9d9e9a80ab0b795bcc64fc659"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d2f6c250a6d958e16bfc4f4936cf606"><td class="memItemLeft" align="right" valign="top"><a id="a8d2f6c250a6d958e16bfc4f4936cf606"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>getPosition</b> () const</td></tr>
 <tr class="separator:a8d2f6c250a6d958e16bfc4f4936cf606"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a7aa6ae98c9ba188d45e787a7b55ba563"><td class="memItemLeft" align="right" valign="top"><a id="a7aa6ae98c9ba188d45e787a7b55ba563"></a>
+static const <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;str)</td></tr>
+<tr class="separator:a7aa6ae98c9ba188d45e787a7b55ba563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a091e25a1b0f9009556ed2f76f40d89d6"><td class="memItemLeft" align="right" valign="top"><a id="a091e25a1b0f9009556ed2f76f40d89d6"></a>
+static const <a class="el" href="struct_p_g_e_1_1_string_1_1_iterator.html">Iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;str)</td></tr>
+<tr class="separator:a091e25a1b0f9009556ed2f76f40d89d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a35f74aa0df1cd9abd219a3297fc6c7a2"><td class="memItemLeft" align="right" valign="top"><a id="a35f74aa0df1cd9abd219a3297fc6c7a2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Iterator</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;str, int byteIndex, int chIndex)</td></tr>
+<tr class="separator:a35f74aa0df1cd9abd219a3297fc6c7a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c3d6f3a8c2b6f68b1230dfd54979b4d"><td class="memItemLeft" align="right" valign="top"><a id="a2c3d6f3a8c2b6f68b1230dfd54979b4d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>increment</b> ()</td></tr>
+<tr class="separator:a2c3d6f3a8c2b6f68b1230dfd54979b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af52bbb7e435ce96892d0fd9499014d5b"><td class="memItemLeft" align="right" valign="top"><a id="af52bbb7e435ce96892d0fd9499014d5b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>decrement</b> ()</td></tr>
+<tr class="separator:af52bbb7e435ce96892d0fd9499014d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a7d79bcf347cda813b5c23814abad67d0"><td class="memItemLeft" align="right" valign="top"><a id="a7d79bcf347cda813b5c23814abad67d0"></a>
+const <a class="el" href="class_p_g_e_1_1_string.html">String</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>ref</b></td></tr>
+<tr class="separator:a7d79bcf347cda813b5c23814abad67d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a421bad79b3df7094e085cd3c62335b12"><td class="memItemLeft" align="right" valign="top"><a id="a421bad79b3df7094e085cd3c62335b12"></a>
+wchar&#160;</td><td class="memItemRight" valign="bottom"><b>_ch</b> = L'\uFFFF'</td></tr>
+<tr class="separator:a421bad79b3df7094e085cd3c62335b12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a391ec7e4019b4b14af6e518aff420ff1"><td class="memItemLeft" align="right" valign="top"><a id="a391ec7e4019b4b14af6e518aff420ff1"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>charIndex</b></td></tr>
+<tr class="separator:a391ec7e4019b4b14af6e518aff420ff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b6fce2b3c80a2e12211fd0879b93c01"><td class="memItemLeft" align="right" valign="top"><a id="a7b6fce2b3c80a2e12211fd0879b93c01"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>index</b></td></tr>
+<tr class="separator:a7b6fce2b3c80a2e12211fd0879b93c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
