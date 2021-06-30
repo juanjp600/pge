@@ -1,12 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"class_p_g_e_1_1_string.html#ac7ed7097a8f45d0db575d0c8b056f76d":[1,0,0,40,53],
-"class_p_g_e_1_1_string.html#ac910206f1a48acbb8b7dcd5896eab94e":[1,0,0,40,32],
-"class_p_g_e_1_1_string.html#acab3beef14fce2ae2b05d7c1de732f66":[1,0,0,40,8],
-"class_p_g_e_1_1_string.html#ad09d7cb057201e7af8833420a49dead1":[1,0,0,40,33],
-"class_p_g_e_1_1_string.html#ad499de88358e9aad50670048ac188cf6":[1,0,0,40,44],
-"class_p_g_e_1_1_string.html#adc967f43aadf3ca053a0a9c9f4d7671c":[1,0,0,40,18],
-"class_p_g_e_1_1_string.html#ade1b91ab2224997c54fba7f32da1297b":[1,0,0,40,17],
 "class_p_g_e_1_1_string.html#ae214a27004c89dbd34025573962f3f31":[1,0,0,40,48],
 "class_p_g_e_1_1_string.html#ae430e40287ebf65b336dac93d100e0ff":[1,0,0,40,45],
 "class_p_g_e_1_1_string.html#ae4ab9b20750544009ac31397aea954f0":[1,0,0,40,40],
@@ -244,10 +237,17 @@ var NAVTREEINDEX3 =
 "struct_p_g_e_1_1_string_1_1_iterator.html#a297e8f016484df3e453ebb55045f3c20":[1,0,0,40,0,2],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a2a7a3f4de64c4e9cb4634b51526d6a00":[1,0,0,40,0,12],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a42f7b29049e3ad25a566b130756c74b8":[1,0,0,40,0,3],
+"struct_p_g_e_1_1_string_1_1_iterator.html#a42fc945180ef83f234fefee54e328ce3":[1,0,0,40,0,22],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a4d5aed73ecdb6bb08176b86d88cdbc7d":[1,0,0,40,0,9],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a4e9f7100ffff99ab9908c74d75a69a3c":[1,0,0,40,0,15],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a61b537f0aedb01ce19f49a9d5b9a75c3":[1,0,0,40,0,11],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a6426afe4bb757fb38ce7308f51a8d42e":[1,0,0,40,0,5],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a6ee6f608a4f844430884f7096044456f":[1,0,0,40,0,10],
-"struct_p_g_e_1_1_string_1_1_iterator.html#a7354de0f1a14b80fd09fd32cc9d27af7":[1,0,0,40,0,1]
+"struct_p_g_e_1_1_string_1_1_iterator.html#a7354de0f1a14b80fd09fd32cc9d27af7":[1,0,0,40,0,1],
+"struct_p_g_e_1_1_string_1_1_iterator.html#a75105b3726e43469764794cdad2d8118":[1,0,0,40,0,8],
+"struct_p_g_e_1_1_string_1_1_iterator.html#a8d2f6c250a6d958e16bfc4f4936cf606":[1,0,0,40,0,7],
+"struct_p_g_e_1_1_string_1_1_iterator.html#aa090026b77e7844c24f2f7426a692042":[1,0,0,40,0,13],
+"struct_p_g_e_1_1_string_1_1_iterator.html#ac9eb63ec019dc43c0bb48ebbdd4de458":[1,0,0,40,0,19],
+"struct_p_g_e_1_1_string_1_1_iterator.html#aca9d8aca4496dab4ab3516d5fc66ccdb":[1,0,0,40,0,20],
+"struct_p_g_e_1_1_string_1_1_iterator.html#ad50301707cf55118d7d9f457be17fce7":[1,0,0,40,0,4]
 };

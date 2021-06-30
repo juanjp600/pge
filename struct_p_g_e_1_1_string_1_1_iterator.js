@@ -18,5 +18,9 @@ var struct_p_g_e_1_1_string_1_1_iterator =
     [ "\u202Aoperator--", "struct_p_g_e_1_1_string_1_1_iterator.html#a4e9f7100ffff99ab9908c74d75a69a3c", null ],
     [ "\u202Aoperator--", "struct_p_g_e_1_1_string_1_1_iterator.html#aec87f0806656625889c9afcca033ae5f", null ],
     [ "\u202Aoperator-=", "struct_p_g_e_1_1_string_1_1_iterator.html#a22b26dbfa254c43e93e1e59e270f373e", null ],
-    [ "\u202Aoperator==", "struct_p_g_e_1_1_string_1_1_iterator.html#aca9d8aca4496dab4ab3516d5fc66ccdb", null ]
+    [ "\u202Aoperator<", "struct_p_g_e_1_1_string_1_1_iterator.html#af077fe6441cea5ec63b31ae49b9c659b", null ],
+    [ "\u202Aoperator<=", "struct_p_g_e_1_1_string_1_1_iterator.html#ac9eb63ec019dc43c0bb48ebbdd4de458", null ],
+    [ "\u202Aoperator==", "struct_p_g_e_1_1_string_1_1_iterator.html#aca9d8aca4496dab4ab3516d5fc66ccdb", null ],
+    [ "\u202Aoperator>", "struct_p_g_e_1_1_string_1_1_iterator.html#afcdf8cc8125e3457c7a9b46724f63b0c", null ],
+    [ "\u202Aoperator>=", "struct_p_g_e_1_1_string_1_1_iterator.html#a42fc945180ef83f234fefee54e328ce3", null ]
 ];
