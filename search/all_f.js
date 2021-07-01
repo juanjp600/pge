@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['safekey_98',['SafeKey',['../struct_p_g_e_1_1_string_1_1_safe_key.html',1,'PGE::String']]],
-  ['shader_99',['Shader',['../class_p_g_e_1_1_shader.html',1,'PGE']]],
-  ['skip_100',['skip',['../class_p_g_e_1_1_binary_reader.html#a900e87b23551a3a2d4dd95c029b2592d',1,'PGE::BinaryReader']]],
-  ['str_101',['str',['../class_p_g_e_1_1_file_path.html#a9c721acdf541d8e06baea01b86a22211',1,'PGE::FilePath']]],
-  ['string_102',['String',['../class_p_g_e_1_1_string.html',1,'PGE']]],
-  ['subscriber_103',['Subscriber',['../class_p_g_e_1_1_sys_events_1_1_subscriber.html',1,'PGE::SysEvents']]],
-  ['sysevents_104',['SysEvents',['../class_p_g_e_1_1_sys_events.html',1,'PGE']]]
+  ['textreader_103',['TextReader',['../class_p_g_e_1_1_text_reader.html',1,'PGE::TextReader'],['../class_p_g_e_1_1_text_reader.html#add793f41d06eac43920e53a08feff79a',1,'PGE::TextReader::TextReader()']]],
+  ['texture_104',['Texture',['../class_p_g_e_1_1_texture.html',1,'PGE']]],
+  ['textwriter_105',['TextWriter',['../class_p_g_e_1_1_text_writer.html',1,'PGE::TextWriter'],['../class_p_g_e_1_1_text_writer.html#aabc1eb0d15dfe6eaede253f85abca8e5',1,'PGE::TextWriter::TextWriter()']]],
+  ['trimextension_106',['trimExtension',['../class_p_g_e_1_1_file_path.html#ad27af26601dd4f83629b748cf65d19f7',1,'PGE::FilePath']]]
 ];

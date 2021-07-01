@@ -93,7 +93,6 @@ var namespaces_dup =
       [ "\u202AResourceViewVector", "class_p_g_e_1_1_resource_view_vector.html", "class_p_g_e_1_1_resource_view_vector" ],
       [ "\u202AString", "class_p_g_e_1_1_string.html", "class_p_g_e_1_1_string" ],
       [ "\u202ASysEvents", "class_p_g_e_1_1_sys_events.html", "class_p_g_e_1_1_sys_events" ],
-      [ "\u202AThreadManager", "class_p_g_e_1_1_thread_manager.html", "class_p_g_e_1_1_thread_manager" ],
       [ "\u202Abyte", "_types_8h.html#a8f505ac0d396bb9660ada1574191d946", null ],
       [ "\u202Ai16", "_types_8h.html#a9ca3266a46cd62ab10ac03f6693e3fad", null ],
       [ "\u202Ai32", "_types_8h.html#a3d08326f9a0ab699946296c17e1f9697", null ],

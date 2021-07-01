@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['safekey_177',['SafeKey',['../struct_p_g_e_1_1_string_1_1_safe_key.html',1,'PGE::String']]],
-  ['shader_178',['Shader',['../class_p_g_e_1_1_shader.html',1,'PGE']]],
-  ['string_179',['String',['../class_p_g_e_1_1_string.html',1,'PGE']]],
-  ['subscriber_180',['Subscriber',['../class_p_g_e_1_1_sys_events_1_1_subscriber.html',1,'PGE::SysEvents']]],
-  ['sysevents_181',['SysEvents',['../class_p_g_e_1_1_sys_events.html',1,'PGE']]]
+  ['textreader_177',['TextReader',['../class_p_g_e_1_1_text_reader.html',1,'PGE']]],
+  ['texture_178',['Texture',['../class_p_g_e_1_1_texture.html',1,'PGE']]],
+  ['textwriter_179',['TextWriter',['../class_p_g_e_1_1_text_writer.html',1,'PGE']]]
 ];
