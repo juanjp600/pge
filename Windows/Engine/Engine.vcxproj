@@ -49,7 +49,6 @@
     <ClCompile Include="..\..\Src\String\Unicode.cpp" />
     <ClCompile Include="..\..\Src\String\UnicodeHelper.cpp" />
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
-    <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\PGE\Color\Color.h" />
@@ -86,7 +85,6 @@
     <ClInclude Include="..\..\Include\PGE\String\Key.h" />
     <ClInclude Include="..\..\Include\PGE\String\String.h" />
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h" />
-    <ClInclude Include="..\..\Include\PGE\Threading\ThreadManager.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Types.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h" />

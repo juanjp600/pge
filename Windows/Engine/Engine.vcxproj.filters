@@ -31,12 +31,6 @@
     <Filter Include="Src\Init">
       <UniqueIdentifier>{c64f3e6b-c791-45aa-92d1-fa77d74543de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Threading">
-      <UniqueIdentifier>{645f0c42-1599-4e18-a10a-1007c22a9bde}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Threading">
-      <UniqueIdentifier>{922f5910-100f-4ac1-b3f5-37b9dbc452f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Exception">
       <UniqueIdentifier>{ae97ce05-f017-4a7d-86b2-af0796ef45d7}</UniqueIdentifier>
     </Filter>
@@ -101,9 +95,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp">
       <Filter>Src\SysEvents</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Threading\ThreadManager.cpp">
-      <Filter>Src\Threading</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Exception\Exception.cpp">
       <Filter>Src\Exception</Filter>
@@ -325,9 +316,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h">
       <Filter>Include\SysEvents</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\PGE\Threading\ThreadManager.h">
-      <Filter>Include\Threading</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\PGE\File\TextReader.h">
       <Filter>Include\File</Filter>
