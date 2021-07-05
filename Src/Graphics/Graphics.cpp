@@ -90,15 +90,6 @@ Graphics::Culling Graphics::getCulling() const {
     return cullingMode;
 }
 
-#define APPEND(name) '\n' + #name + ": " + String::fromInt(name)
-
-String Graphics::getInfo() const {
-    return caption + " (" + getRendererName() + ") "
-        + String::fromInt(dimensions.x) + 'x' + String::fromInt(dimensions.y) + " / "
-        + String::fromInt(viewport.width()) + 'x' + String::fromInt(viewport.height())
-        + APPEND(open) + APPEND(focused) + APPEND(fullscreen) + APPEND(vsync) + APPEND(depthTest);
-}
-
 SDL_Window* Graphics::getWindow() const noexcept {
     return sdlWindow;
 }

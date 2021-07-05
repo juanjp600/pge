@@ -10,6 +10,8 @@
 #include <PGE/File/TextWriter.h>
 #include <PGE/Info/Info.h>
 
+#include "../Graphics/GraphicsInternal.h"
+
 using namespace PGE;
 
 #define PGE_ASSERT_SDL(CALL) PGE_ASSERT(CALL >= 0, SDL_GetError())

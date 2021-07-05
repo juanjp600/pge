@@ -4,7 +4,6 @@
 #include <PGE/String/String.h>
 #include <PGE/File/FilePath.h>
 #include <PGE/Graphics/Graphics.h>
-#include <PGE/Threading/ThreadManager.h>
 
 namespace PGE {
 

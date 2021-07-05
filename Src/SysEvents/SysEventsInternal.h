@@ -13,9 +13,6 @@ namespace PGE {
 class Graphics;
 
 class SysEventsInternal : public SysEvents {
-    public:
-        class SubscriberInternal;
-
     private:
         static std::unordered_set<Subscriber*> subscribers;
         SysEventsInternal() = default;

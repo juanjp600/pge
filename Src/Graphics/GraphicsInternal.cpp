@@ -69,3 +69,12 @@ Texture* Texture::load(Graphics* gfx, int w, int h, const byte* buffer, Format f
     PGE_ASSERT(buffer != nullptr, "Tried to load texture from nullptr");
     return ((GraphicsInternal*)gfx)->loadTexture(w, h, buffer, fmt, mipmaps);
 }
+
+#define APPEND(name) '\n' + #name + ": " + String::fromInt(name)
+
+String GraphicsInternal::getInfo() const {
+    return caption + " (" + getRendererName() + ") "
+        + String::fromInt(dimensions.x) + 'x' + String::fromInt(dimensions.y) + " / "
+        + String::fromInt(viewport.width()) + 'x' + String::fromInt(viewport.height())
+        + APPEND(open) + APPEND(focused) + APPEND(fullscreen) + APPEND(vsync) + APPEND(depthTest);
+}

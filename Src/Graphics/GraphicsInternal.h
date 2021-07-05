@@ -55,6 +55,9 @@ class GraphicsInternal : public Graphics {
         NSWindow* getCocoaWindow() const;
 #endif
 
+        String getInfo() const override;
+
+        virtual String getRendererName() const = 0;
         virtual Shader* loadShader(const FilePath& path) = 0;
         virtual Mesh* createMesh(Primitive::Type pt) = 0;
         virtual Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) = 0;

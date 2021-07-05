@@ -2,7 +2,6 @@
 #define PGEINTERNAL_TEXTUREOGL3_H_INCLUDED
 
 #include <PGE/Graphics/Texture.h>
-#include <PGE/Threading/ThreadManager.h>
 
 #include "../../ResourceManagement/OGL3.h"
 #include "../../ResourceManagement/ResourceManagerOGL3.h"
