@@ -105,103 +105,120 @@ $(document).ready(function(){initNavTree('_graphics_8h_source.html',''); initRes
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">class </span>Texture;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html">   18</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a> {</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">enum class</span> Renderer {</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            OpenGL,</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            DirectX11,</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            Default,</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        };</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24">   27</a></span>&#160;        <span class="keyword">static</span> <a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>* <a class="code" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24">create</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; name = <span class="stringliteral">&quot;PGE Application&quot;</span>, <span class="keywordtype">int</span> w = 1280, <span class="keywordtype">int</span> h = 720, <span class="keywordtype">bool</span> fs = <span class="keyword">false</span>, Renderer r = Renderer::Default);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> std::list&lt;Graphics*&gt;&amp; getActiveInstances();</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; name, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keywordtype">bool</span> fs, u32 windowFlags);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>();</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> update();</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> swap() = 0;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_color.html">Color</a>&amp; color) = 0;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setRenderTarget(<a class="code" href="class_p_g_e_1_1_texture.html">Texture</a>* renderTarget) = 0;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setRenderTargets(<span class="keyword">const</span> std::vector&lt;Texture*&gt;&amp; renderTargets) = 0;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> resetRenderTarget() = 0;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setViewport(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_rectanglei.html">Rectanglei</a>&amp; vp) = 0;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_rectanglei.html">Rectanglei</a>&amp; getViewport() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector2i.html">Vector2i</a>&amp; getDimensions() <span class="keyword">const</span>; <span class="keywordtype">float</span> getAspectRatio() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html">   20</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a> {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">   23</a></span>&#160;        <span class="keyword">enum class</span> <a class="code" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">Renderer</a> {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            OpenGL,</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            DirectX11,</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            <a class="code" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83a7a1920d61156abc05a60135aefe8bc67">Default</a>,</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        };</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24">   34</a></span>&#160;        <span class="keyword">static</span> <a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>* <a class="code" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24">create</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; name = <span class="stringliteral">&quot;PGE Application&quot;</span>, <span class="keywordtype">int</span> w = 1280, <span class="keywordtype">int</span> h = 720, <span class="keywordtype">bool</span> fs = <span class="keyword">false</span>, <a class="code" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">Renderer</a> r = <a class="code" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83a7a1920d61156abc05a60135aefe8bc67">Renderer::Default</a>);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#a6a1a6360becaae2c599e2c6e011ccb54">   38</a></span>&#160;        <span class="keyword">virtual</span> <a class="code" href="class_p_g_e_1_1_graphics.html#a6a1a6360becaae2c599e2c6e011ccb54">~Graphics</a>();</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#abae713b91b43026784e653f1f64c63e5">   44</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_graphics.html#abae713b91b43026784e653f1f64c63e5">update</a>();</div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#af7931cd5b5bb39aeffd2031967af6770">   46</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_graphics.html#af7931cd5b5bb39aeffd2031967af6770">swap</a>() = 0;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">bool</span> isWindowOpen() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">bool</span> isWindowFocused() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setDepthTest(<span class="keywordtype">bool</span> isEnabled);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> getDepthTest() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setVsync(<span class="keywordtype">bool</span> isEnabled);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> getVsync() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">enum class</span> Culling {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            BACK,</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            FRONT,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            NONE,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        };</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setCulling(Culling mode);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keyword">virtual</span> Culling getCulling() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <a class="code" href="class_p_g_e_1_1_string.html">String</a> getInfo() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a> getRendererName() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <a class="code" href="class_p_g_e_1_1_string.html">String</a> caption;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="class_p_g_e_1_1_rectanglei.html">Rectanglei</a> viewport;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <a class="code" href="class_p_g_e_1_1_vector2i.html">Vector2i</a> dimensions; <span class="keywordtype">float</span> aspectRatio;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordtype">bool</span> fullscreen;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordtype">bool</span> open;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordtype">bool</span> focused;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordtype">bool</span> depthTest;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">bool</span> vsync;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        Culling cullingMode;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        SDL_Window* getWindow() const noexcept;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    private:</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="comment">// Base class always automatically takes care of SysEvents and the window.</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        class WindowEventSubscriber : public <a class="code" href="class_p_g_e_1_1_resource.html">Resource</a>&lt;<a class="code" href="class_p_g_e_1_1_sys_events.html">SysEvents</a>::Subscriber*&gt; {</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                WindowEventSubscriber(<a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>* gfx);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                ~WindowEventSubscriber();</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        };</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        WindowEventSubscriber::View eventSubscriber;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keyword">class </span>SDLWindow : <span class="keyword">public</span> Resource&lt;SDL_Window*&gt; {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                SDLWindow(<span class="keyword">const</span> String&amp; title, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, u32 flags);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                ~SDLWindow();</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        };</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        SDLWindow::View sdlWindow;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        ResourceManager resourceManager;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keyword">static</span> std::list&lt;Graphics*&gt; activeGraphics;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;};</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#ab6dd05a42685bffd85e9c128ba4241e0">   51</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_graphics.html#ab6dd05a42685bffd85e9c128ba4241e0">clear</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_color.html">Color</a>&amp; color) = 0;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#ab216819d266a1e9f61001702c71c11cb">   55</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_graphics.html#ab216819d266a1e9f61001702c71c11cb">setRenderTarget</a>(<a class="code" href="class_p_g_e_1_1_texture.html">Texture</a>* renderTarget) = 0;</div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#afa8018f3b5be7c85d983658823644de8">   58</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_graphics.html#afa8018f3b5be7c85d983658823644de8">setRenderTargets</a>(<span class="keyword">const</span> std::vector&lt;Texture*&gt;&amp; renderTargets) = 0;</div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#a57f1f66ffdf2e79ecd2581a788e572e8">   60</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_graphics.html#a57f1f66ffdf2e79ecd2581a788e572e8">resetRenderTarget</a>() = 0;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#a7fdac10172b296c64ccf5fcdc698bd55">   66</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_graphics.html#a7fdac10172b296c64ccf5fcdc698bd55">setViewport</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_rectanglei.html">Rectanglei</a>&amp; vp) = 0;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_rectanglei.html">Rectanglei</a>&amp; getViewport() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#aa5b2de1f4b67e543d75f7201498d763a">   70</a></span>&#160;        <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector2i.html">Vector2i</a>&amp; <a class="code" href="class_p_g_e_1_1_graphics.html#aa5b2de1f4b67e543d75f7201498d763a">getDimensions</a>() <span class="keyword">const</span>; <span class="keywordtype">float</span> getAspectRatio() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordtype">bool</span> isWindowOpen() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordtype">bool</span> isWindowFocused() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#ad07f9d967947dab85825e31a53e2fd6e">   77</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_graphics.html#ad07f9d967947dab85825e31a53e2fd6e">setDepthTest</a>(<span class="keywordtype">bool</span> isEnabled);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> getDepthTest() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#a1d986c8ad7c097b28e683f1c4f62265e">   81</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_graphics.html#a1d986c8ad7c097b28e683f1c4f62265e">setVsync</a>(<span class="keywordtype">bool</span> isEnabled);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> getVsync() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">   85</a></span>&#160;        <span class="keyword">enum class</span> <a class="code" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a> {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            BACK,</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            FRONT,</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            NONE,</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        };</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setCulling(<a class="code" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a> mode);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a> getCulling() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#a526acbd2eaeabc8e84df733297f97ea4">   94</a></span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> std::list&lt;Graphics*&gt;&amp; <a class="code" href="class_p_g_e_1_1_graphics.html#a526acbd2eaeabc8e84df733297f97ea4">getActiveInstances</a>();</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_graphics.html#ae4a4f0df2b99436f5e4bf8fd0ad86a21">   97</a></span>&#160;        <span class="keyword">virtual</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a> <a class="code" href="class_p_g_e_1_1_graphics.html#ae4a4f0df2b99436f5e4bf8fd0ad86a21">getInfo</a>() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="code" href="class_p_g_e_1_1_string.html">String</a> caption;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <a class="code" href="class_p_g_e_1_1_rectanglei.html">Rectanglei</a> viewport;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <a class="code" href="class_p_g_e_1_1_vector2i.html">Vector2i</a> dimensions; <span class="keywordtype">float</span> aspectRatio;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">bool</span> fullscreen;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_GRAPHICS_H_INCLUDED</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">bool</span> open;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordtype">bool</span> focused;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordtype">bool</span> depthTest;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordtype">bool</span> vsync;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <a class="code" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a> cullingMode;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; name, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keywordtype">bool</span> fs, u32 windowFlags);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        SDL_Window* getWindow() const noexcept;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    private:</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="comment">// Base class always automatically takes care of SysEvents and the window.</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        class WindowEventSubscriber : public <a class="code" href="class_p_g_e_1_1_resource.html">Resource</a>&lt;<a class="code" href="class_p_g_e_1_1_sys_events.html">SysEvents</a>::Subscriber*&gt; {</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                WindowEventSubscriber(<a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>* gfx);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                ~WindowEventSubscriber();</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        };</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        WindowEventSubscriber::View eventSubscriber;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keyword">class </span>SDLWindow : <span class="keyword">public</span> <a class="code" href="class_p_g_e_1_1_resource.html">Resource</a>&lt;SDL_Window*&gt; {</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;            <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                SDLWindow(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; title, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, u32 flags);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                ~SDLWindow();</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        };</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        SDLWindow::View sdlWindow;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        ResourceManager resourceManager;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keyword">static</span> std::list&lt;Graphics*&gt; activeGraphics;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;};</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;}</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_GRAPHICS_H_INCLUDED</span></div>
 <div class="ttc" id="aclass_p_g_e_1_1_color_html"><div class="ttname"><a href="class_p_g_e_1_1_color.html">PGE::Color</a></div><div class="ttdoc">An RGBA color represented via 4 floating point numbers.</div><div class="ttdef"><b>Definition:</b> Color.h:13</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_graphics_html"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html">PGE::Graphics</a></div><div class="ttdef"><b>Definition:</b> Graphics.h:18</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html">PGE::Graphics</a></div><div class="ttdoc">Main class for managing everything graphics related.</div><div class="ttdef"><b>Definition:</b> Graphics.h:20</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_a0982d3b9d3f6e910f3e430da961a5a44"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">PGE::Graphics::Culling</a></div><div class="ttdeci">Culling</div><div class="ttdoc">Default is back culling.</div><div class="ttdef"><b>Definition:</b> Graphics.h:85</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_a1d986c8ad7c097b28e683f1c4f62265e"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#a1d986c8ad7c097b28e683f1c4f62265e">PGE::Graphics::setVsync</a></div><div class="ttdeci">virtual void setVsync(bool isEnabled)</div><div class="ttdoc">Default is enabled.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_a526acbd2eaeabc8e84df733297f97ea4"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#a526acbd2eaeabc8e84df733297f97ea4">PGE::Graphics::getActiveInstances</a></div><div class="ttdeci">static const std::list&lt; Graphics * &gt; &amp; getActiveInstances()</div><div class="ttdoc">An instance of the Graphics class is considered active from when it was created via create,...</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_a57f1f66ffdf2e79ecd2581a788e572e8"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#a57f1f66ffdf2e79ecd2581a788e572e8">PGE::Graphics::resetRenderTarget</a></div><div class="ttdeci">virtual void resetRenderTarget()=0</div><div class="ttdoc">Resets the render target to a buffer, which can be presented to the screen using swap.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_a6a1a6360becaae2c599e2c6e011ccb54"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#a6a1a6360becaae2c599e2c6e011ccb54">PGE::Graphics::~Graphics</a></div><div class="ttdeci">virtual ~Graphics()</div><div class="ttdoc">An instance of the Graphics class is considered active from when it was created via create,...</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_a7ba2bbb9d3249d2a61df738fec941f83"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">PGE::Graphics::Renderer</a></div><div class="ttdeci">Renderer</div><div class="ttdoc">The type of renderer to use.</div><div class="ttdef"><b>Definition:</b> Graphics.h:23</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_a7ba2bbb9d3249d2a61df738fec941f83a7a1920d61156abc05a60135aefe8bc67"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83a7a1920d61156abc05a60135aefe8bc67">PGE::Graphics::Renderer::Default</a></div><div class="ttdeci">@ Default</div><div class="ttdoc">Will choose the optimal renderer, depending on the platform.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_a7fdac10172b296c64ccf5fcdc698bd55"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#a7fdac10172b296c64ccf5fcdc698bd55">PGE::Graphics::setViewport</a></div><div class="ttdeci">virtual void setViewport(const Rectanglei &amp;vp)=0</div><div class="ttdoc">Sets the size and position of the viewport into which rendering operatons take place.</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_graphics_html_a900adeee80c1f1c5fada1d36ffe75b24"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24">PGE::Graphics::create</a></div><div class="ttdeci">static Graphics * create(const String &amp;name=&quot;PGE Application&quot;, int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default)</div><div class="ttdoc">Factory method.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_aa5b2de1f4b67e543d75f7201498d763a"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#aa5b2de1f4b67e543d75f7201498d763a">PGE::Graphics::getDimensions</a></div><div class="ttdeci">const Vector2i &amp; getDimensions() const</div><div class="ttdoc">Gets the window's dimensions in pixels.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_ab216819d266a1e9f61001702c71c11cb"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#ab216819d266a1e9f61001702c71c11cb">PGE::Graphics::setRenderTarget</a></div><div class="ttdeci">virtual void setRenderTarget(Texture *renderTarget)=0</div><div class="ttdoc">Sets the current render target to the specified texture.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_ab6dd05a42685bffd85e9c128ba4241e0"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#ab6dd05a42685bffd85e9c128ba4241e0">PGE::Graphics::clear</a></div><div class="ttdeci">virtual void clear(const Color &amp;color)=0</div><div class="ttdoc">Clears the screen.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_abae713b91b43026784e653f1f64c63e5"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#abae713b91b43026784e653f1f64c63e5">PGE::Graphics::update</a></div><div class="ttdeci">virtual void update()</div><div class="ttdoc">Updates native window functionality.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_ad07f9d967947dab85825e31a53e2fd6e"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#ad07f9d967947dab85825e31a53e2fd6e">PGE::Graphics::setDepthTest</a></div><div class="ttdeci">virtual void setDepthTest(bool isEnabled)</div><div class="ttdoc">Whether z-buffering is enabled.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_ae4a4f0df2b99436f5e4bf8fd0ad86a21"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#ae4a4f0df2b99436f5e4bf8fd0ad86a21">PGE::Graphics::getInfo</a></div><div class="ttdeci">virtual String getInfo() const =0</div><div class="ttdoc">Gets implementation defined debug information about a graphics object.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_af7931cd5b5bb39aeffd2031967af6770"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#af7931cd5b5bb39aeffd2031967af6770">PGE::Graphics::swap</a></div><div class="ttdeci">virtual void swap()=0</div><div class="ttdoc">Presents previously rendered image to the screen.</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_graphics_html_afa8018f3b5be7c85d983658823644de8"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html#afa8018f3b5be7c85d983658823644de8">PGE::Graphics::setRenderTargets</a></div><div class="ttdeci">virtual void setRenderTargets(const std::vector&lt; Texture * &gt; &amp;renderTargets)=0</div><div class="ttdoc">Sets the current render target to the specified textures.</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_rectanglei_html"><div class="ttname"><a href="class_p_g_e_1_1_rectanglei.html">PGE::Rectanglei</a></div><div class="ttdef"><b>Definition:</b> Rectangle.h:74</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_resource_html"><div class="ttname"><a href="class_p_g_e_1_1_resource.html">PGE::Resource</a></div><div class="ttdef"><b>Definition:</b> Resource.h:17</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_string_html"><div class="ttname"><a href="class_p_g_e_1_1_string.html">PGE::String</a></div><div class="ttdoc">A UTF-8 character sequence guaranteed to be terminated by a null byte.</div><div class="ttdef"><b>Definition:</b> String.h:19</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_sys_events_html"><div class="ttname"><a href="class_p_g_e_1_1_sys_events.html">PGE::SysEvents</a></div><div class="ttdef"><b>Definition:</b> SysEvents.h:6</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_texture_html"><div class="ttname"><a href="class_p_g_e_1_1_texture.html">PGE::Texture</a></div><div class="ttdef"><b>Definition:</b> Texture.h:11</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_sys_events_html"><div class="ttname"><a href="class_p_g_e_1_1_sys_events.html">PGE::SysEvents</a></div><div class="ttdoc">Class that is required for dealing with system events.</div><div class="ttdef"><b>Definition:</b> SysEvents.h:8</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_texture_html"><div class="ttname"><a href="class_p_g_e_1_1_texture.html">PGE::Texture</a></div><div class="ttdef"><b>Definition:</b> Texture.h:10</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_vector2i_html"><div class="ttname"><a href="class_p_g_e_1_1_vector2i.html">PGE::Vector2i</a></div><div class="ttdef"><b>Definition:</b> Vector.h:181</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

@@ -49,7 +49,8 @@ var menudata={children:[
 {text:"\u202As",url:"functions.html#index_s"},
 {text:"\u202At",url:"functions.html#index_t"},
 {text:"\u202Au",url:"functions.html#index_u"},
-{text:"\u202Aw",url:"functions.html#index_w"}]},
+{text:"\u202Aw",url:"functions.html#index_w"},
+{text:"~",url:"functions.html#index__7E"}]},
 {text:"\u202AFunctions",url:"functions_func.html",children:[
 {text:"\u202Ab",url:"functions_func.html#index_b"},
 {text:"\u202Ac",url:"functions_func.html#index_c"},
@@ -64,4 +65,6 @@ var menudata={children:[
 {text:"\u202As",url:"functions_func.html#index_s"},
 {text:"\u202At",url:"functions_func.html#index_t"},
 {text:"\u202Au",url:"functions_func.html#index_u"},
-{text:"\u202Aw",url:"functions_func.html#index_w"}]}]}]}]}
+{text:"\u202Aw",url:"functions_func.html#index_w"},
+{text:"~",url:"functions_func.html#index__7E"}]},
+{text:"\u202AEnumerations",url:"functions_enum.html"}]}]}]}

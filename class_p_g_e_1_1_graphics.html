@@ -96,51 +96,62 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_graphics.html',''); in
 <div class="title">PGE::Graphics Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>&#x202A;Main class for managing everything graphics related.  
+ <a href="class_p_g_e_1_1_graphics.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_graphics_8h_source.html">PGE/Graphics/Graphics.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a7ba2bbb9d3249d2a61df738fec941f83"><td class="memItemLeft" align="right" valign="top"><a id="a7ba2bbb9d3249d2a61df738fec941f83"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Renderer</b> { <b>OpenGL</b>
+<tr class="memitem:a7ba2bbb9d3249d2a61df738fec941f83"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">Renderer</a> { <b>OpenGL</b>
 , <b>DirectX11</b>
-, <b>Default</b>
+, <a class="el" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83a7a1920d61156abc05a60135aefe8bc67">Default</a>
  }</td></tr>
+<tr class="memdesc:a7ba2bbb9d3249d2a61df738fec941f83"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;The type of renderer to use.  <a href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">More...</a><br /></td></tr>
 <tr class="separator:a7ba2bbb9d3249d2a61df738fec941f83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0982d3b9d3f6e910f3e430da961a5a44"><td class="memItemLeft" align="right" valign="top"><a id="a0982d3b9d3f6e910f3e430da961a5a44"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Culling</b> { <b>BACK</b>
+<tr class="memitem:a0982d3b9d3f6e910f3e430da961a5a44"><td class="memItemLeft" align="right" valign="top"><a id="a0982d3b9d3f6e910f3e430da961a5a44"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a> { <b>BACK</b>
 , <b>FRONT</b>
 , <b>NONE</b>
  }</td></tr>
+<tr class="memdesc:a0982d3b9d3f6e910f3e430da961a5a44"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Default is back culling. <br /></td></tr>
 <tr class="separator:a0982d3b9d3f6e910f3e430da961a5a44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a49f23860aa11145752b8eb1e5b10dbd3"><td class="memItemLeft" align="right" valign="top"><a id="a49f23860aa11145752b8eb1e5b10dbd3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Graphics</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;name, int w, int h, bool fs, u32 windowFlags)</td></tr>
-<tr class="separator:a49f23860aa11145752b8eb1e5b10dbd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abae713b91b43026784e653f1f64c63e5"><td class="memItemLeft" align="right" valign="top"><a id="abae713b91b43026784e653f1f64c63e5"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()</td></tr>
+<tr class="memitem:a6a1a6360becaae2c599e2c6e011ccb54"><td class="memItemLeft" align="right" valign="top"><a id="a6a1a6360becaae2c599e2c6e011ccb54"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a6a1a6360becaae2c599e2c6e011ccb54">~Graphics</a> ()</td></tr>
+<tr class="memdesc:a6a1a6360becaae2c599e2c6e011ccb54"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;An instance of the <a class="el" href="class_p_g_e_1_1_graphics.html" title="&#x202A;Main class for managing everything graphics related.">Graphics</a> class is considered active from when it was created via <a class="el" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24" title="&#x202A;Factory method.">create</a>, until it is deleted. <br /></td></tr>
+<tr class="separator:a6a1a6360becaae2c599e2c6e011ccb54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abae713b91b43026784e653f1f64c63e5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#abae713b91b43026784e653f1f64c63e5">update</a> ()</td></tr>
+<tr class="memdesc:abae713b91b43026784e653f1f64c63e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Updates native window functionality.  <a href="class_p_g_e_1_1_graphics.html#abae713b91b43026784e653f1f64c63e5">More...</a><br /></td></tr>
 <tr class="separator:abae713b91b43026784e653f1f64c63e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7931cd5b5bb39aeffd2031967af6770"><td class="memItemLeft" align="right" valign="top"><a id="af7931cd5b5bb39aeffd2031967af6770"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> ()=0</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#af7931cd5b5bb39aeffd2031967af6770">swap</a> ()=0</td></tr>
+<tr class="memdesc:af7931cd5b5bb39aeffd2031967af6770"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Presents previously rendered image to the screen. <br /></td></tr>
 <tr class="separator:af7931cd5b5bb39aeffd2031967af6770"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6dd05a42685bffd85e9c128ba4241e0"><td class="memItemLeft" align="right" valign="top"><a id="ab6dd05a42685bffd85e9c128ba4241e0"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> (const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> &amp;color)=0</td></tr>
+<tr class="memitem:ab6dd05a42685bffd85e9c128ba4241e0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#ab6dd05a42685bffd85e9c128ba4241e0">clear</a> (const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> &amp;color)=0</td></tr>
+<tr class="memdesc:ab6dd05a42685bffd85e9c128ba4241e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Clears the screen.  <a href="class_p_g_e_1_1_graphics.html#ab6dd05a42685bffd85e9c128ba4241e0">More...</a><br /></td></tr>
 <tr class="separator:ab6dd05a42685bffd85e9c128ba4241e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab216819d266a1e9f61001702c71c11cb"><td class="memItemLeft" align="right" valign="top"><a id="ab216819d266a1e9f61001702c71c11cb"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setRenderTarget</b> (<a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *renderTarget)=0</td></tr>
+<tr class="memitem:ab216819d266a1e9f61001702c71c11cb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#ab216819d266a1e9f61001702c71c11cb">setRenderTarget</a> (<a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *renderTarget)=0</td></tr>
+<tr class="memdesc:ab216819d266a1e9f61001702c71c11cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Sets the current render target to the specified texture.  <a href="class_p_g_e_1_1_graphics.html#ab216819d266a1e9f61001702c71c11cb">More...</a><br /></td></tr>
 <tr class="separator:ab216819d266a1e9f61001702c71c11cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa8018f3b5be7c85d983658823644de8"><td class="memItemLeft" align="right" valign="top"><a id="afa8018f3b5be7c85d983658823644de8"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setRenderTargets</b> (const std::vector&lt; <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> * &gt; &amp;renderTargets)=0</td></tr>
+<tr class="memitem:afa8018f3b5be7c85d983658823644de8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#afa8018f3b5be7c85d983658823644de8">setRenderTargets</a> (const std::vector&lt; <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> * &gt; &amp;renderTargets)=0</td></tr>
+<tr class="memdesc:afa8018f3b5be7c85d983658823644de8"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Sets the current render target to the specified textures.  <a href="class_p_g_e_1_1_graphics.html#afa8018f3b5be7c85d983658823644de8">More...</a><br /></td></tr>
 <tr class="separator:afa8018f3b5be7c85d983658823644de8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57f1f66ffdf2e79ecd2581a788e572e8"><td class="memItemLeft" align="right" valign="top"><a id="a57f1f66ffdf2e79ecd2581a788e572e8"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>resetRenderTarget</b> ()=0</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a57f1f66ffdf2e79ecd2581a788e572e8">resetRenderTarget</a> ()=0</td></tr>
+<tr class="memdesc:a57f1f66ffdf2e79ecd2581a788e572e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Resets the render target to a buffer, which can be presented to the screen using <a class="el" href="class_p_g_e_1_1_graphics.html#af7931cd5b5bb39aeffd2031967af6770" title="&#x202A;Presents previously rendered image to the screen.">swap</a>. <br /></td></tr>
 <tr class="separator:a57f1f66ffdf2e79ecd2581a788e572e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fdac10172b296c64ccf5fcdc698bd55"><td class="memItemLeft" align="right" valign="top"><a id="a7fdac10172b296c64ccf5fcdc698bd55"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setViewport</b> (const <a class="el" href="class_p_g_e_1_1_rectanglei.html">Rectanglei</a> &amp;vp)=0</td></tr>
+<tr class="memitem:a7fdac10172b296c64ccf5fcdc698bd55"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a7fdac10172b296c64ccf5fcdc698bd55">setViewport</a> (const <a class="el" href="class_p_g_e_1_1_rectanglei.html">Rectanglei</a> &amp;vp)=0</td></tr>
+<tr class="memdesc:a7fdac10172b296c64ccf5fcdc698bd55"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Sets the size and position of the viewport into which rendering operatons take place.  <a href="class_p_g_e_1_1_graphics.html#a7fdac10172b296c64ccf5fcdc698bd55">More...</a><br /></td></tr>
 <tr class="separator:a7fdac10172b296c64ccf5fcdc698bd55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cc1946dae4e2b92e19d8f618bb0f96e"><td class="memItemLeft" align="right" valign="top"><a id="a7cc1946dae4e2b92e19d8f618bb0f96e"></a>
 const <a class="el" href="class_p_g_e_1_1_rectanglei.html">Rectanglei</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getViewport</b> () const</td></tr>
 <tr class="separator:a7cc1946dae4e2b92e19d8f618bb0f96e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5b2de1f4b67e543d75f7201498d763a"><td class="memItemLeft" align="right" valign="top"><a id="aa5b2de1f4b67e543d75f7201498d763a"></a>
-const <a class="el" href="class_p_g_e_1_1_vector2i.html">Vector2i</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDimensions</b> () const</td></tr>
+const <a class="el" href="class_p_g_e_1_1_vector2i.html">Vector2i</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#aa5b2de1f4b67e543d75f7201498d763a">getDimensions</a> () const</td></tr>
+<tr class="memdesc:aa5b2de1f4b67e543d75f7201498d763a"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Gets the window's dimensions in pixels. <br /></td></tr>
 <tr class="separator:aa5b2de1f4b67e543d75f7201498d763a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66c372dc8561f81ab19f567d1a11a58e"><td class="memItemLeft" align="right" valign="top"><a id="a66c372dc8561f81ab19f567d1a11a58e"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getAspectRatio</b> () const</td></tr>
@@ -151,43 +162,46 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isWindowOpen</b> () c
 <tr class="memitem:a2f7957ee51137e680b41586faf706a68"><td class="memItemLeft" align="right" valign="top"><a id="a2f7957ee51137e680b41586faf706a68"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isWindowFocused</b> () const</td></tr>
 <tr class="separator:a2f7957ee51137e680b41586faf706a68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad07f9d967947dab85825e31a53e2fd6e"><td class="memItemLeft" align="right" valign="top"><a id="ad07f9d967947dab85825e31a53e2fd6e"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setDepthTest</b> (bool isEnabled)</td></tr>
+<tr class="memitem:ad07f9d967947dab85825e31a53e2fd6e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#ad07f9d967947dab85825e31a53e2fd6e">setDepthTest</a> (bool isEnabled)</td></tr>
+<tr class="memdesc:ad07f9d967947dab85825e31a53e2fd6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Whether z-buffering is enabled.  <a href="class_p_g_e_1_1_graphics.html#ad07f9d967947dab85825e31a53e2fd6e">More...</a><br /></td></tr>
 <tr class="separator:ad07f9d967947dab85825e31a53e2fd6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbd644a9f7ffda988e3de5ddbb93c387"><td class="memItemLeft" align="right" valign="top"><a id="acbd644a9f7ffda988e3de5ddbb93c387"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>getDepthTest</b> () const</td></tr>
 <tr class="separator:acbd644a9f7ffda988e3de5ddbb93c387"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d986c8ad7c097b28e683f1c4f62265e"><td class="memItemLeft" align="right" valign="top"><a id="a1d986c8ad7c097b28e683f1c4f62265e"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setVsync</b> (bool isEnabled)</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a1d986c8ad7c097b28e683f1c4f62265e">setVsync</a> (bool isEnabled)</td></tr>
+<tr class="memdesc:a1d986c8ad7c097b28e683f1c4f62265e"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Default is enabled. <br /></td></tr>
 <tr class="separator:a1d986c8ad7c097b28e683f1c4f62265e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac95c76a48aba5940b5cca496bec027df"><td class="memItemLeft" align="right" valign="top"><a id="ac95c76a48aba5940b5cca496bec027df"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>getVsync</b> () const</td></tr>
 <tr class="separator:ac95c76a48aba5940b5cca496bec027df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a449fc76e49f2b27cb56c077e2b33b216"><td class="memItemLeft" align="right" valign="top"><a id="a449fc76e49f2b27cb56c077e2b33b216"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setCulling</b> (Culling mode)</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setCulling</b> (<a class="el" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a> mode)</td></tr>
 <tr class="separator:a449fc76e49f2b27cb56c077e2b33b216"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83ba3617a8d7befd0db51c4d893a0cc6"><td class="memItemLeft" align="right" valign="top"><a id="a83ba3617a8d7befd0db51c4d893a0cc6"></a>
-virtual Culling&#160;</td><td class="memItemRight" valign="bottom"><b>getCulling</b> () const</td></tr>
+virtual <a class="el" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getCulling</b> () const</td></tr>
 <tr class="separator:a83ba3617a8d7befd0db51c4d893a0cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a373d59649eb02fb5331952efbdd527e5"><td class="memItemLeft" align="right" valign="top"><a id="a373d59649eb02fb5331952efbdd527e5"></a>
-<a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getInfo</b> () const</td></tr>
-<tr class="separator:a373d59649eb02fb5331952efbdd527e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0117dc381e49b9b038c6f30347098ace"><td class="memItemLeft" align="right" valign="top"><a id="a0117dc381e49b9b038c6f30347098ace"></a>
-virtual <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getRendererName</b> () const =0</td></tr>
-<tr class="separator:a0117dc381e49b9b038c6f30347098ace"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4a4f0df2b99436f5e4bf8fd0ad86a21"><td class="memItemLeft" align="right" valign="top"><a id="ae4a4f0df2b99436f5e4bf8fd0ad86a21"></a>
+virtual <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#ae4a4f0df2b99436f5e4bf8fd0ad86a21">getInfo</a> () const =0</td></tr>
+<tr class="memdesc:ae4a4f0df2b99436f5e4bf8fd0ad86a21"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Gets implementation defined debug information about a graphics object. <br /></td></tr>
+<tr class="separator:ae4a4f0df2b99436f5e4bf8fd0ad86a21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a900adeee80c1f1c5fada1d36ffe75b24"><td class="memItemLeft" align="right" valign="top"><a id="a900adeee80c1f1c5fada1d36ffe75b24"></a>
-static <a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24">create</a> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;name=&quot;PGE Application&quot;, int w=1280, int h=720, bool fs=false, Renderer r=Renderer::Default)</td></tr>
+static <a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24">create</a> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;name=&quot;PGE Application&quot;, int w=1280, int h=720, bool fs=false, <a class="el" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">Renderer</a> r=<a class="el" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83a7a1920d61156abc05a60135aefe8bc67">Renderer::Default</a>)</td></tr>
 <tr class="memdesc:a900adeee80c1f1c5fada1d36ffe75b24"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Factory method. <br /></td></tr>
 <tr class="separator:a900adeee80c1f1c5fada1d36ffe75b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a526acbd2eaeabc8e84df733297f97ea4"><td class="memItemLeft" align="right" valign="top"><a id="a526acbd2eaeabc8e84df733297f97ea4"></a>
-static const std::list&lt; <a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getActiveInstances</b> ()</td></tr>
+static const std::list&lt; <a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a526acbd2eaeabc8e84df733297f97ea4">getActiveInstances</a> ()</td></tr>
+<tr class="memdesc:a526acbd2eaeabc8e84df733297f97ea4"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;An instance of the <a class="el" href="class_p_g_e_1_1_graphics.html" title="&#x202A;Main class for managing everything graphics related.">Graphics</a> class is considered active from when it was created via <a class="el" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24" title="&#x202A;Factory method.">create</a>, until it is deleted. <br /></td></tr>
 <tr class="separator:a526acbd2eaeabc8e84df733297f97ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
+<tr class="memitem:a49f23860aa11145752b8eb1e5b10dbd3"><td class="memItemLeft" align="right" valign="top"><a id="a49f23860aa11145752b8eb1e5b10dbd3"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Graphics</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;name, int w, int h, bool fs, u32 windowFlags)</td></tr>
+<tr class="separator:a49f23860aa11145752b8eb1e5b10dbd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a942532b493300f366bd0b938c31fb223"><td class="memItemLeft" align="right" valign="top"><a id="a942532b493300f366bd0b938c31fb223"></a>
 SDL_Window *&#160;</td><td class="memItemRight" valign="bottom"><b>getWindow</b> () const noexcept</td></tr>
 <tr class="separator:a942532b493300f366bd0b938c31fb223"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,9 +236,219 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>depthTest</b></td></t
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>vsync</b></td></tr>
 <tr class="separator:abfdbae6c0809255bbbc1130722a1a2ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6942641e93eb05a3d7c16ad0ff6a78f"><td class="memItemLeft" align="right" valign="top"><a id="ac6942641e93eb05a3d7c16ad0ff6a78f"></a>
-Culling&#160;</td><td class="memItemRight" valign="bottom"><b>cullingMode</b></td></tr>
+<a class="el" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cullingMode</b></td></tr>
 <tr class="separator:ac6942641e93eb05a3d7c16ad0ff6a78f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p class="DocNodeLTR">Main class for managing everything graphics related. </p>
+<p class="DocNodeLTR">By default z-buffering, v-sync and backface culling are enabled. </p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a7ba2bbb9d3249d2a61df738fec941f83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ba2bbb9d3249d2a61df738fec941f83">&#9670;&nbsp;</a></span>Renderer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">PGE::Graphics::Renderer</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&#x202A;The type of renderer to use. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7ba2bbb9d3249d2a61df738fec941f83a7a1920d61156abc05a60135aefe8bc67"></a>Default&#160;</td><td class="fielddoc"><p class="DocNodeLTR">Will choose the optimal renderer, depending on the platform. </p>
+<p class="DocNodeLTR">Windows: DX11</p>
+<p class="DocNodeLTR">Everything else: OGL </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab6dd05a42685bffd85e9c128ba4241e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6dd05a42685bffd85e9c128ba4241e0">&#9670;&nbsp;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void PGE::Graphics::clear </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> &amp;&#160;</td>
+          <td class="paramname"><em>color</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&#x202A;Clears the screen. </p>
+<p class="DocNodeLTR">In order to actually display the changes, call <a class="el" href="class_p_g_e_1_1_graphics.html#af7931cd5b5bb39aeffd2031967af6770" title="&#x202A;Presents previously rendered image to the screen.">swap</a>. Independent of <a class="el" href="class_p_g_e_1_1_graphics.html#a7fdac10172b296c64ccf5fcdc698bd55" title="&#x202A;Sets the size and position of the viewport into which rendering operatons take place.">setViewport</a>. </p>
+
+</div>
+</div>
+<a id="ad07f9d967947dab85825e31a53e2fd6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad07f9d967947dab85825e31a53e2fd6e">&#9670;&nbsp;</a></span>setDepthTest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void PGE::Graphics::setDepthTest </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isEnabled</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&#x202A;Whether z-buffering is enabled. </p>
+<p class="DocNodeLTR">Default is enabled. </p>
+
+</div>
+</div>
+<a id="ab216819d266a1e9f61001702c71c11cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab216819d266a1e9f61001702c71c11cb">&#9670;&nbsp;</a></span>setRenderTarget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void PGE::Graphics::setRenderTarget </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *&#160;</td>
+          <td class="paramname"><em>renderTarget</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&#x202A;Sets the current render target to the specified texture. </p>
+<p class="DocNodeLTR"><a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> must support being rendered to. </p>
+
+</div>
+</div>
+<a id="afa8018f3b5be7c85d983658823644de8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa8018f3b5be7c85d983658823644de8">&#9670;&nbsp;</a></span>setRenderTargets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void PGE::Graphics::setRenderTargets </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>renderTargets</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&#x202A;Sets the current render target to the specified textures. </p>
+<p class="DocNodeLTR">All textures must support being rendered to. </p>
+
+</div>
+</div>
+<a id="a7fdac10172b296c64ccf5fcdc698bd55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fdac10172b296c64ccf5fcdc698bd55">&#9670;&nbsp;</a></span>setViewport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void PGE::Graphics::setViewport </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_p_g_e_1_1_rectanglei.html">Rectanglei</a> &amp;&#160;</td>
+          <td class="paramname"><em>vp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&#x202A;Sets the size and position of the viewport into which rendering operatons take place. </p>
+<p class="DocNodeLTR">In pixels with the windows's top left corner as (0, 0).</p>
+<p class="DocNodeLTR">Useful for rendering multiple views at once. </p>
+
+</div>
+</div>
+<a id="abae713b91b43026784e653f1f64c63e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abae713b91b43026784e653f1f64c63e5">&#9670;&nbsp;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void PGE::Graphics::update </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&#x202A;Updates native window functionality. </p>
+<p class="DocNodeLTR">E.g. minimyzing, closing.</p>
+<p class="DocNodeLTR"><b>Requires</b> a call to <a class="el" href="class_p_g_e_1_1_sys_events.html#af01fc4f9f22191b3e853b039fc16da5f" title="&#x202A;This must be called in order for system events to be handled.">PGE::SysEvents::update</a> to function at all. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

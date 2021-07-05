@@ -1,12 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"class_p_g_e_1_1_string.html#ac910206f1a48acbb8b7dcd5896eab94e":[1,0,0,40,32],
-"class_p_g_e_1_1_string.html#acab3beef14fce2ae2b05d7c1de732f66":[1,0,0,40,8],
-"class_p_g_e_1_1_string.html#ad09d7cb057201e7af8833420a49dead1":[1,0,0,40,33],
-"class_p_g_e_1_1_string.html#ad499de88358e9aad50670048ac188cf6":[1,0,0,40,44],
-"class_p_g_e_1_1_string.html#adc967f43aadf3ca053a0a9c9f4d7671c":[1,0,0,40,18],
-"class_p_g_e_1_1_string.html#ade1b91ab2224997c54fba7f32da1297b":[1,0,0,40,17],
-"class_p_g_e_1_1_string.html#ae214a27004c89dbd34025573962f3f31":[1,0,0,40,48],
 "class_p_g_e_1_1_string.html#ae430e40287ebf65b336dac93d100e0ff":[1,0,0,40,45],
 "class_p_g_e_1_1_string.html#ae4ab9b20750544009ac31397aea954f0":[1,0,0,40,40],
 "class_p_g_e_1_1_string.html#ae893905a061d6a33712e4e5ba1df9d7a":[1,0,0,40,22],
@@ -187,6 +180,7 @@ var NAVTREEINDEX3 =
 "class_p_g_e_1_1_vertex.html#ae5d6294c9ed7a81ee68c3dc8ae93b963":[1,0,0,10,6],
 "classes.html":[1,1],
 "functions.html":[1,3,0],
+"functions_enum.html":[1,3,2],
 "functions_func.html":[1,3,1],
 "hierarchy.html":[1,2],
 "index.html":[],
@@ -249,5 +243,11 @@ var NAVTREEINDEX3 =
 "struct_p_g_e_1_1_string_1_1_iterator.html#afcdf8cc8125e3457c7a9b46724f63b0c":[1,0,0,40,0,25],
 "struct_p_g_e_1_1_string_1_1_key.html":[1,0,0,40,1],
 "struct_p_g_e_1_1_string_1_1_key.html#abba308ec34ff87956277ca693d4d3dc3":[1,0,0,40,1,0],
-"struct_p_g_e_1_1_string_1_1_key.html#aec22ceea9b91897bbcfdb5dc16a5f86a":[1,0,0,40,1,1]
+"struct_p_g_e_1_1_string_1_1_key.html#aec22ceea9b91897bbcfdb5dc16a5f86a":[1,0,0,40,1,1],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html":[1,0,0,40,2],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#a3fb5c1d537a68472288c1422638cda5b":[1,0,0,40,2,0],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#a5ed81bb14531c5caa933d2a07f6fce23":[1,0,0,40,2,3],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#a81271fa78f79662e96f975be1bec0087":[1,0,0,40,2,1],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#afd3c65656fe877af5f3ed1bccaa88026":[1,0,0,40,2,2],
+"struct_p_g_e_1_1_string_1_1_redundant_key.html":[1,0,0,40,3]
 };
