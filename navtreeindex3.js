@@ -1,9 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"class_p_g_e_1_1_string.html#ae430e40287ebf65b336dac93d100e0ff":[1,0,0,40,45],
-"class_p_g_e_1_1_string.html#ae4ab9b20750544009ac31397aea954f0":[1,0,0,40,40],
-"class_p_g_e_1_1_string.html#ae893905a061d6a33712e4e5ba1df9d7a":[1,0,0,40,22],
-"class_p_g_e_1_1_string.html#af3d88a942ef0ed2ff1a115340bd1e41c":[1,0,0,40,42],
 "class_p_g_e_1_1_string.html#aff79d7d33c05c4fedc4d88e32881b7d1":[1,0,0,40,31],
 "class_p_g_e_1_1_sys_events.html":[1,0,0,41],
 "class_p_g_e_1_1_sys_events.html#ad148f06c9f7af3c07a47e15807e0652b":[1,0,0,41,1],
@@ -242,12 +238,16 @@ var NAVTREEINDEX3 =
 "struct_p_g_e_1_1_string_1_1_iterator.html#af52bbb7e435ce96892d0fd9499014d5b":[1,0,0,40,0,7],
 "struct_p_g_e_1_1_string_1_1_iterator.html#afcdf8cc8125e3457c7a9b46724f63b0c":[1,0,0,40,0,25],
 "struct_p_g_e_1_1_string_1_1_key.html":[1,0,0,40,1],
-"struct_p_g_e_1_1_string_1_1_key.html#abba308ec34ff87956277ca693d4d3dc3":[1,0,0,40,1,0],
-"struct_p_g_e_1_1_string_1_1_key.html#aec22ceea9b91897bbcfdb5dc16a5f86a":[1,0,0,40,1,1],
+"struct_p_g_e_1_1_string_1_1_key.html#aa73efe19d7bd272872874eaa69ab171a":[1,0,0,40,1,0],
+"struct_p_g_e_1_1_string_1_1_key.html#abba308ec34ff87956277ca693d4d3dc3":[1,0,0,40,1,1],
+"struct_p_g_e_1_1_string_1_1_key.html#aec22ceea9b91897bbcfdb5dc16a5f86a":[1,0,0,40,1,2],
 "struct_p_g_e_1_1_string_1_1_ordered_key.html":[1,0,0,40,2],
-"struct_p_g_e_1_1_string_1_1_ordered_key.html#a3fb5c1d537a68472288c1422638cda5b":[1,0,0,40,2,0],
-"struct_p_g_e_1_1_string_1_1_ordered_key.html#a5ed81bb14531c5caa933d2a07f6fce23":[1,0,0,40,2,3],
-"struct_p_g_e_1_1_string_1_1_ordered_key.html#a81271fa78f79662e96f975be1bec0087":[1,0,0,40,2,1],
-"struct_p_g_e_1_1_string_1_1_ordered_key.html#afd3c65656fe877af5f3ed1bccaa88026":[1,0,0,40,2,2],
-"struct_p_g_e_1_1_string_1_1_redundant_key.html":[1,0,0,40,3]
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#a3fb5c1d537a68472288c1422638cda5b":[1,0,0,40,2,1],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#a5ed81bb14531c5caa933d2a07f6fce23":[1,0,0,40,2,4],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#a81271fa78f79662e96f975be1bec0087":[1,0,0,40,2,2],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#a93ed10bc2b271a59a4acd77c6d0f05f1":[1,0,0,40,2,0],
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#afd3c65656fe877af5f3ed1bccaa88026":[1,0,0,40,2,3],
+"struct_p_g_e_1_1_string_1_1_redundant_key.html":[1,0,0,40,3],
+"struct_p_g_e_1_1_string_1_1_redundant_key.html#a7a575174570820a8167552151111b43f":[1,0,0,40,3,2],
+"struct_p_g_e_1_1_string_1_1_redundant_key.html#a8c93284fdb101f60b17b817beb5ddb80":[1,0,0,40,3,1]
 };

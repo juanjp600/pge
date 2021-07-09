@@ -86,12 +86,16 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_material.html',''); in
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="class_p_g_e_1_1_material-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">PGE::Material Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>&#x202A;Can be applied to a mesh and simply consists of a <a class="el" href="class_p_g_e_1_1_shader.html">PGE::Shader</a> and optional <a class="el" href="class_p_g_e_1_1_texture.html">PGE::Texture</a> (s).  
+ <a href="class_p_g_e_1_1_material.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_material_8h_source.html">PGE/Graphics/Material.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -116,20 +120,11 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>getTextureCount</b> ()
 <tr class="memitem:ae6290290dd787f5a66af686e4ea8ca67"><td class="memItemLeft" align="right" valign="top"><a id="ae6290290dd787f5a66af686e4ea8ca67"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isOpaque</b> () const</td></tr>
 <tr class="separator:ae6290290dd787f5a66af686e4ea8ca67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:ad26a01e5223eb5d6c062b62d79592786"><td class="memItemLeft" align="right" valign="top"><a id="ad26a01e5223eb5d6c062b62d79592786"></a>
-<a class="el" href="class_p_g_e_1_1_shader.html">Shader</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>shader</b></td></tr>
-<tr class="separator:ad26a01e5223eb5d6c062b62d79592786"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa48456ed59f236345104e6cfd50f0af0"><td class="memItemLeft" align="right" valign="top"><a id="aa48456ed59f236345104e6cfd50f0af0"></a>
-std::vector&lt; <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>textures</b></td></tr>
-<tr class="separator:aa48456ed59f236345104e6cfd50f0af0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a481dbb486e396e18d992a199a16f40d8"><td class="memItemLeft" align="right" valign="top"><a id="a481dbb486e396e18d992a199a16f40d8"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>opaque</b></td></tr>
-<tr class="separator:a481dbb486e396e18d992a199a16f40d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p class="DocNodeLTR">Can be applied to a mesh and simply consists of a <a class="el" href="class_p_g_e_1_1_shader.html">PGE::Shader</a> and optional <a class="el" href="class_p_g_e_1_1_texture.html">PGE::Texture</a> (s). </p>
+<p class="DocNodeLTR">If a material is not opaque z-buffering will never be applied to the rendered mesh. </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
