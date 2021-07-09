@@ -133,7 +133,7 @@ void MeshOGL3::render() {
     glDepthMask(isOpaque());
     glColorMask(true,true,true,!isOpaque());
 
-    glDrawElements(glPrimitiveType,primitives.size()*glIndexMultiplier,GL_UNSIGNED_INT,nullptr);
+    glDrawElements(glPrimitiveType,(GLsizei)primitives.size()*glIndexMultiplier,GL_UNSIGNED_INT,nullptr);
 
     ((ShaderOGL3*)material->getShader())->unbindGLAttribs();
     glBindVertexArray(0);

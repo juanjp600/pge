@@ -22,6 +22,9 @@ static void textureImage(int width, int height, const byte* buffer, Texture::For
             glFormat = GL_RED;
             glPixelType = GL_UNSIGNED_BYTE;
         } break;
+        default: {
+            throw PGE_CREATE_EX("Invalid format");
+        }
     }
 
     glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, buffer);

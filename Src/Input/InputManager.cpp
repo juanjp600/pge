@@ -91,7 +91,7 @@ const String& ControllerInternal::getName() const {
 void ControllerInternal::rumble(float lowFreqIntensity,float highFreqIntensity,int durationMs) {
     int lfiUshort = (int)(lowFreqIntensity*((float)0xffff));
     int hfiUshort = (int)(highFreqIntensity*((float)0xffff));
-    SDL_GameControllerRumble(sdlController, lfiUshort>0xffff ? 0xffff : lfiUshort, hfiUshort>0xffff ? 0xffff : hfiUshort, durationMs);
+    SDL_GameControllerRumble(sdlController, lfiUshort>0xffff ? 0xffff : (Uint16)lfiUshort, hfiUshort>0xffff ? 0xffff : (Uint16)hfiUshort, durationMs);
 }
 
 SDL_GameController* ControllerInternal::getSdlController() const {
@@ -406,7 +406,7 @@ void InputManagerInternal::untrackInput(Input* input) {
 }
 
 int InputManagerInternal::getControllerCount() const {
-    return openControllers.size();
+    return (int)openControllers.size();
 }
 
 Controller* InputManagerInternal::getController(int index) const {

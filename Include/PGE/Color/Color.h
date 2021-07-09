@@ -42,22 +42,22 @@ class Color {
             switch (i) {
                 default:
                 case 0: {
-                    return Color(v, z, x);
+                    return Color(v, z, x, a);
                 }
                 case 1: {
-                    return Color(y, v, x);
+                    return Color(y, v, x, a);
                 }
                 case 2: {
-                    return Color(x, v, z);
+                    return Color(x, v, z, a);
                 }
                 case 3: {
-                    return Color(x, y, v);
+                    return Color(x, y, v, a);
                 }
                 case 4: {
-                    return Color(z, x, v);
+                    return Color(z, x, v, a);
                 }
                 case 5: {
-                    return Color(v, x, y);
+                    return Color(v, x, y, a);
                 }
             }
         }

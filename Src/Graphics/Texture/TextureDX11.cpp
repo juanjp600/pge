@@ -56,7 +56,7 @@ void TextureDX11::useTexture(int index) {
 
 // TODO: Redo this.
 Texture* TextureDX11::copy() const {
-    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
+    //ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     //TextureDX11* copy = new TextureDX11(graphics, getWidth(), getHeight(), false, nullptr, format);
 

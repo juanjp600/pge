@@ -8,8 +8,6 @@ using namespace PGE;
 //REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
 
 GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsSpecialized("DirectX 11", name, w, h, fs, SDL_WINDOW_SHOWN) {
-    HRESULT hResult = 0;
-
     if (fullscreen) {
         SDL_SetWindowBordered(getWindow(), SDL_bool::SDL_FALSE);
         SDL_Rect displayBounds;
@@ -123,18 +121,18 @@ void GraphicsDX11::setRenderTarget(Texture* renderTarget) {
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
     currentRenderTargetViews.clear(); currentRenderTargetViews.push_back(((TextureDX11*)renderTarget)->getRtv());
     currentDepthStencilView = ((TextureDX11*)renderTarget)->getZBufferView();
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::setRenderTargets(const std::vector<Texture*>& renderTargets) {
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
     currentRenderTargetViews.clear();
     TextureDX11* maxSizeTexture = (TextureDX11*)renderTargets[0];
@@ -151,18 +149,18 @@ void GraphicsDX11::setRenderTargets(const std::vector<Texture*>& renderTargets) 
                                                        String::fromInt(renderTargets[i]->getWidth()) + "x" + String::fromInt(renderTargets[i]->getHeight()) + ")");
     }
     currentDepthStencilView = maxSizeTexture->getZBufferView();
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::resetRenderTarget() {
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
     currentRenderTargetViews.clear(); currentRenderTargetViews.push_back(dxBackBufferRtv);
     currentDepthStencilView = dxZBufferView;
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::setViewport(const Rectanglei& vp) {

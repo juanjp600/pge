@@ -53,7 +53,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
 
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
     dxSamplerState = ResourceViewVector<ID3D11SamplerState*>::withSize(samplerCount);
-    for (int i = 0; i < samplerCount; i++) {
+    for (int i = 0; i < (int)samplerCount; i++) {
         dxSamplerState[i] = resourceManager.addNewResource<D3D11SamplerState>(dxDevice, samplerDesc);
     }
 
@@ -71,7 +71,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
 void ShaderDX11::readConstantBuffers(BinaryReader& reader, ResourceViewVector<CBufferInfo*>& constantBuffers) {
     u32 cBufferCount = reader.readUInt32();
 
-    for (int i = 0; i < cBufferCount; i++) {
+    for (int i = 0; i < (int)cBufferCount; i++) {
         String bufferName = reader.readNullTerminatedString();
         u32 cBufferSize = reader.readUInt32();
         CBufferInfoView constantBuffer = resourceManager.addNewResource<CBufferInfoOwner>(graphics, bufferName, cBufferSize, &resourceManager);
@@ -79,7 +79,7 @@ void ShaderDX11::readConstantBuffers(BinaryReader& reader, ResourceViewVector<CB
 
         String varName;
         u32 varCount = reader.readUInt32();
-        for (int i = 0; i < (int)varCount; i++) {
+        for (int j = 0; j < (int)varCount; j++) {
             varName = reader.readNullTerminatedString();
             u32 varOffset = reader.readUInt32();
             u32 varSize = reader.readUInt32();
@@ -165,8 +165,6 @@ ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, const String& nm, int s
     ZeroMemory( &cBufferSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA) );
     cBufferSubresourceData.pSysMem = data;
 
-    HRESULT hResult = 0;
-
     dxCBuffer = resourceManager->addNewResource<D3D11Buffer>(((GraphicsDX11*)graphics)->getDxDevice(), cBufferDesc, cBufferSubresourceData);
 
     dxContext = ((GraphicsDX11*)graphics)->getDxContext();
@@ -186,8 +184,8 @@ std::unordered_map<String::Key, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferIn
     return &constants;
 }
 
-void ShaderDX11::CBufferInfo::addConstant(const String& name, const ShaderDX11::ConstantDX11& constant) {
-    constants.emplace(name, constant);
+void ShaderDX11::CBufferInfo::addConstant(const String& cName, const ShaderDX11::ConstantDX11& constant) {
+    constants.emplace(cName, constant);
 }
 
 bool ShaderDX11::CBufferInfo::isDirty() const {

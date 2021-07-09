@@ -5,7 +5,7 @@
 
 using namespace PGE;
 
-int Unicode::measureCodepoint(unsigned char chr) {
+int Unicode::measureCodepoint(byte chr) {
     if ((chr & 0x80) == 0x00) {
         // First bit is 0: treat as ASCII.
         return 1;
@@ -73,7 +73,7 @@ int Unicode::wCharToUtf8(wchar chr, char* result) {
         // It doesn't fit: add another byte.
         if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
         chr >>= 6;
-        firstByte = (firstByte | (0x1 << (7 - len))) | chr;
+        firstByte = (char)((firstByte | (0x1 << (7 - len))) | chr);
         len++;
     }
 

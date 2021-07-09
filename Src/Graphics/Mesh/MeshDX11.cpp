@@ -86,7 +86,6 @@ void MeshDX11::uploadInternalData() {
     if (!mustReuploadInternalData) { return; }
 
     ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
-    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     if (dxVertexData.size() > 0) {
         ZeroMemory(&dxVertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
@@ -155,7 +154,7 @@ void MeshDX11::render() {
                 ? (isOpaque() ? GraphicsDX11::ZBufferStateIndex::ENABLED_WRITE : GraphicsDX11::ZBufferStateIndex::ENABLED_NOWRITE)
                 : GraphicsDX11::ZBufferStateIndex::DISABLED);
     
-    dxContext->DrawIndexed(primitives.size()*dxIndexMultiplier,0,0);
+    dxContext->DrawIndexed((UINT)primitives.size()*dxIndexMultiplier,0,0);
 
     ID3D11ShaderResourceView* nullResource = nullptr;
     for (int i=0;i<material->getTextureCount();i++) {

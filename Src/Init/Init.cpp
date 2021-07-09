@@ -16,6 +16,7 @@ using namespace PGE;
 
 #define PGE_ASSERT_SDL(CALL) PGE_ASSERT(CALL >= 0, SDL_GetError())
 
+#ifndef DEBUG
 static void showError(const String& exceptionType, const String& what) {
     TextWriter writer = TextWriter(FilePath::fromStr("exception.txt"));
     writer.writeLine(Info::REPO_LINK);
@@ -30,6 +31,7 @@ static void showError(const String& exceptionType, const String& what) {
     SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags::SDL_MESSAGEBOX_ERROR, "Fatal Error",
         "An exception has been thrown, please send \"exception.txt\" to a developer.", NULL);
 }
+#endif
 
 // Throws PGE::Exception on error.
 void Init::init() {
@@ -52,7 +54,10 @@ void Init::quit() {
 #ifdef DEBUG
 int main(int argc, char** argv) {
 #else
+#pragma warning(push)
+#pragma warning(disable: 4100) // Unusued parameters.
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PSTR lpCmdLine, _In_ INT nCmdShow) {
+#pragma warning(pop)
     try {
 #endif
         Init::init();

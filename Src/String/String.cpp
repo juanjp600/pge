@@ -620,16 +620,16 @@ char* String::cstrNoConst() {
 }
 
 std::vector<wchar> String::wstr() const {
-    std::vector<wchar> chs;
+    std::vector<wchar> chars;
     if (data->_strLength >= 0) {
-        chs.reserve(data->_strLength);
+        chars.reserve(data->_strLength);
     }
     // Convert all the codepoints to wchars.
     for (Iterator it = begin(); it != end(); it++) {
-        chs.push_back(*it);
+        chars.push_back(*it);
     }
-    chs.push_back(L'\0');
-    return chs;
+    chars.push_back(L'\0');
+    return chars;
 }
 
 int String::toInt(bool& success) const {

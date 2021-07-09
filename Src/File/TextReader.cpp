@@ -65,27 +65,27 @@ wchar TextReader::readChar() {
 			if (ch == EOF) {
 				reportEOF();
 			}
-			return ch;
+			return (wchar)ch;
 		}
 		case Encoding::UTF8: {
 			int ch = stream.rdbuf()->sbumpc();
 			if (ch == EOF) {
 				reportEOF();
-				return ch;
+				return (wchar)ch;
 			}
-			int codepoint = Unicode::measureCodepoint(ch);
+			int codepoint = Unicode::measureCodepoint((byte)ch);
 			if (codepoint == 1) {
 				return (char)ch;
 			} else {
 				char chs[3];
-				chs[0] = ch;
+				chs[0] = (char)ch;
 				for (int i = 1; i < codepoint; i++) {
 					int newCh = stream.rdbuf()->sbumpc();
 					if (newCh == EOF) {
 						reportEOF();
 						throw PGE_CREATE_EX(UNEXPECTED_EOF);
 					}
-					chs[i] = newCh;
+					chs[i] = (char)newCh;
 				}
 				return Unicode::utf8ToWChar(chs, codepoint);
 			}
@@ -95,7 +95,7 @@ wchar TextReader::readChar() {
 			int ch = stream.rdbuf()->sbumpc();
 			if (ch == EOF) {
 				reportEOF();
-				return ch;
+				return (wchar)ch;
 			}
 			int ch2 = stream.rdbuf()->sbumpc();
 			if (ch2 == EOF) {
