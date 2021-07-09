@@ -6,17 +6,20 @@
 namespace PGE {
 
 struct String::Key {
+    Key() = default;
     Key(const String& str) : hash(str.getHashCode()) { }
     size_t hash;
 };
 
 struct String::RedundantKey {
+    RedundantKey() = default;
     RedundantKey(const String& str) : hash(str.getHashCode()), str(str) { }
     size_t hash;
     String str;
 };
 
 struct String::SafeKey {
+    SafeKey() = default;
     SafeKey(const String& str) : hash(str.getHashCode()), str(str) { }
     size_t hash;
     String str;
@@ -26,6 +29,7 @@ struct String::SafeKey {
 };
 
 struct String::OrderedKey {
+    OrderedKey() = default;
     OrderedKey(const String& str) : str(str) { }
     const String str;
     bool operator<(const OrderedKey& other) const {
