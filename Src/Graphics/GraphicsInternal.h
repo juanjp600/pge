@@ -31,11 +31,14 @@ class GraphicsInternal : public Graphics {
 
 template <class SHADER, class MESH, class TEXTURE>
 class GraphicsSpecialized : public GraphicsInternal {
-    private:
-        static const inline String RENDERER_NAME = "SHIT";
+    protected:
+        // TODO: The more appropriate template solution is available in C++20.
+        const String RENDERER_NAME;
 
     public:
-        using GraphicsInternal::GraphicsInternal;
+        GraphicsSpecialized(const String& rendererName, const String& name, int w, int h, bool fs, u32 windowFlags)
+            : GraphicsInternal(name, w, h, fs, windowFlags), RENDERER_NAME(rendererName) { }
+        
         using Graphics::getWindow;
 
 #if defined(__APPLE__) && defined(__OBJC__)

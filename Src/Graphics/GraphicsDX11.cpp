@@ -7,7 +7,7 @@ using namespace PGE;
 
 //REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
 
-GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsSpecialized(name, w, h, fs, SDL_WINDOW_SHOWN) {
+GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsSpecialized("DirectX 11", name, w, h, fs, SDL_WINDOW_SHOWN) {
     HRESULT hResult = 0;
 
     if (fullscreen) {
