@@ -8,6 +8,8 @@ namespace PGE {
 class Shader;
 class Texture;
 
+/// Can be applied to a mesh and simply consists of a #PGE::Shader and optional #PGE::Texture (s).
+/// If a material is not opaque z-buffering will never be applied to the rendered mesh.
 class Material {
     public:
         Material(Shader* sh, const std::vector<Texture*>& t, bool opaq = true);
@@ -19,8 +21,7 @@ class Material {
         int getTextureCount() const;
         bool isOpaque() const;
 
-    protected:
-        Material() = default;
+    private:
         Shader* shader; std::vector<Texture*> textures;
         bool opaque;
 };

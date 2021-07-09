@@ -1,8 +1,4 @@
-#include <PGE/Graphics/Graphics.h>
 #include "../GraphicsOGL3.h"
-#include <PGE/Graphics/Texture.h>
-#include "TextureOGL3.h"
-#include <PGE/Exception/Exception.h>
 
 using namespace PGE;
 

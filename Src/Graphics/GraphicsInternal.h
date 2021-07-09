@@ -2,42 +2,14 @@
 #define PGEINTERNAL_WINDOWINTERNAL_H_INCLUDED
 
 #include <PGE/Graphics/Graphics.h>
+#include <PGE/Graphics/Mesh.h>
+#include <PGE/Graphics/Texture.h>
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <AppKit/AppKit.h>
 #endif
 
-#include <PGE/File/FilePath.h>
-#include <PGE/Graphics/Mesh.h>
-#include <PGE/Graphics/Texture.h>
-
-#define PGE_GFX_OBJ_DEC \
-Shader* loadShader(const FilePath& path) override; \
-Mesh* createMesh(Primitive::Type pt) override; \
-Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) override; \
-Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) override; \
-String getRendererName() const override;
-
-#define PGE_GFX_OBJ_DEF(GfxType) \
-Shader* Graphics ## GfxType ## ::loadShader(const FilePath& path) { \
-    return new Shader ## GfxType ## (this, path); \
-} \
-\
-Mesh* Graphics ## GfxType ## ::createMesh(Primitive::Type pt) { \
-    return new Mesh ## GfxType ## (this, pt); \
-} \
-\
-Texture* Graphics ## GfxType ## ::createRenderTargetTexture(int w, int h, Texture::Format fmt) { \
-    return new Texture ## GfxType ## (this, w, h, fmt); \
-} \
-\
-Texture* Graphics ## GfxType ## ::loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) { \
-    return new Texture ## GfxType ## (this, w, h, buffer, fmt, mipmaps); \
-} \
-\
-String Graphics ## GfxType ## ::getRendererName() const { \
-    return #GfxType; \
-}
+#define APPEND(name) '\n' + #name + ": " + String::fromInt(name)
 
 struct SDL_Window;
 
@@ -51,17 +23,51 @@ class GraphicsInternal : public Graphics {
         using Graphics::Graphics;
         using Graphics::getWindow;
 
-#if defined(__APPLE__) && defined(__OBJC__)
-        NSWindow* getCocoaWindow() const;
-#endif
-
-        String getInfo() const override;
-
-        virtual String getRendererName() const = 0;
         virtual Shader* loadShader(const FilePath& path) = 0;
         virtual Mesh* createMesh(Primitive::Type pt) = 0;
         virtual Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) = 0;
         virtual Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) = 0;
+};
+
+template <class SHADER, class MESH, class TEXTURE>
+class GraphicsSpecialized : public GraphicsInternal {
+    private:
+        static const inline String RENDERER_NAME = "SHIT";
+
+    public:
+        using GraphicsInternal::GraphicsInternal;
+        using Graphics::getWindow;
+
+#if defined(__APPLE__) && defined(__OBJC__)
+        NSWindow* getCocoaWindow() const;
+#endif
+
+        String getInfo() const override {
+            return caption + " (" + RENDERER_NAME + ") "
+                + String::fromInt(dimensions.x) + 'x' + String::fromInt(dimensions.y) + " / "
+                + String::fromInt(viewport.width()) + 'x' + String::fromInt(viewport.height())
+                + APPEND(open) + APPEND(focused) + APPEND(fullscreen) + APPEND(vsync) + APPEND(depthTest);
+        }
+
+        Shader* loadShader(const FilePath& path) final override {
+            static_assert(std::is_base_of<Shader, SHADER>::value);
+            return new SHADER(this, path);
+        }
+
+        Mesh* createMesh(Primitive::Type pt) final override {
+            static_assert(std::is_base_of<Mesh, MESH>::value);
+            return new MESH(this, pt);
+        }
+
+        Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) final override {
+            static_assert(std::is_base_of<Texture, TEXTURE>::value);
+            return new TEXTURE(this, w, h, fmt);
+        }
+
+        Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) final override {
+            static_assert(std::is_base_of<Texture, TEXTURE>::value);
+            return new TEXTURE(this, w, h, buffer, fmt, mipmaps);
+        }
 };
 
 }

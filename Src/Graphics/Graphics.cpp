@@ -2,8 +2,6 @@
 
 #include <SDL.h>
 
-#include <PGE/Types/Types.h>
-#include <PGE/Exception/Exception.h>
 #include "../SysEvents/SysEventsInternal.h"
 
 using namespace PGE;

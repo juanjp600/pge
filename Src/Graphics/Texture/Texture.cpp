@@ -1,5 +1,7 @@
 #include <PGE/Graphics/Texture.h>
 
+#include <PGE/Exception/Exception.h>
+
 using namespace PGE;
 
 int Texture::getBytesPerPixel(Format fmt) {

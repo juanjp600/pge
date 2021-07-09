@@ -3,6 +3,10 @@
 
 #include "GraphicsInternal.h"
 
+#include "Shader/ShaderDX11.h"
+#include "Mesh/MeshDX11.h"
+#include "Texture/TextureDX11.h"
+
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <d3d11.h>
@@ -12,7 +16,7 @@
 
 namespace PGE {
 
-class GraphicsDX11 : public GraphicsInternal {
+class GraphicsDX11 : public GraphicsSpecialized<ShaderDX11, MeshDX11, TextureDX11> {
     public:
         GraphicsDX11(const String& name,int w,int h,bool fs);
 
@@ -40,8 +44,6 @@ class GraphicsDX11 : public GraphicsInternal {
         };
 
         void setZBufferState(ZBufferStateIndex index);
-
-        PGE_GFX_OBJ_DEC
 
     private:
         DXGIFactory1::View dxgiFactory;

@@ -1,11 +1,12 @@
 #ifndef PGE_TEXTURE_H_INCLUDED
 #define PGE_TEXTURE_H_INCLUDED
 
-#include <PGE/String/String.h>
+#include <PGE/Math/Vector.h>
 #include <PGE/File/FilePath.h>
-#include <PGE/Graphics/Graphics.h>
 
 namespace PGE {
+
+class Graphics;
 
 class Texture {
     public:

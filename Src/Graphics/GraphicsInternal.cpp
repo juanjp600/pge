@@ -1,12 +1,5 @@
-#include "GraphicsInternal.h"
 #include "GraphicsDX11.h"
 #include "GraphicsOGL3.h"
-#include "Shader/ShaderDX11.h"
-#include "Shader/ShaderOGL3.h"
-#include "Mesh/MeshDX11.h"
-#include "Mesh/MeshOGL3.h"
-#include "Texture/TextureDX11.h"
-#include "Texture/TextureOGL3.h"
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
@@ -68,13 +61,4 @@ Texture* Texture::createBlank(Graphics* gfx, int w, int h, Format fmt, bool mipm
 Texture* Texture::load(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) {
     PGE_ASSERT(buffer != nullptr, "Tried to load texture from nullptr");
     return ((GraphicsInternal*)gfx)->loadTexture(w, h, buffer, fmt, mipmaps);
-}
-
-#define APPEND(name) '\n' + #name + ": " + String::fromInt(name)
-
-String GraphicsInternal::getInfo() const {
-    return caption + " (" + getRendererName() + ") "
-        + String::fromInt(dimensions.x) + 'x' + String::fromInt(dimensions.y) + " / "
-        + String::fromInt(viewport.width()) + 'x' + String::fromInt(viewport.height())
-        + APPEND(open) + APPEND(focused) + APPEND(fullscreen) + APPEND(vsync) + APPEND(depthTest);
 }

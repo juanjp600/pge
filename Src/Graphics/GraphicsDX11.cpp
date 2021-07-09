@@ -3,15 +3,11 @@
 #include <SDL_syswm.h>
 #include <stdlib.h>
 
-#include "Shader/ShaderDX11.h"
-#include "Mesh/MeshDX11.h"
-#include "Texture/TextureDX11.h"
-
 using namespace PGE;
 
 //REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
 
-GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_SHOWN) {
+GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsSpecialized(name, w, h, fs, SDL_WINDOW_SHOWN) {
     HRESULT hResult = 0;
 
     if (fullscreen) {
@@ -237,5 +233,3 @@ ID3D11DepthStencilView* GraphicsDX11::getZBufferView() const {
 void GraphicsDX11::setZBufferState(GraphicsDX11::ZBufferStateIndex index) {
     dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)index], 0);
 }
-
-PGE_GFX_OBJ_DEF(DX11)

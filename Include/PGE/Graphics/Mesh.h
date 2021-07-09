@@ -4,12 +4,11 @@
 #include <unordered_map>
 
 #include <PGE/String/Key.h>
-
 #include <PGE/Types/Types.h>
-#include <PGE/Graphics/Material.h>
 #include <PGE/Color/Color.h>
 #include <PGE/Math/Vector.h>
 #include <PGE/Math/Matrix.h>
+#include <PGE/Graphics/Material.h>
 
 namespace PGE {
 
@@ -27,7 +26,7 @@ class Vertex {
                 VECTOR3F,
                 VECTOR4F,
                 COLOR,
-                INVALID
+                INVALID,
             };
 
             Property() = default;

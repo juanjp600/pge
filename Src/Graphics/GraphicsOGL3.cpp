@@ -1,16 +1,12 @@
 #include "GraphicsOGL3.h"
 
-#include "Shader/ShaderOGL3.h"
-#include "Mesh/MeshOGL3.h"
-#include "Texture/TextureOGL3.h"
-
 #include <glad/gl.h>
 
 using namespace PGE;
 
 GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs)
     //TODO: this is incorrect on macOS
-    : GraphicsInternal(name, w, h, fs, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/), resourceManager(this) {
+    : GraphicsSpecialized(name, w, h, fs, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/), resourceManager(this) {
 #if defined(__APPLE__) && defined(__OBJC__)
     // Figure out the de-scaled window size.
     NSRect rect = NSMakeRect(0, 0, w, h);
@@ -194,5 +190,3 @@ void GraphicsOGL3::setCulling(Culling mode) {
 
     cullingMode = mode;
 }
-
-PGE_GFX_OBJ_DEF(OGL3)

@@ -1,8 +1,5 @@
 #include <PGE/Graphics/Mesh.h>
 
-#include <PGE/Graphics/Graphics.h>
-#include <PGE/Exception/Exception.h>
-
 using namespace PGE;
 
 Vertex::Property::Property(const Vertex::Property& other) {

@@ -3,6 +3,10 @@
 
 #include "GraphicsInternal.h"
 
+#include "Shader/ShaderOGL3.h"
+#include "Mesh/MeshOGL3.h"
+#include "Texture/TextureOGL3.h"
+
 #include "../ResourceManagement/OGL3.h"
 #include "../ResourceManagement/ResourceManagerOGL3.h"
 
@@ -10,9 +14,7 @@
 
 namespace PGE {
 
-class Texture;
-
-class GraphicsOGL3 : public GraphicsInternal {
+class GraphicsOGL3 : public GraphicsSpecialized<ShaderOGL3, MeshOGL3, TextureOGL3> {
     public:
         GraphicsOGL3(const String& name,int w,int h,bool fs);
 
@@ -33,8 +35,6 @@ class GraphicsOGL3 : public GraphicsInternal {
 
         void takeGlContext();
         SDL_GLContext getGlContext() const;
-
-        PGE_GFX_OBJ_DEC
 
     private:
         GLContext::View glContext;

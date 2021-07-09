@@ -1,7 +1,3 @@
-#include <PGE/Graphics/Shader.h>
-#include <PGE/Graphics/Graphics.h>
-#include "ShaderDX11.h"
-#include <PGE/Exception/Exception.h>
 #include "../GraphicsDX11.h"
 
 using namespace PGE;
