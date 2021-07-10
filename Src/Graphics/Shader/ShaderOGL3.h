@@ -58,6 +58,8 @@ class ShaderOGL3 : public Shader {
                     Color colorVal;
                     float floatVal;
                     int intVal;
+                    
+                    Value();
                 } val;
 
                 Graphics* graphics;

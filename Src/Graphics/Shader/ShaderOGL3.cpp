@@ -147,7 +147,7 @@ Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
 void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::vector<ShaderVar>& varList) {
     String line = "";
     String varStr = varKind + " ";
-    for (wchar ch : src) {
+    for (char16 ch : src) {
         if (ch!='\r' && ch!='\n') {
             line += ch;
         } else {
@@ -158,7 +158,7 @@ void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::
                 var.name = "";
                 auto it = line.begin() + (varStr.length() - 1);
                 while (++it != line.end()) {
-                    wchar lineCh = *it;
+                    char16 lineCh = *it;
                     if (lineCh == ' ') {
                         if (readType && var.name.length()>0) {
                             break;
@@ -181,6 +181,10 @@ void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::
             line = "";
         }
     }
+}
+
+ShaderOGL3::ConstantOGL3::Value::Value() {
+    matrixVal = Matrices::ZERO;
 }
 
 ShaderOGL3::ConstantOGL3::ConstantOGL3(Graphics* gfx, int loc) {

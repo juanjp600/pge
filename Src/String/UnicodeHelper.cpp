@@ -1,7 +1,7 @@
 #include "UnicodeHelper.h"
 
 #include <PGE/Exception/Exception.h>
-#define PGE_ASSERT_CHAR(chr) wchar PGE_TMP = chr; PGE_ASSERT(PGE_TMP != 0 && PGE_TMP != 0xFFFF && PGE_TMP != 0xFFFE, "Invalid character (" + String::fromInt(PGE_TMP) + ")")
+#define PGE_ASSERT_CHAR(chr) char16 PGE_TMP = chr; PGE_ASSERT(PGE_TMP != 0 && PGE_TMP != 0xFFFF && PGE_TMP != 0xFFFE, "Invalid character (" + String::fromInt(PGE_TMP) + ")")
 
 using namespace PGE;
 
@@ -19,16 +19,16 @@ int Unicode::measureCodepoint(byte chr) {
     return len;
 }
 
-wchar Unicode::utf8ToWChar(const char* cbuffer) {
+char16 Unicode::utf8ToWChar(const char* cbuffer) {
     return utf8ToWChar(cbuffer, measureCodepoint(*cbuffer));
 }
 
-wchar Unicode::utf8ToWChar(const char* cbuffer, int codepointLen) {
+char16 Unicode::utf8ToWChar(const char* cbuffer, int codepointLen) {
     if (codepointLen == 1) {
         return cbuffer[0];
     } else {
         // Decode first byte by skipping all bits that indicate the length of the codepoint.
-        wchar newChar = cbuffer[0] & (0x7f >> codepointLen);
+        char16 newChar = cbuffer[0] & (0x7f >> codepointLen);
         for (int j = 1; j < codepointLen; j++) {
             // Decode all of the following bytes, fixed 6 bits per byte.
             newChar = (newChar << 6) | (cbuffer[j] & 0x3f);
@@ -40,7 +40,7 @@ wchar Unicode::utf8ToWChar(const char* cbuffer, int codepointLen) {
 
 
 // TODO: Take into account UTF-16 surrogate pairs.
-int Unicode::wCharToUtf8(wchar chr, char* result) {
+int Unicode::wCharToUtf8(char16 chr, char* result) {
     PGE_ASSERT_CHAR(chr);
 
     // Fits in standard ASCII, just return the char as-is.

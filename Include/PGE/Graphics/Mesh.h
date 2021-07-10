@@ -29,18 +29,21 @@ class Vertex {
                 INVALID,
             };
 
-            Property() = default;
+            Property();
             Property(const Property& other);
             Type type = Type::INVALID;
             // TODO: Replace all this with set byte layout.
-            union {
+            union Value {
                 float floatVal;
                 unsigned uintVal;
                 Vector2f vector2fVal;
                 Vector3f vector3fVal;
-                Vector4f vector4fVal = Vectors::ZERO4F;
+                Vector4f vector4fVal;
                 Color colorVal;
-            } value;
+                
+                Value();
+            };
+            Value value;
         };
 
         const Property& getProperty(const String& name) const;

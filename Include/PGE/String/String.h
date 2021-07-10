@@ -26,7 +26,7 @@ class String {
         struct Iterator {
             using iterator_category = std::bidirectional_iterator_tag;
             using difference_type = unsigned;
-            using value_type = wchar;
+            using value_type = char16;
             using pointer = value_type*;
             using reference = value_type&;
 
@@ -47,7 +47,7 @@ class String {
 
             int operator-(const Iterator& other) const;
 
-            wchar operator*() const;
+            char16 operator*() const;
 
             bool operator>(const Iterator& other) const;
             bool operator<(const Iterator& other) const;
@@ -67,7 +67,7 @@ class String {
 
                 const String* ref;
                 // Lazily evaluated, Unicode invalid character by default.
-                mutable wchar _ch = L'\uFFFF';
+                mutable char16 _ch = L'\uFFFF';
                 mutable int charIndex;
                 int index;
         };
@@ -132,13 +132,12 @@ class String {
         }
 
         String(const std::string& cppstr);
-        String(const wchar* wstr);
-        String(const std::wstring& cppwstr);
+        String(const char16* wstr);
 #if defined(__APPLE__) && defined(__OBJC__)
         String(const NSString* nsstr);
 #endif
         String(char c);
-        String(wchar w);
+        String(char16 w);
 
         template <class T>
         static const String format(T t, const String& format);
@@ -147,21 +146,21 @@ class String {
 
         String& operator=(const String& other);
         String& operator+=(const String& other);
-        String& operator+=(wchar ch);
+        String& operator+=(char16 ch);
 
         // TODO: Remove (juan hates his friends).
         friend const String operator+(const String& a, const String& b);
         friend const String operator+(const char* a, const String& b);
         friend const String operator+(const String& a, const char* b);
-        friend const String operator+(const String& a, wchar b);
-        friend const String operator+(wchar a, const String& b);
+        friend const String operator+(const String& a, char16 b);
+        friend const String operator+(char16 a, const String& b);
 
         /// Gets the UTF-8 data the string is composd of, without transferring ownership.
         /// Guaranteed to have a null byte appended to the string's content.
         /// 
         /// O(1)
         const char* cstr() const;
-        std::vector<wchar> wstr() const;
+        std::vector<char16> wstr() const;
         int toInt(bool& success) const;
         float toFloat(bool& success) const;
         int toInt() const;
@@ -240,9 +239,9 @@ class String {
         char* chs = std::get<Unique>(internalData).chs;
         Data* data = &std::get<Unique>(internalData).data;
 
-        const String performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const;
+        const String performCaseConversion(const std::unordered_map<char16, char16>& conv, const std::unordered_map<char16, std::vector<char16>>& multiConv) const;
 
-        void wCharToUtf8Str(const wchar* wbuffer);
+        void wCharToUtf8Str(const char16* wbuffer);
         void reallocate(int size, bool copyOldChs = false);
         char* cstrNoConst();
 };

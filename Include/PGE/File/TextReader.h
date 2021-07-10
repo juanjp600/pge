@@ -48,13 +48,13 @@ class TextReader : private AbstractIO<std::ifstream> {
         /// Line endings are returned exactly as they appear in the file.
         /// 
         /// If #endOfFile returns true after a call to this, the last read char is considered undefined and is not to be used.
-        wchar readChar();
+        char16 readChar();
 
     private:
         Encoding encoding;
         bool eof = false;
 
-        void spitOut(wchar ch);
+        void spitOut(char16 ch);
 
         void reportEOF();
 };

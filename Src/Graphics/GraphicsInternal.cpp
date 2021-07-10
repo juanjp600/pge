@@ -1,4 +1,6 @@
+#ifdef WINDOWS
 #include "GraphicsDX11.h"
+#endif
 #include "GraphicsOGL3.h"
 
 #if defined(__APPLE__) && defined(__OBJC__)
@@ -28,9 +30,11 @@ Graphics* Graphics::create(const String& name, int w, int h, bool fs, Renderer r
     }
     Graphics* gfx;
     switch (r) {
+#ifdef WINDOWS
         case Renderer::DirectX11: {
             gfx = new GraphicsDX11(name, w, h, fs);
         } break;
+#endif
         case Renderer::OpenGL: {
             gfx = new GraphicsOGL3(name, w, h, fs);
         } break;

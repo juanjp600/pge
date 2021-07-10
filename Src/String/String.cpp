@@ -113,7 +113,7 @@ int String::Iterator::operator-(const String::Iterator& other) const {
     return getPosition() - other.getPosition();
 }
 
-wchar String::Iterator::operator*() const {
+char16 String::Iterator::operator*() const {
     if (_ch == L'\uFFFF') {
         _ch = Unicode::utf8ToWChar(ref->cstr() + index);
     }
@@ -249,15 +249,11 @@ String::String(const std::string& cppstr) {
     memcpy(cstrNoConst(), cppstr.c_str(), len + 1);
 }
 
-String::String(const wchar* wstri) {
+String::String(const char16* wstri) {
     wCharToUtf8Str(wstri);
 }
 
-String::String(const std::wstring& cppwstr) {
-    wCharToUtf8Str(cppwstr.c_str());
-}
-
-void String::wCharToUtf8Str(const wchar* wbuffer) {
+void String::wCharToUtf8Str(const char16* wbuffer) {
     // Determine the capacity of the cbuffer by measuring the number of bytes required for each codepoint.
     int newCap = 0;
     for (int i = 0; wbuffer[i] != L'\0'; i++) {
@@ -290,7 +286,7 @@ String::String(char c) {
     char* buf = cstrNoConst();
     if (c < 0) {
         reallocate(2);
-        data->strByteLength = Unicode::wCharToUtf8((wchar)(unsigned char)c, buf);
+        data->strByteLength = Unicode::wCharToUtf8((char16)(unsigned char)c, buf);
         buf[data->strByteLength] = '\0';
     } else {
         reallocate(1);
@@ -301,7 +297,7 @@ String::String(char c) {
     data->_strLength = 1;
 }
 
-String::String(wchar w) {
+String::String(char16 w) {
     reallocate(4);
     char* buf = cstrNoConst();
     data->strByteLength = Unicode::wCharToUtf8(w, buf);
@@ -385,7 +381,7 @@ String& String::operator+=(const String& other) {
     return *this;
 }
 
-String& String::operator+=(wchar ch) {
+String& String::operator+=(char16 ch) {
     int aLen = byteLength();
     reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
@@ -434,7 +430,7 @@ const String PGE::operator+(const String& a, const char* b) {
     return ret;
 }
 
-const String PGE::operator+(const String& a, wchar b) {
+const String PGE::operator+(const String& a, char16 b) {
     int aLen = a.byteLength();
     String ret(aLen + 4);
     char* buf = ret.cstrNoConst();
@@ -448,7 +444,7 @@ const String PGE::operator+(const String& a, wchar b) {
     return ret;
 }
 
-const String PGE::operator+(wchar a, const String& b) {
+const String PGE::operator+(char16 a, const String& b) {
     int bLen = b.byteLength();
     String ret(4 + bLen);
     char* buf = ret.cstrNoConst();
@@ -512,20 +508,20 @@ bool String::equals(const String& other) const {
     return strcmp(cstr(), other.cstr()) == 0;
 }
 
-static void fold(const char*& buf, std::queue<wchar>& queue) {
+static void fold(const char*& buf, std::queue<char16>& queue) {
     if (queue.empty() && *buf != '\0') {
         int codepoint = Unicode::measureCodepoint(*buf);
-        wchar ch = Unicode::utf8ToWChar(buf, codepoint);
+        char16 ch = Unicode::utf8ToWChar(buf, codepoint);
         auto it = Unicode::FOLDING.find(ch);
         if (it == Unicode::FOLDING.end()) {
             queue.push(ch);
         } else {
-            wchar folded = it->second;
+            char16 folded = it->second;
             if (folded != L'\uFFFF') {
                 queue.push(folded);
             } else {
-                const std::vector<wchar>& addChars = Unicode::MULTI_FOLDING.find(ch)->second;
-                for (wchar add : addChars) {
+                const std::vector<char16>& addChars = Unicode::MULTI_FOLDING.find(ch)->second;
+                for (char16 add : addChars) {
                     queue.push(add);
                 }
             }
@@ -539,7 +535,7 @@ bool String::equalsIgnoreCase(const String& other) const {
     if (data->_hashCodeEvaluted && other.data->_hashCodeEvaluted && getHashCode() == other.getHashCode()) { return true; }
 
     const char* buf[2] = { cstr(), other.cstr() };
-    std::queue<wchar> queue[2];
+    std::queue<char16> queue[2];
 
     // Feed first char.
     for (int i = 0; i < 2; i++) {
@@ -619,8 +615,8 @@ char* String::cstrNoConst() {
     return chs;
 }
 
-std::vector<wchar> String::wstr() const {
-    std::vector<wchar> chars;
+std::vector<char16> String::wstr() const {
+    std::vector<char16> chars;
     if (data->_strLength >= 0) {
         chars.reserve(data->_strLength);
     }
@@ -783,17 +779,17 @@ const String String::replace(const String& fnd, const String& rplace) const {
 }
 
 // TODO: Funny special cases!
-const String String::performCaseConversion(const std::unordered_map<wchar, wchar>& conv, const std::unordered_map<wchar, std::vector<wchar>>& multiConv) const {
+const String String::performCaseConversion(const std::unordered_map<char16, char16>& conv, const std::unordered_map<char16, std::vector<char16>>& multiConv) const {
     String ret(byteLength());
     ret.data->strByteLength = 0;
     ret.data->_strLength = 0;
-    for (wchar ch : *this) {
+    for (char16 ch : *this) {
         const auto& find = conv.find(ch);
         if (find == conv.end()) {
             ret += ch;
         } else if (find->second == L'\uFFFF') {
-            const std::vector<wchar>& multiFind = multiConv.find(ch)->second;
-            for (wchar writeChar : multiFind) {
+            const std::vector<char16>& multiFind = multiConv.find(ch)->second;
+            for (char16 writeChar : multiFind) {
                 ret += writeChar;
             }
         } else {

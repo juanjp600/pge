@@ -2,6 +2,15 @@
 
 using namespace PGE;
 
+Vertex::Property::Value::Value() {
+    vector4fVal = Vectors::ZERO4F;
+}
+
+Vertex::Property::Property() {
+    value.vector4fVal = Vectors::ZERO4F;
+    type = Type::VECTOR4F;
+}
+
 Vertex::Property::Property(const Vertex::Property& other) {
     type = other.type;
     switch (type) {

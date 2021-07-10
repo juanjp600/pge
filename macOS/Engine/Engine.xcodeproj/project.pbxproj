@@ -200,6 +200,41 @@
 		83C49EB02699E7E300CE7A5F /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Exception.cpp; sourceTree = "<group>"; };
 		83C49F06269A109E00CE7A5F /* glad.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = glad.xcodeproj; path = ../../Libraries/glad/glad.xcodeproj; sourceTree = "<group>"; };
 		83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = ../../Libraries/SDL2/Xcode/SDL/SDL.xcodeproj; sourceTree = "<group>"; };
+		83C49F3E269A3FEF00CE7A5F /* Init.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Init.h; sourceTree = "<group>"; };
+		83C49F40269A3FEF00CE7A5F /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
+		83C49F42269A3FEF00CE7A5F /* BinaryWriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BinaryWriter.h; sourceTree = "<group>"; };
+		83C49F43269A3FEF00CE7A5F /* TextWriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextWriter.h; sourceTree = "<group>"; };
+		83C49F44269A3FEF00CE7A5F /* FilePath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilePath.h; sourceTree = "<group>"; };
+		83C49F45269A3FEF00CE7A5F /* AbstractIO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AbstractIO.h; sourceTree = "<group>"; };
+		83C49F46269A3FEF00CE7A5F /* TextReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextReader.h; sourceTree = "<group>"; };
+		83C49F47269A3FEF00CE7A5F /* BinaryReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BinaryReader.h; sourceTree = "<group>"; };
+		83C49F49269A3FEF00CE7A5F /* Input.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Input.h; sourceTree = "<group>"; };
+		83C49F4A269A3FEF00CE7A5F /* InputManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InputManager.h; sourceTree = "<group>"; };
+		83C49F4C269A3FEF00CE7A5F /* SysEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SysEvents.h; sourceTree = "<group>"; };
+		83C49F4E269A3FEF00CE7A5F /* Color.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
+		83C49F50269A3FEF00CE7A5F /* Matrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
+		83C49F51269A3FEF00CE7A5F /* Plane.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Plane.h; sourceTree = "<group>"; };
+		83C49F52269A3FEF00CE7A5F /* AABBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AABBox.h; sourceTree = "<group>"; };
+		83C49F53269A3FEF00CE7A5F /* Interpolator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Interpolator.h; sourceTree = "<group>"; };
+		83C49F54269A3FEF00CE7A5F /* Math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Math.h; sourceTree = "<group>"; };
+		83C49F55269A3FEF00CE7A5F /* Line.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Line.h; sourceTree = "<group>"; };
+		83C49F56269A3FEF00CE7A5F /* Rectangle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rectangle.h; sourceTree = "<group>"; };
+		83C49F57269A3FEF00CE7A5F /* Vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
+		83C49F58269A3FEF00CE7A5F /* Random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
+		83C49F5A269A3FEF00CE7A5F /* Info.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Info.h; sourceTree = "<group>"; };
+		83C49F5C269A3FEF00CE7A5F /* ResourceViewVector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResourceViewVector.h; sourceTree = "<group>"; };
+		83C49F5D269A3FEF00CE7A5F /* ResourceView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResourceView.h; sourceTree = "<group>"; };
+		83C49F5E269A3FEF00CE7A5F /* RawWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RawWrapper.h; sourceTree = "<group>"; };
+		83C49F5F269A3FEF00CE7A5F /* Resource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Resource.h; sourceTree = "<group>"; };
+		83C49F60269A3FEF00CE7A5F /* ResourceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResourceManager.h; sourceTree = "<group>"; };
+		83C49F62269A3FEF00CE7A5F /* Key.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Key.h; sourceTree = "<group>"; };
+		83C49F63269A3FEF00CE7A5F /* String.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = String.h; sourceTree = "<group>"; };
+		83C49F65269A3FEF00CE7A5F /* Shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
+		83C49F66269A3FEF00CE7A5F /* Material.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
+		83C49F67269A3FEF00CE7A5F /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
+		83C49F68269A3FEF00CE7A5F /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
+		83C49F69269A3FEF00CE7A5F /* Graphics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Graphics.h; sourceTree = "<group>"; };
+		83C49F6B269A3FEF00CE7A5F /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +251,7 @@
 		194AA0152209FF3800837F38 = {
 			isa = PBXGroup;
 			children = (
+				83C49F3B269A3FEF00CE7A5F /* Include */,
 				83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */,
 				83C49F06269A109E00CE7A5F /* glad.xcodeproj */,
 				83C49E762699E7E300CE7A5F /* Src */,
@@ -413,6 +449,153 @@
 				83C49F36269A14B200CE7A5F /* hidapi.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		83C49F3B269A3FEF00CE7A5F /* Include */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F3C269A3FEF00CE7A5F /* PGE */,
+			);
+			name = Include;
+			path = ../../Include;
+			sourceTree = "<group>";
+		};
+		83C49F3C269A3FEF00CE7A5F /* PGE */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F3D269A3FEF00CE7A5F /* Init */,
+				83C49F3F269A3FEF00CE7A5F /* Types */,
+				83C49F41269A3FEF00CE7A5F /* File */,
+				83C49F48269A3FEF00CE7A5F /* Input */,
+				83C49F4B269A3FEF00CE7A5F /* SysEvents */,
+				83C49F4D269A3FEF00CE7A5F /* Color */,
+				83C49F4F269A3FEF00CE7A5F /* Math */,
+				83C49F59269A3FEF00CE7A5F /* Info */,
+				83C49F5B269A3FEF00CE7A5F /* ResourceManagement */,
+				83C49F61269A3FEF00CE7A5F /* String */,
+				83C49F64269A3FEF00CE7A5F /* Graphics */,
+				83C49F6A269A3FEF00CE7A5F /* Exception */,
+			);
+			path = PGE;
+			sourceTree = "<group>";
+		};
+		83C49F3D269A3FEF00CE7A5F /* Init */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F3E269A3FEF00CE7A5F /* Init.h */,
+			);
+			path = Init;
+			sourceTree = "<group>";
+		};
+		83C49F3F269A3FEF00CE7A5F /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F40269A3FEF00CE7A5F /* Types.h */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
+		83C49F41269A3FEF00CE7A5F /* File */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F42269A3FEF00CE7A5F /* BinaryWriter.h */,
+				83C49F43269A3FEF00CE7A5F /* TextWriter.h */,
+				83C49F44269A3FEF00CE7A5F /* FilePath.h */,
+				83C49F45269A3FEF00CE7A5F /* AbstractIO.h */,
+				83C49F46269A3FEF00CE7A5F /* TextReader.h */,
+				83C49F47269A3FEF00CE7A5F /* BinaryReader.h */,
+			);
+			path = File;
+			sourceTree = "<group>";
+		};
+		83C49F48269A3FEF00CE7A5F /* Input */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F49269A3FEF00CE7A5F /* Input.h */,
+				83C49F4A269A3FEF00CE7A5F /* InputManager.h */,
+			);
+			path = Input;
+			sourceTree = "<group>";
+		};
+		83C49F4B269A3FEF00CE7A5F /* SysEvents */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F4C269A3FEF00CE7A5F /* SysEvents.h */,
+			);
+			path = SysEvents;
+			sourceTree = "<group>";
+		};
+		83C49F4D269A3FEF00CE7A5F /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F4E269A3FEF00CE7A5F /* Color.h */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		83C49F4F269A3FEF00CE7A5F /* Math */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F50269A3FEF00CE7A5F /* Matrix.h */,
+				83C49F51269A3FEF00CE7A5F /* Plane.h */,
+				83C49F52269A3FEF00CE7A5F /* AABBox.h */,
+				83C49F53269A3FEF00CE7A5F /* Interpolator.h */,
+				83C49F54269A3FEF00CE7A5F /* Math.h */,
+				83C49F55269A3FEF00CE7A5F /* Line.h */,
+				83C49F56269A3FEF00CE7A5F /* Rectangle.h */,
+				83C49F57269A3FEF00CE7A5F /* Vector.h */,
+				83C49F58269A3FEF00CE7A5F /* Random.h */,
+			);
+			path = Math;
+			sourceTree = "<group>";
+		};
+		83C49F59269A3FEF00CE7A5F /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F5A269A3FEF00CE7A5F /* Info.h */,
+			);
+			path = Info;
+			sourceTree = "<group>";
+		};
+		83C49F5B269A3FEF00CE7A5F /* ResourceManagement */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F5C269A3FEF00CE7A5F /* ResourceViewVector.h */,
+				83C49F5D269A3FEF00CE7A5F /* ResourceView.h */,
+				83C49F5E269A3FEF00CE7A5F /* RawWrapper.h */,
+				83C49F5F269A3FEF00CE7A5F /* Resource.h */,
+				83C49F60269A3FEF00CE7A5F /* ResourceManager.h */,
+			);
+			path = ResourceManagement;
+			sourceTree = "<group>";
+		};
+		83C49F61269A3FEF00CE7A5F /* String */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F62269A3FEF00CE7A5F /* Key.h */,
+				83C49F63269A3FEF00CE7A5F /* String.h */,
+			);
+			path = String;
+			sourceTree = "<group>";
+		};
+		83C49F64269A3FEF00CE7A5F /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F65269A3FEF00CE7A5F /* Shader.h */,
+				83C49F66269A3FEF00CE7A5F /* Material.h */,
+				83C49F67269A3FEF00CE7A5F /* Mesh.h */,
+				83C49F68269A3FEF00CE7A5F /* Texture.h */,
+				83C49F69269A3FEF00CE7A5F /* Graphics.h */,
+			);
+			path = Graphics;
+			sourceTree = "<group>";
+		};
+		83C49F6A269A3FEF00CE7A5F /* Exception */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F6B269A3FEF00CE7A5F /* Exception.h */,
+			);
+			path = Exception;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

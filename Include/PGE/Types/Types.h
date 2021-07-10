@@ -19,9 +19,9 @@ typedef uint64_t u64;
 // We always want 16 bits, but Windows functions expect wchar_t, so this only acts as to avoid unnecessary casting.
 // wchar_t is always 16 bits on Windows.
 #ifdef _WIN32
-typedef wchar_t wchar;
+typedef wchar_t char16;
 #else
-typedef char16_t wchar;
+typedef char16_t char16;
 #endif
 
 }
