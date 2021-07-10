@@ -21,6 +21,7 @@ Windows/Engine/.vs/
 # Xcode
 DerivedData/
 xcuserdata
+xcshareddata/
 *.xccheckout
 *.xcuserstate
 # user settings

@@ -29,12 +29,12 @@ class Resource : public ResourceBase {
         // Force cast.
         const T& get() const { return resource; }
         
-        template <class = typename std::enable_if<std::is_pointer<T>::value>::type>
+        template <typename Y = T, typename std::enable_if<std::is_pointer<Y>::value>::type>
         const T& operator->() const {
             return resource;
         }
 
-        template <class = typename std::enable_if<std::negation<std::is_pointer<T>>::value>::type>
+        template <typename Y = T, typename std::enable_if<std::negation<std::is_pointer<Y>>::value>::type>
         const T* operator->() const {
             return &resource;
         }

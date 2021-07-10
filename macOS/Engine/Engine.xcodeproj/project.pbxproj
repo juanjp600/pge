@@ -144,6 +144,20 @@
 			remoteGlobalIDString = A75FDB6E23E3A2C900529352;
 			remoteInfo = "hidapi-tvOS";
 		};
+		83C49F37269A170800CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BECDF66D0761BA81005FE872;
+			remoteInfo = "Static Library";
+		};
+		83C49F39269A170D00CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F06269A109E00CE7A5F /* glad.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 83C49EE62699EF0E00CE7A5F;
+			remoteInfo = glad;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -436,6 +450,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				83C49F3A269A170D00CE7A5F /* PBXTargetDependency */,
+				83C49F38269A170800CE7A5F /* PBXTargetDependency */,
 			);
 			name = Engine;
 			productName = Engine;
@@ -620,6 +636,19 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		83C49F38269A170800CE7A5F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Static Library";
+			targetProxy = 83C49F37269A170800CE7A5F /* PBXContainerItemProxy */;
+		};
+		83C49F3A269A170D00CE7A5F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = glad;
+			targetProxy = 83C49F39269A170D00CE7A5F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		194AA0202209FF3800837F38 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -739,12 +768,10 @@
 				EXECUTABLE_PREFIX = lib;
 				HEADER_SEARCH_PATHS = (
 					../../Include/,
-					"../../Libraries/SDL2-2.0.9/include/",
-					"../../Libraries/glew-2.1.0/include/",
-					../../Libraries/FreeImage3180/Source/,
-					"../../Libraries/libogg-1.3.3/include/",
-					"../../Libraries/libvorbis-1.3.6/include/",
+					../../Libraries/SDL2/include/,
+					../../Libraries/glad/include/,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -757,12 +784,10 @@
 				EXECUTABLE_PREFIX = lib;
 				HEADER_SEARCH_PATHS = (
 					../../Include/,
-					"../../Libraries/SDL2-2.0.9/include/",
-					"../../Libraries/glew-2.1.0/include/",
-					../../Libraries/FreeImage3180/Source/,
-					"../../Libraries/libogg-1.3.3/include/",
-					"../../Libraries/libvorbis-1.3.6/include/",
+					../../Libraries/SDL2/include/,
+					../../Libraries/glad/include/,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
