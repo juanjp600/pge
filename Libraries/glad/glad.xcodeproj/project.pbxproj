@@ -7,57 +7,53 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1938AB1A2209EDEC00B71C2E /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 1938AB192209EDEC00B71C2E /* glew.c */; };
-		1938AB1D2209EE0000B71C2E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1938AB1C2209EE0000B71C2E /* OpenGL.framework */; };
+		83C49EF02699EF5D00CE7A5F /* gl.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C49EEF2699EF5D00CE7A5F /* gl.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1938AB192209EDEC00B71C2E /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glew.c; path = "../../Libraries/glew-2.1.0/src/glew.c"; sourceTree = "<group>"; };
-		1938AB1C2209EE0000B71C2E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		19BBC2C22209EDAB0084956D /* libglew.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libglew.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		83C49EE72699EF0E00CE7A5F /* libglad.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libglad.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		83C49EEF2699EF5D00CE7A5F /* gl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gl.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		19BBC2C02209EDAB0084956D /* Frameworks */ = {
+		83C49EE52699EF0E00CE7A5F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1938AB1D2209EE0000B71C2E /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1938AB1B2209EE0000B71C2E /* Frameworks */ = {
+		83C49EDE2699EF0E00CE7A5F = {
 			isa = PBXGroup;
 			children = (
-				1938AB1C2209EE0000B71C2E /* OpenGL.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		19BBC2B92209EDAB0084956D = {
-			isa = PBXGroup;
-			children = (
-				1938AB192209EDEC00B71C2E /* glew.c */,
-				19BBC2C32209EDAB0084956D /* Products */,
-				1938AB1B2209EE0000B71C2E /* Frameworks */,
+				83C49EEE2699EF5D00CE7A5F /* src */,
+				83C49EE82699EF0E00CE7A5F /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		19BBC2C32209EDAB0084956D /* Products */ = {
+		83C49EE82699EF0E00CE7A5F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				19BBC2C22209EDAB0084956D /* libglew.a */,
+				83C49EE72699EF0E00CE7A5F /* libglad.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		83C49EEE2699EF5D00CE7A5F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				83C49EEF2699EF5D00CE7A5F /* gl.c */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		19BBC2BE2209EDAB0084956D /* Headers */ = {
+		83C49EE32699EF0E00CE7A5F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -67,38 +63,37 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		19BBC2C12209EDAB0084956D /* glew */ = {
+		83C49EE62699EF0E00CE7A5F /* glad */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 19BBC2C62209EDAB0084956D /* Build configuration list for PBXNativeTarget "glew" */;
+			buildConfigurationList = 83C49EEB2699EF0E00CE7A5F /* Build configuration list for PBXNativeTarget "glad" */;
 			buildPhases = (
-				19BBC2BE2209EDAB0084956D /* Headers */,
-				19BBC2BF2209EDAB0084956D /* Sources */,
-				19BBC2C02209EDAB0084956D /* Frameworks */,
+				83C49EE32699EF0E00CE7A5F /* Headers */,
+				83C49EE42699EF0E00CE7A5F /* Sources */,
+				83C49EE52699EF0E00CE7A5F /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = glew;
-			productName = glew;
-			productReference = 19BBC2C22209EDAB0084956D /* libglew.a */;
+			name = glad;
+			productName = glad;
+			productReference = 83C49EE72699EF0E00CE7A5F /* libglad.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		19BBC2BA2209EDAB0084956D /* Project object */ = {
+		83C49EDF2699EF0E00CE7A5F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
-				ORGANIZATIONNAME = BigOof;
+				LastUpgradeCheck = 1250;
 				TargetAttributes = {
-					19BBC2C12209EDAB0084956D = {
-						CreatedOnToolsVersion = 10.1;
+					83C49EE62699EF0E00CE7A5F = {
+						CreatedOnToolsVersion = 12.5;
 					};
 				};
 			};
-			buildConfigurationList = 19BBC2BD2209EDAB0084956D /* Build configuration list for PBXProject "glew" */;
+			buildConfigurationList = 83C49EE22699EF0E00CE7A5F /* Build configuration list for PBXProject "glad" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -106,29 +101,29 @@
 				en,
 				Base,
 			);
-			mainGroup = 19BBC2B92209EDAB0084956D;
-			productRefGroup = 19BBC2C32209EDAB0084956D /* Products */;
+			mainGroup = 83C49EDE2699EF0E00CE7A5F;
+			productRefGroup = 83C49EE82699EF0E00CE7A5F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				19BBC2C12209EDAB0084956D /* glew */,
+				83C49EE62699EF0E00CE7A5F /* glad */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		19BBC2BF2209EDAB0084956D /* Sources */ = {
+		83C49EE42699EF0E00CE7A5F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1938AB1A2209EDEC00B71C2E /* glew.c in Sources */,
+				83C49EF02699EF5D00CE7A5F /* gl.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		19BBC2C42209EDAB0084956D /* Debug */ = {
+		83C49EE92699EF0E00CE7A5F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -154,13 +149,13 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -179,7 +174,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -187,7 +182,7 @@
 			};
 			name = Debug;
 		};
-		19BBC2C52209EDAB0084956D /* Release */ = {
+		83C49EEA2699EF0E00CE7A5F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -213,13 +208,13 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -232,59 +227,65 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 			};
 			name = Release;
 		};
-		19BBC2C72209EDAB0084956D /* Debug */ = {
+		83C49EEC2699EF0E00CE7A5F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CODE_SIGN_STYLE = Automatic;
+				CONFIGURATION_BUILD_DIR = build/macos;
 				EXECUTABLE_PREFIX = lib;
-				HEADER_SEARCH_PATHS = "../../Libraries/glew-2.1.0/include/";
+				HEADER_SEARCH_PATHS = ./include/;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SYMROOT = build;
 			};
 			name = Debug;
 		};
-		19BBC2C82209EDAB0084956D /* Release */ = {
+		83C49EED2699EF0E00CE7A5F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CODE_SIGN_STYLE = Automatic;
+				CONFIGURATION_BUILD_DIR = build/macos;
 				EXECUTABLE_PREFIX = lib;
-				HEADER_SEARCH_PATHS = "../../Libraries/glew-2.1.0/include/";
+				HEADER_SEARCH_PATHS = ./include/;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SYMROOT = build;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		19BBC2BD2209EDAB0084956D /* Build configuration list for PBXProject "glew" */ = {
+		83C49EE22699EF0E00CE7A5F /* Build configuration list for PBXProject "glad" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				19BBC2C42209EDAB0084956D /* Debug */,
-				19BBC2C52209EDAB0084956D /* Release */,
+				83C49EE92699EF0E00CE7A5F /* Debug */,
+				83C49EEA2699EF0E00CE7A5F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		19BBC2C62209EDAB0084956D /* Build configuration list for PBXNativeTarget "glew" */ = {
+		83C49EEB2699EF0E00CE7A5F /* Build configuration list for PBXNativeTarget "glad" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				19BBC2C72209EDAB0084956D /* Debug */,
-				19BBC2C82209EDAB0084956D /* Release */,
+				83C49EEC2699EF0E00CE7A5F /* Debug */,
+				83C49EED2699EF0E00CE7A5F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 19BBC2BA2209EDAB0084956D /* Project object */;
+	rootObject = 83C49EDF2699EF0E00CE7A5F /* Project object */;
 }
