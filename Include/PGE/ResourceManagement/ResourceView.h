@@ -24,10 +24,10 @@ class ResourceView {
         // Force cast.
         const T& get() const { PGE_ASSERT(holdsResource, "Reference not filled"); return internalResource; }
         
-        template <class Y = T, typename std::enable_if<std::is_pointer<Y>::value>::type>
+        template <class Y = T, typename = std::enable_if<std::is_pointer<Y>::value>::type>
         const T& operator->() const { return get(); }
 
-        template <class Y = T, typename std::enable_if<!std::is_pointer<Y>::value>::type>
+        template <class Y = T, typename = std::enable_if<!std::is_pointer<Y>::value>::type>
         const T* operator->() const { return &get(); }
 
         const T* operator&() const { return &get(); }
