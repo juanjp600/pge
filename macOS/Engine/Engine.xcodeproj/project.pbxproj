@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		194AA11D220A035800837F38 /* libFreeImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 194AA11C220A034600837F38 /* libFreeImage.a */; };
 		83C49EB12699E7E300CE7A5F /* Init.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83C49E782699E7E300CE7A5F /* Init.cpp */; };
 		83C49EB22699E7E300CE7A5F /* TextReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83C49E7A2699E7E300CE7A5F /* TextReader.cpp */; };
 		83C49EB32699E7E300CE7A5F /* TextWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83C49E7B2699E7E300CE7A5F /* TextWriter.cpp */; };
@@ -47,18 +46,108 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		194AA11B220A034600837F38 /* PBXContainerItemProxy */ = {
+		83C49F0B269A109E00CE7A5F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 194AA114220A034600837F38 /* FreeImage.xcodeproj */;
+			containerPortal = 83C49F06269A109E00CE7A5F /* glad.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 1938AB272209EF8B00B71C2E;
-			remoteInfo = FreeImage;
+			remoteGlobalIDString = 83C49EE72699EF0E00CE7A5F;
+			remoteInfo = glad;
+		};
+		83C49F1D269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BECDF66C0761BA81005FE872;
+			remoteInfo = Framework;
+		};
+		83C49F1F269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A7D88B5423E2437C00DCD162;
+			remoteInfo = "Framework-iOS";
+		};
+		83C49F21269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A7D88D1523E24BED00DCD162;
+			remoteInfo = "Framework-tvOS";
+		};
+		83C49F23269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BECDF6B30761BA81005FE872;
+			remoteInfo = "Static Library";
+		};
+		83C49F25269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A7D88E5423E24D3B00DCD162;
+			remoteInfo = "Static Library-iOS";
+		};
+		83C49F27269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A769B23D23E259AE00872273;
+			remoteInfo = "Static Library-tvOS";
+		};
+		83C49F29269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DB31407717554B71006C0E22;
+			remoteInfo = "Shared Library";
+		};
+		83C49F2B269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A75FCEB323E25AB700529352;
+			remoteInfo = "Shared Library-iOS";
+		};
+		83C49F2D269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A75FD06C23E25AC700529352;
+			remoteInfo = "Shared Library-tvOS";
+		};
+		83C49F2F269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BECDF6BE0761BA81005FE872;
+			remoteInfo = "Standard DMG";
+		};
+		83C49F31269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A75FDB8C23E4C74400529352;
+			remoteInfo = hidapi;
+		};
+		83C49F33269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A75FDB4923E399AC00529352;
+			remoteInfo = "hidapi-iOS";
+		};
+		83C49F35269A14B200CE7A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A75FDB6E23E3A2C900529352;
+			remoteInfo = "hidapi-tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		194AA01E2209FF3800837F38 /* libEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		194AA114220A034600837F38 /* FreeImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FreeImage.xcodeproj; path = ../FreeImage/FreeImage.xcodeproj; sourceTree = "<group>"; };
 		83C49E782699E7E300CE7A5F /* Init.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Init.cpp; sourceTree = "<group>"; };
 		83C49E7A2699E7E300CE7A5F /* TextReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextReader.cpp; sourceTree = "<group>"; };
 		83C49E7B2699E7E300CE7A5F /* TextWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextWriter.cpp; sourceTree = "<group>"; };
@@ -95,6 +184,8 @@
 		83C49EAD2699E7E300CE7A5F /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
 		83C49EAE2699E7E300CE7A5F /* GraphicsInternal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphicsInternal.cpp; sourceTree = "<group>"; };
 		83C49EB02699E7E300CE7A5F /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Exception.cpp; sourceTree = "<group>"; };
+		83C49F06269A109E00CE7A5F /* glad.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = glad.xcodeproj; path = ../../Libraries/glad/glad.xcodeproj; sourceTree = "<group>"; };
+		83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = ../../Libraries/SDL2/Xcode/SDL/SDL.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +193,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				194AA11D220A035800837F38 /* libFreeImage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,8 +202,9 @@
 		194AA0152209FF3800837F38 = {
 			isa = PBXGroup;
 			children = (
+				83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */,
+				83C49F06269A109E00CE7A5F /* glad.xcodeproj */,
 				83C49E762699E7E300CE7A5F /* Src */,
-				194AA114220A034600837F38 /* FreeImage.xcodeproj */,
 				194AA01F2209FF3800837F38 /* Products */,
 				194AA0AC2209FFC400837F38 /* Frameworks */,
 			);
@@ -132,14 +223,6 @@
 			children = (
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		194AA115220A034600837F38 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				194AA11C220A034600837F38 /* libFreeImage.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		83C49E762699E7E300CE7A5F /* Src */ = {
@@ -290,6 +373,34 @@
 			path = Exception;
 			sourceTree = "<group>";
 		};
+		83C49F07269A109E00CE7A5F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F0C269A109E00CE7A5F /* libglad.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		83C49F0E269A14B200CE7A5F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				83C49F1E269A14B200CE7A5F /* SDL2.framework */,
+				83C49F20269A14B200CE7A5F /* SDL2.framework */,
+				83C49F22269A14B200CE7A5F /* SDL2.framework */,
+				83C49F24269A14B200CE7A5F /* libSDL2.a */,
+				83C49F26269A14B200CE7A5F /* libSDL2.a */,
+				83C49F28269A14B200CE7A5F /* libSDL2.a */,
+				83C49F2A269A14B200CE7A5F /* libSDL2.dylib */,
+				83C49F2C269A14B200CE7A5F /* libSDL2.dylib */,
+				83C49F2E269A14B200CE7A5F /* libSDL2.dylib */,
+				83C49F30269A14B200CE7A5F /* SDL2 */,
+				83C49F32269A14B200CE7A5F /* hidapi.framework */,
+				83C49F34269A14B200CE7A5F /* hidapi.framework */,
+				83C49F36269A14B200CE7A5F /* hidapi.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -358,8 +469,12 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 194AA115220A034600837F38 /* Products */;
-					ProjectRef = 194AA114220A034600837F38 /* FreeImage.xcodeproj */;
+					ProductGroup = 83C49F07269A109E00CE7A5F /* Products */;
+					ProjectRef = 83C49F06269A109E00CE7A5F /* glad.xcodeproj */;
+				},
+				{
+					ProductGroup = 83C49F0E269A14B200CE7A5F /* Products */;
+					ProjectRef = 83C49F0D269A14B200CE7A5F /* SDL.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -370,11 +485,102 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		194AA11C220A034600837F38 /* libFreeImage.a */ = {
+		83C49F0C269A109E00CE7A5F /* libglad.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libFreeImage.a;
-			remoteRef = 194AA11B220A034600837F38 /* PBXContainerItemProxy */;
+			path = libglad.a;
+			remoteRef = 83C49F0B269A109E00CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F1E269A14B200CE7A5F /* SDL2.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SDL2.framework;
+			remoteRef = 83C49F1D269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F20269A14B200CE7A5F /* SDL2.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SDL2.framework;
+			remoteRef = 83C49F1F269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F22269A14B200CE7A5F /* SDL2.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SDL2.framework;
+			remoteRef = 83C49F21269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F24269A14B200CE7A5F /* libSDL2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL2.a;
+			remoteRef = 83C49F23269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F26269A14B200CE7A5F /* libSDL2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL2.a;
+			remoteRef = 83C49F25269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F28269A14B200CE7A5F /* libSDL2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL2.a;
+			remoteRef = 83C49F27269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F2A269A14B200CE7A5F /* libSDL2.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libSDL2.dylib;
+			remoteRef = 83C49F29269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F2C269A14B200CE7A5F /* libSDL2.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libSDL2.dylib;
+			remoteRef = 83C49F2B269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F2E269A14B200CE7A5F /* libSDL2.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libSDL2.dylib;
+			remoteRef = 83C49F2D269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F30269A14B200CE7A5F /* SDL2 */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = SDL2;
+			remoteRef = 83C49F2F269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F32269A14B200CE7A5F /* hidapi.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = hidapi.framework;
+			remoteRef = 83C49F31269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F34269A14B200CE7A5F /* hidapi.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = hidapi.framework;
+			remoteRef = 83C49F33269A14B200CE7A5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		83C49F36269A14B200CE7A5F /* hidapi.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = hidapi.framework;
+			remoteRef = 83C49F35269A14B200CE7A5F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
