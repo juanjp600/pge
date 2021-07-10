@@ -7,7 +7,7 @@ var searchData=
   ['readboolean_75',['readBoolean',['../class_p_g_e_1_1_binary_reader.html#a8d18b295925afbcb21dab9e6be34d23c',1,'PGE::BinaryReader']]],
   ['readbyte_76',['readByte',['../class_p_g_e_1_1_binary_reader.html#a80422a9b799749323dd198571d59a4e4',1,'PGE::BinaryReader']]],
   ['readbytes_77',['readBytes',['../class_p_g_e_1_1_binary_reader.html#aa4907b0fb6869240bf85d721dbea1ffc',1,'PGE::BinaryReader::readBytes()'],['../class_p_g_e_1_1_file_path.html#ab3505d0387c4a6c23aea431a1a2456df',1,'PGE::FilePath::readBytes()']]],
-  ['readchar_78',['readChar',['../class_p_g_e_1_1_text_reader.html#aa75ca4486092ed0e7a80847b46c1a72e',1,'PGE::TextReader']]],
+  ['readchar_78',['readChar',['../class_p_g_e_1_1_text_reader.html#a037caf0e9390d3b75672cf59de3f5873',1,'PGE::TextReader']]],
   ['readdouble_79',['readDouble',['../class_p_g_e_1_1_binary_reader.html#a57b443840bf2d4bf4bfc88936b03e15d',1,'PGE::BinaryReader']]],
   ['readfixedlengthstring_80',['readFixedLengthString',['../class_p_g_e_1_1_binary_reader.html#aa424c78b12bc5343e721f8fe90e444bc',1,'PGE::BinaryReader']]],
   ['readfloat_81',['readFloat',['../class_p_g_e_1_1_binary_reader.html#aef6580a44ef8ccd6a1de3f4e407bfa3a',1,'PGE::BinaryReader']]],

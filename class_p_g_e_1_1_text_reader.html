@@ -130,9 +130,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7112ccb2ec594415791d07279def0ec2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_text_reader.html#a7112ccb2ec594415791d07279def0ec2">readLine</a> (<a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;dest)</td></tr>
 <tr class="memdesc:a7112ccb2ec594415791d07279def0ec2"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads a line into the given string.  <a href="class_p_g_e_1_1_text_reader.html#a7112ccb2ec594415791d07279def0ec2">More...</a><br /></td></tr>
 <tr class="separator:a7112ccb2ec594415791d07279def0ec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa75ca4486092ed0e7a80847b46c1a72e"><td class="memItemLeft" align="right" valign="top">wchar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_text_reader.html#aa75ca4486092ed0e7a80847b46c1a72e">readChar</a> ()</td></tr>
-<tr class="memdesc:aa75ca4486092ed0e7a80847b46c1a72e"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads a singular char.  <a href="class_p_g_e_1_1_text_reader.html#aa75ca4486092ed0e7a80847b46c1a72e">More...</a><br /></td></tr>
-<tr class="separator:aa75ca4486092ed0e7a80847b46c1a72e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a037caf0e9390d3b75672cf59de3f5873"><td class="memItemLeft" align="right" valign="top">char16&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_text_reader.html#a037caf0e9390d3b75672cf59de3f5873">readChar</a> ()</td></tr>
+<tr class="memdesc:a037caf0e9390d3b75672cf59de3f5873"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads a singular char.  <a href="class_p_g_e_1_1_text_reader.html#a037caf0e9390d3b75672cf59de3f5873">More...</a><br /></td></tr>
+<tr class="separator:a037caf0e9390d3b75672cf59de3f5873"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af252120aa787246f2c0f2df43dce0e4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_text_reader.html#af252120aa787246f2c0f2df43dce0e4d">earlyClose</a> ()</td></tr>
 <tr class="memdesc:af252120aa787246f2c0f2df43dce0e4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Closes the stream prematurely.  <a href="class_p_g_e_1_1_text_reader.html#af252120aa787246f2c0f2df43dce0e4d">More...</a><br /></td></tr>
 <tr class="separator:af252120aa787246f2c0f2df43dce0e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -251,19 +251,19 @@ Public Member Functions</h2></td></tr>
 
 <p>&#x202A;Whether the end of file has been encountered. </p>
 <p class="DocNodeLTR">If <a class="el" href="class_p_g_e_1_1_text_reader.html#a5ce17c0da98ff5433beeccafd9c65f07" title="&#x202A;Reads a line and returns it.">readLine</a> is used the end of file will be marked after the last line has been read, all lines returned are considerd valid.</p>
-<p class="DocNodeLTR">If <a class="el" href="class_p_g_e_1_1_text_reader.html#aa75ca4486092ed0e7a80847b46c1a72e" title="&#x202A;Reads a singular char.">readChar</a> is used the first call to read past the end of the file will mark the end of the file, and undefined data is returned, which is not to be used.</p>
+<p class="DocNodeLTR">If <a class="el" href="class_p_g_e_1_1_text_reader.html#a037caf0e9390d3b75672cf59de3f5873" title="&#x202A;Reads a singular char.">readChar</a> is used the first call to read past the end of the file will mark the end of the file, and undefined data is returned, which is not to be used.</p>
 <p class="DocNodeLTR">Any subsequent calls to any of the reading methods will raise an exception. </p>
 
 </div>
 </div>
-<a id="aa75ca4486092ed0e7a80847b46c1a72e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa75ca4486092ed0e7a80847b46c1a72e">&#9670;&nbsp;</a></span>readChar()</h2>
+<a id="a037caf0e9390d3b75672cf59de3f5873"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a037caf0e9390d3b75672cf59de3f5873">&#9670;&nbsp;</a></span>readChar()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">wchar PGE::TextReader::readChar </td>
+          <td class="memname">char16 PGE::TextReader::readChar </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

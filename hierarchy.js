@@ -57,6 +57,7 @@ var hierarchy =
     [ "\u202APGE::SysEvents::Subscriber", "class_p_g_e_1_1_sys_events_1_1_subscriber.html", null ],
     [ "\u202APGE::SysEvents", "class_p_g_e_1_1_sys_events.html", null ],
     [ "\u202APGE::Texture", "class_p_g_e_1_1_texture.html", null ],
+    [ "\u202APGE::Vertex::Property::Value", "union_p_g_e_1_1_vertex_1_1_property_1_1_value.html", null ],
     [ "\u202APGE::Vector2f", "class_p_g_e_1_1_vector2f.html", null ],
     [ "\u202APGE::Vector2i", "class_p_g_e_1_1_vector2i.html", null ],
     [ "\u202APGE::Vector3f", "class_p_g_e_1_1_vector3f.html", null ],
