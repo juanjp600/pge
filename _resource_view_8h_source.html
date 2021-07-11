@@ -114,10 +114,10 @@ $(document).ready(function(){initNavTree('_resource_view_8h_source.html',''); in
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="comment">// Force cast.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">const</span> T&amp; get()<span class="keyword"> const </span>{ PGE_ASSERT(holdsResource, <span class="stringliteral">&quot;Reference not filled&quot;</span>); <span class="keywordflow">return</span> internalResource; }</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        template &lt;class Y = T, typename = std::enable_if&lt;std::is_pointer&lt;Y&gt;::value&gt;::type&gt;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        template &lt;class Y = T, typename = typename std::enable_if&lt;std::is_pointer&lt;Y&gt;::value&gt;::type&gt;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">const</span> T&amp; operator-&gt;()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> get(); }</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        template &lt;class Y = T, typename = std::enable_if&lt;!std::is_pointer&lt;Y&gt;::value&gt;::type&gt;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        template &lt;class Y = T, typename = typename std::enable_if&lt;!std::is_pointer&lt;Y&gt;::value&gt;::type&gt;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">const</span> T* operator-&gt;()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> &amp;get(); }</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keyword">const</span> T* operator&amp;()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> &amp;get(); }</div>

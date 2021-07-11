@@ -119,12 +119,12 @@ $(document).ready(function(){initNavTree('_resource_8h_source.html',''); initRes
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="comment">// Force cast.</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">const</span> T&amp; get()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> resource; }</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        template &lt;typename Y = T, typename = std::enable_if&lt;std::is_pointer&lt;Y&gt;::value&gt;::type&gt;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        template &lt;typename Y = T, typename = typename std::enable_if&lt;std::is_pointer&lt;Y&gt;::value&gt;::type&gt;</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keyword">const</span> T&amp; operator-&gt;()<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="keywordflow">return</span> resource;</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        }</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Y = T, <span class="keyword">typename</span> = std::enable_if&lt;std::negation&lt;std::is_po<span class="keywordtype">int</span>er&lt;Y&gt;&gt;::value&gt;::type&gt;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Y = T, <span class="keyword">typename</span> = <span class="keyword">typename</span> std::enable_if&lt;std::negation&lt;std::is_po<span class="keywordtype">int</span>er&lt;Y&gt;&gt;::value&gt;::type&gt;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keyword">const</span> T* operator-&gt;()<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keywordflow">return</span> &amp;resource;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        }</div>
