@@ -26,7 +26,7 @@ class TextWriter : private AbstractIO<std::ofstream> {
         /// Writes a string to stream.
 		void write(const String& content);
         /// Writes a string to stream and appends `\n`.
-		void writeLine(const String& content);
+		void writeLine(const String& content = String());
 };
 
 }

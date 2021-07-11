@@ -1,4 +1,4 @@
-#ifdef WINDOWS
+#ifdef _WIN32
 #include "GraphicsDX11.h"
 #endif
 #include "GraphicsOGL3.h"
@@ -30,7 +30,7 @@ Graphics* Graphics::create(const String& name, int w, int h, bool fs, Renderer r
     }
     Graphics* gfx;
     switch (r) {
-#ifdef WINDOWS
+#ifdef _WIN32
         case Renderer::DirectX11: {
             gfx = new GraphicsDX11(name, w, h, fs);
         } break;
