@@ -15,17 +15,8 @@ class ResourceManager {
     public:
         virtual ~ResourceManager();
 
-        template <class T,
-                  typename... Args>
-        decltype(auto) addNewResource(Args... args) {
-            //TODO: This is cancer and AIDS.
-            //decltype(T::resource) doesn't work because
-            //the resource field is protected. We are
-            //not going to make it public just for this.
-            //We should probably turn this into
-            //takeOwnership(Resource<T>* res) instead
-            //of dealing with bullshit templates not
-            //doing what we want.
+        template <class T, typename... Args>
+        typename T::View addNewResource(Args... args) {
             static_assert(std::is_base_of<ResourceBase, T>::value);
             T* res = new T(args...);
             resources.push_back(res);
