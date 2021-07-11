@@ -810,27 +810,18 @@ const String String::toLower() const {
 const String String::trim() const {
     if (byteLength() == 0) { return *this; }
 
-    const char* buf = cstr();
-    int leadingPos = 0;
-    while (buf[leadingPos] == ' ' || buf[leadingPos] == '\t') {
-        leadingPos++;
-        if (leadingPos>=byteLength()) {
-            return *this;
-        }
+    Iterator leading = begin();
+    while (leading != end() && isspace(*leading)) {
+        leading++;
+    }
+    if (leading == end()) {
+        return "";
     }
 
-    int trailingPos = byteLength() - 1;
-    while (*charAt(trailingPos) == ' ' || *charAt(trailingPos) == '\t') {
-        trailingPos--;
-        if (trailingPos<0) {
-            return *this;
-        }
-    }
+    ReverseIterator trailing = rbegin();
+    while (isspace(*trailing)) { trailing++; }
 
-    int newSize = trailingPos - leadingPos + 1;
-    String ret(*this, leadingPos, newSize);
-    // If the length has been calculated, good, it remains valid, if not, it just goes more into the negative.
-    ret.data->_strLength = data->_strLength - (byteLength() - newSize);
+    String ret(*this, leading.getBytePosition(), trailing.getBytePosition() - leading.getBytePosition() + 1);
     return ret;
 }
 
