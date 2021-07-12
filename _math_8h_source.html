@@ -110,33 +110,32 @@ $(document).ready(function(){initNavTree('_math_8h_source.html',''); initResizab
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordtype">float</span> diff = val - other;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordflow">if</span> (diff &gt;= 0) {</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <span class="keywordflow">return</span> diff &lt; epsilon;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        }</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            <span class="keywordflow">return</span> -diff &lt; epsilon;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        }</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    }</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="namespace_p_g_e_1_1_math.html#ad64e0f41b409c339ed5644f6b24e44d8">   40</a></span>&#160;    constexpr <span class="keywordtype">int</span> <a class="code" href="namespace_p_g_e_1_1_math.html#ad64e0f41b409c339ed5644f6b24e44d8">floor</a>(<span class="keywordtype">float</span> val) noexcept {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">int</span> i = (int)val;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordflow">if</span> (i &gt; val) { i--; }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordflow">return</span> i;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    }</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78">   50</a></span>&#160;    constexpr <span class="keywordtype">int</span> <a class="code" href="namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78">ceil</a>(<span class="keywordtype">float</span> val) noexcept {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordtype">int</span> i = (int)val;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordflow">if</span> (i &lt; val) { i++; }</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">return</span> i;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    }</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;}</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;}</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MATH_H_INCLUDED</span></div>
-<div class="ttc" id="anamespace_p_g_e_1_1_math_html_a12d5305ff965b3d0832fb946cf80bb78"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78">PGE::Math::ceil</a></div><div class="ttdeci">constexpr int ceil(float val) noexcept</div><div class="ttdoc">Round up a float.</div><div class="ttdef"><b>Definition:</b> Math.h:50</div></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keywordflow">return</span> -diff &lt; epsilon;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        }</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    }</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="namespace_p_g_e_1_1_math.html#ad64e0f41b409c339ed5644f6b24e44d8">   39</a></span>&#160;    constexpr <span class="keywordtype">int</span> <a class="code" href="namespace_p_g_e_1_1_math.html#ad64e0f41b409c339ed5644f6b24e44d8">floor</a>(<span class="keywordtype">float</span> val) noexcept {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">int</span> i = (int)val;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordflow">if</span> (i &gt; val) { i--; }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordflow">return</span> i;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78">   49</a></span>&#160;    constexpr <span class="keywordtype">int</span> <a class="code" href="namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78">ceil</a>(<span class="keywordtype">float</span> val) noexcept {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordtype">int</span> i = (int)val;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordflow">if</span> (i &lt; val) { i++; }</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordflow">return</span> i;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;}</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MATH_H_INCLUDED</span></div>
+<div class="ttc" id="anamespace_p_g_e_1_1_math_html_a12d5305ff965b3d0832fb946cf80bb78"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78">PGE::Math::ceil</a></div><div class="ttdeci">constexpr int ceil(float val) noexcept</div><div class="ttdoc">Round up a float.</div><div class="ttdef"><b>Definition:</b> Math.h:49</div></div>
 <div class="ttc" id="anamespace_p_g_e_1_1_math_html_a24ce35a5ad40879ca3a9498e73ecc606"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a24ce35a5ad40879ca3a9498e73ecc606">PGE::Math::degToRad</a></div><div class="ttdeci">constexpr float degToRad(float degree) noexcept</div><div class="ttdoc">Converts degrees to radians.</div><div class="ttdef"><b>Definition:</b> Math.h:16</div></div>
 <div class="ttc" id="anamespace_p_g_e_1_1_math_html_a254393cd3a914e459f8ecedf76802e77"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">PGE::Math::equalFloats</a></div><div class="ttdeci">constexpr bool equalFloats(float val, float other, float epsilon=EPSILON_DEFAULT) noexcept</div><div class="ttdoc">Two values are considered equal if |val - other| &lt; epsilon.</div><div class="ttdef"><b>Definition:</b> Math.h:26</div></div>
 <div class="ttc" id="anamespace_p_g_e_1_1_math_html_a6b04fd48d78229387dde0bddbe3d5c05"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">PGE::Math::EPSILON_DEFAULT</a></div><div class="ttdeci">constexpr float EPSILON_DEFAULT</div><div class="ttdoc">The default difference two floats are allowed to have in order to be considered &quot;equal&quot;.</div><div class="ttdef"><b>Definition:</b> Math.h:13</div></div>
-<div class="ttc" id="anamespace_p_g_e_1_1_math_html_ad64e0f41b409c339ed5644f6b24e44d8"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#ad64e0f41b409c339ed5644f6b24e44d8">PGE::Math::floor</a></div><div class="ttdeci">constexpr int floor(float val) noexcept</div><div class="ttdoc">Round down a float.</div><div class="ttdef"><b>Definition:</b> Math.h:40</div></div>
+<div class="ttc" id="anamespace_p_g_e_1_1_math_html_ad64e0f41b409c339ed5644f6b24e44d8"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#ad64e0f41b409c339ed5644f6b24e44d8">PGE::Math::floor</a></div><div class="ttdeci">constexpr int floor(float val) noexcept</div><div class="ttdoc">Round down a float.</div><div class="ttdef"><b>Definition:</b> Math.h:39</div></div>
 <div class="ttc" id="anamespace_p_g_e_1_1_math_html_aec5240ab51ce3a2760c11ebe761950f4"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#aec5240ab51ce3a2760c11ebe761950f4">PGE::Math::radToDeg</a></div><div class="ttdeci">constexpr float radToDeg(float radians) noexcept</div><div class="ttdoc">Converts radians to degrees.</div><div class="ttdef"><b>Definition:</b> Math.h:21</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
