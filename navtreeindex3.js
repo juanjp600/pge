@@ -1,5 +1,11 @@
 var NAVTREEINDEX3 =
 {
+"class_p_g_e_1_1_string.html#ade1b91ab2224997c54fba7f32da1297b":[1,0,0,40,16],
+"class_p_g_e_1_1_string.html#ae214a27004c89dbd34025573962f3f31":[1,0,0,40,47],
+"class_p_g_e_1_1_string.html#ae430e40287ebf65b336dac93d100e0ff":[1,0,0,40,44],
+"class_p_g_e_1_1_string.html#ae4ab9b20750544009ac31397aea954f0":[1,0,0,40,39],
+"class_p_g_e_1_1_string.html#ae893905a061d6a33712e4e5ba1df9d7a":[1,0,0,40,21],
+"class_p_g_e_1_1_string.html#af3d88a942ef0ed2ff1a115340bd1e41c":[1,0,0,40,41],
 "class_p_g_e_1_1_sys_events.html":[1,0,0,41],
 "class_p_g_e_1_1_sys_events.html#ad148f06c9f7af3c07a47e15807e0652b":[1,0,0,41,1],
 "class_p_g_e_1_1_sys_events_1_1_subscriber.html":[1,0,0,41,0],
@@ -206,7 +212,6 @@ var NAVTREEINDEX3 =
 "pages.html":[],
 "struct_p_g_e_1_1_string_1_1_iterator.html":[1,0,0,40,0],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a0a01d49424d201752380d5d439772fae":[1,0,0,40,0,18],
-"struct_p_g_e_1_1_string_1_1_iterator.html#a1bb42471505779723a51489f9a81684d":[1,0,0,40,0,0],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a22b26dbfa254c43e93e1e59e270f373e":[1,0,0,40,0,21],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a297e8f016484df3e453ebb55045f3c20":[1,0,0,40,0,2],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a2a7a3f4de64c4e9cb4634b51526d6a00":[1,0,0,40,0,15],
@@ -232,6 +237,7 @@ var NAVTREEINDEX3 =
 "struct_p_g_e_1_1_string_1_1_iterator.html#aca9d8aca4496dab4ab3516d5fc66ccdb":[1,0,0,40,0,24],
 "struct_p_g_e_1_1_string_1_1_iterator.html#acd97d2a9d9e9a80ab0b795bcc64fc659":[1,0,0,40,0,8],
 "struct_p_g_e_1_1_string_1_1_iterator.html#ad1678930c0fb9f048e6380d06ba9a4e5":[1,0,0,40,0,4],
+"struct_p_g_e_1_1_string_1_1_iterator.html#ae114f8160677aac8c373e36d1aef3f65":[1,0,0,40,0,0],
 "struct_p_g_e_1_1_string_1_1_iterator.html#aec87f0806656625889c9afcca033ae5f":[1,0,0,40,0,20],
 "struct_p_g_e_1_1_string_1_1_iterator.html#af077fe6441cea5ec63b31ae49b9c659b":[1,0,0,40,0,22],
 "struct_p_g_e_1_1_string_1_1_iterator.html#af52bbb7e435ce96892d0fd9499014d5b":[1,0,0,40,0,7],
@@ -243,11 +249,5 @@ var NAVTREEINDEX3 =
 "struct_p_g_e_1_1_string_1_1_ordered_key.html":[1,0,0,40,2],
 "struct_p_g_e_1_1_string_1_1_ordered_key.html#a3fb5c1d537a68472288c1422638cda5b":[1,0,0,40,2,1],
 "struct_p_g_e_1_1_string_1_1_ordered_key.html#a5ed81bb14531c5caa933d2a07f6fce23":[1,0,0,40,2,4],
-"struct_p_g_e_1_1_string_1_1_ordered_key.html#a81271fa78f79662e96f975be1bec0087":[1,0,0,40,2,2],
-"struct_p_g_e_1_1_string_1_1_ordered_key.html#a93ed10bc2b271a59a4acd77c6d0f05f1":[1,0,0,40,2,0],
-"struct_p_g_e_1_1_string_1_1_ordered_key.html#afd3c65656fe877af5f3ed1bccaa88026":[1,0,0,40,2,3],
-"struct_p_g_e_1_1_string_1_1_redundant_key.html":[1,0,0,40,3],
-"struct_p_g_e_1_1_string_1_1_redundant_key.html#a7a575174570820a8167552151111b43f":[1,0,0,40,3,2],
-"struct_p_g_e_1_1_string_1_1_redundant_key.html#a8c93284fdb101f60b17b817beb5ddb80":[1,0,0,40,3,1],
-"struct_p_g_e_1_1_string_1_1_redundant_key.html#ae5dc51fb2e5aad307af21fb01a6ff685":[1,0,0,40,3,3]
+"struct_p_g_e_1_1_string_1_1_ordered_key.html#a81271fa78f79662e96f975be1bec0087":[1,0,0,40,2,2]
 };
