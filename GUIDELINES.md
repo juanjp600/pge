@@ -76,3 +76,18 @@ Example:
 using MyInt = int32_t; // Yes
 typedef int32_t MyInt; // No
 ```
+
+
+## Prefer `typename` over `class` for templates.
+
+`typename` poses a syntactic superset to `class` and `class` could potentially be interpreted as excluding non-class types (e.g. `struct`s or primitive types).
+
+Example:
+```cpp
+template <typename T>
+class MyClass { ... }
+// ^ Yes
+// v No
+template <class T>
+class MyClass { ... }
+```
