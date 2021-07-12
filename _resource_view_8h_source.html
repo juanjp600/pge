@@ -99,7 +99,7 @@ $(document).ready(function(){initNavTree('_resource_view_8h_source.html',''); in
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>PGE {</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">class </span>ResourceBase;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_resource_view.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_resource_view.html">ResourceView</a> {</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        T internalResource;</div>
@@ -115,10 +115,10 @@ $(document).ready(function(){initNavTree('_resource_view_8h_source.html',''); in
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keyword">operator</span> <span class="keyword">const</span> T&amp; () <span class="keyword">const</span> { <span class="keywordflow">return</span> get(); }</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        template &lt;class Y = T, typename = typename std::enable_if&lt;std::is_pointer&lt;Y&gt;::value&gt;::type&gt;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        template &lt;typename Y = T, typename = typename std::enable_if&lt;std::is_pointer&lt;Y&gt;::value&gt;::type&gt;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keyword">const</span> T&amp; operator-&gt;()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> get(); }</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">class</span> Y = T, <span class="keyword">typename</span> = <span class="keyword">typename</span> std::enable_if&lt;std::negation&lt;std::is_po<span class="keywordtype">int</span>er&lt;Y&gt;&gt;::value&gt;::type&gt;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Y = T, <span class="keyword">typename</span> = <span class="keyword">typename</span> std::enable_if&lt;std::negation&lt;std::is_po<span class="keywordtype">int</span>er&lt;Y&gt;&gt;::value&gt;::type&gt;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">const</span> T* operator-&gt;()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> &amp;get(); }</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">const</span> T* operator&amp;()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> &amp;get(); }</div>

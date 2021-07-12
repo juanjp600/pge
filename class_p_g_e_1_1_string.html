@@ -137,7 +137,7 @@ template&lt;size_t S&gt; </td></tr>
 <tr class="memitem:acab3beef14fce2ae2b05d7c1de732f66"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>String</b> (const char(&amp;cstri)[S])</td></tr>
 <tr class="separator:acab3beef14fce2ae2b05d7c1de732f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fd9785dc424ebe3bd9bcb797e9b8e12"><td class="memTemplParams" colspan="2"><a id="a4fd9785dc424ebe3bd9bcb797e9b8e12"></a>
-template&lt;class T , class  = typename std::enable_if&lt;            std::conjunction&lt;                std::is_pointer&lt;T&gt;,                std::disjunction&lt;                    std::is_same&lt;char*, T&gt;,                    std::is_same&lt;const char*, T&gt;                &gt;            &gt;::value        &gt;::type&gt; </td></tr>
+template&lt;typename T , typename  = typename std::enable_if&lt;            std::conjunction&lt;                std::is_pointer&lt;T&gt;,                std::disjunction&lt;                    std::is_same&lt;char*, T&gt;,                    std::is_same&lt;const char*, T&gt;                &gt;            &gt;::value        &gt;::type&gt; </td></tr>
 <tr class="memitem:a4fd9785dc424ebe3bd9bcb797e9b8e12"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>String</b> (T cstri)</td></tr>
 <tr class="separator:a4fd9785dc424ebe3bd9bcb797e9b8e12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b42d8e900acddf2e138dcd62bafd92b"><td class="memItemLeft" align="right" valign="top"><a id="a1b42d8e900acddf2e138dcd62bafd92b"></a>
@@ -252,7 +252,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isEmpty</b> () const<
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aad60f81d98376f6b9aeeb4bd7391a651"><td class="memTemplParams" colspan="2"><a id="aad60f81d98376f6b9aeeb4bd7391a651"></a>
-template&lt;class T &gt; </td></tr>
+template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aad60f81d98376f6b9aeeb4bd7391a651"><td class="memTemplItemLeft" align="right" valign="top">static const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>format</b> (T t, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;format)</td></tr>
 <tr class="separator:aad60f81d98376f6b9aeeb4bd7391a651"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc0541694dff5fc15b00a4ed8e166f1a"><td class="memItemLeft" align="right" valign="top"><a id="acc0541694dff5fc15b00a4ed8e166f1a"></a>

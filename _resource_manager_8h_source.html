@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('_resource_manager_8h_source.html','');
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="class_p_g_e_1_1_resource_manager.html">ResourceManager</a>();</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">class </span>T, <span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">typename</span> T::View addNewResource(Args... args) {</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            static_assert(std::is_base_of&lt;ResourceBase, T&gt;::value);</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            T* res = <span class="keyword">new</span> T(args...);</div>
@@ -115,7 +115,7 @@ $(document).ready(function(){initNavTree('_resource_manager_8h_source.html','');
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="class_p_g_e_1_1_resource_view.html">ResourceView</a>(res-&gt;get(), lastResourceIter);</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        }</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordtype">void</span> deleteResource(<a class="code" href="class_p_g_e_1_1_resource_view.html">ResourceView&lt;T&gt;</a> view) {</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            <span class="keywordflow">if</span> (!view.isHoldingResource()) {</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                <span class="keywordflow">return</span>;</div>

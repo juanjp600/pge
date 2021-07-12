@@ -104,11 +104,11 @@ const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get</b> () c
 &#160;</td><td class="memItemRight" valign="bottom"><b>operator const T &amp;</b> () const</td></tr>
 <tr class="separator:a78f2960a99c484162c4e4035e18609a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90e84ab3773e75a9f8825471b81476d7"><td class="memTemplParams" colspan="2"><a id="a90e84ab3773e75a9f8825471b81476d7"></a>
-template&lt;class Y  = T, typename  = typename std::enable_if&lt;std::is_pointer&lt;Y&gt;::value&gt;::type&gt; </td></tr>
+template&lt;typename Y  = T, typename  = typename std::enable_if&lt;std::is_pointer&lt;Y&gt;::value&gt;::type&gt; </td></tr>
 <tr class="memitem:a90e84ab3773e75a9f8825471b81476d7"><td class="memTemplItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator-&gt;</b> () const</td></tr>
 <tr class="separator:a90e84ab3773e75a9f8825471b81476d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91ebb4e32527cc00d4580739e8fb0293"><td class="memTemplParams" colspan="2"><a id="a91ebb4e32527cc00d4580739e8fb0293"></a>
-template&lt;class Y  = T, typename  = typename std::enable_if&lt;std::negation&lt;std::is_pointer&lt;Y&gt;&gt;::value&gt;::type&gt; </td></tr>
+template&lt;typename Y  = T, typename  = typename std::enable_if&lt;std::negation&lt;std::is_pointer&lt;Y&gt;&gt;::value&gt;::type&gt; </td></tr>
 <tr class="memitem:a91ebb4e32527cc00d4580739e8fb0293"><td class="memTemplItemLeft" align="right" valign="top">const T *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator-&gt;</b> () const</td></tr>
 <tr class="separator:a91ebb4e32527cc00d4580739e8fb0293"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a643699b44a0bbb857263dfb9711e67bf"><td class="memItemLeft" align="right" valign="top"><a id="a643699b44a0bbb857263dfb9711e67bf"></a>
