@@ -15,7 +15,7 @@ namespace PGE {
 /// @see #PGE::TextWriter
 class BinaryWriter : private AbstractIO<std::ofstream> {
     private:
-        template <class T>
+        template <typename T>
         void write(T t);
 
     public:

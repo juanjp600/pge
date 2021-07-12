@@ -10,7 +10,7 @@ namespace PGE {
 
 /// Utility to more easily deal with file IO streams.
 /// Not intended to be polymorphic.
-template <class T>
+template <typename T>
 class AbstractIO {
 	protected:
 		static const inline PGE::String BAD_STREAM = "Stream turned bad";

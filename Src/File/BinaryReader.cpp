@@ -23,7 +23,7 @@ bool BinaryReader::endOfFile() const noexcept {
     return eof;
 }
 
-template <class T>
+template <typename T>
 T BinaryReader::read() {
     T val;
     stream.read((char*)&val, sizeof(T));

@@ -29,7 +29,7 @@ class GraphicsInternal : public Graphics {
         virtual Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) = 0;
 };
 
-template <class SHADER, class MESH, class TEXTURE>
+template <typename SHADER, typename MESH, typename TEXTURE>
 class GraphicsSpecialized : public GraphicsInternal {
     protected:
         // TODO: The more appropriate template solution is available in C++20.

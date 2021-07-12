@@ -5,7 +5,7 @@ namespace PGE {
 BinaryWriter::BinaryWriter(const FilePath& file, bool append)
     : AbstractIO(file, std::ios::binary | (append ? std::ios::app : std::ios::trunc)) { }
 
-template <class T>
+template <typename T>
 void BinaryWriter::write(T t) {
     stream.write((char*)&t, sizeof(T));
     validate();

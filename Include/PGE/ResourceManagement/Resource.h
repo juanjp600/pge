@@ -13,7 +13,7 @@ class ResourceBase {
 };
 
 // Only inherit publicly and use the designated macro.
-template <class T>
+template <typename T>
 class Resource : public ResourceBase {
     protected:
         T resource;

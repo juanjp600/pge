@@ -7,7 +7,7 @@
 
 namespace PGE {
 
-template <class T>
+template <typename T>
 class DX11Resource : public Resource<T> {
     protected:
         ~DX11Resource() override {

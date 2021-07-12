@@ -114,7 +114,7 @@ class String {
             initLiteral((int)S);
         }
 
-        template <class T, class = typename std::enable_if<
+        template <typename T, typename = typename std::enable_if<
             std::conjunction<
                 std::is_pointer<T>,
                 std::disjunction<
@@ -138,7 +138,7 @@ class String {
         String(char c);
         String(char16 w);
 
-        template <class T>
+        template <typename T>
         static const String format(T t, const String& format);
         static const String fromInt(int i);
         static const String fromFloat(float f);

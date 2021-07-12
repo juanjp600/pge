@@ -9,7 +9,7 @@
 namespace PGE {
 
 class ResourceBase;
-template <class T>
+template <typename T>
 class ResourceView {
     private:
         T internalResource;
@@ -25,10 +25,10 @@ class ResourceView {
 
         operator const T& () const { return get(); }
 
-        template <class Y = T, typename = typename std::enable_if<std::is_pointer<Y>::value>::type>
+        template <typename Y = T, typename = typename std::enable_if<std::is_pointer<Y>::value>::type>
         const T& operator->() const { return get(); }
 
-        template <class Y = T, typename = typename std::enable_if<std::negation<std::is_pointer<Y>>::value>::type>
+        template <typename Y = T, typename = typename std::enable_if<std::negation<std::is_pointer<Y>>::value>::type>
         const T* operator->() const { return &get(); }
 
         const T* operator&() const { return &get(); }

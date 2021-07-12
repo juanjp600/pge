@@ -17,7 +17,7 @@ class BinaryReader : private AbstractIO<std::ifstream> {
 
         bool checkEOF() noexcept;
 
-        template <class T>
+        template <typename T>
         T read();
 
     public:

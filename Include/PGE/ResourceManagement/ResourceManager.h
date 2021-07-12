@@ -15,7 +15,7 @@ class ResourceManager {
     public:
         virtual ~ResourceManager();
 
-        template <class T, typename... Args>
+        template <typename T, typename... Args>
         typename T::View addNewResource(Args... args) {
             static_assert(std::is_base_of<ResourceBase, T>::value);
             T* res = new T(args...);
@@ -25,7 +25,7 @@ class ResourceManager {
             return ResourceView(res->get(), lastResourceIter);
         }
 
-        template <class T>
+        template <typename T>
         void deleteResource(ResourceView<T> view) {
             if (!view.isHoldingResource()) {
                 return;

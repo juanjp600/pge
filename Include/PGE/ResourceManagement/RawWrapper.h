@@ -5,14 +5,14 @@
 
 namespace PGE {
 
-template <class T>
+template <typename T>
 class RawWrapper : public Resource<T*> {
     public:
         RawWrapper(T* ptr) {
             this->resource = ptr;
         }
 
-        template <class... Args>
+        template <typename... Args>
         RawWrapper(Args... args) {
             this->resource = new T(args...);
         }

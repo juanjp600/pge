@@ -323,7 +323,7 @@ String::String(const String& other, int from, int cnt) {
     buf[cnt] = '\0';
 }
 
-template <class T>
+template <typename T>
 const String String::format(T t, const String& format) {
     int size = snprintf(nullptr, 0, format.cstr(), t);
     String ret(size);
@@ -333,16 +333,14 @@ const String String::format(T t, const String& format) {
     return ret;
 }
 
-template const String String::format<char>(char t, const PGE::String& format);
-template const String String::format<short>(short t, const PGE::String& format);
-template const String String::format<int>(int t, const PGE::String& format);
-template const String String::format<long>(long t, const PGE::String& format);
-template const String String::format<long long>(long long t, const PGE::String& format);
-template const String String::format<unsigned char>(unsigned char t, const PGE::String& format);
-template const String String::format<unsigned short>(unsigned short t, const PGE::String& format);
-template const String String::format<unsigned>(unsigned t, const PGE::String& format);
-template const String String::format<unsigned long>(unsigned long t, const PGE::String& format);
-template const String String::format<unsigned long long>(unsigned long long t, const PGE::String& format);
+template const String String::format<u8>(u8 t, const PGE::String& format);
+template const String String::format<u16>(u16 t, const PGE::String& format);
+template const String String::format<u32>(u32 t, const PGE::String& format);
+template const String String::format<u64>(u64 t, const PGE::String& format);
+template const String String::format<i8>(i8 t, const PGE::String& format);
+template const String String::format<i16>(i16 t, const PGE::String& format);
+template const String String::format<i32>(i32 t, const PGE::String& format);
+template const String String::format<i64>(i64 t, const PGE::String& format);
 template const String String::format<float>(float t, const PGE::String& format);
 template const String String::format<double>(double t, const PGE::String& format);
 template const String String::format<long double>(long double t, const PGE::String& format);
