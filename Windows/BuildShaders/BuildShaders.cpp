@@ -103,7 +103,7 @@ static void writeConstants(BinaryWriter& writer, ReflectionInfo info) {
 }
 
 namespace Parser {
-    static void skip(String::Iterator& it, std::function<bool (char16)> predicate) {
+    static void skip(String::Iterator& it, const std::function<bool (char16)>& predicate) {
         while (predicate(*it)) {
             it++;
         }
@@ -231,7 +231,7 @@ static ID3DBlob* compileDX11(const FilePath& path, const String& dxEntryPoint, c
         throw PGE_CREATE_EX(failure);
     } else {
         BinaryWriter writer(path);
-        writer.writeBytes((byte*)compiledBlob->GetBufferPointer(), compiledBlob->GetBufferSize());
+        writer.writeBytes((byte*)compiledBlob->GetBufferPointer(), (int)compiledBlob->GetBufferSize());
     }
     return compiledBlob;
 }

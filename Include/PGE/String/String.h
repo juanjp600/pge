@@ -2,6 +2,7 @@
 #define PGE_STRING_H_INCLUDED
 
 #include <unordered_map>
+#include <functional>
 #include <vector>
 #include <string>
 #include <regex>
@@ -239,7 +240,7 @@ class String {
         char* chs = std::get<Unique>(internalData).chs;
         Data* data = &std::get<Unique>(internalData).data;
 
-        const String performCaseConversion(const std::unordered_map<char16, char16>& conv, const std::unordered_map<char16, std::vector<char16>>& multiConv) const;
+        const String performCaseConversion(const std::function<void(String&, char16)>& func) const;
 
         void wCharToUtf8Str(const char16* wbuffer);
         void reallocate(int size, bool copyOldChs = false);

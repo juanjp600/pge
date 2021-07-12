@@ -114,6 +114,7 @@ int String::Iterator::operator-(const String::Iterator& other) const {
 }
 
 char16 String::Iterator::operator*() const {
+    PGE_ASSERT(index >= 0 && index < ref->byteLength(), "Tried dereferencing invalid iterator");
     if (_ch == L'\uFFFF') {
         _ch = Unicode::utf8ToWChar(ref->cstr() + index);
     }
@@ -219,7 +220,12 @@ const String::ReverseIterator String::rend() const {
 
 void String::copy(String& dst, const String& src) {
     dst.internalData = src.internalData;
-    if (src.data->cCapacity == SHORT_STR_CAPACITY) {
+    if (src.data->cCapacity == 0) {
+        // TODO: Share data for literals??
+        // Shared string, not data.
+        dst.chs = src.chs;
+        dst.data = &std::get<Unique>(dst.internalData).data;
+    } else if (src.data->cCapacity == SHORT_STR_CAPACITY) {
         Unique& u = std::get<Unique>(dst.internalData);
         dst.chs = u.chs;
         dst.data = &u.data;
@@ -512,20 +518,7 @@ static void fold(const char*& buf, std::queue<char16>& queue) {
     if (queue.empty() && *buf != '\0') {
         int codepoint = Unicode::measureCodepoint(*buf);
         char16 ch = Unicode::utf8ToWChar(buf, codepoint);
-        auto it = Unicode::FOLDING.find(ch);
-        if (it == Unicode::FOLDING.end()) {
-            queue.push(ch);
-        } else {
-            char16 folded = it->second;
-            if (folded != L'\uFFFF') {
-                queue.push(folded);
-            } else {
-                const std::vector<char16>& addChars = Unicode::MULTI_FOLDING.find(ch)->second;
-                for (char16 add : addChars) {
-                    queue.push(add);
-                }
-            }
-        }
+        Unicode::fold(queue, ch);
         buf += codepoint;
     }
 }
@@ -779,32 +772,22 @@ const String String::replace(const String& fnd, const String& rplace) const {
 }
 
 // TODO: Funny special cases!
-const String String::performCaseConversion(const std::unordered_map<char16, char16>& conv, const std::unordered_map<char16, std::vector<char16>>& multiConv) const {
+const String String::performCaseConversion(const std::function<void (String&, char16)>& func) const {
     String ret(byteLength());
     ret.data->strByteLength = 0;
     ret.data->_strLength = 0;
     for (char16 ch : *this) {
-        const auto& find = conv.find(ch);
-        if (find == conv.end()) {
-            ret += ch;
-        } else if (find->second == L'\uFFFF') {
-            const std::vector<char16>& multiFind = multiConv.find(ch)->second;
-            for (char16 writeChar : multiFind) {
-                ret += writeChar;
-            }
-        } else {
-            ret += find->second;
-        }
+        func(ret, ch);
     }
     return ret;
 }
 
 const String String::toUpper() const {
-    return performCaseConversion(Unicode::UP, Unicode::MULTI_UP);
+    return performCaseConversion(Unicode::up);
 }
 
 const String String::toLower() const {
-    return performCaseConversion(Unicode::DOWN, Unicode::MULTI_DOWN);
+    return performCaseConversion(Unicode::down);
 }
 
 const String String::trim() const {
