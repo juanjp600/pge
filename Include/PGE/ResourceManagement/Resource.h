@@ -19,27 +19,24 @@ class Resource : public ResourceBase {
         T resource;
 
     public:
-        typedef ResourceView<T> View;
+        using View = ResourceView<T>;
 
         Resource() = default;
         Resource(const Resource<T>& other) = delete;
         Resource<T>& operator=(const Resource<T>& other) = delete;
 
-        operator const T& () const { return resource; }
         // Force cast.
         const T& get() const { return resource; }
         
+        operator const T& () const { return get(); }
+
         template <typename Y = T, typename = typename std::enable_if<std::is_pointer<Y>::value>::type>
-        const T& operator->() const {
-            return resource;
-        }
+        const T& operator->() const { return get(); }
 
         template <typename Y = T, typename = typename std::enable_if<std::negation<std::is_pointer<Y>>::value>::type>
-        const T* operator->() const {
-            return &resource;
-        }
+        const T* operator->() const { return &get(); }
 
-        const T* operator&() const { return &resource; }
+        const T* operator&() const { return &get(); }
 };
 
 }

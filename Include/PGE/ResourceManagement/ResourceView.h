@@ -20,14 +20,15 @@ class ResourceView {
         ResourceView() = default;
         ResourceView(T res, std::list<ResourceBase*>::iterator pos) { internalResource = res; holdsResource = true; position = pos; }
 
-        operator const T&() const { return get(); }
         // Force cast.
         const T& get() const { PGE_ASSERT(holdsResource, "Reference not filled"); return internalResource; }
-        
+
+        operator const T& () const { return get(); }
+
         template <class Y = T, typename = typename std::enable_if<std::is_pointer<Y>::value>::type>
         const T& operator->() const { return get(); }
 
-        template <class Y = T, typename = typename std::enable_if<!std::is_pointer<Y>::value>::type>
+        template <class Y = T, typename = typename std::enable_if<std::negation<std::is_pointer<Y>>::value>::type>
         const T* operator->() const { return &get(); }
 
         const T* operator&() const { return &get(); }
