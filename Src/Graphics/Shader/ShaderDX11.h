@@ -35,7 +35,7 @@ class ShaderDX11 : public Shader {
         std::vector<String> vertexInputElems;
 
         class CBufferInfo;
-        typedef ResourceView<CBufferInfo*> CBufferInfoView;
+        using CBufferInfoView = ResourceView<CBufferInfo*>;
         class ConstantDX11 : public Constant {
             public:
                 ConstantDX11(CBufferInfoView cBuffer, int offst, int sz);

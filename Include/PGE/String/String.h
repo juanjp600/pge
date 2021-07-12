@@ -26,7 +26,7 @@ class String {
 
         struct Iterator {
             using iterator_category = std::bidirectional_iterator_tag;
-            using difference_type = unsigned;
+            using difference_type = int;
             using value_type = char16;
             using pointer = value_type*;
             using reference = value_type&;

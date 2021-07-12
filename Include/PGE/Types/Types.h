@@ -5,23 +5,23 @@
 
 namespace PGE {
 
-typedef unsigned char byte;
+using byte = unsigned char;
 
-typedef int8_t i8;
-typedef uint8_t u8;
-typedef int16_t i16;
-typedef uint16_t u16;
-typedef int32_t i32;
-typedef uint32_t u32;
-typedef int64_t i64;
-typedef uint64_t u64;
+using i8 = int8_t;
+using u8 = uint8_t;
+using i16 = int16_t;
+using u16 = uint16_t;
+using i32 = int32_t;
+using u32 = uint32_t;
+using i64 = int64_t;
+using u64 = uint64_t;
 
 // We always want 16 bits, but Windows functions expect wchar_t, so this only acts as to avoid unnecessary casting.
 // wchar_t is always 16 bits on Windows.
 #ifdef _WIN32
-typedef wchar_t char16;
+using char16 = wchar_t;
 #else
-typedef char16_t char16;
+using char16 = char16_t;
 #endif
 
 }

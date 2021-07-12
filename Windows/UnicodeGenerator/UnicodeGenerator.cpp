@@ -76,9 +76,8 @@ class Folder : private SwitchWriter {
             if (dominant) {
                 pre[from] = to;
             } else {
-                auto it = pre.find(from);
                 // We haven't mapped this yet!
-                if (it == pre.end()) {
+                if (pre.find(from) == pre.end()) {
                     pre.emplace(from, to);
                 }
             }
@@ -103,9 +102,8 @@ class Caser : private SwitchWriter {
             : SwitchWriter(name, "String& str", "str += ", ";") { }
 
         void feed(const String& from, const String& to) {
-            auto it = hasHad.find(from);
             // First come, first serve.
-            if (it == hasHad.end()) {
+            if (hasHad.find(from) == hasHad.end()) {
                 done[to].emplace(from);
                 hasHad.emplace(from);
             }
