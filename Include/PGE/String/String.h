@@ -104,16 +104,14 @@ class String {
         const Iterator end() const;
         const ReverseIterator rbegin() const;
         const ReverseIterator rend() const;
-
-        static void copy(String& dst, const String& src);
         
         String();
         String(const String& other);
 
         template <size_t S>
-        String(const char(&cstri)[S]) : chs((char*)&cstri) {
-            data->strByteLength = S - 1;
-            data->cCapacity = 0;
+        String(const char(&cstri)[S])
+            : internalData(std::monostate()), chs((char*)cstri), data(nullptr) {
+            initLiteral((int)S);
         }
 
         template <class T, class = typename std::enable_if<
@@ -212,6 +210,8 @@ class String {
         String(int size);
         String(const String& other, int from, int cnt);
 
+        static void copy(String& dst, const String& src);
+
         static constexpr int SHORT_STR_CAPACITY = 16;
 
         struct Data {
@@ -236,9 +236,11 @@ class String {
         };
 
         // Default initialized with Unique.
-        std::variant<Unique, std::shared_ptr<Shared>> internalData;
+        std::variant<Unique, std::shared_ptr<Shared>, std::monostate> internalData;
         char* chs = std::get<Unique>(internalData).chs;
         Data* data = &std::get<Unique>(internalData).data;
+
+        void initLiteral(int litSize);
 
         const String performCaseConversion(const std::function<void(String&, char16)>& func) const;
 

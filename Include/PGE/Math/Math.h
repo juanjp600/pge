@@ -27,8 +27,7 @@ namespace Math {
         float diff = val - other;
         if (diff >= 0) {
             return diff < epsilon;
-        }
-        else {
+        } else {
             return -diff < epsilon;
         }
     }

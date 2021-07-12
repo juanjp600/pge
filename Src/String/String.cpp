@@ -220,12 +220,7 @@ const String::ReverseIterator String::rend() const {
 
 void String::copy(String& dst, const String& src) {
     dst.internalData = src.internalData;
-    if (src.data->cCapacity == 0) {
-        // TODO: Share data for literals??
-        // Shared string, not data.
-        dst.chs = src.chs;
-        dst.data = &std::get<Unique>(dst.internalData).data;
-    } else if (src.data->cCapacity == SHORT_STR_CAPACITY) {
+    if (src.data->cCapacity == SHORT_STR_CAPACITY) {
         Unique& u = std::get<Unique>(dst.internalData);
         dst.chs = u.chs;
         dst.data = &u.data;
@@ -769,6 +764,18 @@ const String String::replace(const String& fnd, const String& rplace) const {
         retVal.data->_strLength = data->_strLength + (int)foundPositions.size() * (rplace.length() - fnd.length());
     }
     return retVal;
+}
+
+// Only has to deal with data.
+void String::initLiteral(int litSize) {
+    static std::unordered_map<const char*, Data> litData;
+    if (const auto& it = litData.find(chs); it != litData.end()) {
+        data = &it->second;
+    } else {
+        data = &litData.emplace(chs, Data()).first->second;
+        data->cCapacity = 0;
+        data->strByteLength = litSize - 1;
+    }
 }
 
 // TODO: Funny special cases!
