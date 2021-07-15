@@ -16,9 +16,9 @@ class ResourceManager {
         virtual ~ResourceManager();
 
         template <typename T, typename... Args>
-        typename T::View addNewResource(Args... args) {
+        typename T::View addNewResource(Args&&... args) {
             static_assert(std::is_base_of<ResourceBase, T>::value);
-            T* res = new T(args...);
+            T* res = new T(std::forward<Args>(args)...);
             resources.push_back(res);
             std::list<ResourceBase*>::iterator lastResourceIter = resources.end();
             lastResourceIter--;

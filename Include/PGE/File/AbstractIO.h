@@ -13,23 +13,23 @@ namespace PGE {
 template <typename T>
 class AbstractIO {
 	protected:
-		static const inline PGE::String BAD_STREAM = "Stream turned bad";
-		static const inline PGE::String INVALID_FILEPATH = "Tried using an invalid path";
+		static const inline String BAD_STREAM = "Stream turned bad";
+		static const inline String INVALID_FILEPATH = "Tried using an invalid path";
 	
 		T stream;
-
-		void validate() {
-			if (!stream.good()) {
-				stream.close();
-				throw PGE_CREATE_EX(BAD_STREAM);
-			}
-		}
 
 		AbstractIO(const PGE::FilePath& file, std::ios::openmode mode = std::ios::binary) {
 			static_assert(std::is_base_of<std::ios_base, T>::value);
 			PGE_ASSERT(file.isValid(), INVALID_FILEPATH);
 			stream.open(file.cstr(), mode);
 			PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
+		}
+
+		void validate() {
+			if (!stream.good()) {
+				stream.close();
+				throw PGE_CREATE_EX(BAD_STREAM);
+			}
 		}
 
 	public:

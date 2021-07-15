@@ -13,8 +13,8 @@ class RawWrapper : public Resource<T*> {
         }
 
         template <typename... Args>
-        RawWrapper(Args... args) {
-            this->resource = new T(args...);
+        RawWrapper(Args&&... args) {
+            this->resource = new T(std::forward<Args>(args)...);
         }
 
         ~RawWrapper() {
