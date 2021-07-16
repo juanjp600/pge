@@ -5,28 +5,20 @@
 
 namespace PGE {
 
-struct String::Key {
+struct String::Key : private NoHeap {
     Key() = default;
     Key(const String& str) : hash(str.getHashCode()) { }
     size_t hash;
-    void* operator new(size_t) = delete;
-    void* operator new[](size_t) = delete;
-    void operator delete(void*) = delete;
-    void operator delete[](void*) = delete;
 };
 
-struct String::RedundantKey {
+struct String::RedundantKey : private NoHeap {
     RedundantKey() = default;
     RedundantKey(const String& str) : hash(str.getHashCode()), str(str) { }
     size_t hash;
     String str;
-    void* operator new(size_t) = delete;
-    void* operator new[](size_t) = delete;
-    void operator delete(void*) = delete;
-    void operator delete[](void*) = delete;
 };
 
-struct String::SafeKey {
+struct String::SafeKey : private NoHeap {
     SafeKey() = default;
     SafeKey(const String& str) : hash(str.getHashCode()), str(str) { }
     size_t hash;
@@ -34,13 +26,9 @@ struct String::SafeKey {
     bool lengthEvaluated() const {
         return str.data->_strLength >= 0;
     }
-    void* operator new(size_t) = delete;
-    void* operator new[](size_t) = delete;
-    void operator delete(void*) = delete;
-    void operator delete[](void*) = delete;
 };
 
-struct String::OrderedKey {
+struct String::OrderedKey : private NoHeap {
     OrderedKey() = default;
     OrderedKey(const String& str) : str(str) { }
     const String str;
@@ -50,10 +38,6 @@ struct String::OrderedKey {
     bool operator>(const OrderedKey& other) const {
         return strcmp(str.cstr(), other.str.cstr()) > 0;
     }
-    void* operator new(size_t) = delete;
-    void* operator new[](size_t) = delete;
-    void operator delete(void*) = delete;
-    void operator delete[](void*) = delete;
 };
 
 }

@@ -10,7 +10,7 @@ namespace PGE {
 
 class ResourceBase;
 template <typename T>
-class ResourceView {
+class ResourceView : private NoHeap {
     private:
         T internalResource;
         std::list<ResourceBase*>::iterator position;
@@ -36,11 +36,6 @@ class ResourceView {
         bool isHoldingResource() const { return holdsResource; }
 
         std::list<ResourceBase*>::iterator getPosition() { return position; }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
 }

@@ -5,7 +5,7 @@
 
 namespace PGE {
 
-class Matrix4x4f {
+class Matrix4x4f : private NoHeap {
     private:
         static constexpr int SIZE = 4;
         float elements[SIZE][SIZE];
@@ -260,11 +260,6 @@ class Matrix4x4f {
             Vector3f zAxis = Vector3f(elements[0][2], elements[1][2], elements[2][2]);
             return -(xAxis * elements[3][0] + yAxis * elements[3][1] + zAxis * elements[3][2]);
         }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
 namespace Matrices {

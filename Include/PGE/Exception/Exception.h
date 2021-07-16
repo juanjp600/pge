@@ -2,12 +2,13 @@
 #define PGE_EXCEPTION_H_INCLUDED
 
 #include <PGE/String/String.h>
+#include <PGE/ResourceManagement/NoHeap.h>
 
 namespace PGE {
 
 /// Singular exception class thrown by PGE.
 /// @see #PGE::PGE_CREATE_EX, #PGE::PGE_ASSERT
-class Exception {
+class Exception : private NoHeap {
     public:
         /// Invalid exception.
         /// Only ever use for storing exceptions by value.
@@ -23,11 +24,6 @@ class Exception {
 
     private:
         String info;
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
 }

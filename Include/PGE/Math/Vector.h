@@ -7,7 +7,7 @@
 // If you modify one class here, apply your changes to the others as well!
 namespace PGE {
 
-class Vector2f {
+class Vector2f : private NoHeap {
     public:
         float x; float y;
 
@@ -59,15 +59,10 @@ class Vector2f {
 
         constexpr float distanceSquared(const Vector2f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector2f& other) const { return sqrtf(distanceSquared(other)); }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 constexpr const Vector2f operator*(float f, const Vector2f& vec) { return vec * f; }
 
-class Vector3f {
+class Vector3f : private NoHeap {
     public:
         float x; float y; float z;
 
@@ -122,15 +117,10 @@ class Vector3f {
 
         constexpr float distanceSquared(const Vector3f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector3f& other) const { return sqrtf(distanceSquared(other)); }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 constexpr const Vector3f operator*(float f, const Vector3f& vec) { return vec * f; }
 
-class Vector4f {
+class Vector4f : private NoHeap {
     public:
         float x; float y; float z; float w;
 
@@ -185,15 +175,10 @@ class Vector4f {
 
         constexpr float distanceSquared(const Vector4f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector4f& other) const { return sqrtf(distanceSquared(other)); }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 constexpr const Vector4f operator*(float f, const Vector4f& vec) { return vec * f; }
 
-class Vector2i {
+class Vector2i : private NoHeap {
     public:
         int x; int y;
 
@@ -231,11 +216,6 @@ class Vector2i {
 
         constexpr int distanceSquared(const Vector2i& other) const { return ((*this) - other).lengthSquared(); }
         inline float distance(const Vector2i& other) const { return sqrtf((float)distanceSquared(other)); }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 constexpr const Vector2i operator*(int i, const Vector2i& vec) { return vec * i; }
 

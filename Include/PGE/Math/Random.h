@@ -1,6 +1,7 @@
 #ifndef PGE_RANDOM_H_INCLUDED
 #define PGE_RANDOM_H_INCLUDED
 
+#include <PGE/ResourceManagement/NoHeap.h>
 #include <PGE/Types/Types.h>
 
 namespace PGE {
@@ -8,7 +9,7 @@ namespace PGE {
 // xoshiro128**
 // https://prng.di.unimi.it/
 // CC0
-class Random {
+class Random : private NoHeap {
     public:
         Random();
         Random(u64 seed);
@@ -21,11 +22,6 @@ class Random {
 
     private:
         u32 state[4];
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
 }

@@ -5,13 +5,14 @@
 
 #include <PGE/File/FilePath.h>
 #include <PGE/Exception/Exception.h>
+#include <PGE/ResourceManagement/NoHeap.h>
 
 namespace PGE {
 
 /// Utility to more easily deal with file IO streams.
 /// Not intended to be polymorphic.
 template <typename T>
-class AbstractIO {
+class AbstractIO : private NoHeap {
 	protected:
 		static const inline String BAD_STREAM = "Stream turned bad";
 		static const inline String INVALID_FILEPATH = "Tried using an invalid path";

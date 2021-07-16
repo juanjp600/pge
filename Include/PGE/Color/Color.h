@@ -4,13 +4,14 @@
 #include <PGE/Math/Math.h>
 #include <PGE/Types/Types.h>
 #include <PGE/Exception/Exception.h>
+#include <PGE/ResourceManagement/NoHeap.h>
 
 namespace PGE {
 
 /// An RGBA color represented via 4 floating point numbers.
 /// Attributes are public.
 /// @see #PGE::Colors
-class Color {
+class Color : private NoHeap {
     public:
         float red; float green; float blue; float alpha;
 
@@ -90,11 +91,6 @@ class Color {
         constexpr void setGreen(byte g) noexcept { green = ((float)g) / 255.f; }
         constexpr void setBlue(byte b) noexcept { blue = ((float)b) / 255.f; }
         constexpr void setAlpha(byte a) noexcept { alpha = ((float)a) / 255.f; }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
 /// A few common colors.

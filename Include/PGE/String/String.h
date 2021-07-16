@@ -8,16 +8,17 @@
 #include <regex>
 #include <variant>
 
-#include <PGE/Types/Types.h>
-
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/NSString.h>
 #endif
 
+#include <PGE/ResourceManagement/NoHeap.h> 
+#include <PGE/Types/Types.h>
+
 namespace PGE {
 
 /// A UTF-8 character sequence guaranteed to be terminated by a null byte.
-class String {
+class String : private NoHeap {
     public:
         struct Key;
         struct RedundantKey;
@@ -247,11 +248,6 @@ class String {
         void wCharToUtf8Str(const char16* wbuffer);
         void reallocate(int size, bool copyOldChs = false);
         char* cstrNoConst();
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 bool operator==(const String& a, const String& b);
 bool operator!=(const String& a, const String& b);

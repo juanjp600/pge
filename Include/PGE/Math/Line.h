@@ -6,7 +6,7 @@
 
 namespace PGE {
 
-class Line2f {
+class Line2f : private NoHeap {
     public:
         Vector2f pointA; Vector2f pointB;
 
@@ -58,14 +58,9 @@ class Line2f {
             }
             return pointA + aToB * t;
         }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
-class Line2i {
+class Line2i : private NoHeap {
     public:
         Vector2i pointA; Vector2i pointB;
 
@@ -94,14 +89,9 @@ class Line2i {
             if (!segmentOnly) { return true; }
             return boundingBox().isPointInside(Vector2i(point)) && other.boundingBox().isPointInside(Vector2i(point));
         }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
-class Line3f {
+class Line3f : private NoHeap {
     public:
         Vector3f pointA; Vector3f pointB;
 
@@ -123,11 +113,6 @@ class Line3f {
             }
             return pointA + aToB * t;
         }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
 }

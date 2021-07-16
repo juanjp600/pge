@@ -43,7 +43,7 @@
 
 namespace PGE {
 
-class Plane {
+class Plane : private NoHeap {
     public:
         Vector3f normal;
         float distanceFromOrigin;
@@ -111,11 +111,6 @@ class Plane {
             intersectionPoint = numer / denom;
             return true;
         }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
 }

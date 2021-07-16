@@ -1,12 +1,14 @@
 #ifndef PGE_AABBOX_H_INCLUDED
 #define PGE_AABBOX_H_INCLUDED
 
+#include <PGE/ResourceManagement/NoHeap.h>
+
 #include "Vector.h"
 
 namespace PGE {
 
 // Axis Aligned Bounding Box
-class AABBox {
+class AABBox : private NoHeap {
     private:
         Vector3f min; Vector3f max;
 
@@ -45,11 +47,6 @@ class AABBox {
 
             return *this;
         }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
 }

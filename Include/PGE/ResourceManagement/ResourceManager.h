@@ -3,12 +3,13 @@
 
 #include <vector>
 
+#include "NoHeap.h"
 #include "Resource.h"
 
 namespace PGE {
 
 class ResourceBase;
-class ResourceManager {
+class ResourceManager : private NoHeap {
     private:
         std::list<ResourceBase*> resources;
 
@@ -34,11 +35,6 @@ class ResourceManager {
             delete *view.getPosition();
             resources.erase(view.getPosition());
         }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
 }

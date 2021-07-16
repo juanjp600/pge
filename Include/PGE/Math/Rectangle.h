@@ -7,7 +7,7 @@ namespace PGE {
 
 class Rectanglei;
 
-class Rectanglef {
+class Rectanglef : private NoHeap {
     private:
         Vector2f tl; Vector2f br;
 
@@ -69,14 +69,9 @@ class Rectanglef {
         constexpr bool intersects(const Rectanglef& other) const {
             return other.tl.x <= tl.x && other.br.x >= tl.x && other.tl.y <= br.y && other.br.y >= tl.y;
         }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
-class Rectanglei {
+class Rectanglei : private NoHeap {
     private:
         Vector2i tl; Vector2i br;
 
@@ -132,11 +127,6 @@ class Rectanglei {
         constexpr bool intersects(const Rectanglei& other) const {
             return other.tl.x <= tl.x && other.br.x >= tl.x && other.tl.y <= br.y && other.br.y >= tl.y;
         }
-
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
 };
 
 }

@@ -77,6 +77,7 @@
     <ClInclude Include="..\..\Include\PGE\Math\Random.h" />
     <ClInclude Include="..\..\Include\PGE\Math\Rectangle.h" />
     <ClInclude Include="..\..\Include\PGE\Math\Vector.h" />
+    <ClInclude Include="..\..\Include\PGE\ResourceManagement\NoHeap.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\RawWrapper.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\Resource.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceManager.h" />
@@ -186,6 +187,7 @@
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4670; 4673</DisableSpecificWarnings>
     </ClCompile>
     <PreBuildEvent>
       <Command>cd ../../Src/
@@ -231,6 +233,7 @@ echo Generated %25CD%\Info.cpp!</Command>
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4670; 4673</DisableSpecificWarnings>
     </ClCompile>
     <PreBuildEvent>
       <Command>cd ../../Src/
@@ -277,6 +280,7 @@ echo Generated %25CD%\Info.cpp!</Command>
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4670; 4673</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -327,6 +331,7 @@ echo Generated %25CD%\Info.cpp!</Command>
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4670; 4673</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
