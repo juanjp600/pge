@@ -127,9 +127,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 <tr class="memitem:acbdb052c51f4b375db39f7cb055ef5c0"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_file_path.html#acbdb052c51f4b375db39f7cb055ef5c0">makeDirectory</a> () const</td></tr>
 <tr class="memdesc:acbdb052c51f4b375db39f7cb055ef5c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Causes a path to be interpreted as a directory.  <a href="class_p_g_e_1_1_file_path.html#acbdb052c51f4b375db39f7cb055ef5c0">More...</a><br /></td></tr>
 <tr class="separator:acbdb052c51f4b375db39f7cb055ef5c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac767399d048e1563c77104ece55530b9"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_file_path.html#ac767399d048e1563c77104ece55530b9">up</a> () const</td></tr>
-<tr class="memdesc:ac767399d048e1563c77104ece55530b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Goes up exactly one step in the hierarchy.  <a href="class_p_g_e_1_1_file_path.html#ac767399d048e1563c77104ece55530b9">More...</a><br /></td></tr>
-<tr class="separator:ac767399d048e1563c77104ece55530b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bbe05d238befcd8a8212d224228112a"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_file_path.html#a9bbe05d238befcd8a8212d224228112a">getParentDirectory</a> () const</td></tr>
+<tr class="memdesc:a9bbe05d238befcd8a8212d224228112a"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Returns the path to the parent directory of the current path.  <a href="class_p_g_e_1_1_file_path.html#a9bbe05d238befcd8a8212d224228112a">More...</a><br /></td></tr>
+<tr class="separator:a9bbe05d238befcd8a8212d224228112a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa922504cb9fbc915ecb306f7f9668c1c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_file_path.html#aa922504cb9fbc915ecb306f7f9668c1c">getExtension</a> () const</td></tr>
 <tr class="memdesc:aa922504cb9fbc915ecb306f7f9668c1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Gets a file's extension.  <a href="class_p_g_e_1_1_file_path.html#aa922504cb9fbc915ecb306f7f9668c1c">More...</a><br /></td></tr>
 <tr class="separator:aa922504cb9fbc915ecb306f7f9668c1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -413,6 +413,31 @@ Static Public Member Functions</h2></td></tr>
 
 <p>&#x202A;Gets a file's extension. </p>
 <p class="DocNodeLTR">A file's extension is defined as the suffix after the last occurence of the "." character. </p><dl class="section return"><dt>Returns</dt><dd>&#x202A;The file extension, without a leading dot. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;If the path is not initialized. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9bbe05d238befcd8a8212d224228112a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bbe05d238befcd8a8212d224228112a">&#9670;&nbsp;</a></span>getParentDirectory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> PGE::FilePath::getParentDirectory </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Returns the path to the parent directory of the current path. </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;If the path is not initialized. </td></tr>
@@ -718,31 +743,6 @@ Static Public Member Functions</h2></td></tr>
 
 <p>&#x202A;Returns a path, without its extension. </p>
 <p class="DocNodeLTR">A file's extension is defined as the suffix after the last occurence of the "." character. </p><dl class="section return"><dt>Returns</dt><dd>&#x202A;The path, without the extension <em>and</em> without the trailing dot. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;If the path is not initialized. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ac767399d048e1563c77104ece55530b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac767399d048e1563c77104ece55530b9">&#9670;&nbsp;</a></span>up()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> PGE::FilePath::up </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>&#x202A;Goes up exactly one step in the hierarchy. </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;If the path is not initialized. </td></tr>

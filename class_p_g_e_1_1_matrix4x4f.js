@@ -18,5 +18,6 @@ var class_p_g_e_1_1_matrix4x4f =
     [ "\u202Aoperator[]", "class_p_g_e_1_1_matrix4x4f.html#ab258b6c42660c9d1cc80d6287807d3dc", null ],
     [ "\u202Aoperator[]", "class_p_g_e_1_1_matrix4x4f.html#ab0465d97c17a9acbff9871dbf3342884", null ],
     [ "\u202Atransform", "class_p_g_e_1_1_matrix4x4f.html#ae5cf082f0c1af6cc090c56a8cc0f3e72", null ],
+    [ "\u202Atransform", "class_p_g_e_1_1_matrix4x4f.html#a624b69a56fd1c82bd3aa9657e2a2d86e", null ],
     [ "\u202Atranspose", "class_p_g_e_1_1_matrix4x4f.html#a3bd759d1e8c9b6724a66d8c98cfb37d1", null ]
 ];
