@@ -124,11 +124,16 @@ $(document).ready(function(){initNavTree('_resource_manager_8h_source.html','');
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="keyword">delete</span> *view.getPosition();</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            resources.erase(view.getPosition());</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        }</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;};</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_RESOURCEMANAGER_H_INCLUDED</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">void</span>* <span class="keyword">operator</span> <span class="keyword">new</span>(size_t) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordtype">void</span>* <span class="keyword">operator</span> <span class="keyword">new</span>[](size_t) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">void</span> <span class="keyword">operator</span> <span class="keyword">delete</span>(<span class="keywordtype">void</span>*) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">void</span> <span class="keyword">operator</span> <span class="keyword">delete</span>[](<span class="keywordtype">void</span>*) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;};</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_RESOURCEMANAGER_H_INCLUDED</span></div>
 <div class="ttc" id="aclass_p_g_e_1_1_resource_manager_html"><div class="ttname"><a href="class_p_g_e_1_1_resource_manager.html">PGE::ResourceManager</a></div><div class="ttdef"><b>Definition:</b> ResourceManager.h:11</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_resource_view_html"><div class="ttname"><a href="class_p_g_e_1_1_resource_view.html">PGE::ResourceView</a></div><div class="ttdef"><b>Definition:</b> ResourceView.h:13</div></div>
 </div><!-- fragment --></div><!-- contents -->

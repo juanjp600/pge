@@ -350,24 +350,29 @@ $(document).ready(function(){initNavTree('_matrix_8h_source.html',''); initResiz
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> zAxis = <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>(elements[0][2], elements[1][2], elements[2][2]);</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            <span class="keywordflow">return</span> -(xAxis * elements[3][0] + yAxis * elements[3][1] + zAxis * elements[3][2]);</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        }</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;};</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="keyword">namespace </span>Matrices {</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    constexpr <a class="code" href="class_p_g_e_1_1_matrix4x4f.html">Matrix4x4f</a> ZERO = <a class="code" href="class_p_g_e_1_1_matrix4x4f.html">Matrix4x4f</a>();</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    constexpr <a class="code" href="class_p_g_e_1_1_matrix4x4f.html">Matrix4x4f</a> IDENTITY = <a class="code" href="class_p_g_e_1_1_matrix4x4f.html">Matrix4x4f</a>(</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        1.f, 0.f, 0.f, 0.f,</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        0.f, 1.f, 0.f, 0.f,</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        0.f, 0.f, 1.f, 0.f,</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        0.f, 0.f, 0.f, 1.f</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    );</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;}</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;}</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160; </div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MATRIX_H_INCLUDED</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160; </div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        <span class="keywordtype">void</span>* <span class="keyword">operator</span> <span class="keyword">new</span>(size_t) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="keywordtype">void</span>* <span class="keyword">operator</span> <span class="keyword">new</span>[](size_t) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="keywordtype">void</span> <span class="keyword">operator</span> <span class="keyword">delete</span>(<span class="keywordtype">void</span>*) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordtype">void</span> <span class="keyword">operator</span> <span class="keyword">delete</span>[](<span class="keywordtype">void</span>*) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;};</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="keyword">namespace </span>Matrices {</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    constexpr <a class="code" href="class_p_g_e_1_1_matrix4x4f.html">Matrix4x4f</a> ZERO = <a class="code" href="class_p_g_e_1_1_matrix4x4f.html">Matrix4x4f</a>();</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    constexpr <a class="code" href="class_p_g_e_1_1_matrix4x4f.html">Matrix4x4f</a> IDENTITY = <a class="code" href="class_p_g_e_1_1_matrix4x4f.html">Matrix4x4f</a>(</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        1.f, 0.f, 0.f, 0.f,</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        0.f, 1.f, 0.f, 0.f,</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        0.f, 0.f, 1.f, 0.f,</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        0.f, 0.f, 0.f, 1.f</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    );</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;}</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;}</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MATRIX_H_INCLUDED</span></div>
 <div class="ttc" id="aclass_p_g_e_1_1_matrix4x4f_html"><div class="ttname"><a href="class_p_g_e_1_1_matrix4x4f.html">PGE::Matrix4x4f</a></div><div class="ttdef"><b>Definition:</b> Matrix.h:8</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:65</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_vector4f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector4f.html">PGE::Vector4f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:123</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:70</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_vector4f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector4f.html">PGE::Vector4f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:133</div></div>
 <div class="ttc" id="anamespace_p_g_e_1_1_math_html_a254393cd3a914e459f8ecedf76802e77"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">PGE::Math::equalFloats</a></div><div class="ttdeci">constexpr bool equalFloats(float val, float other, float epsilon=EPSILON_DEFAULT) noexcept</div><div class="ttdoc">Two values are considered equal if |val - other| &lt; epsilon.</div><div class="ttdef"><b>Definition:</b> Math.h:26</div></div>
 <div class="ttc" id="anamespace_p_g_e_1_1_math_html_a6b04fd48d78229387dde0bddbe3d5c05"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">PGE::Math::EPSILON_DEFAULT</a></div><div class="ttdeci">constexpr float EPSILON_DEFAULT</div><div class="ttdoc">The default difference two floats are allowed to have in order to be considered &quot;equal&quot;.</div><div class="ttdef"><b>Definition:</b> Math.h:13</div></div>
 </div><!-- fragment --></div><!-- contents -->
