@@ -52,6 +52,7 @@ class FilePath {
         /// @param[in] str Will have its path seperators sanitized.
         /// @throws #PGE::Exception If the path is not initialized.
         FilePath& operator+=(const String& str);
+
         /// Appends str to a valid path.
         /// The path must be valid.
         /// 
@@ -64,9 +65,11 @@ class FilePath {
         /// Gets if a path is considered valid.
         /// A path object is considered valid if it has been assigned a path. A default constructed path is not valid.
         bool isValid() const noexcept;
+
         /// Checks if a path is an existing directory.
         /// @throws #PGE::Exception If the path is not initialized.
         bool isDirectory() const;
+
         /// Check if a path exists on the system.
         /// @throws #PGE::Exception If the path is not initialized.
         bool exists() const;
@@ -76,15 +79,17 @@ class FilePath {
         /// @returns The path, guaranteed to have a path seperator as a suffix.
         /// @throws #PGE::Exception If the path is not initialized.
         const FilePath makeDirectory() const;
-        /// Goes up exactly one step in the hierarchy.
+
+        /// Returns the path to the parent directory of the current path.
         /// @throws #PGE::Exception If the path is not initialized.
-        const FilePath up() const;
+        const FilePath getParentDirectory() const;
 
         /// Gets a file's extension.
         /// A file's extension is defined as the suffix after the last occurence of the "." character.
         /// @returns The file extension, without a leading dot.
         /// @throws #PGE::Exception If the path is not initialized.
         const String getExtension() const;
+
         /// Returns a path, without its extension.
         /// A file's extension is defined as the suffix after the last occurence of the "." character.
         /// @returns The path, without the extension *and* without the trailing dot.
@@ -128,6 +133,7 @@ class FilePath {
         /// Always absolute and path sepeartors are sanitized to '/'.
         /// @throws #PGE::Exception If the path is not initialized.
         const String& str() const;
+
         /// Forwards a call to #PGE::String::cstr.
         /// @throws #PGE::Exception If the path is not initialized.
         const char* cstr() const;

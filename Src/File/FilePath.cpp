@@ -104,7 +104,7 @@ const FilePath FilePath::makeDirectory() const {
     return *this;
 }
 
-const FilePath FilePath::up() const {
+const FilePath FilePath::getParentDirectory() const {
     PGE_ASSERT(valid, INVALID_STR);
     String::Iterator to = name.findLast("/");
     int index;

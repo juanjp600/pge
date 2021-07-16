@@ -239,11 +239,11 @@ static ID3DBlob* compileDX11(const FilePath& path, const String& dxEntryPoint, c
 static void compileShader(const FilePath& path) {
     String input = path.read();
 
-    FilePath compiledPath = path.trimExtension().makeDirectory();
+    FilePath compiledPath = path.getParentDirectory().makeDirectory();
     compiledPath.createDirectory();
 
     ID3DBlob* vsBlob = compileDX11(compiledPath + "vertex.dxbc", "VS", input);
-    ID3DBlob* psBlob = compileDX11(compiledPath + "pixel.dxbc", "PS", input);
+    ID3DBlob* psBlob = compileDX11(compiledPath + "fragment.dxbc", "PS", input); //it's called a fucking fragment shader, microsoft is wrong about this
     compileDX11Reflection(compiledPath + "reflection.dxri", input, vsBlob, psBlob);
 }
 

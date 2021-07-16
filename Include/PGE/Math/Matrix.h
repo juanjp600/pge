@@ -232,8 +232,12 @@ class Matrix4x4f : private NoHeap {
 
         constexpr const Vector3f transform(const Vector3f& vec) const {
             Vector4f retVal(vec.x, vec.y, vec.z, 1.f);
-            retVal = *this * retVal;
+            retVal = (*this) * retVal;
             return Vector3f(retVal.x, retVal.y, retVal.z);
+        }
+
+        constexpr const Vector4f transform(const Vector4f& vec) const {
+            return (*this) * vec;
         }
 
         constexpr const Matrix4x4f transpose() const {

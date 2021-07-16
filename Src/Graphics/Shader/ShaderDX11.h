@@ -35,10 +35,9 @@ class ShaderDX11 : public Shader {
         std::vector<String> vertexInputElems;
 
         class CBufferInfo;
-        using CBufferInfoView = ResourceView<CBufferInfo*>;
         class ConstantDX11 : public Constant {
             public:
-                ConstantDX11(CBufferInfoView cBuffer, int offst, int sz);
+                ConstantDX11(CBufferInfo& cBuffer, int offst, int sz);
 
                 void setValue(const Matrix4x4f& value) override;
                 void setValue(const Vector2f& value) override;
@@ -49,18 +48,19 @@ class ShaderDX11 : public Shader {
                 void setValue(int value) override;
 
             private:
-                CBufferInfoView constantBuffer;
+                CBufferInfo& constantBuffer;
                 int offset;
                 int size;
         };
 
         class CBufferInfo {
             public:
-                CBufferInfo(Graphics* graphics, const String& nm, int sz, ResourceManager* resourceManager);
+                CBufferInfo() = delete;
+                CBufferInfo(Graphics* graphics, const String& nm, int sz, ResourceManager& resourceManager);
                 ~CBufferInfo();
 
                 byte* getData();
-                std::unordered_map<String::Key, ConstantDX11>* getConstants();
+                std::unordered_map<String::Key, ConstantDX11>& getConstants();
                 void addConstant(const String& name, const ConstantDX11& constant);
                 bool isDirty() const;
                 void markAsDirty();
@@ -76,16 +76,10 @@ class ShaderDX11 : public Shader {
                 D3D11Buffer::View dxCBuffer;
                 bool dirty;
         };
-        
-        // TODO: Rid the world of this atrocity.
-        class CBufferInfoOwner : public Resource<CBufferInfo*> {
-            public:
-                CBufferInfoOwner(Graphics* gfx, const String& nm, int sz, ResourceManager* rm);
-        };
 
-        ResourceViewVector<CBufferInfo*> vertexConstantBuffers;
-        ResourceViewVector<CBufferInfo*> fragmentConstantBuffers;
-        void readConstantBuffers(BinaryReader& reflectionInfo, ResourceViewVector<CBufferInfo*>& constantBuffers);
+        std::vector<CBufferInfo> vertexConstantBuffers;
+        std::vector<CBufferInfo> fragmentConstantBuffers;
+        void readConstantBuffers(BinaryReader& reflectionInfo, std::vector<CBufferInfo>& constantBuffers);
 
         ResourceViewVector<ID3D11SamplerState*> dxSamplerState;
 

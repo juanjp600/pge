@@ -60,7 +60,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     std::vector<byte> vertexShaderBytecode = (path + "vertex.dxbc").readBytes();
     PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
 
-    std::vector<byte> fragmentShaderBytecode = (path + "pixel.dxbc").readBytes();
+    std::vector<byte> fragmentShaderBytecode = (path + "fragment.dxbc").readBytes();
     PGE_ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str() + ")");
 
     dxVertexShader = resourceManager.addNewResource<D3D11VertexShader>(dxDevice, vertexShaderBytecode);
@@ -68,14 +68,13 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     dxVertexInputLayout = resourceManager.addNewResource<D3D11InputLayout>(dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
 }
 
-void ShaderDX11::readConstantBuffers(BinaryReader& reader, ResourceViewVector<CBufferInfo*>& constantBuffers) {
+void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferInfo>& constantBuffers) {
     u32 cBufferCount = reader.readUInt32();
 
     for (int i = 0; i < (int)cBufferCount; i++) {
         String bufferName = reader.readNullTerminatedString();
         u32 cBufferSize = reader.readUInt32();
-        CBufferInfoView constantBuffer = resourceManager.addNewResource<CBufferInfoOwner>(graphics, bufferName, cBufferSize, &resourceManager);
-        constantBuffers.add(constantBuffer);
+        CBufferInfo& constantBuffer = constantBuffers.emplace_back(graphics, bufferName, cBufferSize, resourceManager);
 
         String varName;
         u32 varCount = reader.readUInt32();
@@ -83,16 +82,16 @@ void ShaderDX11::readConstantBuffers(BinaryReader& reader, ResourceViewVector<CB
             varName = reader.readNullTerminatedString();
             u32 varOffset = reader.readUInt32();
             u32 varSize = reader.readUInt32();
-            constantBuffer->addConstant(varName, ConstantDX11(constantBuffer, varOffset, varSize));
+            constantBuffer.addConstant(varName, ConstantDX11(constantBuffer, varOffset, varSize));
         }
     }
 }
 
 Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
-    for (auto cBuffer : vertexConstantBuffers) {
-        auto map = cBuffer->getConstants();
-        auto it = map->find(name);
-        if (it != map->end()) {
+    for (CBufferInfo& cBuffer : vertexConstantBuffers) {
+        auto& map = cBuffer.getConstants();
+        auto it = map.find(name);
+        if (it != map.end()) {
             return &it->second;
         }
     }
@@ -100,10 +99,10 @@ Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
 }
 
 Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
-    for (auto cBuffer : fragmentConstantBuffers) {
-        auto map = cBuffer->getConstants();
-        auto it = map->find(name);
-        if (it != map->end()) {
+    for (CBufferInfo& cBuffer : fragmentConstantBuffers) {
+        auto& map = cBuffer.getConstants();
+        auto it = map.find(name);
+        if (it != map.end()) {
             return &it->second;
         }
     }
@@ -118,13 +117,13 @@ void ShaderDX11::useShader() {
     ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
-        vertexConstantBuffers[i]->update();
-        dxContext->VSSetConstantBuffers(i,1,&vertexConstantBuffers[i]->getDxCBuffer());
+        vertexConstantBuffers[i].update();
+        dxContext->VSSetConstantBuffers(i,1,&vertexConstantBuffers[i].getDxCBuffer());
     }
 
     for (int i = 0; i < (int)fragmentConstantBuffers.size(); i++) {
-        fragmentConstantBuffers[i]->update();
-        dxContext->PSSetConstantBuffers(i,1,&fragmentConstantBuffers[i]->getDxCBuffer());
+        fragmentConstantBuffers[i].update();
+        dxContext->PSSetConstantBuffers(i,1,&fragmentConstantBuffers[i].getDxCBuffer());
     }
     
     dxContext->VSSetShader(dxVertexShader,NULL,0);
@@ -141,11 +140,7 @@ void ShaderDX11::useSamplers() {
     dxContext->PSSetSamplers(0, (UINT)dxSamplerState.size(), dxSamplerState.data());
 }
 
-ShaderDX11::CBufferInfoOwner::CBufferInfoOwner(Graphics* gfx, const String& nm, int sz, ResourceManager* rm) {
-    resource = new ShaderDX11::CBufferInfo(gfx, nm, sz, rm);
-}
-
-ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, const String& nm, int sz, ResourceManager* resourceManager) {
+ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, const String& nm, int sz, ResourceManager& resourceManager) {
     name = nm;
     size = sz;
     int cBufferSize = size;
@@ -165,7 +160,7 @@ ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, const String& nm, int s
     ZeroMemory( &cBufferSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA) );
     cBufferSubresourceData.pSysMem = data;
 
-    dxCBuffer = resourceManager->addNewResource<D3D11Buffer>(((GraphicsDX11*)graphics)->getDxDevice(), cBufferDesc, cBufferSubresourceData);
+    dxCBuffer = resourceManager.addNewResource<D3D11Buffer>(((GraphicsDX11*)graphics)->getDxDevice(), cBufferDesc, cBufferSubresourceData);
 
     dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
@@ -180,8 +175,8 @@ byte* ShaderDX11::CBufferInfo::getData() {
     return data;
 }
 
-std::unordered_map<String::Key, ShaderDX11::ConstantDX11>* ShaderDX11::CBufferInfo::getConstants() {
-    return &constants;
+std::unordered_map<String::Key, ShaderDX11::ConstantDX11>& ShaderDX11::CBufferInfo::getConstants() {
+    return constants;
 }
 
 void ShaderDX11::CBufferInfo::addConstant(const String& cName, const ShaderDX11::ConstantDX11& constant) {
@@ -198,7 +193,7 @@ void ShaderDX11::CBufferInfo::markAsDirty() {
 
 void ShaderDX11::CBufferInfo::update() {
     if (!dirty) { return; }
-    dxContext->UpdateSubresource(dxCBuffer,0,NULL,data,0,0);
+    dxContext->UpdateSubresource(dxCBuffer,0,NULL,getData(),0,0);
     dirty = false;
 }
 
@@ -206,53 +201,52 @@ D3D11Buffer::View ShaderDX11::CBufferInfo::getDxCBuffer() {
     return dxCBuffer;
 }
 
-ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfoView cBuffer, int offst, int sz) {
-    constantBuffer = cBuffer;
+ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfo& cBuffer, int offst, int sz) : constantBuffer(cBuffer) {
     offset = offst;
     size = sz;
 }
 
 void ShaderDX11::ConstantDX11::setValue(const Matrix4x4f& value) {
-    memcpy(constantBuffer->getData()+offset,value.transpose()[0],16*sizeof(float));
-    constantBuffer->markAsDirty();
+    memcpy(constantBuffer.getData()+offset,value.transpose()[0],16*sizeof(float));
+    constantBuffer.markAsDirty();
 }
 
 void ShaderDX11::ConstantDX11::setValue(const Vector2f& value) {
     float arr[2]; arr[0] = value.x; arr[1] = value.y;
-    memcpy(constantBuffer->getData() + offset, arr, 2 * sizeof(float));
-    constantBuffer->markAsDirty();
+    memcpy(constantBuffer.getData() + offset, arr, 2 * sizeof(float));
+    constantBuffer.markAsDirty();
 }
 
 void ShaderDX11::ConstantDX11::setValue(const Vector3f& value) {
     float arr[3]; arr[0] = value.x; arr[1] = value.y; arr[2] = value.z;
-    memcpy(constantBuffer->getData() + offset, arr, 3 * sizeof(float));
+    memcpy(constantBuffer.getData() + offset, arr, 3 * sizeof(float));
     if (size == 4 * sizeof(float)) {
         float one = 1.f;
-        memcpy(constantBuffer->getData() + offset + (3 * sizeof(float)), &one, sizeof(float));
+        memcpy(constantBuffer.getData() + offset + (3 * sizeof(float)), &one, sizeof(float));
     }
-    constantBuffer->markAsDirty();
+    constantBuffer.markAsDirty();
 }
 
 void ShaderDX11::ConstantDX11::setValue(const Vector4f& value) {
     float arr[4]; arr[0] = value.x; arr[1] = value.y; arr[2] = value.z; arr[3] = value.w;
-    memcpy(constantBuffer->getData()+offset,arr,4*sizeof(float));
-    constantBuffer->markAsDirty();
+    memcpy(constantBuffer.getData()+offset,arr,4*sizeof(float));
+    constantBuffer.markAsDirty();
 }
 
 void ShaderDX11::ConstantDX11::setValue(const Color& value) {
     float arr[4]; arr[0] = value.red; arr[1] = value.green; arr[2] = value.blue; arr[3] = value.alpha;
-    memcpy(constantBuffer->getData()+offset,arr,4*sizeof(float));
-    constantBuffer->markAsDirty();
+    memcpy(constantBuffer.getData()+offset,arr,4*sizeof(float));
+    constantBuffer.markAsDirty();
 }
 
 void ShaderDX11::ConstantDX11::setValue(float value) {
-    memcpy(constantBuffer->getData()+offset,&value,sizeof(float));
-    constantBuffer->markAsDirty();
+    memcpy(constantBuffer.getData()+offset,&value,sizeof(float));
+    constantBuffer.markAsDirty();
 }
 
 void ShaderDX11::ConstantDX11::setValue(int value) {
     u32 valUi32 = value;
-    memcpy(constantBuffer->getData()+offset,&valUi32,sizeof(u32));
-    constantBuffer->markAsDirty();
+    memcpy(constantBuffer.getData()+offset,&valUi32,sizeof(u32));
+    constantBuffer.markAsDirty();
 }
 
