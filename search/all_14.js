@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7egraphics_145',['~Graphics',['../class_p_g_e_1_1_graphics.html#a6a1a6360becaae2c599e2c6e011ccb54',1,'PGE::Graphics']]]
+  ['yellow_145',['YELLOW',['../namespace_p_g_e_1_1_colors.html#a121027dfd1eb4b69ee86c4696b59ec2b',1,'PGE::Colors']]]
 ];

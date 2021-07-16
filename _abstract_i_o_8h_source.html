@@ -95,48 +95,50 @@ $(document).ready(function(){initNavTree('_abstract_i_o_8h_source.html',''); ini
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;PGE/File/FilePath.h&gt;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;PGE/Exception/Exception.h&gt;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>PGE {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_abstract_i_o.html">   14</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_abstract_i_o.html">AbstractIO</a> {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">inline</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a> BAD_STREAM = <span class="stringliteral">&quot;Stream turned bad&quot;</span>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">inline</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a> INVALID_FILEPATH = <span class="stringliteral">&quot;Tried using an invalid path&quot;</span>;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        T stream;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <a class="code" href="class_p_g_e_1_1_abstract_i_o.html">AbstractIO</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">PGE::FilePath</a>&amp; file, std::ios::openmode mode = std::ios::binary) {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            static_assert(std::is_base_of&lt;std::ios_base, T&gt;::value);</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            PGE_ASSERT(file.<a class="code" href="class_p_g_e_1_1_file_path.html#ae405fc81a9bb80d4b3bd0c0c23649816">isValid</a>(), INVALID_FILEPATH);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            stream.open(file.<a class="code" href="class_p_g_e_1_1_file_path.html#af7868ec37b9953c309465b3887ed928f">cstr</a>(), mode);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            PGE_ASSERT(stream.is_open(), <span class="stringliteral">&quot;Could not open (file: \&quot;&quot;</span> + file.<a class="code" href="class_p_g_e_1_1_file_path.html#a9c721acdf541d8e06baea01b86a22211">str</a>() + <span class="stringliteral">&quot;\&quot;)&quot;</span>);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        }</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordtype">void</span> validate() {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <span class="keywordflow">if</span> (!stream.good()) {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                stream.close();</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                <span class="keywordflow">throw</span> PGE_CREATE_EX(BAD_STREAM);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            }</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        }</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">   43</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">earlyClose</a>() {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            stream.close();</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            PGE_ASSERT(stream.good(), BAD_STREAM);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        }</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;};</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_INTERNAL_ABSTRACTIO_H_DEFINED</span></div>
-<div class="ttc" id="aclass_p_g_e_1_1_abstract_i_o_html"><div class="ttname"><a href="class_p_g_e_1_1_abstract_i_o.html">PGE::AbstractIO</a></div><div class="ttdoc">Utility to more easily deal with file IO streams.</div><div class="ttdef"><b>Definition:</b> AbstractIO.h:14</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_abstract_i_o_html_af252120aa787246f2c0f2df43dce0e4d"><div class="ttname"><a href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">PGE::AbstractIO::earlyClose</a></div><div class="ttdeci">void earlyClose()</div><div class="ttdoc">Closes the stream prematurely.</div><div class="ttdef"><b>Definition:</b> AbstractIO.h:43</div></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;PGE/ResourceManagement/NoHeap.h&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>PGE {</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_abstract_i_o.html">   15</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_abstract_i_o.html">AbstractIO</a> : <span class="keyword">private</span> <a class="code" href="class_p_g_e_1_1_no_heap.html">NoHeap</a> {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">inline</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a> BAD_STREAM = <span class="stringliteral">&quot;Stream turned bad&quot;</span>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">inline</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a> INVALID_FILEPATH = <span class="stringliteral">&quot;Tried using an invalid path&quot;</span>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        T stream;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <a class="code" href="class_p_g_e_1_1_abstract_i_o.html">AbstractIO</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">PGE::FilePath</a>&amp; file, std::ios::openmode mode = std::ios::binary) {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            static_assert(std::is_base_of&lt;std::ios_base, T&gt;::value);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            PGE_ASSERT(file.<a class="code" href="class_p_g_e_1_1_file_path.html#ae405fc81a9bb80d4b3bd0c0c23649816">isValid</a>(), INVALID_FILEPATH);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            stream.open(file.<a class="code" href="class_p_g_e_1_1_file_path.html#af7868ec37b9953c309465b3887ed928f">cstr</a>(), mode);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            PGE_ASSERT(stream.is_open(), <span class="stringliteral">&quot;Could not open (file: \&quot;&quot;</span> + file.<a class="code" href="class_p_g_e_1_1_file_path.html#a9c721acdf541d8e06baea01b86a22211">str</a>() + <span class="stringliteral">&quot;\&quot;)&quot;</span>);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        }</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordtype">void</span> validate() {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            <span class="keywordflow">if</span> (!stream.good()) {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                stream.close();</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                <span class="keywordflow">throw</span> PGE_CREATE_EX(BAD_STREAM);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            }</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        }</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">   44</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">earlyClose</a>() {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            stream.close();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            PGE_ASSERT(stream.good(), BAD_STREAM);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;};</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_INTERNAL_ABSTRACTIO_H_DEFINED</span></div>
+<div class="ttc" id="aclass_p_g_e_1_1_abstract_i_o_html"><div class="ttname"><a href="class_p_g_e_1_1_abstract_i_o.html">PGE::AbstractIO</a></div><div class="ttdoc">Utility to more easily deal with file IO streams.</div><div class="ttdef"><b>Definition:</b> AbstractIO.h:15</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_abstract_i_o_html_af252120aa787246f2c0f2df43dce0e4d"><div class="ttname"><a href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">PGE::AbstractIO::earlyClose</a></div><div class="ttdeci">void earlyClose()</div><div class="ttdoc">Closes the stream prematurely.</div><div class="ttdef"><b>Definition:</b> AbstractIO.h:44</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_file_path_html"><div class="ttname"><a href="class_p_g_e_1_1_file_path.html">PGE::FilePath</a></div><div class="ttdoc">String wrapper utility to deal with paths.</div><div class="ttdef"><b>Definition:</b> FilePath.h:13</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_file_path_html_a9c721acdf541d8e06baea01b86a22211"><div class="ttname"><a href="class_p_g_e_1_1_file_path.html#a9c721acdf541d8e06baea01b86a22211">PGE::FilePath::str</a></div><div class="ttdeci">const String &amp; str() const</div><div class="ttdoc">Returns the internal string representation of the path.</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_file_path_html_ae405fc81a9bb80d4b3bd0c0c23649816"><div class="ttname"><a href="class_p_g_e_1_1_file_path.html#ae405fc81a9bb80d4b3bd0c0c23649816">PGE::FilePath::isValid</a></div><div class="ttdeci">bool isValid() const noexcept</div><div class="ttdoc">Gets if a path is considered valid.</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_file_path_html_af7868ec37b9953c309465b3887ed928f"><div class="ttname"><a href="class_p_g_e_1_1_file_path.html#af7868ec37b9953c309465b3887ed928f">PGE::FilePath::cstr</a></div><div class="ttdeci">const char * cstr() const</div><div class="ttdoc">Forwards a call to PGE::String::cstr.</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_string_html"><div class="ttname"><a href="class_p_g_e_1_1_string.html">PGE::String</a></div><div class="ttdoc">A UTF-8 character sequence guaranteed to be terminated by a null byte.</div><div class="ttdef"><b>Definition:</b> String.h:20</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_no_heap_html"><div class="ttname"><a href="class_p_g_e_1_1_no_heap.html">PGE::NoHeap</a></div><div class="ttdoc">A mixin class intended to prevent heap allocation of a class.</div><div class="ttdef"><b>Definition:</b> NoHeap.h:7</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_string_html"><div class="ttname"><a href="class_p_g_e_1_1_string.html">PGE::String</a></div><div class="ttdoc">A UTF-8 character sequence guaranteed to be terminated by a null byte.</div><div class="ttdef"><b>Definition:</b> String.h:21</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

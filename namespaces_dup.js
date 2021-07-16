@@ -85,6 +85,7 @@ var namespaces_dup =
       [ "\u202AVector3f", "class_p_g_e_1_1_vector3f.html", "class_p_g_e_1_1_vector3f" ],
       [ "\u202AVector4f", "class_p_g_e_1_1_vector4f.html", "class_p_g_e_1_1_vector4f" ],
       [ "\u202AVector2i", "class_p_g_e_1_1_vector2i.html", "class_p_g_e_1_1_vector2i" ],
+      [ "\u202ANoHeap", "class_p_g_e_1_1_no_heap.html", "class_p_g_e_1_1_no_heap" ],
       [ "\u202ARawWrapper", "class_p_g_e_1_1_raw_wrapper.html", "class_p_g_e_1_1_raw_wrapper" ],
       [ "\u202AResourceBase", "class_p_g_e_1_1_resource_base.html", "class_p_g_e_1_1_resource_base" ],
       [ "\u202AResource", "class_p_g_e_1_1_resource.html", "class_p_g_e_1_1_resource" ],

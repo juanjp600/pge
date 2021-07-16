@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['up_121',['up',['../class_p_g_e_1_1_file_path.html#ac767399d048e1563c77104ece55530b9',1,'PGE::FilePath']]],
-  ['update_122',['update',['../class_p_g_e_1_1_graphics.html#abae713b91b43026784e653f1f64c63e5',1,'PGE::Graphics::update()'],['../class_p_g_e_1_1_sys_events.html#af01fc4f9f22191b3e853b039fc16da5f',1,'PGE::SysEvents::update()']]]
+  ['textreader_118',['TextReader',['../class_p_g_e_1_1_text_reader.html',1,'PGE::TextReader'],['../class_p_g_e_1_1_text_reader.html#add793f41d06eac43920e53a08feff79a',1,'PGE::TextReader::TextReader()']]],
+  ['texture_119',['Texture',['../class_p_g_e_1_1_texture.html',1,'PGE']]],
+  ['textwriter_120',['TextWriter',['../class_p_g_e_1_1_text_writer.html',1,'PGE::TextWriter'],['../class_p_g_e_1_1_text_writer.html#aabc1eb0d15dfe6eaede253f85abca8e5',1,'PGE::TextWriter::TextWriter()']]],
+  ['trimextension_121',['trimExtension',['../class_p_g_e_1_1_file_path.html#ad27af26601dd4f83629b748cf65d19f7',1,'PGE::FilePath']]]
 ];
