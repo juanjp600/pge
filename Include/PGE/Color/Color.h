@@ -12,6 +12,8 @@ namespace PGE {
 /// @see #PGE::Colors
 class Color {
     public:
+        float red; float green; float blue; float alpha;
+
         /// Default constructs fully opaque white (#PGE::Colors::WHITE).
         constexpr Color() noexcept : red(1.f), green(1.f), blue(1.f), alpha(1.f) { }
         /// Converts bytes in range [0, 255] to floats in range [0, 1].
@@ -89,7 +91,10 @@ class Color {
         constexpr void setBlue(byte b) noexcept { blue = ((float)b) / 255.f; }
         constexpr void setAlpha(byte a) noexcept { alpha = ((float)a) / 255.f; }
 
-        float red; float green; float blue; float alpha;
+        void* operator new(size_t) = delete;
+        void* operator new[](size_t) = delete;
+        void operator delete(void*) = delete;
+        void operator delete[](void*) = delete;
 };
 
 /// A few common colors.

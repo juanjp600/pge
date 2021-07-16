@@ -111,6 +111,11 @@ class Plane {
             intersectionPoint = numer / denom;
             return true;
         }
+
+        void* operator new(size_t) = delete;
+        void* operator new[](size_t) = delete;
+        void operator delete(void*) = delete;
+        void operator delete[](void*) = delete;
 };
 
 }

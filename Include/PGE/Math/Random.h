@@ -21,6 +21,11 @@ class Random {
 
     private:
         u32 state[4];
+
+        void* operator new(size_t) = delete;
+        void* operator new[](size_t) = delete;
+        void operator delete(void*) = delete;
+        void operator delete[](void*) = delete;
 };
 
 }

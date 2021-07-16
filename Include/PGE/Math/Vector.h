@@ -59,6 +59,11 @@ class Vector2f {
 
         constexpr float distanceSquared(const Vector2f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector2f& other) const { return sqrtf(distanceSquared(other)); }
+
+        void* operator new(size_t) = delete;
+        void* operator new[](size_t) = delete;
+        void operator delete(void*) = delete;
+        void operator delete[](void*) = delete;
 };
 constexpr const Vector2f operator*(float f, const Vector2f& vec) { return vec * f; }
 
@@ -117,6 +122,11 @@ class Vector3f {
 
         constexpr float distanceSquared(const Vector3f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector3f& other) const { return sqrtf(distanceSquared(other)); }
+
+        void* operator new(size_t) = delete;
+        void* operator new[](size_t) = delete;
+        void operator delete(void*) = delete;
+        void operator delete[](void*) = delete;
 };
 constexpr const Vector3f operator*(float f, const Vector3f& vec) { return vec * f; }
 
@@ -175,6 +185,11 @@ class Vector4f {
 
         constexpr float distanceSquared(const Vector4f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector4f& other) const { return sqrtf(distanceSquared(other)); }
+
+        void* operator new(size_t) = delete;
+        void* operator new[](size_t) = delete;
+        void operator delete(void*) = delete;
+        void operator delete[](void*) = delete;
 };
 constexpr const Vector4f operator*(float f, const Vector4f& vec) { return vec * f; }
 
@@ -216,6 +231,11 @@ class Vector2i {
 
         constexpr int distanceSquared(const Vector2i& other) const { return ((*this) - other).lengthSquared(); }
         inline float distance(const Vector2i& other) const { return sqrtf((float)distanceSquared(other)); }
+
+        void* operator new(size_t) = delete;
+        void* operator new[](size_t) = delete;
+        void operator delete(void*) = delete;
+        void operator delete[](void*) = delete;
 };
 constexpr const Vector2i operator*(int i, const Vector2i& vec) { return vec * i; }
 

@@ -247,6 +247,11 @@ class String {
         void wCharToUtf8Str(const char16* wbuffer);
         void reallocate(int size, bool copyOldChs = false);
         char* cstrNoConst();
+
+        void* operator new(size_t) = delete;
+        void* operator new[](size_t) = delete;
+        void operator delete(void*) = delete;
+        void operator delete[](void*) = delete;
 };
 bool operator==(const String& a, const String& b);
 bool operator!=(const String& a, const String& b);

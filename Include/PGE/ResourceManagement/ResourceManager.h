@@ -34,6 +34,11 @@ class ResourceManager {
             delete *view.getPosition();
             resources.erase(view.getPosition());
         }
+
+        void* operator new(size_t) = delete;
+        void* operator new[](size_t) = delete;
+        void operator delete(void*) = delete;
+        void operator delete[](void*) = delete;
 };
 
 }

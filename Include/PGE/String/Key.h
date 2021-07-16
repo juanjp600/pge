@@ -9,6 +9,10 @@ struct String::Key {
     Key() = default;
     Key(const String& str) : hash(str.getHashCode()) { }
     size_t hash;
+    void* operator new(size_t) = delete;
+    void* operator new[](size_t) = delete;
+    void operator delete(void*) = delete;
+    void operator delete[](void*) = delete;
 };
 
 struct String::RedundantKey {
@@ -16,6 +20,10 @@ struct String::RedundantKey {
     RedundantKey(const String& str) : hash(str.getHashCode()), str(str) { }
     size_t hash;
     String str;
+    void* operator new(size_t) = delete;
+    void* operator new[](size_t) = delete;
+    void operator delete(void*) = delete;
+    void operator delete[](void*) = delete;
 };
 
 struct String::SafeKey {
@@ -26,6 +34,10 @@ struct String::SafeKey {
     bool lengthEvaluated() const {
         return str.data->_strLength >= 0;
     }
+    void* operator new(size_t) = delete;
+    void* operator new[](size_t) = delete;
+    void operator delete(void*) = delete;
+    void operator delete[](void*) = delete;
 };
 
 struct String::OrderedKey {
@@ -38,6 +50,10 @@ struct String::OrderedKey {
     bool operator>(const OrderedKey& other) const {
         return strcmp(str.cstr(), other.str.cstr()) > 0;
     }
+    void* operator new(size_t) = delete;
+    void* operator new[](size_t) = delete;
+    void operator delete(void*) = delete;
+    void operator delete[](void*) = delete;
 };
 
 }

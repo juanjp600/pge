@@ -46,6 +46,11 @@ class ResourceViewVector {
         typename std::vector<T>::iterator end() {
             return elements.end();
         }
+
+        void* operator new(size_t) = delete;
+        void* operator new[](size_t) = delete;
+        void operator delete(void*) = delete;
+        void operator delete[](void*) = delete;
 };
 
 }
