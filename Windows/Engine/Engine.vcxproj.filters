@@ -85,6 +85,12 @@
     <Filter Include="Src\Info">
       <UniqueIdentifier>{b7024983-2d50-4c71-b3a1-bc03f13d54d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\StructuredData">
+      <UniqueIdentifier>{7b6e9d0b-61bb-480b-b1ef-ba0fc176642e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\StructuredData">
+      <UniqueIdentifier>{2db3a570-a040-433f-849d-d51dd7ad6a83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp">
@@ -176,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp">
       <Filter>Src\ResourceManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\StructuredData\StructuredData.cpp">
+      <Filter>Src\StructuredData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -334,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\PGE\File\AbstractIO.h">
       <Filter>Include\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\StructuredData\StructuredData.h">
+      <Filter>Include\StructuredData</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

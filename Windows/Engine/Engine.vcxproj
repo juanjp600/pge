@@ -48,6 +48,7 @@
     <ClCompile Include="..\..\Src\String\String.cpp" />
     <ClCompile Include="..\..\Src\String\Unicode.cpp" />
     <ClCompile Include="..\..\Src\String\UnicodeHelper.cpp" />
+    <ClCompile Include="..\..\Src\StructuredData\StructuredData.cpp" />
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +86,7 @@
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceViewVector.h" />
     <ClInclude Include="..\..\Include\PGE\String\Key.h" />
     <ClInclude Include="..\..\Include\PGE\String\String.h" />
+    <ClInclude Include="..\..\Include\PGE\StructuredData\StructuredData.h" />
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Types.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />

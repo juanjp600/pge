@@ -6,11 +6,8 @@
 namespace PGE {
 
 class Matrix4x4f : private NoHeap {
-    private:
-        static constexpr int SIZE = 4;
-        float elements[SIZE][SIZE];
-
     public:
+        float elements[4][4];
 
         constexpr Matrix4x4f() : elements() { }
         constexpr Matrix4x4f(
@@ -126,8 +123,8 @@ class Matrix4x4f : private NoHeap {
         }
 
         constexpr bool operator==(const Matrix4x4f& other) const {
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
                     if (elements[i][j] != other.elements[i][j]) {
                         return false;
                     }
@@ -137,8 +134,8 @@ class Matrix4x4f : private NoHeap {
         }
 
         constexpr bool operator!=(const Matrix4x4f& other) const {
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
                     if (elements[i][j] != other.elements[i][j]) {
                         return true;
                     }
@@ -148,8 +145,8 @@ class Matrix4x4f : private NoHeap {
         }
 
         constexpr bool equals(const Matrix4x4f& other, float epsilon = Math::EPSILON_DEFAULT) const {
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
                     if (Math::equalFloats(elements[i][j], other.elements[i][j], epsilon)) {
                         return true;
                     }
@@ -159,8 +156,8 @@ class Matrix4x4f : private NoHeap {
         }
 
         constexpr Matrix4x4f& operator+=(const Matrix4x4f& other) {
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
                     this->elements[i][j] += other.elements[i][j];
                 }
             }
@@ -169,9 +166,9 @@ class Matrix4x4f : private NoHeap {
 
         constexpr Matrix4x4f& operator*=(const Matrix4x4f& other) {
             Matrix4x4f retVal;
-            for (int i = 0; i < SIZE; i++) {
-                for (int k = 0; k < SIZE; k++) {
-                    for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < 4; i++) {
+                for (int k = 0; k < 4; k++) {
+                    for (int j = 0; j < 4; j++) {
                         retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
                     }
                 }
@@ -181,8 +178,8 @@ class Matrix4x4f : private NoHeap {
         }
 
         constexpr Matrix4x4f& operator*=(float scalar) {
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
                     this->elements[i][j] *= scalar;
                 }
             }
@@ -191,8 +188,8 @@ class Matrix4x4f : private NoHeap {
 
         constexpr const Matrix4x4f operator+(const Matrix4x4f& other) const {
             Matrix4x4f retVal = *this;
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
                     retVal.elements[i][j] += other.elements[i][j];
                 }
             }
@@ -201,9 +198,9 @@ class Matrix4x4f : private NoHeap {
 
         constexpr const Matrix4x4f operator*(const Matrix4x4f& other) const {
             Matrix4x4f retVal;
-            for (int i = 0; i < SIZE; i++) {
-                for (int k = 0; k < SIZE; k++) {
-                    for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < 4; i++) {
+                for (int k = 0; k < 4; k++) {
+                    for (int j = 0; j < 4; j++) {
                         retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
                     }
                 }
@@ -213,8 +210,8 @@ class Matrix4x4f : private NoHeap {
 
         constexpr const Matrix4x4f operator*(float scalar) const {
             Matrix4x4f retVal = *this;
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
                     retVal.elements[i][j] *= scalar;
                 }
             }
@@ -242,8 +239,8 @@ class Matrix4x4f : private NoHeap {
 
         constexpr const Matrix4x4f transpose() const {
             Matrix4x4f retVal;
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
                     retVal.elements[i][j] = elements[j][i];
                 }
             }
