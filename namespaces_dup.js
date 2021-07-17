@@ -93,6 +93,7 @@ var namespaces_dup =
       [ "\u202AResourceView", "class_p_g_e_1_1_resource_view.html", "class_p_g_e_1_1_resource_view" ],
       [ "\u202AResourceViewVector", "class_p_g_e_1_1_resource_view_vector.html", "class_p_g_e_1_1_resource_view_vector" ],
       [ "\u202AString", "class_p_g_e_1_1_string.html", "class_p_g_e_1_1_string" ],
+      [ "\u202AStructuredData", "class_p_g_e_1_1_structured_data.html", "class_p_g_e_1_1_structured_data" ],
       [ "\u202ASysEvents", "class_p_g_e_1_1_sys_events.html", "class_p_g_e_1_1_sys_events" ],
       [ "\u202Abyte", "_types_8h.html#a615ae4c1ab00a4e8253437f0986cf7f1", null ],
       [ "\u202Achar16", "_types_8h.html#ad52b6a978fb975e439aaadddc671e00a", null ],

@@ -43,6 +43,7 @@ var annotated_dup =
       [ "\u202AResourceView", "class_p_g_e_1_1_resource_view.html", "class_p_g_e_1_1_resource_view" ],
       [ "\u202AResourceViewVector", "class_p_g_e_1_1_resource_view_vector.html", "class_p_g_e_1_1_resource_view_vector" ],
       [ "\u202AString", "class_p_g_e_1_1_string.html", "class_p_g_e_1_1_string" ],
+      [ "\u202AStructuredData", "class_p_g_e_1_1_structured_data.html", "class_p_g_e_1_1_structured_data" ],
       [ "\u202ASysEvents", "class_p_g_e_1_1_sys_events.html", "class_p_g_e_1_1_sys_events" ]
     ] ]
 ];

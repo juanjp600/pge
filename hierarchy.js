@@ -2,6 +2,8 @@ var hierarchy =
 [
     [ "\u202APGE::Shader::Constant", "class_p_g_e_1_1_shader_1_1_constant.html", null ],
     [ "\u202APGE::Controller", "class_p_g_e_1_1_controller.html", null ],
+    [ "\u202APGE::StructuredData::ElemLayout", "class_p_g_e_1_1_structured_data_1_1_elem_layout.html", null ],
+    [ "\u202APGE::StructuredData::ElemLayout::Entry", "struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_entry.html", null ],
     [ "\u202APGE::FilePath", "class_p_g_e_1_1_file_path.html", null ],
     [ "\u202APGE::Graphics", "class_p_g_e_1_1_graphics.html", null ],
     [ "\u202APGE::Input", "class_p_g_e_1_1_input.html", [
@@ -13,6 +15,7 @@ var hierarchy =
     [ "\u202APGE::String::Iterator", "struct_p_g_e_1_1_string_1_1_iterator.html", [
       [ "\u202APGE::String::ReverseIterator", "struct_p_g_e_1_1_string_1_1_reverse_iterator.html", null ]
     ] ],
+    [ "\u202APGE::StructuredData::ElemLayout::LocationAndSize", "struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_location_and_size.html", null ],
     [ "\u202APGE::Material", "class_p_g_e_1_1_material.html", null ],
     [ "\u202APGE::Mesh", "class_p_g_e_1_1_mesh.html", null ],
     [ "\u202APGE::NoHeap", "class_p_g_e_1_1_no_heap.html", [
@@ -60,6 +63,7 @@ var hierarchy =
       [ "\u202APGE::Resource< T >", "class_p_g_e_1_1_resource.html", null ]
     ] ],
     [ "\u202APGE::Shader", "class_p_g_e_1_1_shader.html", null ],
+    [ "\u202APGE::StructuredData", "class_p_g_e_1_1_structured_data.html", null ],
     [ "\u202APGE::SysEvents::Subscriber", "class_p_g_e_1_1_sys_events_1_1_subscriber.html", null ],
     [ "\u202APGE::SysEvents", "class_p_g_e_1_1_sys_events.html", null ],
     [ "\u202APGE::Texture", "class_p_g_e_1_1_texture.html", null ],
