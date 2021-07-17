@@ -48,12 +48,7 @@ class ShaderDX11 : public Shader {
                 void setValue(int value) override;
 
             private:
-                //This has to be a pointer because ConstantDX11 needs to be copyable
-                //for its use in CBufferInfo::constants, and a reference to a class
-                //with a deleted copy constructor makes this basically impossible.
-                //(feel free to prove me wrong by figuring out how to get unordered_map
-                //to accept this)
-                CBufferInfo* constantBuffer;
+                CBufferInfo& constantBuffer;
 
                 int offset;
                 int size;
