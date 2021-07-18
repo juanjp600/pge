@@ -33,7 +33,7 @@ References are less flexible, but more robust than pointers, what they reference
 
 **Example:**
 ```cpp
-MyBadClass {
+class MyBadClass {
     private:
         MyOtherClass* other; // Mutable and nullable, ew!
         // (Making the pointer const would only solve one of those issues.)
@@ -44,7 +44,7 @@ MyBadClass {
         }
 };
 
-MyGoodClass {
+class MyGoodClass {
     private:
         MyOtherClass& other; // Immutable and not nullable, yum!
         // (What is being referenced is not necessarily immutable, which is correct.)
