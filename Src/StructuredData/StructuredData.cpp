@@ -10,11 +10,11 @@ StructuredData::ElemLayout::LocationAndSize::LocationAndSize(int loc, int sz) {
     location = loc; size = sz;
 }
 
-PGE::StructuredData::ElemLayout::ElemLayout() {
+StructuredData::ElemLayout::ElemLayout() {
     elementSize = 0;
 }
 
-PGE::StructuredData::ElemLayout::ElemLayout(const std::vector<Entry>& entrs) {
+StructuredData::ElemLayout::ElemLayout(const std::vector<Entry>& entrs) {
     int currLocation = 0;
     for (int i = 0; i < entrs.size(); i++) {
         entries.emplace(entrs[i].name, LocationAndSize(currLocation, entrs[i].size));
@@ -23,17 +23,17 @@ PGE::StructuredData::ElemLayout::ElemLayout(const std::vector<Entry>& entrs) {
     elementSize = currLocation;
 }
 
-const PGE::StructuredData::ElemLayout::LocationAndSize& PGE::StructuredData::ElemLayout::getLocationAndSize(const String& name) const {
+const StructuredData::ElemLayout::LocationAndSize& StructuredData::ElemLayout::getLocationAndSize(const String& name) const {
     auto iter = entries.find(String::Key(name));
     PGE_ASSERT(iter != entries.end(), "No entry with name \"" + name + "\"");
     return iter->second;
 }
 
-int PGE::StructuredData::ElemLayout::getElementSize() const {
+int StructuredData::ElemLayout::getElementSize() const {
     return elementSize;
 }
 
-bool PGE::StructuredData::ElemLayout::operator==(const StructuredData::ElemLayout& other) const {
+bool StructuredData::ElemLayout::operator==(const StructuredData::ElemLayout& other) const {
     if (elementSize != other.elementSize) { return false; }
     if (entries.size() != other.entries.size()) { return false; }
     for (const auto& kvp : entries) {
@@ -45,38 +45,38 @@ bool PGE::StructuredData::ElemLayout::operator==(const StructuredData::ElemLayou
     return true;
 }
 
-PGE::StructuredData::StructuredData(const ElemLayout& ly, int elemCount) {
+StructuredData::StructuredData(const ElemLayout& ly, int elemCount) {
     layout = ly;
     data.resize((size_t)layout.getElementSize() * (size_t)elemCount);
     data.shrink_to_fit();
 }
 
-const byte* PGE::StructuredData::getData() const {
+const byte* StructuredData::getData() const {
     return data.data();
 }
 
-void PGE::StructuredData::setValue(int elemIndex, const String& entryName, float f) {
+void StructuredData::setValue(int elemIndex, const String& entryName, float f) {
     memcpy(data.data() + getDataIndex(elemIndex, entryName, sizeof(float)), &f, sizeof(float));
 }
 
-void PGE::StructuredData::setValue(int elemIndex, const String& entryName, u32 u) {
+void StructuredData::setValue(int elemIndex, const String& entryName, u32 u) {
     memcpy(data.data() + getDataIndex(elemIndex, entryName, sizeof(u32)), &u, sizeof(u32));
 }
 
-void PGE::StructuredData::setValue(int elemIndex, const String& entryName, const Vector2f& v2f) {
+void StructuredData::setValue(int elemIndex, const String& entryName, const Vector2f& v2f) {
     int dataIndex = getDataIndex(elemIndex, entryName, sizeof(float) * 2);
     memcpy(data.data() + dataIndex, &v2f.x, sizeof(float));
     memcpy(data.data() + dataIndex + sizeof(float), &v2f.y, sizeof(float));
 }
 
-void PGE::StructuredData::setValue(int elemIndex, const String& entryName, const Vector3f& v3f) {
+void StructuredData::setValue(int elemIndex, const String& entryName, const Vector3f& v3f) {
     int dataIndex = getDataIndex(elemIndex, entryName, sizeof(float) * 3);
     memcpy(data.data() + dataIndex, &v3f.x, sizeof(float));
     memcpy(data.data() + dataIndex + sizeof(float), &v3f.y, sizeof(float));
     memcpy(data.data() + dataIndex + (sizeof(float) * 2), &v3f.z, sizeof(float));
 }
 
-void PGE::StructuredData::setValue(int elemIndex, const String& entryName, const Vector4f& v4f) {
+void StructuredData::setValue(int elemIndex, const String& entryName, const Vector4f& v4f) {
     int dataIndex = getDataIndex(elemIndex, entryName, sizeof(float) * 4);
     memcpy(data.data() + dataIndex, &v4f.x, sizeof(float));
     memcpy(data.data() + dataIndex + sizeof(float), &v4f.y, sizeof(float));
@@ -84,11 +84,11 @@ void PGE::StructuredData::setValue(int elemIndex, const String& entryName, const
     memcpy(data.data() + dataIndex + (sizeof(float) * 3), &v4f.w, sizeof(float));
 }
 
-void PGE::StructuredData::setValue(int elemIndex, const String& entryName, const Matrix4x4f& m) {
+void StructuredData::setValue(int elemIndex, const String& entryName, const Matrix4x4f& m) {
     memcpy(data.data() + getDataIndex(elemIndex, entryName, sizeof(float) * 4 * 4), m.elements, sizeof(float) * 4 * 4);
 }
 
-void PGE::StructuredData::setValue(int elemIndex, const String& entryName, const Color& c) {
+void StructuredData::setValue(int elemIndex, const String& entryName, const Color& c) {
     int dataIndex = getDataIndex(elemIndex, entryName, sizeof(float) * 4);
     memcpy(data.data() + dataIndex, &c.red, sizeof(float));
     memcpy(data.data() + dataIndex + sizeof(float), &c.green, sizeof(float));
@@ -96,7 +96,7 @@ void PGE::StructuredData::setValue(int elemIndex, const String& entryName, const
     memcpy(data.data() + dataIndex + (sizeof(float) * 3), &c.alpha, sizeof(float));
 }
 
-int PGE::StructuredData::getDataIndex(int elemIndex, const String& entryName, int expectedSize) const {
+int StructuredData::getDataIndex(int elemIndex, const String& entryName, int expectedSize) const {
     PGE_ASSERT(elemIndex >= 0, "Requested a negative element index (" + String::fromInt(elemIndex) + ")");
 
     int elemOffset = elemIndex * layout.getElementSize();
