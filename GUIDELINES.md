@@ -28,6 +28,34 @@ myFunc() = MyClass(); // Error: This is no longer possible (which it shouldn't b
 ```
 
 
+## Prefer references over pointers
+References are less flexible, but more robust than pointers, what they reference is immutable and they lack nullability. This makes them ideal candidates for member variables.
+
+**Example:**
+```cpp
+MyBadClass {
+    private:
+        MyOtherClass* other; // Mutable and nullable, ew!
+        // (Making the pointer const would only solve one of those issues.)
+        
+    public:
+        MyBadClass(MyOtherClass* o) {
+            other = o;
+        }
+};
+
+MyGoodClass {
+    private:
+        MyOtherClass& other; // Immutable and not nullable, yum!
+        // (What is being referenced is not necessarily immutable, which is correct.)
+        
+    public:
+        MyBadClas(MyOtherClass& other)
+        : other(other) { }
+};
+```
+
+
 ## Consider preventing heap allocation for non-polymorphic classes
 Heap allocations are prone to causing issues in user code, thus disallowing them in most classes should be standard.
 
