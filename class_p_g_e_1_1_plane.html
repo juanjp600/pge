@@ -85,6 +85,7 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_plane.html',''); initR
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
@@ -103,6 +104,14 @@ Inheritance diagram for PGE::Plane:</div>
   </map>
 </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a053e0e0c33281ec9ff99d4383245ec2a"><td class="memItemLeft" align="right" valign="top"><a id="a053e0e0c33281ec9ff99d4383245ec2a"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>PointRelation</b> { <b>ON</b>
+, <b>BELOW</b>
+, <b>ABOVE</b>
+ }</td></tr>
+<tr class="separator:a053e0e0c33281ec9ff99d4383245ec2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2738a44a922f2133cb131efcd7cd8a5c"><td class="memItemLeft" align="right" valign="top"><a id="a2738a44a922f2133cb131efcd7cd8a5c"></a>
@@ -126,9 +135,9 @@ constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>equals</b> 
 <tr class="memitem:a65a2aa978a8ec70161ec23adaf381853"><td class="memItemLeft" align="right" valign="top"><a id="a65a2aa978a8ec70161ec23adaf381853"></a>
 constexpr float&#160;</td><td class="memItemRight" valign="bottom"><b>evalAtPoint</b> (const <a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> &amp;co) const</td></tr>
 <tr class="separator:a65a2aa978a8ec70161ec23adaf381853"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab86b707ec9c8b13b07062abdb82d38e4"><td class="memItemLeft" align="right" valign="top"><a id="ab86b707ec9c8b13b07062abdb82d38e4"></a>
-constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>onPlane</b> (const <a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> &amp;co, float epsilon=<a class="el" href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">Math::EPSILON_DEFAULT</a>) const</td></tr>
-<tr class="separator:ab86b707ec9c8b13b07062abdb82d38e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a7e446e920730daaaecba13755df3db"><td class="memItemLeft" align="right" valign="top"><a id="a1a7e446e920730daaaecba13755df3db"></a>
+constexpr PointRelation&#160;</td><td class="memItemRight" valign="bottom"><b>onPlane</b> (const <a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> &amp;co, float epsilon=<a class="el" href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">Math::EPSILON_DEFAULT</a>) const</td></tr>
+<tr class="separator:a1a7e446e920730daaaecba13755df3db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a089074f119235ffacd7683c82e38979e"><td class="memItemLeft" align="right" valign="top"><a id="a089074f119235ffacd7683c82e38979e"></a>
 constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>intersects</b> (const <a class="el" href="class_p_g_e_1_1_line3f.html">Line3f</a> &amp;line, <a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> &amp;intersectionPoint, float &amp;coveredAmount, bool ignoreDirection=false, bool ignoreSegment=false) const</td></tr>
 <tr class="separator:a089074f119235ffacd7683c82e38979e"><td class="memSeparator" colspan="2">&#160;</td></tr>
