@@ -18,7 +18,7 @@
 namespace PGE {
 
 /// A UTF-8 character sequence guaranteed to be terminated by a null byte.
-class String : private NoHeap {
+class String /* TODO : private NoHeap */ {
     public:
         struct Key;
         struct RedundantKey;

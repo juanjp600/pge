@@ -9,7 +9,7 @@ namespace PGE {
 // xoshiro128**
 // https://prng.di.unimi.it/
 // CC0
-class Random : private NoHeap {
+class Random /* TODO : private NoHeap */ {
     public:
         Random();
         Random(u64 seed);

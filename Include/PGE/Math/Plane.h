@@ -74,8 +74,12 @@ class Plane : private NoHeap {
             return normal.equals(other.normal, epsilon) && Math::equalFloats(distanceFromOrigin, other.distanceFromOrigin, epsilon);
         }
 
+        constexpr float evalAtPoint(const Vector3f& co) const {
+            return normal.dotProduct(co) - distanceFromOrigin;
+        }
+
         constexpr int onPlane(const Vector3f& co, float epsilon = Math::EPSILON_DEFAULT) const {
-            float res = normal.dotProduct(co) - distanceFromOrigin;;
+            float res = evalAtPoint(co);
             if (Math::equalFloats(epsilon, 0.f)) { return 0; }
             if (res < 0) { return -1; }
             return 1;

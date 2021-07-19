@@ -557,9 +557,15 @@ void String::reallocate(int size, bool copyOldChs) {
 
     // Initialized with String literal.
     if (data->cCapacity == 0) {
-        data->cCapacity = SHORT_STR_CAPACITY;
         if (size <= SHORT_STR_CAPACITY) {
-            chs = std::get<Unique>(internalData).chs;
+            Unique& u = internalData.emplace<Unique>();
+            if (copyOldChs) {
+                memcpy(u.chs, chs, data->strByteLength);
+            }
+            u.data = *data;
+            u.data.cCapacity = SHORT_STR_CAPACITY;
+            chs = u.chs;
+            data = &u.data;
             return;
         }
     } else {
@@ -579,16 +585,16 @@ void String::reallocate(int size, bool copyOldChs) {
     int targetCapacity = data->cCapacity;
     while (targetCapacity < size) { targetCapacity <<= 1; }
 
-    char* newChs = new char[targetCapacity];
+    std::unique_ptr<char[]> newChs = std::make_unique<char[]>(targetCapacity);
     if (copyOldChs) {
-        memcpy(newChs, cstr(), data->strByteLength);
+        memcpy(newChs.get(), cstr(), data->strByteLength);
     }
 
     internalData = std::make_shared<Shared>();
     std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
-    s->chs = std::unique_ptr<char[]>(newChs);
+    s->chs = std::move(newChs);
 
-    chs = newChs;
+    chs = s->chs.get();
     data = &s->data;
     data->cCapacity = targetCapacity;
 }

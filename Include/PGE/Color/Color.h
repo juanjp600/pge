@@ -11,7 +11,7 @@ namespace PGE {
 /// An RGBA color represented via 4 floating point numbers.
 /// Attributes are public.
 /// @see #PGE::Colors
-class Color : private NoHeap {
+class Color /* TODO : private NoHeap */ {
     public:
         float red; float green; float blue; float alpha;
 

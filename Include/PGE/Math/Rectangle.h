@@ -7,7 +7,7 @@ namespace PGE {
 
 class Rectanglei;
 
-class Rectanglef : private NoHeap {
+class Rectanglef /* TODO : private NoHeap */ {
     private:
         Vector2f tl; Vector2f br;
 
