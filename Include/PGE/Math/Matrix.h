@@ -5,7 +5,7 @@
 
 namespace PGE {
 
-class Matrix4x4f /* TODO : private NoHeap */ {
+class Matrix4x4f : private NoHeap {
     public:
         float elements[4][4];
 

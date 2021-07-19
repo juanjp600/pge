@@ -7,7 +7,7 @@
 // If you modify one class here, apply your changes to the others as well!
 namespace PGE {
 
-class Vector2f /* TODO : private NoHeap */ {
+class Vector2f : private NoHeap {
     public:
         float x; float y;
 
@@ -62,7 +62,7 @@ class Vector2f /* TODO : private NoHeap */ {
 };
 constexpr const Vector2f operator*(float f, const Vector2f& vec) { return vec * f; }
 
-class Vector3f /* TODO : private NoHeap */ {
+class Vector3f : private NoHeap {
     public:
         float x; float y; float z;
 
