@@ -101,7 +101,7 @@ int StructuredData::getDataIndex(int elemIndex, const String& entryName, int exp
 
     int elemOffset = elemIndex * layout.getElementSize();
     PGE_ASSERT(elemOffset <= (data.size() - layout.getElementSize()),
-        "Requested an element index greater than the number of elements (" + String::fromInt(elemOffset) + " > " + String::fromInt(data.size() - layout.getElementSize()) + ")");
+        "Requested an element index greater than the number of elements (" + String::fromInt(elemOffset) + " > " + String::fromInt((int)(data.size() - layout.getElementSize())) + ")");
 
     const ElemLayout::LocationAndSize& locAndSize = layout.getLocationAndSize(entryName);
     PGE_ASSERT(locAndSize.size == expectedSize,

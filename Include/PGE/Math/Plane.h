@@ -78,11 +78,17 @@ class Plane : private NoHeap {
             return normal.dotProduct(co) - distanceFromOrigin;
         }
 
-        constexpr int onPlane(const Vector3f& co, float epsilon = Math::EPSILON_DEFAULT) const {
+        enum class PointRelation {
+            ON,
+            BELOW,
+            ABOVE,
+        };
+
+        constexpr PointRelation onPlane(const Vector3f& co, float epsilon = Math::EPSILON_DEFAULT) const {
             float res = evalAtPoint(co);
-            if (Math::equalFloats(epsilon, 0.f)) { return 0; }
-            if (res < 0) { return -1; }
-            return 1;
+            if (Math::equalFloats(epsilon, 0.f)) { return PointRelation::ON; }
+            if (res < 0) { return PointRelation::BELOW; }
+            return PointRelation::ABOVE;
         }
         
         constexpr bool intersects(const Line3f& line, Vector3f& intersectionPoint, float& coveredAmount, bool ignoreDirection = false, bool ignoreSegment = false) const {

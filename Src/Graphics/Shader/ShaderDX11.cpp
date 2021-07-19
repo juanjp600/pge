@@ -144,7 +144,7 @@ ShaderDX11::CBufferInfo::CBufferInfo(Graphics* graphics, const String& nm, int s
     name = nm;
     size = sz;
     int cBufferSize = size;
-    //round up to a multiple of 16, see https://docs.microsoft.com/en-us/windows/win32/api/d3d11/ns-d3d11-d3d11_buffer_desc
+    // Round up to a multiple of 16, see https://docs.microsoft.com/en-us/windows/win32/api/d3d11/ns-d3d11-d3d11_buffer_desc
     if ((cBufferSize % 16) != 0) { cBufferSize += 16 - (cBufferSize % 16); }
     data = new byte[cBufferSize];
 
