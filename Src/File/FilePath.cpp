@@ -91,7 +91,7 @@ bool FilePath::isValid() const noexcept {
 bool FilePath::isDirectory() const {
     PGE_ASSERT(valid, INVALID_STR);
     std::error_code err;
-    bool isDir = std::filesystem::is_directory(cstr(), err);
+    bool isDir = std::filesystem::is_directory(str().cstr(), err);
     PGE_ASSERT(err.value() == 0, "Couldn't check if path is directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
     return isDir;
 }
@@ -133,7 +133,7 @@ const FilePath FilePath::trimExtension() const {
 bool FilePath::exists() const {
     PGE_ASSERT(valid, INVALID_STR);
     std::error_code err;
-    bool exists = std::filesystem::exists(cstr(), err);
+    bool exists = std::filesystem::exists(str().cstr(), err);
     PGE_ASSERT(err.value() == 0, "Couldn't check if directory exists (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
     return exists;
 }
@@ -149,7 +149,7 @@ bool FilePath::createDirectory() const {
 std::vector<FilePath> FilePath::enumerateFolders() const {
     PGE_ASSERT(valid, INVALID_STR);
     std::vector<FilePath> folders;
-    for (const auto& it : std::filesystem::directory_iterator(cstr())) {
+    for (const auto& it : std::filesystem::directory_iterator(str().cstr())) {
         if (it.is_directory()) {
             folders.push_back(FilePath::fromStr(it.path().c_str()));
         }
@@ -161,13 +161,13 @@ std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
     PGE_ASSERT(valid, INVALID_STR);
     std::vector<FilePath> files;
     if (recursive) {
-        for (const auto& it : std::filesystem::recursive_directory_iterator(cstr())) {
+        for (const auto& it : std::filesystem::recursive_directory_iterator(str().cstr())) {
             if (it.is_regular_file()) {
                 files.push_back(FilePath::fromStr(it.path().c_str()));
             }
         }
     } else {
-        for (const auto& it : std::filesystem::directory_iterator(cstr())) {
+        for (const auto& it : std::filesystem::directory_iterator(str().cstr())) {
             if (it.is_regular_file()) {
                 files.push_back(FilePath::fromStr(it.path().c_str()));
             }
@@ -203,7 +203,7 @@ std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
 
 std::vector<byte> FilePath::readBytes() const {
     PGE_ASSERT(valid, INVALID_STR);
-    std::ifstream file(cstr(), std::ios::ate | std::ios::binary);
+    std::ifstream file(str().cstr(), std::ios::ate | std::ios::binary);
     PGE_ASSERT(file.is_open(), "Couldn't read bytes from file (file: \"" + str() + "\")");
     std::vector<byte> bytes;
     size_t vertSize = (size_t)file.tellg();
@@ -216,11 +216,6 @@ std::vector<byte> FilePath::readBytes() const {
 const String& FilePath::str() const {
     PGE_ASSERT(valid, INVALID_STR);
     return name;
-}
-
-const char* FilePath::cstr() const {
-    PGE_ASSERT(valid, INVALID_STR);
-    return name.cstr();
 }
 
 bool FilePath::operator==(const FilePath& other) const noexcept {

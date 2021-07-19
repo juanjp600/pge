@@ -22,7 +22,7 @@ class AbstractIO : private NoHeap {
         AbstractIO(const PGE::FilePath& file, std::ios::openmode mode = std::ios::binary) {
             static_assert(std::is_base_of<std::ios_base, T>::value);
             PGE_ASSERT(file.isValid(), INVALID_FILEPATH);
-            stream.open(file.cstr(), mode);
+            stream.open(file.str().cstr(), mode);
             PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
         }
 

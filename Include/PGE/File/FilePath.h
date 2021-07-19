@@ -133,10 +133,6 @@ class FilePath {
         /// Always absolute and path sepeartors are sanitized to '/'.
         /// @throws #PGE::Exception If the path is not initialized.
         const String& str() const;
-
-        /// Forwards a call to #PGE::String::cstr.
-        /// @throws #PGE::Exception If the path is not initialized.
-        const char* cstr() const;
 };
 
 }

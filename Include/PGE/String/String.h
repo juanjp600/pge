@@ -12,7 +12,7 @@
 #import <Foundation/NSString.h>
 #endif
 
-#include <PGE/ResourceManagement/NoHeap.h> 
+#include <PGE/ResourceManagement/NoHeap.h>
 #include <PGE/Types/Types.h>
 
 namespace PGE {
