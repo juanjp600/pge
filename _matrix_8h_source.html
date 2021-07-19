@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('_matrix_8h_source.html',''); initResiz
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>PGE {</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_matrix4x4f.html">    8</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_matrix4x4f.html">Matrix4x4f</a> <span class="comment">/* TODO : private NoHeap */</span> {</div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_matrix4x4f.html">    8</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_matrix4x4f.html">Matrix4x4f</a> : <span class="keyword">private</span> <a class="code" href="class_p_g_e_1_1_no_heap.html">NoHeap</a> {</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keywordtype">float</span> elements[4][4];</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
@@ -367,6 +367,7 @@ $(document).ready(function(){initNavTree('_matrix_8h_source.html',''); initResiz
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MATRIX_H_INCLUDED</span></div>
 <div class="ttc" id="aclass_p_g_e_1_1_matrix4x4f_html"><div class="ttname"><a href="class_p_g_e_1_1_matrix4x4f.html">PGE::Matrix4x4f</a></div><div class="ttdef"><b>Definition:</b> Matrix.h:8</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_no_heap_html"><div class="ttname"><a href="class_p_g_e_1_1_no_heap.html">PGE::NoHeap</a></div><div class="ttdoc">A mixin class intended to prevent heap allocation of a class.</div><div class="ttdef"><b>Definition:</b> NoHeap.h:7</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:65</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_vector4f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector4f.html">PGE::Vector4f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:123</div></div>
 <div class="ttc" id="anamespace_p_g_e_1_1_math_html_a254393cd3a914e459f8ecedf76802e77"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">PGE::Math::equalFloats</a></div><div class="ttdeci">constexpr bool equalFloats(float val, float other, float epsilon=EPSILON_DEFAULT) noexcept</div><div class="ttdoc">Two values are considered equal if |val - other| &lt; epsilon.</div><div class="ttdef"><b>Definition:</b> Math.h:26</div></div>
