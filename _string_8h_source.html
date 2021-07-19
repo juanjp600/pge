@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('_string_8h_source.html',''); initResiz
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span>PGE {</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_string.html">   21</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_string.html">String</a> : <span class="keyword">private</span> <a class="code" href="class_p_g_e_1_1_no_heap.html">NoHeap</a> {</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_string.html">   21</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_string.html">String</a> <span class="comment">/* TODO : private NoHeap */</span> {</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keyword">struct </span><a class="code" href="struct_p_g_e_1_1_string_1_1_key.html">Key</a>;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keyword">struct </span><a class="code" href="struct_p_g_e_1_1_string_1_1_redundant_key.html">RedundantKey</a>;</div>
@@ -335,7 +335,6 @@ $(document).ready(function(){initNavTree('_string_8h_source.html',''); initResiz
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;}</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_STRING_H_INCLUDED</span></div>
-<div class="ttc" id="aclass_p_g_e_1_1_no_heap_html"><div class="ttname"><a href="class_p_g_e_1_1_no_heap.html">PGE::NoHeap</a></div><div class="ttdoc">A mixin class intended to prevent heap allocation of a class.</div><div class="ttdef"><b>Definition:</b> NoHeap.h:7</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_string_html"><div class="ttname"><a href="class_p_g_e_1_1_string.html">PGE::String</a></div><div class="ttdoc">A UTF-8 character sequence guaranteed to be terminated by a null byte.</div><div class="ttdef"><b>Definition:</b> String.h:21</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_string_html_a8c0da5319ef56356fa252848a9faf9d8"><div class="ttname"><a href="class_p_g_e_1_1_string.html#a8c0da5319ef56356fa252848a9faf9d8">PGE::String::length</a></div><div class="ttdeci">int length() const</div><div class="ttdoc">The amount of characters the string is composed of, excluding the terminating null byte.</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_string_html_ac3e19338d386c9009001969a4169c4b9"><div class="ttname"><a href="class_p_g_e_1_1_string.html#ac3e19338d386c9009001969a4169c4b9">PGE::String::byteLength</a></div><div class="ttdeci">int byteLength() const</div><div class="ttdoc">The amount of bytes the string is composed of, excluding the terminating null byte.</div></div>

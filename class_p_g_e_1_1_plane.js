@@ -5,6 +5,7 @@ var class_p_g_e_1_1_plane =
     [ "\u202APlane", "class_p_g_e_1_1_plane.html#acc2aea858756455650a95102a190935f", null ],
     [ "\u202APlane", "class_p_g_e_1_1_plane.html#af4d2c06e4121e3e29084eca71284327c", null ],
     [ "\u202Aequals", "class_p_g_e_1_1_plane.html#a83a6c58a1ff31326e0c5a069c87e9751", null ],
+    [ "\u202AevalAtPoint", "class_p_g_e_1_1_plane.html#a65a2aa978a8ec70161ec23adaf381853", null ],
     [ "\u202Aintersects", "class_p_g_e_1_1_plane.html#a089074f119235ffacd7683c82e38979e", null ],
     [ "\u202AonPlane", "class_p_g_e_1_1_plane.html#ab86b707ec9c8b13b07062abdb82d38e4", null ],
     [ "\u202Aoperator!=", "class_p_g_e_1_1_plane.html#a6fe1df4a67e3999db7c1ed8440e0f47e", null ],
