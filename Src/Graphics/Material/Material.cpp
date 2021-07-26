@@ -2,13 +2,11 @@
 
 using namespace PGE;
 
-Material::Material(Shader& sh, const std::vector<std::reference_wrapper<Texture>>& t, bool opaq)
+Material::Material(Shader& sh, const ReferenceVector<Texture>& t, bool opaq)
     : shader(sh), textures(t), opaque(opaq) { }
 
 Material::Material(Shader& sh, Texture& t,bool opaq)
-    : shader(sh), opaque(opaq) {
-    textures.push_back(t);
-}
+    : shader(sh), opaque(opaq), textures{ t } { }
 
 Material::Material(Shader& sh,bool opaq)
     : shader(sh), opaque(opaq) { }

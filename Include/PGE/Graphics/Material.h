@@ -1,7 +1,7 @@
 #ifndef PGE_MATERIAL_H_INCLUDED
 #define PGE_MATERIAL_H_INCLUDED
 
-#include <vector>
+#include <PGE/Types/Types.h>
 
 namespace PGE {
 
@@ -12,7 +12,7 @@ class Texture;
 /// If a material is not opaque z-buffering will never be applied to the rendered mesh.
 class Material {
     public:
-        Material(Shader& sh, const std::vector<std::reference_wrapper<Texture>>& t, bool opaq = true);
+        Material(Shader& sh, const ReferenceVector<Texture>& t, bool opaq = true);
         Material(Shader& sh, Texture& t, bool opaq = true);
         Material(Shader& sh, bool opaq = true);
 
@@ -22,7 +22,7 @@ class Material {
         bool isOpaque() const;
 
     private:
-        Shader& shader; std::vector<std::reference_wrapper<Texture>> textures;
+        Shader& shader; const ReferenceVector<Texture> textures;
         const bool opaque;
 };
 
