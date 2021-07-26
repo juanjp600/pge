@@ -76,7 +76,7 @@ class Primitive {
 class Mesh {
     public:
         static Mesh* create(Graphics* gfx, Primitive::Type pt);
-        Mesh* clone();
+        Mesh* clone(Graphics* gfx);
         virtual ~Mesh() = default;
 
         void setGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims);
@@ -107,7 +107,6 @@ class Mesh {
 
         Material* material;
 
-        Graphics* graphics;
         Primitive::Type primitiveType;
 
         std::vector<Vertex> vertices;

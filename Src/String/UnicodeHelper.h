@@ -6,10 +6,10 @@
 namespace PGE {
 
 namespace Unicode {
-    int measureCodepoint(unsigned char chr);
+    byte measureCodepoint(unsigned char chr);
     char16 utf8ToWChar(const char* cbuffer);
     char16 utf8ToWChar(const char* cbuffer, int codepointLen);
-    int wCharToUtf8(char16 chr, char* result);
+    byte wCharToUtf8(char16 chr, char* result);
 }
 
 }

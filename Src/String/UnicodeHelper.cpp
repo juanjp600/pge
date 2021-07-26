@@ -5,14 +5,14 @@
 
 using namespace PGE;
 
-int Unicode::measureCodepoint(byte chr) {
+byte Unicode::measureCodepoint(byte chr) {
     if ((chr & 0x80) == 0x00) {
         // First bit is 0: treat as ASCII.
         return 1;
     }
 
     // First bit is 1: Number of consecutive 1 bits at the start is length of codepoint.
-    int len = 0;
+    byte len = 0;
     while (((chr >> (7 - len)) & 0x01) == 0x01) {
         len++;
     }
@@ -40,7 +40,7 @@ char16 Unicode::utf8ToWChar(const char* cbuffer, int codepointLen) {
 
 
 // TODO: Take into account UTF-16 surrogate pairs.
-int Unicode::wCharToUtf8(char16 chr, char* result) {
+byte Unicode::wCharToUtf8(char16 chr, char* result) {
     PGE_ASSERT_CHAR(chr);
 
     // Fits in standard ASCII, just return the char as-is.
@@ -49,7 +49,7 @@ int Unicode::wCharToUtf8(char16 chr, char* result) {
         return 1;
     }
 
-    int len = 1;
+    byte len = 1;
 
     // Determine most of the bytes after the first one.
     while ((chr & (~0x3f)) != 0x00) {

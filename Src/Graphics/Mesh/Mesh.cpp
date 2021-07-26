@@ -81,8 +81,8 @@ Primitive::Primitive(long ia,long ib,long ic) {
     a = ia; b = ib; c = ic;
 }
 
-Mesh* Mesh::clone() {
-    Mesh* newMesh = create(graphics, primitiveType);
+Mesh* Mesh::clone(Graphics* gfx) {
+    Mesh* newMesh = create(gfx, primitiveType);
     newMesh->setGeometry(vertices, primitives);
     newMesh->setMaterial(material);
     return newMesh;

@@ -48,14 +48,24 @@ class BinaryReader : private AbstractIO<std::ifstream> {
         float readFloat();
         /// Interprets 8 bytes as a 64-bit floating point number.
         double readDouble();
+        /// Interprets between 1 and 4 bytes as an UTF-8 character.
+        char16 readUTF8Char();
         /// Reads bytes into a String until a terminating null byte is encountered.
         /// Interpreted as UTF-8.
         /// @see #PGE::TextReader for more control over encoding.
         const String readNullTerminatedString();
-        /// Reads the given amount of bytes into a String.
+        /// This can be used in combination with the property of strings to never contract their internal capacity in order to avoid
+        /// unnecessary allocations.
+        /// @see #readNullTerminatedString()
+        void readNullTerminatedString(String& dest);
+        /// Reads the given amount of characters into a String.
         /// Interpreted as UTF-8.
         /// @see #PGE::TextReader for more control over encoding.
         const String readFixedLengthString(int length);
+        /// This can be used in combination with the property of strings to never contract their internal capacity in order to avoid
+        /// unnecessary allocations.
+        /// @see #readFixedLengthString()
+        void readFixedLengthString(String& dest, int length);
         /// Interprets two floats as a 2 component vector.
         /// 32-bit floating point numbers read in order x, y.
         const Vector2f readVector2f();

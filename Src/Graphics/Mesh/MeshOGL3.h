@@ -12,7 +12,9 @@
 
 namespace PGE {
 
-class MeshOGL3 : public Mesh {
+class GraphicsOGL3;
+
+class MeshOGL3 : public Mesh, private GraphicsReferencer<GraphicsOGL3> {
     public:
         MeshOGL3(Graphics* gfx, Primitive::Type pt);
 

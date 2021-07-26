@@ -1,5 +1,7 @@
 #include <PGE/File/BinaryWriter.h>
 
+#include "../String/UnicodeHelper.h"
+
 namespace PGE {
 
 BinaryWriter::BinaryWriter(const FilePath& file, bool append)
@@ -38,6 +40,12 @@ void BinaryWriter::writeFloat(float f) {
 
 void BinaryWriter::writeDouble(double d) {
     write(d);
+}
+
+void BinaryWriter::writeUTF8Char(char16 ch) {
+    char buf[4];
+    byte len = Unicode::wCharToUtf8(ch, buf);
+    writeBytes((byte*)buf, len);
 }
 
 void BinaryWriter::writeNullTerminatedString(const String& str) {

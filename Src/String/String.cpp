@@ -390,6 +390,7 @@ String& String::operator+=(char16 ch) {
     if (data->_strLength >= 0) {
         data->_strLength++;
     }
+    data->_hashCodeEvaluted = false; // TODO: Deal with partially evaluated hashcode.
     return *this;
 }
 
