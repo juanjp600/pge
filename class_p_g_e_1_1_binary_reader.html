@@ -141,12 +141,22 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a57b443840bf2d4bf4bfc88936b03e15d">readDouble</a> ()</td></tr>
 <tr class="memdesc:a57b443840bf2d4bf4bfc88936b03e15d"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets 8 bytes as a 64-bit floating point number. <br /></td></tr>
 <tr class="separator:a57b443840bf2d4bf4bfc88936b03e15d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3720fc7df983996831e369e4d7d9ae71"><td class="memItemLeft" align="right" valign="top"><a id="a3720fc7df983996831e369e4d7d9ae71"></a>
+char16&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a3720fc7df983996831e369e4d7d9ae71">readUTF8Char</a> ()</td></tr>
+<tr class="memdesc:a3720fc7df983996831e369e4d7d9ae71"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets between 1 and 4 bytes as an UTF-8 character. <br /></td></tr>
+<tr class="separator:a3720fc7df983996831e369e4d7d9ae71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af86e53291fa7f08e23bc410d193443e6"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#af86e53291fa7f08e23bc410d193443e6">readNullTerminatedString</a> ()</td></tr>
 <tr class="memdesc:af86e53291fa7f08e23bc410d193443e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a> until a terminating null byte is encountered.  <a href="class_p_g_e_1_1_binary_reader.html#af86e53291fa7f08e23bc410d193443e6">More...</a><br /></td></tr>
 <tr class="separator:af86e53291fa7f08e23bc410d193443e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38f44bc645063b21dd9b932940342ce5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a38f44bc645063b21dd9b932940342ce5">readNullTerminatedString</a> (<a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;dest)</td></tr>
+<tr class="memdesc:a38f44bc645063b21dd9b932940342ce5"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;This can be used in combination with the property of strings to never contract their internal capacity in order to avoid unnecessary allocations.  <a href="class_p_g_e_1_1_binary_reader.html#a38f44bc645063b21dd9b932940342ce5">More...</a><br /></td></tr>
+<tr class="separator:a38f44bc645063b21dd9b932940342ce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa424c78b12bc5343e721f8fe90e444bc"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#aa424c78b12bc5343e721f8fe90e444bc">readFixedLengthString</a> (int length)</td></tr>
-<tr class="memdesc:aa424c78b12bc5343e721f8fe90e444bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads the given amount of bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a>.  <a href="class_p_g_e_1_1_binary_reader.html#aa424c78b12bc5343e721f8fe90e444bc">More...</a><br /></td></tr>
+<tr class="memdesc:aa424c78b12bc5343e721f8fe90e444bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads the given amount of characters into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a>.  <a href="class_p_g_e_1_1_binary_reader.html#aa424c78b12bc5343e721f8fe90e444bc">More...</a><br /></td></tr>
 <tr class="separator:aa424c78b12bc5343e721f8fe90e444bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89c9bb5d739cec4e6bb4cf0384c969db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a89c9bb5d739cec4e6bb4cf0384c969db">readFixedLengthString</a> (<a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;dest, int length)</td></tr>
+<tr class="memdesc:a89c9bb5d739cec4e6bb4cf0384c969db"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;This can be used in combination with the property of strings to never contract their internal capacity in order to avoid unnecessary allocations.  <a href="class_p_g_e_1_1_binary_reader.html#a89c9bb5d739cec4e6bb4cf0384c969db">More...</a><br /></td></tr>
+<tr class="separator:a89c9bb5d739cec4e6bb4cf0384c969db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b94bab93c33331757da3fdf630ac135"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_reader.html#a6b94bab93c33331757da3fdf630ac135">readVector2f</a> ()</td></tr>
 <tr class="memdesc:a6b94bab93c33331757da3fdf630ac135"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Interprets two floats as a 2 component vector.  <a href="class_p_g_e_1_1_binary_reader.html#a6b94bab93c33331757da3fdf630ac135">More...</a><br /></td></tr>
 <tr class="separator:a6b94bab93c33331757da3fdf630ac135"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -281,7 +291,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </div>
 </div>
 <a id="aa424c78b12bc5343e721f8fe90e444bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa424c78b12bc5343e721f8fe90e444bc">&#9670;&nbsp;</a></span>readFixedLengthString()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa424c78b12bc5343e721f8fe90e444bc">&#9670;&nbsp;</a></span>readFixedLengthString() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -296,13 +306,44 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
       </table>
 </div><div class="memdoc">
 
-<p>&#x202A;Reads the given amount of bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a>. </p>
+<p>&#x202A;Reads the given amount of characters into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a>. </p>
 <p class="DocNodeLTR">Interpreted as UTF-8. </p><dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_text_reader.html" title="&#x202A;Utility to read text in different encodings from a file.">PGE::TextReader</a> for more control over encoding. </dd></dl>
 
 </div>
 </div>
+<a id="a89c9bb5d739cec4e6bb4cf0384c969db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89c9bb5d739cec4e6bb4cf0384c969db">&#9670;&nbsp;</a></span>readFixedLengthString() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PGE::BinaryReader::readFixedLengthString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>dest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>length</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;This can be used in combination with the property of strings to never contract their internal capacity in order to avoid unnecessary allocations. </p>
+<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_binary_reader.html#aa424c78b12bc5343e721f8fe90e444bc" title="&#x202A;Reads the given amount of characters into a String.">readFixedLengthString()</a> </dd></dl>
+
+</div>
+</div>
 <a id="af86e53291fa7f08e23bc410d193443e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af86e53291fa7f08e23bc410d193443e6">&#9670;&nbsp;</a></span>readNullTerminatedString()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af86e53291fa7f08e23bc410d193443e6">&#9670;&nbsp;</a></span>readNullTerminatedString() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -318,6 +359,27 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 
 <p>&#x202A;Reads bytes into a <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a> until a terminating null byte is encountered. </p>
 <p class="DocNodeLTR">Interpreted as UTF-8. </p><dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_text_reader.html" title="&#x202A;Utility to read text in different encodings from a file.">PGE::TextReader</a> for more control over encoding. </dd></dl>
+
+</div>
+</div>
+<a id="a38f44bc645063b21dd9b932940342ce5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38f44bc645063b21dd9b932940342ce5">&#9670;&nbsp;</a></span>readNullTerminatedString() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PGE::BinaryReader::readNullTerminatedString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>dest</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;This can be used in combination with the property of strings to never contract their internal capacity in order to avoid unnecessary allocations. </p>
+<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_binary_reader.html#af86e53291fa7f08e23bc410d193443e6" title="&#x202A;Reads bytes into a String until a terminating null byte is encountered.">readNullTerminatedString()</a> </dd></dl>
 
 </div>
 </div>

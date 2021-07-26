@@ -11,6 +11,7 @@ var class_p_g_e_1_1_binary_writer =
     [ "\u202AwriteInt32", "class_p_g_e_1_1_binary_writer.html#a9ea8232462cb8464d232d9d9f549d864", null ],
     [ "\u202AwriteNullTerminatedString", "class_p_g_e_1_1_binary_writer.html#a3b6bd0dcea9ed0b18f1dc5f64b5e2fb3", null ],
     [ "\u202AwriteUInt32", "class_p_g_e_1_1_binary_writer.html#a7a902f05f9d5362e561e46a71a58160f", null ],
+    [ "\u202AwriteUTF8Char", "class_p_g_e_1_1_binary_writer.html#a109cd47e115116530cca6c29a8a4d785", null ],
     [ "\u202AwriteVector2f", "class_p_g_e_1_1_binary_writer.html#a6ed6d8c13e74f85a550437385b72cffa", null ],
     [ "\u202AwriteVector3f", "class_p_g_e_1_1_binary_writer.html#a1a56f6ff60d058fc23c07af7c5f5270c", null ]
 ];
