@@ -105,17 +105,22 @@ void Mesh::clearGeometry() {
     vertices.clear(); primitives.clear();
 }
 
-void Mesh::setMaterial(Material* m) {
-    mustUpdateInternalData = true; mustReuploadInternalData = true;
-    material = m;
-}
-
 const std::vector<Vertex>& Mesh::getVertices() const {
     return vertices;
 }
 
 const std::vector<Primitive>& Mesh::getPrimitives() const {
     return primitives;
+}
+
+void Mesh::setMaterial(Material* m) {
+    mustUpdateInternalData = true; mustReuploadInternalData = true;
+    material = m;
+}
+
+
+Material* Mesh::getMaterial() const {
+    return material;
 }
 
 bool Mesh::isOpaque() const {

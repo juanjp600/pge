@@ -18,7 +18,7 @@ void MeshOGL3::updateInternalData() {
 
     glVertexData.clear(); glIndexData.clear();
 
-    const std::vector<String>& vertexInputElems = ((ShaderOGL3*)material->getShader())->getVertexInputElems();
+    const std::vector<String>& vertexInputElems = ((ShaderOGL3&)material->getShader()).getVertexInputElems();
     for (size_t i=0;i<vertices.size();i++) {
         for (size_t j=0;j<vertexInputElems.size();j++) {
             const Vertex::Property& prop = vertices[i].getProperty(vertexInputElems[j]);
@@ -118,10 +118,10 @@ void MeshOGL3::render() {
 
     for (int i=0;i<material->getTextureCount();i++) {
         glActiveTexture(glTextureLayers[i]);
-        glBindTexture(GL_TEXTURE_2D,((TextureOGL3*)material->getTexture(i))->getGlTexture());
+        glBindTexture(GL_TEXTURE_2D,((TextureOGL3&)material->getTexture(i)).getGlTexture());
     }
 
-    ((ShaderOGL3*)material->getShader())->useShader();
+    ((ShaderOGL3&)material->getShader()).useShader();
 
     GLenum glPrimitiveType = GL_TRIANGLES;
     int glIndexMultiplier = 3;
@@ -135,7 +135,7 @@ void MeshOGL3::render() {
 
     glDrawElements(glPrimitiveType,(GLsizei)primitives.size()*glIndexMultiplier,GL_UNSIGNED_INT,nullptr);
 
-    ((ShaderOGL3*)material->getShader())->unbindGLAttribs();
+    ((ShaderOGL3&)material->getShader()).unbindGLAttribs();
     glBindVertexArray(0);
 }
 

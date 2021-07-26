@@ -66,6 +66,7 @@ class Primitive {
             LINE
         };
 
+        Primitive() = default;
         Primitive(long ia,long ib);
         Primitive(long ia,long ib,long ic);
 
@@ -84,10 +85,11 @@ class Mesh {
         // Also e.g. encapsulating update and upload methods a bit would make for a better design. 
         void addGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims);
         void clearGeometry();
-        void setMaterial(Material* m);
-
         const std::vector<Vertex>& getVertices() const;
         const std::vector<Primitive>& getPrimitives() const;
+        void setMaterial(Material* m);
+        Material* getMaterial() const;
+
         bool isOpaque() const;
 
         // Must be threadsafe.
