@@ -32,9 +32,8 @@ class Texture {
         virtual ~Texture() = default;
 
     protected:
-        Texture(Graphics* gfx, int w, int h, bool rt, Format fmt);
+        Texture(int w, int h, bool rt, Format fmt);
 
-        Graphics* graphics;
         bool isRT;
 
         Vector2i dimensions;
