@@ -43,6 +43,8 @@ class BinaryWriter : private AbstractIO<std::ofstream> {
         void writeFloat(float f);
         /// Writes 4 bytes representing a 64-bit floating point number.
         void writeDouble(double d);
+        /// Writes 1 - 4 bytes representing a character.
+        void writeUTF8Char(char16 ch);
         /// Writes #PGE::String::byteLength amount of bytes from #PGE::String::cstr to the file, in addition to a null terminating byte.
         /// Encoded using UTF-8.
         /// @see #PGE::TextWriter for more control over encoding.

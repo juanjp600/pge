@@ -1,5 +1,7 @@
 #include <PGE/File/BinaryReader.h>
 
+#include "../String/UnicodeHelper.h"
+
 namespace PGE {
 
 BinaryReader::BinaryReader(const FilePath& file)
@@ -62,23 +64,40 @@ double BinaryReader::readDouble() {
     return read<double>();
 }
 
-const String BinaryReader::readNullTerminatedString() {
-    std::vector<char> chars;
-    char c;
-    do {
-        c = readByte();
+char16 BinaryReader::readUTF8Char() {
+    char buf[4];
+    buf[0] = readByte();
+    byte codepoint = Unicode::measureCodepoint(buf[0]);
+    for (int i = 1; i < codepoint; i++) {
+        buf[i] = readByte();
         PGE_ASSERT(!endOfFile(), "End of file reached");
-        chars.push_back(c);
-    } while (c != 0);
-    return String(chars.data());
+    }
+    return Unicode::utf8ToWChar(buf, codepoint);
+}
+
+const String BinaryReader::readNullTerminatedString() {
+    String ret;
+    readNullTerminatedString(ret);
+    return ret;
+}
+
+void BinaryReader::readNullTerminatedString(String& dest) {
+    char16 ch;
+    while ((ch = readUTF8Char()) != 0) {
+        dest += ch;
+    }
 }
 
 const String BinaryReader::readFixedLengthString(int length) {
-    std::vector<char> chars(length + 1);
-    stream.read(chars.data(), length);
-    PGE_ASSERT(checkEOF(), BAD_STREAM);
-    chars[length] = 0;
-    return String(chars.data());
+    String ret;
+    readFixedLengthString(ret, length);
+    return ret;
+}
+
+void BinaryReader::readFixedLengthString(String& dest, int length) {
+    for (int i = 0; i < length; i++) {
+        dest += readUTF8Char();
+    }
 }
 
 const Vector2f BinaryReader::readVector2f() {
