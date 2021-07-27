@@ -9,10 +9,11 @@ namespace PGE {
 
 template <typename T>
 class DX11Resource : public Resource<T> {
+    static_assert(std::is_pointer<T>::value);
+    static_assert(std::is_convertible<T, IUnknown*>::value);
+
     protected:
         ~DX11Resource() override {
-            static_assert(std::is_pointer<T>::value);
-            static_assert(std::is_convertible<T, IUnknown*>::value);
             ((IUnknown*)this->resource)->Release();
         }
 };

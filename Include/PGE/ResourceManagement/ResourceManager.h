@@ -10,6 +10,8 @@ namespace PGE {
 
 class ResourceBase;
 class ResourceManager : private NoHeap {
+    static_assert(std::is_base_of<ResourceBase, T>::value);
+
     private:
         std::list<ResourceBase*> resources;
 
@@ -18,7 +20,6 @@ class ResourceManager : private NoHeap {
 
         template <typename T, typename... Args>
         typename T::View addNewResource(Args&&... args) {
-            static_assert(std::is_base_of<ResourceBase, T>::value);
             T* res = new T(std::forward<Args>(args)...);
             resources.push_back(res);
             std::list<ResourceBase*>::iterator lastResourceIter = resources.end();
