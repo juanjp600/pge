@@ -16,9 +16,9 @@ void myFunc2(int i);
 ## Only ever return types by value as const
 This prevents assigning to temporaries.
 
-**Important: Any type supporting [copy elision](https://en.cppreference.com/w/cpp/language/copy_elision), which includes STL containers, must *never* be returned as const, as doing so would render copy elision impossible.**
-
 Built-in primitives already behave this way and thus adding the specifier would only introduce visual clutter.
+
+**Important: Any type that is *movable*, which includes STL containers, must *never* be returned as const, as doing so would render copy elision impossible.**
 
 **Example:**
 ```cpp
@@ -55,14 +55,13 @@ class MyGoodClass {
 };
 ```
 
+**Stub.**
+
 
 ## Consider preventing heap allocation for non-polymorphic classes
 Heap allocations are prone to causing issues in user code, thus disallowing them in most classes should be standard.
 
 Deleting the delete operators isn't strictly necessary, but not doing so might imply that correct usage of it them is possible, which it generally is not.
-
-**Note:**
-Heap allocation is still possible via exotic new operator overloads, but at that point we expect the author to either know exactly what they're doing or intentionally try to write erroneous code, which in both cases we don't care about.
 
 **Example:**
 ```cpp
@@ -192,3 +191,53 @@ class MyClass {
         MyClass(const MyClass&) = delete; // No.
 };
 ```
+
+
+## Place `static_assert`-ions at the very top of their related scope
+It only makes sense for them to be as close to their related template types as possible.
+
+**Example:**
+```cpp
+template <typename T>
+class MyClass {
+    static_assert(std::is_same<T, MyClass>::value); // First line of class, before access specifiers, unindented.
+    
+    public:
+        T t;
+};
+
+template <typename S>
+const S myMethod(const S& s) const {
+    static_assert(true); // First line of function.
+    return s;
+}
+```
+
+
+## Never rely on default access specifiers
+**Stub.**
+
+
+## Always utilize `override` while omitting `virtual` when overriding methods
+`override` clearly implies `virtual`.
+
+**Example:**
+```cpp
+class MyBase {
+    protected:
+        virtual void myFuncA() = 0;
+        virtual void myFuncB() const;
+        virtual void myFuncC();
+};
+
+class MyDerived {
+    public:
+        void myFuncA(); // No.
+        void myFuncB() const override; // Yes.
+        virtual void myFuncC() override; // No.
+};
+```
+
+
+## Use `auto` cautiously
+**Stub.**
