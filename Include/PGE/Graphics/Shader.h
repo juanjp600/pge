@@ -8,11 +8,9 @@
 
 namespace PGE {
 
-class Graphics;
-
 class Shader {
     public:
-        static Shader* load(Graphics* gfx, const FilePath& path);
+        static Shader* load(class Graphics* gfx, const FilePath& path);
         virtual ~Shader() = default;
 
         class Constant {
@@ -33,9 +31,9 @@ class Shader {
         virtual Constant* getFragmentShaderConstant(const String& constName) = 0;
 
     protected:
-        Shader() = default;
+        Shader(const FilePath& path) : filepath(path) { }
 
-        FilePath filepath;
+        const FilePath filepath;
 };
 
 }

@@ -8,11 +8,9 @@
 
 namespace PGE {
 
-class Graphics;
-
 class InputManager {
     public:
-        static InputManager* create(Graphics* gfx);
+        static InputManager* create(class Graphics* gfx);
         virtual ~InputManager() = default;
 
         virtual void update() = 0;

@@ -2,10 +2,8 @@
 
 using namespace PGE;
 
-MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::Type pt) : resourceManager(gfx), GraphicsReferencer(gfx) {
+MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::Type pt) : Mesh(pt), resourceManager(gfx), GraphicsReferencer(gfx) {
     graphics->takeGlContext();
-
-    primitiveType = pt;
 
     glVertexBufferObject = resourceManager.addNewResource<GLBuffer>();
     glIndexBufferObject = resourceManager.addNewResource<GLBuffer>();

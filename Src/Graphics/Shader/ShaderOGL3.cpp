@@ -2,10 +2,8 @@
 
 using namespace PGE;
 
-ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gfx), GraphicsReferencer(gfx) {
+ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : Shader(path), resourceManager(gfx), GraphicsReferencer(gfx) {
     graphics->takeGlContext();
-
-    filepath = path;
 
     std::vector<byte> vertexFile = (path + "vertex.glsl").readBytes();
     PGE_ASSERT(!vertexFile.empty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");

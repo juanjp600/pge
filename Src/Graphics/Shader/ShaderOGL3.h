@@ -12,9 +12,7 @@
 
 namespace PGE {
 
-class GraphicsOGL3;
-
-class ShaderOGL3 : public Shader, private GraphicsReferencer<GraphicsOGL3> {
+class ShaderOGL3 : public Shader, private GraphicsReferencer<class GraphicsOGL3> {
     public:
         ShaderOGL3(Graphics* gfx, const FilePath& path);
 

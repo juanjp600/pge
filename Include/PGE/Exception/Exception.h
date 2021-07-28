@@ -17,13 +17,13 @@ class Exception : private NoHeap {
         /// DO NOT USE.
         /// @see #PGE_CREATE_EX, #PGE_ASSERT
         /// @deprecated Use associated macros.
-        Exception(const char* file, int line, const String& extra) noexcept;
+        Exception(const String& file, int line, const String& extra) noexcept;
 
         /// Returns information about the exception, including the file and line it occured on and the user provided info.
         const String& what() const noexcept;
 
     private:
-        String info;
+        const String info;
 };
 
 }

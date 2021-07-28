@@ -34,11 +34,9 @@ class Texture {
     protected:
         Texture(int w, int h, bool rt, Format fmt);
 
-        bool isRT;
-
-        Vector2i dimensions;
-
-        Format format;
+        const bool isRT;
+        const Vector2i dimensions;
+        const Format format;
 };
 
 }

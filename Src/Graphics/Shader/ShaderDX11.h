@@ -16,9 +16,7 @@
 
 namespace PGE {
 
-class GraphicsDX11;
-
-class ShaderDX11 : public Shader, private GraphicsReferencer<GraphicsDX11> {
+class ShaderDX11 : public Shader, private GraphicsReferencer<class GraphicsDX11> {
     public:
         ShaderDX11(Graphics* gfx, const FilePath& path);
 

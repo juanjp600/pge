@@ -98,16 +98,18 @@ class Mesh {
         virtual void render() = 0;
 
     protected:
-        bool mustUpdateInternalData = true;
-        bool mustReuploadInternalData = true;
+        Mesh(Primitive::Type primitiveType);
 
         // Doesn't have to be threadsafe.
         // The idea is to update a large mesh in parallel and then only doing a low cost upload on the main thread.
         virtual void uploadInternalData() = 0;
 
+        bool mustUpdateInternalData = true;
+        bool mustReuploadInternalData = true;
+
         Material* material;
 
-        Primitive::Type primitiveType;
+        const Primitive::Type primitiveType;
 
         std::vector<Vertex> vertices;
         std::vector<Primitive> primitives;

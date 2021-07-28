@@ -10,8 +10,6 @@
 
 namespace PGE {
 
-class Graphics;
-
 class InputManagerInternal : public InputManager {
     private:
         Graphics* graphics;

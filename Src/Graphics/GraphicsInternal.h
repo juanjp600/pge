@@ -11,12 +11,9 @@
 
 #define APPEND(name) '\n' + #name + ": " + String::fromInt(name)
 
-struct SDL_Window;
-
 namespace PGE {
 
 class Shader;
-class ThreadManager;
 
 class GraphicsInternal : public Graphics {
     public:

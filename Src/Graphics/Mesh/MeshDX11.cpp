@@ -2,9 +2,7 @@
 
 using namespace PGE;
 
-MeshDX11::MeshDX11(Graphics* gfx,Primitive::Type pt) : GraphicsReferencer(gfx) {
-    primitiveType = pt;
-}
+MeshDX11::MeshDX11(Graphics* gfx,Primitive::Type pt) : Mesh(pt), GraphicsReferencer(gfx) { }
 
 void MeshDX11::updateInternalData() {
     if (!mustUpdateInternalData) { return; }
