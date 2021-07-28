@@ -4,9 +4,7 @@
 
 using namespace PGE;
 
-ResourceManagerOGL3::ResourceManagerOGL3(Graphics* gfx) {
-    graphics = (GraphicsOGL3*)gfx;
-}
+ResourceManagerOGL3::ResourceManagerOGL3(Graphics* gfx) : GraphicsReferencer(gfx) { }
 
 ResourceManagerOGL3::~ResourceManagerOGL3() {
     graphics->takeGlContext();

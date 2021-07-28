@@ -11,7 +11,9 @@
 
 namespace PGE {
 
-class TextureDX11 : public Texture {
+class GraphicsDX11;
+
+class TextureDX11 : public Texture, private GraphicsReferencer<GraphicsDX11> {
     public:
         // Render target.
         TextureDX11(Graphics* gfx, int w, int h, Format fmt);
