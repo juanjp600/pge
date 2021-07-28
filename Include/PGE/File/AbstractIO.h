@@ -13,6 +13,8 @@ namespace PGE {
 /// Not intended to be polymorphic.
 template <typename T>
 class AbstractIO : private NoHeap {
+    static_assert(std::is_base_of<std::ios_base, T>::value);
+
     protected:
         static const inline String BAD_STREAM = "Stream turned bad";
         static const inline String INVALID_FILEPATH = "Tried using an invalid path";
@@ -20,7 +22,6 @@ class AbstractIO : private NoHeap {
         T stream;
 
         AbstractIO(const PGE::FilePath& file, std::ios::openmode mode = std::ios::binary) {
-            static_assert(std::is_base_of<std::ios_base, T>::value);
             PGE_ASSERT(file.isValid(), INVALID_FILEPATH);
             stream.open(file.str().cstr(), mode);
             PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");

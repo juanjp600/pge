@@ -31,6 +31,10 @@ class GraphicsInternal : public Graphics {
 
 template <typename SHADER, typename MESH, typename TEXTURE>
 class GraphicsSpecialized : public GraphicsInternal {
+    static_assert(std::is_base_of<Shader, SHADER>::value);
+    static_assert(std::is_base_of<Mesh, MESH>::value);
+    static_assert(std::is_base_of<Texture, TEXTURE>::value);
+
     protected:
         // TODO: The more appropriate template solution is available in C++20.
         const String RENDERER_NAME;
@@ -53,22 +57,18 @@ class GraphicsSpecialized : public GraphicsInternal {
         }
 
         Shader* loadShader(const FilePath& path) final override {
-            static_assert(std::is_base_of<Shader, SHADER>::value);
             return new SHADER(this, path);
         }
 
         Mesh* createMesh(Primitive::Type pt) final override {
-            static_assert(std::is_base_of<Mesh, MESH>::value);
             return new MESH(this, pt);
         }
 
         Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) final override {
-            static_assert(std::is_base_of<Texture, TEXTURE>::value);
             return new TEXTURE(this, w, h, fmt);
         }
 
         Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) final override {
-            static_assert(std::is_base_of<Texture, TEXTURE>::value);
             return new TEXTURE(this, w, h, buffer, fmt, mipmaps);
         }
 };
