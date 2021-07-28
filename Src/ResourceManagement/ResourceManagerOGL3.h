@@ -3,14 +3,15 @@
 
 #include <PGE/ResourceManagement/ResourceManager.h>
 
-#include "../Graphics/GraphicsInternal.h"
-
 namespace PGE {
 
 class Graphics;
 class GraphicsOGL3;
 
-class ResourceManagerOGL3 : public ResourceManager, private GraphicsReferencer<GraphicsOGL3> {
+class ResourceManagerOGL3 : public ResourceManager {
+    private:
+        GraphicsOGL3* graphics;
+
     public:
         ResourceManagerOGL3(Graphics* gfx);
         ~ResourceManagerOGL3();
