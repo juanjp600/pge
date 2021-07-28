@@ -73,6 +73,16 @@ class GraphicsSpecialized : public GraphicsInternal {
         }
 };
 
+template <typename SPEC_GFX>
+class GraphicsReferencer {
+    protected:
+        GraphicsReferencer(Graphics* gfx) : graphics((SPEC_GFX*)gfx) {
+            static_assert(std::is_base_of<Graphics, SPEC_GFX>::value);
+        }
+
+        SPEC_GFX* const graphics;
+};
+
 }
 
 #endif // PGEINTERNAL_WINDOWINTERNAL_H_INCLUDED
