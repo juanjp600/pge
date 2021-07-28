@@ -75,10 +75,10 @@ class GraphicsSpecialized : public GraphicsInternal {
 
 template <typename SPEC_GFX>
 class GraphicsReferencer {
-    static_assert(std::is_base_of<Graphics, SPEC_GFX>::value);
-
     protected:
-        GraphicsReferencer(Graphics* gfx) : graphics((SPEC_GFX*)gfx) { }
+        GraphicsReferencer(Graphics* gfx) : graphics((SPEC_GFX*)gfx) {
+            static_assert(std::is_base_of<Graphics, SPEC_GFX>::value);
+        }
 
         SPEC_GFX* const graphics;
 };
