@@ -165,7 +165,7 @@ $(document).ready(function(){initNavTree('_mesh_8h_source.html',''); initResizab
 <div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_mesh.html">   75</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_mesh.html">Mesh</a> {</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keyword">static</span> <a class="code" href="class_p_g_e_1_1_mesh.html">Mesh</a>* create(<a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>* gfx, Primitive::Type pt);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <a class="code" href="class_p_g_e_1_1_mesh.html">Mesh</a>* clone(<a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>* gfx);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <a class="code" href="class_p_g_e_1_1_mesh.html">Mesh</a>* clone();</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="class_p_g_e_1_1_mesh.html">Mesh</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordtype">void</span> setGeometry(<span class="keyword">const</span> std::vector&lt;Vertex&gt;&amp; verts, <span class="keyword">const</span> std::vector&lt;Primitive&gt;&amp; prims);</div>
@@ -195,15 +195,16 @@ $(document).ready(function(){initNavTree('_mesh_8h_source.html',''); initResizab
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <a class="code" href="class_p_g_e_1_1_material.html">Material</a>* material;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        Primitive::Type primitiveType;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        std::vector&lt;Vertex&gt; vertices;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        std::vector&lt;Primitive&gt; primitives;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;};</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;}</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MESH_H_INCLUDED</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>* graphics;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        Primitive::Type primitiveType;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        std::vector&lt;Vertex&gt; vertices;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        std::vector&lt;Primitive&gt; primitives;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;};</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;}</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MESH_H_INCLUDED</span></div>
 <div class="ttc" id="aclass_p_g_e_1_1_color_html"><div class="ttname"><a href="class_p_g_e_1_1_color.html">PGE::Color</a></div><div class="ttdoc">An RGBA color represented via 4 floating point numbers.</div><div class="ttdef"><b>Definition:</b> Color.h:14</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_graphics_html"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html">PGE::Graphics</a></div><div class="ttdoc">Main class for managing everything graphics related.</div><div class="ttdef"><b>Definition:</b> Graphics.h:20</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_material_html"><div class="ttname"><a href="class_p_g_e_1_1_material.html">PGE::Material</a></div><div class="ttdoc">Can be applied to a mesh and simply consists of a PGE::Shader and optional PGE::Texture (s).</div><div class="ttdef"><b>Definition:</b> Material.h:13</div></div>
