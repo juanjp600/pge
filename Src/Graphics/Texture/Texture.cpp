@@ -19,7 +19,8 @@ int Texture::getBytesPerPixel(Format fmt) {
     }
 }
 
-Texture::Texture(int w, int h, bool rt, Format fmt) {
+Texture::Texture(Graphics* gfx, int w, int h, bool rt, Format fmt) {
+    graphics = gfx;
     dimensions = Vector2i(w,h);
     isRT = rt;
     format = fmt;

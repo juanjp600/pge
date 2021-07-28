@@ -12,9 +12,7 @@
 
 namespace PGE {
 
-class GraphicsOGL3;
-
-class ShaderOGL3 : public Shader, private GraphicsReferencer<GraphicsOGL3> {
+class ShaderOGL3 : public Shader {
     public:
         ShaderOGL3(Graphics* gfx, const FilePath& path);
 
@@ -28,7 +26,7 @@ class ShaderOGL3 : public Shader, private GraphicsReferencer<GraphicsOGL3> {
     private:
         class ConstantOGL3 : public Constant {
             public:
-                ConstantOGL3(GraphicsOGL3* gfx, int loc);
+                ConstantOGL3(Graphics* gfx, int loc);
 
                 void setValue(const Matrix4x4f& value) override;
                 void setValue(const Vector2f& value) override;
@@ -64,7 +62,7 @@ class ShaderOGL3 : public Shader, private GraphicsReferencer<GraphicsOGL3> {
                     Value();
                 } val;
 
-                GraphicsOGL3* graphics;
+                Graphics* graphics;
                 int location;
         };
 
@@ -94,6 +92,8 @@ class ShaderOGL3 : public Shader, private GraphicsReferencer<GraphicsOGL3> {
         GLProgram::View glShaderProgram;
 
         ResourceManagerOGL3 resourceManager;
+
+        Graphics* graphics;
 };
 
 }

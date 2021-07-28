@@ -15,9 +15,7 @@
 
 namespace PGE {
 
-class GraphicsDX11;
-
-class MeshDX11 : public Mesh, private GraphicsReferencer<GraphicsDX11> {
+class MeshDX11 : public Mesh {
     public:
         MeshDX11(Graphics* gfx, Primitive::Type pt);
 

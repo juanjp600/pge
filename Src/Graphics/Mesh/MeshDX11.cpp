@@ -2,7 +2,8 @@
 
 using namespace PGE;
 
-MeshDX11::MeshDX11(Graphics* gfx,Primitive::Type pt) : GraphicsReferencer(gfx) {
+MeshDX11::MeshDX11(Graphics* gfx,Primitive::Type pt) {
+    graphics = gfx;
     primitiveType = pt;
 }
 
@@ -84,7 +85,7 @@ void MeshDX11::uploadInternalData() {
     if (mustUpdateInternalData) { updateInternalData(); }
     if (!mustReuploadInternalData) { return; }
 
-    ID3D11Device* dxDevice = graphics->getDxDevice();
+    ID3D11Device* dxDevice = ((GraphicsDX11*)graphics)->getDxDevice();
 
     if (dxVertexData.size() > 0) {
         ZeroMemory(&dxVertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
@@ -118,7 +119,7 @@ void MeshDX11::uploadInternalData() {
 }
 
 void MeshDX11::render() {
-    ID3D11DeviceContext* dxContext = graphics->getDxContext();
+    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
 
     updateInternalData();
     uploadInternalData();
@@ -148,7 +149,7 @@ void MeshDX11::render() {
         ((TextureDX11*)material->getTexture(i))->useTexture(i);
     }
 
-    graphics->setZBufferState(
+    ((GraphicsDX11*)graphics)->setZBufferState(
         graphics->getDepthTest()
                 ? (isOpaque() ? GraphicsDX11::ZBufferStateIndex::ENABLED_WRITE : GraphicsDX11::ZBufferStateIndex::ENABLED_NOWRITE)
                 : GraphicsDX11::ZBufferStateIndex::DISABLED);
