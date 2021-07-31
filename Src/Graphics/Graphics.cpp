@@ -6,30 +6,18 @@
 
 using namespace PGE;
 
-std::list<Graphics*> Graphics::activeGraphics;
-
-const std::list<Graphics*>& Graphics::getActiveInstances() {
-    return activeGraphics;
-}
-
-Graphics::Graphics(const String& name, int w, int h, bool fs, u32 windowFlags) {
+Graphics::Graphics(const String& name, int w, int h, bool fs) {
     caption = name;
     dimensions = Vector2i(w, h); aspectRatio = (float)w / h;
     fullscreen = fs;
 
     eventSubscriber = resourceManager.addNewResource<WindowEventSubscriber>(this);
 
-    sdlWindow = resourceManager.addNewResource<SDLWindow>(name, w, h, windowFlags);
-
     open = true;
     focused = true;
-
-    activeGraphics.push_back(this);
 }
 
-Graphics::~Graphics() {
-    activeGraphics.erase(std::find(activeGraphics.begin(), activeGraphics.end(), this));
-}
+Graphics::~Graphics() { }
 
 void Graphics::update() {
     SDL_Event event;
@@ -88,10 +76,6 @@ Graphics::Culling Graphics::getCulling() const {
     return cullingMode;
 }
 
-SDL_Window* Graphics::getWindow() const noexcept {
-    return sdlWindow;
-}
-
 Graphics::WindowEventSubscriber::WindowEventSubscriber(Graphics* gfx) {
     resource = new SysEventsInternal::SubscriberInternal(gfx, SysEventsInternal::SubscriberInternal::EventType::WINDOW);
     SysEventsInternal::subscribe(resource);
@@ -99,13 +83,4 @@ Graphics::WindowEventSubscriber::WindowEventSubscriber(Graphics* gfx) {
 
 Graphics::WindowEventSubscriber::~WindowEventSubscriber() {
     SysEventsInternal::unsubscribe(resource);
-}
-
-Graphics::SDLWindow::SDLWindow(const String& title, int width, int height, u32 flags) {
-    resource = SDL_CreateWindow(title.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
-    PGE_ASSERT(resource != nullptr, "Failed to create SDL window (SDLERROR: " + String(SDL_GetError()) + ")");
-}
-
-Graphics::SDLWindow::~SDLWindow() {
-    SDL_DestroyWindow(resource);
 }

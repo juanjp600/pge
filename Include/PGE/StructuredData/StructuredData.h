@@ -34,6 +34,7 @@ class StructuredData {
                 ElemLayout(const std::vector<Entry>& entrs);
 
                 const LocationAndSize& getLocationAndSize(const String& name) const;
+                const LocationAndSize& getLocationAndSize(const String::Key& name) const;
                 int getElementSize() const;
 
                 bool operator==(const StructuredData::ElemLayout& other) const;
@@ -42,19 +43,25 @@ class StructuredData {
                 int elementSize;
         };
 
+        StructuredData() = default;
         StructuredData(const ElemLayout& ly, int elemCount);
 
-        const byte* getData() const;
+        const std::vector<byte>& getData() const;
+        const ElemLayout& getLayout() const;
 
-        void setValue(int elemIndex, const String& entryName, float f);
-        void setValue(int elemIndex, const String& entryName, u32 u);
-        void setValue(int elemIndex, const String& entryName, const Vector2f& v2f);
-        void setValue(int elemIndex, const String& entryName, const Vector3f& v3f);
-        void setValue(int elemIndex, const String& entryName, const Vector4f& v4f);
-        void setValue(int elemIndex, const String& entryName, const Matrix4x4f& m);
-        void setValue(int elemIndex, const String& entryName, const Color& c);
+        template <typename T>
+        void setValue(int elemIndex, const String& entryName, T value) {
+            setValue(elemIndex, String::Key(entryName), value);
+        }
+        void setValue(int elemIndex, const String::Key& entry, float f);
+        void setValue(int elemIndex, const String::Key& entry, u32 u);
+        void setValue(int elemIndex, const String::Key& entry, const Vector2f& v2f);
+        void setValue(int elemIndex, const String::Key& entry, const Vector3f& v3f);
+        void setValue(int elemIndex, const String::Key& entry, const Vector4f& v4f);
+        void setValue(int elemIndex, const String::Key& entry, const Matrix4x4f& m);
+        void setValue(int elemIndex, const String::Key& entry, const Color& c);
     private:
-        int getDataIndex(int elemIndex, const String& entryName, int expectedSize) const;
+        int getDataIndex(int elemIndex, const String::Key& entry, int expectedSize) const;
 
         ElemLayout layout;
         std::vector<byte> data;

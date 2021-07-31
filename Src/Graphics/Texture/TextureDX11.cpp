@@ -19,7 +19,7 @@ static DXGI_FORMAT getDXFormat(Texture::Format format) {
     }
 }
 
-TextureDX11::TextureDX11(Graphics* gfx, int w, int h, Format fmt) : Texture(w, h, true, fmt), GraphicsReferencer(gfx) {
+TextureDX11::TextureDX11(Graphics* gfx, int w, int h, Format fmt) : Texture(w, h, true, fmt) {
     ID3D11Device* dxDevice = graphics->getDxDevice();
 
     DXGI_FORMAT dxFormat = getDXFormat(fmt);
@@ -35,7 +35,7 @@ TextureDX11::TextureDX11(Graphics* gfx, int w, int h, Format fmt) : Texture(w, h
     dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture, DXGI_FORMAT_D24_UNORM_S8_UINT);
 }
 
-TextureDX11::TextureDX11(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) : Texture(w, h, false, fmt), GraphicsReferencer(gfx) {
+TextureDX11::TextureDX11(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) : Texture(w, h, false, fmt) {
     ID3D11Device* dxDevice = graphics->getDxDevice();
     ID3D11DeviceContext* dxContext = graphics->getDxContext();
 

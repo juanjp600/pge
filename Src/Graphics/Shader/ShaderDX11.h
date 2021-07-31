@@ -18,7 +18,7 @@ namespace PGE {
 
 class GraphicsDX11;
 
-class ShaderDX11 : public Shader, private GraphicsReferencer<GraphicsDX11> {
+class ShaderDX11 : public Shader {
     public:
         ShaderDX11(Graphics* gfx, const FilePath& path);
 
@@ -29,7 +29,7 @@ class ShaderDX11 : public Shader, private GraphicsReferencer<GraphicsDX11> {
         void useVertexInputLayout();
         void useSamplers();
 
-        const std::vector<String>& getVertexInputElems() const;
+        const StructuredData::ElemLayout& getElementLayout() const override;
 
     private:
         D3D11InputLayout::View dxVertexInputLayout;
@@ -47,7 +47,7 @@ class ShaderDX11 : public Shader, private GraphicsReferencer<GraphicsDX11> {
                 void setValue(const Vector4f& value) override;
                 void setValue(const Color& value) override;
                 void setValue(float value) override;
-                void setValue(int value) override;
+                void setValue(u32 value) override;
 
             private:
                 CBufferInfo& constantBuffer;
@@ -94,6 +94,10 @@ class ShaderDX11 : public Shader, private GraphicsReferencer<GraphicsDX11> {
         D3D11PixelShader::View dxFragmentShader;
 
         ResourceManager resourceManager;
+
+        StructuredData::ElemLayout vertexLayout;
+
+        GraphicsDX11* graphics;
 };
 
 }

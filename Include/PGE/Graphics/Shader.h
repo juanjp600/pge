@@ -5,6 +5,8 @@
 #include <PGE/Math/Matrix.h>
 #include <PGE/Math/Vector.h>
 #include <PGE/Color/Color.h>
+#include <PGE/Types/Types.h>
+#include <PGE/StructuredData/StructuredData.h>
 
 namespace PGE {
 
@@ -23,7 +25,7 @@ class Shader {
                 virtual void setValue(const Vector4f& value) = 0;
                 virtual void setValue(const Color& value) = 0;
                 virtual void setValue(float value) = 0;
-                virtual void setValue(int value) = 0;
+                virtual void setValue(u32 value) = 0;
 
             protected:
                 Constant() = default;
@@ -31,6 +33,8 @@ class Shader {
         };
         virtual Constant* getVertexShaderConstant(const String& constName) = 0;
         virtual Constant* getFragmentShaderConstant(const String& constName) = 0;
+
+        virtual const StructuredData::ElemLayout& getElementLayout() const = 0;
 
     protected:
         Shader() = default;

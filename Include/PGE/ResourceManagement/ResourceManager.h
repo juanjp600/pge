@@ -11,7 +11,7 @@ namespace PGE {
 class ResourceBase;
 class ResourceManager : private NoHeap {
     private:
-        std::list<ResourceBase*> resources;
+        std::vector<ResourceBase*> resources;
 
     public:
         virtual ~ResourceManager();
@@ -21,7 +21,7 @@ class ResourceManager : private NoHeap {
             static_assert(std::is_base_of<ResourceBase, T>::value);
             T* res = new T(std::forward<Args>(args)...);
             resources.push_back(res);
-            std::list<ResourceBase*>::iterator lastResourceIter = resources.end();
+            std::vector<ResourceBase*>::iterator lastResourceIter = resources.end();
             lastResourceIter--;
             return ResourceView(res->get(), lastResourceIter);
         }

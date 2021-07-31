@@ -2,7 +2,7 @@
 
 using namespace PGE;
 
-ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : GraphicsReferencer(gfx) {
+ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     filepath = path;
 
     BinaryReader reader(path + "reflection.dxri");
@@ -107,10 +107,6 @@ Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
     return nullptr;
 }
 
-const std::vector<String>& ShaderDX11::getVertexInputElems() const {
-    return vertexInputElems;
-}
-
 void ShaderDX11::useShader() {
     ID3D11DeviceContext* dxContext = graphics->getDxContext();
 
@@ -138,6 +134,10 @@ void ShaderDX11::useSamplers() {
     dxContext->PSSetSamplers(0, (UINT)dxSamplerState.size(), dxSamplerState.data());
 }
 
+const StructuredData::ElemLayout& ShaderDX11::getElementLayout() const {
+    return vertexLayout;
+}
+
 ShaderDX11::CBufferInfo::CBufferInfo(GraphicsDX11* graphics, const String& nm, int sz, ResourceManager& resourceManager) {
     name = nm;
     size = sz;
@@ -149,13 +149,13 @@ ShaderDX11::CBufferInfo::CBufferInfo(GraphicsDX11* graphics, const String& nm, i
     D3D11_BUFFER_DESC cBufferDesc;
     D3D11_SUBRESOURCE_DATA cBufferSubresourceData;
 
-    ZeroMemory( &cBufferDesc, sizeof(D3D11_BUFFER_DESC) );
+    ZeroMemory(&cBufferDesc, sizeof(D3D11_BUFFER_DESC));
     cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
     cBufferDesc.ByteWidth = cBufferSize;
     cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     cBufferDesc.CPUAccessFlags = 0;
 
-    ZeroMemory( &cBufferSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA) );
+    ZeroMemory(&cBufferSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
     cBufferSubresourceData.pSysMem = data;
 
     dxCBuffer = resourceManager.addNewResource<D3D11Buffer>(graphics->getDxDevice(), cBufferDesc, cBufferSubresourceData);
@@ -261,9 +261,8 @@ void ShaderDX11::ConstantDX11::setValue(float value) {
     constantBuffer.markAsDirty();
 }
 
-void ShaderDX11::ConstantDX11::setValue(int value) {
-    u32 valUi32 = value;
-    memcpy(constantBuffer.getData()+offset,&valUi32,sizeof(u32));
+void ShaderDX11::ConstantDX11::setValue(u32 value) {
+    memcpy(constantBuffer.getData()+offset,&value,sizeof(u32));
     constantBuffer.markAsDirty();
 }
 

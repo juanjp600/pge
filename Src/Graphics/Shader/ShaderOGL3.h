@@ -14,21 +14,19 @@ namespace PGE {
 
 class GraphicsOGL3;
 
-class ShaderOGL3 : public Shader, private GraphicsReferencer<GraphicsOGL3> {
+class ShaderOGL3 : public Shader {
     public:
         ShaderOGL3(Graphics* gfx, const FilePath& path);
 
         Constant* getVertexShaderConstant(const String& name) override;
         Constant* getFragmentShaderConstant(const String& name) override;
 
-        const std::vector<String>& getVertexInputElems() const;
-
         void useShader();
         void unbindGLAttribs();
     private:
         class ConstantOGL3 : public Constant {
             public:
-                ConstantOGL3(GraphicsOGL3* gfx, int loc);
+                ConstantOGL3(GraphicsOGL3* gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk);
 
                 void setValue(const Matrix4x4f& value) override;
                 void setValue(const Vector2f& value) override;
@@ -36,64 +34,60 @@ class ShaderOGL3 : public Shader, private GraphicsReferencer<GraphicsOGL3> {
                 void setValue(const Vector4f& value) override;
                 void setValue(const Color& value) override;
                 void setValue(float value) override;
-                void setValue(int value) override;
+                void setValue(u32 value) override;
 
                 void setUniform();
 
             private:
-                // TODO: Remove stinky!
-                enum class ValueType {
-                    MATRIX,
-                    VECTOR2F,
-                    VECTOR3F,
-                    VECTOR4F,
-                    COLOR,
-                    FLOAT,
-                    INT,
-                    INVALID
-                } valueType = ValueType::INVALID;
-                union Value {
-                    Matrix4x4f matrixVal = Matrix4x4f();
-                    Vector2f vector2fVal;
-                    Vector3f vector3fVal;
-                    Vector4f vector4fVal;
-                    Color colorVal;
-                    float floatVal;
-                    int intVal;
-                    
-                    Value();
-                } val;
-
                 GraphicsOGL3* graphics;
-                int location;
+                GLint glLocation;
+                GLenum glType;
+                int glArraySize;
+                StructuredData& dataBuffer;
+                String::Key dataKey;
         };
 
         std::unordered_map<String::Key, ConstantOGL3> vertexShaderConstants;
         std::unordered_map<String::Key, ConstantOGL3> fragmentShaderConstants;
         std::unordered_map<String::Key, ConstantOGL3> samplerConstants;
 
-        struct VertexAttrib {
-            String name;
-            int location;
-            int size;
+        struct GlAttribLocation {
+            GlAttribLocation(GLint loc, GLenum t);
+
+            GLint location;
             GLenum type;
         };
 
-        int stride;
-        std::vector<String> vertexInputElems;
-        std::vector<VertexAttrib> vertexAttribs;
+        std::unordered_map<String::Key, GlAttribLocation> glVertexAttribLocations;
+        StructuredData::ElemLayout vertexLayout;
 
-        struct ShaderVar {
-            String type;
+        StructuredData vertexUniformData;
+        StructuredData fragmentUniformData;
+
+        int glSizeToByteSize(GLenum type, int size) const;
+        GLenum parsedTypeToGlType(const String& parsedType);
+
+        void extractVertexUniforms(const String& vertexSource);
+        void extractVertexAttributes(const String& vertexSource);
+        void extractFragmentUniforms(const String& fragmentSource);
+        void extractFragmentOutputs(const String fragmentSource);
+
+        struct ParsedShaderVar {
             String name;
+            String type;
         };
-        void extractShaderVars(const String& src,const String& varKind,std::vector<ShaderVar>& varList);
+        void extractShaderVars(const String& src,const String& varKind,std::vector<ParsedShaderVar>& varList);
 
         GLShader::View glVertexShader;
         GLShader::View glFragmentShader;
         GLProgram::View glShaderProgram;
 
         ResourceManagerOGL3 resourceManager;
+
+        GraphicsOGL3* graphics;
+
+        // Inherited via Shader
+        virtual const StructuredData::ElemLayout& getElementLayout() const override;
 };
 
 }

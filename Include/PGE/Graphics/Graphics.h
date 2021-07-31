@@ -9,8 +9,6 @@
 #include <PGE/Math/Rectangle.h>
 #include <PGE/Color/Color.h>
 
-struct SDL_Window;
-
 namespace PGE {
 
 class Texture;
@@ -42,6 +40,7 @@ class Graphics {
         /// 
         /// **Requires** a call to #PGE::SysEvents::update to function at all.
         virtual void update();
+
         /// Presents previously rendered image to the screen.
         virtual void swap() = 0;
 
@@ -53,9 +52,11 @@ class Graphics {
         /// Sets the current render target to the specified texture.
         /// Texture must support being rendered to.
         virtual void setRenderTarget(Texture* renderTarget) = 0;
+
         /// Sets the current render target to the specified textures.
         /// All textures must support being rendered to.
         virtual void setRenderTargets(const std::vector<Texture*>& renderTargets) = 0;
+
         /// Resets the render target to a buffer, which can be presented to the screen using #swap.
         virtual void resetRenderTarget() = 0;
 
@@ -90,9 +91,6 @@ class Graphics {
         virtual void setCulling(Culling mode);
         virtual Culling getCulling() const;
 
-        /// An instance of the Graphics class is considered active from when it was created via #create, until it is deleted.
-        static const std::list<Graphics*>& getActiveInstances();
-
         /// Gets implementation defined debug information about a graphics object.
         virtual String getInfo() const = 0;
 
@@ -111,10 +109,9 @@ class Graphics {
         bool vsync;
         Culling cullingMode;
 
-        Graphics(const String& name, int w, int h, bool fs, u32 windowFlags);
-
-        SDL_Window* getWindow() const noexcept;
-
+        Graphics(const String& name, int w, int h, bool fs);
+    protected:
+        ResourceManager resourceManager;
     private:
         // Base class always automatically takes care of SysEvents and the window.
         class WindowEventSubscriber : public Resource<SysEvents::Subscriber*> {
@@ -123,16 +120,6 @@ class Graphics {
                 ~WindowEventSubscriber();
         };
         WindowEventSubscriber::View eventSubscriber;
-
-        class SDLWindow : public Resource<SDL_Window*> {
-            public:
-                SDLWindow(const String& title, int width, int height, u32 flags);
-                ~SDLWindow();
-        };
-        SDLWindow::View sdlWindow;
-
-        ResourceManager resourceManager;
-        static std::list<Graphics*> activeGraphics;
 };
 
 }

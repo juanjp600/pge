@@ -17,19 +17,13 @@ namespace PGE {
 
 class GraphicsDX11;
 
-class MeshDX11 : public Mesh, private GraphicsReferencer<GraphicsDX11> {
+class MeshDX11 : public Mesh {
     public:
-        MeshDX11(Graphics* gfx, Primitive::Type pt);
-
-        void updateInternalData() override;
+        MeshDX11(Graphics* gfx);
 
         void render() override;
 
     private:
-        std::vector<byte> dxVertexData;
-        std::vector<WORD> dxIndexData;
-        UINT stride = 0;
-
         D3D11_BUFFER_DESC dxVertexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxVertexBufferData;
         D3D11Buffer::View dxVertexBuffer;
@@ -39,6 +33,8 @@ class MeshDX11 : public Mesh, private GraphicsReferencer<GraphicsDX11> {
         ResourceView<ID3D11Buffer*> dxIndexBuffer;
 
         ResourceManager resourceManager;
+
+        GraphicsDX11* getGraphicsDx11() const;
 
         void uploadInternalData() override;
 };
