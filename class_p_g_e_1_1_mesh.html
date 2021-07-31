@@ -85,6 +85,8 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_mesh.html',''); initRe
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
@@ -95,44 +97,53 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_mesh.html',''); initRe
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_g_e_1_1_mesh_1_1_line.html">Line</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_g_e_1_1_mesh_1_1_triangle.html">Triangle</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a508edaf1c8ada0a5e0454a2a6aafd088"><td class="memItemLeft" align="right" valign="top"><a id="a508edaf1c8ada0a5e0454a2a6aafd088"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>PrimitiveType</b> { <b>NONE</b>
+, <b>LINE</b>
+, <b>TRIANGLE</b>
+ }</td></tr>
+<tr class="separator:a508edaf1c8ada0a5e0454a2a6aafd088"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a07305f69f8decad102b4ff821706337f"><td class="memItemLeft" align="right" valign="top"><a id="a07305f69f8decad102b4ff821706337f"></a>
-<a class="el" href="class_p_g_e_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>clone</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *gfx)</td></tr>
-<tr class="separator:a07305f69f8decad102b4ff821706337f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b0cd54bff720b23325e4a6c16355367"><td class="memItemLeft" align="right" valign="top"><a id="a3b0cd54bff720b23325e4a6c16355367"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setGeometry</b> (const std::vector&lt; <a class="el" href="class_p_g_e_1_1_vertex.html">Vertex</a> &gt; &amp;verts, const std::vector&lt; <a class="el" href="class_p_g_e_1_1_primitive.html">Primitive</a> &gt; &amp;prims)</td></tr>
-<tr class="separator:a3b0cd54bff720b23325e4a6c16355367"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5993474437a4b25b93e8f32b4d742b5"><td class="memItemLeft" align="right" valign="top"><a id="ab5993474437a4b25b93e8f32b4d742b5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addGeometry</b> (const std::vector&lt; <a class="el" href="class_p_g_e_1_1_vertex.html">Vertex</a> &gt; &amp;verts, const std::vector&lt; <a class="el" href="class_p_g_e_1_1_primitive.html">Primitive</a> &gt; &amp;prims)</td></tr>
-<tr class="separator:ab5993474437a4b25b93e8f32b4d742b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8b23c34d0c405052fd7b66fdf036efc"><td class="memItemLeft" align="right" valign="top"><a id="ab8b23c34d0c405052fd7b66fdf036efc"></a>
+<a class="el" href="class_p_g_e_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>clone</b> ()</td></tr>
+<tr class="separator:ab8b23c34d0c405052fd7b66fdf036efc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b0c73c8e4796cf68d1f41ccd656cdd8"><td class="memItemLeft" align="right" valign="top"><a id="a7b0c73c8e4796cf68d1f41ccd656cdd8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setGeometry</b> (const <a class="el" href="class_p_g_e_1_1_structured_data.html">StructuredData</a> &amp;verts, const std::vector&lt; <a class="el" href="struct_p_g_e_1_1_mesh_1_1_line.html">Line</a> &gt; &amp;triangles)</td></tr>
+<tr class="separator:a7b0c73c8e4796cf68d1f41ccd656cdd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac31af04789211cffcaf51f42255dabfd"><td class="memItemLeft" align="right" valign="top"><a id="ac31af04789211cffcaf51f42255dabfd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setGeometry</b> (const <a class="el" href="class_p_g_e_1_1_structured_data.html">StructuredData</a> &amp;verts, const std::vector&lt; <a class="el" href="struct_p_g_e_1_1_mesh_1_1_triangle.html">Triangle</a> &gt; &amp;triangles)</td></tr>
+<tr class="separator:ac31af04789211cffcaf51f42255dabfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7e6a4ca81eb5e5115dfbcb6caa56d2e"><td class="memItemLeft" align="right" valign="top"><a id="af7e6a4ca81eb5e5115dfbcb6caa56d2e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clearGeometry</b> ()</td></tr>
 <tr class="separator:af7e6a4ca81eb5e5115dfbcb6caa56d2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36f1f9b0303d592bf0c3bb4fa9626e17"><td class="memItemLeft" align="right" valign="top"><a id="a36f1f9b0303d592bf0c3bb4fa9626e17"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setMaterial</b> (<a class="el" href="class_p_g_e_1_1_material.html">Material</a> *m)</td></tr>
-<tr class="separator:a36f1f9b0303d592bf0c3bb4fa9626e17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afcb09ce1352548d36376e23e67878590"><td class="memItemLeft" align="right" valign="top"><a id="afcb09ce1352548d36376e23e67878590"></a>
-const std::vector&lt; <a class="el" href="class_p_g_e_1_1_vertex.html">Vertex</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getVertices</b> () const</td></tr>
-<tr class="separator:afcb09ce1352548d36376e23e67878590"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa5a902648ec863a427c1d9dabaa92dc"><td class="memItemLeft" align="right" valign="top"><a id="afa5a902648ec863a427c1d9dabaa92dc"></a>
-const std::vector&lt; <a class="el" href="class_p_g_e_1_1_primitive.html">Primitive</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getPrimitives</b> () const</td></tr>
-<tr class="separator:afa5a902648ec863a427c1d9dabaa92dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad98f4179926952e41dd0411f9988017d"><td class="memItemLeft" align="right" valign="top"><a id="ad98f4179926952e41dd0411f9988017d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clearGeometryAndSetMaterial</b> (<a class="el" href="class_p_g_e_1_1_material.html">Material</a> *m)</td></tr>
+<tr class="separator:ad98f4179926952e41dd0411f9988017d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45a9e3bca102160a7d72414fedb4ecee"><td class="memItemLeft" align="right" valign="top"><a id="a45a9e3bca102160a7d72414fedb4ecee"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>preserveGeometryAndSetMaterial</b> (<a class="el" href="class_p_g_e_1_1_material.html">Material</a> *m)</td></tr>
+<tr class="separator:a45a9e3bca102160a7d72414fedb4ecee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae643a1ded89ad8de2fdfd8da5bb124fa"><td class="memItemLeft" align="right" valign="top"><a id="ae643a1ded89ad8de2fdfd8da5bb124fa"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isOpaque</b> () const</td></tr>
 <tr class="separator:ae643a1ded89ad8de2fdfd8da5bb124fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0d933ad1e3e0d398129092023ecc65f"><td class="memItemLeft" align="right" valign="top"><a id="ab0d933ad1e3e0d398129092023ecc65f"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>updateInternalData</b> ()=0</td></tr>
-<tr class="separator:ab0d933ad1e3e0d398129092023ecc65f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86fbfd81b1dc4c6ab7af83818a7dc3d2"><td class="memItemLeft" align="right" valign="top"><a id="a86fbfd81b1dc4c6ab7af83818a7dc3d2"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> ()=0</td></tr>
 <tr class="separator:a86fbfd81b1dc4c6ab7af83818a7dc3d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a1ce278ba4d50b2476048d70a7ff120a4"><td class="memItemLeft" align="right" valign="top"><a id="a1ce278ba4d50b2476048d70a7ff120a4"></a>
-static <a class="el" href="class_p_g_e_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *gfx, Primitive::Type pt)</td></tr>
-<tr class="separator:a1ce278ba4d50b2476048d70a7ff120a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a9552de7e58502c30b11128e04e7e3b"><td class="memItemLeft" align="right" valign="top"><a id="a4a9552de7e58502c30b11128e04e7e3b"></a>
+static <a class="el" href="class_p_g_e_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *gfx)</td></tr>
+<tr class="separator:a4a9552de7e58502c30b11128e04e7e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -142,24 +153,24 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>uploadInterna
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a701fc7c636159b06f23e5132d0c816f8"><td class="memItemLeft" align="right" valign="top"><a id="a701fc7c636159b06f23e5132d0c816f8"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mustUpdateInternalData</b> = true</td></tr>
-<tr class="separator:a701fc7c636159b06f23e5132d0c816f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b5945fdfa1450713becb07954e429d8"><td class="memItemLeft" align="right" valign="top"><a id="a0b5945fdfa1450713becb07954e429d8"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>mustReuploadInternalData</b> = true</td></tr>
 <tr class="separator:a0b5945fdfa1450713becb07954e429d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6287068c7ad20c366fc54f74c7c3e72"><td class="memItemLeft" align="right" valign="top"><a id="ac6287068c7ad20c366fc54f74c7c3e72"></a>
 <a class="el" href="class_p_g_e_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>material</b></td></tr>
 <tr class="separator:ac6287068c7ad20c366fc54f74c7c3e72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3246ec8b73b0984bd66ebc93d535c3b5"><td class="memItemLeft" align="right" valign="top"><a id="a3246ec8b73b0984bd66ebc93d535c3b5"></a>
-Primitive::Type&#160;</td><td class="memItemRight" valign="bottom"><b>primitiveType</b></td></tr>
-<tr class="separator:a3246ec8b73b0984bd66ebc93d535c3b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c059140a376ff6d4380166125df2baf"><td class="memItemLeft" align="right" valign="top"><a id="a0c059140a376ff6d4380166125df2baf"></a>
-std::vector&lt; <a class="el" href="class_p_g_e_1_1_vertex.html">Vertex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vertices</b></td></tr>
-<tr class="separator:a0c059140a376ff6d4380166125df2baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e0ee7bb453f5a3a9d773913c517231b"><td class="memItemLeft" align="right" valign="top"><a id="a3e0ee7bb453f5a3a9d773913c517231b"></a>
-std::vector&lt; <a class="el" href="class_p_g_e_1_1_primitive.html">Primitive</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>primitives</b></td></tr>
-<tr class="separator:a3e0ee7bb453f5a3a9d773913c517231b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a654d9f4bd640a37a51663417e2c2396f"><td class="memItemLeft" align="right" valign="top"><a id="a654d9f4bd640a37a51663417e2c2396f"></a>
+<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>graphics</b></td></tr>
+<tr class="separator:a654d9f4bd640a37a51663417e2c2396f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7474aaa9594ccbdcaf82c4c7b42b8fd6"><td class="memItemLeft" align="right" valign="top"><a id="a7474aaa9594ccbdcaf82c4c7b42b8fd6"></a>
+PrimitiveType&#160;</td><td class="memItemRight" valign="bottom"><b>primitiveType</b></td></tr>
+<tr class="separator:a7474aaa9594ccbdcaf82c4c7b42b8fd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab913519775ce2f2f980a73bee6faf83d"><td class="memItemLeft" align="right" valign="top"><a id="ab913519775ce2f2f980a73bee6faf83d"></a>
+<a class="el" href="class_p_g_e_1_1_structured_data.html">StructuredData</a>&#160;</td><td class="memItemRight" valign="bottom"><b>vertices</b></td></tr>
+<tr class="separator:ab913519775ce2f2f980a73bee6faf83d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48a4ec2340f115759915ee5bd53895fc"><td class="memItemLeft" align="right" valign="top"><a id="a48a4ec2340f115759915ee5bd53895fc"></a>
+std::vector&lt; u32 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>indices</b></td></tr>
+<tr class="separator:a48a4ec2340f115759915ee5bd53895fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

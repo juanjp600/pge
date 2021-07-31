@@ -192,19 +192,12 @@ Static Public Member Functions</h2></td></tr>
 static <a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24">create</a> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;name=&quot;PGE Application&quot;, int w=1280, int h=720, bool fs=false, <a class="el" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">Renderer</a> r=<a class="el" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83a7a1920d61156abc05a60135aefe8bc67">Renderer::Default</a>)</td></tr>
 <tr class="memdesc:a900adeee80c1f1c5fada1d36ffe75b24"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Factory method. <br /></td></tr>
 <tr class="separator:a900adeee80c1f1c5fada1d36ffe75b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a526acbd2eaeabc8e84df733297f97ea4"><td class="memItemLeft" align="right" valign="top"><a id="a526acbd2eaeabc8e84df733297f97ea4"></a>
-static const std::list&lt; <a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a526acbd2eaeabc8e84df733297f97ea4">getActiveInstances</a> ()</td></tr>
-<tr class="memdesc:a526acbd2eaeabc8e84df733297f97ea4"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;An instance of the <a class="el" href="class_p_g_e_1_1_graphics.html" title="&#x202A;Main class for managing everything graphics related.">Graphics</a> class is considered active from when it was created via <a class="el" href="class_p_g_e_1_1_graphics.html#a900adeee80c1f1c5fada1d36ffe75b24" title="&#x202A;Factory method.">create</a>, until it is deleted. <br /></td></tr>
-<tr class="separator:a526acbd2eaeabc8e84df733297f97ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a49f23860aa11145752b8eb1e5b10dbd3"><td class="memItemLeft" align="right" valign="top"><a id="a49f23860aa11145752b8eb1e5b10dbd3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Graphics</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;name, int w, int h, bool fs, u32 windowFlags)</td></tr>
-<tr class="separator:a49f23860aa11145752b8eb1e5b10dbd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a942532b493300f366bd0b938c31fb223"><td class="memItemLeft" align="right" valign="top"><a id="a942532b493300f366bd0b938c31fb223"></a>
-SDL_Window *&#160;</td><td class="memItemRight" valign="bottom"><b>getWindow</b> () const noexcept</td></tr>
-<tr class="separator:a942532b493300f366bd0b938c31fb223"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49ed5cb20217ac8fd3126610df7d1a68"><td class="memItemLeft" align="right" valign="top"><a id="a49ed5cb20217ac8fd3126610df7d1a68"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Graphics</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;name, int w, int h, bool fs)</td></tr>
+<tr class="separator:a49ed5cb20217ac8fd3126610df7d1a68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -238,6 +231,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>vsync</b></td></tr>
 <tr class="memitem:ac6942641e93eb05a3d7c16ad0ff6a78f"><td class="memItemLeft" align="right" valign="top"><a id="ac6942641e93eb05a3d7c16ad0ff6a78f"></a>
 <a class="el" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cullingMode</b></td></tr>
 <tr class="separator:ac6942641e93eb05a3d7c16ad0ff6a78f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8812b70a38f12d29ae06b282b69349a"><td class="memItemLeft" align="right" valign="top"><a id="ab8812b70a38f12d29ae06b282b69349a"></a>
+<a class="el" href="class_p_g_e_1_1_resource_manager.html">ResourceManager</a>&#160;</td><td class="memItemRight" valign="bottom"><b>resourceManager</b></td></tr>
+<tr class="separator:ab8812b70a38f12d29ae06b282b69349a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p class="DocNodeLTR">Main class for managing everything graphics related. </p>

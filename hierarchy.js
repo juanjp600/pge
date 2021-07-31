@@ -15,6 +15,7 @@ var hierarchy =
     [ "\u202APGE::String::Iterator", "struct_p_g_e_1_1_string_1_1_iterator.html", [
       [ "\u202APGE::String::ReverseIterator", "struct_p_g_e_1_1_string_1_1_reverse_iterator.html", null ]
     ] ],
+    [ "\u202APGE::Mesh::Line", "struct_p_g_e_1_1_mesh_1_1_line.html", null ],
     [ "\u202APGE::StructuredData::ElemLayout::LocationAndSize", "struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_location_and_size.html", null ],
     [ "\u202APGE::Material", "class_p_g_e_1_1_material.html", null ],
     [ "\u202APGE::Mesh", "class_p_g_e_1_1_mesh.html", null ],
@@ -52,10 +53,7 @@ var hierarchy =
       [ "\u202APGE::Vector3f", "class_p_g_e_1_1_vector3f.html", null ],
       [ "\u202APGE::Vector4f", "class_p_g_e_1_1_vector4f.html", null ]
     ] ],
-    [ "\u202APGE::Primitive", "class_p_g_e_1_1_primitive.html", null ],
-    [ "\u202APGE::Vertex::Property", "struct_p_g_e_1_1_vertex_1_1_property.html", null ],
     [ "\u202APGE::ResourceBase", "class_p_g_e_1_1_resource_base.html", [
-      [ "\u202APGE::Resource< SDL_Window * >", "class_p_g_e_1_1_resource.html", null ],
       [ "\u202APGE::Resource< T * >", "class_p_g_e_1_1_resource.html", [
         [ "\u202APGE::RawWrapper< T >", "class_p_g_e_1_1_raw_wrapper.html", null ]
       ] ],
@@ -67,6 +65,5 @@ var hierarchy =
     [ "\u202APGE::SysEvents::Subscriber", "class_p_g_e_1_1_sys_events_1_1_subscriber.html", null ],
     [ "\u202APGE::SysEvents", "class_p_g_e_1_1_sys_events.html", null ],
     [ "\u202APGE::Texture", "class_p_g_e_1_1_texture.html", null ],
-    [ "\u202APGE::Vertex::Property::Value", "union_p_g_e_1_1_vertex_1_1_property_1_1_value.html", null ],
-    [ "\u202APGE::Vertex", "class_p_g_e_1_1_vertex.html", null ]
+    [ "\u202APGE::Mesh::Triangle", "struct_p_g_e_1_1_mesh_1_1_triangle.html", null ]
 ];
