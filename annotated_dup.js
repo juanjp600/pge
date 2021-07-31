@@ -11,6 +11,8 @@ var annotated_dup =
       [ "\u202ATextWriter", "class_p_g_e_1_1_text_writer.html", "class_p_g_e_1_1_text_writer" ],
       [ "\u202AGraphics", "class_p_g_e_1_1_graphics.html", "class_p_g_e_1_1_graphics" ],
       [ "\u202AMaterial", "class_p_g_e_1_1_material.html", "class_p_g_e_1_1_material" ],
+      [ "\u202AVertex", "class_p_g_e_1_1_vertex.html", "class_p_g_e_1_1_vertex" ],
+      [ "\u202APrimitive", "class_p_g_e_1_1_primitive.html", "class_p_g_e_1_1_primitive" ],
       [ "\u202AMesh", "class_p_g_e_1_1_mesh.html", "class_p_g_e_1_1_mesh" ],
       [ "\u202AShader", "class_p_g_e_1_1_shader.html", "class_p_g_e_1_1_shader" ],
       [ "\u202ATexture", "class_p_g_e_1_1_texture.html", "class_p_g_e_1_1_texture" ],
