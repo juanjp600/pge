@@ -78,10 +78,10 @@ bool Mesh::isOpaque() const {
     return material->isOpaque();
 }
 
-Mesh::Line::Line(int a, int b) {
+Mesh::Line::Line(u32 a, u32 b) {
     indices[0] = a; indices[1] = b;
 }
 
-Mesh::Triangle::Triangle(int a, int b, int c) {
+Mesh::Triangle::Triangle(u32 a, u32 b, u32 c) {
     indices[0] = a; indices[1] = b; indices[2] = c;
 }

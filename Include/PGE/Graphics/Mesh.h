@@ -17,27 +17,21 @@ class Graphics;
 
 class Mesh {
     public:
-        enum class PrimitiveType {
-            NONE,
-            LINE,
-            TRIANGLE
-        };
-
         enum class PreserveGeometry {
             YES,
             NO
         };
 
         struct Line {
-            Line(int a, int b);
+            Line(u32 a, u32 b);
 
-            int indices[2];
+            u32 indices[2];
         };
 
         struct Triangle {
-            Triangle(int a, int b, int c);
+            Triangle(u32 a, u32 b, u32 c);
 
-            int indices[3];
+            u32 indices[3];
         };
 
         static Mesh* create(Graphics* gfx);
@@ -57,6 +51,12 @@ class Mesh {
         virtual void render() = 0;
 
     protected:
+        enum class PrimitiveType {
+            NONE,
+            LINE,
+            TRIANGLE
+        };
+
         bool mustReuploadInternalData = true;
 
         virtual void uploadInternalData() = 0;
