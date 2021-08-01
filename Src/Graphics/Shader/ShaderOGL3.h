@@ -52,10 +52,11 @@ class ShaderOGL3 : public Shader {
         std::unordered_map<String::Key, ConstantOGL3> samplerConstants;
 
         struct GlAttribLocation {
-            GlAttribLocation(GLint loc, GLenum t);
+            GlAttribLocation(GLint loc, GLenum elemType, int elemCount);
 
             GLint location;
-            GLenum type;
+            GLenum elementType;
+            int elementCount;
         };
 
         std::unordered_map<String::Key, GlAttribLocation> glVertexAttribLocations;
@@ -66,6 +67,7 @@ class ShaderOGL3 : public Shader {
 
         int glSizeToByteSize(GLenum type, int size) const;
         GLenum parsedTypeToGlType(const String& parsedType);
+        void decomposeGlType(GLenum compositeType, GLenum& elemType, int& elemCount);
 
         void extractVertexUniforms(const String& vertexSource);
         void extractVertexAttributes(const String& vertexSource);

@@ -55,11 +55,16 @@ void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
     std::vector<StructuredData::ElemLayout::Entry> layoutEntries;
     for (int i = 0; i < (int)parsedAttribs.size(); i++) {
         GLenum attrType = parsedTypeToGlType(parsedAttribs[i].type);
+        GLenum attrElemType; int attrElemCount;
+        decomposeGlType(attrType, attrElemType, attrElemCount);
 
         layoutEntries.emplace_back(parsedAttribs[i].name, glSizeToByteSize(attrType, 1));
         glVertexAttribLocations.emplace(
             String::Key(parsedAttribs[i].name),
-            GlAttribLocation(glGetAttribLocation(glShaderProgram, parsedAttribs[i].name.cstr()), attrType));
+            GlAttribLocation(
+                glGetAttribLocation(glShaderProgram, parsedAttribs[i].name.cstr()),
+                attrElemType,
+                attrElemCount));
     }
 
     vertexLayout = StructuredData::ElemLayout(layoutEntries);
@@ -160,7 +165,7 @@ int ShaderOGL3::glSizeToByteSize(GLenum type, int size) const {
         case GL_FLOAT_MAT4:
             return sizeof(GLfloat) * 4 * 4;
         default:
-            PGE_CREATE_EX("Unsupported OpenGL datatype: " + String::fromInt(type));
+            throw PGE_CREATE_EX("Unsupported OpenGL datatype: " + String::fromInt(type));
     }
 }
 
@@ -180,7 +185,35 @@ GLenum ShaderOGL3::parsedTypeToGlType(const String& parsedType) {
     } else if (parsedType.equals("uint")) {
         return GL_UNSIGNED_INT;
     } else {
-        PGE_CREATE_EX("Unsupported GLSL datatype: "+parsedType);
+        throw PGE_CREATE_EX("Unsupported GLSL datatype: "+parsedType);
+    }
+}
+
+void ShaderOGL3::decomposeGlType(GLenum compositeType, GLenum& elemType, int& elemCount) {
+    switch (compositeType) {
+        case GL_INT:
+            elemType = GL_INT; elemCount = 1;
+            break;
+        case GL_UNSIGNED_INT:
+            elemType = GL_UNSIGNED_INT; elemCount = 1;
+            break;
+        case GL_FLOAT:
+            elemType = GL_FLOAT; elemCount = 1;
+            break;
+        case GL_FLOAT_VEC2:
+            elemType = GL_FLOAT; elemCount = 2;
+            break;
+        case GL_FLOAT_VEC3:
+            elemType = GL_FLOAT; elemCount = 3;
+            break;
+        case GL_FLOAT_VEC4:
+            elemType = GL_FLOAT; elemCount = 4;
+            break;
+        case GL_FLOAT_MAT4:
+            elemType = GL_FLOAT; elemCount = 4 * 4;
+            break;
+        default:
+            throw PGE_CREATE_EX("Unsupported OpenGL datatype: " + String::fromInt(compositeType));
     }
 }
 
@@ -198,7 +231,7 @@ void ShaderOGL3::useShader() {
         const StructuredData::ElemLayout::LocationAndSize& locationAndSizeInBuffer = vertexLayout.getLocationAndSize(key);
 
         glEnableVertexAttribArray(glAttribLocation.location);
-        glVertexAttribPointer(glAttribLocation.location, 1, glAttribLocation.type, GL_FALSE, vertexLayout.getElementSize(), ptr + locationAndSizeInBuffer.location);
+        glVertexAttribPointer(glAttribLocation.location, glAttribLocation.elementCount, glAttribLocation.elementType, GL_FALSE, vertexLayout.getElementSize(), ptr + locationAndSizeInBuffer.location);
         glError = glGetError();
         PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + String::fromInt(key.hash) + ")");
     }
@@ -290,13 +323,13 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
             glUniformMatrix4fv(glLocation, 1, GL_FALSE, dataPtrF);
         } break;
         case GL_FLOAT_VEC2: {
-            glUniform2f(glLocation, *dataPtrF, *(dataPtrF + sizeof(GLfloat)));
+            glUniform2f(glLocation, *dataPtrF, *(dataPtrF + 1));
         } break;
         case GL_FLOAT_VEC3: {
-            glUniform3f(glLocation, *dataPtrF, *(dataPtrF + sizeof(GLfloat)), *(dataPtrF + sizeof(GLfloat) * 2));
+            glUniform3f(glLocation, *dataPtrF, *(dataPtrF + 1), *(dataPtrF + 2));
         } break;
         case GL_FLOAT_VEC4: {
-            glUniform4f(glLocation, *dataPtrF, *(dataPtrF + sizeof(GLfloat)), *(dataPtrF + sizeof(GLfloat) * 2), *(dataPtrF + sizeof(GLfloat) * 3));
+            glUniform4f(glLocation, *dataPtrF, *(dataPtrF + 1), *(dataPtrF + 2), *(dataPtrF + 3));
         } break;
         case GL_FLOAT: {
             glUniform1f(glLocation, *dataPtrF);
@@ -313,6 +346,6 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
     PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set uniform value (GLERROR: " + String::fromInt(glError) +")");
 }
 
-ShaderOGL3::GlAttribLocation::GlAttribLocation(GLint loc, GLenum t) {
-    location = loc; type = t;
+ShaderOGL3::GlAttribLocation::GlAttribLocation(GLint loc, GLenum elemType, int elemCount) {
+    location = loc; elementType = elemType; elementCount = elemCount;
 }
