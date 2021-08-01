@@ -7,12 +7,14 @@ Mesh* Mesh::create(Graphics* gfx, Material* material, const StructuredData& vert
     Mesh* newMesh = create(gfx);
     newMesh->setMaterial(material, PreserveGeometry::YES);
     newMesh->setGeometry(verts, lines);
+    return newMesh;
 }
 
 Mesh* Mesh::create(Graphics* gfx, Material* material, const StructuredData& verts, const std::vector<Triangle>& triangles) {
     Mesh* newMesh = create(gfx);
     newMesh->setMaterial(material, PreserveGeometry::YES);
     newMesh->setGeometry(verts, triangles);
+    return newMesh;
 }
 
 Mesh* Mesh::clone() {

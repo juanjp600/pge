@@ -144,7 +144,7 @@ void ShaderOGL3::extractShaderVars(const String& src, const String& varKind, std
     }
 }
 
-const StructuredData::ElemLayout& PGE::ShaderOGL3::getElementLayout() const {
+const StructuredData::ElemLayout& PGE::ShaderOGL3::getVertexLayout() const {
     return vertexLayout;
 }
 
