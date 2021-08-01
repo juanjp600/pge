@@ -217,14 +217,14 @@ class String : private NoHeap {
         static constexpr int SHORT_STR_CAPACITY = 16;
 
         struct Data {
-            // Lazily evaluated.
-            mutable bool _hashCodeEvaluted = false;
-            mutable u64 _hashCode;
-            mutable int _strLength = -1;
-
             int strByteLength = -1;
 
             int cCapacity = SHORT_STR_CAPACITY;
+
+            // Lazily evaluated.
+            mutable u64 _hashCode;
+            mutable int _strLength = -1;
+            mutable bool _hashCodeEvaluted = false;
         };
 
         struct Shared {
@@ -239,6 +239,7 @@ class String : private NoHeap {
 
         // Default initialized with Unique.
         std::variant<Unique, std::shared_ptr<Shared>, std::monostate> internalData;
+        // TODO: Investigate whether calculating these instead is worth it.
         char* chs = std::get<Unique>(internalData).chs;
         Data* data = &std::get<Unique>(internalData).data;
 

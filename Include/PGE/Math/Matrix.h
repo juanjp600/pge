@@ -72,7 +72,7 @@ class Matrix4x4f : private NoHeap {
             );
         }
 
-        static constexpr const Matrix4x4f constructWorldMat(const Vector3f& position, const Vector3f& scale, const Vector3f& rotation) {
+        static constexpr const Matrix4x4f constructWorldMat(const Vector3f& position, const Vector3f& rotation, const Vector3f& scale) {
             return Matrix4x4f::scale(scale) * Matrix4x4f::rotate(rotation) * Matrix4x4f::translate(position);
         }
 

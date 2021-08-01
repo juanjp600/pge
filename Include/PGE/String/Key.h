@@ -23,9 +23,6 @@ struct String::SafeKey : private NoHeap {
     SafeKey(const String& str) : hash(str.getHashCode()), str(str) { }
     size_t hash;
     String str;
-    bool lengthEvaluated() const {
-        return str.data->_strLength >= 0;
-    }
 };
 
 struct String::OrderedKey : private NoHeap {
@@ -74,9 +71,7 @@ template<> struct std::hash<PGE::String::SafeKey> {
 
 template<> struct std::equal_to<PGE::String::SafeKey> {
     bool operator()(const PGE::String::SafeKey& a, const PGE::String::SafeKey& b) const {
-        if (a.str.byteLength() != b.str.byteLength()) { return false; }
-        if (a.lengthEvaluated() && b.lengthEvaluated() && a.str.length() != b.str.length()) { return false; }
-        return memcmp(a.str.cstr(), b.str.cstr(), a.str.byteLength()) == 0;
+        return a.str == b.str;
     }
 };
 

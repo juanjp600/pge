@@ -61,7 +61,7 @@ class MyGoodClass {
 ## Consider preventing heap allocation for non-polymorphic classes
 Heap allocations are prone to causing issues in user code, thus disallowing them in most classes should be standard.
 
-Deleting the delete operators isn't strictly necessary, but not doing so might imply that correct usage of it them is possible, which it generally is not.
+Deleting the delete operators isn't strictly necessary, but not doing so might imply that correct usage of them is possible, which it is not.
 
 **Example:**
 ```cpp
@@ -97,6 +97,16 @@ T* addNewResource(Args&&... args) { // Note the double ampersand.
 
 **See:**
 - https://en.cppreference.com/w/cpp/utility/forward
+
+
+## Rely on C functions and functionality when appropriate
+In general the C++ functions and functionality should clearly be preferred, though some exceptions present themselves.
+
+### Prefer `memcpy` over `std::copy` for copying data primitively
+Although `std::copy` has the benefit of type-safety and can be used in more cases it may not compile to the most performant option (`memcpy`) for primitive data.
+
+### Prefer C-style casts
+A C-style cast subsumes all but `dynamic_cast` (which is the obvious exception to this guideline) while having a more concise syntax and the added verbosity of C++-style casts is unnecessary.
 
 
 # Style
