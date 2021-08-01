@@ -23,6 +23,11 @@ class Mesh {
             TRIANGLE
         };
 
+        enum class PreserveGeometry {
+            YES,
+            NO
+        };
+
         struct Line {
             Line(int a, int b);
 
@@ -36,15 +41,16 @@ class Mesh {
         };
 
         static Mesh* create(Graphics* gfx);
+        static Mesh* create(Graphics* gfx, Material* material, const StructuredData& verts, const std::vector<Line>& lines);
+        static Mesh* create(Graphics* gfx, Material* material, const StructuredData& verts, const std::vector<Triangle>& triangles);
         Mesh* clone();
         virtual ~Mesh() = default;
 
-        void setGeometry(const StructuredData& verts, const std::vector<Line>& triangles);
+        void setGeometry(const StructuredData& verts, const std::vector<Line>& lines);
         void setGeometry(const StructuredData& verts, const std::vector<Triangle>& triangles);
         void clearGeometry();
 
-        void clearGeometryAndSetMaterial(Material* m);
-        void preserveGeometryAndSetMaterial(Material* m);
+        void setMaterial(Material* m, PreserveGeometry preserveGeometry);
 
         bool isOpaque() const;
 
@@ -55,8 +61,8 @@ class Mesh {
 
         virtual void uploadInternalData() = 0;
 
-        Material* material;
-        Graphics* graphics;
+        Material* material = nullptr;
+        Graphics* graphics = nullptr;
 
         PrimitiveType primitiveType;
         StructuredData vertices;

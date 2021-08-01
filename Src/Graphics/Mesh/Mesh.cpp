@@ -1,6 +1,19 @@
 #include <PGE/Graphics/Mesh.h>
+#include <PGE/Graphics/Shader.h>
 
 using namespace PGE;
+
+Mesh* Mesh::create(Graphics* gfx, Material* material, const StructuredData& verts, const std::vector<Line>& lines) {
+    Mesh* newMesh = create(gfx);
+    newMesh->setMaterial(material, PreserveGeometry::YES);
+    newMesh->setGeometry(verts, lines);
+}
+
+Mesh* Mesh::create(Graphics* gfx, Material* material, const StructuredData& verts, const std::vector<Triangle>& triangles) {
+    Mesh* newMesh = create(gfx);
+    newMesh->setMaterial(material, PreserveGeometry::YES);
+    newMesh->setGeometry(verts, triangles);
+}
 
 Mesh* Mesh::clone() {
     Mesh* newMesh = create(graphics);
@@ -13,7 +26,7 @@ Mesh* Mesh::clone() {
 }
 
 void Mesh::setGeometry(const StructuredData& verts, const std::vector<Line>& lines) {
-    PGE_ASSERT(material != nullptr, "Material must be set before geometry can be set");
+    PGE_ASSERT(material == nullptr || material->getShader()->getVertexLayout() == verts.getLayout(), "Material must be set before geometry can be set");
     //TODO: check shader layout
 
     vertices = verts;
@@ -28,7 +41,7 @@ void Mesh::setGeometry(const StructuredData& verts, const std::vector<Line>& lin
 }
 
 void Mesh::setGeometry(const StructuredData& verts, const std::vector<Triangle>& triangles) {
-    PGE_ASSERT(material != nullptr, "Material must be set before geometry can be set");
+    PGE_ASSERT(material == nullptr || material->getShader()->getVertexLayout() == verts.getLayout(), "Material must be set before geometry can be set");
     //TODO: check shader layout
 
     vertices = verts;
@@ -49,13 +62,15 @@ void Mesh::clearGeometry() {
     mustReuploadInternalData = true;
 }
 
-void Mesh::clearGeometryAndSetMaterial(Material* m) {
-    clearGeometry();
-    material = m;
-}
-
-void Mesh::preserveGeometryAndSetMaterial(Material* m) {
-    //TODO: check shader layout
+void Mesh::setMaterial(Material* m, PreserveGeometry preserveGeometry) {
+    if (preserveGeometry == PreserveGeometry::NO) { clearGeometry(); }
+    else {
+        PGE_ASSERT(
+            m == nullptr ||
+            vertices.getLayout().getElementSize() == 0 ||
+            m->getShader()->getVertexLayout() == vertices.getLayout(),
+            "Can't set material with mismatched vertex layout without discarding");
+    }
     material = m;
 }
 

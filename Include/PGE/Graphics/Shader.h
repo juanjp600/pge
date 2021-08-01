@@ -34,7 +34,7 @@ class Shader {
         virtual Constant* getVertexShaderConstant(const String& constName) = 0;
         virtual Constant* getFragmentShaderConstant(const String& constName) = 0;
 
-        virtual const StructuredData::ElemLayout& getElementLayout() const = 0;
+        virtual const StructuredData::ElemLayout& getVertexLayout() const = 0;
 
     protected:
         Shader() = default;

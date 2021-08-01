@@ -88,8 +88,7 @@ class ShaderOGL3 : public Shader {
 
         GraphicsOGL3* graphics;
 
-        // Inherited via Shader
-        virtual const StructuredData::ElemLayout& getElementLayout() const override;
+        virtual const StructuredData::ElemLayout& getVertexLayout() const override;
 };
 
 }

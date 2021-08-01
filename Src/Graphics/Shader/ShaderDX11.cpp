@@ -134,7 +134,7 @@ void ShaderDX11::useSamplers() {
     dxContext->PSSetSamplers(0, (UINT)dxSamplerState.size(), dxSamplerState.data());
 }
 
-const StructuredData::ElemLayout& ShaderDX11::getElementLayout() const {
+const StructuredData::ElemLayout& ShaderDX11::getVertexLayout() const {
     return vertexLayout;
 }
 
