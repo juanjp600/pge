@@ -29,7 +29,7 @@ class ShaderDX11 : public Shader {
         void useVertexInputLayout();
         void useSamplers();
 
-        const StructuredData::ElemLayout& getElementLayout() const override;
+        const StructuredData::ElemLayout& getVertexLayout() const override;
 
     private:
         D3D11InputLayout::View dxVertexInputLayout;

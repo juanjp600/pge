@@ -27,7 +27,6 @@ Mesh* Mesh::clone() {
 
 void Mesh::setGeometry(const StructuredData& verts, const std::vector<Line>& lines) {
     PGE_ASSERT(material == nullptr || material->getShader()->getVertexLayout() == verts.getLayout(), "Material must be set before geometry can be set");
-    //TODO: check shader layout
 
     vertices = verts;
     indices.resize(lines.size() * 2);
@@ -42,7 +41,6 @@ void Mesh::setGeometry(const StructuredData& verts, const std::vector<Line>& lin
 
 void Mesh::setGeometry(const StructuredData& verts, const std::vector<Triangle>& triangles) {
     PGE_ASSERT(material == nullptr || material->getShader()->getVertexLayout() == verts.getLayout(), "Material must be set before geometry can be set");
-    //TODO: check shader layout
 
     vertices = verts;
     indices.resize(triangles.size() * 3);
