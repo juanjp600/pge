@@ -16,9 +16,9 @@
 
 namespace PGE {
 
-class ShaderDX11 : public Shader, private GraphicsReferencer<class GraphicsDX11> {
+class ShaderDX11 : public Shader, private GraphicsReferencer<const class GraphicsDX11> {
     public:
-        ShaderDX11(Graphics* gfx, const FilePath& path);
+        ShaderDX11(const Graphics& gfx, const FilePath& path);
 
         Constant* getVertexShaderConstant(const String& name) override;
         Constant* getFragmentShaderConstant(const String& name) override;
@@ -58,7 +58,7 @@ class ShaderDX11 : public Shader, private GraphicsReferencer<class GraphicsDX11>
             public:
                 CBufferInfo() = delete;
                 CBufferInfo(const CBufferInfo& other) = delete;
-                CBufferInfo(GraphicsDX11* graphics, const String& nm, int sz, ResourceManager& resourceManager);
+                CBufferInfo(const GraphicsDX11& gfx, const String& nm, int sz, ResourceManager& resourceManager);
                 ~CBufferInfo();
 
                 CBufferInfo(CBufferInfo&& other) noexcept;

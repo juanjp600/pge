@@ -54,30 +54,34 @@ class GraphicsSpecialized : public GraphicsInternal {
         }
 
         Shader* loadShader(const FilePath& path) final override {
-            return new SHADER(this, path);
+            return new SHADER(*this, path);
         }
 
         Mesh* createMesh(Primitive::Type pt) final override {
-            return new MESH(this, pt);
+            return new MESH(*this, pt);
         }
 
         Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) final override {
-            return new TEXTURE(this, w, h, fmt);
+            return new TEXTURE(*this, w, h, fmt);
         }
 
         Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) final override {
-            return new TEXTURE(this, w, h, buffer, fmt, mipmaps);
+            return new TEXTURE(*this, w, h, buffer, fmt, mipmaps);
         }
 };
 
 template <typename SPEC_GFX>
 class GraphicsReferencer {
     protected:
-        GraphicsReferencer(Graphics* gfx) : graphics((SPEC_GFX*)gfx) {
+        GraphicsReferencer(Graphics& gfx) : graphics((SPEC_GFX&)gfx) {
             static_assert(std::is_base_of<Graphics, SPEC_GFX>::value);
         }
 
-        SPEC_GFX* const graphics;
+        GraphicsReferencer(const Graphics& gfx) : graphics((SPEC_GFX&)gfx) {
+            static_assert(std::is_base_of<Graphics, SPEC_GFX>::value);
+        }
+
+        SPEC_GFX& graphics;
 };
 
 }

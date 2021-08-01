@@ -2,7 +2,7 @@
 
 using namespace PGE;
 
-ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : Shader(path), GraphicsReferencer(gfx) {
+ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path), GraphicsReferencer(gfx) {
     BinaryReader reader(path + "reflection.dxri");
 
     readConstantBuffers(reader, vertexConstantBuffers);
@@ -47,7 +47,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) : Shader(path), Graph
     samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
     samplerDesc.MipLODBias = -0.1f;
 
-    ID3D11Device* dxDevice = graphics->getDxDevice();
+    ID3D11Device* dxDevice = graphics.getDxDevice();
     dxSamplerState = ResourceViewVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < (int)samplerCount; i++) {
         dxSamplerState[i] = resourceManager.addNewResource<D3D11SamplerState>(dxDevice, samplerDesc);
@@ -110,7 +110,7 @@ const std::vector<String>& ShaderDX11::getVertexInputElems() const {
 }
 
 void ShaderDX11::useShader() {
-    ID3D11DeviceContext* dxContext = graphics->getDxContext();
+    ID3D11DeviceContext* dxContext = graphics.getDxContext();
 
     for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
         vertexConstantBuffers[i].update();
@@ -127,16 +127,16 @@ void ShaderDX11::useShader() {
 }
 
 void ShaderDX11::useVertexInputLayout() {
-    ID3D11DeviceContext* dxContext = graphics->getDxContext();
+    ID3D11DeviceContext* dxContext = graphics.getDxContext();
     dxContext->IASetInputLayout(dxVertexInputLayout);
 }
 
 void ShaderDX11::useSamplers() {
-    ID3D11DeviceContext* dxContext = graphics->getDxContext();
+    ID3D11DeviceContext* dxContext = graphics.getDxContext();
     dxContext->PSSetSamplers(0, (UINT)dxSamplerState.size(), dxSamplerState.data());
 }
 
-ShaderDX11::CBufferInfo::CBufferInfo(GraphicsDX11* graphics, const String& nm, int sz, ResourceManager& resourceManager) {
+ShaderDX11::CBufferInfo::CBufferInfo(const GraphicsDX11& gfx, const String& nm, int sz, ResourceManager& resourceManager) {
     name = nm;
     size = sz;
     int cBufferSize = size;
@@ -147,18 +147,18 @@ ShaderDX11::CBufferInfo::CBufferInfo(GraphicsDX11* graphics, const String& nm, i
     D3D11_BUFFER_DESC cBufferDesc;
     D3D11_SUBRESOURCE_DATA cBufferSubresourceData;
 
-    ZeroMemory( &cBufferDesc, sizeof(D3D11_BUFFER_DESC) );
+    ZeroMemory(&cBufferDesc, sizeof(D3D11_BUFFER_DESC));
     cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
     cBufferDesc.ByteWidth = cBufferSize;
     cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     cBufferDesc.CPUAccessFlags = 0;
 
-    ZeroMemory( &cBufferSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA) );
+    ZeroMemory(&cBufferSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
     cBufferSubresourceData.pSysMem = data;
 
-    dxCBuffer = resourceManager.addNewResource<D3D11Buffer>(graphics->getDxDevice(), cBufferDesc, cBufferSubresourceData);
+    dxCBuffer = resourceManager.addNewResource<D3D11Buffer>(gfx.getDxDevice(), cBufferDesc, cBufferSubresourceData);
 
-    dxContext = graphics->getDxContext();
+    dxContext = gfx.getDxContext();
 
     dirty = true;
 }

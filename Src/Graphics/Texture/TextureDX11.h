@@ -11,12 +11,12 @@
 
 namespace PGE {
 
-class TextureDX11 : public Texture, private GraphicsReferencer<class GraphicsDX11> {
+class TextureDX11 : public Texture, private GraphicsReferencer<const class GraphicsDX11> {
     public:
         // Render target.
-        TextureDX11(Graphics* gfx, int w, int h, Format fmt);
+        TextureDX11(const Graphics& gfx, int w, int h, Format fmt);
         // Loaded texture.
-        TextureDX11(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps);
+        TextureDX11(const Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps);
 
         void useTexture(int index);
 

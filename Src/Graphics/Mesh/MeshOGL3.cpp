@@ -2,8 +2,8 @@
 
 using namespace PGE;
 
-MeshOGL3::MeshOGL3(Graphics* gfx,Primitive::Type pt) : Mesh(pt), resourceManager(gfx), GraphicsReferencer(gfx) {
-    graphics->takeGlContext();
+MeshOGL3::MeshOGL3(Graphics& gfx, Primitive::Type pt) : Mesh(pt), resourceManager(gfx), GraphicsReferencer(gfx) {
+    graphics.takeGlContext();
 
     glVertexBufferObject = resourceManager.addNewResource<GLBuffer>();
     glIndexBufferObject = resourceManager.addNewResource<GLBuffer>();
@@ -94,7 +94,7 @@ void MeshOGL3::uploadInternalData() {
 }
 
 void MeshOGL3::render() {
-    graphics->takeGlContext();
+    graphics.takeGlContext();
 
     glBindVertexArray(glVertexArrayObject);
     glBindBuffer(GL_ARRAY_BUFFER,glVertexBufferObject);
