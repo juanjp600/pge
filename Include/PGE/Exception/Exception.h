@@ -23,7 +23,7 @@ class Exception : private NoHeap {
         const String& what() const noexcept;
 
     private:
-        const String info;
+        String info;
 };
 
 }

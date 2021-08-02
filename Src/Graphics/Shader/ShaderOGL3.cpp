@@ -127,16 +127,14 @@ void ShaderOGL3::unbindGLAttribs() {
 
 Shader::Constant& ShaderOGL3::getVertexShaderConstant(const String& name) {
     auto it = vertexShaderConstants.find(name);
-    if (it != vertexShaderConstants.end()) {
-        return it->second;
-    }
+    PGE_ASSERT(it != vertexShaderConstants.end(), "Could not find vertex shader constant (\"" + name + "\")");
+    return it->second;
 }
 
 Shader::Constant& ShaderOGL3::getFragmentShaderConstant(const String& name) {
     auto it = fragmentShaderConstants.find(name);
-    if (it != fragmentShaderConstants.end()) {
-        return it->second;
-    }
+    PGE_ASSERT(it != fragmentShaderConstants.end(), "Could not find fragment shader constant (\"" + name + "\")");
+    return it->second;
 }
 
 void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::vector<ShaderVar>& varList) {
