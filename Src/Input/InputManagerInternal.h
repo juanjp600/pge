@@ -12,7 +12,7 @@ namespace PGE {
 
 class InputManagerInternal : public InputManager {
     private:
-        Graphics& graphics;
+        const Graphics& graphics;
 
         SysEvents::Subscriber* keyboardSubscriber;
         SysEvents::Subscriber* mouseSubscriber;
@@ -29,7 +29,7 @@ class InputManagerInternal : public InputManager {
         String textInput;
 
     public:
-        InputManagerInternal(Graphics& gfx);
+        InputManagerInternal(const Graphics& gfx);
         ~InputManagerInternal();
 
         void update() override;

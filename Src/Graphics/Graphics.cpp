@@ -92,7 +92,7 @@ SDL_Window* Graphics::getWindow() const noexcept {
     return sdlWindow;
 }
 
-Graphics::WindowEventSubscriber::WindowEventSubscriber(Graphics& gfx) {
+Graphics::WindowEventSubscriber::WindowEventSubscriber(const Graphics& gfx) {
     resource = new SysEventsInternal::SubscriberInternal(gfx, SysEventsInternal::SubscriberInternal::EventType::WINDOW);
     SysEventsInternal::subscribe(resource);
 }

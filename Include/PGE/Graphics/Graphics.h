@@ -119,7 +119,7 @@ class Graphics {
         // Base class always automatically takes care of SysEvents and the window.
         class WindowEventSubscriber : public Resource<SysEvents::Subscriber*> {
             public:
-                WindowEventSubscriber(Graphics& gfx);
+                WindowEventSubscriber(const Graphics& gfx);
                 ~WindowEventSubscriber();
         };
         WindowEventSubscriber::View eventSubscriber;

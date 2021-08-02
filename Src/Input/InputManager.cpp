@@ -13,11 +13,11 @@
 
 using namespace PGE;
 
-InputManager* InputManager::create(Graphics& gfx) {
+InputManager* InputManager::create(const Graphics& gfx) {
     return new InputManagerInternal(gfx);
 }
 
-InputManagerInternal::InputManagerInternal(Graphics& gfx) : graphics(gfx) {
+InputManagerInternal::InputManagerInternal(const Graphics& gfx) : graphics(gfx) {
     keyboardSubscriber = new SysEventsInternal::SubscriberInternal(graphics,SysEventsInternal::SubscriberInternal::EventType::KEYBOARD);
     mouseSubscriber = new SysEventsInternal::SubscriberInternal(graphics,SysEventsInternal::SubscriberInternal::EventType::MOUSE);
     controllerSubscriber = new SysEventsInternal::SubscriberInternal(graphics,SysEventsInternal::SubscriberInternal::EventType::CONTROLLER);
