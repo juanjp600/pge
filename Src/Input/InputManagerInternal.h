@@ -12,7 +12,7 @@ namespace PGE {
 
 class InputManagerInternal : public InputManager {
     private:
-        Graphics* graphics;
+        Graphics& graphics;
 
         SysEvents::Subscriber* keyboardSubscriber;
         SysEvents::Subscriber* mouseSubscriber;
@@ -29,7 +29,7 @@ class InputManagerInternal : public InputManager {
         String textInput;
 
     public:
-        InputManagerInternal(Graphics* gfx);
+        InputManagerInternal(Graphics& gfx);
         ~InputManagerInternal();
 
         void update() override;
@@ -57,16 +57,16 @@ class InputManagerInternal : public InputManager {
 class ControllerInternal : public Controller {
     private:
         bool removed;
-        const InputManagerInternal* io;
-        SDL_GameController* sdlController;
+        const InputManagerInternal& io;
+        SDL_GameController& sdlController;
         String name;
 
     public:
         ~ControllerInternal() override;
-        ControllerInternal(const InputManagerInternal* inIo, SDL_GameController* inSdlController);
+        ControllerInternal(const InputManagerInternal& inIo, SDL_GameController& inSdlController);
         const String& getName() const override;
         void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) override;
-        SDL_GameController* getSdlController() const;
+        SDL_GameController& getSdlController() const;
         void setName(const String& inName);
 };
 
