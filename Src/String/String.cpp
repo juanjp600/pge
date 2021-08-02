@@ -568,6 +568,8 @@ void String::reallocate(int size, bool copyOldChs) {
             chs = u.chs;
             data = &u.data;
             return;
+        } else {
+            data->cCapacity = SHORT_STR_CAPACITY;
         }
     } else {
         if (size <= data->cCapacity) {
