@@ -16,8 +16,8 @@ class ShaderOGL3 : public Shader, private GraphicsReferencer<class GraphicsOGL3>
     public:
         ShaderOGL3(Graphics& gfx, const FilePath& path);
 
-        Constant* getVertexShaderConstant(const String& name) override;
-        Constant* getFragmentShaderConstant(const String& name) override;
+        Constant& getVertexShaderConstant(const String& name) override;
+        Constant& getFragmentShaderConstant(const String& name) override;
 
         const std::vector<String>& getVertexInputElems() const;
 

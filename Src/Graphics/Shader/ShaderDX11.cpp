@@ -83,26 +83,24 @@ void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferIn
     }
 }
 
-Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
+Shader::Constant& ShaderDX11::getVertexShaderConstant(const String& name) {
     for (CBufferInfo& cBuffer : vertexConstantBuffers) {
         auto& map = cBuffer.getConstants();
         auto it = map.find(name);
         if (it != map.end()) {
-            return &it->second;
+            return it->second;
         }
     }
-    return nullptr;
 }
 
-Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
+Shader::Constant& ShaderDX11::getFragmentShaderConstant(const String& name) {
     for (CBufferInfo& cBuffer : fragmentConstantBuffers) {
         auto& map = cBuffer.getConstants();
         auto it = map.find(name);
         if (it != map.end()) {
-            return &it->second;
+            return it->second;
         }
     }
-    return nullptr;
 }
 
 const std::vector<String>& ShaderDX11::getVertexInputElems() const {

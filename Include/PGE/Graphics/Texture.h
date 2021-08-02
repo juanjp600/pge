@@ -26,9 +26,9 @@ class Texture {
         
         virtual void* getNative() const = 0;
 
-        static Texture* createRenderTarget(Graphics* gfx, int w, int h, Format fmt);
-        static Texture* createBlank(Graphics* gfx, int w, int h, Format fmt, bool mipmaps);
-        static Texture* load(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps = true);
+        static Texture* createRenderTarget(Graphics& gfx, int w, int h, Format fmt);
+        static Texture* createBlank(Graphics& gfx, int w, int h, Format fmt, bool mipmaps);
+        static Texture* load(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps = true);
         virtual ~Texture() = default;
 
     protected:
