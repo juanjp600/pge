@@ -263,6 +263,6 @@ While they should be semantically the same in practice, direct initialization av
 **Example:**
 ```cpp
 MyClass c = 42; // Bad.
-MyClass b = MyClass(42) // Better, still bad.
+MyClass b = MyClass(42); // Better, still bad.
 MyClass a(42); // Good.
 ```
