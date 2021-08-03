@@ -75,7 +75,7 @@ class FilePath {
         bool exists() const;
 
         /// Causes a path to be interpreted as a directory.
-        /// This does not actually create the directory, it simply appends a path seperator at the end if there is not one already.
+        /// This does not actually create the directory, it simply appends a path separator at the end if there is not one already.
         /// @returns The path, guaranteed to have a path seperator as a suffix.
         /// @throws #PGE::Exception If the path is not initialized.
         const FilePath makeDirectory() const;

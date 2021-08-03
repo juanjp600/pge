@@ -34,8 +34,6 @@ class ShaderDX11 : public Shader {
     private:
         D3D11InputLayout::View dxVertexInputLayout;
 
-        std::vector<String> vertexInputElems;
-
         class CBufferInfo;
         class ConstantDX11 : public Constant {
             public:
@@ -96,6 +94,7 @@ class ShaderDX11 : public Shader {
         ResourceManager resourceManager;
 
         StructuredData::ElemLayout vertexLayout;
+        int dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat);
 
         GraphicsDX11* graphics;
 };

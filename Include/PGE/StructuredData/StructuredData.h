@@ -17,6 +17,7 @@ class StructuredData {
         class ElemLayout {
             public:
                 struct Entry {
+                    Entry();
                     Entry(const String& nm, int sz);
 
                     String name;

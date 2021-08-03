@@ -239,7 +239,7 @@ static ID3DBlob* compileDX11(const FilePath& path, const String& dxEntryPoint, c
 static void compileShader(const FilePath& path) {
     String input = path.read();
 
-    FilePath compiledPath = path.trimExtension().makeDirectory();
+    FilePath compiledPath = path.getParentDirectory();
     compiledPath.createDirectory();
 
     ID3DBlob* vsBlob = compileDX11(compiledPath + "vertex.dxbc", "VS", input);

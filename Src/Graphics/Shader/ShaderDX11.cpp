@@ -3,6 +3,7 @@
 using namespace PGE;
 
 ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
+    graphics = (GraphicsDX11*)gfx;
     filepath = path;
 
     BinaryReader reader(path + "reflection.dxri");
@@ -10,16 +11,22 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     readConstantBuffers(reader, vertexConstantBuffers);
 
     u32 propertyCount = reader.readUInt32();
+
+    std::vector<StructuredData::ElemLayout::Entry> vertexInputElems;
     vertexInputElems.resize(propertyCount);
+
     // We have to keep the names in memory.
     std::vector<String> semanticNames(propertyCount);
     std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc(propertyCount);
     for (int i = 0; i < (int)propertyCount; i++) {
-        vertexInputElems[i] = reader.readNullTerminatedString();
+        String name = reader.readNullTerminatedString();
 
         semanticNames[i] = reader.readNullTerminatedString();
         byte semanticIndex = reader.readByte();
         DXGI_FORMAT format = (DXGI_FORMAT)reader.readByte();
+
+        vertexInputElems[i].name = name;
+        vertexInputElems[i].size = dxgiFormatToByteSize(format);
 
         D3D11_INPUT_ELEMENT_DESC vertexInputElemDesc;
         vertexInputElemDesc.SemanticName = semanticNames[i].cstr();
@@ -64,6 +71,8 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     dxVertexShader = resourceManager.addNewResource<D3D11VertexShader>(dxDevice, vertexShaderBytecode);
     dxFragmentShader = resourceManager.addNewResource<D3D11PixelShader>(dxDevice, fragmentShaderBytecode);
     dxVertexInputLayout = resourceManager.addNewResource<D3D11InputLayout>(dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
+
+    vertexLayout = StructuredData::ElemLayout(vertexInputElems);
 }
 
 void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferInfo>& constantBuffers) {
@@ -82,6 +91,21 @@ void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferIn
             u32 varSize = reader.readUInt32();
             constantBuffer.addConstant(varName, ConstantDX11(constantBuffer, varOffset, varSize));
         }
+    }
+}
+
+int ShaderDX11::dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat) {
+    switch (dxgiFormat) {
+        case DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT:
+            return sizeof(float);
+        case DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT:
+            return sizeof(float) * 2;
+        case DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT:
+            return sizeof(float) * 3;
+        case DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT:
+            return sizeof(float) * 4;
+        default:
+            throw PGE_CREATE_EX("Unsupported DXGI_FORMAT: " + String::fromInt(dxgiFormat));
     }
 }
 

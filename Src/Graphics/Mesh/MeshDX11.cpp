@@ -33,7 +33,7 @@ void MeshDX11::uploadInternalData() {
     if (indices.size() > 0) {
         ZeroMemory(&dxIndexBufferDesc, sizeof(D3D11_BUFFER_DESC));
         dxIndexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-        dxIndexBufferDesc.ByteWidth = sizeof(WORD)*(UINT)indices.size();
+        dxIndexBufferDesc.ByteWidth = sizeof(u32)*(UINT)indices.size();
         dxIndexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
         dxIndexBufferDesc.CPUAccessFlags = 0;
 
@@ -60,7 +60,7 @@ void MeshDX11::render() {
 
     UINT offset = 0; UINT stride = vertices.getLayout().getElementSize();
     dxContext->IASetVertexBuffers(0,1,&dxVertexBuffer,&stride,&offset);
-    dxContext->IASetIndexBuffer(dxIndexBuffer,DXGI_FORMAT_R16_UINT,0);
+    dxContext->IASetIndexBuffer(dxIndexBuffer,DXGI_FORMAT_R32_UINT,0);
 
     D3D11_PRIMITIVE_TOPOLOGY dxPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     if (primitiveType==PrimitiveType::LINE) {

@@ -1,7 +1,7 @@
 #ifndef PGE_RESOURCEMANAGER_H_INCLUDED
 #define PGE_RESOURCEMANAGER_H_INCLUDED
 
-#include <vector>
+#include <list>
 
 #include "NoHeap.h"
 #include "Resource.h"
@@ -11,7 +11,7 @@ namespace PGE {
 class ResourceBase;
 class ResourceManager : private NoHeap {
     private:
-        std::vector<ResourceBase*> resources;
+        std::list<ResourceBase*> resources;
 
     public:
         virtual ~ResourceManager();
@@ -21,7 +21,7 @@ class ResourceManager : private NoHeap {
             static_assert(std::is_base_of<ResourceBase, T>::value);
             T* res = new T(std::forward<Args>(args)...);
             resources.push_back(res);
-            std::vector<ResourceBase*>::iterator lastResourceIter = resources.end();
+            std::list<ResourceBase*>::iterator lastResourceIter = resources.end();
             lastResourceIter--;
             return ResourceView(res->get(), lastResourceIter);
         }
@@ -32,8 +32,8 @@ class ResourceManager : private NoHeap {
                 return;
             }
 
-            delete *view.getPosition();
-            resources.erase(view.getPosition());
+            delete *view.getIterator();
+            resources.erase(view.getIterator());
         }
 };
 
