@@ -3,22 +3,26 @@ This document outlines some common practices, including their rationales, that h
 
 # Semantic
 
-## Pass parameters as reference-to-const for anything but built-in primitive types
+## Utilize references-to-const in parameters and for-each loops
 This avoid unnecessary copies.
+
+Built-in primitives are trivial to copy and limited in size, therefore they should be passed by value.
+
+Even if your custom type is trivial to copy and limited in size the compiler might not optimize it in the same way as built-in primitives.
 
 **Example:**
 ```cpp
 void myFunc1(const MyClass& mc);
 void myFunc2(int i);
+// ...
+for (const MyClass& m : myClasses) { /* ... */ }
 ```
 
 
 ## Only ever return types by value as const
-This prevents assigning to temporaries.
+This prevents assigning to/modifying temporaries.
 
 Built-in primitives already behave this way and thus adding the specifier would only introduce visual clutter.
-
-**Important: Any type that is *movable*, which includes STL containers, must *never* be returned as const, as doing so would render copy elision impossible.**
 
 **Example:**
 ```cpp
@@ -251,3 +255,14 @@ class MyDerived {
 
 ## Use `auto` cautiously
 **Stub.**
+
+
+## Prefer direct over copy initialization on declaration
+While they should be semantically the same in practice, direct initialization avoids repeating the type unnecessarily and avoids possibly confusing syntax.
+
+**Example:**
+```cpp
+MyClass c = 42; // Bad.
+MyClass b = MyClass(42) // Better, still bad.
+MyClass a(42); // Good.
+```
