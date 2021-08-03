@@ -75,7 +75,8 @@ void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferIn
         String varName;
         u32 varCount = reader.readUInt32();
         for (int j = 0; j < (int)varCount; j++) {
-            varName = reader.readNullTerminatedString();
+            varName = String();
+            reader.readNullTerminatedString(varName);
             u32 varOffset = reader.readUInt32();
             u32 varSize = reader.readUInt32();
             constantBuffer.addConstant(varName, ConstantDX11(constantBuffer, varOffset, varSize));

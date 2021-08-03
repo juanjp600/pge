@@ -6,33 +6,6 @@ Vertex::Property::Value::Value() {
     vector4fVal = Vectors::ZERO4F;
 }
 
-Vertex::Property::Property(const Vertex::Property& other) {
-    type = other.type;
-    switch (type) {
-        case Type::VECTOR2F: {
-            value.vector2fVal = other.value.vector2fVal;
-        } break;
-        case Type::VECTOR3F: {
-            value.vector3fVal = other.value.vector3fVal;
-        } break;
-        case Type::VECTOR4F: {
-            value.vector4fVal = other.value.vector4fVal;
-        } break;
-        case Type::COLOR: {
-            value.colorVal = other.value.colorVal;
-        } break;
-        case Type::FLOAT: {
-            value.floatVal = other.value.floatVal;
-        } break;
-        case Type::UINT: {
-            value.uintVal = other.value.uintVal;
-        } break;
-        default: {
-            PGE_ASSERT(false, "Invalid vertex property type!");
-        }
-    }
-}
-
 const Vertex::Property& Vertex::getProperty(const String& name) const {
     return properties.find(name)->second;
 }

@@ -608,7 +608,7 @@ char* String::cstrNoConst() {
     return chs;
 }
 
-std::vector<char16> String::wstr() const {
+const std::vector<char16> String::wstr() const {
     std::vector<char16> chars;
     if (data->_strLength >= 0) {
         chars.reserve(data->_strLength);
@@ -858,7 +858,7 @@ const String String::multiply(int count, const String& separator) const {
     return ret;
 }
 
-std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
+const std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
     std::vector<String> split;
     const char* haystack = cstr();
     const char* needle = needleStr.cstr();
@@ -889,7 +889,7 @@ const String String::join(const std::vector<String>& vect, const String& separat
 
     String retVal = vect[0];
     for (int i = 1; i < (int)vect.size(); i++) {
-        retVal = retVal + separator + vect[i];
+        retVal += separator + vect[i];
     }
 
     return retVal;

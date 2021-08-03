@@ -161,7 +161,7 @@ class String : private NoHeap {
         /// 
         /// O(1)
         const char* cstr() const;
-        std::vector<char16> wstr() const;
+        const std::vector<char16> wstr() const;
         int toInt(bool& success) const;
         float toFloat(bool& success) const;
         int toInt() const;
@@ -193,7 +193,7 @@ class String : private NoHeap {
         const String trim() const;
         const String reverse() const;
         const String multiply(int count, const String& separator = "") const;
-        std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
+        const std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
         static const String join(const std::vector<String>& vect, const String& separator);
 
         const std::cmatch regexMatch(const std::regex& pattern) const;

@@ -30,7 +30,6 @@ class Vertex {
             };
 
             Property() = default;
-            Property(const Property& other);
             Type type = Type::INVALID;
             // TODO: Replace all this with set byte layout.
             union Value {

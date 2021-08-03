@@ -58,7 +58,7 @@ Texture* Texture::createRenderTarget(Graphics& gfx, int w, int h, Format fmt) {
 }
 
 Texture* Texture::createBlank(Graphics& gfx, int w, int h, Format fmt, bool mipmaps) {
-    std::vector<byte> bufferData = std::vector<byte>(w * h * 4, 0);
+    std::vector<byte> bufferData(w * h * 4, 0);
     return ((GraphicsInternal&)gfx).loadTexture(w, h, bufferData.data(), fmt, mipmaps);
 }
 

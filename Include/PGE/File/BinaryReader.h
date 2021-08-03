@@ -36,7 +36,7 @@ class BinaryReader : private AbstractIO<std::ifstream> {
         /// Reads a single byte from the file.
         byte readByte();
         /// Reads a specified amount of bytes.
-        std::vector<byte> readBytes(int count);
+        const std::vector<byte> readBytes(int count);
         /// Interprets a single byte as a boolean.
         /// @returns `false` if the read byte is `0`, `true` otherwise.
         bool readBoolean();

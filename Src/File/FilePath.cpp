@@ -146,7 +146,7 @@ bool FilePath::createDirectory() const {
     return created;
 }
 
-std::vector<FilePath> FilePath::enumerateFolders() const {
+const std::vector<FilePath> FilePath::enumerateFolders() const {
     PGE_ASSERT(valid, INVALID_STR);
     std::vector<FilePath> folders;
     for (const auto& it : std::filesystem::directory_iterator(str().cstr())) {
@@ -157,7 +157,7 @@ std::vector<FilePath> FilePath::enumerateFolders() const {
     return folders;
 }
 
-std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
+const std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
     PGE_ASSERT(valid, INVALID_STR);
     std::vector<FilePath> files;
     if (recursive) {
@@ -187,7 +187,7 @@ String FilePath::read() const {
     return ret;
 }
 
-std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
+const std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
     // TextReader checks if the path is valid.
     TextReader reader(*this);
     std::vector<String> lines;
@@ -201,7 +201,7 @@ std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
     return lines;
 }
 
-std::vector<byte> FilePath::readBytes() const {
+const std::vector<byte> FilePath::readBytes() const {
     PGE_ASSERT(valid, INVALID_STR);
     std::ifstream file(str().cstr(), std::ios::ate | std::ios::binary);
     PGE_ASSERT(file.is_open(), "Couldn't read bytes from file (file: \"" + str() + "\")");

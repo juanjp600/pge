@@ -34,7 +34,7 @@ class SwitchWriter {
                     out.write(INDENT.multiply(2) + "case " + rawToChar(sit.str) + ":");
                 }
                 out.writeLine(" {");
-                for (String toChr : chars) {
+                for (const String& toChr : chars) {
                     writeAction(out, rawToChar(toChr));
                 }
                 writeBreak(out);

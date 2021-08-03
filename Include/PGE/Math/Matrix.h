@@ -39,21 +39,21 @@ class Matrix4x4f : private NoHeap {
             float cosYaw = cos(rotation.y);
             float cosRoll = cos(rotation.z);
 
-            Matrix4x4f pitchMat = Matrix4x4f(
+            Matrix4x4f pitchMat(
                 1.f, 0.f, 0.f, 0.f,
                 0.f, cosPitch, sinPitch, 0.f,
                 0.f, -sinPitch, cosPitch, 0.f,
                 0.f, 0.f, 0.f, 1.f
             );
 
-            Matrix4x4f yawMat = Matrix4x4f(
+            Matrix4x4f yawMat(
                 cosYaw, 0.f, -sinYaw, 0.f,
                 0.f, 1.f, 0.f, 0.f,
                 sinYaw, 0.f, cosYaw, 0.f,
                 0.f, 0.f, 0.f, 1.f
             );
 
-            Matrix4x4f rollMat = Matrix4x4f(
+            Matrix4x4f rollMat(
                 cosRoll, sinRoll, 0.f, 0.f,
                 -sinRoll, cosRoll, 0.f, 0.f,
                 0.f, 0.f, 1.f, 0.f,
