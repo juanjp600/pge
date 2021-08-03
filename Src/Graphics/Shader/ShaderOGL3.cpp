@@ -7,18 +7,14 @@ ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gf
 
     filepath = path;
 
-    std::vector<byte> vertexFile = (path + "vertex.glsl").readBytes();
-    PGE_ASSERT(!vertexFile.empty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
-    vertexFile.push_back(0);
-    String vertexSource((char*)vertexFile.data());
+    String vertexSource = (path + "vertex.glsl").read();
+    PGE_ASSERT(!vertexSource.isEmpty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
     std::vector<ShaderVar> vertexUniforms;
     extractShaderVars(vertexSource, "uniform", vertexUniforms);
     glVertexShader = resourceManager.addNewResource<GLShader>(GL_VERTEX_SHADER, vertexSource);
 
-    std::vector<byte> fragmentFile = (path + "fragment.glsl").readBytes();
-    PGE_ASSERT(!fragmentFile.empty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
-    fragmentFile.push_back(0);
-    String fragmentSource((char*)fragmentFile.data());
+    String fragmentSource = (path + "fragment.glsl").read();
+    PGE_ASSERT(!fragmentSource.isEmpty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
     std::vector<ShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource, "uniform", fragmentUniforms);
     glFragmentShader = resourceManager.addNewResource<GLShader>(GL_FRAGMENT_SHADER, fragmentSource);
@@ -144,7 +140,7 @@ Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
 }
 
 void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::vector<ShaderVar>& varList) {
-    String line = "";
+    String line = String();
     String varStr = varKind + " ";
     for (char16 ch : src) {
         if (ch!='\r' && ch!='\n') {

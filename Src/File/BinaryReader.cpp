@@ -33,7 +33,7 @@ T BinaryReader::read() {
     return val;
 }
 
-std::vector<byte> BinaryReader::readBytes(int count) {
+const std::vector<byte> BinaryReader::readBytes(int count) {
     std::vector<byte> bytes(count);
     stream.read((char*)bytes.data(), count);
     PGE_ASSERT(checkEOF(), BAD_STREAM);
