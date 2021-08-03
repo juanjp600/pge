@@ -1,8 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"class_p_g_e_1_1_string.html#a9346aecd0e29796e7067f8a8eb5640c2":[1,0,0,41,11],
-"class_p_g_e_1_1_string.html#a9a3cbcf569b45b229cb7eee95322825d":[1,0,0,41,7],
-"class_p_g_e_1_1_string.html#aae0194713ce3169cd8b59acb4c577d1e":[1,0,0,41,30],
 "class_p_g_e_1_1_string.html#ab0a4c49ab9a56f5b4ceb6e37b1fbcb47":[1,0,0,41,6],
 "class_p_g_e_1_1_string.html#ab277dfc4196cdbb54dc2a4968e24ecfd":[1,0,0,41,20],
 "class_p_g_e_1_1_string.html#ab4d862f2b05bc45bfa8146e3dd48cee4":[1,0,0,41,34],
@@ -209,6 +206,11 @@ var NAVTREEINDEX3 =
 "class_p_g_e_1_1_vertex.html#a80fdcf7ceb8920887bc4cddd461d46a5":[1,0,0,10,5],
 "class_p_g_e_1_1_vertex.html#ad8bac20eb43a4380c0a08714cf44f85f":[1,0,0,10,4],
 "class_p_g_e_1_1_vertex.html#ae5d6294c9ed7a81ee68c3dc8ae93b963":[1,0,0,10,6],
+"class_polymorphic_heap.html":[1,0,1],
+"class_polymorphic_heap.html#a13e15757607591c8029b2a7baf7efa82":[1,0,1,0],
+"class_polymorphic_heap.html#a24b5497d4fa64ecf078812f6198f2605":[1,0,1,3],
+"class_polymorphic_heap.html#ac024f6a3edfbbad057cce428be5ce70d":[1,0,1,2],
+"class_polymorphic_heap.html#af9851714ac655e104853ef645bcb66ac":[1,0,1,1],
 "classes.html":[1,1],
 "functions.html":[1,3,0],
 "functions_enum.html":[1,3,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "struct_p_g_e_1_1_string_1_1_iterator.html#a2a7a3f4de64c4e9cb4634b51526d6a00":[1,0,0,41,0,15],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a2c3d6f3a8c2b6f68b1230dfd54979b4d":[1,0,0,41,0,10],
 "struct_p_g_e_1_1_string_1_1_iterator.html#a35f74aa0df1cd9abd219a3297fc6c7a2":[1,0,0,41,0,6],
-"struct_p_g_e_1_1_string_1_1_iterator.html#a391ec7e4019b4b14af6e518aff420ff1":[1,0,0,41,0,28],
-"struct_p_g_e_1_1_string_1_1_iterator.html#a42f7b29049e3ad25a566b130756c74b8":[1,0,0,41,0,3],
-"struct_p_g_e_1_1_string_1_1_iterator.html#a42fc945180ef83f234fefee54e328ce3":[1,0,0,41,0,26]
+"struct_p_g_e_1_1_string_1_1_iterator.html#a391ec7e4019b4b14af6e518aff420ff1":[1,0,0,41,0,28]
 };

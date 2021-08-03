@@ -1,6 +1,5 @@
 var class_p_g_e_1_1_mesh =
 [
-    [ "\u202A~Mesh", "class_p_g_e_1_1_mesh.html#a10f8b3406acebebf8766986498dbaf42", null ],
     [ "\u202AaddGeometry", "class_p_g_e_1_1_mesh.html#ab5993474437a4b25b93e8f32b4d742b5", null ],
     [ "\u202AclearGeometry", "class_p_g_e_1_1_mesh.html#af7e6a4ca81eb5e5115dfbcb6caa56d2e", null ],
     [ "\u202Aclone", "class_p_g_e_1_1_mesh.html#a07305f69f8decad102b4ff821706337f", null ],

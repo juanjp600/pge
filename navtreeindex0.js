@@ -114,9 +114,8 @@ var NAVTREEINDEX0 =
 "class_p_g_e_1_1_color.html#ae2f70345ec876e254db2d993b8766055":[1,0,0,0,13],
 "class_p_g_e_1_1_color.html#af2d496d5bed830234b0086df4db891b1":[1,0,0,0,7],
 "class_p_g_e_1_1_controller.html":[1,0,0,18],
-"class_p_g_e_1_1_controller.html#a05c3be71e6b572c9548d0086f184de3c":[1,0,0,18,0],
-"class_p_g_e_1_1_controller.html#a2378fd6726c2c428b17f0aa7d463f1ec":[1,0,0,18,1],
-"class_p_g_e_1_1_controller.html#a3f9a610505e1656211618f7025688c2e":[1,0,0,18,2],
+"class_p_g_e_1_1_controller.html#a2378fd6726c2c428b17f0aa7d463f1ec":[1,0,0,18,0],
+"class_p_g_e_1_1_controller.html#a3f9a610505e1656211618f7025688c2e":[1,0,0,18,1],
 "class_p_g_e_1_1_controller_input.html":[1,0,0,19],
 "class_p_g_e_1_1_controller_input.html#a0d3ba51e42ff5b93b037f09bf5f24eeb":[1,0,0,19,10],
 "class_p_g_e_1_1_controller_input.html#a1336945094a94566c479180734d58c7b":[1,0,0,19,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "class_p_g_e_1_1_input_manager.html#ab165b1ecd2f6426f6a8f756d02c3c539":[1,0,0,20,13],
 "class_p_g_e_1_1_input_manager.html#ac40f4823baa82e766d1fe88aefd9795c":[1,0,0,20,9],
 "class_p_g_e_1_1_input_manager.html#accef38f387808ba7ead4e4c0b824bbd0":[1,0,0,20,4],
-"class_p_g_e_1_1_input_manager.html#af1260c24c125b53d42633670921616d1":[1,0,0,20,12]
+"class_p_g_e_1_1_input_manager.html#af1260c24c125b53d42633670921616d1":[1,0,0,20,12],
+"class_p_g_e_1_1_keyboard_input.html":[1,0,0,16]
 };
