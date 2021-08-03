@@ -8,13 +8,12 @@
 
 namespace PGE {
 
-class Graphics;
-
-class Shader {
+class Shader : private PolymorphicHeap {
     public:
         static Shader* load(Graphics* gfx, const FilePath& path);
         virtual ~Shader() = default;
 
+        // TODO: Apply PolymorphicHeap.
         class Constant {
             public:
                 virtual void setValue(const Matrix4x4f& value) = 0;
