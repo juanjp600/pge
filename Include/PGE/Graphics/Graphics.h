@@ -2,7 +2,6 @@
 #define PGE_GRAPHICS_H_INCLUDED
 
 #include <vector>
-#include <list>
 
 #include <PGE/ResourceManagement/ResourceManager.h>
 #include <PGE/SysEvents/SysEvents.h>

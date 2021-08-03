@@ -20,7 +20,6 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc(propertyCount);
     for (int i = 0; i < (int)propertyCount; i++) {
         String name = reader.readNullTerminatedString();
-
         semanticNames[i] = reader.readNullTerminatedString();
         byte semanticIndex = reader.readByte();
         DXGI_FORMAT format = (DXGI_FORMAT)reader.readByte();
