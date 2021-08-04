@@ -23,7 +23,7 @@ var class_p_g_e_1_1_controller_input =
     ] ],
     [ "\u202AControllerInput", "class_p_g_e_1_1_controller_input.html#a2a141885aec11bf964f1a666cccf2978", null ],
     [ "\u202AgetButton", "class_p_g_e_1_1_controller_input.html#a1336945094a94566c479180734d58c7b", null ],
-    [ "\u202AgetController", "class_p_g_e_1_1_controller_input.html#a9125ad0ceef0df1ba47ad41c45778cc7", null ],
+    [ "\u202AgetController", "class_p_g_e_1_1_controller_input.html#a31ed6ecd025c7146656f56814ddd1fc9", null ],
     [ "\u202AgetDevice", "class_p_g_e_1_1_controller_input.html#ab5a6d664982440624c5ea856c8e0ce6c", null ],
     [ "\u202AgetDownThreshold", "class_p_g_e_1_1_controller_input.html#ad5fe3032f2a71d46adafce99c450e99f", null ],
     [ "\u202AgetKey", "class_p_g_e_1_1_controller_input.html#a4e29affcd551ad0ada09bf4e3222d52e", null ],

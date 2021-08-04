@@ -3,9 +3,6 @@ var hierarchy =
     [ "\u202APGE::Shader::Constant", "class_p_g_e_1_1_shader_1_1_constant.html", null ],
     [ "\u202APGE::StructuredData::ElemLayout", "class_p_g_e_1_1_structured_data_1_1_elem_layout.html", null ],
     [ "\u202APGE::StructuredData::ElemLayout::Entry", "struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_entry.html", null ],
-    [ "\u202APGE::String::Iterator", "struct_p_g_e_1_1_string_1_1_iterator.html", [
-      [ "\u202APGE::String::ReverseIterator", "struct_p_g_e_1_1_string_1_1_reverse_iterator.html", null ]
-    ] ],
     [ "\u202APGE::StructuredData::ElemLayout::LocationAndSize", "struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_location_and_size.html", null ],
     [ "\u202APGE::Material", "class_p_g_e_1_1_material.html", null ],
     [ "\u202APGE::NoHeap", "class_p_g_e_1_1_no_heap.html", [
@@ -35,6 +32,9 @@ var hierarchy =
       [ "\u202APGE::ResourceView< T >", "class_p_g_e_1_1_resource_view.html", null ],
       [ "\u202APGE::ResourceViewVector< T >", "class_p_g_e_1_1_resource_view_vector.html", null ],
       [ "\u202APGE::String", "class_p_g_e_1_1_string.html", null ],
+      [ "\u202APGE::String::Iterator", "class_p_g_e_1_1_string_1_1_iterator.html", [
+        [ "\u202APGE::String::ReverseIterator", "struct_p_g_e_1_1_string_1_1_reverse_iterator.html", null ]
+      ] ],
       [ "\u202APGE::String::Key", "struct_p_g_e_1_1_string_1_1_key.html", null ],
       [ "\u202APGE::String::OrderedKey", "struct_p_g_e_1_1_string_1_1_ordered_key.html", null ],
       [ "\u202APGE::String::RedundantKey", "struct_p_g_e_1_1_string_1_1_redundant_key.html", null ],

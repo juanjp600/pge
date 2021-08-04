@@ -1,6 +1,6 @@
 var class_p_g_e_1_1_string =
 [
-    [ "\u202AIterator", "struct_p_g_e_1_1_string_1_1_iterator.html", "struct_p_g_e_1_1_string_1_1_iterator" ],
+    [ "\u202AIterator", "class_p_g_e_1_1_string_1_1_iterator.html", "class_p_g_e_1_1_string_1_1_iterator" ],
     [ "\u202AKey", "struct_p_g_e_1_1_string_1_1_key.html", "struct_p_g_e_1_1_string_1_1_key" ],
     [ "\u202AOrderedKey", "struct_p_g_e_1_1_string_1_1_ordered_key.html", "struct_p_g_e_1_1_string_1_1_ordered_key" ],
     [ "\u202ARedundantKey", "struct_p_g_e_1_1_string_1_1_redundant_key.html", "struct_p_g_e_1_1_string_1_1_redundant_key" ],

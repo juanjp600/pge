@@ -101,6 +101,7 @@ var namespaces_dup =
       [ "\u202Ai32", "_types_8h.html#a861af31c658cddefbff4952897836798", null ],
       [ "\u202Ai64", "_types_8h.html#a25a49c989dba5ccaa20edba9136da218", null ],
       [ "\u202Ai8", "_types_8h.html#ad00b457391573f71a49b131c79996329", null ],
+      [ "\u202AReferenceVector", "_types_8h.html#a97eefe06187dffd8dea1564319ab68b0", null ],
       [ "\u202Au16", "_types_8h.html#a9973b55e4cdd7204d94830f09abd0a5f", null ],
       [ "\u202Au32", "_types_8h.html#a95f9f55cf6a292694cc1b62ca82560dd", null ],
       [ "\u202Au64", "_types_8h.html#a53f30471117a7bd82a805d0f038e4947", null ],

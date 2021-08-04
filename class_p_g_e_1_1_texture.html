@@ -139,15 +139,15 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a5ed00a7890bf202218b6e04bf5c854a7"><td class="memItemLeft" align="right" valign="top"><a id="a5ed00a7890bf202218b6e04bf5c854a7"></a>
 static int&#160;</td><td class="memItemRight" valign="bottom"><b>getBytesPerPixel</b> (Format fmt)</td></tr>
 <tr class="separator:a5ed00a7890bf202218b6e04bf5c854a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a116109c021af0d7099dabac57f9f4e41"><td class="memItemLeft" align="right" valign="top"><a id="a116109c021af0d7099dabac57f9f4e41"></a>
-static <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>createRenderTarget</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *gfx, int w, int h, Format fmt)</td></tr>
-<tr class="separator:a116109c021af0d7099dabac57f9f4e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff27b1fe4934d4ab861738b2d519c092"><td class="memItemLeft" align="right" valign="top"><a id="aff27b1fe4934d4ab861738b2d519c092"></a>
-static <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>createBlank</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *gfx, int w, int h, Format fmt, bool mipmaps)</td></tr>
-<tr class="separator:aff27b1fe4934d4ab861738b2d519c092"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3129ed4fd7cc568e05f3dd17ab6f49d9"><td class="memItemLeft" align="right" valign="top"><a id="a3129ed4fd7cc568e05f3dd17ab6f49d9"></a>
-static <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>load</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *gfx, int w, int h, const byte *buffer, Format fmt, bool mipmaps=true)</td></tr>
-<tr class="separator:a3129ed4fd7cc568e05f3dd17ab6f49d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8efa95dcc66b8f61aafb5aebfb02005b"><td class="memItemLeft" align="right" valign="top"><a id="a8efa95dcc66b8f61aafb5aebfb02005b"></a>
+static <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>createRenderTarget</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> &amp;gfx, int w, int h, Format fmt)</td></tr>
+<tr class="separator:a8efa95dcc66b8f61aafb5aebfb02005b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1206a331d0a78e37a16cd49de48b5c68"><td class="memItemLeft" align="right" valign="top"><a id="a1206a331d0a78e37a16cd49de48b5c68"></a>
+static <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>createBlank</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> &amp;gfx, int w, int h, Format fmt, bool mipmaps)</td></tr>
+<tr class="separator:a1206a331d0a78e37a16cd49de48b5c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab42cb3c122fe2dc4e01567d3d91dcb2a"><td class="memItemLeft" align="right" valign="top"><a id="ab42cb3c122fe2dc4e01567d3d91dcb2a"></a>
+static <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>load</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> &amp;gfx, int w, int h, const byte *buffer, Format fmt, bool mipmaps=true)</td></tr>
+<tr class="separator:ab42cb3c122fe2dc4e01567d3d91dcb2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -157,15 +157,15 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:aa77051fd7e6678b68ad38b5d9e9b3ae6"><td class="memItemLeft" align="right" valign="top"><a id="aa77051fd7e6678b68ad38b5d9e9b3ae6"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isRT</b></td></tr>
-<tr class="separator:aa77051fd7e6678b68ad38b5d9e9b3ae6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacf10f7ebd9945ab4b6d5c63ed19c094"><td class="memItemLeft" align="right" valign="top"><a id="aacf10f7ebd9945ab4b6d5c63ed19c094"></a>
-<a class="el" href="class_p_g_e_1_1_vector2i.html">Vector2i</a>&#160;</td><td class="memItemRight" valign="bottom"><b>dimensions</b></td></tr>
-<tr class="separator:aacf10f7ebd9945ab4b6d5c63ed19c094"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73fd2b78554d93b21efdff780dff649a"><td class="memItemLeft" align="right" valign="top"><a id="a73fd2b78554d93b21efdff780dff649a"></a>
-Format&#160;</td><td class="memItemRight" valign="bottom"><b>format</b></td></tr>
-<tr class="separator:a73fd2b78554d93b21efdff780dff649a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22258cdd246b3ef220ebbe343b9d1033"><td class="memItemLeft" align="right" valign="top"><a id="a22258cdd246b3ef220ebbe343b9d1033"></a>
+const bool&#160;</td><td class="memItemRight" valign="bottom"><b>isRT</b></td></tr>
+<tr class="separator:a22258cdd246b3ef220ebbe343b9d1033"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab802509d91c87d53f8d76ca8fb643a00"><td class="memItemLeft" align="right" valign="top"><a id="ab802509d91c87d53f8d76ca8fb643a00"></a>
+const <a class="el" href="class_p_g_e_1_1_vector2i.html">Vector2i</a>&#160;</td><td class="memItemRight" valign="bottom"><b>dimensions</b></td></tr>
+<tr class="separator:ab802509d91c87d53f8d76ca8fb643a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ef1603c730f4832cf3be447ff5ffb6d"><td class="memItemLeft" align="right" valign="top"><a id="a2ef1603c730f4832cf3be447ff5ffb6d"></a>
+const Format&#160;</td><td class="memItemRight" valign="bottom"><b>format</b></td></tr>
+<tr class="separator:a2ef1603c730f4832cf3be447ff5ffb6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -13,7 +13,7 @@ var class_p_g_e_1_1_texture =
     [ "\u202AgetNative", "class_p_g_e_1_1_texture.html#a8bebbcb05bb5c465e8feac7fecfbb571", null ],
     [ "\u202AgetWidth", "class_p_g_e_1_1_texture.html#a19589c2331c505701c9d0ed8b0827b04", null ],
     [ "\u202AisRenderTarget", "class_p_g_e_1_1_texture.html#a257d835431aea58f048530735e697fe5", null ],
-    [ "\u202Adimensions", "class_p_g_e_1_1_texture.html#aacf10f7ebd9945ab4b6d5c63ed19c094", null ],
-    [ "\u202Aformat", "class_p_g_e_1_1_texture.html#a73fd2b78554d93b21efdff780dff649a", null ],
-    [ "\u202AisRT", "class_p_g_e_1_1_texture.html#aa77051fd7e6678b68ad38b5d9e9b3ae6", null ]
+    [ "\u202Adimensions", "class_p_g_e_1_1_texture.html#ab802509d91c87d53f8d76ca8fb643a00", null ],
+    [ "\u202Aformat", "class_p_g_e_1_1_texture.html#a2ef1603c730f4832cf3be447ff5ffb6d", null ],
+    [ "\u202AisRT", "class_p_g_e_1_1_texture.html#a22258cdd246b3ef220ebbe343b9d1033", null ]
 ];
