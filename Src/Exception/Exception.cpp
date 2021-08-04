@@ -11,7 +11,7 @@ Exception::Exception() noexcept {
     info = ">>> INVALID EXCEPTION <<<";
 }
 
-Exception::Exception(const char* file, int line, const String& extra) noexcept {
+Exception::Exception(const String& file, int line, const String& extra) noexcept {
     info = file;
     info += ':';
     info += String::fromInt(line);

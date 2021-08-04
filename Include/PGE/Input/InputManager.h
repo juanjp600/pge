@@ -11,7 +11,7 @@ namespace PGE {
 // TODO: C++20 Make monomorphic.
 class InputManager : private PolymorphicHeap {
     public:
-        static InputManager* create(class Graphics* gfx);
+        static InputManager* create(const class Graphics& gfx);
         virtual ~InputManager() = default;
 
         virtual void update() = 0;

@@ -12,23 +12,21 @@
 
 namespace PGE {
 
-class GraphicsOGL3;
-
-class ShaderOGL3 : public Shader, private GraphicsReferencer<GraphicsOGL3> {
+class ShaderOGL3 : public Shader, private GraphicsReferencer<class GraphicsOGL3> {
     public:
-        ShaderOGL3(Graphics* gfx, const FilePath& path);
+        ShaderOGL3(Graphics& gfx, const FilePath& path);
 
-        Constant* getVertexShaderConstant(const String& name) override;
-        Constant* getFragmentShaderConstant(const String& name) override;
+        Constant& getVertexShaderConstant(const String& name) override;
+        Constant& getFragmentShaderConstant(const String& name) override;
 
         const std::vector<String>& getVertexInputElems() const;
 
         void useShader();
         void unbindGLAttribs();
     private:
-        class ConstantOGL3 : public Constant {
+        class ConstantOGL3 : public Constant, private GraphicsReferencer<GraphicsOGL3> {
             public:
-                ConstantOGL3(GraphicsOGL3* gfx, int loc);
+                ConstantOGL3(GraphicsOGL3& gfx, int loc);
 
                 void setValue(const Matrix4x4f& value) override;
                 void setValue(const Vector2f& value) override;
@@ -64,7 +62,6 @@ class ShaderOGL3 : public Shader, private GraphicsReferencer<GraphicsOGL3> {
                     Value();
                 } val;
 
-                GraphicsOGL3* graphics;
                 int location;
         };
 

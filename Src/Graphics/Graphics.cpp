@@ -17,7 +17,7 @@ Graphics::Graphics(const String& name, int w, int h, bool fs, u32 windowFlags) {
     dimensions = Vector2i(w, h); aspectRatio = (float)w / h;
     fullscreen = fs;
 
-    eventSubscriber = resourceManager.addNewResource<WindowEventSubscriber>(this);
+    eventSubscriber = resourceManager.addNewResource<WindowEventSubscriber>(*this);
 
     sdlWindow = resourceManager.addNewResource<SDLWindow>(name, w, h, windowFlags);
 
@@ -92,7 +92,7 @@ SDL_Window* Graphics::getWindow() const noexcept {
     return sdlWindow;
 }
 
-Graphics::WindowEventSubscriber::WindowEventSubscriber(Graphics* gfx) {
+Graphics::WindowEventSubscriber::WindowEventSubscriber(const Graphics& gfx) {
     resource = new SysEventsInternal::SubscriberInternal(gfx, SysEventsInternal::SubscriberInternal::EventType::WINDOW);
     SysEventsInternal::subscribe(resource);
 }

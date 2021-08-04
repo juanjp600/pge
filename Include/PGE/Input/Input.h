@@ -28,11 +28,11 @@ class Input : private PolymorphicHeap {
         void setReleased(bool released);
 
     protected:
-        Input();
+        Input() = default;
 
-        bool inputDown;
-        bool inputHit;
-        bool inputReleased;
+        bool inputDown = false;
+        bool inputHit = false;
+        bool inputReleased = false;
 };
 
 class KeyboardInput : public Input {
@@ -285,9 +285,9 @@ class KeyboardInput : public Input {
         int getKey() const override;
         Keycode getButton() const;
 
-        KeyboardInput(Keycode inKeyCode);
+        KeyboardInput(Keycode keyCode) : keyCode(keyCode) { }
     private:
-        Keycode keyCode;
+        const Keycode keyCode;
 };
 
 class MouseInput : public Input {
@@ -297,7 +297,7 @@ class MouseInput : public Input {
             RIGHT,
             MIDDLE,
             SIDE1,
-            SIDE2
+            SIDE2,
         };
 
         virtual Device getDevice() const;
@@ -307,13 +307,13 @@ class MouseInput : public Input {
         void setClickCount(int count);
         int getClickCount() const;
 
-        MouseInput(Button inMouseButton);
+        MouseInput(Button mouseButton) : mouseButton(mouseButton) { }
 
     private:
-        Button mouseButton;
+        const Button mouseButton;
     
-        // The amount of clicks done in rapid succession. 1 for single-clicks, 2 for double-clicks, ect.
-        int clicks;
+        // The amount of clicks done in rapid succession. 1 for single-clicks, 2 for double-clicks, etc.
+        int clicks = 0;
 };
 
 class Controller : private PolymorphicHeap {
@@ -352,7 +352,7 @@ class ControllerInput : public Input {
         const Vector2f& getStickPosition() const;
         float getPressDepth() const;
         float getDownThreshold() const;
-        Controller* getController() const;
+        const Controller* getController() const;
         void removeController();
 
         void setStickPosition(const Vector2f& pos);
@@ -362,8 +362,8 @@ class ControllerInput : public Input {
         ControllerInput(Controller* ctrlr, Button inControllerButton, float threshold = 0.5f);
 
     private:
-        Controller* controller;
-        Button controllerButton;
+        const Controller* controller;
+        const Button controllerButton;
         Vector2f stickPosition;
         float pressDepth;
         float downThreshold;

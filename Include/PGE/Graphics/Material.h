@@ -1,7 +1,7 @@
 #ifndef PGE_MATERIAL_H_INCLUDED
 #define PGE_MATERIAL_H_INCLUDED
 
-#include <vector>
+#include <PGE/Types/Types.h>
 
 namespace PGE {
 
@@ -13,18 +13,18 @@ class Texture;
 // TODO: Remove?
 class Material {
     public:
-        Material(Shader* sh, const std::vector<Texture*>& t, bool opaq = true);
-        Material(Shader* sh, Texture* t, bool opaq = true);
-        Material(Shader* sh, bool opaq = true);
+        Material(Shader& sh, const ReferenceVector<Texture>& t, bool opaq = true);
+        Material(Shader& sh, Texture& t, bool opaq = true);
+        Material(Shader& sh, bool opaq = true);
 
-        Shader* getShader() const;
-        Texture* getTexture(int index) const;
+        Shader& getShader() const;
+        Texture& getTexture(int index) const;
         int getTextureCount() const;
         bool isOpaque() const;
 
     private:
-        Shader* shader; std::vector<Texture*> textures;
-        bool opaque;
+        Shader& shader; const ReferenceVector<Texture> textures;
+        const bool opaque;
 };
 
 }

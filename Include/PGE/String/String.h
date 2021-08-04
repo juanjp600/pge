@@ -25,41 +25,42 @@ class String : private NoHeap {
         struct SafeKey;
         struct OrderedKey;
 
-        struct Iterator {
+        class Iterator : NoHeap {
             using iterator_category = std::bidirectional_iterator_tag;
             using difference_type = int;
             using value_type = char16;
             using pointer = value_type*;
             using reference = value_type&;
 
-            static const Iterator begin(const String& str);
-            static const Iterator end(const String& str);
+            public:
+                static const Iterator begin(const String& str);
+                static const Iterator end(const String& str);
 
-            Iterator();
+                Iterator();
 
-            Iterator& operator++();
-            Iterator& operator--();
-            const Iterator operator++(int);
-            const Iterator operator--(int);
+                Iterator& operator++();
+                Iterator& operator--();
+                const Iterator operator++(int);
+                const Iterator operator--(int);
 
-            const Iterator operator+(int steps) const;
-            const Iterator operator-(int steps) const;
-            Iterator& operator+=(int steps);
-            Iterator& operator-=(int steps);
+                const Iterator operator+(int steps) const;
+                const Iterator operator-(int steps) const;
+                Iterator& operator+=(int steps);
+                Iterator& operator-=(int steps);
 
-            int operator-(const Iterator& other) const;
+                int operator-(const Iterator& other) const;
 
-            char16 operator*() const;
+                char16 operator*() const;
 
-            bool operator>(const Iterator& other) const;
-            bool operator<(const Iterator& other) const;
-            bool operator>=(const Iterator& other) const;
-            bool operator<=(const Iterator& other) const;
-            bool operator==(const Iterator& other) const;
-            bool operator!=(const Iterator& other) const;
+                bool operator>(const Iterator& other) const;
+                bool operator<(const Iterator& other) const;
+                bool operator>=(const Iterator& other) const;
+                bool operator<=(const Iterator& other) const;
+                bool operator==(const Iterator& other) const;
+                bool operator!=(const Iterator& other) const;
 
-            int getBytePosition() const;
-            int getPosition() const;
+                int getBytePosition() const;
+                int getPosition() const;
 
             protected:
                 Iterator(const String& str, int byteIndex, int chIndex);

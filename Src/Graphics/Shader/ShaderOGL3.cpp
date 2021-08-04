@@ -2,10 +2,8 @@
 
 using namespace PGE;
 
-ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gfx), GraphicsReferencer(gfx) {
-    graphics->takeGlContext();
-
-    filepath = path;
+ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), resourceManager(gfx), GraphicsReferencer(gfx) {
+    graphics.takeGlContext();
 
     String vertexSource = (path + "vertex.glsl").read();
     PGE_ASSERT(!vertexSource.isEmpty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
@@ -81,7 +79,7 @@ const std::vector<String>& ShaderOGL3::getVertexInputElems() const {
 void ShaderOGL3::useShader() {
     GLuint glError = GL_NO_ERROR;
 
-    graphics->takeGlContext();
+    graphics.takeGlContext();
 
     glUseProgram(glShaderProgram);
 
@@ -116,27 +114,23 @@ void ShaderOGL3::useShader() {
 }
 
 void ShaderOGL3::unbindGLAttribs() {
-    graphics->takeGlContext();
+    graphics.takeGlContext();
 
     for (int i = 0; i < (int)vertexAttribs.size(); i++) {
         glDisableVertexAttribArray(vertexAttribs[i].location);
     }
 }
 
-Shader::Constant* ShaderOGL3::getVertexShaderConstant(const String& name) {
+Shader::Constant& ShaderOGL3::getVertexShaderConstant(const String& name) {
     auto it = vertexShaderConstants.find(name);
-    if (it != vertexShaderConstants.end()) {
-        return &it->second;
-    }
-    return nullptr;
+    PGE_ASSERT(it != vertexShaderConstants.end(), "Could not find vertex shader constant (\"" + name + "\")");
+    return it->second;
 }
 
-Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
+Shader::Constant& ShaderOGL3::getFragmentShaderConstant(const String& name) {
     auto it = fragmentShaderConstants.find(name);
-    if (it != fragmentShaderConstants.end()) {
-        return &it->second;
-    }
-    return nullptr;
+    PGE_ASSERT(it != fragmentShaderConstants.end(), "Could not find fragment shader constant (\"" + name + "\")");
+    return it->second;
 }
 
 void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::vector<ShaderVar>& varList) {
@@ -182,8 +176,8 @@ ShaderOGL3::ConstantOGL3::Value::Value() {
     matrixVal = Matrices::ZERO;
 }
 
-ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3* gfx, int loc) {
-    graphics = gfx;
+ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3& gfx, int loc)
+    : GraphicsReferencer(gfx) {
     location = loc;
 }
 
@@ -218,7 +212,7 @@ void ShaderOGL3::ConstantOGL3::setValue(int value) {
 void ShaderOGL3::ConstantOGL3::setUniform() {
     GLuint glError = GL_NO_ERROR;
 
-    graphics->takeGlContext();
+    graphics.takeGlContext();
     switch (valueType) {
         case ValueType::MATRIX: {
             glUniformMatrix4fv(location, 1, GL_FALSE, val.matrixVal[0]);

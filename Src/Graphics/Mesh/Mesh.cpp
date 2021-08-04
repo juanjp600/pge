@@ -54,7 +54,9 @@ Primitive::Primitive(long ia,long ib,long ic) {
     a = ia; b = ib; c = ic;
 }
 
-Mesh* Mesh::clone(Graphics* gfx) {
+Mesh::Mesh(Primitive::Type primitiveType) : primitiveType(primitiveType) { }
+
+Mesh* Mesh::clone(Graphics& gfx) {
     Mesh* newMesh = create(gfx, primitiveType);
     newMesh->setGeometry(vertices, primitives);
     newMesh->setMaterial(material);
@@ -78,17 +80,22 @@ void Mesh::clearGeometry() {
     vertices.clear(); primitives.clear();
 }
 
-void Mesh::setMaterial(Material* m) {
-    mustUpdateInternalData = true; mustReuploadInternalData = true;
-    material = m;
-}
-
 const std::vector<Vertex>& Mesh::getVertices() const {
     return vertices;
 }
 
 const std::vector<Primitive>& Mesh::getPrimitives() const {
     return primitives;
+}
+
+void Mesh::setMaterial(Material* m) {
+    mustUpdateInternalData = true; mustReuploadInternalData = true;
+    material = m;
+}
+
+
+Material* Mesh::getMaterial() const {
+    return material;
 }
 
 bool Mesh::isOpaque() const {

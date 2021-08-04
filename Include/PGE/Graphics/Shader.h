@@ -5,12 +5,13 @@
 #include <PGE/Math/Matrix.h>
 #include <PGE/Math/Vector.h>
 #include <PGE/Color/Color.h>
+#include <PGE/ResourceManagement/PolymorphicHeap.h>
 
 namespace PGE {
 
 class Shader : private PolymorphicHeap {
     public:
-        static Shader* load(Graphics* gfx, const FilePath& path);
+        static Shader* load(class Graphics& gfx, const FilePath& path);
         virtual ~Shader() = default;
 
         // TODO: Apply PolymorphicHeap.
@@ -28,13 +29,13 @@ class Shader : private PolymorphicHeap {
                 Constant() = default;
                 virtual ~Constant() = default;
         };
-        virtual Constant* getVertexShaderConstant(const String& constName) = 0;
-        virtual Constant* getFragmentShaderConstant(const String& constName) = 0;
+        virtual Constant& getVertexShaderConstant(const String& constName) = 0;
+        virtual Constant& getFragmentShaderConstant(const String& constName) = 0;
 
     protected:
-        Shader() = default;
+        Shader(const FilePath& path) : filepath(path) { }
 
-        FilePath filepath;
+        const FilePath filepath;
 };
 
 }
