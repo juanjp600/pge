@@ -5,6 +5,7 @@
 #include <PGE/Math/Matrix.h>
 #include <PGE/Math/Vector.h>
 #include <PGE/Color/Color.h>
+#include <PGE/ResourceManagement/PolymorphicHeap.h>
 
 namespace PGE {
 
