@@ -4,15 +4,12 @@
 #include <type_traits>
 
 #include "ResourceView.h"
+#include "PolymorphicHeap.h"
 
 namespace PGE {
 
-class ResourceBase {
-    public:
-        virtual ~ResourceBase() = default;
-};
+class ResourceBase : private PolymorphicHeap { };
 
-// Only inherit publicly and use the designated macro.
 template <typename T>
 class Resource : public ResourceBase {
     protected:

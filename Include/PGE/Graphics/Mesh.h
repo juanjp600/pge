@@ -9,12 +9,13 @@
 #include <PGE/Math/Vector.h>
 #include <PGE/Math/Matrix.h>
 #include <PGE/Graphics/Material.h>
+#include <PGE/ResourceManagement/PolymorphicHeap.h>
 
 namespace PGE {
 
 class Graphics;
 
-class Vertex {
+class Vertex : private NoHeap {
     public:
         Vertex() = default;
 
@@ -58,7 +59,7 @@ class Vertex {
         std::unordered_map<String::Key, Property> properties;
 };
 
-class Primitive {
+class Primitive : private NoHeap {
     public:
         enum class Type {
             TRIANGLE,
@@ -72,11 +73,10 @@ class Primitive {
         long a; long b; long c;
 };
 
-class Mesh {
+class Mesh : private PolymorphicHeap {
     public:
         static Mesh* create(Graphics& gfx, Primitive::Type pt);
         Mesh* clone(Graphics& gfx);
-        virtual ~Mesh() = default;
 
         void setGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims);
         // TODO: Possibly delegate this to the implementations.

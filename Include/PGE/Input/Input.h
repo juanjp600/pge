@@ -3,10 +3,11 @@
 
 #include <PGE/Math/Vector.h>
 #include <PGE/String/String.h>
+#include <PGE/ResourceManagement/PolymorphicHeap.h>
 
 namespace PGE {
 
-class Input {
+class Input : private PolymorphicHeap {
     public:
         enum class Device {
             KEYBOARD,
@@ -315,9 +316,8 @@ class MouseInput : public Input {
         int clicks = 0;
 };
 
-class Controller {
+class Controller : private PolymorphicHeap {
     public:
-        virtual ~Controller() = default;
         virtual const String& getName() const = 0;
         virtual void rumble(float lowFreqIntensity, float highFreqIntensity, int durationMs) = 0;
 };

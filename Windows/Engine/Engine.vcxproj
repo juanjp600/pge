@@ -78,6 +78,7 @@
     <ClInclude Include="..\..\Include\PGE\Math\Random.h" />
     <ClInclude Include="..\..\Include\PGE\Math\Rectangle.h" />
     <ClInclude Include="..\..\Include\PGE\Math\Vector.h" />
+    <ClInclude Include="..\..\Include\PGE\ResourceManagement\PolymorphicHeap.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\NoHeap.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\RawWrapper.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\Resource.h" />

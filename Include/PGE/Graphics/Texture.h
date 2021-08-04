@@ -3,12 +3,13 @@
 
 #include <PGE/Math/Vector.h>
 #include <PGE/File/FilePath.h>
+#include <PGE/ResourceManagement/PolymorphicHeap.h>
 
 namespace PGE {
 
 class Graphics;
 
-class Texture {
+class Texture : private PolymorphicHeap {
     public:
         enum class Format {
             RGBA32,

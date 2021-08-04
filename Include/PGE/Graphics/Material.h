@@ -10,6 +10,7 @@ class Texture;
 
 /// Can be applied to a mesh and simply consists of a #PGE::Shader and optional #PGE::Texture (s).
 /// If a material is not opaque z-buffering will never be applied to the rendered mesh.
+// TODO: Remove?
 class Material {
     public:
         Material(Shader& sh, const ReferenceVector<Texture>& t, bool opaq = true);

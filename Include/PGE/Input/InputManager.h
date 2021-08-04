@@ -8,7 +8,8 @@
 
 namespace PGE {
 
-class InputManager {
+// TODO: C++20 Make monomorphic.
+class InputManager : private PolymorphicHeap {
     public:
         static InputManager* create(const class Graphics& gfx);
         virtual ~InputManager() = default;

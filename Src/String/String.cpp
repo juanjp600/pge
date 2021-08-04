@@ -556,6 +556,8 @@ void String::reallocate(int size, bool copyOldChs) {
     // Accounting for the terminating byte.
     size++;
 
+    int targetCapacity = data->cCapacity;
+
     // Initialized with String literal.
     if (data->cCapacity == 0) {
         if (size <= SHORT_STR_CAPACITY) {
@@ -568,6 +570,8 @@ void String::reallocate(int size, bool copyOldChs) {
             chs = u.chs;
             data = &u.data;
             return;
+        } else {
+            targetCapacity = SHORT_STR_CAPACITY;
         }
     } else {
         if (size <= data->cCapacity) {
@@ -583,7 +587,6 @@ void String::reallocate(int size, bool copyOldChs) {
         }
     }
 
-    int targetCapacity = data->cCapacity;
     while (targetCapacity < size) { targetCapacity <<= 1; }
 
     std::unique_ptr<char[]> newChs = std::make_unique<char[]>(targetCapacity);
