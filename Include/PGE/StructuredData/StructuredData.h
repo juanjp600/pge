@@ -47,7 +47,7 @@ class StructuredData {
         StructuredData() = default;
         StructuredData(const ElemLayout& ly, int elemCount);
 
-        const std::vector<byte>& getData() const;
+        const byte* getData() const;
         const ElemLayout& getLayout() const;
 
         template <typename T>
@@ -65,7 +65,8 @@ class StructuredData {
         int getDataIndex(int elemIndex, const String::Key& entry, int expectedSize) const;
 
         ElemLayout layout;
-        std::vector<byte> data;
+        std::unique_ptr<byte[]> data;
+        size_t size;
 };
 
 }
