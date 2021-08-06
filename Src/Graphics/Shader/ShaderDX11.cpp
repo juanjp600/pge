@@ -91,16 +91,13 @@ void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferIn
 
 int ShaderDX11::dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat) {
     switch (dxgiFormat) {
-        case DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT:
-            return sizeof(float);
-        case DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT:
-            return sizeof(float) * 2;
-        case DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT:
-            return sizeof(float) * 3;
-        case DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT:
-            return sizeof(float) * 4;
-        default:
+        case DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT: { return sizeof(float); }
+        case DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT: { return sizeof(float) * 2; }
+        case DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT: { return sizeof(float) * 3; }
+        case DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT: { return sizeof(float) * 4; }
+        default: {
             throw PGE_CREATE_EX("Unsupported DXGI_FORMAT: " + String::fromInt(dxgiFormat));
+        }
     }
 }
 
