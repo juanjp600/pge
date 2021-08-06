@@ -27,8 +27,6 @@ class ShaderDX11 : public Shader, private GraphicsReferencer<const class Graphic
         void useVertexInputLayout();
         void useSamplers();
 
-        const StructuredData::ElemLayout& getVertexLayout() const override;
-
     private:
         D3D11InputLayout::View dxVertexInputLayout;
 
@@ -91,7 +89,6 @@ class ShaderDX11 : public Shader, private GraphicsReferencer<const class Graphic
 
         ResourceManager resourceManager;
 
-        StructuredData::ElemLayout vertexLayout;
         int dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat);
 };
 

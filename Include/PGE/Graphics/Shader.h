@@ -15,6 +15,8 @@ class Shader : private PolymorphicHeap {
         static Shader* load(class Graphics& gfx, const FilePath& path);
         virtual ~Shader() = default;
 
+        const StructuredData::ElemLayout& getVertexLayout() { return *vertexLayout; }
+
         // TODO: Apply PolymorphicHeap.
         class Constant {
             public:
@@ -33,11 +35,10 @@ class Shader : private PolymorphicHeap {
         virtual Constant& getVertexShaderConstant(const String& constName) = 0;
         virtual Constant& getFragmentShaderConstant(const String& constName) = 0;
 
-        virtual const StructuredData::ElemLayout& getVertexLayout() const = 0;
-
     protected:
         Shader(const FilePath& path) : filepath(path) { }
 
+        std::unique_ptr<StructuredData::ElemLayout> vertexLayout;
         const FilePath filepath;
 };
 

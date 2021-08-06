@@ -13,8 +13,10 @@ Mesh* Mesh::clone(Graphics& gfx) {
     return newMesh;
 }
 
+#define PGE_ASSERT_MATERIAL_LAYOUT() PGE_ASSERT(material == nullptr || material->getShader().getVertexLayout() == *verts.getLayout(), "Material must be set before geometry can be set")
+
 void Mesh::setGeometry(const StructuredData& verts, const std::vector<Line>& lines) {
-    PGE_ASSERT(material == nullptr || material->getShader().getVertexLayout() == verts.getLayout(), "Material must be set before geometry can be set");
+    PGE_ASSERT_MATERIAL_LAYOUT();
 
     vertices = verts;
     indices.resize(lines.size() * 2);
@@ -28,7 +30,7 @@ void Mesh::setGeometry(const StructuredData& verts, const std::vector<Line>& lin
 }
 
 void Mesh::setGeometry(const StructuredData& verts, const std::vector<Triangle>& triangles) {
-    PGE_ASSERT(material == nullptr || material->getShader().getVertexLayout() == verts.getLayout(), "Material must be set before geometry can be set");
+    PGE_ASSERT_MATERIAL_LAYOUT();
 
     vertices = verts;
     indices.resize(triangles.size() * 3);
@@ -43,7 +45,7 @@ void Mesh::setGeometry(const StructuredData& verts, const std::vector<Triangle>&
 }
 
 void Mesh::setGeometry(const StructuredData& verts, PrimitiveType type, std::vector<u32>&& inds) {
-    PGE_ASSERT(material == nullptr || material->getShader().getVertexLayout() == verts.getLayout(), "Material must be set before geometry can be set");
+    PGE_ASSERT_MATERIAL_LAYOUT();
     PGE_ASSERT(type == PrimitiveType::LINE && inds.size() % 2 == 0 || type == PrimitiveType::TRIANGLE && inds.size() % 3 == 0,
             "Invalid primitive type or inadequate indices count");
 
@@ -64,8 +66,8 @@ void Mesh::setMaterial(Material* m, PreserveGeometry preserveGeometry) {
     else {
         PGE_ASSERT(
             m == nullptr ||
-            vertices.getLayout().getElementSize() == 0 ||
-            m->getShader().getVertexLayout() == vertices.getLayout(),
+            vertices.getLayout() == nullptr ||
+            m->getShader().getVertexLayout() == *vertices.getLayout(),
             "Can't set material with mismatched vertex layout without discarding"
         );
     }

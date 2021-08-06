@@ -7,6 +7,7 @@
 #include <PGE/Math/Vector.h>
 #include <PGE/Math/Matrix.h>
 #include <PGE/Color/Color.h>
+#include <PGE/ResourceManagement/PolymorphicHeap.h>
 
 #include <unordered_map>
 
@@ -14,9 +15,9 @@ namespace PGE {
 
 class StructuredData {
     public:
-        class ElemLayout {
+        class ElemLayout : private PolymorphicHeap {
             public:
-                struct Entry {
+                struct Entry : private NoHeap {
                     Entry();
                     Entry(const String& nm, int sz);
 
@@ -24,14 +25,13 @@ class StructuredData {
                     int size;
                 };
 
-                struct LocationAndSize {
+                struct LocationAndSize : private NoHeap {
                     LocationAndSize(int loc, int sz);
 
                     int location;
                     int size;
                 };
 
-                ElemLayout();
                 ElemLayout(const std::vector<Entry>& entrs);
 
                 const LocationAndSize& getLocationAndSize(const String& name) const;
@@ -52,7 +52,7 @@ class StructuredData {
 
         const byte* getData() const;
         size_t getDataSize() const;
-        const ElemLayout& getLayout() const;
+        const ElemLayout* getLayout() const;
 
         template <typename T>
         void setValue(int elemIndex, const String& entryName, const T& value) {
@@ -65,10 +65,11 @@ class StructuredData {
         void setValue(int elemIndex, const String::Key& entry, const Vector4f& v4f);
         void setValue(int elemIndex, const String::Key& entry, const Matrix4x4f& m);
         void setValue(int elemIndex, const String::Key& entry, const Color& c);
+
     private:
         int getDataIndex(int elemIndex, const String::Key& entry, int expectedSize) const;
 
-        ElemLayout layout;
+        const ElemLayout* layout = nullptr;
         std::unique_ptr<byte[]> data;
         size_t size;
 };

@@ -59,7 +59,7 @@ void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
                 attrElemCount));
     }
 
-    vertexLayout = StructuredData::ElemLayout(layoutEntries);
+    vertexLayout = std::make_unique<StructuredData::ElemLayout>(layoutEntries);
 }
 
 void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
@@ -134,10 +134,6 @@ void ShaderOGL3::extractShaderVars(const String& src, const String& varKind, std
             line = "";
         }
     }
-}
-
-const StructuredData::ElemLayout& PGE::ShaderOGL3::getVertexLayout() const {
-    return vertexLayout;
 }
 
 int ShaderOGL3::glSizeToByteSize(GLenum type, int size) const {
@@ -220,10 +216,10 @@ void ShaderOGL3::useShader() {
     for (const auto& kvp : glVertexAttribLocations) {
         const String::Key& key = kvp.first;
         const GlAttribLocation& glAttribLocation = kvp.second;
-        const StructuredData::ElemLayout::LocationAndSize& locationAndSizeInBuffer = vertexLayout.getLocationAndSize(key);
+        const StructuredData::ElemLayout::LocationAndSize& locationAndSizeInBuffer = vertexLayout->getLocationAndSize(key);
 
         glEnableVertexAttribArray(glAttribLocation.location);
-        glVertexAttribPointer(glAttribLocation.location, glAttribLocation.elementCount, glAttribLocation.elementType, GL_FALSE, vertexLayout.getElementSize(), ptr + locationAndSizeInBuffer.location);
+        glVertexAttribPointer(glAttribLocation.location, glAttribLocation.elementCount, glAttribLocation.elementType, GL_FALSE, vertexLayout->getElementSize(), ptr + locationAndSizeInBuffer.location);
         glError = glGetError();
         PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + String::format(key.hash, "%Xll") + ")");
     }
@@ -301,7 +297,7 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
     GLuint glError = GL_NO_ERROR;
 
     graphics.takeGlContext();
-    const void* dataPtr = dataBuffer.getData() + dataBuffer.getLayout().getLocationAndSize(dataKey).location;
+    const void* dataPtr = dataBuffer.getData() + dataBuffer.getLayout()->getLocationAndSize(dataKey).location;
     const GLfloat* dataPtrF = (GLfloat*)dataPtr;
     const GLint* dataPtrI = (GLint*)dataPtr;
     const GLuint* dataPtrU = (GLuint*)dataPtr;

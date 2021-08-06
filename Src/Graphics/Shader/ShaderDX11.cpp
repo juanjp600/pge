@@ -67,7 +67,7 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
     dxFragmentShader = resourceManager.addNewResource<D3D11PixelShader>(dxDevice, fragmentShaderBytecode);
     dxVertexInputLayout = resourceManager.addNewResource<D3D11InputLayout>(dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
 
-    vertexLayout = StructuredData::ElemLayout(vertexInputElems);
+    vertexLayout = std::make_unique<StructuredData::ElemLayout>(vertexInputElems);
 }
 
 void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferInfo>& constantBuffers) {
@@ -152,10 +152,6 @@ void ShaderDX11::useVertexInputLayout() {
 void ShaderDX11::useSamplers() {
     ID3D11DeviceContext* dxContext = graphics.getDxContext();
     dxContext->PSSetSamplers(0, (UINT)dxSamplerState.size(), dxSamplerState.data());
-}
-
-const StructuredData::ElemLayout& ShaderDX11::getVertexLayout() const {
-    return vertexLayout;
 }
 
 ShaderDX11::CBufferInfo::CBufferInfo(const GraphicsDX11& gfx, const String& nm, int sz, ResourceManager& resourceManager) {

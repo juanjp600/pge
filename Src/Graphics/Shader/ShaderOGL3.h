@@ -57,7 +57,6 @@ class ShaderOGL3 : public Shader, private GraphicsReferencer<class GraphicsOGL3>
         };
 
         std::unordered_map<String::Key, GlAttribLocation> glVertexAttribLocations;
-        StructuredData::ElemLayout vertexLayout;
 
         StructuredData vertexUniformData;
         StructuredData fragmentUniformData;
@@ -82,8 +81,6 @@ class ShaderOGL3 : public Shader, private GraphicsReferencer<class GraphicsOGL3>
         GLProgram::View glShaderProgram;
 
         ResourceManagerOGL3 resourceManager;
-
-        virtual const StructuredData::ElemLayout& getVertexLayout() const override;
 };
 
 }

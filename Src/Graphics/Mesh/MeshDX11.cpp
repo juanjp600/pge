@@ -51,7 +51,7 @@ void MeshDX11::render() {
 
     ((ShaderDX11&)material->getShader()).useVertexInputLayout();
 
-    UINT offset = 0; UINT stride = vertices.getLayout().getElementSize();
+    UINT offset = 0; UINT stride = vertices.getLayout()->getElementSize();
     dxContext->IASetVertexBuffers(0,1,&dxVertexBuffer,&stride,&offset);
     dxContext->IASetIndexBuffer(dxIndexBuffer,DXGI_FORMAT_R32_UINT,0);
 
