@@ -113,6 +113,7 @@ Shader::Constant& ShaderDX11::getVertexShaderConstant(const String& name) {
             return it->second;
         }
     }
+    throw PGE_CREATE_EX("Could not find vertex shader constant");
 }
 
 Shader::Constant& ShaderDX11::getFragmentShaderConstant(const String& name) {
@@ -123,6 +124,7 @@ Shader::Constant& ShaderDX11::getFragmentShaderConstant(const String& name) {
             return it->second;
         }
     }
+    throw PGE_CREATE_EX("Could not find fragment shader constant");
 }
 
 void ShaderDX11::useShader() {
