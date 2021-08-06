@@ -2,8 +2,6 @@
 
 using namespace PGE;
 
-StructuredData::ElemLayout::Entry::Entry() { name = ""; size = 0; }
-
 StructuredData::ElemLayout::Entry::Entry(const String& nm, int sz) {
     name = nm; size = sz;
 }

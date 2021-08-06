@@ -9,7 +9,7 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 
     std::vector<StructuredData::ElemLayout::Entry> vertexInputElems;
     u32 propertyCount = reader.read<u32>();
-    vertexInputElems.resize(propertyCount);
+    vertexInputElems.reserve(propertyCount);
 
     // We have to keep the names in memory.
     std::vector<String> semanticNames(propertyCount);
@@ -20,8 +20,7 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
         byte semanticIndex = reader.read<byte>();
         DXGI_FORMAT format = (DXGI_FORMAT)reader.read<byte>();
 
-        vertexInputElems[i].name = name;
-        vertexInputElems[i].size = dxgiFormatToByteSize(format);
+        vertexInputElems.emplace_back(name, dxgiFormatToByteSize(format));
 
         D3D11_INPUT_ELEMENT_DESC vertexInputElemDesc;
         vertexInputElemDesc.SemanticName = semanticNames[i].cstr();

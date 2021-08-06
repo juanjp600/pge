@@ -18,7 +18,6 @@ class StructuredData {
         class ElemLayout : private PolymorphicHeap {
             public:
                 struct Entry : private NoHeap {
-                    Entry();
                     Entry(const String& nm, int sz);
 
                     String name;
