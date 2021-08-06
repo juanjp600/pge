@@ -7,17 +7,17 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 
     readConstantBuffers(reader, vertexConstantBuffers);
 
-    u32 propertyCount = reader.readUInt32();
+    u32 propertyCount = reader.read<u32>();
     vertexInputElems.resize(propertyCount);
     // We have to keep the names in memory.
     std::vector<String> semanticNames(propertyCount);
     std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc(propertyCount);
     for (int i = 0; i < (int)propertyCount; i++) {
-        vertexInputElems[i] = reader.readNullTerminatedString();
+        vertexInputElems[i] = reader.read<String>();
 
-        semanticNames[i] = reader.readNullTerminatedString();
-        byte semanticIndex = reader.readByte();
-        DXGI_FORMAT format = (DXGI_FORMAT)reader.readByte();
+        semanticNames[i] = reader.read<String>();
+        byte semanticIndex = reader.read<byte>();
+        DXGI_FORMAT format = (DXGI_FORMAT)reader.read<byte>();
 
         D3D11_INPUT_ELEMENT_DESC vertexInputElemDesc;
         vertexInputElemDesc.SemanticName = semanticNames[i].cstr();
@@ -33,7 +33,7 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 
     readConstantBuffers(reader, fragmentConstantBuffers);
 
-    u32 samplerCount = reader.readUInt32();
+    u32 samplerCount = reader.read<u32>();
 
     D3D11_SAMPLER_DESC samplerDesc;
     ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
@@ -65,20 +65,20 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 }
 
 void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferInfo>& constantBuffers) {
-    u32 cBufferCount = reader.readUInt32();
+    u32 cBufferCount = reader.read<u32>();
 
     for (int i = 0; i < (int)cBufferCount; i++) {
-        String bufferName = reader.readNullTerminatedString();
-        u32 cBufferSize = reader.readUInt32();
+        String bufferName = reader.read<String>();
+        u32 cBufferSize = reader.read<u32>();
         CBufferInfo& constantBuffer = constantBuffers.emplace_back(graphics, bufferName, cBufferSize, resourceManager);
 
         String varName;
-        u32 varCount = reader.readUInt32();
+        u32 varCount = reader.read<u32>();
         for (int j = 0; j < (int)varCount; j++) {
             varName = String();
-            reader.readNullTerminatedString(varName);
-            u32 varOffset = reader.readUInt32();
-            u32 varSize = reader.readUInt32();
+            reader.readStringInto(varName);
+            u32 varOffset = reader.read<u32>();
+            u32 varSize = reader.read<u32>();
             constantBuffer.addConstant(varName, ConstantDX11(constantBuffer, varOffset, varSize));
         }
     }

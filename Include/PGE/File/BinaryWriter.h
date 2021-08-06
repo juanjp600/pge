@@ -8,15 +8,30 @@ namespace PGE {
 
 // TODO: Add more types to this and reader?
 /// Utility to write binary data to a file.
-/// After any call raises an exception the stream will be closed, any further operations will raise an exception again.
 /// 
-/// @throws #PGE::Exception Any write operation can raise an exception if writing failed or the writer is in an invalid state.
+/// In order to expand the capabilities of BinaryWriter the generic write method can be partially specialized
+/// with the type(s) you wish to support. It's recommended to closely adhere to the specification and do things
+/// as they're done in the library. You have access to a `stream` member, to which all your data is to be written. After
+/// writing has concluded it is recommended to call the protected `validate` method in order to do proper error handling.
+/// Specializations for other types can utilize preexisting specializations (e.g. a Vector2f is written by calling `write<float>` twice).\n
+/// It is recommended to also provide a specialization for reading, if one is provided for writing.\n
+/// Variation of functionality of existing types can be achieved by providing a thin wrapper around the object you wish to handle differently.
+/// 
+/// Example:
+/// ```cpp
+/// struct FixedLengthString { const String& str; };
+/// template<> void BinaryWriter::write<FixedLengthString>(const FixedLengthString& val) {
+///     // Regular String writer uses byteLength() + 1 to include the terminating null byte.
+///     stream.write(val.str.cstr(), val.str.byteLength());
+///     validate();
+/// }
+/// // ...
+/// myBinaryWriter.write<FixedLengthString>({ "asd" });
+/// ```
 /// @see #PGE::BinaryReader
 /// @see #PGE::TextWriter
 class BinaryWriter : private AbstractIO<std::ofstream> {
     private:
-        template <typename T>
-        void write(T t);
 
     public:
         using AbstractIO::earlyClose;
@@ -27,40 +42,24 @@ class BinaryWriter : private AbstractIO<std::ofstream> {
         /// @throws #PGE::Exception if the path is invalid or the file could not be opened.
         BinaryWriter(const FilePath& file, bool append = false);
 
-        /// Writes a single byte to the file.
-        void writeByte(byte b);
-        /// Writes a given amount of bytes to the file.
-        /// In order to be read again, the amount of bytes must be known, so it should either be constant, or stored with the byte data manually.
-        void writeBytes(byte* bytes, int count);
-        /// Writes byte representing a boolean.
-        /// @param[in] b `false` is written as `0`, `true` as `1`.
-        void writeBoolean(bool b);
-        /// Writes 4 bytes representing a signed integer.
-        void writeInt32(i32 i);
-        /// Writes 4 bytes representing an unsigned integer.
-        void writeUInt32(u32 u);
-        /// Writes 4 bytes representing a 32-bit floating point number.
-        void writeFloat(float f);
-        /// Writes 4 bytes representing a 64-bit floating point number.
-        void writeDouble(double d);
-        /// Writes 1 - 4 bytes representing a character.
-        void writeUTF8Char(char16 ch);
-        /// Writes #PGE::String::byteLength amount of bytes from #PGE::String::cstr to the file, in addition to a null terminating byte.
-        /// Encoded using UTF-8.
-        /// @see #PGE::TextWriter for more control over encoding.
-        void writeNullTerminatedString(const String& str);
-        /// Writes #PGE::String::byteLength amount of bytes from #PGE::String::cstr to a file, without a terminating null byte.
-        /// Encoded using UTF-8.
+        /// Writes a type T to file.
+        /// By default the following types are supported:
+        /// - Self explanatory: u8, u16, u32, u64, i8, i16, i32, i64, float, double, long double
+        /// - char16: 1-4 bytes represented as a single UTF-8 character.
+        /// - String: A null terminated String of UTF-8 characters.
+        /// - Vector2f: Floats in order x, y.
+        /// - Vector3f: Floats in order x, y, z.
+        /// @throws Exception If any kind of error occurs, this will cause the stream to be closed.
+        ///         In such a case, nothing is guaranteed to be written.
+        template <typename T>
+        void write(const T& val);
+
+        /// Writes the given bytes to file.
+        /// Adheres to the #write specification.
         /// 
-        /// In order to be read again, its byte length must be known, so it should either be constant, or stored together with the string manually.
-        /// @see #PGE::TextWriter for more control over encoding.
-        void writeFixedLengthString(const String& str);
-        /// Writes 2 floats to the file, representing a 2 component vector.
-        /// 32-bit floating point numbers written in order x, y.
-        void writeVector2f(const Vector2f& vec);
-        /// Writes 3 floats to the file, representing a 3 component vector.
-        /// 32-bit floating point numbers written in order x, y, z.
-        void writeVector3f(const Vector3f& vec);
+        /// In order to be read again, the amount of bytes must be known, so it
+        /// should either be constant, or stored along with the byte data manually.
+        void writeBytes(const byte* data, size_t amount);
 };
 
 }

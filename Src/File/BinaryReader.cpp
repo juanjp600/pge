@@ -2,123 +2,96 @@
 
 #include "../String/UnicodeHelper.h"
 
-namespace PGE {
+using namespace PGE;
 
 BinaryReader::BinaryReader(const FilePath& file)
     : AbstractIO(file) { }
 
-// Two strikes and you're out.
-bool BinaryReader::checkEOF() noexcept {
-    if (stream.eof()) {
-        if (!eof) {
-            eof = true;
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return stream.good();
-    }
-}
-
-bool BinaryReader::endOfFile() const noexcept {
-    return eof;
+bool BinaryReader::endOfFile() const {
+    return stream.eof();
 }
 
 template <typename T>
-T BinaryReader::read() {
-    T val;
-    stream.read((char*)&val, sizeof(T));
-    PGE_ASSERT(checkEOF(), BAD_STREAM);
-    return val;
+bool BinaryReader::tryRead(T& out) {
+    stream.read((char*)&out, sizeof(T));
+    return stream.good();
 }
 
-const std::vector<byte> BinaryReader::readBytes(int count) {
-    std::vector<byte> bytes(count);
-    stream.read((char*)bytes.data(), count);
-    PGE_ASSERT(checkEOF(), BAD_STREAM);
-    return bytes;
-}
+#define PGE_IO_DEFAULT_SPEC(T) template bool BinaryReader::tryRead(T& out)
+PGE_IO_DEFAULT_SPEC(u8);
+PGE_IO_DEFAULT_SPEC(u16);
+PGE_IO_DEFAULT_SPEC(u32);
+PGE_IO_DEFAULT_SPEC(u64);
+PGE_IO_DEFAULT_SPEC(i8);
+PGE_IO_DEFAULT_SPEC(i16);
+PGE_IO_DEFAULT_SPEC(i32);
+PGE_IO_DEFAULT_SPEC(i64);
+PGE_IO_DEFAULT_SPEC(float);
+PGE_IO_DEFAULT_SPEC(double);
+PGE_IO_DEFAULT_SPEC(long double);
 
-bool BinaryReader::readBoolean() {
-    return readByte() != 0;
-}
-
-byte BinaryReader::readByte() {
-    return read<byte>();
-}
-
-i32 BinaryReader::readInt32() {
-    return read<i32>();
-}
-
-u32 BinaryReader::readUInt32() {
-    return read<u32>();
-}
-
-float BinaryReader::readFloat() {
-    return read<float>();
-}
-
-double BinaryReader::readDouble() {
-    return read<double>();
-}
-
-char16 BinaryReader::readUTF8Char() {
+template<> bool BinaryReader::tryRead<char16>(char16& out) {
     char buf[4];
-    buf[0] = readByte();
+    if (!tryRead<char>(buf[0])) { return false; }
     byte codepoint = Unicode::measureCodepoint(buf[0]);
     for (int i = 1; i < codepoint; i++) {
-        buf[i] = readByte();
-        PGE_ASSERT(!endOfFile(), "End of file reached");
+        if (!tryRead<char>(buf[i])) { return false; }
     }
-    return Unicode::utf8ToWChar(buf, codepoint);
+    out = Unicode::utf8ToWChar(buf, codepoint);
+    return true;
 }
 
-const String BinaryReader::readNullTerminatedString() {
-    String ret;
-    readNullTerminatedString(ret);
-    return ret;
-}
-
-void BinaryReader::readNullTerminatedString(String& dest) {
+template<> bool BinaryReader::tryRead(String& out) {
+    out = String();
     char16 ch;
-    while ((ch = readUTF8Char()) != 0) {
-        dest += ch;
+    bool succ;
+    while ((succ = tryRead<char16>(ch)) && ch != 0) {
+        out += ch;
     }
+    return succ;
 }
 
-const String BinaryReader::readFixedLengthString(int length) {
+template<> bool BinaryReader::tryRead(Vector2f& out) {
+    float x; float y;
+    bool succ = tryRead<float>(x) && tryRead<float>(y);
+    out = Vector2f(x, y);
+    return succ;
+}
+
+template<> bool BinaryReader::tryRead(Vector3f& out) {
+    float x; float y; float z;
+    bool succ = tryRead<float>(x) && tryRead<float>(y) && tryRead<float>(z);
+    out = Vector3f(x, y, z);
+    return succ;
+}
+
+void BinaryReader::readStringInto(String& ref) {
     String ret;
-    readFixedLengthString(ret, length);
+    PGE_ASSERT(tryRead<String>(ref), BAD_STREAM);
+}
+
+bool BinaryReader::tryReadBytes(size_t count, std::vector<byte>& out) {
+    out.resize(count);
+    stream.read((char*)out.data(), count);
+    return stream.good();
+}
+
+const std::vector<byte> BinaryReader::readBytes(size_t count) {
+    std::vector<byte> ret;
+    PGE_ASSERT(tryReadBytes(count, ret), BAD_STREAM);
     return ret;
 }
 
-void BinaryReader::readFixedLengthString(String& dest, int length) {
-    for (int i = 0; i < length; i++) {
-        dest += readUTF8Char();
-    }
+void BinaryReader::readBytesInto(size_t count, std::vector<byte>& out) {
+    PGE_ASSERT(tryReadBytes(count, out), BAD_STREAM);
 }
 
-const Vector2f BinaryReader::readVector2f() {
-    float x = readFloat();
-    if (endOfFile()) { return Vector2f(); }
-    float y = readFloat();
-    return Vector2f(x, y);
-}
 
-const Vector3f BinaryReader::readVector3f() {
-    float x = readFloat();
-    if (endOfFile()) { return Vector3f(); }
-    float y = readFloat();
-    if (endOfFile()) { return Vector3f(); }
-    float z = readFloat();
-    return Vector3f(x, y, z);
-}
-
-void BinaryReader::skip(int length) {
+bool BinaryReader::trySkip(size_t length) {
     stream.ignore(length);
-    PGE_ASSERT(checkEOF(), BAD_STREAM);
+    return stream.good();
 }
 
+void BinaryReader::skip(size_t length) {
+    PGE_ASSERT(trySkip(length), BAD_STREAM);
 }
