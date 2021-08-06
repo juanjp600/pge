@@ -20,7 +20,13 @@ class Mesh : private PolymorphicHeap {
     public:
         enum class PreserveGeometry {
             YES,
-            NO
+            NO,
+        };
+
+        enum class PrimitiveType {
+            NONE,
+            LINE,
+            TRIANGLE
         };
 
         struct Line {
@@ -43,6 +49,7 @@ class Mesh : private PolymorphicHeap {
 
         void setGeometry(const StructuredData& verts, const std::vector<Line>& lines);
         void setGeometry(const StructuredData& verts, const std::vector<Triangle>& triangles);
+        void setGeometry(const StructuredData& verts, PrimitiveType type, std::vector<u32>&& inds);
         void clearGeometry();
 
         void setMaterial(Material* m, PreserveGeometry preserveGeometry);
@@ -52,12 +59,6 @@ class Mesh : private PolymorphicHeap {
         virtual void render() = 0;
 
     protected:
-        enum class PrimitiveType {
-            NONE,
-            LINE,
-            TRIANGLE
-        };
-
         bool mustReuploadInternalData = true;
 
         virtual void uploadInternalData() = 0;

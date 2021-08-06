@@ -56,6 +56,17 @@ void Mesh::setGeometry(const StructuredData& verts, const std::vector<Triangle>&
     mustReuploadInternalData = true;
 }
 
+void Mesh::setGeometry(const StructuredData& verts, PrimitiveType type, std::vector<u32>&& inds) {
+    PGE_ASSERT(material == nullptr || material->getShader().getVertexLayout() == verts.getLayout(), "Material must be set before geometry can be set");
+    PGE_ASSERT(type == PrimitiveType::LINE && inds.size() % 2 == 0 || type == PrimitiveType::TRIANGLE && inds.size() % 3 == 0,
+            "Invalid primitive type or inadequate indices count");
+
+    vertices = verts;
+    indices = std::move(inds);
+    primitiveType = type;
+    mustReuploadInternalData = true;
+}
+
 void Mesh::clearGeometry() {
     indices.clear();
     primitiveType = PrimitiveType::NONE;
