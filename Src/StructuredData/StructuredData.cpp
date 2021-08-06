@@ -69,6 +69,7 @@ StructuredData& StructuredData::operator=(const StructuredData& other) {
     size = other.size;
     data = std::make_unique<byte[]>(size);
     memcpy(data.get(), other.data.get(), size);
+    return *this;
 }
 
 const byte* StructuredData::getData() const {
