@@ -27,6 +27,9 @@ class StructuredData {
                 struct LocationAndSize : private NoHeap {
                     LocationAndSize(int loc, int sz);
 
+                    // TODO: C++20 default.
+                    bool operator==(const LocationAndSize& other);
+
                     int location;
                     int size;
                 };
