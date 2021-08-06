@@ -10,12 +10,13 @@
 #include <PGE/Math/Matrix.h>
 #include <PGE/Graphics/Material.h>
 #include <PGE/StructuredData/StructuredData.h>
+#include <PGE/ResourceManagement/PolymorphicHeap.h>
 
 namespace PGE {
 
 class Graphics;
 
-class Mesh {
+class Mesh : private PolymorphicHeap {
     public:
         enum class PreserveGeometry {
             YES,
@@ -34,10 +35,10 @@ class Mesh {
             u32 indices[3];
         };
 
-        static Mesh* create(Graphics* gfx);
-        static Mesh* create(Graphics* gfx, Material* material, const StructuredData& verts, const std::vector<Line>& lines);
-        static Mesh* create(Graphics* gfx, Material* material, const StructuredData& verts, const std::vector<Triangle>& triangles);
-        Mesh* clone();
+        static Mesh* create(Graphics& gfx);
+        static Mesh* create(Graphics& gfx, Material* material, const StructuredData& verts, const std::vector<Line>& lines);
+        static Mesh* create(Graphics& gfx, Material* material, const StructuredData& verts, const std::vector<Triangle>& triangles);
+        Mesh* clone(Graphics& gfx);
         virtual ~Mesh() = default;
 
         void setGeometry(const StructuredData& verts, const std::vector<Line>& lines);
@@ -62,7 +63,6 @@ class Mesh {
         virtual void uploadInternalData() = 0;
 
         Material* material = nullptr;
-        Graphics* graphics = nullptr;
 
         PrimitiveType primitiveType;
         StructuredData vertices;

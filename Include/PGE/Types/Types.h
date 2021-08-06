@@ -2,6 +2,7 @@
 #define PGE_TYPES_H_INCLUDED
 
 #include <stdint.h>
+#include <vector>
 
 namespace PGE {
 
@@ -23,6 +24,9 @@ using char16 = wchar_t;
 #else
 using char16 = char16_t;
 #endif
+
+template <typename T>
+using ReferenceVector = std::vector<std::reference_wrapper<T>>;
 
 }
 

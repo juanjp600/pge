@@ -15,11 +15,9 @@
 
 namespace PGE {
 
-class GraphicsDX11;
-
-class MeshDX11 : public Mesh {
+class MeshDX11 : public Mesh, private GraphicsReferencer<class GraphicsDX11> {
     public:
-        MeshDX11(Graphics* gfx);
+        MeshDX11(Graphics& gfx);
 
         void render() override;
 

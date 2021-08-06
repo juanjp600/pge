@@ -18,7 +18,7 @@ class ResourceView : private NoHeap {
 
     public:
         ResourceView() = default;
-        ResourceView(T res, std::list<ResourceBase*>::iterator iter) { internalResource = res; holdsResource = true; iterator = iter; }
+        ResourceView(T res, const std::list<ResourceBase*>::iterator& iter) { internalResource = res; holdsResource = true; iterator = iter; }
 
         // Force cast.
         const T& get() const { PGE_ASSERT(holdsResource, "Reference not filled"); return internalResource; }
@@ -35,7 +35,7 @@ class ResourceView : private NoHeap {
 
         bool isHoldingResource() const { return holdsResource; }
 
-        std::list<ResourceBase*>::iterator getIterator() { return iterator; }
+        const std::list<ResourceBase*>::iterator& getPosition() { return iterator; }
 };
 
 }

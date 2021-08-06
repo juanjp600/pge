@@ -32,8 +32,8 @@ class ResourceManager : private NoHeap {
                 return;
             }
 
-            delete *view.getIterator();
-            resources.erase(view.getIterator());
+            delete *view.getPosition();
+            resources.erase(view.getPosition());
         }
 };
 

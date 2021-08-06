@@ -40,8 +40,8 @@ static void applyTextureParameters(bool rt) {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, rt ? 1.f : 4.f);
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, Format fmt) : Texture(w, h, true, fmt), resourceManager(gfx) {
-    ((GraphicsOGL3*)gfx)->takeGlContext();
+TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, Format fmt) : Texture(w, h, true, fmt), resourceManager(gfx) {
+    ((GraphicsOGL3&)gfx).takeGlContext();
     glTexture = resourceManager.addNewResource<GLTexture>();
     textureImage(w, h, nullptr, fmt);
     applyTextureParameters(true);
@@ -51,8 +51,8 @@ TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, Format fmt) : Texture(w, h
     //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, glDepthbuffer);
 }
 
-TextureOGL3::TextureOGL3(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) : Texture(w, h, false, fmt), resourceManager(gfx) {
-    ((GraphicsOGL3*)gfx)->takeGlContext();
+TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) : Texture(w, h, false, fmt), resourceManager(gfx) {
+    ((GraphicsOGL3&)gfx).takeGlContext();
     glTexture = resourceManager.addNewResource<GLTexture>();
     textureImage(w, h, buffer, fmt);
     if (mipmaps) { glGenerateMipmap(GL_TEXTURE_2D); }

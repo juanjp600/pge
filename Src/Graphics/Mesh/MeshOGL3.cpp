@@ -2,9 +2,8 @@
 
 using namespace PGE;
 
-MeshOGL3::MeshOGL3(Graphics* gfx) : resourceManager(gfx) {
-    graphics = gfx;
-    getGraphicsOgl3()->takeGlContext();
+MeshOGL3::MeshOGL3(Graphics& gfx) : resourceManager(gfx), GraphicsReferencer(gfx) {
+    graphics.takeGlContext();
 
     glVertexBufferObject = resourceManager.addNewResource<GLBuffer>();
     glIndexBufferObject = resourceManager.addNewResource<GLBuffer>();
@@ -28,11 +27,6 @@ void MeshOGL3::uploadInternalData() {
     mustReuploadInternalData = false;
 }
 
-GraphicsOGL3* PGE::MeshOGL3::getGraphicsOgl3() const
-{
-    return (GraphicsOGL3*)graphics;
-}
-
 const static GLenum glTextureLayers[] = {
     GL_TEXTURE0,
     GL_TEXTURE1,
@@ -45,7 +39,7 @@ const static GLenum glTextureLayers[] = {
 };
 
 void MeshOGL3::render() {
-    getGraphicsOgl3()->takeGlContext();
+    graphics.takeGlContext();
 
     glBindVertexArray(glVertexArrayObject);
     glBindBuffer(GL_ARRAY_BUFFER,glVertexBufferObject);
@@ -55,10 +49,10 @@ void MeshOGL3::render() {
 
     for (int i=0;i<material->getTextureCount();i++) {
         glActiveTexture(glTextureLayers[i]);
-        glBindTexture(GL_TEXTURE_2D,((TextureOGL3*)material->getTexture(i))->getGlTexture());
+        glBindTexture(GL_TEXTURE_2D,((TextureOGL3&)material->getTexture(i)).getGlTexture());
     }
 
-    ((ShaderOGL3*)material->getShader())->useShader();
+    ((ShaderOGL3&)material->getShader()).useShader();
 
     GLenum glPrimitiveType = GL_TRIANGLES;
     if (primitiveType==PrimitiveType::LINE) {
@@ -70,7 +64,7 @@ void MeshOGL3::render() {
 
     glDrawElements(glPrimitiveType,(GLsizei)indices.size(),GL_UNSIGNED_INT,nullptr);
 
-    ((ShaderOGL3*)material->getShader())->unbindGLAttribs();
+    ((ShaderOGL3&)material->getShader()).unbindGLAttribs();
     glBindVertexArray(0);
 }
 

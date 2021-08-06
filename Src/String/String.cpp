@@ -51,24 +51,28 @@ void String::Iterator::decrement() {
     _ch = L'\uFFFF';
 }
 
-void String::Iterator::operator++() {
+String::Iterator& String::Iterator::operator++() {
     PGE_ASSERT(index < ref->byteLength(), "Can't increment iterator past string end");
     increment();
+    return *this;
 }
 
-void String::Iterator::operator++(int) {
-    PGE_ASSERT(index < ref->byteLength(), "Can't increment iterator past string end");
-    increment();
-}
-
-void String::Iterator::operator--() {
+String::Iterator& String::Iterator::operator--() {
     PGE_ASSERT(index > 0, "Can't decrement iterator prior to string beginning");
     decrement();
+    return *this;
 }
 
-void String::Iterator::operator--(int) {
-    PGE_ASSERT(index > 0, "Can't decrement iterator prior to string beginning");
-    decrement();
+const String::Iterator String::Iterator::operator++(int) {
+    Iterator temp = *this;
+    ++(*this);
+    return temp;
+}
+
+const String::Iterator String::Iterator::operator--(int) {
+    Iterator temp = *this;
+    --(*this);
+    return temp;
 }
 
 const String::Iterator String::Iterator::operator+(int steps) const {
@@ -89,18 +93,20 @@ const String::Iterator String::Iterator::operator-(int steps) const {
     return ret;
 }
 
-void String::Iterator::operator+=(int steps) {
+String::Iterator& String::Iterator::operator+=(int steps) {
     if (steps < 0) { return *this -= (-steps); }
     for (int i = 0; i < steps; i++) {
         (*this)++;
     }
+    return *this;
 }
 
-void String::Iterator::operator-=(int steps) {
+String::Iterator& String::Iterator::operator-=(int steps) {
     if (steps < 0) { return *this += (-steps); }
     for (int i = 0; i < steps; i++) {
         (*this)--;
     }
+    return *this;
 }
 
 int String::Iterator::operator-(const String::Iterator& other) const {
@@ -546,6 +552,8 @@ void String::reallocate(int size, bool copyOldChs) {
     // Accounting for the terminating byte.
     size++;
 
+    int targetCapacity = data->cCapacity;
+
     // Initialized with String literal.
     if (data->cCapacity == 0) {
         if (size <= SHORT_STR_CAPACITY) {
@@ -558,6 +566,8 @@ void String::reallocate(int size, bool copyOldChs) {
             chs = u.chs;
             data = &u.data;
             return;
+        } else {
+            targetCapacity = SHORT_STR_CAPACITY;
         }
     } else {
         if (size <= data->cCapacity) {
@@ -573,7 +583,6 @@ void String::reallocate(int size, bool copyOldChs) {
         }
     }
 
-    int targetCapacity = data->cCapacity;
     while (targetCapacity < size) { targetCapacity <<= 1; }
 
     std::unique_ptr<char[]> newChs = std::make_unique<char[]>(targetCapacity);
@@ -598,7 +607,7 @@ char* String::cstrNoConst() {
     return chs;
 }
 
-std::vector<char16> String::wstr() const {
+const std::vector<char16> String::wstr() const {
     std::vector<char16> chars;
     if (data->_strLength >= 0) {
         chars.reserve(data->_strLength);
@@ -764,6 +773,7 @@ const String String::replace(const String& fnd, const String& rplace) const {
 // Only has to deal with data.
 void String::initLiteral(int litSize) {
     static std::unordered_map<const char*, Data> litData;
+    // TODO: What a great idea to put a fucking map lookup here.
     if (const auto& it = litData.find(chs); it != litData.end()) {
         data = &it->second;
     } else {
@@ -847,7 +857,7 @@ const String String::multiply(int count, const String& separator) const {
     return ret;
 }
 
-std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
+const std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
     std::vector<String> split;
     const char* haystack = cstr();
     const char* needle = needleStr.cstr();
@@ -878,7 +888,7 @@ const String String::join(const std::vector<String>& vect, const String& separat
 
     String retVal = vect[0];
     for (int i = 1; i < (int)vect.size(); i++) {
-        retVal = retVal + separator + vect[i];
+        retVal += separator + vect[i];
     }
 
     return retVal;

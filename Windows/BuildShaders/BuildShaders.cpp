@@ -82,22 +82,22 @@ class ReflectionInfo {
 static void writeConstants(BinaryWriter& writer, ReflectionInfo info) {
     D3D11_SHADER_DESC shaderDesc;
     info->GetDesc(&shaderDesc);
-    writer.writeUInt32(shaderDesc.ConstantBuffers);
+    writer.write<u32>(shaderDesc.ConstantBuffers);
 
     for (int i = 0; i < (int)shaderDesc.ConstantBuffers; i++) {
         ID3D11ShaderReflectionConstantBuffer* cBuffer = info->GetConstantBufferByIndex(i);
         D3D11_SHADER_BUFFER_DESC cBufferDesc;
         cBuffer->GetDesc(&cBufferDesc);
-        writer.writeNullTerminatedString(cBufferDesc.Name);
-        writer.writeUInt32(cBufferDesc.Size);
-        writer.writeUInt32(cBufferDesc.Variables);
+        writer.write<String>(cBufferDesc.Name);
+        writer.write<u32>(cBufferDesc.Size);
+        writer.write<u32>(cBufferDesc.Variables);
         for (int j = 0; j < (int)cBufferDesc.Variables; j++) {
             ID3D11ShaderReflectionVariable* cBufferVar = cBuffer->GetVariableByIndex(j);
             D3D11_SHADER_VARIABLE_DESC cBufferVarDesc;
             cBufferVar->GetDesc(&cBufferVarDesc);
-            writer.writeNullTerminatedString(cBufferVarDesc.Name);
-            writer.writeUInt32(cBufferVarDesc.StartOffset);
-            writer.writeUInt32(cBufferVarDesc.Size);
+            writer.write<String>(cBufferVarDesc.Name);
+            writer.write<u32>(cBufferVarDesc.StartOffset);
+            writer.write<u32>(cBufferVarDesc.Size);
         }
     }
 }
@@ -185,18 +185,18 @@ static void compileDX11Reflection(const FilePath& path, const String& input, ID3
     vsInfo->GetDesc(&desc);
     writeConstants(writer, vsInfo);
 
-    writer.writeUInt32(desc.InputParameters);
+    writer.write<u32>(desc.InputParameters);
     for (UINT i = 0; i < desc.InputParameters; ++i) {
         D3D11_SIGNATURE_PARAMETER_DESC vsParamDesc;
         vsInfo->GetInputParameterDesc(i, &vsParamDesc);
 
         const auto& it = inputNameSemanticRelation.find(combineStringUInt(vsParamDesc.SemanticName, vsParamDesc.SemanticIndex));
         PGE_ASSERT(it != inputNameSemanticRelation.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::fromInt(vsParamDesc.SemanticIndex) + ")");
-        writer.writeNullTerminatedString(it->second);
-        writer.writeNullTerminatedString(vsParamDesc.SemanticName);
-        writer.writeByte(vsParamDesc.SemanticIndex);
+        writer.write<String>(it->second);
+        writer.write<String>(vsParamDesc.SemanticName);
+        writer.write<byte>(vsParamDesc.SemanticIndex);
 
-        writer.writeByte(computeDxgiFormat(vsParamDesc));
+        writer.write<byte>(computeDxgiFormat(vsParamDesc));
     }
 
     vsBlob->Release();
@@ -213,7 +213,7 @@ static void compileDX11Reflection(const FilePath& path, const String& input, ID3
             samplerCount++;
         }
     }
-    writer.writeUInt32(samplerCount);
+    writer.write<u32>(samplerCount);
 
     psBlob->Release();
 }

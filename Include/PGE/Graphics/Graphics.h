@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <PGE/ResourceManagement/ResourceManager.h>
+#include <PGE/ResourceManagement/PolymorphicHeap.h>
 #include <PGE/SysEvents/SysEvents.h>
 #include <PGE/Math/Rectangle.h>
 #include <PGE/Color/Color.h>
@@ -14,7 +15,7 @@ class Texture;
 
 /// Main class for managing everything graphics related.
 /// By default z-buffering, v-sync and backface culling are enabled.
-class Graphics {
+class Graphics : private PolymorphicHeap {
     public:
         /// The type of renderer to use.
         enum class Renderer {
@@ -115,7 +116,7 @@ class Graphics {
         // Base class always automatically takes care of SysEvents and the window.
         class WindowEventSubscriber : public Resource<SysEvents::Subscriber*> {
             public:
-                WindowEventSubscriber(Graphics* gfx);
+                WindowEventSubscriber(const Graphics& gfx);
                 ~WindowEventSubscriber();
         };
         WindowEventSubscriber::View eventSubscriber;

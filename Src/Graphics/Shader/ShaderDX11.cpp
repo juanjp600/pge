@@ -2,27 +2,23 @@
 
 using namespace PGE;
 
-ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
-    graphics = (GraphicsDX11*)gfx;
-    filepath = path;
-
+ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path), GraphicsReferencer(gfx) {
     BinaryReader reader(path + "reflection.dxri");
 
     readConstantBuffers(reader, vertexConstantBuffers);
 
-    u32 propertyCount = reader.readUInt32();
-
     std::vector<StructuredData::ElemLayout::Entry> vertexInputElems;
+    u32 propertyCount = reader.read<u32>();
     vertexInputElems.resize(propertyCount);
 
     // We have to keep the names in memory.
     std::vector<String> semanticNames(propertyCount);
     std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc(propertyCount);
     for (int i = 0; i < (int)propertyCount; i++) {
-        String name = reader.readNullTerminatedString();
-        semanticNames[i] = reader.readNullTerminatedString();
-        byte semanticIndex = reader.readByte();
-        DXGI_FORMAT format = (DXGI_FORMAT)reader.readByte();
+        String name = reader.read<String>();
+        semanticNames[i] = reader.read<String>();
+        byte semanticIndex = reader.read<byte>();
+        DXGI_FORMAT format = (DXGI_FORMAT)reader.read<byte>();
 
         vertexInputElems[i].name = name;
         vertexInputElems[i].size = dxgiFormatToByteSize(format);
@@ -41,7 +37,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
 
     readConstantBuffers(reader, fragmentConstantBuffers);
 
-    u32 samplerCount = reader.readUInt32();
+    u32 samplerCount = reader.read<u32>();
 
     D3D11_SAMPLER_DESC samplerDesc;
     ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
@@ -55,7 +51,7 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
     samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
     samplerDesc.MipLODBias = -0.1f;
 
-    ID3D11Device* dxDevice = graphics->getDxDevice();
+    ID3D11Device* dxDevice = graphics.getDxDevice();
     dxSamplerState = ResourceViewVector<ID3D11SamplerState*>::withSize(samplerCount);
     for (int i = 0; i < (int)samplerCount; i++) {
         dxSamplerState[i] = resourceManager.addNewResource<D3D11SamplerState>(dxDevice, samplerDesc);
@@ -75,19 +71,20 @@ ShaderDX11::ShaderDX11(Graphics* gfx,const FilePath& path) {
 }
 
 void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferInfo>& constantBuffers) {
-    u32 cBufferCount = reader.readUInt32();
+    u32 cBufferCount = reader.read<u32>();
 
     for (int i = 0; i < (int)cBufferCount; i++) {
-        String bufferName = reader.readNullTerminatedString();
-        u32 cBufferSize = reader.readUInt32();
+        String bufferName = reader.read<String>();
+        u32 cBufferSize = reader.read<u32>();
         CBufferInfo& constantBuffer = constantBuffers.emplace_back(graphics, bufferName, cBufferSize, resourceManager);
 
         String varName;
-        u32 varCount = reader.readUInt32();
+        u32 varCount = reader.read<u32>();
         for (int j = 0; j < (int)varCount; j++) {
-            varName = reader.readNullTerminatedString();
-            u32 varOffset = reader.readUInt32();
-            u32 varSize = reader.readUInt32();
+            varName = String();
+            reader.readStringInto(varName);
+            u32 varOffset = reader.read<u32>();
+            u32 varSize = reader.read<u32>();
             constantBuffer.addConstant(varName, ConstantDX11(constantBuffer, varOffset, varSize));
         }
     }
@@ -108,30 +105,28 @@ int ShaderDX11::dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat) {
     }
 }
 
-Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
+Shader::Constant& ShaderDX11::getVertexShaderConstant(const String& name) {
     for (CBufferInfo& cBuffer : vertexConstantBuffers) {
         auto& map = cBuffer.getConstants();
         auto it = map.find(name);
         if (it != map.end()) {
-            return &it->second;
+            return it->second;
         }
     }
-    return nullptr;
 }
 
-Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
+Shader::Constant& ShaderDX11::getFragmentShaderConstant(const String& name) {
     for (CBufferInfo& cBuffer : fragmentConstantBuffers) {
         auto& map = cBuffer.getConstants();
         auto it = map.find(name);
         if (it != map.end()) {
-            return &it->second;
+            return it->second;
         }
     }
-    return nullptr;
 }
 
 void ShaderDX11::useShader() {
-    ID3D11DeviceContext* dxContext = graphics->getDxContext();
+    ID3D11DeviceContext* dxContext = graphics.getDxContext();
 
     for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
         vertexConstantBuffers[i].update();
@@ -148,12 +143,12 @@ void ShaderDX11::useShader() {
 }
 
 void ShaderDX11::useVertexInputLayout() {
-    ID3D11DeviceContext* dxContext = graphics->getDxContext();
+    ID3D11DeviceContext* dxContext = graphics.getDxContext();
     dxContext->IASetInputLayout(dxVertexInputLayout);
 }
 
 void ShaderDX11::useSamplers() {
-    ID3D11DeviceContext* dxContext = graphics->getDxContext();
+    ID3D11DeviceContext* dxContext = graphics.getDxContext();
     dxContext->PSSetSamplers(0, (UINT)dxSamplerState.size(), dxSamplerState.data());
 }
 
@@ -161,7 +156,7 @@ const StructuredData::ElemLayout& ShaderDX11::getVertexLayout() const {
     return vertexLayout;
 }
 
-ShaderDX11::CBufferInfo::CBufferInfo(GraphicsDX11* graphics, const String& nm, int sz, ResourceManager& resourceManager) {
+ShaderDX11::CBufferInfo::CBufferInfo(const GraphicsDX11& gfx, const String& nm, int sz, ResourceManager& resourceManager) {
     name = nm;
     size = sz;
     int cBufferSize = size;
@@ -181,9 +176,9 @@ ShaderDX11::CBufferInfo::CBufferInfo(GraphicsDX11* graphics, const String& nm, i
     ZeroMemory(&cBufferSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
     cBufferSubresourceData.pSysMem = data;
 
-    dxCBuffer = resourceManager.addNewResource<D3D11Buffer>(graphics->getDxDevice(), cBufferDesc, cBufferSubresourceData);
+    dxCBuffer = resourceManager.addNewResource<D3D11Buffer>(gfx.getDxDevice(), cBufferDesc, cBufferSubresourceData);
 
-    dxContext = graphics->getDxContext();
+    dxContext = gfx.getDxContext();
 
     dirty = true;
 }

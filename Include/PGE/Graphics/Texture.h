@@ -3,12 +3,13 @@
 
 #include <PGE/Math/Vector.h>
 #include <PGE/File/FilePath.h>
+#include <PGE/ResourceManagement/PolymorphicHeap.h>
 
 namespace PGE {
 
 class Graphics;
 
-class Texture {
+class Texture : private PolymorphicHeap {
     public:
         enum class Format {
             RGBA32,
@@ -26,19 +27,17 @@ class Texture {
         
         virtual void* getNative() const = 0;
 
-        static Texture* createRenderTarget(Graphics* gfx, int w, int h, Format fmt);
-        static Texture* createBlank(Graphics* gfx, int w, int h, Format fmt, bool mipmaps);
-        static Texture* load(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps = true);
+        static Texture* createRenderTarget(Graphics& gfx, int w, int h, Format fmt);
+        static Texture* createBlank(Graphics& gfx, int w, int h, Format fmt, bool mipmaps);
+        static Texture* load(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps = true);
         virtual ~Texture() = default;
 
     protected:
         Texture(int w, int h, bool rt, Format fmt);
 
-        bool isRT;
-
-        Vector2i dimensions;
-
-        Format format;
+        const bool isRT;
+        const Vector2i dimensions;
+        const Format format;
 };
 
 }

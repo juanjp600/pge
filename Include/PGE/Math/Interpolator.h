@@ -1,6 +1,8 @@
 #ifndef PGE_INTERPOLATOR_H_INCLUDED
 #define PGE_INTERPOLATOR_H_INCLUDED
 
+#include <cmath>
+
 namespace PGE {
 
 namespace Interpolator {

@@ -14,7 +14,6 @@
 namespace PGE {
 
 class Shader;
-class ThreadManager;
 
 class SDLWindow;
 
@@ -63,20 +62,34 @@ class GraphicsSpecialized : public GraphicsInternal {
 
     public:
         Shader* loadShader(const FilePath& path) final override {
-            return new ShaderType(this, path);
+            return new ShaderType(*this, path);
         }
 
         Mesh* createMesh() final override {
             static_assert(std::is_base_of<Mesh, MeshType>::value);
-            return new MeshType(this);
+            return new MeshType(*this);
         }
 
         Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) final override {
-            return new TextureType(this, w, h, fmt);
+            return new TextureType(*this, w, h, fmt);
         }
 
         Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) final override {
-            return new TextureType(this, w, h, buffer, fmt, mipmaps);
+            return new TextureType(*this, w, h, buffer, fmt, mipmaps);
+        }
+};
+
+template <typename SPEC_GFX>
+class GraphicsReferencer {
+    protected:
+        GraphicsReferencer(Graphics& gfx) : graphics((SPEC_GFX&)gfx) { validate(); }
+        GraphicsReferencer(const Graphics& gfx) : graphics((SPEC_GFX&)gfx) { validate(); }
+
+        SPEC_GFX& graphics;
+
+    private:
+        constexpr void validate() {
+            static_assert(std::is_base_of<Graphics, SPEC_GFX>::value);
         }
 };
 

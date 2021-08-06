@@ -2,23 +2,15 @@
 
 using namespace PGE;
 
-ShaderOGL3::ShaderOGL3(Graphics* gfx, const FilePath& path) : resourceManager(gfx) {
-    graphics = (GraphicsOGL3*)gfx;
+ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), resourceManager(gfx), GraphicsReferencer(gfx) {
+    graphics.takeGlContext();
 
-    graphics->takeGlContext();
-
-    filepath = path;
-
-    std::vector<byte> vertexFile = (path + "vertex.glsl").readBytes();
-    PGE_ASSERT(!vertexFile.empty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
-    vertexFile.push_back(0);
-    String vertexSource((char*)vertexFile.data());
+    String vertexSource = (path + "vertex.glsl").read();
+    PGE_ASSERT(!vertexSource.isEmpty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
     glVertexShader = resourceManager.addNewResource<GLShader>(GL_VERTEX_SHADER, vertexSource);
 
-    std::vector<byte> fragmentFile = (path + "fragment.glsl").readBytes();
-    PGE_ASSERT(!fragmentFile.empty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
-    fragmentFile.push_back(0);
-    String fragmentSource((char*)fragmentFile.data());
+    String fragmentSource = (path + "fragment.glsl").read();
+    PGE_ASSERT(!fragmentSource.isEmpty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
     glFragmentShader = resourceManager.addNewResource<GLShader>(GL_FRAGMENT_SHADER, fragmentSource);
 
     glShaderProgram = resourceManager.addNewResource<GLProgram>(std::vector{ glVertexShader.get(), glFragmentShader.get() });
@@ -220,7 +212,7 @@ void ShaderOGL3::decomposeGlType(GLenum compositeType, GLenum& elemType, int& el
 void ShaderOGL3::useShader() {
     GLuint glError = GL_NO_ERROR;
 
-    graphics->takeGlContext();
+    graphics.takeGlContext();
 
     glUseProgram(glShaderProgram);
 
@@ -250,7 +242,7 @@ void ShaderOGL3::useShader() {
 }
 
 void ShaderOGL3::unbindGLAttribs() {
-    graphics->takeGlContext();
+    graphics.takeGlContext();
 
     for (const auto& kvp : glVertexAttribLocations) {
         const GlAttribLocation& glAttribLocation = kvp.second;
@@ -258,24 +250,19 @@ void ShaderOGL3::unbindGLAttribs() {
     }
 }
 
-Shader::Constant* ShaderOGL3::getVertexShaderConstant(const String& name) {
+Shader::Constant& ShaderOGL3::getVertexShaderConstant(const String& name) {
     auto it = vertexShaderConstants.find(name);
-    if (it != vertexShaderConstants.end()) {
-        return &it->second;
-    }
-    return nullptr;
+    PGE_ASSERT(it != vertexShaderConstants.end(), "Could not find vertex shader constant (\"" + name + "\")");
+    return it->second;
 }
 
-Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
+Shader::Constant& ShaderOGL3::getFragmentShaderConstant(const String& name) {
     auto it = fragmentShaderConstants.find(name);
-    if (it != fragmentShaderConstants.end()) {
-        return &it->second;
-    }
-    return nullptr;
+    PGE_ASSERT(it != fragmentShaderConstants.end(), "Could not find fragment shader constant (\"" + name + "\")");
+    return it->second;
 }
 
-ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3* gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk) : dataBuffer(data) {
-    graphics = gfx;
+ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk) : dataBuffer(data), GraphicsReferencer(gfx) {
     glLocation = glLoc;
     glType = glTyp;
     glArraySize = glArrSz;
@@ -313,7 +300,7 @@ void ShaderOGL3::ConstantOGL3::setValue(u32 value) {
 void ShaderOGL3::ConstantOGL3::setUniform() {
     GLuint glError = GL_NO_ERROR;
 
-    graphics->takeGlContext();
+    graphics.takeGlContext();
     const void* dataPtr = dataBuffer.getData().data() + dataBuffer.getLayout().getLocationAndSize(dataKey).location;
     const GLfloat* dataPtrF = (GLfloat*)dataPtr;
     const GLint* dataPtrI = (GLint*)dataPtr;

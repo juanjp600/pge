@@ -1,20 +1,15 @@
 #ifndef PGEINTERNAL_RESOURCEMANAGER_OGL3
 #define PGEINTERNAL_RESOURCEMANAGER_OGL3
 
-#include <PGE/ResourceManagement/ResourceManager.h>
-
 #include "../Graphics/GraphicsInternal.h"
+#include <PGE/ResourceManagement/ResourceManager.h>
 
 namespace PGE {
 
-class GraphicsOGL3;
-
-class ResourceManagerOGL3 : public ResourceManager {
+class ResourceManagerOGL3 : public ResourceManager, private GraphicsReferencer<class GraphicsOGL3> {
     public:
-        ResourceManagerOGL3(Graphics* gfx);
+        ResourceManagerOGL3(class Graphics& gfx);
         ~ResourceManagerOGL3();
-    private:
-        GraphicsOGL3* graphics;
 };
 
 }

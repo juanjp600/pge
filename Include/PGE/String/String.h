@@ -25,41 +25,42 @@ class String final : private NoHeap {
         struct SafeKey;
         struct OrderedKey;
 
-        struct Iterator {
+        class Iterator : NoHeap {
             using iterator_category = std::bidirectional_iterator_tag;
             using difference_type = int;
             using value_type = char16;
             using pointer = value_type*;
             using reference = value_type&;
 
-            static const Iterator begin(const String& str);
-            static const Iterator end(const String& str);
+            public:
+                static const Iterator begin(const String& str);
+                static const Iterator end(const String& str);
 
-            Iterator();
+                Iterator();
 
-            void operator++();
-            void operator++(int);
-            void operator--();
-            void operator--(int);
+                Iterator& operator++();
+                Iterator& operator--();
+                const Iterator operator++(int);
+                const Iterator operator--(int);
 
-            const Iterator operator+(int steps) const;
-            const Iterator operator-(int steps) const;
-            void operator+=(int steps);
-            void operator-=(int steps);
+                const Iterator operator+(int steps) const;
+                const Iterator operator-(int steps) const;
+                Iterator& operator+=(int steps);
+                Iterator& operator-=(int steps);
 
-            int operator-(const Iterator& other) const;
+                int operator-(const Iterator& other) const;
 
-            char16 operator*() const;
+                char16 operator*() const;
 
-            bool operator>(const Iterator& other) const;
-            bool operator<(const Iterator& other) const;
-            bool operator>=(const Iterator& other) const;
-            bool operator<=(const Iterator& other) const;
-            bool operator==(const Iterator& other) const;
-            bool operator!=(const Iterator& other) const;
+                bool operator>(const Iterator& other) const;
+                bool operator<(const Iterator& other) const;
+                bool operator>=(const Iterator& other) const;
+                bool operator<=(const Iterator& other) const;
+                bool operator==(const Iterator& other) const;
+                bool operator!=(const Iterator& other) const;
 
-            int getBytePosition() const;
-            int getPosition() const;
+                int getBytePosition() const;
+                int getPosition() const;
 
             protected:
                 Iterator(const String& str, int byteIndex, int chIndex);
@@ -160,7 +161,7 @@ class String final : private NoHeap {
         /// 
         /// O(1)
         const char* cstr() const;
-        std::vector<char16> wstr() const;
+        const std::vector<char16> wstr() const;
         int toInt(bool& success) const;
         float toFloat(bool& success) const;
         int toInt() const;
@@ -192,7 +193,7 @@ class String final : private NoHeap {
         const String trim() const;
         const String reverse() const;
         const String multiply(int count, const String& separator = "") const;
-        std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
+        const std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
         static const String join(const std::vector<String>& vect, const String& separator);
 
         const std::cmatch regexMatch(const std::regex& pattern) const;
@@ -216,14 +217,14 @@ class String final : private NoHeap {
         static constexpr int SHORT_STR_CAPACITY = 16;
 
         struct Data {
-            // Lazily evaluated.
-            mutable bool _hashCodeEvaluted = false;
-            mutable u64 _hashCode;
-            mutable int _strLength = -1;
-
             int strByteLength = -1;
 
             int cCapacity = SHORT_STR_CAPACITY;
+
+            // Lazily evaluated.
+            mutable u64 _hashCode;
+            mutable int _strLength = -1;
+            mutable bool _hashCodeEvaluted = false;
         };
 
         struct Shared {
@@ -238,6 +239,7 @@ class String final : private NoHeap {
 
         // Default initialized with Unique.
         std::variant<Unique, std::shared_ptr<Shared>, std::monostate> internalData;
+        // TODO: Investigate whether calculating these instead is worth it.
         char* chs = std::get<Unique>(internalData).chs;
         Data* data = &std::get<Unique>(internalData).data;
 

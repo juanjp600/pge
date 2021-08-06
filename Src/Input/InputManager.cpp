@@ -13,13 +13,11 @@
 
 using namespace PGE;
 
-InputManager* InputManager::create(Graphics* graphics) {
-    return new InputManagerInternal(graphics);
+InputManager* InputManager::create(const Graphics& gfx) {
+    return new InputManagerInternal(gfx);
 }
 
-InputManagerInternal::InputManagerInternal(Graphics* gfx) {
-    graphics = gfx;
-
+InputManagerInternal::InputManagerInternal(const Graphics& gfx) : graphics(gfx) {
     keyboardSubscriber = new SysEventsInternal::SubscriberInternal(graphics,SysEventsInternal::SubscriberInternal::EventType::KEYBOARD);
     mouseSubscriber = new SysEventsInternal::SubscriberInternal(graphics,SysEventsInternal::SubscriberInternal::EventType::MOUSE);
     controllerSubscriber = new SysEventsInternal::SubscriberInternal(graphics,SysEventsInternal::SubscriberInternal::EventType::CONTROLLER);
@@ -73,15 +71,14 @@ String InputManagerInternal::getClipboardText() const {
     return String(SDL_GetClipboardText());
 }
 
-ControllerInternal::ControllerInternal(const InputManagerInternal* inIo, SDL_GameController* inSdlController) {
+ControllerInternal::ControllerInternal(const InputManagerInternal& io, SDL_GameController& sdlController)
+    : io(io), sdlController(sdlController) {
     removed = false;
-    io = inIo;
-    sdlController = inSdlController;
-    name = SDL_GameControllerName(inSdlController);
+    name = SDL_GameControllerName(&sdlController);
 }
 
 ControllerInternal::~ControllerInternal() {
-    SDL_GameControllerClose(sdlController);
+    SDL_GameControllerClose(&sdlController);
 }
 
 const String& ControllerInternal::getName() const {
@@ -91,10 +88,10 @@ const String& ControllerInternal::getName() const {
 void ControllerInternal::rumble(float lowFreqIntensity,float highFreqIntensity,int durationMs) {
     int lfiUshort = (int)(lowFreqIntensity*((float)0xffff));
     int hfiUshort = (int)(highFreqIntensity*((float)0xffff));
-    SDL_GameControllerRumble(sdlController, lfiUshort>0xffff ? 0xffff : (Uint16)lfiUshort, hfiUshort>0xffff ? 0xffff : (Uint16)hfiUshort, durationMs);
+    SDL_GameControllerRumble(&sdlController, lfiUshort>0xffff ? 0xffff : (Uint16)lfiUshort, hfiUshort>0xffff ? 0xffff : (Uint16)hfiUshort, durationMs);
 }
 
-SDL_GameController* ControllerInternal::getSdlController() const {
+SDL_GameController& ControllerInternal::getSdlController() const {
     return sdlController;
 }
 
@@ -200,12 +197,12 @@ void InputManagerInternal::update() {
         if (event.type == SDL_CONTROLLERDEVICEADDED) {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
             SDL_GameController* sdlController = SDL_GameControllerOpen(deviceEvent.which);
-            openControllers.push_back(new ControllerInternal(this, sdlController));
+            openControllers.push_back(new ControllerInternal(*this, *sdlController));
         } else if (event.type == SDL_CONTROLLERDEVICEREMAPPED) {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
             SDL_GameController* sdlController = SDL_GameControllerOpen(deviceEvent.which);
             for (int i = 0; i < (int)openControllers.size(); i++) {
-                if (openControllers[i]->getSdlController() == sdlController) {
+                if (&openControllers[i]->getSdlController() == sdlController) {
                     openControllers[i]->setName(SDL_GameControllerName(sdlController));
                     break;
                 }
@@ -214,7 +211,7 @@ void InputManagerInternal::update() {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(deviceEvent.which);
             for (int i = 0; i < (int)openControllers.size(); i++) {
-                if (openControllers[i]->getSdlController() == sdlController) {
+                if (&openControllers[i]->getSdlController() == sdlController) {
                     for (Input* input : inputs) {
                         if (input->getDevice()==Input::Device::CONTROLLER) {
                             ControllerInput* controllerInput = (ControllerInput*)input;
@@ -235,7 +232,7 @@ void InputManagerInternal::update() {
                 if (input->getDevice()==Input::Device::CONTROLLER) {
                     ControllerInput* controllerInput = (ControllerInput*)input;
                     if (controllerInput->getController() == nullptr) { continue; }
-                    if (((ControllerInternal*)controllerInput->getController())->getSdlController() != sdlController) { continue; }
+                    if (&((ControllerInternal*)controllerInput->getController())->getSdlController() != sdlController) { continue; }
                     ControllerInput::Button button = ControllerInput::Button::INVALID;
                     switch (axisEvent.axis) {
                         case SDL_CONTROLLER_AXIS_LEFTX:
@@ -286,7 +283,7 @@ void InputManagerInternal::update() {
                 if (input->getDevice()==Input::Device::CONTROLLER) {
                     ControllerInput* controllerInput = (ControllerInput*)input;
                     if (controllerInput->getController() == nullptr) { continue; }
-                    if (((ControllerInternal*)controllerInput->getController())->getSdlController() != sdlController) { continue; }
+                    if (&((ControllerInternal*)controllerInput->getController())->getSdlController() != sdlController) { continue; }
                     ControllerInput::Button button = ControllerInput::Button::INVALID;
                     switch (buttonEvent.button) {
                         case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: {
@@ -361,7 +358,7 @@ const Vector2f& InputManagerInternal::getMousePosition() const {
 }
 
 void InputManagerInternal::setMousePosition(const Vector2f& position) {
-    if (!graphics->isWindowFocused()) { return; }
+    if (!graphics.isWindowFocused()) { return; }
 
     mousePos = position;
 
@@ -379,7 +376,7 @@ void InputManagerInternal::setMousePosition(const Vector2f& position) {
     // For some reason updating the mouse position this way doesn't update the cursor position, so we need to tell Cocoa to sync that.
     CGAssociateMouseAndMouseCursorPosition(true);
 #else
-    SDL_WarpMouseInWindow(((GraphicsInternal*)graphics)->getWindow(), (int)position.x, (int)position.y);
+    SDL_WarpMouseInWindow(((GraphicsInternal&)graphics).getWindow(), (int)position.x, (int)position.y);
 #endif
 }
 

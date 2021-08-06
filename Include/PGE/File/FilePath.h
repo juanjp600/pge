@@ -10,7 +10,7 @@ namespace PGE {
 // TODO: Use wstr() for path construction consistently, or utilize C++20 char8_t for direct construction from UTF-8.
 /// String wrapper utility to deal with paths.
 /// Paths are always absolute and have sanitized path seperators.
-class FilePath {
+class FilePath : private NoHeap {
     private:
         String name;
         bool valid;
@@ -105,12 +105,12 @@ class FilePath {
         // TODO: Properly wrapping iteration?
         /// Gets all direct subdirectories.
         /// @throws #PGE::Exception If the path is not initialized.
-        std::vector<FilePath> enumerateFolders() const;
+        const std::vector<FilePath> enumerateFolders() const;
 
         /// Gets all regular files in a directory.
         /// @param[in] recursive Whether to recursively search subdirectories for files as well.
         /// @throws #PGE::Exception If the path is not initialized.
-        std::vector<FilePath> enumerateFiles(bool recursive = true) const;
+        const std::vector<FilePath> enumerateFiles(bool recursive = true) const;
 
         // Shorthand utility.
 
@@ -123,11 +123,11 @@ class FilePath {
         /// Reads all lines of a file into a vector.
         /// @throws #PGE::Exception If the path is not initialized, the file could not be opened, or errors occured during the reading of the file.
         /// @see #PGE::TextReader
-        std::vector<String> readLines(bool includeEmptyLines = false) const;
+        const std::vector<String> readLines(bool includeEmptyLines = false) const;
 
         /// Reads all bytes of a file into a vector.
         /// @throws #PGE::Exception If the path is not initialized, or the file could not be opened.
-        std::vector<byte> readBytes() const;
+        const std::vector<byte> readBytes() const;
 
         /// Returns the internal string representation of the path.
         /// Always absolute and path sepeartors are sanitized to '/'.

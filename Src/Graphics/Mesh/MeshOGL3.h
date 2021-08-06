@@ -12,11 +12,9 @@
 
 namespace PGE {
 
-class GraphicsOGL3;
-
-class MeshOGL3 : public Mesh {
+class MeshOGL3 : public Mesh, private GraphicsReferencer<class GraphicsOGL3> {
     public:
-        MeshOGL3(Graphics* gfx);
+        MeshOGL3(Graphics& gfx);
 
         void render() override;
 
@@ -29,8 +27,6 @@ class MeshOGL3 : public Mesh {
         GLVertexArray::View glVertexArrayObject;
 
         ResourceManagerOGL3 resourceManager;
-
-        GraphicsOGL3* getGraphicsOgl3() const;
 };
 
 }

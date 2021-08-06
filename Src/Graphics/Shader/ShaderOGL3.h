@@ -12,21 +12,19 @@
 
 namespace PGE {
 
-class GraphicsOGL3;
-
-class ShaderOGL3 : public Shader {
+class ShaderOGL3 : public Shader, private GraphicsReferencer<class GraphicsOGL3> {
     public:
-        ShaderOGL3(Graphics* gfx, const FilePath& path);
+        ShaderOGL3(Graphics& gfx, const FilePath& path);
 
-        Constant* getVertexShaderConstant(const String& name) override;
-        Constant* getFragmentShaderConstant(const String& name) override;
+        Constant& getVertexShaderConstant(const String& name) override;
+        Constant& getFragmentShaderConstant(const String& name) override;
 
         void useShader();
         void unbindGLAttribs();
     private:
-        class ConstantOGL3 : public Constant {
+        class ConstantOGL3 : public Constant, private GraphicsReferencer<GraphicsOGL3> {
             public:
-                ConstantOGL3(GraphicsOGL3* gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk);
+                ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk);
 
                 void setValue(const Matrix4x4f& value) override;
                 void setValue(const Vector2f& value) override;
@@ -39,7 +37,6 @@ class ShaderOGL3 : public Shader {
                 void setUniform();
 
             private:
-                GraphicsOGL3* graphics;
                 GLint glLocation;
                 GLenum glType;
                 int glArraySize;
@@ -85,8 +82,6 @@ class ShaderOGL3 : public Shader {
         GLProgram::View glShaderProgram;
 
         ResourceManagerOGL3 resourceManager;
-
-        GraphicsOGL3* graphics;
 
         virtual const StructuredData::ElemLayout& getVertexLayout() const override;
 };

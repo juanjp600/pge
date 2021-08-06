@@ -2,12 +2,6 @@
 
 using namespace PGE;
 
-Input::Input() {
-    inputDown = false;
-    inputHit = false;
-    inputReleased = false;
-}
-
 bool Input::isDown() const {
     return inputDown;
 }
@@ -32,10 +26,6 @@ void Input::setReleased(bool released) {
     inputReleased = released;
 }
 
-KeyboardInput::KeyboardInput(KeyboardInput::Keycode inKeyCode) {
-    keyCode = inKeyCode;
-}
-
 Input::Device KeyboardInput::getDevice() const {
     return Input::Device::KEYBOARD;
 }
@@ -46,11 +36,6 @@ int KeyboardInput::getKey() const {
 
 KeyboardInput::Keycode KeyboardInput::getButton() const {
     return keyCode;
-}
-
-MouseInput::MouseInput(MouseInput::Button inMouseButton) {
-    mouseButton = inMouseButton;
-    clicks = 0;
 }
 
 Input::Device MouseInput::getDevice() const {
@@ -73,9 +58,9 @@ int MouseInput::getClickCount() const {
     return clicks;
 }
 
-ControllerInput::ControllerInput(Controller* ctrlr, ControllerInput::Button inControllerButton, float threshold) {
+ControllerInput::ControllerInput(Controller* ctrlr, ControllerInput::Button inControllerButton, float threshold)
+    : controllerButton(inControllerButton) {
     controller = ctrlr;
-    controllerButton = inControllerButton;
     stickPosition = Vectors::ZERO2F;
     pressDepth = 0.f;
     downThreshold = threshold;
@@ -105,7 +90,7 @@ float ControllerInput::getDownThreshold() const {
     return downThreshold;
 }
 
-Controller* ControllerInput::getController() const {
+const Controller* ControllerInput::getController() const {
     return controller;
 }
 

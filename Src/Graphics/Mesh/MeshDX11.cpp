@@ -2,19 +2,12 @@
 
 using namespace PGE;
 
-MeshDX11::MeshDX11(Graphics* gfx) {
-    graphics = gfx;
-}
-
-GraphicsDX11* PGE::MeshDX11::getGraphicsDx11() const
-{
-    return (GraphicsDX11*)graphics;
-}
+MeshDX11::MeshDX11(Graphics& gfx) : GraphicsReferencer(gfx) { }
 
 void MeshDX11::uploadInternalData() {
     if (!mustReuploadInternalData) { return; }
 
-    ID3D11Device* dxDevice = getGraphicsDx11()->getDxDevice();
+    ID3D11Device* dxDevice = graphics.getDxDevice();
 
     if (vertices.getData().size() > 0) {
         ZeroMemory(&dxVertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
@@ -49,14 +42,14 @@ void MeshDX11::uploadInternalData() {
 
 void MeshDX11::render() {
     if (primitiveType == PrimitiveType::NONE) { return; }
-
-    ID3D11DeviceContext* dxContext = ((GraphicsDX11*)graphics)->getDxContext();
+    
+    ID3D11DeviceContext* dxContext = graphics.getDxContext();
 
     uploadInternalData();
 
     if (!dxVertexBuffer.isHoldingResource() || !dxIndexBuffer.isHoldingResource()) { return; }
 
-    ((ShaderDX11*)material->getShader())->useVertexInputLayout();
+    ((ShaderDX11&)material->getShader()).useVertexInputLayout();
 
     UINT offset = 0; UINT stride = vertices.getLayout().getElementSize();
     dxContext->IASetVertexBuffers(0,1,&dxVertexBuffer,&stride,&offset);
@@ -69,20 +62,20 @@ void MeshDX11::render() {
 
     dxContext->IASetPrimitiveTopology(dxPrimitiveTopology);
 
-    ShaderDX11* shader = ((ShaderDX11*)material->getShader());
+    ShaderDX11& shader = ((ShaderDX11&)material->getShader());
 
-    shader->useShader();
-    shader->useSamplers();
+    shader.useShader();
+    shader.useSamplers();
     for (int i=0;i<material->getTextureCount();i++) {
-        ((TextureDX11*)material->getTexture(i))->useTexture(i);
+        ((TextureDX11&)material->getTexture(i)).useTexture(i);
     }
 
-    getGraphicsDx11()->setZBufferState(
-        graphics->getDepthTest()
+    graphics.setZBufferState(
+        graphics.getDepthTest()
                 ? (isOpaque() ? GraphicsDX11::ZBufferStateIndex::ENABLED_WRITE : GraphicsDX11::ZBufferStateIndex::ENABLED_NOWRITE)
                 : GraphicsDX11::ZBufferStateIndex::DISABLED);
     
-    dxContext->DrawIndexed(indices.size(),0,0);
+    dxContext->DrawIndexed((UINT)indices.size(),0,0);
 
     ID3D11ShaderResourceView* nullResource = nullptr;
     for (int i=0;i<material->getTextureCount();i++) {

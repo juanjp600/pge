@@ -11,7 +11,7 @@ Graphics::Graphics(const String& name, int w, int h, bool fs) {
     dimensions = Vector2i(w, h); aspectRatio = (float)w / h;
     fullscreen = fs;
 
-    eventSubscriber = resourceManager.addNewResource<WindowEventSubscriber>(this);
+    eventSubscriber = resourceManager.addNewResource<WindowEventSubscriber>(*this);
 
     open = true;
     focused = true;
@@ -76,7 +76,7 @@ Graphics::Culling Graphics::getCulling() const {
     return cullingMode;
 }
 
-Graphics::WindowEventSubscriber::WindowEventSubscriber(Graphics* gfx) {
+Graphics::WindowEventSubscriber::WindowEventSubscriber(const Graphics& gfx) {
     resource = new SysEventsInternal::SubscriberInternal(gfx, SysEventsInternal::SubscriberInternal::EventType::WINDOW);
     SysEventsInternal::subscribe(resource);
 }

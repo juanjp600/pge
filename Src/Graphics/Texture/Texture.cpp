@@ -19,11 +19,8 @@ int Texture::getBytesPerPixel(Format fmt) {
     }
 }
 
-Texture::Texture(int w, int h, bool rt, Format fmt) {
-    dimensions = Vector2i(w,h);
-    isRT = rt;
-    format = fmt;
-}
+Texture::Texture(int w, int h, bool rt, Format fmt)
+    : dimensions(w, h), isRT(rt), format(fmt) { }
 
 bool Texture::isRenderTarget() const {
     return isRT;

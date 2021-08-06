@@ -82,24 +82,24 @@ Graphics* Graphics::create(const String& name, int w, int h, bool fs, Renderer r
     return gfx;
 }
 
-Shader* Shader::load(Graphics* gfx, const FilePath& path) {
-    return ((GraphicsInternal*)gfx)->loadShader(path);
+Shader* Shader::load(Graphics& gfx, const FilePath& path) {
+    return ((GraphicsInternal&)gfx).loadShader(path);
 }
 
-Mesh* Mesh::create(Graphics* gfx) {
-    return ((GraphicsInternal*)gfx)->createMesh();
+Mesh* Mesh::create(Graphics& gfx) {
+    return ((GraphicsInternal&)gfx).createMesh();
 }
 
-Texture* Texture::createRenderTarget(Graphics* gfx, int w, int h, Format fmt) {
-    return ((GraphicsInternal*)gfx)->createRenderTargetTexture(w, h, fmt);
+Texture* Texture::createRenderTarget(Graphics& gfx, int w, int h, Format fmt) {
+    return ((GraphicsInternal&)gfx).createRenderTargetTexture(w, h, fmt);
 }
 
-Texture* Texture::createBlank(Graphics* gfx, int w, int h, Format fmt, bool mipmaps) {
-    std::vector<byte> bufferData = std::vector<byte>(w * h * 4, 0);
-    return ((GraphicsInternal*)gfx)->loadTexture(w, h, bufferData.data(), fmt, mipmaps);
+Texture* Texture::createBlank(Graphics& gfx, int w, int h, Format fmt, bool mipmaps) {
+    std::vector<byte> bufferData(w * h * 4, 0);
+    return ((GraphicsInternal&)gfx).loadTexture(w, h, bufferData.data(), fmt, mipmaps);
 }
 
-Texture* Texture::load(Graphics* gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) {
+Texture* Texture::load(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) {
     PGE_ASSERT(buffer != nullptr, "Tried to load texture from nullptr");
-    return ((GraphicsInternal*)gfx)->loadTexture(w, h, buffer, fmt, mipmaps);
+    return ((GraphicsInternal&)gfx).loadTexture(w, h, buffer, fmt, mipmaps);
 }
