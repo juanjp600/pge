@@ -34,8 +34,8 @@ class Program {
     public:
         Program() {
             graphics = Graphics::create("Example 1", 1600, 900, false, Graphics::Renderer::OpenGL);
-            shader = Shader::load(graphics, FilePath::fromStr("Shader1").makeDirectory());
-            material = new Material(shader, true);
+            shader = Shader::load(*graphics, FilePath::fromStr("Shader1").makeDirectory());
+            material = new Material(*shader, true);
 
             vertexData = StructuredData(shader->getVertexLayout(), 5);
             
@@ -50,9 +50,9 @@ class Program {
             triangles.emplace_back(3, 2, 4);
             triangles.emplace_back(0, 3, 4);
 
-            mesh = Mesh::create(graphics, material, vertexData, triangles);
+            mesh = Mesh::create(*graphics, material, vertexData, triangles);
             
-            inputManager = InputManager::create(graphics);
+            inputManager = InputManager::create(*graphics);
             escKey = new KeyboardInput(KeyboardInput::Keycode::ESCAPE);
             inputManager->trackInput(escKey);
 

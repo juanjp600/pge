@@ -51,7 +51,7 @@ class StructuredData {
         const ElemLayout& getLayout() const;
 
         template <typename T>
-        void setValue(int elemIndex, const String& entryName, T value) {
+        void setValue(int elemIndex, const String& entryName, const T& value) {
             setValue(elemIndex, String::Key(entryName), value);
         }
         void setValue(int elemIndex, const String::Key& entry, float f);
