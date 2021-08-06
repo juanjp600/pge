@@ -58,7 +58,7 @@ void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
         GLenum attrElemType; int attrElemCount;
         decomposeGlType(attrType, attrElemType, attrElemCount);
 
-        layoutEntries.emplace_back(parsedAttribs[i].name, glSizeToByteSize(attrType, 1));
+        layoutEntries.emplace_back(parsedAttribs[i].name, glSizeToByteSize(attrType, attrElemCount));
         glVertexAttribLocations.emplace(
             String::Key(parsedAttribs[i].name),
             GlAttribLocation(
@@ -173,13 +173,13 @@ GLenum ShaderOGL3::parsedTypeToGlType(const String& parsedType) {
     if (parsedType.equals("float")) {
         return GL_FLOAT;
     } else if (parsedType.equals("vec2")) {
-        return GL_FLOAT;
+        return GL_FLOAT_VEC2;
     } else if (parsedType.equals("vec3")) {
-        return GL_FLOAT;
+        return GL_FLOAT_VEC3;
     } else if (parsedType.equals("vec4")) {
-        return GL_FLOAT;
+        return GL_FLOAT_VEC4;
     } else if (parsedType.equals("mat4")) {
-        return GL_FLOAT;
+        return GL_FLOAT_MAT4;
     } else if (parsedType.equals("int")) {
         return GL_INT;
     } else if (parsedType.equals("uint")) {

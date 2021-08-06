@@ -1,6 +1,3 @@
-Texture2D diff;
-SamplerState smp;
-
 struct VS_INPUT {
     float4 position  : POSITION0;
     float4 color     : COLOR0;
