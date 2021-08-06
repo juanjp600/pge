@@ -35,7 +35,7 @@ class ResourceView : private NoHeap {
 
         bool isHoldingResource() const { return holdsResource; }
 
-        const std::list<ResourceBase*>::iterator& getPosition() { return iterator; }
+        const std::list<ResourceBase*>::iterator& getManagerIterator() { return iterator; }
 };
 
 }
