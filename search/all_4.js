@@ -2,7 +2,7 @@ var searchData=
 [
   ['earlyclose_22',['earlyClose',['../class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d',1,'PGE::AbstractIO::earlyClose()'],['../class_p_g_e_1_1_binary_reader.html#af252120aa787246f2c0f2df43dce0e4d',1,'PGE::BinaryReader::earlyClose()'],['../class_p_g_e_1_1_binary_writer.html#af252120aa787246f2c0f2df43dce0e4d',1,'PGE::BinaryWriter::earlyClose()'],['../class_p_g_e_1_1_text_reader.html#af252120aa787246f2c0f2df43dce0e4d',1,'PGE::TextReader::earlyClose()'],['../class_p_g_e_1_1_text_writer.html#af252120aa787246f2c0f2df43dce0e4d',1,'PGE::TextWriter::earlyClose()']]],
   ['elemlayout_23',['ElemLayout',['../class_p_g_e_1_1_structured_data_1_1_elem_layout.html',1,'PGE::StructuredData']]],
-  ['endoffile_24',['endOfFile',['../class_p_g_e_1_1_text_reader.html#a84c50b7abd97d807d3cd60132a7d0caa',1,'PGE::TextReader::endOfFile()'],['../class_p_g_e_1_1_binary_reader.html#a9397f0cc758a587c9b40c1a618e9e109',1,'PGE::BinaryReader::endOfFile()']]],
+  ['endoffile_24',['endOfFile',['../class_p_g_e_1_1_text_reader.html#a84c50b7abd97d807d3cd60132a7d0caa',1,'PGE::TextReader::endOfFile()'],['../class_p_g_e_1_1_binary_reader.html#a4055707079ee0daf0f1536a0edd4e50b',1,'PGE::BinaryReader::endOfFile()']]],
   ['entry_25',['Entry',['../struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_entry.html',1,'PGE::StructuredData::ElemLayout']]],
   ['enumeratefiles_26',['enumerateFiles',['../class_p_g_e_1_1_file_path.html#aa3e5f3fbeb04b696733f8578ca44e038',1,'PGE::FilePath']]],
   ['enumeratefolders_27',['enumerateFolders',['../class_p_g_e_1_1_file_path.html#a6b13ab6f7deb4ecf372989ae94f4eafb',1,'PGE::FilePath']]],
