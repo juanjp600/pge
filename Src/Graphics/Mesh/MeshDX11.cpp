@@ -9,15 +9,15 @@ void MeshDX11::uploadInternalData() {
 
     ID3D11Device* dxDevice = graphics.getDxDevice();
 
-    if (vertices.getData().size() > 0) {
+    if (vertices.getDataSize() > 0) {
         ZeroMemory(&dxVertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
         dxVertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-        dxVertexBufferDesc.ByteWidth = (UINT)vertices.getData().size();
+        dxVertexBufferDesc.ByteWidth = (UINT)vertices.getDataSize();
         dxVertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
         dxVertexBufferDesc.CPUAccessFlags = 0;
 
         ZeroMemory(&dxVertexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
-        dxVertexBufferData.pSysMem = vertices.getData().data();
+        dxVertexBufferData.pSysMem = vertices.getData();
 
         resourceManager.deleteResource(dxVertexBuffer);
         dxVertexBuffer = resourceManager.addNewResource<D3D11Buffer>(dxDevice, dxVertexBufferDesc, dxVertexBufferData);

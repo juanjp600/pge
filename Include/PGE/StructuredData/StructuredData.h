@@ -47,7 +47,11 @@ class StructuredData {
         StructuredData() = default;
         StructuredData(const ElemLayout& ly, int elemCount);
 
+        StructuredData(const StructuredData& other);
+        StructuredData& operator=(const StructuredData& other);
+
         const byte* getData() const;
+        size_t getDataSize() const;
         const ElemLayout& getLayout() const;
 
         template <typename T>

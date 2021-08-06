@@ -301,7 +301,7 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
     GLuint glError = GL_NO_ERROR;
 
     graphics.takeGlContext();
-    const void* dataPtr = dataBuffer.getData().data() + dataBuffer.getLayout().getLocationAndSize(dataKey).location;
+    const void* dataPtr = dataBuffer.getData() + dataBuffer.getLayout().getLocationAndSize(dataKey).location;
     const GLfloat* dataPtrF = (GLfloat*)dataPtr;
     const GLint* dataPtrI = (GLint*)dataPtr;
     const GLuint* dataPtrU = (GLuint*)dataPtr;
