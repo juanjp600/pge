@@ -3,20 +3,6 @@
 
 using namespace PGE;
 
-Mesh* Mesh::create(Graphics& gfx, Material* material, const StructuredData& verts, const std::vector<Line>& lines) {
-    Mesh* newMesh = create(gfx);
-    newMesh->setMaterial(material, PreserveGeometry::YES);
-    newMesh->setGeometry(verts, lines);
-    return newMesh;
-}
-
-Mesh* Mesh::create(Graphics& gfx, Material* material, const StructuredData& verts, const std::vector<Triangle>& triangles) {
-    Mesh* newMesh = create(gfx);
-    newMesh->setMaterial(material, PreserveGeometry::YES);
-    newMesh->setGeometry(verts, triangles);
-    return newMesh;
-}
-
 Mesh* Mesh::clone(Graphics& gfx) {
     Mesh* newMesh = create(gfx);
     newMesh->material = material;

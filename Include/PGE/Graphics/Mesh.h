@@ -42,10 +42,7 @@ class Mesh : private PolymorphicHeap {
         };
 
         static Mesh* create(Graphics& gfx);
-        static Mesh* create(Graphics& gfx, Material* material, const StructuredData& verts, const std::vector<Line>& lines);
-        static Mesh* create(Graphics& gfx, Material* material, const StructuredData& verts, const std::vector<Triangle>& triangles);
         Mesh* clone(Graphics& gfx);
-        virtual ~Mesh() = default;
 
         void setGeometry(const StructuredData& verts, const std::vector<Line>& lines);
         void setGeometry(const StructuredData& verts, const std::vector<Triangle>& triangles);
