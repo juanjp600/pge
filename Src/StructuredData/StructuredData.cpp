@@ -10,7 +10,7 @@ StructuredData::ElemLayout::LocationAndSize::LocationAndSize(int loc, int sz) {
     location = loc; size = sz;
 }
 
-bool StructuredData::ElemLayout::LocationAndSize::operator==(const ElemLayout::LocationAndSize& other) {
+bool StructuredData::ElemLayout::LocationAndSize::operator==(const ElemLayout::LocationAndSize& other) const {
     return location == other.location && size == other.size;
 }
 

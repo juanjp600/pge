@@ -28,7 +28,7 @@ class StructuredData {
                     LocationAndSize(int loc, int sz);
 
                     // TODO: C++20 default.
-                    bool operator==(const LocationAndSize& other);
+                    bool operator==(const LocationAndSize& other) const;
 
                     int location;
                     int size;
