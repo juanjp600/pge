@@ -103,6 +103,42 @@ T* addNewResource(Args&&... args) { // Note the double ampersand.
 - https://en.cppreference.com/w/cpp/utility/forward
 
 
+## Prefer `std::vector::emplace_back` over `std::vector::push_back`
+`emplace_back` is able to construct elements in place via perfect forwarding, where `push_back` has to copy an existing object.
+
+`emplace_back` also copies when it needs to, thus it is advisable to always use it.
+
+
+**Example:**
+```cpp
+std::vector<String> myVec;
+myVec.push_back(String('O')); // No.
+myVec.emplace_back('O'); // Yes.
+
+String myComplicatedString;
+// ... Do something complicated.
+myVec.push_back(myComplicatedString);
+myVec.emplace_back(myComplicatedString); // Works just as well!
+```
+
+
+## Prefer `std::vector::reserve` over `std::vector::resize` etc.
+`reserve` does not have the costs associated with initializing objects.
+
+**Example:**
+```cpp
+std::vector<int> myBadSeries(50); // This is equivalent to resize.
+for (int i = 0; i < 50; i++) {
+    myBadSeries[i] = i;
+}
+
+std::vector<int> myGoodSeries; myGoodSeries.reserve(50);
+for (int i = 0; i < 50; i++) {
+    myGoodSeries.emplace_back(i);
+}
+```
+
+
 ## Rely on C functions and functionality when appropriate
 In general the C++ functions and functionality should clearly be preferred, though some exceptions present themselves.
 
