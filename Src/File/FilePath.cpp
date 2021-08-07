@@ -151,7 +151,7 @@ const std::vector<FilePath> FilePath::enumerateFolders() const {
     std::vector<FilePath> folders;
     for (const auto& it : std::filesystem::directory_iterator(str().cstr())) {
         if (it.is_directory()) {
-            folders.push_back(FilePath::fromStr(it.path().c_str()));
+            folders.emplace_back(FilePath::fromStr(it.path().c_str()));
         }
     }
     return folders;
@@ -163,13 +163,13 @@ const std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
     if (recursive) {
         for (const auto& it : std::filesystem::recursive_directory_iterator(str().cstr())) {
             if (it.is_regular_file()) {
-                files.push_back(FilePath::fromStr(it.path().c_str()));
+                files.emplace_back(FilePath::fromStr(it.path().c_str()));
             }
         }
     } else {
         for (const auto& it : std::filesystem::directory_iterator(str().cstr())) {
             if (it.is_regular_file()) {
-                files.push_back(FilePath::fromStr(it.path().c_str()));
+                files.emplace_back(FilePath::fromStr(it.path().c_str()));
             }
         }
     }
@@ -196,7 +196,7 @@ const std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
         line = String();
         reader.readLine(line);
         if ((!includeEmptyLines) && line.isEmpty()) { continue; }
-        lines.push_back(line);
+        lines.emplace_back(line);
     }
     return lines;
 }

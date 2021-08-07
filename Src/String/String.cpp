@@ -618,9 +618,9 @@ const std::vector<char16> String::wstr() const {
     }
     // Convert all the codepoints to wchars.
     for (Iterator it = begin(); it != end(); it++) {
-        chars.push_back(*it);
+        chars.emplace_back(*it);
     }
-    chars.push_back(L'\0');
+    chars.emplace_back(L'\0');
     return chars;
 }
 
@@ -742,7 +742,7 @@ const String String::replace(const String& fnd, const String& rplace) const {
     std::vector<int> foundPositions;
     for (int i = 0; i <= byteLength() - fnd.byteLength();) {
         if (memcmp(fndStr, thisStr + i, fnd.byteLength()) == 0) {
-            foundPositions.push_back(i);
+            foundPositions.emplace_back(i);
             i += fnd.byteLength();
         } else {
             i++;
@@ -872,7 +872,7 @@ const std::vector<String> String::split(const String& needleStr, bool removeEmpt
         if (memcmp(haystack + i, needle, codepoint) == 0) {
             int addSize = i - cut;
             if (!removeEmptyEntries || addSize != 0) {
-                split.push_back(String(*this, cut, addSize));
+                split.emplace_back(String(*this, cut, addSize));
             }
             cut = i + needleStr.byteLength();
         }
@@ -880,7 +880,7 @@ const std::vector<String> String::split(const String& needleStr, bool removeEmpt
     // Add the rest of the string to the vector.
     int endAddSize = byteLength() - cut;
     if (endAddSize != 0) {
-        split.push_back(String(*this, cut, endAddSize));
+        split.emplace_back(String(*this, cut, endAddSize));
     }
     return split;
 }

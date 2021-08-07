@@ -82,5 +82,5 @@ bool SysEventsInternal::SubscriberInternal::popEvent(SDL_Event& e) {
 }
 
 void SysEventsInternal::SubscriberInternal::pushEvent(SDL_Event e) {
-    events.push_back(e);
+    events.emplace_back(e);
 }

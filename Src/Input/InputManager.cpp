@@ -197,7 +197,7 @@ void InputManagerInternal::update() {
         if (event.type == SDL_CONTROLLERDEVICEADDED) {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
             SDL_GameController* sdlController = SDL_GameControllerOpen(deviceEvent.which);
-            openControllers.push_back(new ControllerInternal(*this, *sdlController));
+            openControllers.emplace_back(new ControllerInternal(*this, *sdlController));
         } else if (event.type == SDL_CONTROLLERDEVICEREMAPPED) {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
             SDL_GameController* sdlController = SDL_GameControllerOpen(deviceEvent.which);

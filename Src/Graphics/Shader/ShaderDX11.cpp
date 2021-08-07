@@ -53,7 +53,7 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
     ID3D11Device* dxDevice = graphics.getDxDevice();
     dxSamplerState.reserve(samplerCount);
     for (int i = 0; i < (int)samplerCount; i++) {
-        dxSamplerState.push_back(resourceManager.addNewResource<D3D11SamplerState>(dxDevice, samplerDesc));
+        dxSamplerState.emplace_back(resourceManager.addNewResource<D3D11SamplerState>(dxDevice, samplerDesc));
     }
 
     std::vector<byte> vertexShaderBytecode = (path + "vertex.dxbc").readBytes();

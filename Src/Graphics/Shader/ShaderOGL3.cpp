@@ -128,7 +128,7 @@ void ShaderOGL3::extractShaderVars(const String& src, const String& varKind, std
                     }
                     it++;
                 }
-                varList.push_back(var);
+                varList.emplace_back(var);
             }
             line = String();
         }

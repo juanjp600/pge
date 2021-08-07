@@ -20,7 +20,7 @@ class ResourceManager : private NoHeap {
         typename T::View addNewResource(Args&&... args) {
             static_assert(std::is_base_of<ResourceBase, T>::value);
             T* res = new T(std::forward<Args>(args)...);
-            resources.push_back(res);
+            resources.emplace_back(res);
             std::list<ResourceBase*>::iterator lastResourceIter = resources.end();
             lastResourceIter--;
             return ResourceView(res->get(), lastResourceIter);
