@@ -178,29 +178,30 @@ GLenum ShaderOGL3::parsedTypeToGlType(const String& parsedType) {
 
 void ShaderOGL3::decomposeGlType(GLenum compositeType, GLenum& elemType, int& elemCount) {
     switch (compositeType) {
-        case GL_INT:
+        case GL_INT: {
             elemType = GL_INT; elemCount = 1;
-            break;
-        case GL_UNSIGNED_INT:
+        } break;
+        case GL_UNSIGNED_INT: {
             elemType = GL_UNSIGNED_INT; elemCount = 1;
-            break;
-        case GL_FLOAT:
+        } break;
+        case GL_FLOAT: {
             elemType = GL_FLOAT; elemCount = 1;
-            break;
-        case GL_FLOAT_VEC2:
+        } break;
+        case GL_FLOAT_VEC2: {
             elemType = GL_FLOAT; elemCount = 2;
-            break;
-        case GL_FLOAT_VEC3:
+        } break;
+        case GL_FLOAT_VEC3: {
             elemType = GL_FLOAT; elemCount = 3;
-            break;
-        case GL_FLOAT_VEC4:
+        } break;
+        case GL_FLOAT_VEC4: {
             elemType = GL_FLOAT; elemCount = 4;
-            break;
-        case GL_FLOAT_MAT4:
+        } break;
+        case GL_FLOAT_MAT4: {
             elemType = GL_FLOAT; elemCount = 4 * 4;
-            break;
-        default:
+        } break;
+        default: {
             throw PGE_CREATE_EX("Unsupported OpenGL datatype: " + String::fromInt(compositeType));
+        }
     }
 }
 

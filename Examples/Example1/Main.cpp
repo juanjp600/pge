@@ -50,7 +50,9 @@ class Program {
             triangles.emplace_back(3, 2, 4);
             triangles.emplace_back(0, 3, 4);
 
-            mesh = Mesh::create(*graphics, material, vertexData, triangles);
+            mesh = Mesh::create(*graphics);
+            mesh->setMaterial(material, PGE::Mesh::PreserveGeometry::NO);
+            mesh->setGeometry(vertexData, triangles);
             
             inputManager = InputManager::create(*graphics);
             escKey = new KeyboardInput(KeyboardInput::Keycode::ESCAPE);
