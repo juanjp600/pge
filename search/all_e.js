@@ -21,6 +21,5 @@ var searchData=
   ['resourcebase_93',['ResourceBase',['../class_p_g_e_1_1_resource_base.html',1,'PGE']]],
   ['resourcemanager_94',['ResourceManager',['../class_p_g_e_1_1_resource_manager.html',1,'PGE']]],
   ['resourceview_95',['ResourceView',['../class_p_g_e_1_1_resource_view.html',1,'PGE']]],
-  ['resourceviewvector_96',['ResourceViewVector',['../class_p_g_e_1_1_resource_view_vector.html',1,'PGE']]],
-  ['reverseiterator_97',['ReverseIterator',['../struct_p_g_e_1_1_string_1_1_reverse_iterator.html',1,'PGE::String']]]
+  ['reverseiterator_96',['ReverseIterator',['../struct_p_g_e_1_1_string_1_1_reverse_iterator.html',1,'PGE::String']]]
 ];
