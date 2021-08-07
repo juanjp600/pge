@@ -31,6 +31,7 @@ class Program {
         float state;
 
         bool closeRequested;
+
     public:
         Program() {
             graphics = Graphics::create("Example 1", 1600, 900, false, Graphics::Renderer::OpenGL);

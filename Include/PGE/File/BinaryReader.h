@@ -47,7 +47,7 @@ class BinaryReader : private AbstractIO<std::ifstream> {
         template <typename T>
         bool tryRead(T& out);
 
-        // TODO: Global, #PGE::Exception or just Exception???
+        // TODO: Global, #PGE::Exception or just Exception??
         /// Reads a type T from file.
         /// Throws when #tryRead would return false.
         /// @returns An object of type T, if it has been read successfully.
