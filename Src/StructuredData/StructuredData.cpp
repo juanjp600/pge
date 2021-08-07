@@ -49,19 +49,28 @@ StructuredData::StructuredData(const ElemLayout& ly, int elemCount) {
     data = std::make_unique<byte[]>(size);
 }
 
-StructuredData::StructuredData(const StructuredData& other) {
+StructuredData::StructuredData(StructuredData&& other) noexcept {
     layout = other.layout;
     size = other.size;
-    data = std::make_unique<byte[]>(size);
-    memcpy(data.get(), other.data.get(), size);
+    data = std::move(other.data);
+    other.layout = nullptr;
 }
 
-StructuredData& StructuredData::operator=(const StructuredData& other) {
+StructuredData& StructuredData::operator=(StructuredData&& other) noexcept {
     layout = other.layout;
     size = other.size;
-    data = std::make_unique<byte[]>(size);
-    memcpy(data.get(), other.data.get(), size);
+    data = std::move(other.data);
+    other.layout = nullptr;
     return *this;
+}
+
+StructuredData StructuredData::copy() const {
+    StructuredData ret;
+    ret.layout = layout;
+    ret.size = size;
+    ret.data = std::make_unique<byte[]>(size);
+    memcpy(ret.data.get(), data.get(), size);
+    return ret;
 }
 
 const byte* StructuredData::getData() const {

@@ -7,7 +7,7 @@ Mesh* Mesh::clone(Graphics& gfx) {
     Mesh* newMesh = create(gfx);
     newMesh->material = material;
     newMesh->primitiveType = primitiveType;
-    newMesh->vertices = vertices;
+    newMesh->vertices = vertices.copy();
     newMesh->indices = indices;
     newMesh->mustReuploadInternalData = true;
     return newMesh;
@@ -15,41 +15,41 @@ Mesh* Mesh::clone(Graphics& gfx) {
 
 #define PGE_ASSERT_MATERIAL_LAYOUT() PGE_ASSERT(material == nullptr || material->getShader().getVertexLayout() == *verts.getLayout(), "Material must be set before geometry can be set")
 
-void Mesh::setGeometry(const StructuredData& verts, const std::vector<Line>& lines) {
+void Mesh::setGeometry(StructuredData&& verts, const std::vector<Line>& lines) {
     PGE_ASSERT_MATERIAL_LAYOUT();
 
-    vertices = verts;
-    indices.resize(lines.size() * 2);
+    vertices = std::move(verts);
+    indices.reserve(lines.size() * 2);
     for (int i = 0; i < lines.size(); i++) {
-        indices[(i * 2) + 0] = lines[i].indices[0];
-        indices[(i * 2) + 1] = lines[i].indices[1];
+        indices.emplace_back(lines[i].indices[0]);
+        indices.emplace_back(lines[i].indices[1]);
     }
     primitiveType = PrimitiveType::LINE;
 
     mustReuploadInternalData = true;
 }
 
-void Mesh::setGeometry(const StructuredData& verts, const std::vector<Triangle>& triangles) {
+void Mesh::setGeometry(StructuredData&& verts, const std::vector<Triangle>& triangles) {
     PGE_ASSERT_MATERIAL_LAYOUT();
 
-    vertices = verts;
-    indices.resize(triangles.size() * 3);
+    vertices = std::move(verts);
+    indices.reserve(triangles.size() * 3);
     for (int i = 0; i < triangles.size(); i++) {
-        indices[(i * 3) + 0] = triangles[i].indices[0];
-        indices[(i * 3) + 1] = triangles[i].indices[1];
-        indices[(i * 3) + 2] = triangles[i].indices[2];
+        indices.emplace_back(triangles[i].indices[0]);
+        indices.emplace_back(triangles[i].indices[1]);
+        indices.emplace_back(triangles[i].indices[2]);
     }
     primitiveType = PrimitiveType::TRIANGLE;
 
     mustReuploadInternalData = true;
 }
 
-void Mesh::setGeometry(const StructuredData& verts, PrimitiveType type, std::vector<u32>&& inds) {
+void Mesh::setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u32>&& inds) {
     PGE_ASSERT_MATERIAL_LAYOUT();
     PGE_ASSERT(type == PrimitiveType::LINE && inds.size() % 2 == 0 || type == PrimitiveType::TRIANGLE && inds.size() % 3 == 0,
             "Invalid primitive type or inadequate indices count");
 
-    vertices = verts;
+    vertices = std::move(verts);
     indices = std::move(inds);
     primitiveType = type;
     mustReuploadInternalData = true;

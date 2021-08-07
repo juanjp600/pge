@@ -51,8 +51,10 @@ class StructuredData {
         StructuredData() = default;
         StructuredData(const ElemLayout& ly, int elemCount);
 
-        StructuredData(const StructuredData& other);
-        StructuredData& operator=(const StructuredData& other);
+        StructuredData(StructuredData&& other) noexcept;
+        StructuredData& operator=(StructuredData&& other) noexcept;
+
+        StructuredData copy() const;
 
         const byte* getData() const;
         size_t getDataSize() const;
