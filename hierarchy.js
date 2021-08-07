@@ -37,6 +37,7 @@ var hierarchy =
       [ "\u202APGE::String::OrderedKey", "struct_p_g_e_1_1_string_1_1_ordered_key.html", null ],
       [ "\u202APGE::String::RedundantKey", "struct_p_g_e_1_1_string_1_1_redundant_key.html", null ],
       [ "\u202APGE::String::SafeKey", "struct_p_g_e_1_1_string_1_1_safe_key.html", null ],
+      [ "\u202APGE::StructuredData", "class_p_g_e_1_1_structured_data.html", null ],
       [ "\u202APGE::StructuredData::ElemLayout::Entry", "struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_entry.html", null ],
       [ "\u202APGE::StructuredData::ElemLayout::LocationAndSize", "struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_location_and_size.html", null ],
       [ "\u202APGE::Vector2f", "class_p_g_e_1_1_vector2f.html", null ],
@@ -64,7 +65,6 @@ var hierarchy =
       [ "\u202APGE::Shader", "class_p_g_e_1_1_shader.html", null ],
       [ "\u202APGE::Texture", "class_p_g_e_1_1_texture.html", null ]
     ] ],
-    [ "\u202APGE::StructuredData", "class_p_g_e_1_1_structured_data.html", null ],
     [ "\u202APGE::SysEvents::Subscriber", "class_p_g_e_1_1_sys_events_1_1_subscriber.html", null ],
     [ "\u202APGE::SysEvents", "class_p_g_e_1_1_sys_events.html", null ],
     [ "\u202APGE::Mesh::Triangle", "struct_p_g_e_1_1_mesh_1_1_triangle.html", null ]
