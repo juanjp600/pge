@@ -15,8 +15,6 @@ class TextureOGL3 : public Texture {
         // Loaded texture.
         TextureOGL3(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps);
 
-        Texture* copy() const override;
-
         GLuint getGlTexture() const;
         //GLuint getGlFramebuffer() const;
         GLuint getGlDepthbuffer() const;

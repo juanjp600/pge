@@ -42,8 +42,8 @@ class Mesh : private PolymorphicHeap {
         };
 
         static Mesh* create(Graphics& gfx);
-        Mesh* clone(Graphics& gfx);
 
+        // TODO: Revisit.
         void setGeometry(const StructuredData& verts, const std::vector<Line>& lines);
         void setGeometry(const StructuredData& verts, const std::vector<Triangle>& triangles);
         void setGeometry(StructuredData&& verts, const std::vector<Line>& lines);

@@ -20,8 +20,6 @@ class TextureDX11 : public Texture, private GraphicsReferencer<const class Graph
 
         void useTexture(int index);
 
-        Texture* copy() const override;
-
         ID3D11RenderTargetView* getRtv() const;
         ID3D11DepthStencilView* getZBufferView() const;
         void* getNative() const override;

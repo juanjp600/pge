@@ -22,8 +22,6 @@ class Texture : private PolymorphicHeap {
 
         int getWidth() const; int getHeight() const;
         Vector2i getDimensions() const;
-
-        virtual Texture* copy() const = 0;
         
         virtual void* getNative() const = 0;
 

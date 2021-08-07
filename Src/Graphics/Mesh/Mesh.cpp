@@ -3,16 +3,6 @@
 
 using namespace PGE;
 
-Mesh* Mesh::clone(Graphics& gfx) {
-    Mesh* newMesh = create(gfx);
-    newMesh->material = material;
-    newMesh->primitiveType = primitiveType;
-    newMesh->vertices = vertices.copy();
-    newMesh->indices = indices;
-    newMesh->mustReuploadInternalData = true;
-    return newMesh;
-}
-
 #define PGE_ASSERT_MATERIAL_LAYOUT() PGE_ASSERT(material == nullptr || material->getShader().getVertexLayout() == *verts.getLayout(), "Material must be set before geometry can be set")
 
 void Mesh::setGeometry(const StructuredData& verts, const std::vector<Line>& lines) {
