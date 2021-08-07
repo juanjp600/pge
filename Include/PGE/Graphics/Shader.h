@@ -17,7 +17,7 @@ class Shader : private PolymorphicHeap {
 
         const StructuredData::ElemLayout& getVertexLayout() { return *vertexLayout; }
 
-        // TODO: Apply PolymorphicHeap.
+        // This is not heap-only to allow it as a map value.
         class Constant {
             public:
                 virtual void setValue(const Matrix4x4f& value) = 0;

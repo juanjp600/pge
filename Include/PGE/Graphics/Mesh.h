@@ -26,7 +26,7 @@ class Mesh : private PolymorphicHeap {
         enum class PrimitiveType {
             NONE,
             LINE,
-            TRIANGLE
+            TRIANGLE,
         };
 
         struct Line {

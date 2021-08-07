@@ -182,7 +182,7 @@ String::ReverseIterator& String::ReverseIterator::operator++() {
     return *this;
 }
 
-String::ReverseIterator String::ReverseIterator::operator++(int) {
+const String::ReverseIterator String::ReverseIterator::operator++(int) {
     Iterator temp = *this;
     ++(*this);
     return temp;
@@ -194,7 +194,7 @@ String::ReverseIterator& String::ReverseIterator::operator--() {
     return *this;
 }
 
-String::ReverseIterator String::ReverseIterator::operator--(int) {
+const String::ReverseIterator String::ReverseIterator::operator--(int) {
     Iterator temp = *this;
     --(*this);
     return temp;
