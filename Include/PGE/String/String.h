@@ -18,7 +18,7 @@
 namespace PGE {
 
 /// A UTF-8 character sequence guaranteed to be terminated by a null byte.
-class String final : private NoHeap {
+class String : private NoHeap {
     public:
         struct Key;
         struct RedundantKey;
@@ -78,15 +78,15 @@ class String final : private NoHeap {
         struct ReverseIterator : public Iterator {
             ReverseIterator(const Iterator& it) : Iterator(it) { }
 
-            void operator++();
-            void operator++(int);
-            void operator--();
-            void operator--(int);
+            ReverseIterator& operator++();
+            ReverseIterator& operator--();
+            const ReverseIterator operator++(int);
+            const ReverseIterator operator--(int);
 
             const ReverseIterator operator+(int steps) const { return Iterator::operator-(steps); }
             const ReverseIterator operator-(int steps) const { return Iterator::operator+(steps); }
-            void operator+=(int steps) { Iterator::operator-=(steps); }
-            void operator-=(int steps) { Iterator::operator+=(steps); }
+            ReverseIterator& operator+=(int steps) { Iterator::operator-=(steps); return *this; }
+            ReverseIterator& operator-=(int steps) { Iterator::operator+=(steps); return *this; }
 
             bool operator>(const Iterator& other) const { return Iterator::operator<(other); }
             bool operator<(const Iterator& other) const { return Iterator::operator>(other); }

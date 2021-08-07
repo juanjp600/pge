@@ -176,24 +176,28 @@ const String::Iterator String::end() const {
     return Iterator::end(*this);
 }
 
-void String::ReverseIterator::operator++() {
+String::ReverseIterator& String::ReverseIterator::operator++() {
     PGE_ASSERT(index >= 0, "Can't decrement iterator prior to string beginning");
     decrement();
+    return *this;
 }
 
-void String::ReverseIterator::operator++(int) {
-    PGE_ASSERT(index >= 0, "Can't decrement iterator prior to string beginning");
-    decrement();
+String::ReverseIterator String::ReverseIterator::operator++(int) {
+    Iterator temp = *this;
+    ++(*this);
+    return temp;
 }
 
-void String::ReverseIterator::operator--() {
+String::ReverseIterator& String::ReverseIterator::operator--() {
     PGE_ASSERT(index < ref->byteLength() - 1, "Can't increment iterator past string end");
     increment();
+    return *this;
 }
 
-void String::ReverseIterator::operator--(int) {
-    PGE_ASSERT(index < ref->byteLength() - 1, "Can't increment iterator past string end");
-    increment();
+String::ReverseIterator String::ReverseIterator::operator--(int) {
+    Iterator temp = *this;
+    --(*this);
+    return temp;
 }
 
 const String::ReverseIterator String::ReverseIterator::rbegin(const String& str) {
