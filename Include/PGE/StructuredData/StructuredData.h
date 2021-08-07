@@ -13,7 +13,7 @@
 
 namespace PGE {
 
-class StructuredData {
+class StructuredData : NoHeap {
     public:
         class ElemLayout {
             public:
