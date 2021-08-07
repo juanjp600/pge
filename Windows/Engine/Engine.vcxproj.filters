@@ -317,9 +317,6 @@
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceView.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceViewVector.h">
-      <Filter>Include\ResourceManagement</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\PGE\String\Key.h">
       <Filter>Include\String</Filter>
     </ClInclude>

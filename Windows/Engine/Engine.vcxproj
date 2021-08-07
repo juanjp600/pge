@@ -84,7 +84,6 @@
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\Resource.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceManager.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceView.h" />
-    <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceViewVector.h" />
     <ClInclude Include="..\..\Include\PGE\String\Key.h" />
     <ClInclude Include="..\..\Include\PGE\String\String.h" />
     <ClInclude Include="..\..\Include\PGE\StructuredData\StructuredData.h" />

@@ -8,7 +8,6 @@
 #include <d3d11.h>
 
 #include <PGE/ResourceManagement/ResourceView.h>
-#include <PGE/ResourceManagement/ResourceViewVector.h>
 #include <PGE/File/BinaryReader.h>
 #include <PGE/Graphics/Shader.h>
 
@@ -82,7 +81,7 @@ class ShaderDX11 : public Shader, private GraphicsReferencer<const class Graphic
         std::vector<CBufferInfo> fragmentConstantBuffers;
         void readConstantBuffers(BinaryReader& reflectionInfo, std::vector<CBufferInfo>& constantBuffers);
 
-        ResourceViewVector<ID3D11SamplerState*> dxSamplerState;
+        std::vector<ID3D11SamplerState*> dxSamplerState;
 
         D3D11VertexShader::View dxVertexShader;
         D3D11PixelShader::View dxFragmentShader;

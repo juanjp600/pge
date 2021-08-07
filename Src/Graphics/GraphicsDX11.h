@@ -11,7 +11,6 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 
-#include <PGE/ResourceManagement/ResourceViewVector.h>
 #include "../ResourceManagement/DX11.h"
 
 namespace PGE {
@@ -57,7 +56,7 @@ class GraphicsDX11 : public GraphicsSpecialized<ShaderDX11, MeshDX11, TextureDX1
         D3D11RenderTargetView::View dxBackBufferRtv;
         D3D11Texture2D::View dxZBufferTexture;
         D3D11DepthStencilView::View dxZBufferView;
-        ResourceViewVector<ID3D11DepthStencilState*> dxDepthStencilState;
+        std::vector<ID3D11DepthStencilState*> dxDepthStencilState;
 
         D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
         D3D11RasterizerState::View dxRasterizerState;
