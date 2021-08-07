@@ -15,7 +15,7 @@ namespace PGE {
 
 class StructuredData {
     public:
-        class ElemLayout : private PolymorphicHeap {
+        class ElemLayout {
             public:
                 struct Entry : private NoHeap {
                     Entry(const String& nm, int sz);
@@ -35,6 +35,8 @@ class StructuredData {
                 };
 
                 ElemLayout(const std::vector<Entry>& entrs);
+                ElemLayout(const ElemLayout&) = delete;
+                ElemLayout& operator=(const ElemLayout&) = delete;
 
                 const LocationAndSize& getLocationAndSize(const String& name) const;
                 const LocationAndSize& getLocationAndSize(const String::Key& name) const;
