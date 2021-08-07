@@ -18,6 +18,9 @@ class Shader;
 class SDLWindow;
 
 class GraphicsInternal : public Graphics {
+    private:
+        using Graphics::resourceManager;
+
     protected:
         static String appendInfoLine(const String& name, int value);
         static String appendInfoLine(const String& name, bool value);
@@ -34,10 +37,10 @@ class GraphicsInternal : public Graphics {
                 SDLWindow(const String& title, int width, int height, u32 flags);
                 ~SDLWindow();
         };
-
         SDLWindow::View sdlWindow;
 
         GraphicsInternal(const String& rendererName, const String& name, int w, int h, bool fs, SDL_WindowFlags windowFlags);
+
     public:
         String getInfo() const override;
 
@@ -47,7 +50,6 @@ class GraphicsInternal : public Graphics {
         virtual Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) = 0;
 
         SDL_Window* getWindow() const;
-
 };
 
 template <typename ShaderType, typename MeshType, typename TextureType>
@@ -66,7 +68,6 @@ class GraphicsSpecialized : public GraphicsInternal {
         }
 
         Mesh* createMesh() final override {
-            static_assert(std::is_base_of<Mesh, MeshType>::value);
             return new MeshType(*this);
         }
 

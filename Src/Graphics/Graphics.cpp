@@ -17,8 +17,6 @@ Graphics::Graphics(const String& name, int w, int h, bool fs) {
     focused = true;
 }
 
-Graphics::~Graphics() { }
-
 void Graphics::update() {
     SDL_Event event;
     while (((SysEventsInternal::SubscriberInternal*)eventSubscriber.get())->popEvent(event)) {

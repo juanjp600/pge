@@ -32,8 +32,6 @@ class MeshDX11 : public Mesh, private GraphicsReferencer<class GraphicsDX11> {
 
         ResourceManager resourceManager;
 
-        GraphicsDX11* getGraphicsDx11() const;
-
         void uploadInternalData() override;
 };
 

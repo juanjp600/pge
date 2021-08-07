@@ -62,7 +62,7 @@ class Mesh : private PolymorphicHeap {
 
         Material* material = nullptr;
 
-        PrimitiveType primitiveType;
+        PrimitiveType primitiveType = PrimitiveType::NONE;
         StructuredData vertices;
         std::vector<u32> indices;
 };

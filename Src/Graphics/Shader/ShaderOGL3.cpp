@@ -15,6 +15,7 @@ ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), reso
 
     glShaderProgram = resourceManager.addNewResource<GLProgram>(std::vector{ glVertexShader.get(), glFragmentShader.get() });
 
+    // TODO: Revisit the multiple passes needed here.
     extractVertexUniforms(vertexSource);
 
     extractVertexAttributes(vertexSource);
@@ -36,7 +37,9 @@ void ShaderOGL3::extractVertexUniforms(const String& vertexSource) {
                 parsedTypeToGlType(vertexUniforms[i].type),
                 1 /* TODO: add array support */,
                 vertexUniformData,
-                String::Key(vertexUniforms[i].name)));
+                String::Key(vertexUniforms[i].name)
+            )
+        );
     }
 }
 
@@ -56,7 +59,9 @@ void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
             GlAttribLocation(
                 glGetAttribLocation(glShaderProgram, parsedAttribs[i].name.cstr()),
                 attrElemType,
-                attrElemCount));
+                attrElemCount
+            )
+        );
     }
 
     vertexLayout = std::make_unique<StructuredData::ElemLayout>(layoutEntries);
@@ -66,18 +71,18 @@ void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
     std::vector<ParsedShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource, "uniform", fragmentUniforms);
     for (int i = 0; i < (int)fragmentUniforms.size(); i++) {
-        ConstantOGL3 constant = ConstantOGL3(
+        ConstantOGL3 constant(
             graphics,
             glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr()),
             parsedTypeToGlType(fragmentUniforms[i].type),
             1 /* TODO: add array support */,
             vertexUniformData,
-            String::Key(fragmentUniforms[i].name));
+            String::Key(fragmentUniforms[i].name)
+        );
         if (fragmentUniforms[i].type.equals("sampler2D")) {
             constant.setValue((u32)samplerConstants.size());
             samplerConstants.emplace(fragmentUniforms[i].name, constant);
-        }
-        else {
+        } else {
             fragmentShaderConstants.emplace(fragmentUniforms[i].name, constant);
         }
     }
@@ -92,19 +97,16 @@ void ShaderOGL3::extractFragmentOutputs(const String fragmentSource) {
 }
 
 void ShaderOGL3::extractShaderVars(const String& src, const String& varKind, std::vector<ParsedShaderVar>& varList) {
-    String line = "";
+    String line;
     String varStr = varKind + " ";
     for (char16 ch : src) {
         if (ch != '\r' && ch != '\n') {
             line += ch;
-        }
-        else {
+        } else {
             int minLen = varStr.length() < line.length() ? varStr.length() : line.length();
             if (line.substr(0, minLen).equals(varStr)) {
                 bool typeHasBeenRead = false;
                 ParsedShaderVar var;
-                var.type = "";
-                var.name = "";
                 auto it = line.begin() + varStr.length();
                 while (it != line.end()) {
                     char16 lineCh = *it;
@@ -113,16 +115,13 @@ void ShaderOGL3::extractShaderVars(const String& src, const String& varKind, std
                             break;
                         }
                         typeHasBeenRead = true;
-                    }
-                    else {
+                    } else {
                         if (lineCh == ';' || lineCh == '\r' || lineCh == '\n') {
                             break;
-                        }
-                        else {
+                        } else {
                             if (typeHasBeenRead) {
                                 var.name += lineCh;
-                            }
-                            else {
+                            } else {
                                 var.type += lineCh;
                             }
                         }
@@ -131,7 +130,7 @@ void ShaderOGL3::extractShaderVars(const String& src, const String& varKind, std
                 }
                 varList.push_back(var);
             }
-            line = "";
+            line = String();
         }
     }
 }

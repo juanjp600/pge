@@ -39,6 +39,8 @@ const static GLenum glTextureLayers[] = {
 };
 
 void MeshOGL3::render() {
+    if (primitiveType == PrimitiveType::NONE) { return; }
+
     graphics.takeGlContext();
 
     glBindVertexArray(glVertexArrayObject);

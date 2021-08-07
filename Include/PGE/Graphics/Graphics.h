@@ -32,8 +32,6 @@ class Graphics : private PolymorphicHeap {
         static Graphics* create(const String& name = "PGE Application", int w = 1280, int h = 720, bool fs = false, Renderer r = Renderer::Default);
 
         /// An instance of the Graphics class is considered active from when it was created via #create, until it is deleted.
-
-        virtual ~Graphics();
         
         /// Updates native window functionality.
         /// E.g. minimyzing, closing.
