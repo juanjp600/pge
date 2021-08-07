@@ -162,6 +162,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ac971deaf75803c534a110e46c9c0bcaa"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_color.html#ac971deaf75803c534a110e46c9c0bcaa">fromHSV</a> (float h, float s, float v, float a=1.f)</td></tr>
 <tr class="memdesc:ac971deaf75803c534a110e46c9c0bcaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Converts HSV(A) to RGBA.  <a href="class_p_g_e_1_1_color.html#ac971deaf75803c534a110e46c9c0bcaa">More...</a><br /></td></tr>
 <tr class="separator:ac971deaf75803c534a110e46c9c0bcaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f35fdd2172d3baf087931da97d73470"><td class="memItemLeft" align="right" valign="top"><a id="a6f35fdd2172d3baf087931da97d73470"></a>
+constexpr static <a class="el" href="class_p_g_e_1_1_color.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>lerp</b> (const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> &amp;a, const <a class="el" href="class_p_g_e_1_1_color.html">Color</a> &amp;b, float factor)</td></tr>
+<tr class="separator:a6f35fdd2172d3baf087931da97d73470"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -268,7 +271,7 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b></td></tr>
 <p>&#x202A;Converts HSV(A) to RGBA. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">h</td><td>&#x202A;The hue, must be in range [0, 360]. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h</td><td>&#x202A;The hue, wrapped to be in range [0, 360). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>&#x202A;The saturation, must be in range [0, 1]. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>&#x202A;The value, must be in range [0, 1]. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>&#x202A;The alpha, should be in range [0, 1]. </td></tr>

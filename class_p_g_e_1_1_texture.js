@@ -7,7 +7,6 @@ var class_p_g_e_1_1_texture =
     ] ],
     [ "\u202A~Texture", "class_p_g_e_1_1_texture.html#aebed24bd80bc37654df0a3962dd71804", null ],
     [ "\u202ATexture", "class_p_g_e_1_1_texture.html#a09a8585698c8608b767f930bbf4055cf", null ],
-    [ "\u202Acopy", "class_p_g_e_1_1_texture.html#af86e20e59aac6fc07969e5a04615b1c5", null ],
     [ "\u202AgetDimensions", "class_p_g_e_1_1_texture.html#a83351275393cb801d4d5f6b81e07c2c3", null ],
     [ "\u202AgetHeight", "class_p_g_e_1_1_texture.html#a92022fd7b53cf2a8da8ee05d57e8e9c6", null ],
     [ "\u202AgetNative", "class_p_g_e_1_1_texture.html#a8bebbcb05bb5c465e8feac7fecfbb571", null ],
