@@ -206,10 +206,10 @@ const std::vector<byte> FilePath::readBytes() const {
     std::ifstream file(str().cstr(), std::ios::ate | std::ios::binary);
     PGE_ASSERT(file.is_open(), "Couldn't read bytes from file (file: \"" + str() + "\")");
     std::vector<byte> bytes;
-    size_t vertSize = (size_t)file.tellg();
-    bytes.resize(bytes.size() + vertSize);
+    size_t size = (size_t)file.tellg();
+    bytes.resize(size);
     file.seekg(0);
-    file.read((char*)bytes.data(), vertSize);
+    file.read((char*)bytes.data(), size);
     return bytes;
 }
 
