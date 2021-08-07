@@ -7,17 +7,20 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 
     readConstantBuffers(reader, vertexConstantBuffers);
 
+    std::vector<StructuredData::ElemLayout::Entry> vertexInputElems;
     u32 propertyCount = reader.read<u32>();
-    vertexInputElems.resize(propertyCount);
+    vertexInputElems.reserve(propertyCount);
+
     // We have to keep the names in memory.
     std::vector<String> semanticNames(propertyCount);
     std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc(propertyCount);
     for (int i = 0; i < (int)propertyCount; i++) {
-        vertexInputElems[i] = reader.read<String>();
-
+        String name = reader.read<String>();
         semanticNames[i] = reader.read<String>();
         byte semanticIndex = reader.read<byte>();
         DXGI_FORMAT format = (DXGI_FORMAT)reader.read<byte>();
+
+        vertexInputElems.emplace_back(name, dxgiFormatToByteSize(format));
 
         D3D11_INPUT_ELEMENT_DESC vertexInputElemDesc;
         vertexInputElemDesc.SemanticName = semanticNames[i].cstr();
@@ -62,6 +65,8 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
     dxVertexShader = resourceManager.addNewResource<D3D11VertexShader>(dxDevice, vertexShaderBytecode);
     dxFragmentShader = resourceManager.addNewResource<D3D11PixelShader>(dxDevice, fragmentShaderBytecode);
     dxVertexInputLayout = resourceManager.addNewResource<D3D11InputLayout>(dxDevice, dxVertexInputElemDesc, vertexShaderBytecode);
+
+    vertexLayout = std::make_unique<StructuredData::ElemLayout>(vertexInputElems);
 }
 
 void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferInfo>& constantBuffers) {
@@ -84,6 +89,18 @@ void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferIn
     }
 }
 
+int ShaderDX11::dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat) {
+    switch (dxgiFormat) {
+        case DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT: { return sizeof(float); }
+        case DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT: { return sizeof(float) * 2; }
+        case DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT: { return sizeof(float) * 3; }
+        case DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT: { return sizeof(float) * 4; }
+        default: {
+            throw PGE_CREATE_EX("Unsupported DXGI_FORMAT: " + String::fromInt(dxgiFormat));
+        }
+    }
+}
+
 Shader::Constant& ShaderDX11::getVertexShaderConstant(const String& name) {
     for (CBufferInfo& cBuffer : vertexConstantBuffers) {
         auto& map = cBuffer.getConstants();
@@ -92,6 +109,7 @@ Shader::Constant& ShaderDX11::getVertexShaderConstant(const String& name) {
             return it->second;
         }
     }
+    throw PGE_CREATE_EX("Could not find vertex shader constant");
 }
 
 Shader::Constant& ShaderDX11::getFragmentShaderConstant(const String& name) {
@@ -102,10 +120,7 @@ Shader::Constant& ShaderDX11::getFragmentShaderConstant(const String& name) {
             return it->second;
         }
     }
-}
-
-const std::vector<String>& ShaderDX11::getVertexInputElems() const {
-    return vertexInputElems;
+    throw PGE_CREATE_EX("Could not find fragment shader constant");
 }
 
 void ShaderDX11::useShader() {
@@ -258,9 +273,8 @@ void ShaderDX11::ConstantDX11::setValue(float value) {
     constantBuffer.markAsDirty();
 }
 
-void ShaderDX11::ConstantDX11::setValue(int value) {
-    u32 valUi32 = value;
-    memcpy(constantBuffer.getData()+offset,&valUi32,sizeof(u32));
+void ShaderDX11::ConstantDX11::setValue(u32 value) {
+    memcpy(constantBuffer.getData()+offset,&value,sizeof(u32));
     constantBuffer.markAsDirty();
 }
 

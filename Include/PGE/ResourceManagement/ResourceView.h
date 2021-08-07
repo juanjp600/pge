@@ -13,12 +13,12 @@ template <typename T>
 class ResourceView : private NoHeap {
     private:
         T internalResource;
-        std::list<ResourceBase*>::iterator position;
+        std::list<ResourceBase*>::iterator iterator;
         bool holdsResource = false;
 
     public:
         ResourceView() = default;
-        ResourceView(T res, std::list<ResourceBase*>::iterator pos) { internalResource = res; holdsResource = true; position = pos; }
+        ResourceView(T res, const std::list<ResourceBase*>::iterator& iter) { internalResource = res; holdsResource = true; iterator = iter; }
 
         // Force cast.
         const T& get() const { PGE_ASSERT(holdsResource, "Reference not filled"); return internalResource; }
@@ -35,7 +35,7 @@ class ResourceView : private NoHeap {
 
         bool isHoldingResource() const { return holdsResource; }
 
-        const std::list<ResourceBase*>::iterator& getPosition() { return position; }
+        const std::list<ResourceBase*>::iterator& getManagerIterator() { return iterator; }
 };
 
 }

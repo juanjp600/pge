@@ -1,9 +1,8 @@
 #ifndef PGEINTERNAL_RESOURCEMANAGER_OGL3
 #define PGEINTERNAL_RESOURCEMANAGER_OGL3
 
-#include <PGE/ResourceManagement/ResourceManager.h>
-
 #include "../Graphics/GraphicsInternal.h"
+#include <PGE/ResourceManagement/ResourceManager.h>
 
 namespace PGE {
 

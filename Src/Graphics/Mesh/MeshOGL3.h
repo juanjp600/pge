@@ -14,9 +14,7 @@ namespace PGE {
 
 class MeshOGL3 : public Mesh, private GraphicsReferencer<class GraphicsOGL3> {
     public:
-        MeshOGL3(Graphics& gfx, Primitive::Type pt);
-
-        void updateInternalData() override;
+        MeshOGL3(Graphics& gfx);
 
         void render() override;
 
@@ -29,9 +27,6 @@ class MeshOGL3 : public Mesh, private GraphicsReferencer<class GraphicsOGL3> {
         GLVertexArray::View glVertexArrayObject;
 
         ResourceManagerOGL3 resourceManager;
-
-        std::vector<byte> glVertexData;
-        std::vector<GLuint> glIndexData;
 };
 
 }

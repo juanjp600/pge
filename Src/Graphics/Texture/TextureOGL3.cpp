@@ -59,15 +59,6 @@ TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, const byte* buffer, Format
     applyTextureParameters(false);
 }
 
-// TODO: Look at this again.
-Texture* TextureOGL3::copy() const {
-    //TextureOGL3* copy = new TextureOGL3(graphics, width, height, format);
-
-    //glCopyImageSubData(getGlTexture(), GL_TEXTURE_2D, 0, 0, 0, 0, copy->getGlTexture(), GL_TEXTURE_2D, 0, 0, 0, 0, width, height, 0);
-
-    return nullptr;
-}
-
 GLuint TextureOGL3::getGlTexture() const {
     return glTexture;
 }

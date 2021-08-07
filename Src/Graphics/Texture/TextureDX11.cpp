@@ -54,19 +54,6 @@ void TextureDX11::useTexture(int index) {
     dxContext->PSSetShaderResources(index,1,srvArr);
 }
 
-// TODO: Redo this.
-Texture* TextureDX11::copy() const {
-    //ID3D11DeviceContext* dxContext = graphics->getDxContext();
-
-    //TextureDX11* copy = new TextureDX11(graphics, getWidth(), getHeight(), false, nullptr, format);
-
-    //dxContext->CopyResource(copy->dxTexture, dxTexture);
-
-    // TODO: Check MipLevels, might have to regenerate dxShaderResourceView.
-
-    return nullptr;
-}
-
 ID3D11RenderTargetView* TextureDX11::getRtv() const {
     return dxRtv;
 }

@@ -27,12 +27,8 @@ class ShaderDX11 : public Shader, private GraphicsReferencer<const class Graphic
         void useVertexInputLayout();
         void useSamplers();
 
-        const std::vector<String>& getVertexInputElems() const;
-
     private:
         D3D11InputLayout::View dxVertexInputLayout;
-
-        std::vector<String> vertexInputElems;
 
         class CBufferInfo;
         class ConstantDX11 : public Constant {
@@ -45,7 +41,7 @@ class ShaderDX11 : public Shader, private GraphicsReferencer<const class Graphic
                 void setValue(const Vector4f& value) override;
                 void setValue(const Color& value) override;
                 void setValue(float value) override;
-                void setValue(int value) override;
+                void setValue(u32 value) override;
 
             private:
                 CBufferInfo& constantBuffer;
@@ -92,6 +88,8 @@ class ShaderDX11 : public Shader, private GraphicsReferencer<const class Graphic
         D3D11PixelShader::View dxFragmentShader;
 
         ResourceManager resourceManager;
+
+        int dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat);
 };
 
 }

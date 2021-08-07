@@ -9,109 +9,64 @@
 #include <PGE/Math/Vector.h>
 #include <PGE/Math/Matrix.h>
 #include <PGE/Graphics/Material.h>
+#include <PGE/StructuredData/StructuredData.h>
 #include <PGE/ResourceManagement/PolymorphicHeap.h>
 
 namespace PGE {
 
 class Graphics;
 
-class Vertex : private NoHeap {
-    public:
-        Vertex() = default;
-
-        struct Property {
-            enum class Type {
-                FLOAT,
-                UINT,
-                VECTOR2F,
-                VECTOR3F,
-                VECTOR4F,
-                COLOR,
-                INVALID,
-            };
-
-            Property() = default;
-            Type type = Type::INVALID;
-            // TODO: Replace all this with set byte layout.
-            union Value {
-                float floatVal;
-                unsigned uintVal;
-                Vector2f vector2fVal;
-                Vector3f vector3fVal;
-                Vector4f vector4fVal;
-                Color colorVal;
-                
-                Value();
-            };
-            Value value;
-        };
-
-        const Property& getProperty(const String& name) const;
-        
-        void setFloat(const String& name,float val);
-        void setUInt(const String& name,unsigned val);
-        void setVector2f(const String& name, const Vector2f& val);
-        void setVector3f(const String& name, const Vector3f& val);
-        void setVector4f(const String& name, const Vector4f& val);
-        void setColor(const String& name, const Color& val);
-
-    private:
-        std::unordered_map<String::Key, Property> properties;
-};
-
-class Primitive : private NoHeap {
-    public:
-        enum class Type {
-            TRIANGLE,
-            LINE
-        };
-
-        Primitive() = default;
-        Primitive(long ia,long ib);
-        Primitive(long ia,long ib,long ic);
-
-        long a; long b; long c;
-};
-
 class Mesh : private PolymorphicHeap {
     public:
-        static Mesh* create(Graphics& gfx, Primitive::Type pt);
-        Mesh* clone(Graphics& gfx);
+        enum class PreserveGeometry {
+            YES,
+            NO,
+        };
 
-        void setGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims);
-        // TODO: Possibly delegate this to the implementations.
-        // In general it is worth investigating if we can optimize changes to meshes by offloading more work to the implementations.
-        // Also e.g. encapsulating update and upload methods a bit would make for a better design. 
-        void addGeometry(const std::vector<Vertex>& verts, const std::vector<Primitive>& prims);
+        enum class PrimitiveType {
+            NONE,
+            LINE,
+            TRIANGLE,
+        };
+
+        struct Line {
+            Line(u32 a, u32 b);
+
+            u32 indices[2];
+        };
+
+        struct Triangle {
+            Triangle(u32 a, u32 b, u32 c);
+
+            u32 indices[3];
+        };
+
+        static Mesh* create(Graphics& gfx);
+
+        // TODO: Revisit.
+        void setGeometry(const StructuredData& verts, const std::vector<Line>& lines);
+        void setGeometry(const StructuredData& verts, const std::vector<Triangle>& triangles);
+        void setGeometry(StructuredData&& verts, const std::vector<Line>& lines);
+        void setGeometry(StructuredData&& verts, const std::vector<Triangle>& triangles);
+        void setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u32>&& inds);
         void clearGeometry();
-        const std::vector<Vertex>& getVertices() const;
-        const std::vector<Primitive>& getPrimitives() const;
-        void setMaterial(Material* m);
-        Material* getMaterial() const;
+
+        void setMaterial(Material* m, PreserveGeometry preserveGeometry);
 
         bool isOpaque() const;
-
-        // Must be threadsafe.
-        virtual void updateInternalData() = 0;
 
         virtual void render() = 0;
 
     protected:
-        Mesh(Primitive::Type primitiveType);
-
-        // Doesn't have to be threadsafe.
-        // The idea is to update a large mesh in parallel and then only doing a low cost upload on the main thread.
-        virtual void uploadInternalData() = 0;
-
-        bool mustUpdateInternalData = true;
         bool mustReuploadInternalData = true;
 
-        Material* material;
+        virtual void uploadInternalData() = 0;
 
-        const Primitive::Type primitiveType;
+        Material* material = nullptr;
 
-        std::vector<Vertex> vertices;
-        std::vector<Primitive> primitives;
+        PrimitiveType primitiveType = PrimitiveType::NONE;
+        StructuredData vertices;
+        std::vector<u32> indices;
 };
 
 }

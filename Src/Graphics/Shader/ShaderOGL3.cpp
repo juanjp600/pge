@@ -7,73 +7,202 @@ ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), reso
 
     String vertexSource = (path + "vertex.glsl").read();
     PGE_ASSERT(!vertexSource.isEmpty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
-    std::vector<ShaderVar> vertexUniforms;
-    extractShaderVars(vertexSource, "uniform", vertexUniforms);
     glVertexShader = resourceManager.addNewResource<GLShader>(GL_VERTEX_SHADER, vertexSource);
 
     String fragmentSource = (path + "fragment.glsl").read();
     PGE_ASSERT(!fragmentSource.isEmpty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
-    std::vector<ShaderVar> fragmentUniforms;
-    extractShaderVars(fragmentSource, "uniform", fragmentUniforms);
     glFragmentShader = resourceManager.addNewResource<GLShader>(GL_FRAGMENT_SHADER, fragmentSource);
 
     glShaderProgram = resourceManager.addNewResource<GLProgram>(std::vector{ glVertexShader.get(), glFragmentShader.get() });
 
+    // TODO: Revisit the multiple passes needed here.
+    extractVertexUniforms(vertexSource);
+
+    extractVertexAttributes(vertexSource);
+
+    extractFragmentUniforms(fragmentSource);
+
+    extractFragmentOutputs(fragmentSource);
+}
+
+void ShaderOGL3::extractVertexUniforms(const String& vertexSource) {
+    std::vector<ParsedShaderVar> vertexUniforms;
+    extractShaderVars(vertexSource, "uniform", vertexUniforms);
     for (int i = 0; i < (int)vertexUniforms.size(); i++) {
-        vertexShaderConstants.emplace(vertexUniforms[i].name, ConstantOGL3(graphics,glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr())));
+        vertexShaderConstants.emplace(
+            vertexUniforms[i].name,
+            ConstantOGL3(
+                graphics,
+                glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr()),
+                parsedTypeToGlType(vertexUniforms[i].type),
+                1 /* TODO: add array support */,
+                vertexUniformData,
+                String::Key(vertexUniforms[i].name)
+            )
+        );
+    }
+}
+
+void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
+    std::vector<ParsedShaderVar> parsedAttribs;
+    extractShaderVars(vertexSource, "in", parsedAttribs);
+
+    std::vector<StructuredData::ElemLayout::Entry> layoutEntries;
+    for (int i = 0; i < (int)parsedAttribs.size(); i++) {
+        GLenum attrType = parsedTypeToGlType(parsedAttribs[i].type);
+        GLenum attrElemType; int attrElemCount;
+        decomposeGlType(attrType, attrElemType, attrElemCount);
+
+        layoutEntries.emplace_back(parsedAttribs[i].name, glSizeToByteSize(attrType, attrElemCount));
+        glVertexAttribLocations.emplace(
+            String::Key(parsedAttribs[i].name),
+            GlAttribLocation(
+                glGetAttribLocation(glShaderProgram, parsedAttribs[i].name.cstr()),
+                attrElemType,
+                attrElemCount
+            )
+        );
     }
 
+    vertexLayout = std::make_unique<StructuredData::ElemLayout>(layoutEntries);
+}
+
+void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
+    std::vector<ParsedShaderVar> fragmentUniforms;
+    extractShaderVars(fragmentSource, "uniform", fragmentUniforms);
     for (int i = 0; i < (int)fragmentUniforms.size(); i++) {
-        ConstantOGL3 constant = ConstantOGL3(graphics,glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr()));
+        ConstantOGL3 constant(
+            graphics,
+            glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr()),
+            parsedTypeToGlType(fragmentUniforms[i].type),
+            1 /* TODO: add array support */,
+            vertexUniformData,
+            String::Key(fragmentUniforms[i].name)
+        );
         if (fragmentUniforms[i].type.equals("sampler2D")) {
-            constant.setValue((int)samplerConstants.size());
+            constant.setValue((u32)samplerConstants.size());
             samplerConstants.emplace(fragmentUniforms[i].name, constant);
         } else {
             fragmentShaderConstants.emplace(fragmentUniforms[i].name, constant);
         }
     }
+}
 
-    std::vector<ShaderVar> vertexInput;
-    extractShaderVars(vertexSource,"in",vertexInput);
-    stride = 0;
-    for (int i = 0; i < (int)vertexInput.size(); i++) {
-        VertexAttrib attrib;
-        attrib.name = vertexInput[i].name;
-        attrib.location = glGetAttribLocation(glShaderProgram, vertexInput[i].name.cstr());
-        if (vertexInput[i].type.equals("float")) {
-            attrib.size = 1;
-            attrib.type = GL_FLOAT;
-            stride += sizeof(GLfloat)*1;
-        } else if (vertexInput[i].type.equals("vec2")) {
-            attrib.size = 2;
-            attrib.type = GL_FLOAT;
-            stride += sizeof(GLfloat)*2;
-        } else if (vertexInput[i].type.equals("vec3")) {
-            attrib.size = 3;
-            attrib.type = GL_FLOAT;
-            stride += sizeof(GLfloat)*3;
-        } else if (vertexInput[i].type.equals("vec4")) {
-            attrib.size = 4;
-            attrib.type = GL_FLOAT;
-            stride += sizeof(GLfloat)*4;
-        } else if (vertexInput[i].type.equals("int")) {
-            attrib.size = 1;
-            attrib.type = GL_INT;
-            stride += sizeof(GLint)*1;
-        }
-        vertexAttribs.push_back(attrib);
-        vertexInputElems.push_back(attrib.name);
-    }
-
-    std::vector<ShaderVar> fragmentOutputs;
-    extractShaderVars(fragmentSource,"out",fragmentOutputs);
+void ShaderOGL3::extractFragmentOutputs(const String fragmentSource) {
+    std::vector<ParsedShaderVar> fragmentOutputs;
+    extractShaderVars(fragmentSource, "out", fragmentOutputs);
     for (int i = 0; i < (int)fragmentOutputs.size(); i++) {
-        glBindFragDataLocation(glShaderProgram,i,fragmentOutputs[i].name.cstr());
+        glBindFragDataLocation(glShaderProgram, i, fragmentOutputs[i].name.cstr());
     }
 }
 
-const std::vector<String>& ShaderOGL3::getVertexInputElems() const {
-    return vertexInputElems;
+void ShaderOGL3::extractShaderVars(const String& src, const String& varKind, std::vector<ParsedShaderVar>& varList) {
+    String line;
+    String varStr = varKind + " ";
+    for (char16 ch : src) {
+        if (ch != '\r' && ch != '\n') {
+            line += ch;
+        } else {
+            int minLen = varStr.length() < line.length() ? varStr.length() : line.length();
+            if (line.substr(0, minLen).equals(varStr)) {
+                bool typeHasBeenRead = false;
+                ParsedShaderVar var;
+                auto it = line.begin() + varStr.length();
+                while (it != line.end()) {
+                    char16 lineCh = *it;
+                    if (lineCh == ' ') {
+                        if (typeHasBeenRead && var.name.length() > 0) {
+                            break;
+                        }
+                        typeHasBeenRead = true;
+                    } else {
+                        if (lineCh == ';' || lineCh == '\r' || lineCh == '\n') {
+                            break;
+                        } else {
+                            if (typeHasBeenRead) {
+                                var.name += lineCh;
+                            } else {
+                                var.type += lineCh;
+                            }
+                        }
+                    }
+                    it++;
+                }
+                varList.push_back(var);
+            }
+            line = String();
+        }
+    }
+}
+
+int ShaderOGL3::glSizeToByteSize(GLenum type, int size) const {
+    switch (type) {
+        case GL_INT:
+            return sizeof(GLint);
+        case GL_UNSIGNED_INT:
+            return sizeof(GLuint);
+        case GL_FLOAT:
+            return sizeof(GLfloat);
+        case GL_FLOAT_VEC2:
+            return sizeof(GLfloat) * 2;
+        case GL_FLOAT_VEC3:
+            return sizeof(GLfloat) * 3;
+        case GL_FLOAT_VEC4:
+            return sizeof(GLfloat) * 4;
+        case GL_FLOAT_MAT4:
+            return sizeof(GLfloat) * 4 * 4;
+        default:
+            throw PGE_CREATE_EX("Unsupported OpenGL datatype: " + String::fromInt(type));
+    }
+}
+
+GLenum ShaderOGL3::parsedTypeToGlType(const String& parsedType) {
+    if (parsedType.equals("float")) {
+        return GL_FLOAT;
+    } else if (parsedType.equals("vec2")) {
+        return GL_FLOAT_VEC2;
+    } else if (parsedType.equals("vec3")) {
+        return GL_FLOAT_VEC3;
+    } else if (parsedType.equals("vec4")) {
+        return GL_FLOAT_VEC4;
+    } else if (parsedType.equals("mat4")) {
+        return GL_FLOAT_MAT4;
+    } else if (parsedType.equals("int")) {
+        return GL_INT;
+    } else if (parsedType.equals("uint")) {
+        return GL_UNSIGNED_INT;
+    } else {
+        throw PGE_CREATE_EX("Unsupported GLSL datatype: "+parsedType);
+    }
+}
+
+void ShaderOGL3::decomposeGlType(GLenum compositeType, GLenum& elemType, int& elemCount) {
+    switch (compositeType) {
+        case GL_INT: {
+            elemType = GL_INT; elemCount = 1;
+        } break;
+        case GL_UNSIGNED_INT: {
+            elemType = GL_UNSIGNED_INT; elemCount = 1;
+        } break;
+        case GL_FLOAT: {
+            elemType = GL_FLOAT; elemCount = 1;
+        } break;
+        case GL_FLOAT_VEC2: {
+            elemType = GL_FLOAT; elemCount = 2;
+        } break;
+        case GL_FLOAT_VEC3: {
+            elemType = GL_FLOAT; elemCount = 3;
+        } break;
+        case GL_FLOAT_VEC4: {
+            elemType = GL_FLOAT; elemCount = 4;
+        } break;
+        case GL_FLOAT_MAT4: {
+            elemType = GL_FLOAT; elemCount = 4 * 4;
+        } break;
+        default: {
+            throw PGE_CREATE_EX("Unsupported OpenGL datatype: " + String::fromInt(compositeType));
+        }
+    }
 }
 
 void ShaderOGL3::useShader() {
@@ -84,20 +213,15 @@ void ShaderOGL3::useShader() {
     glUseProgram(glShaderProgram);
 
     byte* ptr = nullptr;
-    for (int i = 0; i < (int)vertexAttribs.size(); i++) {
-        glEnableVertexAttribArray(vertexAttribs[i].location);
-        switch (vertexAttribs[i].type) {
-            case GL_FLOAT: {
-                glVertexAttribPointer(vertexAttribs[i].location,vertexAttribs[i].size,GL_FLOAT,GL_FALSE,stride,(void*)ptr);
-                ptr+=sizeof(GLfloat)*vertexAttribs[i].size;
-            } break;
-            case GL_INT: {
-                glVertexAttribPointer(vertexAttribs[i].location,vertexAttribs[i].size,GL_INT,GL_FALSE,stride,(void*)ptr);
-                ptr+=sizeof(GLint)*vertexAttribs[i].size;
-            } break;
-        }
+    for (const auto& kvp : glVertexAttribLocations) {
+        const String::Key& key = kvp.first;
+        const GlAttribLocation& glAttribLocation = kvp.second;
+        const StructuredData::ElemLayout::LocationAndSize& locationAndSizeInBuffer = vertexLayout->getLocationAndSize(key);
+
+        glEnableVertexAttribArray(glAttribLocation.location);
+        glVertexAttribPointer(glAttribLocation.location, glAttribLocation.elementCount, glAttribLocation.elementType, GL_FALSE, vertexLayout->getElementSize(), ptr + locationAndSizeInBuffer.location);
         glError = glGetError();
-        PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + vertexAttribs[i].name + ")");
+        PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + String::format(key.hash, "%Xll") + ")");
     }
 
     for (auto& it : vertexShaderConstants) {
@@ -116,8 +240,9 @@ void ShaderOGL3::useShader() {
 void ShaderOGL3::unbindGLAttribs() {
     graphics.takeGlContext();
 
-    for (int i = 0; i < (int)vertexAttribs.size(); i++) {
-        glDisableVertexAttribArray(vertexAttribs[i].location);
+    for (const auto& kvp : glVertexAttribLocations) {
+        const GlAttribLocation& glAttribLocation = kvp.second;
+        glDisableVertexAttribArray(glAttribLocation.location);
     }
 }
 
@@ -133,110 +258,77 @@ Shader::Constant& ShaderOGL3::getFragmentShaderConstant(const String& name) {
     return it->second;
 }
 
-void ShaderOGL3::extractShaderVars(const String& src,const String& varKind,std::vector<ShaderVar>& varList) {
-    String line = String();
-    String varStr = varKind + " ";
-    for (char16 ch : src) {
-        if (ch!='\r' && ch!='\n') {
-            line += ch;
-        } else {
-            if (line.substr(0, varStr.length() < line.length() ? varStr.length() : line.length()).equals(varStr)) {
-                bool readType = false;
-                ShaderVar var;
-                var.type = "";
-                var.name = "";
-                auto it = line.begin() + (varStr.length() - 1);
-                while (++it != line.end()) {
-                    char16 lineCh = *it;
-                    if (lineCh == ' ') {
-                        if (readType && var.name.length()>0) {
-                            break;
-                        }
-                        readType = true;
-                    } else {
-                        if (lineCh==';' || lineCh=='\r' || lineCh=='\n') {
-                            break;
-                        } else {
-                            if (readType) {
-                                var.name += lineCh;
-                            } else {
-                                var.type += lineCh;
-                            }
-                        }
-                    }
-                }
-                varList.push_back(var);
-            }
-            line = "";
-        }
-    }
-}
-
-ShaderOGL3::ConstantOGL3::Value::Value() {
-    matrixVal = Matrices::ZERO;
-}
-
-ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3& gfx, int loc)
-    : GraphicsReferencer(gfx) {
-    location = loc;
+ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk) : dataBuffer(data), GraphicsReferencer(gfx) {
+    glLocation = glLoc;
+    glType = glTyp;
+    glArraySize = glArrSz;
+    dataKey = dk;
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Matrix4x4f& value) {
-    val.matrixVal = value; valueType = ValueType::MATRIX;
+    dataBuffer.setValue(0, dataKey, value);
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Vector2f& value) {
-    val.vector2fVal = value; valueType = ValueType::VECTOR2F;
+    dataBuffer.setValue(0, dataKey, value);
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Vector3f& value) {
-    val.vector3fVal = value; valueType = ValueType::VECTOR3F;
+    dataBuffer.setValue(0, dataKey, value);
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Vector4f& value) {
-    val.vector4fVal = value; valueType = ValueType::VECTOR4F;
+    dataBuffer.setValue(0, dataKey, value);
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(const Color& value) {
-    val.colorVal = value; valueType = ValueType::COLOR;
+    dataBuffer.setValue(0, dataKey, value);
 }
 
 void ShaderOGL3::ConstantOGL3::setValue(float value) {
-    val.floatVal = value; valueType = ValueType::FLOAT;
+    dataBuffer.setValue(0, dataKey, value);
 }
 
-void ShaderOGL3::ConstantOGL3::setValue(int value) {
-    val.intVal = value; valueType = ValueType::INT;
+void ShaderOGL3::ConstantOGL3::setValue(u32 value) {
+    dataBuffer.setValue(0, dataKey, value);
 }
 
 void ShaderOGL3::ConstantOGL3::setUniform() {
     GLuint glError = GL_NO_ERROR;
 
     graphics.takeGlContext();
-    switch (valueType) {
-        case ValueType::MATRIX: {
-            glUniformMatrix4fv(location, 1, GL_FALSE, val.matrixVal[0]);
+    const void* dataPtr = dataBuffer.getData() + dataBuffer.getLayout()->getLocationAndSize(dataKey).location;
+    const GLfloat* dataPtrF = (GLfloat*)dataPtr;
+    const GLint* dataPtrI = (GLint*)dataPtr;
+    const GLuint* dataPtrU = (GLuint*)dataPtr;
+    switch (glType) {
+        case GL_FLOAT_MAT4: {
+            glUniformMatrix4fv(glLocation, 1, GL_FALSE, dataPtrF);
         } break;
-        case ValueType::VECTOR2F: {
-            glUniform2f(location,val.vector2fVal.x,val.vector2fVal.y);
+        case GL_FLOAT_VEC2: {
+            glUniform2f(glLocation, *dataPtrF, *(dataPtrF + 1));
         } break;
-        case ValueType::VECTOR3F: {
-            glUniform3f(location,val.vector3fVal.x,val.vector3fVal.y,val.vector3fVal.z);
+        case GL_FLOAT_VEC3: {
+            glUniform3f(glLocation, *dataPtrF, *(dataPtrF + 1), *(dataPtrF + 2));
         } break;
-        case ValueType::VECTOR4F: {
-            glUniform4f(location,val.vector4fVal.x,val.vector4fVal.y,val.vector4fVal.z,val.vector4fVal.w);
+        case GL_FLOAT_VEC4: {
+            glUniform4f(glLocation, *dataPtrF, *(dataPtrF + 1), *(dataPtrF + 2), *(dataPtrF + 3));
         } break;
-        case ValueType::COLOR: {
-            glUniform4f(location,val.colorVal.red,val.colorVal.green,val.colorVal.blue,val.colorVal.alpha);
+        case GL_FLOAT: {
+            glUniform1f(glLocation, *dataPtrF);
         } break;
-        case ValueType::FLOAT: {
-            glUniform1f(location,val.floatVal);
+        case GL_INT: {
+            glUniform1i(glLocation, *dataPtrI);
         } break;
-        case ValueType::INT: {
-            glUniform1i(location,val.intVal);
+        case GL_UNSIGNED_INT: {
+            glUniform1ui(glLocation, *dataPtrU);
         } break;
     }
 
     glError = glGetError();
     PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set uniform value (GLERROR: " + String::fromInt(glError) +")");
+}
+
+ShaderOGL3::GlAttribLocation::GlAttribLocation(GLint loc, GLenum elemType, int elemCount) {
+    location = loc; elementType = elemType; elementCount = elemCount;
 }

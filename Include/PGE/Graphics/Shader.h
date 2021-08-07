@@ -5,6 +5,7 @@
 #include <PGE/Math/Matrix.h>
 #include <PGE/Math/Vector.h>
 #include <PGE/Color/Color.h>
+#include <PGE/StructuredData/StructuredData.h>
 #include <PGE/ResourceManagement/PolymorphicHeap.h>
 
 namespace PGE {
@@ -14,7 +15,9 @@ class Shader : private PolymorphicHeap {
         static Shader* load(class Graphics& gfx, const FilePath& path);
         virtual ~Shader() = default;
 
-        // TODO: Apply PolymorphicHeap.
+        const StructuredData::ElemLayout& getVertexLayout() { return *vertexLayout; }
+
+        // This is not heap-only to allow it as a map value.
         class Constant {
             public:
                 virtual void setValue(const Matrix4x4f& value) = 0;
@@ -23,7 +26,7 @@ class Shader : private PolymorphicHeap {
                 virtual void setValue(const Vector4f& value) = 0;
                 virtual void setValue(const Color& value) = 0;
                 virtual void setValue(float value) = 0;
-                virtual void setValue(int value) = 0;
+                virtual void setValue(u32 value) = 0;
 
             protected:
                 Constant() = default;
@@ -35,6 +38,7 @@ class Shader : private PolymorphicHeap {
     protected:
         Shader(const FilePath& path) : filepath(path) { }
 
+        std::unique_ptr<StructuredData::ElemLayout> vertexLayout;
         const FilePath filepath;
 };
 

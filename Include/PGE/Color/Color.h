@@ -2,6 +2,7 @@
 #define PGE_COLOR_H_INCLUDED
 
 #include <PGE/Math/Math.h>
+#include <PGE/Math/Interpolator.h>
 #include <PGE/Types/Types.h>
 #include <PGE/Exception/Exception.h>
 #include <PGE/ResourceManagement/NoHeap.h>
@@ -23,16 +24,18 @@ class Color : private NoHeap {
         constexpr Color(float r, float g, float b, float a = 1.f) noexcept : red(r), green(g), blue(b), alpha(a) { }
 
         /// Converts HSV(A) to RGBA.
-        /// @param[in] h The hue, must be in range [0, 360].
+        /// @param[in] h The hue, wrapped to be in range [0, 360).
         /// @param[in] s The saturation, must be in range [0, 1].
         /// @param[in] v The value, must be in range [0, 1].
         /// @param[in] a The alpha, should be in range [0, 1].
         /// @exception #PGE::Exception If hue, saturation or value are outside their expected range.
         /// @see https://en.wikipedia.org/wiki/HSL_and_HSV
         static constexpr const Color fromHSV(float h, float s, float v, float a = 1.f) {
-            PGE_ASSERT(h >= 0 && h <= 360.f, "Hue is outside of valid range (hue: " + String::fromFloat(h) + ")");
             PGE_ASSERT(s >= 0 && s <= 1.f, "Saturation is outside of valid range (saturation: " + String::fromFloat(s) + ")");
             PGE_ASSERT(v >= 0 && v <= 1.f, "Value is outside of valid range (value: " + String::fromFloat(v) + ")");
+
+            while (h < 0.f) { h += 360.f; }
+            while (h >= 360.f) { h -= 360.f; }
 
             float hh = h / 60.f;
             int i = (int)hh;
@@ -81,6 +84,14 @@ class Color : private NoHeap {
                 && Math::equalFloats(green, other.green, epsilon)
                 && Math::equalFloats(blue, other.blue, epsilon)
                 && Math::equalFloats(alpha, other.alpha, epsilon);
+        }
+
+        constexpr static Color lerp(const Color& a, const Color& b, float factor) {
+            return Color(
+                PGE::Interpolator::lerp(a.red, b.red, factor),
+                PGE::Interpolator::lerp(a.green, b.green, factor),
+                PGE::Interpolator::lerp(a.blue, b.blue, factor),
+                PGE::Interpolator::lerp(a.alpha, b.alpha, factor));
         }
 
         constexpr byte getRed() const noexcept { return (byte)(red * 255.f); }
