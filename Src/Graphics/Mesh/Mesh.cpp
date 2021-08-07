@@ -17,6 +17,7 @@ void Mesh::setGeometry(StructuredData&& verts, const std::vector<Line>& lines) {
     PGE_ASSERT_MATERIAL_LAYOUT();
 
     vertices = std::move(verts);
+    indices.clear();
     indices.reserve(lines.size() * 2);
     for (int i = 0; i < lines.size(); i++) {
         indices.emplace_back(lines[i].indices[0]);
@@ -31,6 +32,7 @@ void Mesh::setGeometry(StructuredData&& verts, const std::vector<Triangle>& tria
     PGE_ASSERT_MATERIAL_LAYOUT();
 
     vertices = std::move(verts);
+    indices.clear();
     indices.reserve(triangles.size() * 3);
     for (int i = 0; i < triangles.size(); i++) {
         indices.emplace_back(triangles[i].indices[0]);
