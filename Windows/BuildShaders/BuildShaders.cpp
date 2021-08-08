@@ -8,6 +8,7 @@
 
 #include <PGE/Exception/Exception.h>
 #include <PGE/File/BinaryWriter.h>
+#include <PGE/String/Unicode.h>
 #include <PGE/String/Key.h>
 
 using namespace PGE;
@@ -127,31 +128,31 @@ static std::unordered_map<u64, String> parseVertexInput(const String& input) {
     String vsInput = "struct VS_INPUT";
     String::Iterator before = input.findFirst(vsInput) + vsInput.length();
     // Space before {
-    Parser::skip(before, isspace);
+    Parser::skip(before, Unicode::isSpace);
     // {
     Parser::expectFixed(before, L'{');
     // Whitespace before first type
-    Parser::skip(before, isspace);
+    Parser::skip(before, Unicode::isSpace);
     while (*before != L'}') {
         // Type skip
-        Parser::skip(before, isalnum);
+        Parser::skip(before, std::not_fn(Unicode::isSpace));
         // Whitespace after type
-        Parser::skip(before, isspace);
+        Parser::skip(before, Unicode::isSpace);
         
         // Type
         String::Iterator after = before;
-        Parser::skip(after, isalnum);
+        Parser::skip(after, std::not_fn(Unicode::isSpace));
         String inputName = input.substr(before, after);
 
         before = after;
         // Whitespace before colon
-        Parser::skip(before, isspace);
+        Parser::skip(before, Unicode::isSpace);
         Parser::expectFixed(before, L':');
         // Whitespace after colon
-        Parser::skip(before, isspace);
+        Parser::skip(before, Unicode::isSpace);
 
         after = before;
-        Parser::skip(after, [](char16 ch) { return !isdigit(ch) && ch != L';'; });
+        Parser::skip(after, [](char16 ch) { return !Unicode::isDigit(ch) && ch != L';'; });
 
         String semanticName = input.substr(before, after);
         byte semanticIndex;

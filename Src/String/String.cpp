@@ -1,6 +1,7 @@
 #include <PGE/String/String.h>
+#include <PGE/String/Unicode.h>
+#include "UnicodeInternal.h"
 #include "UnicodeHelper.h"
-#include "Unicode.h"
 
 #include <iostream>
 #include <queue>

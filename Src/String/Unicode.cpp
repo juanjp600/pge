@@ -18,7 +18,8 @@
 //                                                                                                                                   //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "Unicode.h"
+#include <PGE/String/Unicode.h>
+#include "UnicodeInternal.h"
 
 using namespace PGE;
 
@@ -11222,7 +11223,72 @@ void Unicode::down(String& str, char16 ch) {
 
 bool Unicode::isSpace(char16 ch) {
     switch (ch) {
+        case u'\u0000':
+        case u'\u0001':
+        case u'\u0002':
+        case u'\u0003':
+        case u'\u0004':
+        case u'\u0005':
+        case u'\u0006':
+        case u'\u0007':
+        case u'\u0008':
+        case u'\u0009':
+        case u'\u000A':
+        case u'\u000B':
+        case u'\u000C':
+        case u'\u000D':
+        case u'\u000E':
+        case u'\u000F':
+        case u'\u0010':
+        case u'\u0011':
+        case u'\u0012':
+        case u'\u0013':
+        case u'\u0014':
+        case u'\u0015':
+        case u'\u0016':
+        case u'\u0017':
+        case u'\u0018':
+        case u'\u0019':
+        case u'\u001A':
+        case u'\u001B':
+        case u'\u001C':
+        case u'\u001D':
+        case u'\u001E':
+        case u'\u001F':
         case u'\u0020':
+        case u'\u007F':
+        case u'\u0080':
+        case u'\u0081':
+        case u'\u0082':
+        case u'\u0083':
+        case u'\u0084':
+        case u'\u0085':
+        case u'\u0086':
+        case u'\u0087':
+        case u'\u0088':
+        case u'\u0089':
+        case u'\u008A':
+        case u'\u008B':
+        case u'\u008C':
+        case u'\u008D':
+        case u'\u008E':
+        case u'\u008F':
+        case u'\u0090':
+        case u'\u0091':
+        case u'\u0092':
+        case u'\u0093':
+        case u'\u0094':
+        case u'\u0095':
+        case u'\u0096':
+        case u'\u0097':
+        case u'\u0098':
+        case u'\u0099':
+        case u'\u009A':
+        case u'\u009B':
+        case u'\u009C':
+        case u'\u009D':
+        case u'\u009E':
+        case u'\u009F':
         case u'\u00A0':
         case u'\u1680':
         case u'\u2000':

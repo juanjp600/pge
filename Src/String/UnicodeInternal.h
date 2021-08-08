@@ -1,5 +1,5 @@
-#ifndef PGE_UNICODE_H_INCLUDED
-#define PGE_UNICODE_H_INCLUDED
+#ifndef PGE_UNICODEINTERNAL_H_INCLUDED
+#define PGE_UNICODEINTERNAL_H_INCLUDED
 
 #include <queue>
 
@@ -11,9 +11,8 @@ namespace Unicode {
 	void fold(std::queue<char16>& queue, char16 ch);
 	void up(String& str, char16 ch);
 	void down(String& str, char16 ch);
-	bool isSpace(char16 ch);
 }
 
 }
 
-#endif // PGE_UNICODE_H_INCLUDED
+#endif // PGE_UNICODEINTERNAL_H_INCLUDED

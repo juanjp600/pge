@@ -197,7 +197,8 @@ R"(
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 )" + 1 // + 1 to skip leading newline.
     );
-    out.writeLine("#include \"Unicode.h\"");
+    out.writeLine("#include <PGE/String/Unicode.h>");
+    out.writeLine("#include \"UnicodeInternal.h\"");
     out.writeLine();
     out.writeLine("using namespace PGE;");
     out.writeLine();
@@ -240,7 +241,7 @@ R"(
             downSwitch.feed(params[0], params[13]);
         }
 
-        if (*params[2].charAt(0) == L'Z') {
+        if (*params[2].charAt(0) == L'Z' || params[2] == "Cc") {
             spaceIdent.feed(params[0]);
         }
     });

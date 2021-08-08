@@ -86,6 +86,7 @@
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceView.h" />
     <ClInclude Include="..\..\Include\PGE\String\Key.h" />
     <ClInclude Include="..\..\Include\PGE\String\String.h" />
+    <ClInclude Include="..\..\Include\PGE\String\Unicode.h" />
     <ClInclude Include="..\..\Include\PGE\StructuredData\StructuredData.h" />
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Types.h" />
@@ -102,7 +103,7 @@
     <ClInclude Include="..\..\Src\ResourceManagement\DX11.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\OGL3.h" />
     <ClInclude Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.h" />
-    <ClInclude Include="..\..\Src\String\Unicode.h" />
+    <ClInclude Include="..\..\Src\String\UnicodeInternal.h" />
     <ClInclude Include="..\..\Src\String\UnicodeHelper.h" />
     <ClInclude Include="..\..\Src\SysEvents\SysEventsInternal.h" />
   </ItemGroup>
