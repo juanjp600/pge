@@ -41,6 +41,9 @@ var namespaces_dup =
         [ "\u202AIDENTITY", "_matrix_8h.html#a046dd63612a413436914ee0e87965210", null ],
         [ "\u202AZERO", "_matrix_8h.html#a60068e56aea133a823e257813d713bd5", null ]
       ] ],
+      [ "\u202AUnicode", null, [
+        [ "\u202AisSpace", "_unicode_8h.html#a1fb4e18653c7532da0bd14f40227ac59", null ]
+      ] ],
       [ "\u202AVectors", null, [
         [ "\u202AONE2F", "_vector_8h.html#a011f4d8e8cb012885bd1c632d139a292", null ],
         [ "\u202AONE2I", "_vector_8h.html#a737bd1fdfd33806f76123012768017a8", null ],
