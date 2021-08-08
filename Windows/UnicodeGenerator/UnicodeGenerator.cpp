@@ -11,16 +11,17 @@ using namespace PGE;
 
 static const String INDENT = "    ";
 
+// TODO: This desperately needs refactoring.
 class SwitchWriter {
     protected:
         using Cases = std::set<String::OrderedKey>;
         using StatementMap = std::map<String::OrderedKey, Cases>;
 
-        SwitchWriter(const String& name, const String& param, const String& preAction, const String& postAction)
-            : name(name), param(param), preAction(preAction), postAction(postAction) { }
+        SwitchWriter(const String& name, const String& param, const String& preAction, const String& postAction, const String& retType = "void")
+            : name(name), param(param), preAction(preAction), postAction(postAction), retType(retType) { }
 
         void write(TextWriter& out, const StatementMap& done) const {
-            out.writeLine("void Unicode::" + name + "(" + param + ", char16 ch) {");
+            out.writeLine(retType + " Unicode::" + name + "(" + (!param.isEmpty() ? (param + ", ") : "") + "char16 ch) {");
             out.writeLine(INDENT + "switch (ch) {");
             for (const auto& it : done) {
                 std::vector<String> chars = it.first.str.split(" ", true);
@@ -40,10 +41,18 @@ class SwitchWriter {
                 writeBreak(out);
             }
             out.writeLine(INDENT.multiply(2) + "default: {");
-            writeAction(out, "ch");
+            writeDefaultAction(out);
             writeBreak(out);
             out.writeLine(INDENT + "}");
             out.writeLine("}");
+        }
+
+        virtual void writeAction(TextWriter& out, const String& item) const {
+            out.writeLine(INDENT.multiply(3) + preAction + item + postAction);
+        }
+
+        virtual void writeDefaultAction(TextWriter& out) const {
+            writeAction(out, "ch");
         }
 
     private:
@@ -51,10 +60,7 @@ class SwitchWriter {
         const String param;
         const String preAction;
         const String postAction;
-
-        void writeAction(TextWriter& out, const String& item) const {
-            out.writeLine(INDENT.multiply(3) + preAction + item + postAction);
-        }
+        const String retType;
 
         static void writeBreak(TextWriter& out) {
             out.writeLine(INDENT.multiply(2) + "} break;");
@@ -116,6 +122,33 @@ class Caser : private SwitchWriter {
     private:
         StatementMap done;
         std::unordered_set<String::Key> hasHad;
+};
+
+class Identifier : private SwitchWriter {
+    public:
+        Identifier(const String& name)
+            : SwitchWriter(name, String(), String(), String(), "bool") { }
+
+        void feed(const String& match) {
+            matchingChars.emplace(match);
+        }
+
+        void write(TextWriter& out) const {
+            StatementMap map;
+            map.emplace("TODO", matchingChars);
+            SwitchWriter::write(out, map);
+        }
+
+    private:
+        Cases matchingChars;
+
+        void writeAction(TextWriter& out, const String& item) const override {
+            out.writeLine(INDENT.multiply(3) + "return true;");
+        }
+
+        void writeDefaultAction(TextWriter& out) const override {
+            out.writeLine(INDENT.multiply(3) + "return false;");
+        }
 };
 
 namespace UnicodeParser {
@@ -186,6 +219,8 @@ R"(
     upSwitch.feed("00DF", "1E9E");
     //
 
+    Identifier spaceIdent("isSpace");
+
     UnicodeParser::parse(FilePath::fromStr("SpecialCasing.txt"), [&](const std::vector<String>& params) {
         // We don't want any conditional mappings.
         if (*params[4].trim().charAt(0) != L'#') { return; }
@@ -204,6 +239,10 @@ R"(
         if (params[13].byteLength() != 0) {
             downSwitch.feed(params[0], params[13]);
         }
+
+        if (*params[2].charAt(0) == L'Z') {
+            spaceIdent.feed(params[0]);
+        }
     });
 
     upSwitch.write(out);
@@ -211,6 +250,10 @@ R"(
     out.writeLine();
 
     downSwitch.write(out);
+
+    out.writeLine();
+
+    spaceIdent.write(out);
 
     std::cout << "Generated Unicode code!" << std::endl;
     return 0;

@@ -11,6 +11,7 @@ namespace Unicode {
 	void fold(std::queue<char16>& queue, char16 ch);
 	void up(String& str, char16 ch);
 	void down(String& str, char16 ch);
+	bool isSpace(char16 ch);
 }
 
 }

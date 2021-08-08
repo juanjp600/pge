@@ -11219,3 +11219,32 @@ void Unicode::down(String& str, char16 ch) {
         } break;
     }
 }
+
+bool Unicode::isSpace(char16 ch) {
+    switch (ch) {
+        case u'\u0020':
+        case u'\u00A0':
+        case u'\u1680':
+        case u'\u2000':
+        case u'\u2001':
+        case u'\u2002':
+        case u'\u2003':
+        case u'\u2004':
+        case u'\u2005':
+        case u'\u2006':
+        case u'\u2007':
+        case u'\u2008':
+        case u'\u2009':
+        case u'\u200A':
+        case u'\u2028':
+        case u'\u2029':
+        case u'\u202F':
+        case u'\u205F':
+        case u'\u3000': {
+            return true;
+        } break;
+        default: {
+            return false;
+        } break;
+    }
+}

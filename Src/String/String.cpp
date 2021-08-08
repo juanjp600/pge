@@ -810,7 +810,7 @@ const String String::trim() const {
     if (byteLength() == 0) { return *this; }
 
     Iterator leading = begin();
-    while (leading != end() && isspace(*leading)) {
+    while (leading != end() && Unicode::isSpace(*leading)) {
         leading++;
     }
     if (leading == end()) {
@@ -818,7 +818,7 @@ const String String::trim() const {
     }
 
     ReverseIterator trailing = rbegin();
-    while (isspace(*trailing)) { trailing++; }
+    while (Unicode::isSpace(*trailing)) { trailing++; }
 
     String ret(*this, leading.getBytePosition(), trailing.getBytePosition() - leading.getBytePosition() + 1);
     return ret;
