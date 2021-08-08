@@ -14,8 +14,6 @@
 
 namespace PGE {
 
-class Graphics;
-
 class Mesh : private PolymorphicHeap {
     public:
         enum class PreserveGeometry {
@@ -41,7 +39,7 @@ class Mesh : private PolymorphicHeap {
             u32 indices[3];
         };
 
-        static Mesh* create(Graphics& gfx);
+        static Mesh* create(class Graphics& gfx);
 
         // TODO: Revisit.
         void setGeometry(const StructuredData& verts, const std::vector<Line>& lines);

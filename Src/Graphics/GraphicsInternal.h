@@ -15,8 +15,6 @@ namespace PGE {
 
 class Shader;
 
-class SDLWindow;
-
 class GraphicsInternal : public Graphics {
     private:
         using Graphics::resourceManager;
