@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"struct_p_g_e_1_1_string_1_1_ordered_key.html":[1,0,0,38,2],
 "struct_p_g_e_1_1_string_1_1_ordered_key.html#a3fb5c1d537a68472288c1422638cda5b":[1,0,0,38,2,1],
 "struct_p_g_e_1_1_string_1_1_ordered_key.html#a5ed81bb14531c5caa933d2a07f6fce23":[1,0,0,38,2,4],
 "struct_p_g_e_1_1_string_1_1_ordered_key.html#a81271fa78f79662e96f975be1bec0087":[1,0,0,38,2,2],

@@ -7,7 +7,6 @@ var class_p_g_e_1_1_mesh =
       [ "\u202ANO", "class_p_g_e_1_1_mesh.html#a0bff835cdf4ed47f5cbd6cb10be8f43fac2f3f489a00553e7a01d369c103c7251", null ]
     ] ],
     [ "\u202APrimitiveType", "class_p_g_e_1_1_mesh.html#a508edaf1c8ada0a5e0454a2a6aafd088", [
-      [ "\u202ANONE", "class_p_g_e_1_1_mesh.html#a508edaf1c8ada0a5e0454a2a6aafd088ab50339a10e1de285ac99d4c3990b8693", null ],
       [ "\u202ALINE", "class_p_g_e_1_1_mesh.html#a508edaf1c8ada0a5e0454a2a6aafd088a17b8ef2c330f1430e00c9de5469fc7e7", null ],
       [ "\u202ATRIANGLE", "class_p_g_e_1_1_mesh.html#a508edaf1c8ada0a5e0454a2a6aafd088a9bcd89070cae224dce305f5011659ef4", null ]
     ] ],
@@ -24,6 +23,6 @@ var class_p_g_e_1_1_mesh =
     [ "\u202Aindices", "class_p_g_e_1_1_mesh.html#a48a4ec2340f115759915ee5bd53895fc", null ],
     [ "\u202Amaterial", "class_p_g_e_1_1_mesh.html#ac6287068c7ad20c366fc54f74c7c3e72", null ],
     [ "\u202AmustReuploadInternalData", "class_p_g_e_1_1_mesh.html#a0b5945fdfa1450713becb07954e429d8", null ],
-    [ "\u202AprimitiveType", "class_p_g_e_1_1_mesh.html#a7474aaa9594ccbdcaf82c4c7b42b8fd6", null ],
+    [ "\u202AprimitiveType", "class_p_g_e_1_1_mesh.html#a2c0eeb4f39696638b467ff790b415758", null ],
     [ "\u202Avertices", "class_p_g_e_1_1_mesh.html#ab913519775ce2f2f980a73bee6faf83d", null ]
 ];
