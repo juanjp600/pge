@@ -39,7 +39,7 @@ const static GLenum glTextureLayers[] = {
 };
 
 void MeshOGL3::render() {
-    if (primitiveType == PrimitiveType::NONE) { return; }
+    if (!primitiveType.has_value()) { return; }
 
     graphics.takeGlContext();
 

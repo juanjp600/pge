@@ -2,6 +2,7 @@
 #define PGE_MESH_H_INCLUDED
 
 #include <unordered_map>
+#include <optional>
 
 #include <PGE/String/Key.h>
 #include <PGE/Types/Types.h>
@@ -22,7 +23,6 @@ class Mesh : private PolymorphicHeap {
         };
 
         enum class PrimitiveType {
-            NONE,
             LINE,
             TRIANGLE,
         };
@@ -62,7 +62,7 @@ class Mesh : private PolymorphicHeap {
 
         Material* material = nullptr;
 
-        PrimitiveType primitiveType = PrimitiveType::NONE;
+        std::optional<PrimitiveType> primitiveType;
         StructuredData vertices;
         std::vector<u32> indices;
 };

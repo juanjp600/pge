@@ -57,7 +57,7 @@ void Mesh::setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u
 
 void Mesh::clearGeometry() {
     indices.clear();
-    primitiveType = PrimitiveType::NONE;
+    primitiveType.reset();
     mustReuploadInternalData = true;
 }
 

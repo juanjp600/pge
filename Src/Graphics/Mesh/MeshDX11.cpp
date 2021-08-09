@@ -41,7 +41,7 @@ void MeshDX11::uploadInternalData() {
 }
 
 void MeshDX11::render() {
-    if (primitiveType == PrimitiveType::NONE) { return; }
+    if (!primitiveType.has_value()) { return; }
     
     ID3D11DeviceContext* dxContext = graphics.getDxContext();
 
