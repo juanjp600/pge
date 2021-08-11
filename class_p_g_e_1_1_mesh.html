@@ -110,15 +110,13 @@ Inheritance diagram for PGE::Mesh:</div>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_g_e_1_1_mesh_1_1_line.html">Line</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_g_e_1_1_mesh_1_1_material.html">Material</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_g_e_1_1_mesh_1_1_triangle.html">Triangle</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a0bff835cdf4ed47f5cbd6cb10be8f43f"><td class="memItemLeft" align="right" valign="top"><a id="a0bff835cdf4ed47f5cbd6cb10be8f43f"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>PreserveGeometry</b> { <b>YES</b>
-, <b>NO</b>
- }</td></tr>
-<tr class="separator:a0bff835cdf4ed47f5cbd6cb10be8f43f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a508edaf1c8ada0a5e0454a2a6aafd088"><td class="memItemLeft" align="right" valign="top"><a id="a508edaf1c8ada0a5e0454a2a6aafd088"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>PrimitiveType</b> { <b>LINE</b>
 , <b>TRIANGLE</b>
  }</td></tr>
@@ -144,15 +142,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setGeometry</b> (<a c
 <tr class="memitem:af7e6a4ca81eb5e5115dfbcb6caa56d2e"><td class="memItemLeft" align="right" valign="top"><a id="af7e6a4ca81eb5e5115dfbcb6caa56d2e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clearGeometry</b> ()</td></tr>
 <tr class="separator:af7e6a4ca81eb5e5115dfbcb6caa56d2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9b7582f9751cba9bc593e44f02a8b43"><td class="memItemLeft" align="right" valign="top"><a id="ab9b7582f9751cba9bc593e44f02a8b43"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setMaterial</b> (<a class="el" href="class_p_g_e_1_1_material.html">Material</a> *m, PreserveGeometry preserveGeometry)</td></tr>
-<tr class="separator:ab9b7582f9751cba9bc593e44f02a8b43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a8bfe0a2c3d6a71db93413a75b77c9c"><td class="memItemLeft" align="right" valign="top"><a id="a1a8bfe0a2c3d6a71db93413a75b77c9c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setMaterial</b> (const <a class="el" href="struct_p_g_e_1_1_mesh_1_1_material.html">Material</a> &amp;m)</td></tr>
+<tr class="separator:a1a8bfe0a2c3d6a71db93413a75b77c9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a783a8866af827a58f4d4a6eeef78bdcb"><td class="memItemLeft" align="right" valign="top"><a id="a783a8866af827a58f4d4a6eeef78bdcb"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setOpacity</b> (bool opq)</td></tr>
+<tr class="separator:a783a8866af827a58f4d4a6eeef78bdcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae643a1ded89ad8de2fdfd8da5bb124fa"><td class="memItemLeft" align="right" valign="top"><a id="ae643a1ded89ad8de2fdfd8da5bb124fa"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isOpaque</b> () const</td></tr>
 <tr class="separator:ae643a1ded89ad8de2fdfd8da5bb124fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86fbfd81b1dc4c6ab7af83818a7dc3d2"><td class="memItemLeft" align="right" valign="top"><a id="a86fbfd81b1dc4c6ab7af83818a7dc3d2"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> ()=0</td></tr>
-<tr class="separator:a86fbfd81b1dc4c6ab7af83818a7dc3d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a624f376f30e4ec0db40d119486bfaf73"><td class="memItemLeft" align="right" valign="top"><a id="a624f376f30e4ec0db40d119486bfaf73"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> ()</td></tr>
+<tr class="separator:a624f376f30e4ec0db40d119486bfaf73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -165,15 +166,15 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a4bfda4b082f3a01ffaf4e04945e8e970"><td class="memItemLeft" align="right" valign="top"><a id="a4bfda4b082f3a01ffaf4e04945e8e970"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>uploadInternalData</b> ()=0</td></tr>
 <tr class="separator:a4bfda4b082f3a01ffaf4e04945e8e970"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00187a62884d45156b4d6fd9c6a7b674"><td class="memItemLeft" align="right" valign="top"><a id="a00187a62884d45156b4d6fd9c6a7b674"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>renderInternal</b> ()=0</td></tr>
+<tr class="separator:a00187a62884d45156b4d6fd9c6a7b674"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a0b5945fdfa1450713becb07954e429d8"><td class="memItemLeft" align="right" valign="top"><a id="a0b5945fdfa1450713becb07954e429d8"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mustReuploadInternalData</b> = true</td></tr>
-<tr class="separator:a0b5945fdfa1450713becb07954e429d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6287068c7ad20c366fc54f74c7c3e72"><td class="memItemLeft" align="right" valign="top"><a id="ac6287068c7ad20c366fc54f74c7c3e72"></a>
-<a class="el" href="class_p_g_e_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>material</b> = nullptr</td></tr>
-<tr class="separator:ac6287068c7ad20c366fc54f74c7c3e72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acac62fd4570b6b06a179d126615a6b68"><td class="memItemLeft" align="right" valign="top"><a id="acac62fd4570b6b06a179d126615a6b68"></a>
+<a class="el" href="struct_p_g_e_1_1_mesh_1_1_material.html">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><b>material</b></td></tr>
+<tr class="separator:acac62fd4570b6b06a179d126615a6b68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c0eeb4f39696638b467ff790b415758"><td class="memItemLeft" align="right" valign="top"><a id="a2c0eeb4f39696638b467ff790b415758"></a>
 std::optional&lt; PrimitiveType &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>primitiveType</b></td></tr>
 <tr class="separator:a2c0eeb4f39696638b467ff790b415758"><td class="memSeparator" colspan="2">&#160;</td></tr>
