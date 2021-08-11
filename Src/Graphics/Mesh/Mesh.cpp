@@ -6,11 +6,11 @@ using namespace PGE;
 #define PGE_ASSERT_MATERIAL_LAYOUT() PGE_ASSERT(!material.isValid() || material.getShader().getVertexLayout() == *verts.getLayout(), "Material must be set before geometry can be set")
 
 void Mesh::setGeometry(const StructuredData& verts, const std::vector<Line>& lines) {
-    setGeometry(std::move(verts.copy()), lines);
+    setGeometry(verts.copy(), lines);
 }
 
 void Mesh::setGeometry(const StructuredData& verts, const std::vector<Triangle>& triangles) {
-    setGeometry(std::move(verts.copy()), triangles);
+    setGeometry(verts.copy(), triangles);
 }
 
 void Mesh::setGeometry(StructuredData&& verts, const std::vector<Line>& lines) {
