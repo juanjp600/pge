@@ -16,10 +16,11 @@ class MeshOGL3 : public Mesh, private GraphicsReferencer<class GraphicsOGL3> {
     public:
         MeshOGL3(Graphics& gfx);
 
-        void render() override;
-
     private:
+        void prepareVertexOperation();
+
         void uploadInternalData() override;
+        void renderInternal() override;
 
         GLBuffer::View glVertexBufferObject;
         GLBuffer::View glIndexBufferObject;

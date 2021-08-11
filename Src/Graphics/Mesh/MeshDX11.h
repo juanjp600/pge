@@ -19,8 +19,6 @@ class MeshDX11 : public Mesh, private GraphicsReferencer<class GraphicsDX11> {
     public:
         MeshDX11(Graphics& gfx);
 
-        void render() override;
-
     private:
         D3D11_BUFFER_DESC dxVertexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxVertexBufferData;
@@ -33,6 +31,7 @@ class MeshDX11 : public Mesh, private GraphicsReferencer<class GraphicsDX11> {
         ResourceManager resourceManager;
 
         void uploadInternalData() override;
+        void renderInternal() override;
 };
 
 }

@@ -73,12 +73,6 @@
     <Filter Include="Src\Graphics\Shader">
       <UniqueIdentifier>{0341c7af-1885-40c3-b940-6ff29d425afd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Graphics\Mesh">
-      <UniqueIdentifier>{6fc2247b-e4d4-4684-a5b1-76d254bd7abe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Graphics\Material">
-      <UniqueIdentifier>{1f2b8b8d-894d-443d-bb27-c6924debd23d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\Info">
       <UniqueIdentifier>{a53ee220-cda5-43e9-83c4-4c225069fd0d}</UniqueIdentifier>
     </Filter>
@@ -90,6 +84,9 @@
     </Filter>
     <Filter Include="Src\StructuredData">
       <UniqueIdentifier>{2db3a570-a040-433f-849d-d51dd7ad6a83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Graphics\Mesh">
+      <UniqueIdentifier>{6fc2247b-e4d4-4684-a5b1-76d254bd7abe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -167,9 +164,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Graphics\Texture\TextureOGL3.cpp">
       <Filter>Src\Graphics\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Graphics\Material\Material.cpp">
-      <Filter>Src\Graphics\Material</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Info\Info.cpp">
       <Filter>Src\Info</Filter>
@@ -249,9 +243,6 @@
       <Filter>Include\File</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\PGE\Graphics\Graphics.h">
-      <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\PGE\Graphics\Material.h">
       <Filter>Include\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\PGE\Graphics\Mesh.h">

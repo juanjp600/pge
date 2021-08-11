@@ -9,7 +9,6 @@
 #include <PGE/Color/Color.h>
 #include <PGE/Math/Vector.h>
 #include <PGE/Math/Matrix.h>
-#include <PGE/Graphics/Material.h>
 #include <PGE/StructuredData/StructuredData.h>
 #include <PGE/ResourceManagement/PolymorphicHeap.h>
 
@@ -17,9 +16,20 @@ namespace PGE {
 
 class Mesh : private PolymorphicHeap {
     public:
-        enum class PreserveGeometry {
-            YES,
-            NO,
+        struct Material {
+            Material();
+            Material(class Shader& sh);
+            Material(Shader& sh, class Texture& tex);
+            Material(Shader& sh, const ReferenceVector<Texture>& texs);
+
+            bool isValid() const;
+            Shader& getShader() const;
+            size_t getTextureCount() const;
+            Texture& getTexture(size_t index) const;
+
+            private:
+                Shader* shader;
+                ReferenceVector<Texture> textures;
         };
 
         enum class PrimitiveType {
@@ -49,22 +59,26 @@ class Mesh : private PolymorphicHeap {
         void setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u32>&& inds);
         void clearGeometry();
 
-        void setMaterial(Material* m, PreserveGeometry preserveGeometry);
+        void setMaterial(const Material& m);
 
+        void setOpacity(bool opq);
         bool isOpaque() const;
 
-        virtual void render() = 0;
+        void render();
 
     protected:
-        bool mustReuploadInternalData = true;
-
         virtual void uploadInternalData() = 0;
+        virtual void renderInternal() = 0;
 
-        Material* material = nullptr;
+        Material material;
 
         std::optional<PrimitiveType> primitiveType;
         StructuredData vertices;
         std::vector<u32> indices;
+
+    private:
+        bool mustReuploadInternalData = true;
+        bool opaque = true;
 };
 
 }

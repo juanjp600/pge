@@ -29,7 +29,6 @@
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsOGL3.cpp" />
-    <ClCompile Include="..\..\Src\Graphics\Material\Material.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Mesh\Mesh.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Mesh\MeshDX11.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Mesh\MeshOGL3.cpp" />
@@ -61,7 +60,6 @@
     <ClInclude Include="..\..\Include\PGE\File\TextReader.h" />
     <ClInclude Include="..\..\Include\PGE\File\TextWriter.h" />
     <ClInclude Include="..\..\Include\PGE\Graphics\Graphics.h" />
-    <ClInclude Include="..\..\Include\PGE\Graphics\Material.h" />
     <ClInclude Include="..\..\Include\PGE\Graphics\Mesh.h" />
     <ClInclude Include="..\..\Include\PGE\Graphics\Shader.h" />
     <ClInclude Include="..\..\Include\PGE\Graphics\Texture.h" />

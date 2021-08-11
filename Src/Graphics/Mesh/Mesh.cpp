@@ -3,7 +3,7 @@
 
 using namespace PGE;
 
-#define PGE_ASSERT_MATERIAL_LAYOUT() PGE_ASSERT(material == nullptr || material->getShader().getVertexLayout() == *verts.getLayout(), "Material must be set before geometry can be set")
+#define PGE_ASSERT_MATERIAL_LAYOUT() PGE_ASSERT(!material.isValid() || material.getShader().getVertexLayout() == *verts.getLayout(), "Material must be set before geometry can be set")
 
 void Mesh::setGeometry(const StructuredData& verts, const std::vector<Line>& lines) {
     setGeometry(std::move(verts.copy()), lines);
@@ -61,21 +61,32 @@ void Mesh::clearGeometry() {
     mustReuploadInternalData = true;
 }
 
-void Mesh::setMaterial(Material* m, PreserveGeometry preserveGeometry) {
-    if (preserveGeometry == PreserveGeometry::NO) { clearGeometry(); }
-    else {
-        PGE_ASSERT(
-            m == nullptr ||
-            vertices.getLayout() == nullptr ||
-            m->getShader().getVertexLayout() == *vertices.getLayout(),
-            "Can't set material with mismatched vertex layout without discarding"
-        );
-    }
+void Mesh::setMaterial(const Material& m) {
+    PGE_ASSERT(
+        !m.isValid() ||
+        vertices.getLayout() == nullptr ||
+        m.getShader().getVertexLayout() == *vertices.getLayout(),
+        "Can't set material with mismatched vertex layout without discarding"
+    );
     material = m;
 }
 
+void Mesh::setOpacity(bool opq) {
+    opaque = opq;
+}
+
 bool Mesh::isOpaque() const {
-    return material->isOpaque();
+    return opaque;
+}
+
+void Mesh::render() {
+    if (primitiveType.has_value() && material.isValid()) {
+        if (mustReuploadInternalData) {
+            uploadInternalData();
+            mustReuploadInternalData = false;
+        }
+        renderInternal();
+    }
 }
 
 Mesh::Line::Line(u32 a, u32 b) {
@@ -84,4 +95,41 @@ Mesh::Line::Line(u32 a, u32 b) {
 
 Mesh::Triangle::Triangle(u32 a, u32 b, u32 c) {
     indices[0] = a; indices[1] = b; indices[2] = c;
+}
+
+Mesh::Material::Material() {
+    shader = nullptr;
+}
+
+Mesh::Material::Material(Shader& sh) {
+    shader = &sh;
+}
+
+Mesh::Material::Material(Shader& sh, Texture& tex) {
+    shader = &sh;
+    textures = { tex };
+}
+
+Mesh::Material::Material(Shader& sh, const ReferenceVector<Texture>& texs) {
+    shader = &sh;
+    textures = texs;
+}
+
+bool Mesh::Material::isValid() const {
+    return shader != nullptr;
+}
+
+Shader& Mesh::Material::getShader() const {
+    PGE_ASSERT(isValid(), "Material was not valid!");
+    return *shader;
+}
+
+size_t Mesh::Material::getTextureCount() const {
+    PGE_ASSERT(isValid(), "Material was not valid!");
+    return textures.size();
+}
+
+Texture& Mesh::Material::getTexture(size_t index) const {
+    PGE_ASSERT(isValid(), "Material was not valid!");
+    return textures.at(index);
 }
