@@ -96,7 +96,7 @@ void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
             String::Key(fragmentUniforms[i].name)
         );
         if (fragmentUniforms[i].type.equals("sampler2D")) {
-            constant.setValue((u32)i);
+            constant.setValue((u32)samplerConstants.size());
             samplerConstants.emplace(fragmentUniforms[i].name, constant);
         } else {
             fragmentShaderConstants.emplace(fragmentUniforms[i].name, constant);
