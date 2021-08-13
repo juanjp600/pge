@@ -99,7 +99,7 @@ class Line3f : private NoHeap {
         constexpr Line3f(const Vector3f& a, const Vector3f& b) : pointA(a), pointB(b) { }
         constexpr Line3f(float ax, float ay, float az, float bx, float by, float bz) : pointA(ax, ay, az), pointB(bx, by, bz) { }
 
-        constexpr const AABBox boundingBox() const { return AABBox(pointA).addPoint(pointB); }
+        constexpr const AABBox boundingBox() const { AABBox box(pointA); box.addPoint(pointB); return box; }
 
         constexpr const Vector3f closestPoint(const Vector3f& point, bool segmentOnly = true) const {
             Vector3f aToP = point - pointA;
