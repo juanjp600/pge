@@ -52,7 +52,7 @@ class StructuredData : NoHeap {
         StructuredData(const ElemLayout& ly, int elemCount);
 
         StructuredData(StructuredData&& other) noexcept;
-        StructuredData& operator=(StructuredData&& other) noexcept;
+        void operator=(StructuredData&& other) noexcept;
 
         StructuredData copy() const;
 

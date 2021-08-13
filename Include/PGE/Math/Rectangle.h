@@ -33,20 +33,18 @@ class Rectanglef : private NoHeap {
             return tl.equals(other.tl, epsilon) && br.equals(other.br, epsilon);
         }
 
-        constexpr Rectanglef& addPoint(float x, float y) {
+        constexpr void addPoint(float x, float y) {
             if (x > br.x) { br.x = x; }
             else if (x < tl.x) { tl.x = x; }
             if (y > br.y) { br.y = y; }
             else if (y < tl.y) { tl.y = y; }
-            return *this;
         }
 
-        constexpr Rectanglef& addPoint(const Vector2f& point) {
+        constexpr void addPoint(const Vector2f& point) {
             if (point.x > br.x) { br.x = point.x; }
             else if (point.x < tl.x) { tl.x = point.x; }
             if (point.y > br.y) { br.y = point.y; }
             else if (point.y < tl.y) { tl.y = point.y; }
-            return *this;
         }
 
         constexpr float width() const { return br.x - tl.x; }
@@ -93,20 +91,18 @@ class Rectanglei : private NoHeap {
         constexpr bool operator==(const Rectanglei& other) const { return tl == other.tl && br == other.br; }
         constexpr bool operator!=(const Rectanglei& other) const { return tl != other.tl || br != other.br; }
 
-        constexpr Rectanglei& addPoint(int x, int y) {
+        constexpr void addPoint(int x, int y) {
             if (x > br.x) { br.x = x; }
             else if (x < tl.x) { tl.x = x; }
             if (y > br.y) { br.y = y; }
             else if (y < tl.y) { tl.y = y; }
-            return *this;
         }
 
-        constexpr Rectanglei& addPoint(const Vector2i& point) {
+        constexpr void addPoint(const Vector2i& point) {
             if (point.x > br.x) { br.x = point.x; }
             else if (point.x < tl.x) { tl.x = point.x; }
             if (point.y > br.y) { br.y = point.y; }
             else if (point.y < tl.y) { tl.y = point.y; }
-            return *this;
         }
 
         constexpr int width() const { return br.x - tl.x; }

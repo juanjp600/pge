@@ -232,10 +232,9 @@ bool FilePath::operator!=(const FilePath& other) const noexcept {
     return name != other.name;
 }
 
-FilePath& FilePath::operator+=(const String& str) {
+void FilePath::operator+=(const String& str) {
     PGE_ASSERT(valid, INVALID_STR);
     name += sanitizeFileSeperator(str);
-    return *this;
 }
 
 const FilePath FilePath::operator+(const String& str) const {

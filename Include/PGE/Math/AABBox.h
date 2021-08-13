@@ -36,7 +36,7 @@ class AABBox : private NoHeap {
                 && otherMin.x <= max.x && otherMin.y <= max.y && otherMin.z <= max.z;
         }
 
-        constexpr AABBox& addPoint(const Vector3f& point) {
+        constexpr void addPoint(const Vector3f& point) {
             min.x = min.x < point.x ? min.x : point.x;
             min.y = min.y < point.y ? min.y : point.y;
             min.z = min.z < point.z ? min.z : point.z;
@@ -44,8 +44,6 @@ class AABBox : private NoHeap {
             max.x = max.x > point.x ? max.x : point.x;
             max.y = max.y > point.y ? max.y : point.y;
             max.z = max.z > point.z ? max.z : point.z;
-
-            return *this;
         }
 };
 

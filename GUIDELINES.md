@@ -203,6 +203,26 @@ it++; // Yes.
 ++it; // No.
 ```
 
+## Never use the result of assignment, incrementing or decrementing.
+It makes your code harder to understand. Writing separate statements is always clearer.
+
+**Example:**
+```cpp
+int myInt = otherInt++; // This is bad.
+int myInt = otherInt; otherInt++; // This is good.
+
+a = b = c; // This is bad.
+a = c; b = c; // This is good.
+```
+
+## Define assignment, increment and decrement operators with return type void.
+This makes it impossible to make the mistake mentioned above with custom types.
+
+**Example:**
+```cpp
+MyType& operator=(const MyType& other); // This is bad.
+void operator=(const MyType& other); // This is good.
+```
 
 ## Prefer `using` over `typedef`
 They are semantically the same and the syntax of `using` is superior.

@@ -52,28 +52,22 @@ void String::Iterator::decrement() {
     _ch = L'\uFFFF';
 }
 
-String::Iterator& String::Iterator::operator++() {
+void String::Iterator::operator++() {
     PGE_ASSERT(index < ref->byteLength(), "Can't increment iterator past string end");
     increment();
-    return *this;
 }
 
-String::Iterator& String::Iterator::operator--() {
+void String::Iterator::operator--() {
     PGE_ASSERT(index > 0, "Can't decrement iterator prior to string beginning");
     decrement();
-    return *this;
 }
 
-const String::Iterator String::Iterator::operator++(int) {
-    Iterator temp = *this;
+void String::Iterator::operator++(int) {
     ++(*this);
-    return temp;
 }
 
-const String::Iterator String::Iterator::operator--(int) {
-    Iterator temp = *this;
+void String::Iterator::operator--(int) {
     --(*this);
-    return temp;
 }
 
 const String::Iterator String::Iterator::operator+(int steps) const {
@@ -94,20 +88,18 @@ const String::Iterator String::Iterator::operator-(int steps) const {
     return ret;
 }
 
-String::Iterator& String::Iterator::operator+=(int steps) {
-    if (steps < 0) { return *this -= (-steps); }
+void String::Iterator::operator+=(int steps) {
+    if (steps < 0) { *this -= (-steps); return; }
     for (int i = 0; i < steps; i++) {
         (*this)++;
     }
-    return *this;
 }
 
-String::Iterator& String::Iterator::operator-=(int steps) {
-    if (steps < 0) { return *this += (-steps); }
+void String::Iterator::operator-=(int steps) {
+    if (steps < 0) { *this += (-steps); return; }
     for (int i = 0; i < steps; i++) {
         (*this)--;
     }
-    return *this;
 }
 
 int String::Iterator::operator-(const String::Iterator& other) const {
@@ -177,28 +169,22 @@ const String::Iterator String::end() const {
     return Iterator::end(*this);
 }
 
-String::ReverseIterator& String::ReverseIterator::operator++() {
+void String::ReverseIterator::operator++() {
     PGE_ASSERT(index >= 0, "Can't decrement iterator prior to string beginning");
     decrement();
-    return *this;
 }
 
-const String::ReverseIterator String::ReverseIterator::operator++(int) {
-    Iterator temp = *this;
+void String::ReverseIterator::operator++(int) {
     ++(*this);
-    return temp;
 }
 
-String::ReverseIterator& String::ReverseIterator::operator--() {
+void String::ReverseIterator::operator--() {
     PGE_ASSERT(index < ref->byteLength() - 1, "Can't increment iterator past string end");
     increment();
-    return *this;
 }
 
-const String::ReverseIterator String::ReverseIterator::operator--(int) {
-    Iterator temp = *this;
+void String::ReverseIterator::operator--(int) {
     --(*this);
-    return temp;
 }
 
 const String::ReverseIterator String::ReverseIterator::rbegin(const String& str) {
@@ -363,12 +349,11 @@ const String String::fromFloat(float f) {
     return ret;
 }
 
-String& String::operator=(const String& other) {
+void String::operator=(const String& other) {
     copy(*this, other);
-    return *this;
 }
 
-String& String::operator+=(const String& other) {
+void String::operator+=(const String& other) {
     int oldByteSize = byteLength();
     int newSize = oldByteSize + other.byteLength();
     reallocate(newSize, true);
@@ -378,10 +363,9 @@ String& String::operator+=(const String& other) {
     if (data->_strLength >= 0 && other.data->_strLength >= 0) {
         data->_strLength += other.length();
     }
-    return *this;
 }
 
-String& String::operator+=(char16 ch) {
+void String::operator+=(char16 ch) {
     int aLen = byteLength();
     reallocate(aLen + 4, true);
     char* buf = cstrNoConst();
@@ -392,7 +376,6 @@ String& String::operator+=(char16 ch) {
         data->_strLength++;
     }
     data->_hashCodeEvaluted = false; // TODO: Deal with partially evaluated hashcode.
-    return *this;
 }
 
 const String PGE::operator+(const String& a, const String& b) {

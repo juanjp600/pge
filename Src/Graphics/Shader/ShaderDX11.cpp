@@ -181,7 +181,7 @@ ShaderDX11::CBufferInfo::CBufferInfo(CBufferInfo&& other) noexcept {
     *this = std::move(other);
 }
 
-ShaderDX11::CBufferInfo& ShaderDX11::CBufferInfo::operator=(CBufferInfo&& other) noexcept {
+void ShaderDX11::CBufferInfo::operator=(CBufferInfo&& other) noexcept {
     name = other.name;
     size = other.size;
     constants = std::move(other.constants);
@@ -191,8 +191,6 @@ ShaderDX11::CBufferInfo& ShaderDX11::CBufferInfo::operator=(CBufferInfo&& other)
 
     data = other.data;
     other.data = nullptr; // Clear other's data as we take ownership of it here.
-
-    return *this;
 }
 
 ShaderDX11::CBufferInfo::~CBufferInfo() {

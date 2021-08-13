@@ -124,16 +124,16 @@ bool Mesh::Material::isOpaque() const {
 }
 
 Shader& Mesh::Material::getShader() const {
-    PGE_ASSERT(isValid(), "Material was not valid!");
+    PGE_ASSERT(isValid(), "Material is not valid!");
     return *shader;
 }
 
 size_t Mesh::Material::getTextureCount() const {
-    PGE_ASSERT(isValid(), "Material was not valid!");
+    PGE_ASSERT(isValid(), "Material is not valid!");
     return textures.size();
 }
 
 Texture& Mesh::Material::getTexture(size_t index) const {
-    PGE_ASSERT(isValid(), "Material was not valid!");
+    PGE_ASSERT(isValid(), "Material is not valid!");
     return textures.at(index);
 }

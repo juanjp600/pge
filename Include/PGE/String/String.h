@@ -38,15 +38,15 @@ class String : private NoHeap {
 
                 Iterator();
 
-                Iterator& operator++();
-                Iterator& operator--();
-                const Iterator operator++(int);
-                const Iterator operator--(int);
+                void operator++();
+                void operator--();
+                void operator++(int);
+                void operator--(int);
 
                 const Iterator operator+(int steps) const;
                 const Iterator operator-(int steps) const;
-                Iterator& operator+=(int steps);
-                Iterator& operator-=(int steps);
+                void operator+=(int steps);
+                void operator-=(int steps);
 
                 int operator-(const Iterator& other) const;
 
@@ -78,15 +78,15 @@ class String : private NoHeap {
         struct ReverseIterator : public Iterator {
             ReverseIterator(const Iterator& it) : Iterator(it) { }
 
-            ReverseIterator& operator++();
-            ReverseIterator& operator--();
-            const ReverseIterator operator++(int);
-            const ReverseIterator operator--(int);
+            void operator++();
+            void operator--();
+            void operator++(int);
+            void operator--(int);
 
             const ReverseIterator operator+(int steps) const { return Iterator::operator-(steps); }
             const ReverseIterator operator-(int steps) const { return Iterator::operator+(steps); }
-            ReverseIterator& operator+=(int steps) { Iterator::operator-=(steps); return *this; }
-            ReverseIterator& operator-=(int steps) { Iterator::operator+=(steps); return *this; }
+            void operator+=(int steps) { Iterator::operator-=(steps); }
+            void operator-=(int steps) { Iterator::operator+=(steps); }
 
             bool operator>(const Iterator& other) const { return Iterator::operator<(other); }
             bool operator<(const Iterator& other) const { return Iterator::operator>(other); }
@@ -145,9 +145,9 @@ class String : private NoHeap {
         static const String fromInt(int i);
         static const String fromFloat(float f);
 
-        String& operator=(const String& other);
-        String& operator+=(const String& other);
-        String& operator+=(char16 ch);
+        void operator=(const String& other);
+        void operator+=(const String& other);
+        void operator+=(char16 ch);
 
         // TODO: Remove (juan hates his friends).
         friend const String operator+(const String& a, const String& b);

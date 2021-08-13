@@ -24,12 +24,12 @@ class Vector2f : private NoHeap {
 
         constexpr const Vector2f operator-() const { return Vector2f(-x, -y); }
 
-        constexpr Vector2f& operator+=(const Vector2f& other) { x += other.x; y += other.y; return *this; }
-        constexpr Vector2f& operator-=(const Vector2f& other) { x -= other.x; y -= other.y; return *this; }
-        constexpr Vector2f& operator+=(float f) { x += f; y += f; return *this; }
-        constexpr Vector2f& operator-=(float f) { x -= f; y -= f; return *this; }
-        constexpr Vector2f& operator*=(float f) { x *= f; y *= f; return *this; }
-        constexpr Vector2f& operator/=(float f) { x /= f; y /= f; return *this; }
+        constexpr void operator+=(const Vector2f& other) { x += other.x; y += other.y; }
+        constexpr void operator-=(const Vector2f& other) { x -= other.x; y -= other.y; }
+        constexpr void operator+=(float f) { x += f; y += f; }
+        constexpr void operator-=(float f) { x -= f; y -= f; }
+        constexpr void operator*=(float f) { x *= f; y *= f; }
+        constexpr void operator/=(float f) { x /= f; y /= f; }
 
         constexpr const Vector2f operator+(const Vector2f& other) const { return Vector2f(x + other.x, y + other.y); }
         constexpr const Vector2f operator-(const Vector2f& other) const { return Vector2f(x - other.x, y - other.y); }
@@ -44,7 +44,7 @@ class Vector2f : private NoHeap {
         constexpr const Vector2f normalize() const {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector2f(); }
-            if (Math::equalFloats(1.f, lenSqr)) { return *this; }
+            if (Math::equalFloats(1.f, lenSqr)) { }
             return *this / sqrtf(lenSqr);
         }
 
@@ -81,12 +81,12 @@ class Vector3f : private NoHeap {
 
         constexpr const Vector3f operator-() const { return Vector3f(-x, -y, -z); }
 
-        constexpr Vector3f& operator+=(const Vector3f& other) { x += other.x; y += other.y; z += other.z; return *this; }
-        constexpr Vector3f& operator-=(const Vector3f& other) { x -= other.x; y -= other.y; z -= other.z; return *this; }
-        constexpr Vector3f& operator+=(float f) { x += f; y += f; z += f; return *this; }
-        constexpr Vector3f& operator-=(float f) { x -= f; y -= f; z -= f; return *this; }
-        constexpr Vector3f& operator*=(float f) { x *= f; y *= f; z *= f; return *this; }
-        constexpr Vector3f& operator/=(float f) { x /= f; y /= f; z /= f; return *this; }
+        constexpr void operator+=(const Vector3f& other) { x += other.x; y += other.y; z += other.z; }
+        constexpr void operator-=(const Vector3f& other) { x -= other.x; y -= other.y; z -= other.z; }
+        constexpr void operator+=(float f) { x += f; y += f; z += f; }
+        constexpr void operator-=(float f) { x -= f; y -= f; z -= f; }
+        constexpr void operator*=(float f) { x *= f; y *= f; z *= f; }
+        constexpr void operator/=(float f) { x /= f; y /= f; z /= f; }
 
         constexpr const Vector3f operator+(const Vector3f& other) const { return Vector3f(x + other.x, y + other.y, z + other.z); }
         constexpr const Vector3f operator-(const Vector3f& other) const { return Vector3f(x - other.x, y - other.y, z - other.z); }
@@ -102,7 +102,7 @@ class Vector3f : private NoHeap {
         constexpr const Vector3f normalize() const {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector3f(); }
-            if (Math::equalFloats(1.f, lenSqr)) { return *this; }
+            if (Math::equalFloats(1.f, lenSqr)) { }
             return *this / sqrtf(lenSqr);
         }
 
@@ -140,12 +140,12 @@ class Vector4f : private NoHeap {
 
         constexpr const Vector4f operator-() const { return Vector4f(-x, -y, -z, -w); }
 
-        constexpr Vector4f& operator+=(const Vector4f& other) { x += other.x; y += other.y; z += other.z; w += other.w; return *this; }
-        constexpr Vector4f& operator-=(const Vector4f& other) { x -= other.x; y -= other.y; z -= other.z; w -= other.w; return *this; }
-        constexpr Vector4f& operator+=(float f) { x += f; y += f; z += f; w += f; return *this; }
-        constexpr Vector4f& operator-=(float f) { x -= f; y -= f; z -= f; w -= f; return *this; }
-        constexpr Vector4f& operator*=(float f) { x *= f; y *= f; z *= f; w *= f; return *this; }
-        constexpr Vector4f& operator/=(float f) { x /= f; y /= f; z /= f; w /= f; return *this; }
+        constexpr void operator+=(const Vector4f& other) { x += other.x; y += other.y; z += other.z; w += other.w; }
+        constexpr void operator-=(const Vector4f& other) { x -= other.x; y -= other.y; z -= other.z; w -= other.w; }
+        constexpr void operator+=(float f) { x += f; y += f; z += f; w += f; }
+        constexpr void operator-=(float f) { x -= f; y -= f; z -= f; w -= f; }
+        constexpr void operator*=(float f) { x *= f; y *= f; z *= f; w *= f; }
+        constexpr void operator/=(float f) { x /= f; y /= f; z /= f; w /= f; }
 
         constexpr const Vector4f operator+(const Vector4f& other) const { return Vector4f(x + other.x, y + other.y, z + other.z, w + other.w); }
         constexpr const Vector4f operator-(const Vector4f& other) const { return Vector4f(x - other.x, y - other.y, z - other.z, w - other.w); }
@@ -160,7 +160,7 @@ class Vector4f : private NoHeap {
         constexpr const Vector4f normalize() const {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector4f(); }
-            if (Math::equalFloats(1.f, lenSqr)) { return *this; }
+            if (Math::equalFloats(1.f, lenSqr)) { }
             return *this / sqrtf(lenSqr);
         }
 
@@ -194,11 +194,11 @@ class Vector2i : private NoHeap {
 
         constexpr const Vector2i operator-() const { return Vector2i(-x, -y); }
 
-        constexpr Vector2i& operator+=(const Vector2i& other) { x += other.x; y += other.y; return *this; }
-        constexpr Vector2i& operator-=(const Vector2i& other) { x -= other.x; y -= other.y; return *this; }
-        constexpr Vector2i& operator+=(int i) { x += i; y += i; return *this; }
-        constexpr Vector2i& operator-=(int i) { x -= i; y -= i; return *this; }
-        constexpr Vector2i& operator*=(int i) { x *= i; y *= i; return *this; }
+        constexpr void operator+=(const Vector2i& other) { x += other.x; y += other.y; }
+        constexpr void operator-=(const Vector2i& other) { x -= other.x; y -= other.y; }
+        constexpr void operator+=(int i) { x += i; y += i; }
+        constexpr void operator-=(int i) { x -= i; y -= i; }
+        constexpr void operator*=(int i) { x *= i; y *= i; }
 
         constexpr const Vector2i operator+(const Vector2i& other) const { return Vector2i(x + other.x, y + other.y); }
         constexpr const Vector2i operator-(const Vector2i& other) const { return Vector2i(x - other.x, y - other.y); }

@@ -59,7 +59,7 @@ class ReflectionInfo {
             reflection->AddRef();
         }
 
-        ReflectionInfo& operator=(const ReflectionInfo& other) {
+        void operator=(const ReflectionInfo& other) {
             reflection = other.reflection;
             reflection->AddRef();
         }

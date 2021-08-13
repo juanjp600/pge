@@ -51,7 +51,7 @@ class FilePath : private NoHeap {
         /// to make sure that your path is correctly suffixed with a path seperator.
         /// @param[in] str Will have its path seperators sanitized.
         /// @throws #PGE::Exception If the path is not initialized.
-        FilePath& operator+=(const String& str);
+        void operator+=(const String& str);
 
         /// Appends str to a valid path.
         /// The path must be valid.

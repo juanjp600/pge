@@ -155,16 +155,15 @@ class Matrix4x4f : private NoHeap {
             return false;
         }
 
-        constexpr Matrix4x4f& operator+=(const Matrix4x4f& other) {
+        constexpr void operator+=(const Matrix4x4f& other) {
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                     this->elements[i][j] += other.elements[i][j];
                 }
             }
-            return *this;
         }
 
-        constexpr Matrix4x4f& operator*=(const Matrix4x4f& other) {
+        constexpr void operator*=(const Matrix4x4f& other) {
             Matrix4x4f retVal;
             for (int i = 0; i < 4; i++) {
                 for (int k = 0; k < 4; k++) {
@@ -174,16 +173,14 @@ class Matrix4x4f : private NoHeap {
                 }
             }
             *this = retVal;
-            return *this;
         }
 
-        constexpr Matrix4x4f& operator*=(float scalar) {
+        constexpr void operator*=(float scalar) {
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                     this->elements[i][j] *= scalar;
                 }
             }
-            return *this;
         }
 
         constexpr const Matrix4x4f operator+(const Matrix4x4f& other) const {

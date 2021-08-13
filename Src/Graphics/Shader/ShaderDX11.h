@@ -60,7 +60,7 @@ class ShaderDX11 : public Shader {
                 ~CBufferInfo();
 
                 CBufferInfo(CBufferInfo&& other) noexcept;
-                CBufferInfo& operator=(CBufferInfo&& other) noexcept;
+                void operator=(CBufferInfo&& other) noexcept;
 
                 byte* getData();
                 std::unordered_map<String::Key, ConstantDX11>& getConstants();

@@ -56,12 +56,11 @@ StructuredData::StructuredData(StructuredData&& other) noexcept {
     other.layout = nullptr;
 }
 
-StructuredData& StructuredData::operator=(StructuredData&& other) noexcept {
+void StructuredData::operator=(StructuredData&& other) noexcept {
     layout = other.layout;
     size = other.size;
     data = std::move(other.data);
     other.layout = nullptr;
-    return *this;
 }
 
 StructuredData StructuredData::copy() const {
