@@ -258,7 +258,7 @@ Shader::Constant& ShaderOGL3::getFragmentShaderConstant(const String& name) {
     return it->second;
 }
 
-ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk) : dataBuffer(data), graphics((GraphicsOGL3&)gfx) {
+ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk) : dataBuffer(data), graphics(gfx) {
     glLocation = glLoc;
     glType = glTyp;
     glArraySize = glArrSz;
