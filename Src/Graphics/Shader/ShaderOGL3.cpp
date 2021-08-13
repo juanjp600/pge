@@ -28,19 +28,25 @@ ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), reso
 void ShaderOGL3::extractVertexUniforms(const String& vertexSource) {
     std::vector<ParsedShaderVar> vertexUniforms;
     extractShaderVars(vertexSource, "uniform", vertexUniforms);
+    std::vector<StructuredData::ElemLayout::Entry> layoutEntries;
     for (int i = 0; i < (int)vertexUniforms.size(); i++) {
+        int arrSize = 1; //TODO: add array support
+        GLenum glType = parsedTypeToGlType(vertexUniforms[i].type);
+        int byteSize = glSizeToByteSize(glType, arrSize);
+        layoutEntries.emplace_back(vertexUniforms[i].name, byteSize);
         vertexShaderConstants.emplace(
             vertexUniforms[i].name,
             ConstantOGL3(
                 graphics,
                 glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr()),
-                parsedTypeToGlType(vertexUniforms[i].type),
-                1 /* TODO: add array support */,
+                glType,
+                arrSize,
                 vertexUniformData,
                 String::Key(vertexUniforms[i].name)
             )
         );
     }
+    vertexUniformData = StructuredData(StructuredData::ElemLayout(layoutEntries), 1);
 }
 
 void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
@@ -53,7 +59,7 @@ void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
         GLenum attrElemType; int attrElemCount;
         decomposeGlType(attrType, attrElemType, attrElemCount);
 
-        layoutEntries.emplace_back(parsedAttribs[i].name, glSizeToByteSize(attrType, attrElemCount));
+        layoutEntries.emplace_back(parsedAttribs[i].name, glSizeToByteSize(attrElemType, attrElemCount));
         glVertexAttribLocations.emplace(
             String::Key(parsedAttribs[i].name),
             GlAttribLocation(
@@ -64,27 +70,40 @@ void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
         );
     }
 
-    vertexLayout = std::make_unique<StructuredData::ElemLayout>(layoutEntries);
+    vertexLayout = StructuredData::ElemLayout(layoutEntries);
 }
 
 void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
     std::vector<ParsedShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource, "uniform", fragmentUniforms);
+    std::vector<StructuredData::ElemLayout::Entry> layoutEntries;
     for (int i = 0; i < (int)fragmentUniforms.size(); i++) {
+        int arrSize = 1; //TODO: add array support
+        GLenum glType = parsedTypeToGlType(fragmentUniforms[i].type);
+        int byteSize = glSizeToByteSize(glType, arrSize);
+        layoutEntries.emplace_back(fragmentUniforms[i].name, byteSize);
+    }
+    fragmentUniformData = StructuredData(StructuredData::ElemLayout(layoutEntries), 1);
+
+    for (int i = 0; i < (int)fragmentUniforms.size(); i++) {
+        int arrSize = 1; //TODO: add array support
         ConstantOGL3 constant(
             graphics,
             glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr()),
             parsedTypeToGlType(fragmentUniforms[i].type),
-            1 /* TODO: add array support */,
-            vertexUniformData,
+            arrSize,
+            fragmentUniformData,
             String::Key(fragmentUniforms[i].name)
         );
         if (fragmentUniforms[i].type.equals("sampler2D")) {
-            constant.setValue((u32)samplerConstants.size());
+            constant.setValue((u32)i);
             samplerConstants.emplace(fragmentUniforms[i].name, constant);
         } else {
             fragmentShaderConstants.emplace(fragmentUniforms[i].name, constant);
         }
+    }
+
+    for (int i = 0; i < (int)samplerConstants.size(); i++) {
     }
 }
 
@@ -136,24 +155,34 @@ void ShaderOGL3::extractShaderVars(const String& src, const String& varKind, std
 }
 
 int ShaderOGL3::glSizeToByteSize(GLenum type, int size) const {
+    int retVal = size;
     switch (type) {
-        case GL_INT:
-            return sizeof(GLint);
-        case GL_UNSIGNED_INT:
-            return sizeof(GLuint);
-        case GL_FLOAT:
-            return sizeof(GLfloat);
-        case GL_FLOAT_VEC2:
-            return sizeof(GLfloat) * 2;
-        case GL_FLOAT_VEC3:
-            return sizeof(GLfloat) * 3;
-        case GL_FLOAT_VEC4:
-            return sizeof(GLfloat) * 4;
-        case GL_FLOAT_MAT4:
-            return sizeof(GLfloat) * 4 * 4;
-        default:
+        case GL_INT: {
+            retVal *= sizeof(GLint);
+        } break;
+        case GL_UNSIGNED_INT: {
+            retVal *= sizeof(GLuint);
+        } break;
+        case GL_FLOAT: {
+            retVal *= sizeof(GLfloat);
+        } break;
+        case GL_FLOAT_VEC2: {
+            retVal *= sizeof(GLfloat) * 2;
+        } break;
+        case GL_FLOAT_VEC3: {
+            retVal *= sizeof(GLfloat) * 3;
+        } break;
+        case GL_FLOAT_VEC4: {
+            retVal *= sizeof(GLfloat) * 4;
+        } break;
+        case GL_FLOAT_MAT4: {
+            retVal *= sizeof(GLfloat) * 4 * 4;
+        } break;
+        default: {
             throw PGE_CREATE_EX("Unsupported OpenGL datatype: " + String::fromInt(type));
+        } break;
     }
+    return retVal;
 }
 
 GLenum ShaderOGL3::parsedTypeToGlType(const String& parsedType) {
@@ -216,10 +245,10 @@ void ShaderOGL3::useShader() {
     for (const auto& kvp : glVertexAttribLocations) {
         const String::Key& key = kvp.first;
         const GlAttribLocation& glAttribLocation = kvp.second;
-        const StructuredData::ElemLayout::LocationAndSize& locationAndSizeInBuffer = vertexLayout->getLocationAndSize(key);
+        const StructuredData::ElemLayout::LocationAndSize& locationAndSizeInBuffer = vertexLayout.getLocationAndSize(key);
 
         glEnableVertexAttribArray(glAttribLocation.location);
-        glVertexAttribPointer(glAttribLocation.location, glAttribLocation.elementCount, glAttribLocation.elementType, GL_FALSE, vertexLayout->getElementSize(), ptr + locationAndSizeInBuffer.location);
+        glVertexAttribPointer(glAttribLocation.location, glAttribLocation.elementCount, glAttribLocation.elementType, GL_FALSE, vertexLayout.getElementSize(), ptr + locationAndSizeInBuffer.location);
         glError = glGetError();
         PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + String::format(key.hash, "%Xll") + ")");
     }
@@ -297,7 +326,7 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
     GLuint glError = GL_NO_ERROR;
 
     graphics.takeGlContext();
-    const void* dataPtr = dataBuffer.getData() + dataBuffer.getLayout()->getLocationAndSize(dataKey).location;
+    const void* dataPtr = dataBuffer.getData() + dataBuffer.getLayout().getLocationAndSize(dataKey).location;
     const GLfloat* dataPtrF = (GLfloat*)dataPtr;
     const GLint* dataPtrI = (GLint*)dataPtr;
     const GLuint* dataPtrU = (GLuint*)dataPtr;

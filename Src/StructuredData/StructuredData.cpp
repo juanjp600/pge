@@ -44,8 +44,8 @@ bool StructuredData::ElemLayout::operator==(const StructuredData::ElemLayout& ot
 }
 
 StructuredData::StructuredData(const ElemLayout& ly, int elemCount) {
-    layout = &ly;
-    size = (size_t)layout->getElementSize() * elemCount;
+    layout = ly;
+    size = (size_t)layout.getElementSize() * elemCount;
     data = std::make_unique<byte[]>(size);
 }
 
@@ -53,14 +53,12 @@ StructuredData::StructuredData(StructuredData&& other) noexcept {
     layout = other.layout;
     size = other.size;
     data = std::move(other.data);
-    other.layout = nullptr;
 }
 
 void StructuredData::operator=(StructuredData&& other) noexcept {
     layout = other.layout;
     size = other.size;
     data = std::move(other.data);
-    other.layout = nullptr;
 }
 
 StructuredData StructuredData::copy() const {
@@ -80,7 +78,7 @@ size_t StructuredData::getDataSize() const {
     return size;
 }
 
-const StructuredData::ElemLayout* StructuredData::getLayout() const {
+const StructuredData::ElemLayout& StructuredData::getLayout() const {
     return layout;
 }
 
@@ -128,12 +126,12 @@ void StructuredData::setValue(int elemIndex, const String::Key& entry, const Col
 int StructuredData::getDataIndex(int elemIndex, const String::Key& entry, int expectedSize) const {
     PGE_ASSERT(elemIndex >= 0, "Requested a negative element index (" + String::fromInt(elemIndex) + ")");
 
-    int elemOffset = elemIndex * layout->getElementSize();
-    PGE_ASSERT(elemOffset <= (size - layout->getElementSize()),
+    int elemOffset = elemIndex * layout.getElementSize();
+    PGE_ASSERT(elemOffset <= (size - layout.getElementSize()),
         "Requested an element index greater than the number of elements ("
-        + String::fromInt(elemOffset) + " > " + String::fromInt((int)(size - layout->getElementSize())) + ")");
+        + String::fromInt(elemOffset) + " > " + String::fromInt((int)(size - layout.getElementSize())) + ")");
 
-    const ElemLayout::LocationAndSize& locAndSize = layout->getLocationAndSize(entry);
+    const ElemLayout::LocationAndSize& locAndSize = layout.getLocationAndSize(entry);
     PGE_ASSERT(locAndSize.size == expectedSize,
         "Entry \"" + String::format(entry.hash, "%Xll") + "\" size mismatch (expected " + String::fromInt(locAndSize.size)
         + ", got " + String::fromInt(expectedSize) + ")");
