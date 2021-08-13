@@ -12,7 +12,8 @@
 
 namespace PGE {
 
-class ShaderOGL3 : public Shader, private GraphicsReferencer<class GraphicsOGL3> {
+class GraphicsOGL3;
+class ShaderOGL3 : public Shader {
     public:
         ShaderOGL3(Graphics& gfx, const FilePath& path);
 
@@ -22,7 +23,9 @@ class ShaderOGL3 : public Shader, private GraphicsReferencer<class GraphicsOGL3>
         void useShader();
         void unbindGLAttribs();
     private:
-        class ConstantOGL3 : public Constant, private GraphicsReferencer<GraphicsOGL3> {
+        GraphicsOGL3& graphics;
+
+        class ConstantOGL3 : public Constant {
             public:
                 ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk);
 
@@ -37,6 +40,8 @@ class ShaderOGL3 : public Shader, private GraphicsReferencer<class GraphicsOGL3>
                 void setUniform();
 
             private:
+                GraphicsOGL3& graphics;
+
                 GLint glLocation;
                 GLenum glType;
                 int glArraySize;

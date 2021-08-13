@@ -1,7 +1,6 @@
 #include <PGE/Graphics/Graphics.h>
 #include <PGE/Graphics/Texture.h>
 #include <PGE/Graphics/Shader.h>
-#include <PGE/Graphics/Material.h>
 #include <PGE/Graphics/Mesh.h>
 #include <PGE/String/String.h>
 #include <PGE/File/FilePath.h>
@@ -20,7 +19,7 @@ class Program {
     private:
         Graphics* graphics;
         Shader* shader;
-        Material* material;
+        Mesh::Material material;
         Mesh* mesh;
         InputManager* inputManager;
         KeyboardInput* escKey;
@@ -36,7 +35,7 @@ class Program {
         Program() {
             graphics = Graphics::create("Example 1", 1600, 900, false, Graphics::Renderer::OpenGL);
             shader = Shader::load(*graphics, FilePath::fromStr("Shader1").makeDirectory());
-            material = new Material(*shader, true);
+            material = Mesh::Material(*shader, Mesh::Material::Opaque::YES);
 
             vertexData = StructuredData(shader->getVertexLayout(), 5);
             
@@ -52,7 +51,7 @@ class Program {
             triangles.emplace_back(0, 3, 4);
 
             mesh = Mesh::create(*graphics);
-            mesh->setMaterial(material, PGE::Mesh::PreserveGeometry::NO);
+            mesh->setMaterial(material);
             mesh->setGeometry(vertexData, triangles);
             
             inputManager = InputManager::create(*graphics);
@@ -69,7 +68,6 @@ class Program {
             delete escKey;
             delete inputManager;
             delete mesh;
-            delete material;
             delete shader;
             delete graphics;
         }

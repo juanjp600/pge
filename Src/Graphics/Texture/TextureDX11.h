@@ -11,7 +11,8 @@
 
 namespace PGE {
 
-class TextureDX11 : public Texture, private GraphicsReferencer<const class GraphicsDX11> {
+class GraphicsDX11;
+class TextureDX11 : public Texture {
     public:
         // Render target.
         TextureDX11(const Graphics& gfx, int w, int h, Format fmt);
@@ -25,6 +26,8 @@ class TextureDX11 : public Texture, private GraphicsReferencer<const class Graph
         void* getNative() const override;
 
     private:
+        GraphicsDX11& graphics;
+
         D3D11Texture2D::View dxTexture;
         D3D11ShaderResourceView::View dxShaderResourceView;
 

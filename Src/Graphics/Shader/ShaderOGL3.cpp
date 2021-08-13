@@ -2,7 +2,7 @@
 
 using namespace PGE;
 
-ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), resourceManager(gfx), GraphicsReferencer(gfx) {
+ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), resourceManager((GraphicsOGL3&)gfx), graphics((GraphicsOGL3&)gfx) {
     graphics.takeGlContext();
 
     String vertexSource = (path + "vertex.glsl").read();
@@ -258,7 +258,7 @@ Shader::Constant& ShaderOGL3::getFragmentShaderConstant(const String& name) {
     return it->second;
 }
 
-ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk) : dataBuffer(data), GraphicsReferencer(gfx) {
+ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk) : dataBuffer(data), graphics((GraphicsOGL3&)gfx) {
     glLocation = glLoc;
     glType = glTyp;
     glArraySize = glArrSz;

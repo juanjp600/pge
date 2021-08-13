@@ -15,11 +15,14 @@
 
 namespace PGE {
 
-class MeshDX11 : public Mesh, private GraphicsReferencer<class GraphicsDX11> {
+class GraphicsDX11;
+class MeshDX11 : public Mesh {
     public:
         MeshDX11(Graphics& gfx);
 
     private:
+        GraphicsDX11& graphics;
+
         D3D11_BUFFER_DESC dxVertexBufferDesc;
         D3D11_SUBRESOURCE_DATA dxVertexBufferData;
         D3D11Buffer::View dxVertexBuffer;

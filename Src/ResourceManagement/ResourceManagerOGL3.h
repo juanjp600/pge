@@ -6,9 +6,12 @@
 
 namespace PGE {
 
-class ResourceManagerOGL3 : public ResourceManager, private GraphicsReferencer<class GraphicsOGL3> {
+class GraphicsOGL3;
+class ResourceManagerOGL3 : public ResourceManager {
+    private:
+        GraphicsOGL3& graphics;
     public:
-        ResourceManagerOGL3(class Graphics& gfx);
+        ResourceManagerOGL3(GraphicsOGL3& gfx);
         ~ResourceManagerOGL3();
 };
 

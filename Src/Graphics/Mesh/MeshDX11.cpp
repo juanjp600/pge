@@ -2,7 +2,7 @@
 
 using namespace PGE;
 
-MeshDX11::MeshDX11(Graphics& gfx) : GraphicsReferencer(gfx) { }
+MeshDX11::MeshDX11(Graphics& gfx) : graphics((GraphicsDX11&)gfx) { }
 
 void MeshDX11::uploadInternalData() {
     ID3D11Device* dxDevice = graphics.getDxDevice();

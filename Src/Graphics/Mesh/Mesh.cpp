@@ -71,12 +71,8 @@ void Mesh::setMaterial(const Material& m) {
     material = m;
 }
 
-void Mesh::setOpacity(bool opq) {
-    opaque = opq;
-}
-
 bool Mesh::isOpaque() const {
-    return opaque;
+    return material.isOpaque();
 }
 
 void Mesh::render() {
@@ -99,24 +95,32 @@ Mesh::Triangle::Triangle(u32 a, u32 b, u32 c) {
 
 Mesh::Material::Material() {
     shader = nullptr;
+    opaque = Opaque::YES;
 }
 
-Mesh::Material::Material(Shader& sh) {
+Mesh::Material::Material(Shader& sh, Opaque o) {
     shader = &sh;
+    opaque = o;
 }
 
-Mesh::Material::Material(Shader& sh, Texture& tex) {
+Mesh::Material::Material(Shader& sh, Texture& tex, Opaque o) {
     shader = &sh;
     textures = { tex };
+    opaque = o;
 }
 
-Mesh::Material::Material(Shader& sh, const ReferenceVector<Texture>& texs) {
+Mesh::Material::Material(Shader& sh, const ReferenceVector<Texture>& texs, Opaque o) {
     shader = &sh;
     textures = texs;
+    opaque = o;
 }
 
 bool Mesh::Material::isValid() const {
     return shader != nullptr;
+}
+
+bool Mesh::Material::isOpaque() const {
+    return opaque == Opaque::YES;
 }
 
 Shader& Mesh::Material::getShader() const {

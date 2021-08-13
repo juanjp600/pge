@@ -16,20 +16,27 @@ namespace PGE {
 
 class Mesh : private PolymorphicHeap {
     public:
-        struct Material {
-            Material();
-            Material(class Shader& sh);
-            Material(Shader& sh, class Texture& tex);
-            Material(Shader& sh, const ReferenceVector<Texture>& texs);
+        class Material {
+            public:
+                enum class Opaque {
+                    YES,
+                    NO
+                };
 
-            bool isValid() const;
-            Shader& getShader() const;
-            size_t getTextureCount() const;
-            Texture& getTexture(size_t index) const;
+                Material();
+                Material(class Shader& sh, Opaque o);
+                Material(Shader& sh, class Texture& tex, Opaque o);
+                Material(Shader& sh, const ReferenceVector<Texture>& texs, Opaque o);
 
+                bool isValid() const;
+                bool isOpaque() const;
+                Shader& getShader() const;
+                size_t getTextureCount() const;
+                Texture& getTexture(size_t index) const;
             private:
                 Shader* shader;
                 ReferenceVector<Texture> textures;
+                Opaque opaque;
         };
 
         enum class PrimitiveType {
@@ -61,7 +68,6 @@ class Mesh : private PolymorphicHeap {
 
         void setMaterial(const Material& m);
 
-        void setOpacity(bool opq);
         bool isOpaque() const;
 
         void render();
@@ -78,7 +84,6 @@ class Mesh : private PolymorphicHeap {
 
     private:
         bool mustReuploadInternalData = true;
-        bool opaque = true;
 };
 
 }

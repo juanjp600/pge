@@ -2,7 +2,7 @@
 
 using namespace PGE;
 
-ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path), GraphicsReferencer(gfx) {
+ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path), graphics((GraphicsDX11&)gfx) {
     BinaryReader reader(path + "reflection.dxri");
 
     readConstantBuffers(reader, vertexConstantBuffers);

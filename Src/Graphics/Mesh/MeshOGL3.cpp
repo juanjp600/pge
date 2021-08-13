@@ -2,7 +2,7 @@
 
 using namespace PGE;
 
-MeshOGL3::MeshOGL3(Graphics& gfx) : resourceManager(gfx), GraphicsReferencer(gfx) {
+MeshOGL3::MeshOGL3(Graphics& gfx) : resourceManager((GraphicsOGL3&)gfx), graphics((GraphicsOGL3&)gfx) {
     graphics.takeGlContext();
 
     glVertexBufferObject = resourceManager.addNewResource<GLBuffer>();

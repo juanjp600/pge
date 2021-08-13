@@ -15,7 +15,8 @@
 
 namespace PGE {
 
-class ShaderDX11 : public Shader, private GraphicsReferencer<const class GraphicsDX11> {
+class GraphicsDX11;
+class ShaderDX11 : public Shader {
     public:
         ShaderDX11(const Graphics& gfx, const FilePath& path);
 
@@ -27,6 +28,8 @@ class ShaderDX11 : public Shader, private GraphicsReferencer<const class Graphic
         void useSamplers();
 
     private:
+        GraphicsDX11& graphics;
+
         D3D11InputLayout::View dxVertexInputLayout;
 
         class CBufferInfo;

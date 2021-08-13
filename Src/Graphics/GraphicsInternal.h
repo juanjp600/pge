@@ -78,20 +78,6 @@ class GraphicsSpecialized : public GraphicsInternal {
         }
 };
 
-template <typename SPEC_GFX>
-class GraphicsReferencer {
-    protected:
-        GraphicsReferencer(Graphics& gfx) : graphics((SPEC_GFX&)gfx) { validate(); }
-        GraphicsReferencer(const Graphics& gfx) : graphics((SPEC_GFX&)gfx) { validate(); }
-
-        SPEC_GFX& graphics;
-
-    private:
-        constexpr void validate() {
-            static_assert(std::is_base_of<Graphics, SPEC_GFX>::value);
-        }
-};
-
 }
 
 #endif // PGEINTERNAL_WINDOWINTERNAL_H_INCLUDED

@@ -12,11 +12,14 @@
 
 namespace PGE {
 
-class MeshOGL3 : public Mesh, private GraphicsReferencer<class GraphicsOGL3> {
+class GraphicsOGL3;
+class MeshOGL3 : public Mesh {
     public:
         MeshOGL3(Graphics& gfx);
 
     private:
+        GraphicsOGL3& graphics;
+
         void prepareVertexOperation();
 
         void uploadInternalData() override;
