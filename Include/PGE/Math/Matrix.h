@@ -99,7 +99,7 @@ class Matrix4x4f : private NoHeap {
             float nad = cos(rad) / sin(rad);
 
             return Matrix4x4f(
-                nad * (-1.0f / aspectRatio), 0.f, 0.f, 0.f,
+                nad / aspectRatio, 0.f, 0.f, 0.f,
                 0.f, nad, 0.f, 0.f,
                 0.f, 0.f, (farZ + 1) / (farZ - nearZ), -(nearZ * (farZ + 1) / (farZ - nearZ)),
                 0.f, 0.f, 1.f, 1.f
