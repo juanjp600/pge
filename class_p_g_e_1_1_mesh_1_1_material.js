@@ -9,8 +9,8 @@ var class_p_g_e_1_1_mesh_1_1_material =
     [ "\u202AMaterial", "class_p_g_e_1_1_mesh_1_1_material.html#a2a3744e439f6c07de2830c8fe881e108", null ],
     [ "\u202AMaterial", "class_p_g_e_1_1_mesh_1_1_material.html#abccce5b62ecffe2c72d98b92139d3546", null ],
     [ "\u202AgetShader", "class_p_g_e_1_1_mesh_1_1_material.html#a082ec77f6d2ddf7d097589710c885eca", null ],
-    [ "\u202AgetTexture", "class_p_g_e_1_1_mesh_1_1_material.html#acd1254b8c92ecaec32d70afd744dded4", null ],
-    [ "\u202AgetTextureCount", "class_p_g_e_1_1_mesh_1_1_material.html#a26c324300ac239c4224fd3a277f732e0", null ],
+    [ "\u202AgetTexture", "class_p_g_e_1_1_mesh_1_1_material.html#aba8d385f7ef54ad28b0c4ed7d92ee5d4", null ],
+    [ "\u202AgetTextureCount", "class_p_g_e_1_1_mesh_1_1_material.html#a971442be79418dfe3ed16da863d4ab28", null ],
     [ "\u202AisOpaque", "class_p_g_e_1_1_mesh_1_1_material.html#a26bfe7f4fff14b1d0106aa4b9c57ea7d", null ],
     [ "\u202AisValid", "class_p_g_e_1_1_mesh_1_1_material.html#a2cd1a1807b9d22a4fcd9a6c6ca6ad063", null ]
 ];
