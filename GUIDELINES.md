@@ -328,7 +328,7 @@ MyClass a(42); // Good.
 ## Utilize structured bindings
 Way better than using cancerous pair types directly!
 
-**Example**
+**Example:**
 ```cpp
 // Bad!
 for (const auto& it : myMap) {
