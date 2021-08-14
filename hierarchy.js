@@ -66,5 +66,8 @@ var hierarchy =
     ] ],
     [ "\u202APGE::SysEvents::Subscriber", "class_p_g_e_1_1_sys_events_1_1_subscriber.html", null ],
     [ "\u202APGE::SysEvents", "class_p_g_e_1_1_sys_events.html", null ],
+    [ "\u202APGE::Time", "struct_p_g_e_1_1_time.html", null ],
+    [ "\u202APGE::TimeMaster", "class_p_g_e_1_1_time_master.html", null ],
+    [ "\u202APGE::Timing", "class_p_g_e_1_1_timing.html", null ],
     [ "\u202APGE::Mesh::Triangle", "struct_p_g_e_1_1_mesh_1_1_triangle.html", null ]
 ];
