@@ -6,6 +6,7 @@
 namespace PGE {
 
 namespace Interpolator {
+	// TODO: C++20 will eliminate this via std::lerp.
 	template <typename T>
 	constexpr const T lerp(const T& from, const T& to, float lerp) {
 		return from * (1.f - lerp) + to * lerp;
