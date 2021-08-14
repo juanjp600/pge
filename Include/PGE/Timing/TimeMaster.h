@@ -13,8 +13,8 @@ class TimeMaster {
 		String print() const;
 
 	private:
-		Time top;
-		Time* current = &top;
+		Timer top;
+		Timer* current = &top;
 };
 
 }

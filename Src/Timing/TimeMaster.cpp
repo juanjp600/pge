@@ -6,11 +6,11 @@ String TimeMaster::print() const {
     String ret;
 
     u64 sum = 0;
-    for (const auto& t : top.children) {
-        sum += t.second.time;
+    for (const auto& [_, child] : top.children) {
+        sum += child.time;
     }
-    for (const auto& t : top.children) {
-        t.second.print(ret, sum, 0, t.first.str);
+    for (const auto& [name, child] : top.children) {
+        child.print(ret, sum, 0, name.str);
     }
 
     return ret;

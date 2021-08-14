@@ -242,9 +242,7 @@ void ShaderOGL3::useShader() {
     glUseProgram(glShaderProgram);
 
     byte* ptr = nullptr;
-    for (const auto& kvp : glVertexAttribLocations) {
-        const String::Key& key = kvp.first;
-        const GlAttribLocation& glAttribLocation = kvp.second;
+    for (const auto& [key, glAttribLocation] : glVertexAttribLocations) {
         const StructuredData::ElemLayout::LocationAndSize& locationAndSizeInBuffer = vertexLayout.getLocationAndSize(key);
 
         glEnableVertexAttribArray(glAttribLocation.location);
@@ -253,24 +251,23 @@ void ShaderOGL3::useShader() {
         PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + String::format(key.hash, "%Xll") + ")");
     }
 
-    for (auto& it : vertexShaderConstants) {
-        it.second.setUniform();
+    for (auto& [_, constant] : vertexShaderConstants) {
+        constant.setUniform();
     }
 
-    for (auto& it : fragmentShaderConstants) {
-        it.second.setUniform();
+    for (auto& [_, constant] : fragmentShaderConstants) {
+        constant.setUniform();
     }
 
-    for (auto& it : samplerConstants) {
-        it.second.setUniform();
+    for (auto& [_, constant] : samplerConstants) {
+        constant.setUniform();
     }
 }
 
 void ShaderOGL3::unbindGLAttribs() {
     graphics.takeGlContext();
 
-    for (const auto& kvp : glVertexAttribLocations) {
-        const GlAttribLocation& glAttribLocation = kvp.second;
+    for (const auto& [_, glAttribLocation] : glVertexAttribLocations) {
         glDisableVertexAttribArray(glAttribLocation.location);
     }
 }

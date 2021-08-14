@@ -5,10 +5,10 @@
 
 namespace PGE {
 
-struct Time {
+struct Timer {
     u64 time;
-    Time* parent;
-    std::unordered_map<String::RedundantKey, Time> children;
+    Timer* parent;
+    std::unordered_map<String::RedundantKey, Timer> children;
     void print(String& ret, u64 parentTime, int depth, const String& name) const;
 };
 
