@@ -11,8 +11,6 @@ var class_p_g_e_1_1_mesh =
     [ "\u202AisOpaque", "class_p_g_e_1_1_mesh.html#ae643a1ded89ad8de2fdfd8da5bb124fa", null ],
     [ "\u202Arender", "class_p_g_e_1_1_mesh.html#a624f376f30e4ec0db40d119486bfaf73", null ],
     [ "\u202ArenderInternal", "class_p_g_e_1_1_mesh.html#a00187a62884d45156b4d6fd9c6a7b674", null ],
-    [ "\u202AsetGeometry", "class_p_g_e_1_1_mesh.html#a1e3585bb9af7f98f890a44c9dc3578bb", null ],
-    [ "\u202AsetGeometry", "class_p_g_e_1_1_mesh.html#ac31af04789211cffcaf51f42255dabfd", null ],
     [ "\u202AsetGeometry", "class_p_g_e_1_1_mesh.html#adb50603a6321f4e33813b44672ad7b85", null ],
     [ "\u202AsetGeometry", "class_p_g_e_1_1_mesh.html#a141e0c12452282e0b40fb31fecbf1e17", null ],
     [ "\u202AsetGeometry", "class_p_g_e_1_1_mesh.html#a0b2be51a45e6bd335333ac00143f937b", null ],
