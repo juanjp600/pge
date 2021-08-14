@@ -85,7 +85,7 @@ class Program {
 
             mesh = Mesh::create(*graphics);
             mesh->setMaterial(material);
-            mesh->setGeometry(vertexDataGpuTransform, triangles);
+            mesh->setGeometry(vertexDataGpuTransform.copy(), triangles);
             
             inputManager = InputManager::create(*graphics);
             escKey = new KeyboardInput(KeyboardInput::Keycode::ESCAPE);
@@ -141,7 +141,7 @@ class Program {
             shader->getVertexShaderConstant("worldMatrix").setValue(worldMatrix);
             shader->getVertexShaderConstant("viewMatrix").setValue(viewMatrix);
             shader->getVertexShaderConstant("projectionMatrix").setValue(projectionMatrix);
-            mesh->setGeometry(vertexDataGpuTransform, triangles);
+            mesh->setGeometry(vertexDataGpuTransform.copy(), triangles);
             mesh->render();
 
             for (int i = 0; i < 5; i++) {
@@ -151,7 +151,7 @@ class Program {
             shader->getVertexShaderConstant("worldMatrix").setValue(Matrices::IDENTITY);
             shader->getVertexShaderConstant("viewMatrix").setValue(Matrices::IDENTITY);
             shader->getVertexShaderConstant("projectionMatrix").setValue(Matrices::IDENTITY);
-            mesh->setGeometry(vertexDataCpuTransform, triangles);
+            mesh->setGeometry(vertexDataCpuTransform.copy(), triangles);
             mesh->render();
 
             graphics->swap();

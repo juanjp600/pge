@@ -52,7 +52,7 @@ class Program {
 
             mesh = Mesh::create(*graphics);
             mesh->setMaterial(material);
-            mesh->setGeometry(vertexData, triangles);
+            mesh->setGeometry(vertexData.copy(), triangles);
             
             inputManager = InputManager::create(*graphics);
             escKey = new KeyboardInput(KeyboardInput::Keycode::ESCAPE);
@@ -96,7 +96,7 @@ class Program {
                 0.5f);
             vertexData.setValue(4, "color", color4);
 
-            mesh->setGeometry(vertexData, triangles);
+            mesh->setGeometry(vertexData.copy(), triangles);
 
             graphics->clear(Colors::MAGENTA);
             mesh->render();
