@@ -49,6 +49,9 @@
     <ClCompile Include="..\..\Src\String\UnicodeHelper.cpp" />
     <ClCompile Include="..\..\Src\StructuredData\StructuredData.cpp" />
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
+    <ClCompile Include="..\..\Src\Timing\Time.cpp" />
+    <ClCompile Include="..\..\Src\Timing\TimeMaster.cpp" />
+    <ClCompile Include="..\..\Src\Timing\Timing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\PGE\Color\Color.h" />
@@ -87,6 +90,9 @@
     <ClInclude Include="..\..\Include\PGE\String\Unicode.h" />
     <ClInclude Include="..\..\Include\PGE\StructuredData\StructuredData.h" />
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h" />
+    <ClInclude Include="..\..\Include\PGE\Timing\Time.h" />
+    <ClInclude Include="..\..\Include\PGE\Timing\TimeMaster.h" />
+    <ClInclude Include="..\..\Include\PGE\Timing\Timing.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Types.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h" />
