@@ -15,7 +15,7 @@ class Shader : private PolymorphicHeap {
         static Shader* load(class Graphics& gfx, const FilePath& path);
         virtual ~Shader() = default;
 
-        const StructuredData::ElemLayout& getVertexLayout() { return *vertexLayout; }
+        const StructuredData::ElemLayout& getVertexLayout() { return vertexLayout; }
 
         // This is not heap-only to allow it as a map value.
         class Constant {
@@ -38,7 +38,7 @@ class Shader : private PolymorphicHeap {
     protected:
         Shader(const FilePath& path) : filepath(path) { }
 
-        std::unique_ptr<StructuredData::ElemLayout> vertexLayout;
+        StructuredData::ElemLayout vertexLayout;
         const FilePath filepath;
 };
 

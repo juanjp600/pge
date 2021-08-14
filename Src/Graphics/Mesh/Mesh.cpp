@@ -3,15 +3,7 @@
 
 using namespace PGE;
 
-#define PGE_ASSERT_MATERIAL_LAYOUT() PGE_ASSERT(!material.isValid() || material.getShader().getVertexLayout() == *verts.getLayout(), "Material must be set before geometry can be set")
-
-void Mesh::setGeometry(const StructuredData& verts, const std::vector<Line>& lines) {
-    setGeometry(verts.copy(), lines);
-}
-
-void Mesh::setGeometry(const StructuredData& verts, const std::vector<Triangle>& triangles) {
-    setGeometry(verts.copy(), triangles);
-}
+#define PGE_ASSERT_MATERIAL_LAYOUT() PGE_ASSERT(!material.isValid() || verts.getDataSize() <= 0 || material.getShader().getVertexLayout() == verts.getLayout(), "Material must be set before geometry can be set")
 
 void Mesh::setGeometry(StructuredData&& verts, const std::vector<Line>& lines) {
     PGE_ASSERT_MATERIAL_LAYOUT();
@@ -64,8 +56,8 @@ void Mesh::clearGeometry() {
 void Mesh::setMaterial(const Material& m) {
     PGE_ASSERT(
         !m.isValid() ||
-        vertices.getLayout() == nullptr ||
-        m.getShader().getVertexLayout() == *vertices.getLayout(),
+        vertices.getDataSize() <= 0 ||
+        m.getShader().getVertexLayout() == vertices.getLayout(),
         "Can't set material with mismatched vertex layout without discarding"
     );
     material = m;

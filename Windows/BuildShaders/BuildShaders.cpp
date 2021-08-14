@@ -221,7 +221,8 @@ static void compileDX11Reflection(const FilePath& path, const String& input, ID3
 
 static ID3DBlob* compileDX11(const FilePath& path, const String& dxEntryPoint, const String& input) {
     ID3DBlob* compiledBlob; ID3DBlob* errorBlob;
-    HRESULT hr = D3DCompile(input.cstr(), input.byteLength(), NULL, NULL, NULL, dxEntryPoint.cstr(), (dxEntryPoint.toLower() + "_5_0").cstr(), D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3 | D3DCOMPILE_WARNINGS_ARE_ERRORS, 0, &compiledBlob, &errorBlob);
+    HRESULT hr = D3DCompile(input.cstr(), input.byteLength(), NULL, NULL, NULL, dxEntryPoint.cstr(), (dxEntryPoint.toLower() + "_5_0").cstr(),
+        D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3 | D3DCOMPILE_WARNINGS_ARE_ERRORS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &compiledBlob, &errorBlob);
     if (FAILED(hr)) {
         String failure = "Compilation failed (" + String::fromInt(hr) + ")";
         if (errorBlob != NULL) {

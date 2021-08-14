@@ -26,6 +26,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{81A305
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glad", "..\Libraries\glad\glad.vcxproj", "{3A84BF6D-4447-4AC4-8B18-4CEEF5B45D7E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example2", "Examples\Example2.vcxproj", "{859EFC63-2B77-43D4-874D-618E2768BA44}"
+	ProjectSection(ProjectDependencies) = postProject
+		{86FA7807-97DD-432B-BAFD-4B8304762DEA} = {86FA7807-97DD-432B-BAFD-4B8304762DEA}
+		{2D5343E1-C4C3-43FB-AB12-234001B3F5DD} = {2D5343E1-C4C3-43FB-AB12-234001B3F5DD}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -72,6 +78,12 @@ Global
 		{3A84BF6D-4447-4AC4-8B18-4CEEF5B45D7E}.Release|x64.Build.0 = Release|x64
 		{3A84BF6D-4447-4AC4-8B18-4CEEF5B45D7E}.Release|x86.ActiveCfg = Release|Win32
 		{3A84BF6D-4447-4AC4-8B18-4CEEF5B45D7E}.Release|x86.Build.0 = Release|Win32
+		{859EFC63-2B77-43D4-874D-618E2768BA44}.Debug|x64.ActiveCfg = Debug|x64
+		{859EFC63-2B77-43D4-874D-618E2768BA44}.Debug|x64.Build.0 = Debug|x64
+		{859EFC63-2B77-43D4-874D-618E2768BA44}.Debug|x86.ActiveCfg = Debug|x64
+		{859EFC63-2B77-43D4-874D-618E2768BA44}.Release|x64.ActiveCfg = Release|x64
+		{859EFC63-2B77-43D4-874D-618E2768BA44}.Release|x64.Build.0 = Release|x64
+		{859EFC63-2B77-43D4-874D-618E2768BA44}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

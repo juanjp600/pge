@@ -34,9 +34,8 @@ class StructuredData : NoHeap {
                     int size;
                 };
 
+                ElemLayout() = default;
                 ElemLayout(const std::vector<Entry>& entrs);
-                ElemLayout(const ElemLayout&) = delete;
-                ElemLayout& operator=(const ElemLayout&) = delete;
 
                 const LocationAndSize& getLocationAndSize(const String& name) const;
                 const LocationAndSize& getLocationAndSize(const String::Key& name) const;
@@ -51,6 +50,9 @@ class StructuredData : NoHeap {
         StructuredData() = default;
         StructuredData(const ElemLayout& ly, int elemCount);
 
+        StructuredData(const StructuredData&) = delete;
+        void operator=(const StructuredData&) = delete;
+
         StructuredData(StructuredData&& other) noexcept;
         void operator=(StructuredData&& other) noexcept;
 
@@ -58,7 +60,7 @@ class StructuredData : NoHeap {
 
         const byte* getData() const;
         size_t getDataSize() const;
-        const ElemLayout* getLayout() const;
+        const ElemLayout& getLayout() const;
 
         template <typename T>
         void setValue(int elemIndex, const String& entryName, const T& value) {
@@ -75,7 +77,7 @@ class StructuredData : NoHeap {
     private:
         int getDataIndex(int elemIndex, const String::Key& entry, int expectedSize) const;
 
-        const ElemLayout* layout = nullptr;
+        ElemLayout layout; //don't change this to a pointer, stop preemptively optimizing!!!!!
         std::unique_ptr<byte[]> data;
         size_t size;
 };

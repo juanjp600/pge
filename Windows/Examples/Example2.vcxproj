@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{4f3dc492-9c14-4804-aa5b-ab231bbbac95}</ProjectGuid>
+    <ProjectGuid>{859EFC63-2B77-43D4-874D-618E2768BA44}</ProjectGuid>
     <RootNamespace>PGE</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -66,7 +66,7 @@
       <AdditionalDependencies>$(SolutionDir)$(Platform)\$(Configuration)\Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>"$(ProjectDir)..\BuildShaders\$(Platform)\$(Configuration)\BuildShaders.exe"  "$(ProjectDir)../../Examples/Example1/"</Command>
+      <Command>"$(ProjectDir)..\BuildShaders\$(Platform)\$(Configuration)\BuildShaders.exe"  "$(ProjectDir)../../Examples/Example2/"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -88,11 +88,11 @@
       <AdditionalDependencies>$(SolutionDir)$(Platform)\$(Configuration)\Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>"$(ProjectDir)..\BuildShaders\$(Platform)\$(Configuration)\BuildShaders.exe"  "$(ProjectDir)../../Examples/Example1/"</Command>
+      <Command>"$(ProjectDir)..\BuildShaders\$(Platform)\$(Configuration)\BuildShaders.exe"  "$(ProjectDir)../../Examples/Example2/"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Examples\Example1\Main.cpp" />
+    <ClCompile Include="..\..\Examples\Example2\Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

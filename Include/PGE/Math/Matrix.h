@@ -5,29 +5,30 @@
 
 namespace PGE {
 
+/// Row-major 4x4 matrix.
 class Matrix4x4f : private NoHeap {
     public:
         float elements[4][4];
 
         constexpr Matrix4x4f() : elements() { }
         constexpr Matrix4x4f(
-                float aa,float ab,float ac,float ad,
-                float ba,float bb,float bc,float bd,
-                float ca,float cb,float cc,float cd,
-                float da,float db,float dc,float dd
+                float r0c0, float r0c1, float r0c2, float r0c3,
+                float r1c0, float r1c1, float r1c2, float r1c3,
+                float r2c0, float r2c1, float r2c2, float r2c3,
+                float r3c0, float r3c1, float r3c2, float r3c3
             ) : elements {
-                aa, ab, ac, ad,
-                ba, bb, bc, bd,
-                ca, cb, cc, cd,
-                da, db, dc, dd,
+                r0c0, r0c1, r0c2, r0c3,
+                r1c0, r1c1, r1c2, r1c3,
+                r2c0, r2c1, r2c2, r2c3,
+                r3c0, r3c1, r3c2, r3c3,
             } { }
 
         static constexpr const Matrix4x4f translate(const Vector3f& position) {
             return Matrix4x4f(
-                1.f, 0.f, 0.f, 0.f,
-                0.f, 1.f, 0.f, 0.f,
-                0.f, 0.f, 1.f, 0.f,
-                position.x, position.y, position.z, 1.f
+                1.f, 0.f, 0.f, position.x,
+                0.f, 1.f, 0.f, position.y,
+                0.f, 0.f, 1.f, position.z,
+                0.f, 0.f, 0.f, 1.f
             );
         }
         // TODO: Custom trigonometric function implementation?
@@ -41,26 +42,26 @@ class Matrix4x4f : private NoHeap {
 
             Matrix4x4f pitchMat(
                 1.f, 0.f, 0.f, 0.f,
-                0.f, cosPitch, sinPitch, 0.f,
-                0.f, -sinPitch, cosPitch, 0.f,
+                0.f, cosPitch, -sinPitch, 0.f,
+                0.f, sinPitch, cosPitch, 0.f,
                 0.f, 0.f, 0.f, 1.f
             );
 
             Matrix4x4f yawMat(
-                cosYaw, 0.f, -sinYaw, 0.f,
+                cosYaw, 0.f, sinYaw, 0.f,
                 0.f, 1.f, 0.f, 0.f,
-                sinYaw, 0.f, cosYaw, 0.f,
+                -sinYaw, 0.f, cosYaw, 0.f,
                 0.f, 0.f, 0.f, 1.f
             );
 
             Matrix4x4f rollMat(
-                cosRoll, sinRoll, 0.f, 0.f,
-                -sinRoll, cosRoll, 0.f, 0.f,
+                cosRoll, -sinRoll, 0.f, 0.f,
+                sinRoll, cosRoll, 0.f, 0.f,
                 0.f, 0.f, 1.f, 0.f,
                 0.f, 0.f, 0.f, 1.f
             );
 
-            return rollMat * pitchMat * yawMat;
+            return yawMat * pitchMat * rollMat;
         }
 
         static constexpr const Matrix4x4f scale(const Vector3f& scale) {
@@ -73,11 +74,11 @@ class Matrix4x4f : private NoHeap {
         }
 
         static constexpr const Matrix4x4f constructWorldMat(const Vector3f& position, const Vector3f& rotation, const Vector3f& scale) {
-            return Matrix4x4f::scale(scale) * Matrix4x4f::rotate(rotation) * Matrix4x4f::translate(position);
+            return Matrix4x4f::translate(position) * Matrix4x4f::rotate(rotation) * Matrix4x4f::scale(scale);
         }
 
         static constexpr const Matrix4x4f constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector) {
-            Vector3f zAxis = -forwardVector;
+            Vector3f zAxis = forwardVector;
             zAxis = zAxis.normalize();
 
             Vector3f xAxis = upVector.crossProduct(zAxis);
@@ -86,10 +87,10 @@ class Matrix4x4f : private NoHeap {
             Vector3f yAxis = zAxis.crossProduct(xAxis);
 
             return Matrix4x4f(
-                xAxis.x, yAxis.x, zAxis.x, 0.f,
-                xAxis.y, yAxis.y, zAxis.y, 0.f,
-                xAxis.z, yAxis.z, zAxis.z, 0.f,
-                -xAxis.dotProduct(position), -yAxis.dotProduct(position), -zAxis.dotProduct(position), 1.f
+                xAxis.x, xAxis.y, xAxis.z, -xAxis.dotProduct(position),
+                yAxis.x, yAxis.y, yAxis.z, -yAxis.dotProduct(position),
+                zAxis.x, zAxis.y, zAxis.z, -zAxis.dotProduct(position),
+                0.f, 0.f, 0.f, 1.f
             );
         }
 
@@ -98,10 +99,10 @@ class Matrix4x4f : private NoHeap {
             float nad = cos(rad) / sin(rad);
 
             return Matrix4x4f(
-                nad * (-1.0f / aspectRatio), 0.f, 0.f, 0.f,
+                nad / aspectRatio, 0.f, 0.f, 0.f,
                 0.f, nad, 0.f, 0.f,
-                0.f, 0.f, farZ / (nearZ - farZ), -1.f,
-                0.f, 0.f, (nearZ * farZ / (nearZ - farZ)), 1.f
+                0.f, 0.f, (farZ + 1) / (farZ - nearZ), -(nearZ * (farZ + 1) / (farZ - nearZ)),
+                0.f, 0.f, 1.f, 1.f
             );
         }
 
@@ -109,8 +110,8 @@ class Matrix4x4f : private NoHeap {
             return Matrix4x4f(
                 -2.f / width, 0.f, 0.f, 0.f,
                 0.f, 2.f / height, 0.f, 0.f,
-                0.f, 0.f, -1.f / (nearZ - farZ), 0.f,
-                0.f, 0.f, -farZ / (nearZ - farZ), 1.f
+                0.f, 0.f, -1.f / (nearZ - farZ), -farZ / (nearZ - farZ),
+                0.f, 0.f, 0.f, 1.f
             );
         }
 
@@ -196,8 +197,8 @@ class Matrix4x4f : private NoHeap {
         constexpr const Matrix4x4f operator*(const Matrix4x4f& other) const {
             Matrix4x4f retVal;
             for (int i = 0; i < 4; i++) {
-                for (int k = 0; k < 4; k++) {
-                    for (int j = 0; j < 4; j++) {
+                for (int j = 0; j < 4; j++) {
+                    for (int k = 0; k < 4; k++) {
                         retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
                     }
                 }
@@ -217,10 +218,10 @@ class Matrix4x4f : private NoHeap {
 
         constexpr const Vector4f operator*(const Vector4f& vec) const {
             Vector4f retVal;
-            retVal.x = vec.x * elements[0][0] + vec.y * elements[1][0] + vec.z * elements[2][0] + vec.w * elements[3][0];
-            retVal.y = vec.x * elements[0][1] + vec.y * elements[1][1] + vec.z * elements[2][1] + vec.w * elements[3][1];
-            retVal.z = vec.x * elements[0][2] + vec.y * elements[1][2] + vec.z * elements[2][2] + vec.w * elements[3][2];
-            retVal.w = vec.x * elements[0][3] + vec.y * elements[1][3] + vec.z * elements[2][3] + vec.w * elements[3][3];
+            retVal.x = vec.x * elements[0][0] + vec.y * elements[0][1] + vec.z * elements[0][2] + vec.w * elements[0][3];
+            retVal.y = vec.x * elements[1][0] + vec.y * elements[1][1] + vec.z * elements[1][2] + vec.w * elements[1][3];
+            retVal.z = vec.x * elements[2][0] + vec.y * elements[2][1] + vec.z * elements[2][2] + vec.w * elements[2][3];
+            retVal.w = vec.x * elements[3][0] + vec.y * elements[3][1] + vec.z * elements[3][2] + vec.w * elements[3][3];
             return retVal;
         }
 
