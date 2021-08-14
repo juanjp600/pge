@@ -50,6 +50,9 @@ class StructuredData : NoHeap {
         StructuredData() = default;
         StructuredData(const ElemLayout& ly, int elemCount);
 
+        StructuredData(const StructuredData&) = delete;
+        void operator=(const StructuredData&) = delete;
+
         StructuredData(StructuredData&& other) noexcept;
         void operator=(StructuredData&& other) noexcept;
 
