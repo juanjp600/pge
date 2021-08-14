@@ -39,7 +39,7 @@ class Program {
 
     public:
         Program() {
-            graphics = Graphics::create("Example 2", 1600, 900, false, Graphics::Renderer::DirectX11);
+            graphics = Graphics::create("Example 2", 1600, 900, false, Graphics::Renderer::OpenGL);
             graphics->setDepthTest(false);
 
             shader = Shader::load(*graphics, FilePath::fromStr("Shader2").makeDirectory());
@@ -51,26 +51,32 @@ class Program {
             vertexPositions[1] = Vector4f(-1.f, 1.f, 0.f, 1.f);
             vertexPositions[2] = Vector4f(1.f, 1.f, 0.f, 1.f);
             vertexPositions[3] = Vector4f(1.f, -1.f, 0.f, 1.f);
-            vertexPositions[4] = Vector4f(0.f, 0.f, -2.f, 1.f);
+            vertexPositions[4] = Vector4f(0.f, 0.f, 0.f, 1.f);
 
             for (int i = 0; i < 5; i++) {
                 vertexDataGpuTransform.setValue(i, "position", vertexPositions[i]);
             }
 
-            vertexDataGpuTransform.setValue(0, "color", Colors::RED);
+            vertexDataGpuTransform.setValue(0, "color", Colors::GREEN);
             vertexDataGpuTransform.setValue(1, "color", Colors::RED);
             vertexDataGpuTransform.setValue(2, "color", Colors::RED);
-            vertexDataGpuTransform.setValue(3, "color", Colors::RED);
-            vertexDataGpuTransform.setValue(4, "color", Colors::RED);
+            vertexDataGpuTransform.setValue(3, "color", Colors::GREEN);
+            vertexDataGpuTransform.setValue(4, "color", Colors::WHITE);
 
             vertexDataCpuTransform = vertexDataGpuTransform.copy();
 
             Color blue = Colors::BLUE; blue.alpha = 0.5f;
+            Color white = Colors::WHITE; white.alpha = 0.5f;
             vertexDataCpuTransform.setValue(0, "color", blue);
             vertexDataCpuTransform.setValue(1, "color", blue);
             vertexDataCpuTransform.setValue(2, "color", blue);
             vertexDataCpuTransform.setValue(3, "color", blue);
-            vertexDataCpuTransform.setValue(4, "color", blue);
+            vertexDataCpuTransform.setValue(4, "color", white);
+
+            triangles.emplace_back(0, 1, 4);
+            triangles.emplace_back(1, 2, 4);
+            triangles.emplace_back(2, 3, 4);
+            triangles.emplace_back(3, 0, 4);
 
             triangles.emplace_back(1, 0, 4);
             triangles.emplace_back(2, 1, 4);
@@ -108,21 +114,23 @@ class Program {
         void update() {
             state1 += 0.1f;
             state2 += 0.05f;
-            state3 += 0.01f;
+            state3 += 0.007f;
 
             Matrix4x4f worldMatrix = Matrix4x4f::constructWorldMat(
-                Vector3f(0,0,5 + sin(state1)),
-                Vector3f(0,0,Math::degToRad(state1)),
+                Vector3f(0,0,0),
+                Vector3f(0,0,0),
                 Vector3f(7.f, 3.5f, 1.f));
+            Vector3f camPos = Vector3f(sin(state2), 0.5f, cos(state2)).normalize() * 5.f + Vector3f(0, 0, 0);
+            Vector3f forwardVector = (Vector3f(0, 0, 0) - camPos).normalize();
             Matrix4x4f viewMatrix = Matrix4x4f::constructViewMat(
-                Vectors::ZERO3F,
-                Vector3f(sin(state2) * sin(state3) * 0,cos(state2) * sin(state3) * 0,1),
+                camPos,
+                forwardVector,
                 Vector3f(0,1,0));
             Matrix4x4f projectionMatrix = Matrix4x4f::constructPerspectiveMat(
-                Math::degToRad(120.f),
+                Math::degToRad(90.f),
                 16.f / 9.f,
-                4.f,
-                6.f);
+                0.01f,
+                5.f);
             Matrix4x4f stackedMatrices = projectionMatrix * viewMatrix * worldMatrix;
 
             inputManager->update();

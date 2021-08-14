@@ -78,7 +78,7 @@ class Matrix4x4f : private NoHeap {
         }
 
         static constexpr const Matrix4x4f constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector) {
-            Vector3f zAxis = -forwardVector;
+            Vector3f zAxis = forwardVector;
             zAxis = zAxis.normalize();
 
             Vector3f xAxis = upVector.crossProduct(zAxis);
@@ -101,8 +101,8 @@ class Matrix4x4f : private NoHeap {
             return Matrix4x4f(
                 nad * (-1.0f / aspectRatio), 0.f, 0.f, 0.f,
                 0.f, nad, 0.f, 0.f,
-                0.f, 0.f, farZ / (nearZ - farZ), (nearZ * farZ / (nearZ - farZ)),
-                0.f, 0.f, -1.f, 1.f
+                0.f, 0.f, (farZ + 1) / (farZ - nearZ), -(nearZ * (farZ + 1) / (farZ - nearZ)),
+                0.f, 0.f, 1.f, 1.f
             );
         }
 
