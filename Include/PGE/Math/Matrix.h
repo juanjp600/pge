@@ -77,6 +77,7 @@ class Matrix4x4f : private NoHeap {
             return Matrix4x4f::translate(position) * Matrix4x4f::rotate(rotation) * Matrix4x4f::scale(scale);
         }
 
+        /// Constructs a view matrix. Returns the identity matrix when position=(0,0,0), forwardVector=(0,0,1), upVector=(0,1,0)
         static constexpr const Matrix4x4f constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector) {
             Vector3f zAxis = forwardVector;
             zAxis = zAxis.normalize();
@@ -94,13 +95,15 @@ class Matrix4x4f : private NoHeap {
             );
         }
 
-        static inline const Matrix4x4f constructPerspectiveMat(float horizontalfov, float aspectRatio, float nearZ, float farZ) {
-            float rad = horizontalfov * 0.5f;
-            float nad = cos(rad) / sin(rad);
+        /// Constructs a perspective projection matrix.
+        /// Horizontal field of view must be provided in radians.
+        static inline const Matrix4x4f constructPerspectiveMat(float horizontalFovRad, float aspectRatio, float nearZ, float farZ) {
+            float halfFov = horizontalFovRad * 0.5f;
+            float cotanHalfFov = cos(halfFov) / sin(halfFov);
 
             return Matrix4x4f(
-                nad / aspectRatio, 0.f, 0.f, 0.f,
-                0.f, nad, 0.f, 0.f,
+                cotanHalfFov / aspectRatio, 0.f, 0.f, 0.f,
+                0.f, cotanHalfFov, 0.f, 0.f,
                 0.f, 0.f, (farZ + 1) / (farZ - nearZ), -(nearZ * (farZ + 1) / (farZ - nearZ)),
                 0.f, 0.f, 1.f, 1.f
             );
@@ -225,12 +228,27 @@ class Matrix4x4f : private NoHeap {
             return retVal;
         }
 
+        /// Returns the result of the following matrix-vector product:
+        /// --                   --   -- --
+        /// | r0c0 r0c1 r0c2 r0c3 |   | x |
+        /// | r1c0 r1c1 r1c2 r1c3 | * | y |
+        /// | r2c0 r2c1 r2c2 r2c3 |   | z |
+        /// | r3c0 r3c1 r3c2 r3c3 |   | 1 |
+        /// --                   --   -- --
+        /// The w component of the result is discarded.
         constexpr const Vector3f transform(const Vector3f& vec) const {
             Vector4f retVal(vec.x, vec.y, vec.z, 1.f);
             retVal = (*this) * retVal;
             return Vector3f(retVal.x, retVal.y, retVal.z);
         }
 
+        /// Returns the result of the following matrix-vector product:
+        /// --                   --   -- --
+        /// | r0c0 r0c1 r0c2 r0c3 |   | x |
+        /// | r1c0 r1c1 r1c2 r1c3 | * | y |
+        /// | r2c0 r2c1 r2c2 r2c3 |   | z |
+        /// | r3c0 r3c1 r3c2 r3c3 |   | w |
+        /// --                   --   -- --
         constexpr const Vector4f transform(const Vector4f& vec) const {
             return (*this) * vec;
         }
