@@ -16,7 +16,7 @@ class Timing {
 	private:
 		using Clock = std::chrono::steady_clock;
 
-		class Time** current;
+		struct Time** current;
 		const String name;
 		const std::chrono::time_point<Clock> start;
 };
