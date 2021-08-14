@@ -31,8 +31,8 @@ class Mesh : private PolymorphicHeap {
                 bool isValid() const;
                 bool isOpaque() const;
                 Shader& getShader() const;
-                size_t getTextureCount() const;
-                Texture& getTexture(size_t index) const;
+                int getTextureCount() const;
+                Texture& getTexture(int index) const;
             private:
                 Shader* shader;
                 ReferenceVector<Texture> textures;
@@ -58,7 +58,6 @@ class Mesh : private PolymorphicHeap {
 
         static Mesh* create(class Graphics& gfx);
 
-        // TODO: Revisit.
         void setGeometry(StructuredData&& verts, const std::vector<Line>& lines);
         void setGeometry(StructuredData&& verts, const std::vector<Triangle>& triangles);
         void setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u32>&& inds);
