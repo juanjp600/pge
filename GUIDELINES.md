@@ -323,3 +323,22 @@ MyClass c = 42; // Bad.
 MyClass b = MyClass(42); // Better, still bad.
 MyClass a(42); // Good.
 ```
+
+
+## Utilize structured bindings
+Way better than using cancerous pair types directly!
+
+**Example**
+```cpp
+// Bad!
+for (const auto& it : myMap) {
+    KeyType key = it.first;
+    ValueType val = it.second;
+    // ...
+}
+
+// Good!
+for (const auto& [key, value] : myMap) {
+    // ...
+}
+```
