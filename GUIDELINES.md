@@ -224,6 +224,43 @@ MyType& operator=(const MyType& other); // This is bad.
 void operator=(const MyType& other); // This is good.
 ```
 
+
+## Do not provide overloads taking l-values instead of r-values.
+This forces users of the function to make an active decision between moving and copying.
+
+**Note:**
+This also applies to move-constructors and assignment operators, in addition to which an explicit clone method is preferable to a copy-constructor and assignment operator, as the existance of a move constructor implies nontrivial copying. Delete the copy-constructor and assignment operator to prevent unintentional auto-generation.
+
+**Example:**
+```cpp
+class MyBadType {
+    public:
+        MyBadType(MyBadType&& other);
+        void operator=(MyBadType&& other);
+        
+        // v Bad! v
+        MyBadType(const MyBadType& other);
+        void operator=(const MyBadType& other);
+        
+        void myFunction(MyOtherType&& other);
+        void myFunction(const MyOtherType& other); // Bad.
+};
+
+class MyGoodType {
+    public:
+        MyGoodType(MyGoodType&& other);
+        void operator=(MyGoodType&& other);
+        
+        // v Good! v
+        MyGoodType(const MyGoodType&) = delete;
+        void operator=(const MyGoodType&) = delete;
+        
+        MyGoodType clone() const; // Good.
+        
+        void myFunction(MyOtherType&& other);
+};
+```
+
 ## Prefer `using` over `typedef`
 They are semantically the same and the syntax of `using` is superior.
 
