@@ -119,7 +119,8 @@ static void writeConstants(BinaryWriter& writer, ReflectionInfo info) {
 }
 
 namespace Parser {
-    static void skip(String::Iterator& it, const std::function<bool(char16)>& predicate) {
+    template <typename T>
+    static void skip(T& it, const std::function<bool(char16)>& predicate) {
         while (predicate(*it)) {
             it++;
         }
