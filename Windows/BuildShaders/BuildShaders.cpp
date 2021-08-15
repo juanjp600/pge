@@ -236,7 +236,7 @@ static void generateDXReflectionInformation(const FilePath& path, const CompileR
         D3D11_SIGNATURE_PARAMETER_DESC vsParamDesc;
         vsInfo->GetInputParameterDesc(i, &vsParamDesc);
 
-        const auto& it = findMember(vsInputStruct, vsParamDesc.SemanticName, vsParamDesc.SemanticIndex);
+        auto it = findMember(vsInputStruct, vsParamDesc.SemanticName, vsParamDesc.SemanticIndex);
         PGE_ASSERT(it != vsInputStruct.members.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::fromInt(vsParamDesc.SemanticIndex) + ")");
         writer.write<String>(it->name);
         writer.write<String>(vsParamDesc.SemanticName);
