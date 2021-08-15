@@ -90,8 +90,9 @@ struct CompileResult {
         String name;
         std::vector<Member> members;
     };
-    HlslStruct inputStruct;
-    HlslStruct outputStruct;
+    HlslStruct inputType; String inputParameterName;
+    HlslStruct returnType;
+    String hlslFunctionBody;
 };
 
 static void writeConstants(BinaryWriter& writer, ReflectionInfo info) {
@@ -124,12 +125,6 @@ namespace Parser {
         }
     }
 
-    static void skip(String::ReverseIterator& it, const std::function<bool(char16)>& predicate) {
-        while (predicate(*it)) {
-            it++;
-        }
-    }
-
     static void expectFixed(String::Iterator& it, char16 ch) {
         PGE_ASSERT(*it == ch, String("Expected \"") + ch + "\", found \"" + *it + '"');
         it++;
@@ -140,30 +135,16 @@ static bool isNotDigitOrSemicolon(char16 chr) {
     return !Unicode::isDigit(chr) && (chr != L';');
 }
 
-static bool extractFuncReturnAndInputTypes(const String& hlsl, const String& functionName, String& inputType, String& returnType) {
-    String::Iterator iter = hlsl.begin();
-    while (iter < hlsl.end()) {
-        iter = hlsl.findFirst(functionName, iter) + functionName.length();
-        Parser::skip(iter, Unicode::isSpace);
+static bool isOpeningBrace(char16 chr) {
+    return chr == '{';
+}
 
-        if (*iter == '(') {
-            //Correct function found!
+static bool isClosingBrace(char16 chr) {
+    return chr == '}';
+}
 
-            String::Iterator inputStart = iter+1;
-            String::Iterator inputEnd = inputStart;
-            Parser::skip(inputEnd, std::not_fn(Unicode::isSpace));
-            inputType = hlsl.substr(inputStart, inputEnd);
-
-            String::ReverseIterator returnEnd = (iter-functionName.length()-1);
-            Parser::skip(returnEnd, Unicode::isSpace); returnEnd--;
-            String::ReverseIterator returnStart = (returnEnd+1);
-            Parser::skip(returnStart, std::not_fn(Unicode::isSpace)); returnStart--;
-            returnType = hlsl.substr(returnStart, returnEnd);
-
-            return true;
-        }
-    }
-    return false;
+static bool isIdentifierCharacter(char16 chr) {
+    return !(Unicode::isSpace(chr) || (chr == ',') || (chr == ';') || (chr == ':') || (chr == '(') || (chr == ')'));
 }
 
 static CompileResult::HlslStruct parseHlslStruct(const String& hlsl, const String& structName) {
@@ -176,7 +157,7 @@ static CompileResult::HlslStruct parseHlslStruct(const String& hlsl, const Strin
     CompileResult::HlslStruct parsedStruct;
     parsedStruct.name = structName;
 
-    String structDecl = "struct "+structName;
+    String structDecl = "struct " + structName;
     String::Iterator before = hlsl.findFirst(structDecl) + structDecl.length();
     // Space before {
     Parser::skip(before, Unicode::isSpace);
@@ -213,7 +194,8 @@ static CompileResult::HlslStruct parseHlslStruct(const String& hlsl, const Strin
         member.dxSemanticName = hlsl.substr(before, after);
         if (*after == ';') {
             member.dxSemanticIndex = 0;
-        } else {
+        }
+        else {
             member.dxSemanticIndex = *after - '0';
             after++;
         }
@@ -229,6 +211,54 @@ static CompileResult::HlslStruct parseHlslStruct(const String& hlsl, const Strin
     }
 
     return parsedStruct;
+}
+
+static void extractFunctionData(const String& hlsl, const String& functionName, CompileResult& compileResult) {
+    String::Iterator iter = hlsl.begin();
+    while (iter < hlsl.end()) {
+        iter = hlsl.findFirst(functionName, iter) + functionName.length();
+        Parser::skip(iter, Unicode::isSpace);
+
+        if (*iter == '(') {
+            //Correct function found!
+
+            String::Iterator inputTypeStart = iter+1;
+            Parser::skip(inputTypeStart, Unicode::isSpace);
+            String::Iterator inputTypeEnd = inputTypeStart;
+            Parser::skip(inputTypeEnd, std::not_fn(Unicode::isSpace));
+            String inputTypeName = hlsl.substr(inputTypeStart, inputTypeEnd);
+
+            String::Iterator inputParamStart = inputTypeEnd;
+            Parser::skip(inputParamStart, Unicode::isSpace);
+            String::Iterator inputParamEnd = inputParamStart;
+            Parser::skip(inputParamEnd, isIdentifierCharacter);
+            String inputParamName = hlsl.substr(inputParamStart, inputParamEnd);
+
+            String::ReverseIterator returnTypeEnd = (iter-functionName.length()-1);
+            Parser::skip(returnTypeEnd, Unicode::isSpace); returnTypeEnd--;
+            String::ReverseIterator returnTypeStart = (returnTypeEnd+1);
+            Parser::skip(returnTypeStart, std::not_fn(Unicode::isSpace)); returnTypeStart--;
+            String returnTypeName = hlsl.substr(returnTypeStart, returnTypeEnd);
+
+            String::Iterator bodyStart = iter+1;
+            Parser::skip(bodyStart, std::not_fn(isOpeningBrace));
+            String::Iterator bodyEnd = bodyStart+1;
+            int nestDepth = 0;
+            while (nestDepth >= 0) {
+                if (isOpeningBrace(*bodyEnd)) { nestDepth++; }
+                else if (isClosingBrace(*bodyEnd)) { nestDepth--; }
+                bodyEnd++;
+            }
+
+            compileResult.inputType = parseHlslStruct(hlsl, inputTypeName);
+            compileResult.inputParameterName = inputParamName;
+            compileResult.returnType = parseHlslStruct(hlsl, returnTypeName);
+            compileResult.hlslFunctionBody = hlsl.substr(bodyStart, bodyEnd);
+
+            return;
+        }
+    }
+    throw PGE_CREATE_EX("Failed to locate function \"" + functionName + "\"");
 }
 
 static std::vector<CompileResult::HlslStruct::Member>::const_iterator findMember(const CompileResult::HlslStruct& hlslStruct, const String& semanticName, int semanticIndex) {
@@ -247,7 +277,7 @@ static void generateDXReflectionInformation(const FilePath& path, const CompileR
     vsInfo->GetDesc(&desc);
     writeConstants(writer, vsInfo);
 
-    const CompileResult::HlslStruct& vsInputStruct = vsCompileResult.inputStruct;
+    const CompileResult::HlslStruct& vsInputStruct = vsCompileResult.inputType;
 
     writer.write<u32>(desc.InputParameters);
     for (UINT i = 0; i < desc.InputParameters; ++i) {
@@ -300,9 +330,7 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
         writer.writeBytes((byte*)result.compiledD3dBlob->GetBufferPointer(), (int)result.compiledD3dBlob->GetBufferSize());
 
         String inputType; String returnType;
-        extractFuncReturnAndInputTypes(hlsl, dxEntryPoint, inputType, returnType);
-        result.inputStruct = parseHlslStruct(hlsl, inputType);
-        result.outputStruct = parseHlslStruct(hlsl, returnType);
+        extractFunctionData(hlsl, dxEntryPoint, result);
     }
     return result;
 }
