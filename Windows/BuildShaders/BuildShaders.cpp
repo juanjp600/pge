@@ -8,6 +8,7 @@
 
 #include <PGE/Exception/Exception.h>
 #include <PGE/File/BinaryWriter.h>
+#include <PGE/File/TextWriter.h>
 #include <PGE/String/Unicode.h>
 #include <PGE/String/Key.h>
 
@@ -126,6 +127,24 @@ namespace Parser {
         }
     }
 
+    template <typename T>
+    static void skipBlock(T& it) {
+        int nestDepth = 0;
+        do {
+            if (isBlockOpener(*it)) { nestDepth++; }
+            else if (isBlockCloser(*it)) { nestDepth--; }
+            it++;
+        } while (nestDepth > 0);
+    }
+
+    template <typename T>
+    static void skipStatement(T& it) {
+        while (isIdentifierCharacter(*it)) {
+            it++;
+            if (isBlockOpener(*it)) { skipBlock(it); }
+        }
+    }
+
     static void expectFixed(String::Iterator& it, char16 ch) {
         PGE_ASSERT(*it == ch, String("Expected \"") + ch + "\", found \"" + *it + '"');
         it++;
@@ -142,6 +161,14 @@ static bool isOpeningBrace(char16 chr) {
 
 static bool isClosingBrace(char16 chr) {
     return chr == '}';
+}
+
+static bool isBlockOpener(char16 chr) {
+    return chr == '{' || chr == '(' || chr == '[';
+}
+
+static bool isBlockCloser(char16 chr) {
+    return chr == '}' || chr == ')' || chr == ']';
 }
 
 static bool isIdentifierCharacter(char16 chr) {
@@ -201,7 +228,9 @@ static CompileResult::HlslStruct parseHlslStruct(const String& hlsl, const Strin
             after++;
         }
 
-        parsedStruct.members.push_back(member);
+        if (member.type.length() > 2 && member.type.substr(0, 2) != "//") {
+            parsedStruct.members.push_back(member);
+        }
 
         before = after;
         // Skip semicolon
@@ -243,13 +272,8 @@ static void extractFunctionData(const String& hlsl, const String& functionName, 
 
             String::Iterator bodyStart = iter+1;
             Parser::skip(bodyStart, std::not_fn(isOpeningBrace));
-            String::Iterator bodyEnd = bodyStart+1;
-            int nestDepth = 0;
-            while (nestDepth >= 0) {
-                if (isOpeningBrace(*bodyEnd)) { nestDepth++; }
-                else if (isClosingBrace(*bodyEnd)) { nestDepth--; }
-                bodyEnd++;
-            }
+            String::Iterator bodyEnd = bodyStart;
+            Parser::skipBlock(bodyEnd);
 
             compileResult.inputType = parseHlslStruct(hlsl, inputTypeName);
             compileResult.inputParameterName = inputParamName;
@@ -336,6 +360,133 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
     return result;
 }
 
+namespace Glsl {
+    enum class ShaderType {
+        VERTEX,
+        FRAGMENT
+    };
+
+    static String hlslToGlslTypes(const String& hlsl) {
+        return hlsl
+            .replace("float2", "vec2")
+            .replace("float3", "vec3")
+            .replace("float4", "vec4")
+            .replace("matrix", "mat4");
+    }
+
+    static void writeHlslFuncs(TextWriter& writer) {
+        //write a definition for mul so we don't have to bother parsing that out of the function body :)
+        writer.writeLine("vec4 mul(mat4 m, vec4 v) {");
+        writer.writeLine("    return m * v;");
+        writer.writeLine("}\n");
+    }
+
+    static String prefixIfRequired(const String& varName, const String& varKind, ShaderType shaderType) {
+        if (((varKind == "out") && (shaderType == ShaderType::VERTEX)) ||
+            ((varKind == "in") && (shaderType == ShaderType::FRAGMENT))) {
+            return "vsToFs_" + varName;
+        }
+        return varName;
+    }
+
+    static void writeStructDef(TextWriter& writer, const CompileResult::HlslStruct& hlslStruct) {
+        writer.writeLine("struct " + hlslStruct.name + " {");
+        for (CompileResult::HlslStruct::Member member : hlslStruct.members) {
+            writer.writeLine("    " + hlslToGlslTypes(member.type) + " " + member.name + ";");
+        }
+        writer.writeLine("};\n");
+    }
+
+    static void writeStructReturnAux(TextWriter& writer, const CompileResult::HlslStruct& hlslStruct, ShaderType shaderType) {
+        writer.writeLine("void retAux(in " + hlslStruct.name + " retVal) {");
+        for (CompileResult::HlslStruct::Member member : hlslStruct.members) {
+            writer.writeLine("    "+prefixIfRequired(member.name, "out", shaderType) + " = retVal." + member.name + ";");
+            if (member.dxSemanticName.equalsIgnoreCase("SV_POSITION")) {
+                writer.writeLine("    gl_Position = retVal." + member.name + ";");
+            }
+        }
+        writer.writeLine("}\n");
+
+        writer.writeLine(hlslStruct.name + " def_output_value() {");
+        writer.writeLine("    return " + hlslStruct.name + "(");
+        for (int i = 0; i < hlslStruct.members.size(); i++) {
+            CompileResult::HlslStruct::Member member = hlslStruct.members[i];
+            String ln = "        ";
+            //Worth noting: in spite of the fact that the
+            //GLSL spec does allow initializing from a single
+            //value, there are bad implementations out there
+            //that don't allow it >:(
+            if (member.type == "float2") {
+                ln += "vec2(0.0,0.0)";
+            } else if (member.type == "float3") {
+                ln += "vec3(0.0,0.0,0.0)";
+            } else if (member.type == "float4") {
+                ln += "vec4(0.0,0.0,0.0,0.0)";
+            } else if (member.type == "matrix") {
+                ln += "mat4(1.0)";
+            } else {
+                ln += "0";
+            }
+            ln += ((i < (hlslStruct.members.size() - 1)) ? "," : ");");
+            writer.writeLine(ln);
+        }
+        writer.writeLine("}\n");
+    }
+
+    static void writeStructAsVars(TextWriter& writer, const CompileResult::HlslStruct& hlslStruct, const String& varKind, ShaderType shaderType) {
+        for (CompileResult::HlslStruct::Member member : hlslStruct.members) {
+            writer.writeLine(varKind+" "+hlslToGlslTypes(member.type)+" "+prefixIfRequired(member.name, varKind, shaderType)+";");
+        }
+        writer.writeLine("");
+    }
+
+    static void writeMain(TextWriter& writer, const CompileResult& compileResult, ShaderType shaderType) {
+        String body = compileResult.hlslFunctionBody;
+        body = hlslToGlslTypes(body)
+            .replace(compileResult.inputParameterName + ".", prefixIfRequired("", "in", shaderType))
+            .replace("output", "out_put") //reserved keyword in glsl
+            .replace("input", "in_put") //reserved keyword in glsl
+            .replace("(" + compileResult.returnType.name + ")0", "def_output_value()");
+
+        String::Iterator returnStatementPos = body.findFirst("return");
+        while (returnStatementPos != body.end()) {
+            String pre = body.substr(body.begin(), returnStatementPos);
+
+            String::Iterator valueStart = returnStatementPos + 6;
+            Parser::skip(valueStart, Unicode::isSpace);
+            String::Iterator valueEnd = valueStart;
+            Parser::skipStatement(valueEnd);
+
+            String value = body.substr(valueStart, valueEnd);
+
+            String post = body.substr(valueEnd, body.end());
+
+            body = pre + "retAux(" + value + ")" + post;
+
+            returnStatementPos = body.findFirst("return");
+        }
+
+        writer.writeLine("void main() " + body);
+    }
+
+    static void convert(const FilePath& path, const CompileResult& compileResult, ShaderType shaderType) {
+        TextWriter writer(path);
+        writer.writeLine("//This file was autogenerated.\n#version 330 core\n");
+
+        //TODO: uniforms
+
+        writeStructAsVars(writer, compileResult.inputType, "in", shaderType);
+        writeStructAsVars(writer, compileResult.returnType, "out", shaderType);
+
+        writeHlslFuncs(writer);
+
+        writeStructDef(writer, compileResult.returnType);
+        writeStructReturnAux(writer, compileResult.returnType, shaderType);
+
+        writeMain(writer, compileResult, shaderType);
+    }
+}
+
 static void compileShader(const FilePath& path) {
     String input = path.readText();
 
@@ -345,6 +496,9 @@ static void compileShader(const FilePath& path) {
     CompileResult vsResult = compileDXBC(compiledPath + "vertex.dxbc", "VS", input);
     CompileResult fsResult = compileDXBC(compiledPath + "fragment.dxbc", "PS", input); //it's called a fucking fragment shader, microsoft is wrong about this
     generateDXReflectionInformation(compiledPath + "reflection.dxri", vsResult, fsResult);
+
+    Glsl::convert(compiledPath + "vertex.glsl", vsResult, Glsl::ShaderType::VERTEX);
+    Glsl::convert(compiledPath + "fragment.glsl", fsResult, Glsl::ShaderType::FRAGMENT);
 }
 
 static void compileAndLog(const FilePath& path) {
