@@ -190,7 +190,7 @@ static CompileResult::HlslStruct parseHlslStruct(const String& hlsl, const Strin
         Parser::skip(before, Unicode::isSpace);
 
         after = before;
-        Parser::skip(after, isDigitOrSemiColon);
+        Parser::skip(after, isNotDigitOrSemicolon);
 
         member.dxSemanticName = hlsl.substr(before, after);
         if (*after == ';') {
