@@ -128,7 +128,7 @@ namespace Parser {
     }
 }
 
-static bool isDigitOrSemiColon(char16 chr) {
+static bool isNotDigitOrSemicolon(char16 chr) {
     return !Unicode::isDigit(chr) && (chr != L';');
 }
 
