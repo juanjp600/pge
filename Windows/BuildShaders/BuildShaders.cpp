@@ -89,7 +89,9 @@ struct CompileResult {
 
         String name;
         std::vector<Member> members;
-    } inputStruct;
+    };
+    HlslStruct inputStruct;
+    HlslStruct outputStruct;
 };
 
 static void writeConstants(BinaryWriter& writer, ReflectionInfo info) {
@@ -116,7 +118,13 @@ static void writeConstants(BinaryWriter& writer, ReflectionInfo info) {
 }
 
 namespace Parser {
-    static void skip(String::Iterator& it, const std::function<bool (char16)>& predicate) {
+    static void skip(String::Iterator& it, const std::function<bool(char16)>& predicate) {
+        while (predicate(*it)) {
+            it++;
+        }
+    }
+
+    static void skip(String::ReverseIterator& it, const std::function<bool(char16)>& predicate) {
         while (predicate(*it)) {
             it++;
         }
@@ -132,20 +140,30 @@ static bool isNotDigitOrSemicolon(char16 chr) {
     return !Unicode::isDigit(chr) && (chr != L';');
 }
 
-static String extractInputStructName(const String& hlsl, const String& functionName) {
+static bool extractFuncReturnAndInputTypes(const String& hlsl, const String& functionName, String& inputType, String& returnType) {
     String::Iterator iter = hlsl.begin();
     while (iter < hlsl.end()) {
         iter = hlsl.findFirst(functionName, iter) + functionName.length();
         Parser::skip(iter, Unicode::isSpace);
+
         if (*iter == '(') {
-            iter++;
-            String::Iterator start = iter;
-            String::Iterator end = iter;
-            Parser::skip(end, std::not_fn(Unicode::isSpace));
-            return hlsl.substr(start, end);
+            //Correct function found!
+
+            String::Iterator inputStart = iter+1;
+            String::Iterator inputEnd = inputStart;
+            Parser::skip(inputEnd, std::not_fn(Unicode::isSpace));
+            inputType = hlsl.substr(inputStart, inputEnd);
+
+            String::ReverseIterator returnEnd = (iter-functionName.length()-1);
+            Parser::skip(returnEnd, Unicode::isSpace); returnEnd--;
+            String::ReverseIterator returnStart = (returnEnd+1);
+            Parser::skip(returnStart, std::not_fn(Unicode::isSpace)); returnStart--;
+            returnType = hlsl.substr(returnStart, returnEnd);
+
+            return true;
         }
     }
-    return "";
+    return false;
 }
 
 static CompileResult::HlslStruct parseHlslStruct(const String& hlsl, const String& structName) {
@@ -281,7 +299,10 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
         BinaryWriter writer(path);
         writer.writeBytes((byte*)result.compiledD3dBlob->GetBufferPointer(), (int)result.compiledD3dBlob->GetBufferSize());
 
-        result.inputStruct = parseHlslStruct(hlsl, extractInputStructName(hlsl, dxEntryPoint));
+        String inputType; String returnType;
+        extractFuncReturnAndInputTypes(hlsl, dxEntryPoint, inputType, returnType);
+        result.inputStruct = parseHlslStruct(hlsl, inputType);
+        result.outputStruct = parseHlslStruct(hlsl, returnType);
     }
     return result;
 }
