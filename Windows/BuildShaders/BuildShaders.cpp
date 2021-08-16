@@ -198,6 +198,7 @@ static void compileAndLog(const FilePath& path) {
     }
 }
 
+// TODO: Don't recompile up-to-date shaders.
 int main(int argc, char** argv) {
     String folderName;
     if (argc < 2) {
