@@ -3,13 +3,16 @@
 
 #include <iostream>
 #include <execution>
-#include <functional>
 #include <filesystem>
 
 #include <PGE/Exception/Exception.h>
 #include <PGE/File/BinaryWriter.h>
+#include <PGE/File/TextWriter.h>
 #include <PGE/String/Unicode.h>
-#include <PGE/String/Key.h>
+
+#include "CompileResult.h"
+#include "Glsl.h"
+#include "Parser.h"
 
 using namespace PGE;
 
@@ -40,18 +43,14 @@ static DXGI_FORMAT computeDxgiFormat(const D3D11_SIGNATURE_PARAMETER_DESC& param
             case D3D_REGISTER_COMPONENT_FLOAT32: { return DXGI_FORMAT_R32G32B32A32_FLOAT; }
         }
     }
-    throw PGE_CREATE_EX("Invalid DXGI format! (" + String::fromInt(paramDesc.Mask) + ", " + String::fromInt(paramDesc.ComponentType) + ")");
-}
-
-static u64 combineStringUInt(const String& str, u64 u) {
-    return std::hash<String::Key>()(String::Key(str)) + u * 3;
+    throw PGE_CREATE_EX("Unsupported DXGI format (" + String::fromInt(paramDesc.Mask) + ", " + String::fromInt(paramDesc.ComponentType) + ")");
 }
 
 class ReflectionInfo {
     public:
         ReflectionInfo(ID3DBlob* shader) {
             HRESULT hr = D3DReflect(shader->GetBufferPointer(), shader->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection);
-            PGE_ASSERT(SUCCEEDED(hr), "Epic reflection fail " + String::fromInt(hr));
+            PGE_ASSERT(SUCCEEDED(hr), "D3DReflect failed: HRESULT " + String::fromInt(hr));
         }
 
         ReflectionInfo(const ReflectionInfo& other) {
@@ -103,106 +102,34 @@ static void writeConstants(BinaryWriter& writer, ReflectionInfo info) {
     }
 }
 
-namespace Parser {
-    static void skip(String::Iterator& it, const std::function<bool (char16)>& predicate) {
-        while (predicate(*it)) {
-            it++;
-        }
-    }
-
-    static void expectFixed(String::Iterator& it, char16 ch) {
-        PGE_ASSERT(*it == ch, String("Expected \"") + ch + "\", found \"" + *it + '"');
-        it++;
-    }
-}
-
-static std::unordered_map<u64, String> parseVertexInput(const String& input) {
-    // struct VS_INPUT {
-    //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME''SEMANTIC_INDEX';
-    //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME';
-    //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME''SEMANTIC_INDEX';
-    // }
-
-    std::unordered_map<u64, String> inputNameSemanticRelation;
-
-    String vsInput = "struct VS_INPUT";
-    String::Iterator before = input.findFirst(vsInput) + vsInput.length();
-    // Space before {
-    Parser::skip(before, Unicode::isSpace);
-    // {
-    Parser::expectFixed(before, L'{');
-    // Whitespace before first type
-    Parser::skip(before, Unicode::isSpace);
-    while (*before != L'}') {
-        // Type skip
-        Parser::skip(before, std::not_fn(Unicode::isSpace));
-        // Whitespace after type
-        Parser::skip(before, Unicode::isSpace);
-        
-        // Type
-        String::Iterator after = before;
-        Parser::skip(after, std::not_fn(Unicode::isSpace));
-        String inputName = input.substr(before, after);
-
-        before = after;
-        // Whitespace before colon
-        Parser::skip(before, Unicode::isSpace);
-        Parser::expectFixed(before, L':');
-        // Whitespace after colon
-        Parser::skip(before, Unicode::isSpace);
-
-        after = before;
-        Parser::skip(after, [](char16 ch) { return !Unicode::isDigit(ch) && ch != L';'; });
-
-        String semanticName = input.substr(before, after);
-        byte semanticIndex;
-        if (*after == ';') {
-            semanticIndex = 0;
-        } else {
-            semanticIndex = *after - '0';
-            after++;
-        }
-        inputNameSemanticRelation.emplace(combineStringUInt(semanticName, semanticIndex), inputName);
-
-        before = after;
-        // Skip ;
-        before++;
-        // Whitespace before type
-        Parser::skip(before, isspace);
-    }
-
-    return inputNameSemanticRelation;
-}
-
-static void compileDX11Reflection(const FilePath& path, const String& input, ID3DBlob* vsBlob, ID3DBlob* psBlob) {
-    // Parsing Vertex input.
-    std::unordered_map<u64, String> inputNameSemanticRelation = parseVertexInput(input);
-
+static void generateDXReflectionInformation(const FilePath& path, const CompileResult& vsCompileResult, const CompileResult& fsCompileResult) {
     BinaryWriter writer(path);
 
-    ReflectionInfo vsInfo(vsBlob);
+    ReflectionInfo vsInfo(vsCompileResult.compiledD3dBlob);
 
     D3D11_SHADER_DESC desc;
     vsInfo->GetDesc(&desc);
     writeConstants(writer, vsInfo);
+
+    const CompileResult::HlslStruct& vsInputStruct = vsCompileResult.inputType;
 
     writer.write<u32>(desc.InputParameters);
     for (UINT i = 0; i < desc.InputParameters; ++i) {
         D3D11_SIGNATURE_PARAMETER_DESC vsParamDesc;
         vsInfo->GetInputParameterDesc(i, &vsParamDesc);
 
-        const auto& it = inputNameSemanticRelation.find(combineStringUInt(vsParamDesc.SemanticName, vsParamDesc.SemanticIndex));
-        PGE_ASSERT(it != inputNameSemanticRelation.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::fromInt(vsParamDesc.SemanticIndex) + ")");
-        writer.write<String>(it->second);
+        auto it = vsInputStruct.findMember(vsParamDesc.SemanticName, vsParamDesc.SemanticIndex);
+        PGE_ASSERT(it != vsInputStruct.members.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::fromInt(vsParamDesc.SemanticIndex) + ")");
+        writer.write<String>(it->name);
         writer.write<String>(vsParamDesc.SemanticName);
-        writer.write<byte>(vsParamDesc.SemanticIndex);
+        writer.write<byte>((byte)vsParamDesc.SemanticIndex);
 
         writer.write<byte>(computeDxgiFormat(vsParamDesc));
     }
 
-    vsBlob->Release();
+    vsCompileResult.compiledD3dBlob->Release();
 
-    ReflectionInfo psInfo(psBlob);
+    ReflectionInfo psInfo(fsCompileResult.compiledD3dBlob);
     psInfo->GetDesc(&desc);
     writeConstants(writer, psInfo);
 
@@ -216,16 +143,17 @@ static void compileDX11Reflection(const FilePath& path, const String& input, ID3
     }
     writer.write<u32>(samplerCount);
 
-    psBlob->Release();
+    fsCompileResult.compiledD3dBlob->Release();
 }
 
-static ID3DBlob* compileDX11(const FilePath& path, const String& dxEntryPoint, const String& input) {
-    ID3DBlob* compiledBlob; ID3DBlob* errorBlob;
-    HRESULT hr = D3DCompile(input.cstr(), input.byteLength(), NULL, NULL, NULL, dxEntryPoint.cstr(), (dxEntryPoint.toLower() + "_5_0").cstr(),
-        D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3 | D3DCOMPILE_WARNINGS_ARE_ERRORS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &compiledBlob, &errorBlob);
+static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoint, const String& hlsl) {
+    CompileResult result;
+    ID3DBlob* errorBlob = nullptr;
+    HRESULT hr = D3DCompile(hlsl.cstr(), hlsl.byteLength(), nullptr, nullptr, nullptr, dxEntryPoint.cstr(), (dxEntryPoint.toLower() + "_5_0").cstr(),
+        D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3 | D3DCOMPILE_WARNINGS_ARE_ERRORS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &result.compiledD3dBlob, &errorBlob);
     if (FAILED(hr)) {
         String failure = "Compilation failed (" + String::fromInt(hr) + ")";
-        if (errorBlob != NULL) {
+        if (errorBlob != nullptr) {
             failure += ":\n";
             failure += (char*)errorBlob->GetBufferPointer();
             errorBlob->Release();
@@ -233,22 +161,44 @@ static ID3DBlob* compileDX11(const FilePath& path, const String& dxEntryPoint, c
         throw PGE_CREATE_EX(failure);
     } else {
         BinaryWriter writer(path);
-        writer.writeBytes((byte*)compiledBlob->GetBufferPointer(), (int)compiledBlob->GetBufferSize());
+        writer.writeBytes((byte*)result.compiledD3dBlob->GetBufferPointer(), (int)result.compiledD3dBlob->GetBufferSize());
+
+        CompileResult::extractFunctionData(hlsl, dxEntryPoint, result);
+        std::vector<String> cBufferNames = CompileResult::extractCBufferNames(hlsl);
+        for (const String& cBufName : cBufferNames) {
+            CompileResult::CBuffer cBuffer = CompileResult::parseCBuffer(hlsl, cBufName);
+            if (cBuffer.usedByFunction(result.hlslFunctionBody)) {
+                result.cBuffers.emplace_back(std::move(cBuffer));
+            }
+        }
+        result.textureInputs = CompileResult::extractTextureInputs(hlsl);
     }
-    return compiledBlob;
+    return result;
 }
 
 static void compileShader(const FilePath& path) {
-    String input = path.read();
+    String input = path.readText();
 
     FilePath compiledPath = path.trimExtension().makeDirectory();
     compiledPath.createDirectory();
 
-    ID3DBlob* vsBlob = compileDX11(compiledPath + "vertex.dxbc", "VS", input);
-    ID3DBlob* psBlob = compileDX11(compiledPath + "fragment.dxbc", "PS", input); //it's called a fucking fragment shader, microsoft is wrong about this
-    compileDX11Reflection(compiledPath + "reflection.dxri", input, vsBlob, psBlob);
+    CompileResult vsResult = compileDXBC(compiledPath + "vertex.dxbc", "VS", input);
+    CompileResult fsResult = compileDXBC(compiledPath + "fragment.dxbc", "PS", input); //it's called a fucking fragment shader, microsoft is wrong about this
+    generateDXReflectionInformation(compiledPath + "reflection.dxri", vsResult, fsResult);
+
+    Glsl::convert(compiledPath + "vertex.glsl", vsResult, Glsl::ShaderType::VERTEX);
+    Glsl::convert(compiledPath + "fragment.glsl", fsResult, Glsl::ShaderType::FRAGMENT);
 }
 
+static void compileAndLog(const FilePath& path) {
+    if (path.getExtension() == "hlsl") {
+        std::cout << "Compiling: " + path.str() + '\n';
+        compileShader(path);
+        std::cout << "Success: " + path.str() + '\n';
+    }
+}
+
+// TODO: Don't recompile up-to-date shaders.
 int main(int argc, char** argv) {
     String folderName;
     if (argc < 2) {
@@ -258,15 +208,13 @@ int main(int argc, char** argv) {
         folderName = argv[1];
     }
 
-    std::vector<FilePath> shaders = FilePath::fromStr(folderName).enumerateFiles();
+    std::vector<FilePath> shaderPaths = FilePath::fromStr(folderName).enumerateFiles();
 
-    std::for_each(std::execution::par_unseq, shaders.begin(), shaders.end(), [](const FilePath& shader) {
-        if (shader.getExtension() == "hlsl") {
-            std::cout << "Compiling: " + shader.str() + '\n';
-            compileShader(shader);
-            std::cout << "Success: " + shader.str() + '\n';
-        }
-    });
+#ifdef _DEBUG
+    for (auto path : shaderPaths) { compileAndLog(path); }
+#else
+    std::for_each(std::execution::par_unseq, shaderPaths.begin(), shaderPaths.end(), compileAndLog);
+#endif
 
     return 0;
 }

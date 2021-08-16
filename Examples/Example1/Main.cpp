@@ -36,7 +36,7 @@ class Program {
             graphics = Graphics::create("Example 1", 1600, 900, false, Graphics::Renderer::OpenGL);
             shader = Shader::load(*graphics, FilePath::fromStr("Shader1").makeDirectory());
             material = Mesh::Material(*shader, Mesh::Material::Opaque::YES);
-
+            
             vertexData = StructuredData(shader->getVertexLayout(), 5);
             
             vertexData.setValue(0, "position", Vector4f(-1.f, -1.f, 0.f, 1.f));
@@ -59,7 +59,7 @@ class Program {
             inputManager->trackInput(escKey);
 
             state = 0.f;
-
+            
             closeRequested = false;
         }
 

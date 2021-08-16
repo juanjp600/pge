@@ -2,5 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="BuildShaders.cpp" />
+    <ClCompile Include="Glsl.cpp" />
+    <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="CompileResult.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CompileResult.h" />
+    <ClInclude Include="Glsl.h" />
+    <ClInclude Include="Parser.h" />
   </ItemGroup>
 </Project>

@@ -75,6 +75,7 @@ class String : private NoHeap {
                 int index;
         };
 
+        //TODO: redo this, misuses inheritance
         struct ReverseIterator : public Iterator {
             ReverseIterator(const Iterator& it) : Iterator(it) { }
 
