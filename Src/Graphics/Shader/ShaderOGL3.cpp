@@ -198,6 +198,8 @@ GLenum ShaderOGL3::parsedTypeToGlType(const String& parsedType) {
         return GL_FLOAT_MAT4;
     } else if (parsedType.equals("int")) {
         return GL_INT;
+    } else if (parsedType.equals("sampler2D")) {
+        return GL_INT;
     } else if (parsedType.equals("uint")) {
         return GL_UNSIGNED_INT;
     } else {
