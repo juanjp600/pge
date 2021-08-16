@@ -118,7 +118,7 @@ class FilePath : private NoHeap {
         /// Line endings are normalized to `\n`.
         /// @throws #PGE::Exception If the path is not initialized, the file could not be opened, or errors occured during the reading of the file.
         /// @see #PGE::TextReader
-        String read() const;
+        const String readText() const;
 
         /// Reads all lines of a file into a vector.
         /// @throws #PGE::Exception If the path is not initialized, the file could not be opened, or errors occured during the reading of the file.

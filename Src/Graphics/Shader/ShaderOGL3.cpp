@@ -5,11 +5,11 @@ using namespace PGE;
 ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), resourceManager((GraphicsOGL3&)gfx), graphics((GraphicsOGL3&)gfx) {
     graphics.takeGlContext();
 
-    String vertexSource = (path + "vertex.glsl").read();
+    String vertexSource = (path + "vertex.glsl").readText();
     PGE_ASSERT(!vertexSource.isEmpty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
     glVertexShader = resourceManager.addNewResource<GLShader>(GL_VERTEX_SHADER, vertexSource);
 
-    String fragmentSource = (path + "fragment.glsl").read();
+    String fragmentSource = (path + "fragment.glsl").readText();
     PGE_ASSERT(!fragmentSource.isEmpty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
     glFragmentShader = resourceManager.addNewResource<GLShader>(GL_FRAGMENT_SHADER, fragmentSource);
 
@@ -197,6 +197,8 @@ GLenum ShaderOGL3::parsedTypeToGlType(const String& parsedType) {
     } else if (parsedType.equals("mat4")) {
         return GL_FLOAT_MAT4;
     } else if (parsedType.equals("int")) {
+        return GL_INT;
+    } else if (parsedType.equals("sampler2D")) {
         return GL_INT;
     } else if (parsedType.equals("uint")) {
         return GL_UNSIGNED_INT;
