@@ -40,7 +40,7 @@ static DXGI_FORMAT computeDxgiFormat(const D3D11_SIGNATURE_PARAMETER_DESC& param
             case D3D_REGISTER_COMPONENT_FLOAT32: { return DXGI_FORMAT_R32G32B32A32_FLOAT; }
         }
     }
-    throw PGE_CREATE_EX("Invalid DXGI format! (" + String::fromInt(paramDesc.Mask) + ", " + String::fromInt(paramDesc.ComponentType) + ")");
+    throw PGE_CREATE_EX("Invalid DXGI format! (" + String::from(paramDesc.Mask) + ", " + String::from<int>(paramDesc.ComponentType) + ")");
 }
 
 static u64 combineStringUInt(const String& str, u64 u) {
@@ -51,7 +51,7 @@ class ReflectionInfo {
     public:
         ReflectionInfo(ID3DBlob* shader) {
             HRESULT hr = D3DReflect(shader->GetBufferPointer(), shader->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection);
-            PGE_ASSERT(SUCCEEDED(hr), "Epic reflection fail " + String::fromInt(hr));
+            PGE_ASSERT(SUCCEEDED(hr), "Epic reflection fail " + String::from(hr));
         }
 
         ReflectionInfo(const ReflectionInfo& other) {
@@ -192,7 +192,7 @@ static void compileDX11Reflection(const FilePath& path, const String& input, ID3
         vsInfo->GetInputParameterDesc(i, &vsParamDesc);
 
         const auto& it = inputNameSemanticRelation.find(combineStringUInt(vsParamDesc.SemanticName, vsParamDesc.SemanticIndex));
-        PGE_ASSERT(it != inputNameSemanticRelation.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::fromInt(vsParamDesc.SemanticIndex) + ")");
+        PGE_ASSERT(it != inputNameSemanticRelation.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::from(vsParamDesc.SemanticIndex) + ")");
         writer.write<String>(it->second);
         writer.write<String>(vsParamDesc.SemanticName);
         writer.write<byte>(vsParamDesc.SemanticIndex);
@@ -224,7 +224,7 @@ static ID3DBlob* compileDX11(const FilePath& path, const String& dxEntryPoint, c
     HRESULT hr = D3DCompile(input.cstr(), input.byteLength(), NULL, NULL, NULL, dxEntryPoint.cstr(), (dxEntryPoint.toLower() + "_5_0").cstr(),
         D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3 | D3DCOMPILE_WARNINGS_ARE_ERRORS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &compiledBlob, &errorBlob);
     if (FAILED(hr)) {
-        String failure = "Compilation failed (" + String::fromInt(hr) + ")";
+        String failure = "Compilation failed (" + String::from(hr) + ")";
         if (errorBlob != NULL) {
             failure += ":\n";
             failure += (char*)errorBlob->GetBufferPointer();

@@ -1,7 +1,7 @@
 #include "UnicodeHelper.h"
 
 #include <PGE/Exception/Exception.h>
-#define PGE_ASSERT_CHAR(chr) char16 PGE_TMP = chr; PGE_ASSERT(PGE_TMP != 0 && PGE_TMP != 0xFFFF && PGE_TMP != 0xFFFE, "Invalid character (" + String::fromInt(PGE_TMP) + ")")
+#define PGE_ASSERT_CHAR(chr) char16 PGE_TMP = chr; PGE_ASSERT(PGE_TMP != 0 && PGE_TMP != 0xFFFF && PGE_TMP != 0xFFFE, "Invalid character (" + String::hexFromInt<u16>(PGE_TMP) + ")")
 
 using namespace PGE;
 

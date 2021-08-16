@@ -92,7 +92,7 @@ bool FilePath::isDirectory() const {
     PGE_ASSERT(valid, INVALID_STR);
     std::error_code err;
     bool isDir = std::filesystem::is_directory(str().cstr(), err);
-    PGE_ASSERT(err.value() == 0, "Couldn't check if path is directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
+    PGE_ASSERT(err.value() == 0, "Couldn't check if path is directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
     return isDir;
 }
 
@@ -134,7 +134,7 @@ bool FilePath::exists() const {
     PGE_ASSERT(valid, INVALID_STR);
     std::error_code err;
     bool exists = std::filesystem::exists(str().cstr(), err);
-    PGE_ASSERT(err.value() == 0, "Couldn't check if directory exists (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
+    PGE_ASSERT(err.value() == 0, "Couldn't check if directory exists (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
     return exists;
 }
 
@@ -142,7 +142,7 @@ bool FilePath::createDirectory() const {
     PGE_ASSERT(valid, INVALID_STR);
     std::error_code err;
     bool created = std::filesystem::create_directories(str().wstr().data(), err);
-    PGE_ASSERT(err.value() == 0, "Couldn't create directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::fromInt(err.value()) + "))");
+    PGE_ASSERT(err.value() == 0, "Couldn't create directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
     return created;
 }
 

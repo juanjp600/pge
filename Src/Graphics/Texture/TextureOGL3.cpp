@@ -29,7 +29,7 @@ static void textureImage(int width, int height, const byte* buffer, Texture::For
 
     glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, buffer);
     GLenum glError = glGetError();
-    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (" + String::fromInt(width) + "x" + String::fromInt(height) + "; GLERROR: " + String::format(glError, "%u") + ")");
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (" + String::from(width) + "x" + String::from(height) + "; GLERROR: " + String::from(glError) + ")");
 }
 
 static void applyTextureParameters(bool rt) {

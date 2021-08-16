@@ -3,6 +3,7 @@
 #include "UnicodeInternal.h"
 #include "UnicodeHelper.h"
 
+#include <limits>
 #include <iostream>
 #include <queue>
 #if defined(__APPLE__) && defined(__OBJC__)
@@ -310,45 +311,6 @@ String::String(const String& other, int from, int cnt) {
     buf[cnt] = '\0';
 }
 
-template <typename T>
-const String String::format(T t, const String& format) {
-    int size = snprintf(nullptr, 0, format.cstr(), t);
-    String ret(size);
-    // From my (limited) research these should be safe to use, even with UTF-8 strings, as 0x25 never appears in any UTF-8 character.
-    sprintf(ret.cstrNoConst(), format.cstr(), t);
-    ret.data->strByteLength = size;
-    return ret;
-}
-
-template const String String::format<u8>(u8 t, const PGE::String& format);
-template const String String::format<u16>(u16 t, const PGE::String& format);
-template const String String::format<u32>(u32 t, const PGE::String& format);
-template const String String::format<u64>(u64 t, const PGE::String& format);
-template const String String::format<i8>(i8 t, const PGE::String& format);
-template const String String::format<i16>(i16 t, const PGE::String& format);
-template const String String::format<i32>(i32 t, const PGE::String& format);
-template const String String::format<i64>(i64 t, const PGE::String& format);
-template const String String::format<float>(float t, const PGE::String& format);
-template const String String::format<double>(double t, const PGE::String& format);
-template const String String::format<long double>(long double t, const PGE::String& format);
-
-const String String::fromInt(int i) {
-    // "-2147483648" has 11 characters.
-    String ret(11);
-    ret.data->_strLength = sprintf(ret.cstrNoConst(), "%d", i);
-    ret.data->strByteLength = ret.data->_strLength;
-    return ret;
-}
-
-const String String::fromFloat(float f) {
-    // Scientific notation to severly limit maximum output length.
-    // sign + 6 * digits + point + e + expsign + 2 * expdigits
-    String ret(12);
-    ret.data->_strLength = sprintf(ret.cstrNoConst(), "%g", f);
-    ret.data->strByteLength = ret.data->_strLength;
-    return ret;
-}
-
 void String::operator=(const String& other) {
     copy(*this, other);
 }
@@ -608,35 +570,218 @@ const std::vector<char16> String::wstr() const {
     return chars;
 }
 
-int String::toInt(bool& success) const {
-    try {
-        success = true;
-        return std::stoi(cstr());
-    } catch (const std::exception&) {
-        success = false;
-        return 0;
+template <typename I, byte BASE>
+void validateBaseWithType() {
+    // 10 digits + 26 characters = 36
+    static_assert(BASE >= 2 && BASE <= 36);
+
+    // Only unsigned numbers can be represented in other bases.
+    static_assert(BASE == 10 || !std::numeric_limits<I>::is_signed);
+}
+
+template <typename I>
+static constexpr byte maxIntegerDigits(byte base) { // TODO: Consteval C++20.
+    static_assert(std::numeric_limits<I>::is_integer);
+
+    byte digits = 0;
+    I max = std::numeric_limits<I>::max();
+    while (max != 0) { digits++; max /= base; }
+    if (std::numeric_limits<I>::is_signed) { digits++; }
+    return digits;
+}
+
+template <typename I, byte BASE>
+const String String::fromInteger(I i, Casing casing) {
+    validateBaseWithType<I, BASE>();
+
+    constexpr byte digits = maxIntegerDigits<I>(BASE);
+    String ret(digits);
+
+    char* buf = ret.cstrNoConst();
+    byte count = 0;
+    if constexpr (std::numeric_limits<I>::is_signed) {
+        if (i < 0) { buf[0] = '-'; buf++; count++; i = -i; }
+    }
+    if (i == 0) { buf[0] = '0'; count = 1; }
+    while (i != 0) {
+        byte digit = i % BASE;
+        i /= BASE;
+        if constexpr (BASE <= 10) {
+            buf[count] = '0' + digit;
+        } else {
+            if (digit >= 10) {
+                buf[count] = (casing == Casing::UPPER ? 'A' : 'a') + digit - 10;
+            } else {
+                buf[count] = '0' + digit;
+            }
+        }
+        count++;
+    }
+    std::reverse(buf, buf + count);
+
+    ret.data->strByteLength = count;
+    ret.data->_strLength = ret.data->strByteLength;
+    return ret;
+}
+
+static bool parseOptionalSign(String::Iterator& it, const String& str) {
+    if (it != str.end()) {
+        if (*it == L'-') {
+            it++;
+            return true;
+        } else if (*it == L'+') {
+            it++;
+        }
+    }
+    return false;
+}
+
+template <char16 FIRST_CHAR, char16 LAST_CHAR, byte EXTRA = 0>
+static bool charInRange(byte& digit, char16 ch) {
+    if (ch < FIRST_CHAR || ch > LAST_CHAR) { return false; }
+    digit = (byte)(ch - FIRST_CHAR + EXTRA);
+    return true;
+}
+
+template <byte BASE>
+static bool charToDigit(byte& digit, char16 ch) {
+    if (charInRange<L'0', L'9'>(digit, ch)) { return true; }
+
+    if constexpr (BASE > 10) {
+        if (charInRange<L'A', L'A' + BASE - 11, 10>(digit, ch)) { return true; }
+        if (charInRange<L'a', L'a' + BASE - 11, 10>(digit, ch)) { return true; }
+    }
+
+    return false;
+}
+
+template <typename I, byte BASE = 10>
+static I toInteger(const String& str, bool& success) {
+    validateBaseWithType<I, BASE>();
+
+    success = false;
+    I ret = 0;
+    String::Iterator it = str.begin();
+    bool neg = false;
+    if constexpr (std::numeric_limits<I>::is_signed) {
+        neg = parseOptionalSign(it, str);
+    }
+    for (; it != str.end(); it++) {
+        char16 ch = *it;
+        if (ret > std::numeric_limits<I>::max() / BASE) { return 0; }
+        ret *= BASE;
+        byte digit;
+        if (!charToDigit<BASE>(digit, ch)) { return 0; }
+        if (ret > std::numeric_limits<I>::max() - digit) { return 0; }
+        ret += digit;
+    }
+    success = true;
+    if constexpr (std::numeric_limits<I>::is_signed) {
+        return neg ? -ret : ret; // TODO: Most negative number.
+    } else {
+        return ret;
     }
 }
 
-float String::toFloat(bool& success) const {
-    try {
+#define PGE_STRING_TO_FROM_SIGNED_INTEGER(TYPE) \
+template <> const TYPE String::to(bool& success) const { return toInteger<TYPE>(*this, success); } \
+template <> const String String::from(const TYPE& t) { return fromInteger(t); }
+
+#define PGE_STRING_TO_FROM_UNSIGNED_INTEGER(TYPE) \
+PGE_STRING_TO_FROM_SIGNED_INTEGER(TYPE) \
+template <> TYPE String::binToInt(bool& success) const { return toInteger<TYPE, 2>(*this, success); } \
+template <> TYPE String::octToInt(bool& success) const { return toInteger<TYPE, 8>(*this, success); } \
+template <> TYPE String::hexToInt(bool& success) const { return toInteger<TYPE, 16>(*this, success); } \
+template <> const String String::binFromInt(TYPE t) { return fromInteger<TYPE, 2>(t); } \
+template <> const String String::octFromInt(TYPE t) { return fromInteger<TYPE, 8>(t); } \
+template <> const String String::hexFromInt(TYPE t, Casing casing) { return fromInteger<TYPE, 16>(t, casing); }
+
+PGE_STRING_TO_FROM_SIGNED_INTEGER(short)
+PGE_STRING_TO_FROM_SIGNED_INTEGER(int)
+PGE_STRING_TO_FROM_SIGNED_INTEGER(long)
+PGE_STRING_TO_FROM_SIGNED_INTEGER(long long)
+PGE_STRING_TO_FROM_UNSIGNED_INTEGER(byte)
+PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned short)
+PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned int)
+PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned long)
+PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned long long)
+
+template <typename F>
+const String String::fromFloatingPoint(F f) {
+    throw PGE_CREATE_EX("// TODO: STUB");
+    // std::numeric_limits<float>::max_digits10
+    // https://dl.acm.org/doi/pdf/10.1145/3296979.3192369
+    // https://blog.benoitblanchon.fr/lightweight-float-to-string/
+    // https://www.ryanjuckett.com/printing-floating-point-numbers/
+}
+
+static const String NAN_STRING = "nan";
+static constexpr char16 DECIMAL_SEPERATOR = L'.';
+
+template <typename F>
+static F toFloatingPoint(const String& str, bool& success) {
+    // TODO: Infinity.
+    if (str.equalsIgnoreCase(NAN_STRING)) {
         success = true;
-        return std::stof(cstr());
-    } catch (const std::exception&) {
-        success = false;
-        return 0.f;
+        return std::numeric_limits<F>::quiet_NaN();
     }
+
+    success = false;
+    F ret = 0;
+    String::Iterator it = str.begin();
+    bool neg = parseOptionalSign(it, str);
+
+    for (; it != str.end(); it++) {
+        char16 ch = *it;
+        if (ch == DECIMAL_SEPERATOR) { break; }
+        if (!Unicode::isDigit(ch)) { break; }
+        ret *= 10;
+        ret += (F)(ch - L'0');
+    }
+
+    if (it != str.end() && *it == DECIMAL_SEPERATOR) {
+        it++;
+        F multi = (F)1;
+        for (; it != str.end(); it++) {
+            multi /= 10;
+            char16 ch = *it;
+            if (!Unicode::isDigit(ch)) { break; }
+            ret += (F)(ch - L'0') * multi;
+        }
+    }
+
+    if (it != str.end() && (*it == L'e' || *it == L'E')) {
+        it++;
+        using Exponent = u32; // TODO: Type.
+        Exponent exponent = 0;
+        bool expNeg = parseOptionalSign(it, str);
+        for (; it != str.end(); it++) {
+            char16 ch = *it;
+            if (!Unicode::isDigit(ch)) { return 0; }
+            if (exponent > std::numeric_limits<Exponent>::max() / 10) { return 0; }
+            exponent *= 10;
+            Exponent digit = (Exponent)(ch - L'0');
+            if (exponent > std::numeric_limits<Exponent>::max() - digit) { return 0; }
+            exponent += digit;
+        }
+        if (expNeg) {
+            ret = (F)(ret / pow(10, exponent));
+        } else {
+            ret = (F)(ret * pow(10, exponent));
+        }
+    }
+
+    success = true;
+    return neg ? -ret : ret;
 }
 
-int String::toInt() const {
-    bool discard;
-    return toInt(discard);
-}
+#define PGE_STRING_TO_FLOAT(TYPE) \
+template <> const TYPE String::to(bool& success) const { return toFloatingPoint<TYPE>(*this, success); } \
+template <> const String String::from(const TYPE& t) { return fromFloatingPoint(t); }
 
-float String::toFloat() const {
-    bool discard;
-    return toFloat(discard);
-}
+PGE_STRING_TO_FLOAT(float)
+PGE_STRING_TO_FLOAT(double)
+PGE_STRING_TO_FLOAT(long double)
 
 int String::length() const {
     if (data->_strLength < 0) {
@@ -695,9 +840,9 @@ const String String::substr(const Iterator& start) const {
 
 const String String::substr(const Iterator& start, const Iterator& to) const {
     PGE_ASSERT(start.getBytePosition() <= to.getBytePosition(),
-        "Start iterator can't come after to iterator (start: " + fromInt(start.getBytePosition()) + "; to: " + fromInt(to.getBytePosition()) + "; str: " + *this + ")");
+        "Start iterator can't come after to iterator (start: " + from(start.getBytePosition()) + "; to: " + from(to.getBytePosition()) + "; str: " + *this + ")");
     PGE_ASSERT(to.getBytePosition() <= end().getBytePosition(),
-        "To iterator can't come after end iterator (to: " + fromInt(to.getBytePosition()) + "; end: " + fromInt(end().getBytePosition()) + "; str: " + *this + ")");
+        "To iterator can't come after end iterator (to: " + from(to.getBytePosition()) + "; end: " + from(end().getBytePosition()) + "; str: " + *this + ")");
 
     int newSize = to.getBytePosition() - start.getBytePosition();
     String retVal(newSize);
