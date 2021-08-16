@@ -36,12 +36,15 @@ struct CompileResult {
     HlslStruct inputType; PGE::String inputParameterName;
     HlslStruct returnType;
     std::vector<CBuffer> cBuffers;
+    std::vector<PGE::String> textureInputs;
     PGE::String hlslFunctionBody;
 
 
     static CompileResult::HlslStruct parseHlslStruct(const PGE::String& hlsl, const PGE::String& structName);
 
+    static std::vector<PGE::String> extractHlslDeclNames(const PGE::String& hlsl, const PGE::String& declType);
     static std::vector<PGE::String> extractCBufferNames(const PGE::String& hlsl);
+    static std::vector<PGE::String> extractTextureInputs(const PGE::String& hlsl);
     static CompileResult::CBuffer parseCBuffer(const PGE::String& hlsl, const PGE::String& cBufferName);
 
     static void extractFunctionData(const PGE::String& hlsl, const PGE::String& functionName, CompileResult& compileResult);

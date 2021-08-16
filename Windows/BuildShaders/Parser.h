@@ -10,6 +10,8 @@
 namespace Parser {
     bool isNotDigitOrSemicolon(PGE::char16 chr);
 
+    bool isNotComma(PGE::char16 chr);
+
     bool isOpeningBrace(PGE::char16 chr);
 
     bool isClosingBrace(PGE::char16 chr);

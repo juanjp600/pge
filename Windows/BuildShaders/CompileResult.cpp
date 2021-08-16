@@ -71,22 +71,30 @@ CompileResult::HlslStruct CompileResult::parseHlslStruct(const String& hlsl, con
     return parsedStruct;
 }
 
-std::vector<String> CompileResult::extractCBufferNames(const String& hlsl) {
+std::vector<String> CompileResult::extractHlslDeclNames(const String& hlsl, const String& declType) {
     std::vector<String> retVal;
 
-    String::Iterator cBufferPos = hlsl.findFirst("cbuffer ");
-    while (cBufferPos != hlsl.end()) {
-        String::Iterator nameStart = cBufferPos + 8;
+    String::Iterator declPos = hlsl.findFirst(declType+" ");
+    while (declPos != hlsl.end()) {
+        String::Iterator nameStart = declPos + declType.length() + 1;
         Parser::skip(nameStart, Unicode::isSpace);
         String::Iterator nameEnd = nameStart;
         Parser::skip(nameEnd, Parser::isIdentifierCharacter);
 
         retVal.push_back(hlsl.substr(nameStart, nameEnd));
 
-        cBufferPos = hlsl.findFirst("cbuffer ", nameEnd);
+        declPos = hlsl.findFirst(declType+" ", nameEnd);
     }
 
     return retVal;
+}
+
+std::vector<String> CompileResult::extractCBufferNames(const String& hlsl) {
+    return extractHlslDeclNames(hlsl, "cbuffer");
+}
+
+std::vector<String> CompileResult::extractTextureInputs(const String& hlsl) {
+    return extractHlslDeclNames(hlsl, "Texture2D");
 }
 
 CompileResult::CBuffer CompileResult::parseCBuffer(const String& hlsl, const String& cBufferName) {

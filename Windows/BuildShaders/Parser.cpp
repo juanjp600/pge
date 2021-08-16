@@ -4,6 +4,10 @@ bool Parser::isNotDigitOrSemicolon(PGE::char16 chr) {
     return !PGE::Unicode::isDigit(chr) && (chr != L';');
 }
 
+bool Parser::isNotComma(PGE::char16 chr) {
+    return chr != ',';
+}
+
 bool Parser::isOpeningBrace(PGE::char16 chr) {
     return chr == '{';
 }

@@ -163,7 +163,6 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
         BinaryWriter writer(path);
         writer.writeBytes((byte*)result.compiledD3dBlob->GetBufferPointer(), (int)result.compiledD3dBlob->GetBufferSize());
 
-        String inputType; String returnType;
         CompileResult::extractFunctionData(hlsl, dxEntryPoint, result);
         std::vector<String> cBufferNames = CompileResult::extractCBufferNames(hlsl);
         for (String cBufName : cBufferNames) {
@@ -172,6 +171,7 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
                 result.cBuffers.push_back(cBuffer);
             }
         }
+        result.textureInputs = CompileResult::extractTextureInputs(hlsl);
     }
     return result;
 }
