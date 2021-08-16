@@ -14,9 +14,9 @@ var class_p_g_e_1_1_file_path =
     [ "\u202Aoperator+", "class_p_g_e_1_1_file_path.html#ac5ec817d82240d713d074168bab133cc", null ],
     [ "\u202Aoperator+=", "class_p_g_e_1_1_file_path.html#a5557a59e2a24f4cd46137357fb1ad13f", null ],
     [ "\u202Aoperator==", "class_p_g_e_1_1_file_path.html#a26c00b427347055ad979e7ffb4fdf951", null ],
-    [ "\u202Aread", "class_p_g_e_1_1_file_path.html#aa2c31c16bc52df0a41f3144386fe8619", null ],
     [ "\u202AreadBytes", "class_p_g_e_1_1_file_path.html#a0db81573a6ed28b6ddb1b63d3d3ffec0", null ],
     [ "\u202AreadLines", "class_p_g_e_1_1_file_path.html#a34cf4363c3b4c08611db37f7a0864460", null ],
+    [ "\u202AreadText", "class_p_g_e_1_1_file_path.html#adcd12f1fec56f9edc0090b8dadcf7701", null ],
     [ "\u202Astr", "class_p_g_e_1_1_file_path.html#a9c721acdf541d8e06baea01b86a22211", null ],
     [ "\u202AtrimExtension", "class_p_g_e_1_1_file_path.html#ad27af26601dd4f83629b748cf65d19f7", null ]
 ];

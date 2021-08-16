@@ -154,9 +154,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 <tr class="memitem:aa3e5f3fbeb04b696733f8578ca44e038"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="class_p_g_e_1_1_file_path.html">FilePath</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_file_path.html#aa3e5f3fbeb04b696733f8578ca44e038">enumerateFiles</a> (bool recursive=true) const</td></tr>
 <tr class="memdesc:aa3e5f3fbeb04b696733f8578ca44e038"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Gets all regular files in a directory.  <a href="class_p_g_e_1_1_file_path.html#aa3e5f3fbeb04b696733f8578ca44e038">More...</a><br /></td></tr>
 <tr class="separator:aa3e5f3fbeb04b696733f8578ca44e038"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2c31c16bc52df0a41f3144386fe8619"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_file_path.html#aa2c31c16bc52df0a41f3144386fe8619">read</a> () const</td></tr>
-<tr class="memdesc:aa2c31c16bc52df0a41f3144386fe8619"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads the entire file with normalized line-endings and UTF-8 encoding.  <a href="class_p_g_e_1_1_file_path.html#aa2c31c16bc52df0a41f3144386fe8619">More...</a><br /></td></tr>
-<tr class="separator:aa2c31c16bc52df0a41f3144386fe8619"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcd12f1fec56f9edc0090b8dadcf7701"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_file_path.html#adcd12f1fec56f9edc0090b8dadcf7701">readText</a> () const</td></tr>
+<tr class="memdesc:adcd12f1fec56f9edc0090b8dadcf7701"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads the entire file with normalized line-endings and UTF-8 encoding.  <a href="class_p_g_e_1_1_file_path.html#adcd12f1fec56f9edc0090b8dadcf7701">More...</a><br /></td></tr>
+<tr class="separator:adcd12f1fec56f9edc0090b8dadcf7701"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34cf4363c3b4c08611db37f7a0864460"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="class_p_g_e_1_1_string.html">String</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_file_path.html#a34cf4363c3b4c08611db37f7a0864460">readLines</a> (bool includeEmptyLines=false) const</td></tr>
 <tr class="memdesc:a34cf4363c3b4c08611db37f7a0864460"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Reads all lines of a file into a vector.  <a href="class_p_g_e_1_1_file_path.html#a34cf4363c3b4c08611db37f7a0864460">More...</a><br /></td></tr>
 <tr class="separator:a34cf4363c3b4c08611db37f7a0864460"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -604,32 +604,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa2c31c16bc52df0a41f3144386fe8619"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2c31c16bc52df0a41f3144386fe8619">&#9670;&nbsp;</a></span>read()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_p_g_e_1_1_string.html">String</a> PGE::FilePath::read </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>&#x202A;Reads the entire file with normalized line-endings and UTF-8 encoding. </p>
-<p class="DocNodeLTR">Line endings are normalized to <code>\n</code>. </p><dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;If the path is not initialized, the file could not be opened, or errors occured during the reading of the file. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_text_reader.html" title="&#x202A;Utility to read text in different encodings from a file.">PGE::TextReader</a> </dd></dl>
-
-</div>
-</div>
 <a id="a0db81573a6ed28b6ddb1b63d3d3ffec0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0db81573a6ed28b6ddb1b63d3d3ffec0">&#9670;&nbsp;</a></span>readBytes()</h2>
 
@@ -673,6 +647,32 @@ Static Public Member Functions</h2></td></tr>
 
 <p>&#x202A;Reads all lines of a file into a vector. </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;If the path is not initialized, the file could not be opened, or errors occured during the reading of the file. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_text_reader.html" title="&#x202A;Utility to read text in different encodings from a file.">PGE::TextReader</a> </dd></dl>
+
+</div>
+</div>
+<a id="adcd12f1fec56f9edc0090b8dadcf7701"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcd12f1fec56f9edc0090b8dadcf7701">&#9670;&nbsp;</a></span>readText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_p_g_e_1_1_string.html">String</a> PGE::FilePath::readText </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&#x202A;Reads the entire file with normalized line-endings and UTF-8 encoding. </p>
+<p class="DocNodeLTR">Line endings are normalized to <code>\n</code>. </p><dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="class_p_g_e_1_1_exception.html" title="&#x202A;Singular exception class thrown by PGE.">PGE::Exception</a></td><td>&#x202A;If the path is not initialized, the file could not be opened, or errors occured during the reading of the file. </td></tr>
   </table>
