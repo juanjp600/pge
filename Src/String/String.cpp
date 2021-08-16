@@ -762,7 +762,8 @@ const String String::replace(const String& fnd, const String& rplace) const {
 void String::initLiteral(int litSize) {
     static std::unordered_map<const char*, Data> litData;
     // TODO: What a great idea to put a fucking map lookup here.
-    if (const auto& it = litData.find(chs); it != litData.end()) {
+    const auto& it = litData.find(chs);
+    if (it != litData.end()) {
         data = &it->second;
     } else {
         data = &litData.emplace(chs, Data()).first->second;

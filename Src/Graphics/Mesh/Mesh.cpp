@@ -48,6 +48,7 @@ void Mesh::setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u
 }
 
 void Mesh::clearGeometry() {
+    vertices = StructuredData();
     indices.clear();
     primitiveType.reset();
     mustReuploadInternalData = true;
@@ -120,12 +121,13 @@ Shader& Mesh::Material::getShader() const {
     return *shader;
 }
 
-size_t Mesh::Material::getTextureCount() const {
+int Mesh::Material::getTextureCount() const {
     PGE_ASSERT(isValid(), "Material is not valid!");
-    return textures.size();
+    return (int)textures.size();
 }
 
-Texture& Mesh::Material::getTexture(size_t index) const {
+Texture& Mesh::Material::getTexture(int index) const {
     PGE_ASSERT(isValid(), "Material is not valid!");
+    PGE_ASSERT(index >= 0 && index < getTextureCount(), "Texture index out of bounds");
     return textures.at(index);
 }

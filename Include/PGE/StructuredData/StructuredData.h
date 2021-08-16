@@ -59,7 +59,8 @@ class StructuredData : NoHeap {
         StructuredData copy() const;
 
         const byte* getData() const;
-        size_t getDataSize() const;
+        int getDataSize() const;
+        int getElementCount() const;
         const ElemLayout& getLayout() const;
 
         template <typename T>
@@ -79,7 +80,7 @@ class StructuredData : NoHeap {
 
         ElemLayout layout; //don't change this to a pointer, stop preemptively optimizing!!!!!
         std::unique_ptr<byte[]> data;
-        size_t size;
+        int size;
 };
 
 }
