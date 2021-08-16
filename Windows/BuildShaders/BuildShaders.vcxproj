@@ -167,6 +167,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BuildShaders.cpp" />
+    <ClCompile Include="CompileResult.cpp" />
     <ClCompile Include="Glsl.cpp" />
     <ClCompile Include="Parser.cpp" />
   </ItemGroup>

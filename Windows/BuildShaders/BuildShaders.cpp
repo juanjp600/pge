@@ -102,124 +102,6 @@ static void writeConstants(BinaryWriter& writer, ReflectionInfo info) {
     }
 }
 
-static CompileResult::HlslStruct parseHlslStruct(const String& hlsl, const String& structName) {
-    // struct VS_INPUT {
-    //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME''SEMANTIC_INDEX';
-    //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME';
-    //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME''SEMANTIC_INDEX';
-    // }
-
-    CompileResult::HlslStruct parsedStruct;
-    parsedStruct.name = structName;
-
-    String structDecl = "struct " + structName;
-    String::Iterator before = hlsl.findFirst(structDecl) + structDecl.length();
-    // Space before {
-    Parser::skip(before, Unicode::isSpace);
-    // {
-    Parser::expectFixed(before, L'{');
-
-    // Whitespace before first type
-    Parser::skip(before, Unicode::isSpace);
-    while (*before != L'}') {
-        CompileResult::HlslStruct::Member member;
-
-        String::Iterator after = before;
-        // Type
-        Parser::skip(after, std::not_fn(Unicode::isSpace));
-        member.type = hlsl.substr(before, after);
-        // Whitespace after type
-        Parser::skip(after, Unicode::isSpace);
-
-        before = after;
-        // Member name
-        Parser::skip(after, std::not_fn(Unicode::isSpace));
-        member.name = hlsl.substr(before, after);
-
-        before = after;
-        // Whitespace before colon
-        Parser::skip(before, Unicode::isSpace);
-        Parser::expectFixed(before, L':');
-        // Whitespace after colon
-        Parser::skip(before, Unicode::isSpace);
-
-        after = before;
-        Parser::skip(after, Parser::isNotDigitOrSemicolon);
-
-        member.dxSemanticName = hlsl.substr(before, after);
-        if (*after == ';') {
-            member.dxSemanticIndex = 0;
-        }
-        else {
-            member.dxSemanticIndex = *after - '0';
-            after++;
-        }
-
-        if (member.type.length() > 2 && member.type.substr(0, 2) != "//") {
-            parsedStruct.members.push_back(member);
-        }
-
-        before = after;
-        // Skip semicolon
-        before++;
-
-        // Whitespace before next type
-        Parser::skip(before, Unicode::isSpace);
-    }
-
-    return parsedStruct;
-}
-
-static void extractFunctionData(const String& hlsl, const String& functionName, CompileResult& compileResult) {
-    String::Iterator iter = hlsl.begin();
-    while (iter < hlsl.end()) {
-        iter = hlsl.findFirst(functionName, iter) + functionName.length();
-        Parser::skip(iter, Unicode::isSpace);
-
-        if (*iter == '(') {
-            //Correct function found!
-
-            String::Iterator inputTypeStart = iter+1;
-            Parser::skip(inputTypeStart, Unicode::isSpace);
-            String::Iterator inputTypeEnd = inputTypeStart;
-            Parser::skip(inputTypeEnd, std::not_fn(Unicode::isSpace));
-            String inputTypeName = hlsl.substr(inputTypeStart, inputTypeEnd);
-
-            String::Iterator inputParamStart = inputTypeEnd;
-            Parser::skip(inputParamStart, Unicode::isSpace);
-            String::Iterator inputParamEnd = inputParamStart;
-            Parser::skip(inputParamEnd, Parser::isIdentifierCharacter);
-            String inputParamName = hlsl.substr(inputParamStart, inputParamEnd);
-
-            String::ReverseIterator returnTypeEnd = (iter-functionName.length()-1);
-            Parser::skip(returnTypeEnd, Unicode::isSpace); returnTypeEnd--;
-            String::ReverseIterator returnTypeStart = (returnTypeEnd+1);
-            Parser::skip(returnTypeStart, std::not_fn(Unicode::isSpace)); returnTypeStart--;
-            String returnTypeName = hlsl.substr(returnTypeStart, returnTypeEnd);
-
-            String::Iterator bodyStart = iter+1;
-            Parser::skip(bodyStart, std::not_fn(Parser::isOpeningBrace));
-            String::Iterator bodyEnd = bodyStart;
-            Parser::skipBlock(bodyEnd);
-
-            compileResult.inputType = parseHlslStruct(hlsl, inputTypeName);
-            compileResult.inputParameterName = inputParamName;
-            compileResult.returnType = parseHlslStruct(hlsl, returnTypeName);
-            compileResult.hlslFunctionBody = hlsl.substr(bodyStart, bodyEnd);
-
-            return;
-        }
-    }
-    throw PGE_CREATE_EX("Failed to locate function \"" + functionName + "\"");
-}
-
-static std::vector<CompileResult::HlslStruct::Member>::const_iterator findMember(const CompileResult::HlslStruct& hlslStruct, const String& semanticName, int semanticIndex) {
-    for (auto it = hlslStruct.members.begin(); it < hlslStruct.members.end(); it++) {
-        if ((it->dxSemanticName == semanticName) && (it->dxSemanticIndex == semanticIndex)) { return it; }
-    }
-    return hlslStruct.members.end();
-}
-
 static void generateDXReflectionInformation(const FilePath& path, const CompileResult& vsCompileResult, const CompileResult& fsCompileResult) {
     BinaryWriter writer(path);
 
@@ -236,7 +118,7 @@ static void generateDXReflectionInformation(const FilePath& path, const CompileR
         D3D11_SIGNATURE_PARAMETER_DESC vsParamDesc;
         vsInfo->GetInputParameterDesc(i, &vsParamDesc);
 
-        auto it = findMember(vsInputStruct, vsParamDesc.SemanticName, vsParamDesc.SemanticIndex);
+        auto it = vsInputStruct.findMember(vsParamDesc.SemanticName, vsParamDesc.SemanticIndex);
         PGE_ASSERT(it != vsInputStruct.members.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::fromInt(vsParamDesc.SemanticIndex) + ")");
         writer.write<String>(it->name);
         writer.write<String>(vsParamDesc.SemanticName);
@@ -282,7 +164,14 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
         writer.writeBytes((byte*)result.compiledD3dBlob->GetBufferPointer(), (int)result.compiledD3dBlob->GetBufferSize());
 
         String inputType; String returnType;
-        extractFunctionData(hlsl, dxEntryPoint, result);
+        CompileResult::extractFunctionData(hlsl, dxEntryPoint, result);
+        std::vector<String> cBufferNames = CompileResult::extractCBufferNames(hlsl);
+        for (String cBufName : cBufferNames) {
+            CompileResult::CBuffer cBuffer = CompileResult::parseCBuffer(hlsl, cBufName);
+            if (cBuffer.usedByFunction(result.hlslFunctionBody)) {
+                result.cBuffers.push_back(cBuffer);
+            }
+        }
     }
     return result;
 }
