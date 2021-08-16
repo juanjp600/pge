@@ -167,6 +167,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BuildShaders.cpp" />
+    <ClCompile Include="Glsl.cpp" />
+    <ClCompile Include="Parser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CompileResult.h" />
+    <ClInclude Include="Glsl.h" />
+    <ClInclude Include="Parser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

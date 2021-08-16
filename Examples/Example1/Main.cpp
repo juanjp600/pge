@@ -59,7 +59,7 @@ class Program {
             inputManager->trackInput(escKey);
 
             state = 0.f;
-
+            
             closeRequested = false;
         }
 
