@@ -122,7 +122,7 @@ static void generateDXReflectionInformation(const FilePath& path, const CompileR
         PGE_ASSERT(it != vsInputStruct.members.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::fromInt(vsParamDesc.SemanticIndex) + ")");
         writer.write<String>(it->name);
         writer.write<String>(vsParamDesc.SemanticName);
-        writer.write<byte>(vsParamDesc.SemanticIndex);
+        writer.write<byte>((byte)vsParamDesc.SemanticIndex);
 
         writer.write<byte>(computeDxgiFormat(vsParamDesc));
     }
@@ -165,10 +165,10 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
 
         CompileResult::extractFunctionData(hlsl, dxEntryPoint, result);
         std::vector<String> cBufferNames = CompileResult::extractCBufferNames(hlsl);
-        for (String cBufName : cBufferNames) {
+        for (const String& cBufName : cBufferNames) {
             CompileResult::CBuffer cBuffer = CompileResult::parseCBuffer(hlsl, cBufName);
             if (cBuffer.usedByFunction(result.hlslFunctionBody)) {
-                result.cBuffers.push_back(cBuffer);
+                result.cBuffers.emplace_back(std::move(cBuffer));
             }
         }
         result.textureInputs = CompileResult::extractTextureInputs(hlsl);

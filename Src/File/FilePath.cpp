@@ -176,7 +176,7 @@ const std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
     return files;
 }
 
-String FilePath::readText() const {
+const String FilePath::readText() const {
     // TextReader checks if the path is valid.
     TextReader reader(*this);
     String ret;

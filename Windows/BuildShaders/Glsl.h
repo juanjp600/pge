@@ -16,4 +16,4 @@ namespace Glsl {
     void convert(const PGE::FilePath& path, const CompileResult& compileResult, ShaderType shaderType);
 }
 
-#endif
+#endif // BUILDSHADERS_GLSL_H_INCLUDED

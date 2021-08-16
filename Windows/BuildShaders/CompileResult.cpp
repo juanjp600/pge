@@ -4,7 +4,7 @@
 using namespace PGE;
 
 CompileResult::HlslStruct CompileResult::parseHlslStruct(const String& hlsl, const String& structName) {
-    // struct VS_INPUT {
+    // struct 'VS_INPUT_NAME' {
     //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME''SEMANTIC_INDEX';
     //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME';
     //     'TYPE' 'INPUT_NAME' : 'SEMANTIC_NAME''SEMANTIC_INDEX';

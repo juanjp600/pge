@@ -50,4 +50,4 @@ struct CompileResult {
     static void extractFunctionData(const PGE::String& hlsl, const PGE::String& functionName, CompileResult& compileResult);
 };
 
-#endif
+#endif // BUILDSHADERS_COMPILERESULT_H_INCLUDED

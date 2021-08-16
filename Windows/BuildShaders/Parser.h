@@ -36,4 +36,4 @@ namespace Parser {
     void expectFixed(PGE::String::Iterator& it, PGE::char16 ch);
 }
 
-#endif
+#endif // BUILDSHADERS_PARSER_H_INCLUDED
