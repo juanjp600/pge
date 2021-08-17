@@ -83,7 +83,7 @@ Graphics* Graphics::create(const String& name, int w, int h, bool fs, Renderer r
 }
 
 Shader* Shader::load(Graphics& gfx, const FilePath& path) {
-    return ((GraphicsInternal&)gfx).loadShader(path);
+    return ((GraphicsInternal&)gfx).loadShader(path.makeDirectory());
 }
 
 Mesh* Mesh::create(Graphics& gfx) {
