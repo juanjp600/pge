@@ -14,7 +14,7 @@ Exception::Exception() noexcept {
 Exception::Exception(const String& file, int line, const String& extra) noexcept {
     info = file;
     info += ':';
-    info += String::fromInt(line);
+    info += String::from(line);
     if (extra != "") {
         info += '\n';
         info += extra;

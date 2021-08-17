@@ -43,14 +43,14 @@ static DXGI_FORMAT computeDxgiFormat(const D3D11_SIGNATURE_PARAMETER_DESC& param
             case D3D_REGISTER_COMPONENT_FLOAT32: { return DXGI_FORMAT_R32G32B32A32_FLOAT; }
         }
     }
-    throw PGE_CREATE_EX("Unsupported DXGI format (" + String::fromInt(paramDesc.Mask) + ", " + String::fromInt(paramDesc.ComponentType) + ")");
+    throw PGE_CREATE_EX("Unsupported DXGI format (" + String::from(paramDesc.Mask) + ", " + String::from<int>(paramDesc.ComponentType) + ")");
 }
 
 class ReflectionInfo {
     public:
         ReflectionInfo(ID3DBlob* shader) {
             HRESULT hr = D3DReflect(shader->GetBufferPointer(), shader->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection);
-            PGE_ASSERT(SUCCEEDED(hr), "D3DReflect failed: HRESULT " + String::fromInt(hr));
+            PGE_ASSERT(SUCCEEDED(hr), "D3DReflect failed: HRESULT " + String::from(hr));
         }
 
         ReflectionInfo(const ReflectionInfo& other) {
@@ -119,12 +119,12 @@ static void generateDXReflectionInformation(const FilePath& path, const CompileR
         vsInfo->GetInputParameterDesc(i, &vsParamDesc);
 
         auto it = vsInputStruct.findMember(vsParamDesc.SemanticName, vsParamDesc.SemanticIndex);
-        PGE_ASSERT(it != vsInputStruct.members.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::fromInt(vsParamDesc.SemanticIndex) + ")");
+        PGE_ASSERT(it != vsInputStruct.members.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::from(vsParamDesc.SemanticIndex) + ")");
         writer.write<String>(it->name);
         writer.write<String>(vsParamDesc.SemanticName);
         writer.write<byte>((byte)vsParamDesc.SemanticIndex);
 
-        writer.write<byte>(computeDxgiFormat(vsParamDesc));
+        writer.write<byte>((byte)computeDxgiFormat(vsParamDesc));
     }
 
     vsCompileResult.compiledD3dBlob->Release();
@@ -152,7 +152,7 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
     HRESULT hr = D3DCompile(hlsl.cstr(), hlsl.byteLength(), nullptr, nullptr, nullptr, dxEntryPoint.cstr(), (dxEntryPoint.toLower() + "_5_0").cstr(),
         D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3 | D3DCOMPILE_WARNINGS_ARE_ERRORS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &result.compiledD3dBlob, &errorBlob);
     if (FAILED(hr)) {
-        String failure = "Compilation failed (" + String::fromInt(hr) + ")";
+        String failure = "Compilation failed (" + String::from(hr) + ")";
         if (errorBlob != nullptr) {
             failure += ":\n";
             failure += (char*)errorBlob->GetBufferPointer();
@@ -210,7 +210,7 @@ int main(int argc, char** argv) {
 
     std::vector<FilePath> shaderPaths = FilePath::fromStr(folderName).enumerateFiles();
 
-#ifdef _DEBUG
+#if 0
     for (auto path : shaderPaths) { compileAndLog(path); }
 #else
     std::for_each(std::execution::par_unseq, shaderPaths.begin(), shaderPaths.end(), compileAndLog);

@@ -96,7 +96,7 @@ int ShaderDX11::dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat) {
         case DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT: { return sizeof(float) * 3; }
         case DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT: { return sizeof(float) * 4; }
         default: {
-            throw PGE_CREATE_EX("Unsupported DXGI_FORMAT: " + String::fromInt(dxgiFormat));
+            throw PGE_CREATE_EX("Unsupported DXGI_FORMAT: " + String::from<int>(dxgiFormat));
         }
     }
 }

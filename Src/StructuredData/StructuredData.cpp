@@ -29,7 +29,7 @@ const StructuredData::ElemLayout::LocationAndSize& StructuredData::ElemLayout::g
 
 const StructuredData::ElemLayout::LocationAndSize& StructuredData::ElemLayout::getLocationAndSize(const String::Key& key) const {
     auto iter = entries.find(key);
-    PGE_ASSERT(iter != entries.end(), "No entry with key \"" + String::format(key.hash, "%Xll") + "\"");
+    PGE_ASSERT(iter != entries.end(), "No entry with key \"" + String::hexFromInt(key.hash) + "\"");
     return iter->second;
 }
 
@@ -131,17 +131,17 @@ void StructuredData::setValue(int elemIndex, const String::Key& entry, const Col
 }
 
 int StructuredData::getDataIndex(int elemIndex, const String::Key& entry, int expectedSize) const {
-    PGE_ASSERT(elemIndex >= 0, "Requested a negative element index (" + String::fromInt(elemIndex) + ")");
+    PGE_ASSERT(elemIndex >= 0, "Requested a negative element index (" + String::from(elemIndex) + ")");
 
     int elemOffset = elemIndex * layout.getElementSize();
     PGE_ASSERT(elemOffset <= (size - layout.getElementSize()),
         "Requested an element index greater than the number of elements ("
-        + String::fromInt(elemOffset) + " > " + String::fromInt((int)(size - layout.getElementSize())) + ")");
+        + String::from(elemOffset) + " > " + String::from((int)(size - layout.getElementSize())) + ")");
 
     const ElemLayout::LocationAndSize& locAndSize = layout.getLocationAndSize(entry);
     PGE_ASSERT(locAndSize.size == expectedSize,
-        "Entry \"" + String::format(entry.hash, "%Xll") + "\" size mismatch (expected " + String::fromInt(locAndSize.size)
-        + ", got " + String::fromInt(expectedSize) + ")");
+        "Entry \"" + String::hexFromInt(entry.hash) + "\" size mismatch (expected " + String::from(locAndSize.size)
+        + ", got " + String::from(expectedSize) + ")");
 
     return elemOffset + locAndSize.location;
 }

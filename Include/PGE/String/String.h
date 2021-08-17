@@ -142,9 +142,16 @@ class String : private NoHeap {
         String(char16 w);
 
         template <typename T>
-        static const String format(T t, const String& format);
-        static const String fromInt(int i);
-        static const String fromFloat(float f);
+        static const String from(const T& t);
+
+        enum class Casing {
+            UPPER,
+            LOWER,
+        };
+
+        template <typename I> static const String binFromInt(I i);
+        template <typename I> static const String octFromInt(I i);
+        template <typename I> static const String hexFromInt(I i, Casing casing = Casing::UPPER);
 
         void operator=(const String& other);
         void operator+=(const String& other);
@@ -157,16 +164,49 @@ class String : private NoHeap {
         friend const String operator+(const String& a, char16 b);
         friend const String operator+(char16 a, const String& b);
 
-        /// Gets the UTF-8 data the string is composd of, without transferring ownership.
+        /// Gets the UTF-8 data the string is composed of, without transferring ownership.
         /// Guaranteed to have a null byte appended to the string's content.
         /// 
         /// O(1)
         const char* cstr() const;
         const std::vector<char16> wstr() const;
-        int toInt(bool& success) const;
-        float toFloat(bool& success) const;
-        int toInt() const;
-        float toFloat() const;
+
+        template <typename T> const T to(bool& success) const;
+        template <typename T>
+        const T to() const {
+            bool succ;
+            T t = to<T>(succ);
+            // TODO: C++20?
+            //PGE_ASSERT(succ, "Failed to convert");
+            return t;
+        }
+
+        template <typename I> I binToInt(bool& success) const;
+        template <typename I>
+        I binToInt() const {
+            bool succ;
+            I t = binToInt<I>(succ);
+            //PGE_ASSERT(succ, "Failed to convert");
+            return t;
+        }
+
+        template <typename I> I octToInt(bool& success) const;
+        template <typename I>
+        I octToInt() const {
+            bool succ;
+            I t = octToInt<I>(succ);
+            //PGE_ASSERT(succ, "Failed to convert");
+            return t;
+        }
+
+        template <typename I> I hexToInt(bool& success) const;
+        template <typename I>
+        I hexToInt() const {
+            bool succ;
+            I t = hexToInt<I>(succ);
+            //PGE_ASSERT(succ, "Failed to convert");
+            return t;
+        }
 
         /// The amount of characters the string is composed of, excluding the terminating null byte.
         /// 
@@ -251,6 +291,11 @@ class String : private NoHeap {
         void wCharToUtf8Str(const char16* wbuffer);
         void reallocate(int size, bool copyOldChs = false);
         char* cstrNoConst();
+
+        template <typename I, byte BASE = 10>
+        static const String fromInteger(I i, Casing casing = Casing::UPPER);
+        template <typename F>
+        static const String fromFloatingPoint(F f);
 };
 bool operator==(const String& a, const String& b);
 bool operator!=(const String& a, const String& b);

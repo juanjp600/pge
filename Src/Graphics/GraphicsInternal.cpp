@@ -11,7 +11,7 @@
 using namespace PGE;
 
 String GraphicsInternal::appendInfoLine(const String& name, int value) {
-    return "\n" + name + ": " + String::fromInt(value);
+    return "\n" + name + ": " + String::from(value);
 }
 
 String GraphicsInternal::appendInfoLine(const String& name, bool value) {
@@ -35,8 +35,8 @@ GraphicsInternal::GraphicsInternal(const String& rendererName, const String& nam
 
 String GraphicsInternal::getInfo() const {
     return caption + " (" + RENDERER_NAME + ") "
-        + String::fromInt(dimensions.x) + 'x' + String::fromInt(dimensions.y) + " / "
-        + String::fromInt(viewport.width()) + 'x' + String::fromInt(viewport.height())
+        + String::from(dimensions.x) + 'x' + String::from(dimensions.y) + " / "
+        + String::from(viewport.width()) + 'x' + String::from(viewport.height())
         + appendInfoLine("open", open)
         + appendInfoLine("focused", focused)
         + appendInfoLine("fullscreen", fullscreen)
