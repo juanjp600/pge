@@ -708,22 +708,55 @@ PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned long long)
 
 template <typename F>
 const String String::fromFloatingPoint(F f) {
-    throw PGE_CREATE_EX("// TODO: STUB");
-    // std::numeric_limits<float>::max_digits10
-    // https://dl.acm.org/doi/pdf/10.1145/3296979.3192369
-    // https://blog.benoitblanchon.fr/lightweight-float-to-string/
-    // https://www.ryanjuckett.com/printing-floating-point-numbers/
+    static_assert(std::is_floating_point<F>::value);
+
+    const char* format;
+    if constexpr (std::is_same<F, long double>::value) {
+        format = "%fL";
+    } else {
+        format = "%f";
+    }
+    
+    int size = snprintf(nullptr, 0, format, f) + 1;
+    String ret(size);
+    snprintf(ret.cstrNoConst(), size, format, f);
+
+    ret.data->strByteLength = size;
+    ret.data->_strLength = size;
+
+    return ret;
 }
 
-static const String NAN_STRING = "nan";
+static const String POSITIVE_INFINITY = "Inf";
+static const String NEGATIVE_INFINITY = '-' + POSITIVE_INFINITY;
+static const String POSITIVE_INFINITY_LONG = "Infinity";
+static const String NEGATIVE_INFINITY_LONG = '-' + POSITIVE_INFINITY_LONG;
+
+static const String NAN_STRING = "NaN";
+static const String NAN_STRING_LOWER = NAN_STRING.toLower();
+
 static constexpr char16 DECIMAL_SEPERATOR = L'.';
 
 template <typename F>
 static F toFloatingPoint(const String& str, bool& success) {
-    // TODO: Infinity.
-    if (str.equalsIgnoreCase(NAN_STRING)) {
+    // TODO: Move to end?
+    if (str.equalsIgnoreCase(NAN_STRING_LOWER)) {
         success = true;
         return std::numeric_limits<F>::quiet_NaN();
+    }
+
+    if (str.equalsIgnoreCase(POSITIVE_INFINITY)
+        || str.equalsIgnoreCase(POSITIVE_INFINITY_LONG)
+        || str.equalsIgnoreCase(L"\u221E") {
+        success = true;
+        return std::numeric_limits<F>::infinity();
+    }
+
+    if (str.equalsIgnoreCase(NEGATIVE_INFINITY)
+        || str.equalsIgnoreCase(NEGATIVE_INFINITY_LONG)
+        || str.equalsIgnoreCase(L"-\u221E") {
+        success = true;
+        return -std::numeric_limits<F>::infinity();
     }
 
     success = false;
