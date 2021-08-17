@@ -32,6 +32,14 @@ namespace Glsl {
             writer.writeLine("        v.w);");
             writer.writeLine("}\n");
         }
+
+        if (shaderType == ShaderType::FRAGMENT && funcBody.findFirst(".Sample(") != funcBody.end()) {
+            writer.writeLine("vec4 texture_yflip(sampler2D sampler, vec2 uv) {");
+            writer.writeLine("    return texture(");
+            writer.writeLine("        sampler,");
+            writer.writeLine("        vec2(uv.x, 1.0-uv.y));");
+            writer.writeLine("}\n");
+        }
     }
 
     String prefixIfRequired(const String& varName, const String& varKind, ShaderType shaderType) {
@@ -150,7 +158,7 @@ namespace Glsl {
                 sampleCallEnd++;
 
                 body = body.substr(body.begin(), sampleCallStart) +
-                       "texture("+input+", "+ uv+")" +
+                       "texture_yflip("+input+", "+ uv+")" +
                        body.substr(sampleCallEnd, body.end());
 
                 sampleCallStart = body.findFirst(input + ".Sample(");

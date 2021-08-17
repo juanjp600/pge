@@ -14,14 +14,15 @@ void BinaryWriter::write(const T& t) {
 }
 
 #define PGE_IO_DEFAULT_SPEC(T) template void BinaryWriter::write(const T& val)
-PGE_IO_DEFAULT_SPEC(u8);
-PGE_IO_DEFAULT_SPEC(u16);
-PGE_IO_DEFAULT_SPEC(u32);
-PGE_IO_DEFAULT_SPEC(u64);
-PGE_IO_DEFAULT_SPEC(i8);
-PGE_IO_DEFAULT_SPEC(i16);
-PGE_IO_DEFAULT_SPEC(i32);
-PGE_IO_DEFAULT_SPEC(i64);
+PGE_IO_DEFAULT_SPEC(byte);
+PGE_IO_DEFAULT_SPEC(short);
+PGE_IO_DEFAULT_SPEC(int);
+PGE_IO_DEFAULT_SPEC(long);
+PGE_IO_DEFAULT_SPEC(long long);
+PGE_IO_DEFAULT_SPEC(unsigned short);
+PGE_IO_DEFAULT_SPEC(unsigned int);
+PGE_IO_DEFAULT_SPEC(unsigned long);
+PGE_IO_DEFAULT_SPEC(unsigned long long);
 PGE_IO_DEFAULT_SPEC(float);
 PGE_IO_DEFAULT_SPEC(double);
 PGE_IO_DEFAULT_SPEC(long double);
