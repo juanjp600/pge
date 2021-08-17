@@ -1,4 +1,5 @@
 #include "../GraphicsOGL3.h"
+#include <stdlib.h>
 
 using namespace PGE;
 
@@ -6,30 +7,46 @@ static void textureImage(int width, int height, const byte* buffer, Texture::For
     GLint glInternalFormat;
     GLenum glFormat;
     GLenum glPixelType;
+    int bytesPerPixel;
     switch (format) {
         case Texture::Format::RGBA32: {
             glInternalFormat = GL_RGBA;
             glFormat = GL_RGBA;
             glPixelType = GL_UNSIGNED_BYTE;
+            bytesPerPixel = 4;
         } break;
         case Texture::Format::R32F: {
             glInternalFormat = GL_R32F;
             glFormat = GL_RED;
             glPixelType = GL_FLOAT;
+            bytesPerPixel = 4;
         } break;
         case Texture::Format::R8: {
             glInternalFormat = GL_R8;
             glFormat = GL_RED;
             glPixelType = GL_UNSIGNED_BYTE;
+            bytesPerPixel = 1;
         } break;
         default: {
             throw PGE_CREATE_EX("Invalid format");
         }
     }
 
-    glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, buffer);
+    //Flip the texture on the Y axis because OpenGL's texture coordinate system is Y-up while we expect Y-down.
+    //This matters because render targets will have to be flipped by the fragment shader, so to avoid turning
+    //shaders into a clusterfuck, they will flip all textures.
+    byte* yFlippedBuffer = (buffer != nullptr) ? new byte[width * height * bytesPerPixel] : nullptr;
+    if (yFlippedBuffer != nullptr) {
+        for (int y = 0; y < height; y++) {
+            memcpy(yFlippedBuffer + (width * y), buffer + (width * (height - y - 1)), width);
+        }
+    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, yFlippedBuffer);
     GLenum glError = glGetError();
     PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (" + String::fromInt(width) + "x" + String::fromInt(height) + "; GLERROR: " + String::format(glError, "%u") + ")");
+
+    if (yFlippedBuffer != nullptr) { delete[] yFlippedBuffer; }
 }
 
 static void applyTextureParameters(bool rt) {
