@@ -38,7 +38,7 @@ static void textureImage(int width, int height, const byte* buffer, Texture::For
     byte* yFlippedBuffer = (buffer != nullptr) ? new byte[width * height * bytesPerPixel] : nullptr;
     if (yFlippedBuffer != nullptr) {
         for (int y = 0; y < height; y++) {
-            memcpy(yFlippedBuffer + (width * y), buffer + (width * (height - y - 1)), width);
+            memcpy(yFlippedBuffer + (width * y * bytesPerPixel), buffer + (width * (height - y - 1) * bytesPerPixel), width * bytesPerPixel);
         }
     }
 
