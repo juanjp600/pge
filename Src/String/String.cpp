@@ -739,23 +739,22 @@ static constexpr char16 DECIMAL_SEPERATOR = L'.';
 
 template <typename F>
 static F toFloatingPoint(const String& str, bool& success) {
+    success = true;
+
     // TODO: Move to end?
     if (str.equalsIgnoreCase(NAN_STRING_LOWER)) {
-        success = true;
         return std::numeric_limits<F>::quiet_NaN();
     }
 
     if (str.equalsIgnoreCase(POSITIVE_INFINITY)
         || str.equalsIgnoreCase(POSITIVE_INFINITY_LONG)
         || str.equalsIgnoreCase(L"\u221E")) {
-        success = true;
         return std::numeric_limits<F>::infinity();
     }
 
     if (str.equalsIgnoreCase(NEGATIVE_INFINITY)
         || str.equalsIgnoreCase(NEGATIVE_INFINITY_LONG)
         || str.equalsIgnoreCase(L"-\u221E")) {
-        success = true;
         return -std::numeric_limits<F>::infinity();
     }
 
