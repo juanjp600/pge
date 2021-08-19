@@ -7,7 +7,8 @@ using namespace PGE;
 
 //REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
 
-GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsSpecialized("DirectX 11", name, w, h, fs, SDL_WINDOW_SHOWN) {
+GraphicsDX11::GraphicsDX11(const String& name, int w, int h, bool fs, int x, int y)
+    : GraphicsSpecialized("DirectX 11", name, w, h, fs, x, y, SDL_WINDOW_SHOWN) {
     if (fullscreen) {
         SDL_SetWindowBordered(getWindow(), SDL_bool::SDL_FALSE);
         SDL_Rect displayBounds;
@@ -117,36 +118,36 @@ void GraphicsDX11::clear(const Color& color) {
     dxContext->ClearDepthStencilView( currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
 }
 
-void GraphicsDX11::setRenderTarget(Texture* renderTarget) {
+void GraphicsDX11::setRenderTarget(Texture& renderTarget) {
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
     dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
-    currentRenderTargetViews.clear(); currentRenderTargetViews.emplace_back(((TextureDX11*)renderTarget)->getRtv());
-    currentDepthStencilView = ((TextureDX11*)renderTarget)->getZBufferView();
+    currentRenderTargetViews.clear(); currentRenderTargetViews.emplace_back(((TextureDX11&)renderTarget).getRtv());
+    currentDepthStencilView = ((TextureDX11&)renderTarget).getZBufferView();
     dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
-void GraphicsDX11::setRenderTargets(const std::vector<Texture*>& renderTargets) {
+void GraphicsDX11::setRenderTargets(const ReferenceVector<Texture>& renderTargets) {
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
     dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
     currentRenderTargetViews.clear();
-    TextureDX11* maxSizeTexture = (TextureDX11*)renderTargets[0];
+    TextureDX11* maxSizeTexture = &(TextureDX11&)renderTargets[0];
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets[" + String::from(i) + "] is not a valid render target");
-        currentRenderTargetViews.emplace_back(((TextureDX11*)renderTargets[i])->getRtv());
-        if (renderTargets[i]->getWidth()+renderTargets[i]->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
-            maxSizeTexture = (TextureDX11*)renderTargets[i];
+        PGE_ASSERT(renderTargets[i].get().isRenderTarget(), "renderTargets[" + String::from(i) + "] is not a valid render target");
+        currentRenderTargetViews.emplace_back(((TextureDX11&)renderTargets[i]).getRtv());
+        if (renderTargets[i].get().getWidth()+renderTargets[i].get().getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
+            maxSizeTexture = &(TextureDX11&)renderTargets[i];
         }
     }
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i]->getWidth() <= maxSizeTexture->getWidth() && renderTargets[i]->getHeight() <= maxSizeTexture->getHeight(),
+        PGE_ASSERT(renderTargets[i].get().getWidth() <= maxSizeTexture->getWidth() && renderTargets[i].get().getHeight() <= maxSizeTexture->getHeight(),
             "Render target sizes are incompatible (" + String::from(maxSizeTexture->getWidth()) + "x" + String::from(maxSizeTexture->getHeight()) + " vs " +
-                                                       String::from(renderTargets[i]->getWidth()) + "x" + String::from(renderTargets[i]->getHeight()) + ")");
+                                                       String::from(renderTargets[i].get().getWidth()) + "x" + String::from(renderTargets[i].get().getHeight()) + ")");
     }
     currentDepthStencilView = maxSizeTexture->getZBufferView();
     dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );

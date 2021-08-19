@@ -32,12 +32,12 @@ class GraphicsInternal : public Graphics {
 
         class SDLWindow : public Resource<SDL_Window*> {
             public:
-                SDLWindow(const String& title, int width, int height, u32 flags);
+                SDLWindow(const String& title, int x, int y, int width, int height, u32 flags);
                 ~SDLWindow();
         };
         SDLWindow::View sdlWindow;
 
-        GraphicsInternal(const String& rendererName, const String& name, int w, int h, bool fs, SDL_WindowFlags windowFlags);
+        GraphicsInternal(const String& rendererName, const String& name, int w, int h, bool fs, int x, int y, SDL_WindowFlags windowFlags);
 
     public:
         String getInfo() const override;
@@ -57,8 +57,8 @@ class GraphicsSpecialized : public GraphicsInternal {
     static_assert(std::is_base_of<Texture, TextureType>::value);
 
     protected:
-        GraphicsSpecialized(const String& rendererName, const String& name, int w, int h, bool fs, SDL_WindowFlags windowFlags)
-            : GraphicsInternal(rendererName, name, w, h, fs, windowFlags) { }
+        GraphicsSpecialized(const String& rendererName, const String& name, int w, int h, bool fs, int x, int y, SDL_WindowFlags windowFlags)
+            : GraphicsInternal(rendererName, name, w, h, fs, x, y, windowFlags) { }
 
     public:
         Shader* loadShader(const FilePath& path) final override {

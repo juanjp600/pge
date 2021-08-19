@@ -17,14 +17,14 @@ namespace PGE {
 
 class GraphicsDX11 : public GraphicsSpecialized<ShaderDX11, MeshDX11, TextureDX11> {
     public:
-        GraphicsDX11(const String& name,int w,int h,bool fs);
+        GraphicsDX11(const String& name, int w, int h, bool fs, int x, int y);
 
         void swap() override;
 
         void clear(const Color& color) override;
 
-        void setRenderTarget(Texture* renderTarget) override;
-        void setRenderTargets(const std::vector<Texture*>& renderTargets) override;
+        void setRenderTarget(Texture& renderTarget) override;
+        void setRenderTargets(const ReferenceVector<Texture>& renderTargets) override;
         void resetRenderTarget() override;
 
         void setViewport(const Rectanglei& vp) override;

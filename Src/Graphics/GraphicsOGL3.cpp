@@ -4,9 +4,9 @@
 
 using namespace PGE;
 
-GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs)
+GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, int x, int y, bool fs)
     //TODO: this is incorrect on macOS
-    : GraphicsSpecialized("OpenGL", name, w, h, fs, (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/)), resourceManager(*this) {
+    : GraphicsSpecialized("OpenGL", name, w, h, fs, x, y, (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/)), resourceManager(*this) {
 #if defined(__APPLE__) && defined(__OBJC__)
     // Figure out the de-scaled window size.
     NSRect rect = NSMakeRect(0, 0, w, h);
@@ -82,12 +82,12 @@ void GraphicsOGL3::clear(const Color& color) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void GraphicsOGL3::setRenderTarget(Texture* renderTarget) {
+void GraphicsOGL3::setRenderTarget(Texture& renderTarget) {
     takeGlContext();
 
     glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, ((TextureOGL3*)renderTarget)->getGlDepthbuffer());
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ((TextureOGL3*)renderTarget)->getGlTexture(), 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, ((TextureOGL3&)renderTarget).getGlDepthbuffer());
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ((TextureOGL3&)renderTarget).getGlTexture(), 0);
 
     GLenum glAttachments[] = {
         GL_COLOR_ATTACHMENT0
@@ -95,17 +95,17 @@ void GraphicsOGL3::setRenderTarget(Texture* renderTarget) {
     glDrawBuffers(1, glAttachments);
 }
 
-void GraphicsOGL3::setRenderTargets(const std::vector<Texture*>& renderTargets) {
+void GraphicsOGL3::setRenderTargets(const ReferenceVector<Texture>& renderTargets) {
     takeGlContext();
 
-    TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
+    TextureOGL3* largestTarget = &(TextureOGL3&)renderTargets[0];
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets["+String::from(i)+"] is not a valid render target");
+        PGE_ASSERT(renderTargets[i].get().isRenderTarget(), "renderTargets["+String::from(i)+"] is not a valid render target");
 
         if (i == 0) { continue; }
 
-        if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i]->getWidth()+renderTargets[i]->getHeight())) {
-            largestTarget = (TextureOGL3*)renderTargets[i];
+        if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i].get().getWidth()+renderTargets[i].get().getHeight())) {
+            largestTarget = &(TextureOGL3&)renderTargets[i];
         }
     }
     GLenum glAttachments[] = {
@@ -121,7 +121,7 @@ void GraphicsOGL3::setRenderTargets(const std::vector<Texture*>& renderTargets) 
     glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, largestTarget->getGlDepthbuffer());
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3*)renderTargets[i])->getGlTexture(), 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3&)renderTargets[i]).getGlTexture(), 0);
     }
     glDrawBuffers((GLsizei)renderTargets.size(), glAttachments);
 }

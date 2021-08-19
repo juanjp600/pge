@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include "GraphicsInternal.h"
 #include "../SysEvents/SysEventsInternal.h"
 
 using namespace PGE;
@@ -28,6 +29,10 @@ void Graphics::update() {
             focused = false;
         }
     }
+}
+
+void Graphics::setScreenPosition(const Vector2i& pos) const {
+    SDL_SetWindowPosition(((GraphicsInternal*)this)->getWindow(), pos.x, pos.y);
 }
 
 const Rectanglei& Graphics::getViewport() const {
@@ -82,3 +87,5 @@ Graphics::WindowEventSubscriber::WindowEventSubscriber(const Graphics& gfx) {
 Graphics::WindowEventSubscriber::~WindowEventSubscriber() {
     SysEventsInternal::unsubscribe(resource);
 }
+
+const int Graphics::DEFAULT_SCREEN_POSITION = SDL_WINDOWPOS_UNDEFINED;

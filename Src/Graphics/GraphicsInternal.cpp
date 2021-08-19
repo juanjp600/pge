@@ -28,9 +28,9 @@ NSWindow* GraphicsInternal::getCocoaWindow() const {
 }
 #endif
 
-GraphicsInternal::GraphicsInternal(const String& rendererName, const String& name, int w, int h, bool fs, SDL_WindowFlags windowFlags)
+GraphicsInternal::GraphicsInternal(const String& rendererName, const String& name, int w, int h, bool fs, int x, int y, SDL_WindowFlags windowFlags)
     : Graphics(name, w, h, fs), RENDERER_NAME(rendererName) {
-    sdlWindow = resourceManager.addNewResource<SDLWindow>(name, w, h, windowFlags);
+    sdlWindow = resourceManager.addNewResource<SDLWindow>(name, x, y, w, h, windowFlags);
 }
 
 String GraphicsInternal::getInfo() const {
@@ -48,8 +48,8 @@ SDL_Window* GraphicsInternal::getWindow() const {
     return sdlWindow;
 }
 
-GraphicsInternal::SDLWindow::SDLWindow(const String& title, int width, int height, u32 flags) {
-    resource = SDL_CreateWindow(title.cstr(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+GraphicsInternal::SDLWindow::SDLWindow(const String& title, int x, int y, int width, int height, u32 flags) {
+    resource = SDL_CreateWindow(title.cstr(), x, y, width, height, flags);
     PGE_ASSERT(resource != nullptr, "Failed to create SDL window (SDLERROR: " + String(SDL_GetError()) + ")");
 }
 
@@ -57,8 +57,8 @@ GraphicsInternal::SDLWindow::~SDLWindow() {
     SDL_DestroyWindow(resource);
 }
 
-Graphics* Graphics::create(const String& name, int w, int h, bool fs, Renderer r) {
-    if (r == Renderer::Default) {
+Graphics* Graphics::create(const String& name, int w, int h, bool fs, std::optional<Renderer> r, int x, int y) {
+    if (!r.has_value()) {
 #ifdef _WIN32
         r = Renderer::DirectX11;
 #else
@@ -66,14 +66,14 @@ Graphics* Graphics::create(const String& name, int w, int h, bool fs, Renderer r
 #endif
     }
     Graphics* gfx;
-    switch (r) {
+    switch (r.value()) {
 #ifdef _WIN32
         case Renderer::DirectX11: {
-            gfx = new GraphicsDX11(name, w, h, fs);
+            gfx = new GraphicsDX11(name, w, h, fs, x, y);
         } break;
 #endif
         case Renderer::OpenGL: {
-            gfx = new GraphicsOGL3(name, w, h, fs);
+            gfx = new GraphicsOGL3(name, w, h, fs, x, y);
         } break;
         default: {
             gfx = nullptr;
