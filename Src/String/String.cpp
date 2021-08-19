@@ -717,9 +717,9 @@ const String String::fromFloatingPoint(F f) {
         format = "%f";
     }
     
-    int size = snprintf(nullptr, 0, format, f) + 1;
-    String ret(size);
-    snprintf(ret.cstrNoConst(), size, format, f);
+    int size = snprintf(nullptr, 0, format, f);
+    String ret(size + 1);
+    snprintf(ret.cstrNoConst(), size + 1, format, f);
 
     ret.data->strByteLength = size;
     ret.data->_strLength = size;
