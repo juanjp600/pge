@@ -138,6 +138,14 @@ bool FilePath::exists() const {
     return exists;
 }
 
+u64 FilePath::getLastModifyTime() const {
+    PGE_ASSERT(valid, INVALID_STR);
+    std::error_code err;
+    std::filesystem::file_time_type time = std::filesystem::last_write_time(str().cstr(), err);
+    PGE_ASSERT(err.value() == 0, "Couldn't check directory modify time (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
+    return time.time_since_epoch().count();
+}
+
 bool FilePath::createDirectory() const {
     PGE_ASSERT(valid, INVALID_STR);
     std::error_code err;

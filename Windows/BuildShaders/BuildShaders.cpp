@@ -192,9 +192,13 @@ static void compileShader(const FilePath& path) {
 
 static void compileAndLog(const FilePath& path) {
     if (path.getExtension() == "hlsl") {
-        std::cout << "Compiling: " + path.str() + '\n';
-        compileShader(path);
-        std::cout << "Success: " + path.str() + '\n';
+        if (path.getLastModifyTime() <= (path.trimExtension().makeDirectory() + "reflection.dxri").getLastModifyTime()) {
+            std::cout << "Already compiled: " + path.str() + '\n';
+        } else {
+            std::cout << "Compiling: " + path.str() + '\n';
+            compileShader(path);
+            std::cout << "Success: " + path.str() + '\n';
+        }
     }
 }
 

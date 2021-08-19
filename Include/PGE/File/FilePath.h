@@ -74,6 +74,8 @@ class FilePath : private NoHeap {
         /// @throws #PGE::Exception If the path is not initialized.
         bool exists() const;
 
+        u64 getLastModifyTime() const;
+
         /// Causes a path to be interpreted as a directory.
         /// This does not actually create the directory, it simply appends a path separator at the end if there is not one already.
         /// @returns The path, guaranteed to have a path seperator as a suffix.
