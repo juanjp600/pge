@@ -7,8 +7,7 @@ var class_p_g_e_1_1_graphics =
     ] ],
     [ "\u202ARenderer", "class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83", [
       [ "\u202AOpenGL", "class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83a760716b590ee7c0adc25f434f577d8be", null ],
-      [ "\u202ADirectX11", "class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83ab80b8d669e3be09cdf4975ac55ab676a", null ],
-      [ "\u202ADefault", "class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83a7a1920d61156abc05a60135aefe8bc67", null ]
+      [ "\u202ADirectX11", "class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83ab80b8d669e3be09cdf4975ac55ab676a", null ]
     ] ],
     [ "\u202AGraphics", "class_p_g_e_1_1_graphics.html#a49ed5cb20217ac8fd3126610df7d1a68", null ],
     [ "\u202Aclear", "class_p_g_e_1_1_graphics.html#ab6dd05a42685bffd85e9c128ba4241e0", null ],
@@ -24,8 +23,9 @@ var class_p_g_e_1_1_graphics =
     [ "\u202AresetRenderTarget", "class_p_g_e_1_1_graphics.html#a57f1f66ffdf2e79ecd2581a788e572e8", null ],
     [ "\u202AsetCulling", "class_p_g_e_1_1_graphics.html#a449fc76e49f2b27cb56c077e2b33b216", null ],
     [ "\u202AsetDepthTest", "class_p_g_e_1_1_graphics.html#ad07f9d967947dab85825e31a53e2fd6e", null ],
-    [ "\u202AsetRenderTarget", "class_p_g_e_1_1_graphics.html#ab216819d266a1e9f61001702c71c11cb", null ],
-    [ "\u202AsetRenderTargets", "class_p_g_e_1_1_graphics.html#afa8018f3b5be7c85d983658823644de8", null ],
+    [ "\u202AsetRenderTarget", "class_p_g_e_1_1_graphics.html#a836e2cd6f3f94ebed4a2cec357168e63", null ],
+    [ "\u202AsetRenderTargets", "class_p_g_e_1_1_graphics.html#a43b43c745c723ffd69d3d61cd0208569", null ],
+    [ "\u202AsetScreenPosition", "class_p_g_e_1_1_graphics.html#ad5ab178f1e8e46afac5c519bf9a1c3b2", null ],
     [ "\u202AsetViewport", "class_p_g_e_1_1_graphics.html#a7fdac10172b296c64ccf5fcdc698bd55", null ],
     [ "\u202AsetVsync", "class_p_g_e_1_1_graphics.html#a1d986c8ad7c097b28e683f1c4f62265e", null ],
     [ "\u202Aswap", "class_p_g_e_1_1_graphics.html#af7931cd5b5bb39aeffd2031967af6770", null ],
