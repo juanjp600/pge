@@ -192,7 +192,8 @@ static void compileShader(const FilePath& path) {
 
 static void compileAndLog(const FilePath& path) {
     if (path.getExtension() == "hlsl") {
-        if (path.getLastModifyTime() <= (path.trimExtension().makeDirectory() + "reflection.dxri").getLastModifyTime()) {
+        FilePath reflectFile = path.trimExtension().makeDirectory() + "reflection.dxri";
+        if (reflectFile.exists() && path.getLastModifyTime() <= reflectFile.getLastModifyTime()) {
             std::cout << "Already compiled: " + path.str() + '\n';
         } else {
             std::cout << "Compiling: " + path.str() + '\n';
@@ -202,7 +203,6 @@ static void compileAndLog(const FilePath& path) {
     }
 }
 
-// TODO: Don't recompile up-to-date shaders.
 int main(int argc, char** argv) {
     String folderName;
     if (argc < 2) {
