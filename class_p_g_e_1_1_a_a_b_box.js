@@ -3,6 +3,7 @@ var class_p_g_e_1_1_a_a_b_box =
     [ "\u202AAABBox", "class_p_g_e_1_1_a_a_b_box.html#a52ee6d5e74aa46574695e73ef2c51697", null ],
     [ "\u202AAABBox", "class_p_g_e_1_1_a_a_b_box.html#a610fc25c4dcaf807a3e4b56729414cec", null ],
     [ "\u202AaddPoint", "class_p_g_e_1_1_a_a_b_box.html#afa9e68e0056915581b0d2817063f9407", null ],
+    [ "\u202Acontains", "class_p_g_e_1_1_a_a_b_box.html#a608dfdef48b078b2c2e4c09335b060cb", null ],
     [ "\u202Aequals", "class_p_g_e_1_1_a_a_b_box.html#aa5c14581b12732cad98c47c976385d09", null ],
     [ "\u202AgetCenter", "class_p_g_e_1_1_a_a_b_box.html#a3fc9734857bf3db089f835e6dc297557", null ],
     [ "\u202AgetDims", "class_p_g_e_1_1_a_a_b_box.html#ad6e125bd3b18551be6047baa330507fd", null ],
