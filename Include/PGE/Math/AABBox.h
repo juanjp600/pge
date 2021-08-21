@@ -28,6 +28,10 @@ class AABBox : private NoHeap {
         constexpr const Vector3f getCenter() const { return (min + max) * 0.5f; }
         constexpr const Vector3f getDims() const { return max - min; }
 
+        constexpr bool contains(const Vector3f& point) const {
+            return point.x >= min.x && point.y >= min.y && point.x <= max.x && point.y <= max.y;
+        }
+
         constexpr bool intersects(const AABBox& other) const {
             Vector3f otherMin = other.getMin();
             Vector3f otherMax = other.getMax();
