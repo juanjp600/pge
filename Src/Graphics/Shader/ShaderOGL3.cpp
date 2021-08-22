@@ -50,20 +50,28 @@ void ShaderOGL3::extractVertexUniforms(const String& vertexSource) {
 }
 
 void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
+    const String vertexInputPrefix = "vertexInput_";
+
     std::vector<ParsedShaderVar> parsedAttribs;
     extractShaderVars(vertexSource, "in", parsedAttribs);
 
     std::vector<StructuredData::ElemLayout::Entry> layoutEntries;
     for (int i = 0; i < (int)parsedAttribs.size(); i++) {
+        String attrName = parsedAttribs[i].name;
+        String sanitizedAttrName = attrName;
+        if (sanitizedAttrName.findFirst(vertexInputPrefix) == sanitizedAttrName.begin()) {
+            sanitizedAttrName = sanitizedAttrName.substr(vertexInputPrefix.length());
+        }
+
         GLenum attrType = parsedTypeToGlType(parsedAttribs[i].type);
         GLenum attrElemType; int attrElemCount;
         decomposeGlType(attrType, attrElemType, attrElemCount);
 
-        layoutEntries.emplace_back(parsedAttribs[i].name, glSizeToByteSize(attrElemType, attrElemCount));
+        layoutEntries.emplace_back(sanitizedAttrName, glSizeToByteSize(attrElemType, attrElemCount));
         glVertexAttribLocations.emplace(
-            String::Key(parsedAttribs[i].name),
+            String::Key(sanitizedAttrName),
             GlAttribLocation(
-                glGetAttribLocation(glShaderProgram, parsedAttribs[i].name.cstr()),
+                glGetAttribLocation(glShaderProgram, attrName.cstr()),
                 attrElemType,
                 attrElemCount
             )

@@ -23,6 +23,24 @@ namespace Glsl {
             writer.writeLine("}\n");
         }
 
+        if (funcBody.findFirst("saturate") != funcBody.end()) {
+            writer.writeLine("float saturate(float f) {");
+            writer.writeLine("    return clamp(f, 0.0, 1.0);");
+            writer.writeLine("}\n");
+
+            writer.writeLine("vec2 saturate(vec2 v) {");
+            writer.writeLine("    return vec2(saturate(v.x), saturate(v.y));");
+            writer.writeLine("}\n");
+
+            writer.writeLine("vec3 saturate(vec3 v) {");
+            writer.writeLine("    return vec3(saturate(v.x), saturate(v.y), saturate(v.z));");
+            writer.writeLine("}\n");
+
+            writer.writeLine("vec4 saturate(vec4 v) {");
+            writer.writeLine("    return vec4(saturate(v.x), saturate(v.y), saturate(v.z), saturate(v.w));");
+            writer.writeLine("}\n");
+        }
+
         if (shaderType == ShaderType::VERTEX) {
             writer.writeLine("vec4 dx_to_gl_pos(vec4 v) {");
             writer.writeLine("    return vec4(");
@@ -46,6 +64,8 @@ namespace Glsl {
         if (((varKind == "out") && (shaderType == ShaderType::VERTEX)) ||
             ((varKind == "in") && (shaderType == ShaderType::FRAGMENT))) {
             return "vsToFs_" + varName;
+        } else if ((varKind == "in") && (shaderType == ShaderType::VERTEX)) {
+            return "vertexInput_" + varName;
         }
         return varName;
     }
