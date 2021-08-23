@@ -94,12 +94,14 @@ class GLShader : public Resource<GLuint> {
             glShaderSource(resource, 1, &src, nullptr);
             glCompileShader(resource);
 
-            char err[512];
-            glGetShaderInfoLog(resource, 512, NULL, err);
-
-            int result;
+            GLint result;
             glGetShaderiv(resource, GL_COMPILE_STATUS, &result);
-            PGE_ASSERT(result == GL_TRUE, "Failed to create shader (stage: " + String::from(stage) + "; error:" + err + ")");
+            if (result != GL_TRUE) {
+                glGetShaderiv(resource, GL_INFO_LOG_LENGTH, &result);
+                std::unique_ptr<GLchar[]> err = std::make_unique<GLchar[]>(result);
+                glGetShaderInfoLog(resource, result, NULL, err.get());
+                throw PGE_CREATE_EX("Failed to create shader (stage: " + String::from(stage) + "; error:" + err.get() + ")");
+            }
         }
 
         ~GLShader() {
