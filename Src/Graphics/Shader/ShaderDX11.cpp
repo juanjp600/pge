@@ -91,6 +91,7 @@ void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferIn
 
 int ShaderDX11::dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat) {
     switch (dxgiFormat) {
+        case DXGI_FORMAT::DXGI_FORMAT_R32_UINT: { return sizeof(u32); }
         case DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT: { return sizeof(float); }
         case DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT: { return sizeof(float) * 2; }
         case DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT: { return sizeof(float) * 3; }
