@@ -7,7 +7,7 @@
 using namespace PGE;
 
 namespace Glsl {
-    String hlslToGlslTypes(const String& hlsl) {
+    const String hlslToGlslTypes(const String& hlsl) {
         return hlsl
             .replace("float2x2", "mat2")
             .replace("float3x3", "mat3")
@@ -19,19 +19,18 @@ namespace Glsl {
 
     void writeHlslFuncs(TextWriter& writer, const String& funcBody, ShaderType shaderType) {
         //write definitions for intrinsic functions that the shader actually uses
+        bool anyMacroUsers = false; // Macro users will be shot on sight.
         if (funcBody.findFirst("mul") != funcBody.end()) {
-            writer.writeLine("vec4 mul(mat4 m, vec4 v) {");
-            writer.writeLine("    return v * m;");
-            writer.writeLine("}\n");
-
-            writer.writeLine("vec3 mul(mat3 m, vec3 v) {");
-            writer.writeLine("    return v * m;");
-            writer.writeLine("}\n");
-
-            writer.writeLine("vec2 mul(mat2 m, vec2 v) {");
-            writer.writeLine("    return v * m;");
-            writer.writeLine("}\n");
+            anyMacroUsers = true;
+            writer.writeLine("#define mul(v, m) (m * v)\n");
         }
+
+        if (funcBody.findFirst("lerp") != funcBody.end()) {
+            anyMacroUsers = true;
+            writer.writeLine("#define lerp mix\n");
+        }
+
+        if (anyMacroUsers) { writer.writeLine(); }
 
         if (funcBody.findFirst("saturate") != funcBody.end()) {
             writer.writeLine("float saturate(float f) {");
@@ -61,16 +60,18 @@ namespace Glsl {
             writer.writeLine("}\n");
         }
 
-        if (shaderType == ShaderType::FRAGMENT && funcBody.findFirst(".Sample(") != funcBody.end()) {
-            writer.writeLine("vec4 texture_yflip(sampler2D sampler, vec2 uv) {");
-            writer.writeLine("    return texture(");
-            writer.writeLine("        sampler,");
-            writer.writeLine("        vec2(uv.x, 1.0-uv.y));");
-            writer.writeLine("}\n");
+        if (shaderType == ShaderType::FRAGMENT) {
+            if (funcBody.findFirst(".Sample(") != funcBody.end() || funcBody.findFirst(".SampleLevel(") != funcBody.end()) {
+                writer.writeLine("vec4 texture_yflip(sampler2D sampler, vec2 uv) {");
+                writer.writeLine("    return texture(");
+                writer.writeLine("        sampler,");
+                writer.writeLine("        vec2(uv.x, 1.0-uv.y));");
+                writer.writeLine("}\n");
+            }
         }
     }
 
-    String prefixIfRequired(const String& varName, const String& varKind, ShaderType shaderType) {
+    const String prefixIfRequired(const String& varName, const String& varKind, ShaderType shaderType) {
         if (((varKind == "out") && (shaderType == ShaderType::VERTEX)) ||
             ((varKind == "in") && (shaderType == ShaderType::FRAGMENT))) {
             return "vsToFs_" + varName;
@@ -128,27 +129,34 @@ namespace Glsl {
         writer.writeLine("}\n");
     }
 
+    void writeConstants(TextWriter& writer, const std::vector<CompileResult::Constant>& constants) {
+        for (const CompileResult::Constant& c : constants) {
+            writer.writeLine("const " + hlslToGlslTypes(c.type) + " " + c.name + " = " + hlslToGlslTypes(c.value) + ";");
+        }
+        writer.writeLine();
+    }
+
     void writeCBuffersAsUniforms(TextWriter& writer, const std::vector<CompileResult::CBuffer>& cBuffers) {
-        for (CompileResult::CBuffer cBuffer : cBuffers) {
+        for (const CompileResult::CBuffer& cBuffer : cBuffers) {
             for (CompileResult::CBuffer::Member member : cBuffer.members) {
                 writer.writeLine("uniform " + hlslToGlslTypes(member.type) + " " + member.name + ";");
             }
-            writer.writeLine("");
+            writer.writeLine();
         }
     }
 
     void writeTextureInputsAsUniforms(TextWriter& writer, const std::vector<String>& textureInputs) {
-        for (String input : textureInputs) {
+        for (const String& input : textureInputs) {
             writer.writeLine("uniform sampler2D " + input + ";");
         }
-        writer.writeLine("");
+        writer.writeLine();
     }
 
     void writeStructAsVars(TextWriter& writer, const CompileResult::HlslStruct& hlslStruct, const String& varKind, ShaderType shaderType) {
-        for (CompileResult::HlslStruct::Member member : hlslStruct.members) {
+        for (const CompileResult::HlslStruct::Member& member : hlslStruct.members) {
             writer.writeLine(varKind + " " + hlslToGlslTypes(member.type) + " " + prefixIfRequired(member.name, varKind, shaderType) + ";");
         }
-        writer.writeLine("");
+        writer.writeLine();
     }
 
     void handleReturns(String& body) {
@@ -172,26 +180,30 @@ namespace Glsl {
     }
 
     void handleTextureSamples(String& body, const std::vector<String>& textureInputs) {
-        for (String input : textureInputs) {
-            String::Iterator sampleCallStart = body.findFirst(input+".Sample(");
-            while (sampleCallStart != body.end()) {
-                String::Iterator uvStart = sampleCallStart;
-                Parser::skip(uvStart, Parser::isNotComma);
-                uvStart++;
-                Parser::skip(uvStart, Unicode::isSpace);
-                String::Iterator uvEnd = uvStart;
-                Parser::skipStatement(uvEnd);
-                String uv = body.substr(uvStart, uvEnd);
+        for (const String& input : textureInputs) {
+            for (int i = 0; i < 2; i++) {
+                String find = input + (i == 0 ? ".Sample(" : ".SampleLevel(");
+                String::Iterator sampleCallStart = body.findFirst(find);
 
-                String::Iterator sampleCallEnd = uvEnd;
-                Parser::skip(uvStart, std::not_fn(Parser::isBlockCloser));
-                sampleCallEnd++;
+                while (sampleCallStart != body.end()) {
+                    String::Iterator uvStart = sampleCallStart;
+                    Parser::skip(uvStart, Parser::isNotComma);
+                    uvStart++;
+                    Parser::skip(uvStart, Unicode::isSpace);
+                    String::Iterator uvEnd = uvStart;
+                    Parser::skipStatement(uvEnd);
+                    String uv = body.substr(uvStart, uvEnd);
 
-                body = body.substr(body.begin(), sampleCallStart) +
-                       "texture_yflip("+input+", "+ uv+")" +
-                       body.substr(sampleCallEnd, body.end());
+                    String::Iterator sampleCallEnd = uvEnd;
+                    Parser::skip(uvStart, std::not_fn(Parser::isBlockCloser));
+                    sampleCallEnd++;
 
-                sampleCallStart = body.findFirst(input + ".Sample(");
+                    body = body.substr(body.begin(), sampleCallStart) +
+                        "texture_yflip(" + input + ", " + uv + ")" +
+                        body.substr(sampleCallEnd, body.end());
+
+                    sampleCallStart = body.findFirst(input + ".Sample(");
+                }
             }
         }
     }
@@ -199,6 +211,7 @@ namespace Glsl {
     void writeMain(TextWriter& writer, const CompileResult& compileResult, ShaderType shaderType) {
         String body = compileResult.hlslFunctionBody;
         body = hlslToGlslTypes(body)
+            .replace("[loop]", "")
             .replace(compileResult.inputParameterName + ".", prefixIfRequired("", "in", shaderType))
             .replace("output", "out_put") //reserved keyword in glsl
             .replace("input", "in_put") //reserved keyword in glsl
@@ -212,15 +225,17 @@ namespace Glsl {
 
     void convert(const FilePath& path, const CompileResult& compileResult, ShaderType shaderType) {
         TextWriter writer(path);
-        writer.writeLine("//This file was autogenerated.\n#version 330 core\n");
+        writer.writeLine("// This file was autogenerated.\n#version 330 core\n");
+
+        writeHlslFuncs(writer, compileResult.hlslFunctionBody, shaderType);
+
+        writeConstants(writer, compileResult.constants);
 
         writeCBuffersAsUniforms(writer, compileResult.cBuffers);
         if (shaderType == ShaderType::FRAGMENT) { writeTextureInputsAsUniforms(writer, compileResult.textureInputs); }
 
         writeStructAsVars(writer, compileResult.inputType, "in", shaderType);
         writeStructAsVars(writer, compileResult.returnType, "out", shaderType);
-
-        writeHlslFuncs(writer, compileResult.hlslFunctionBody, shaderType);
 
         writeStructDef(writer, compileResult.returnType);
         writeStructReturnAux(writer, compileResult.returnType, shaderType);

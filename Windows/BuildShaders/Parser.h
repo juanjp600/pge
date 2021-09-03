@@ -9,17 +9,11 @@
 
 namespace Parser {
     bool isNotDigitOrSemicolon(PGE::char16 chr);
-
     bool isNotComma(PGE::char16 chr);
-
     bool isOpeningBrace(PGE::char16 chr);
-
     bool isClosingBrace(PGE::char16 chr);
-
     bool isBlockOpener(PGE::char16 chr);
-
     bool isBlockCloser(PGE::char16 chr);
-
     bool isIdentifierCharacter(PGE::char16 chr);
 
     template <typename T>
@@ -30,7 +24,6 @@ namespace Parser {
     }
 
     void skipBlock(PGE::String::Iterator& it);
-
     void skipStatement(PGE::String::Iterator& it);
 
     void expectFixed(PGE::String::Iterator& it, PGE::char16 ch);

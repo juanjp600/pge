@@ -172,6 +172,7 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
             }
         }
         result.textureInputs = CompileResult::extractTextureInputs(hlsl);
+        result.constants = CompileResult::extractConstants(hlsl);
     }
     return result;
 }
@@ -190,10 +191,12 @@ static void compileShader(const FilePath& path) {
     Glsl::convert(compiledPath + "fragment.glsl", fsResult, Glsl::ShaderType::FRAGMENT);
 }
 
+bool recompile = false;
+
 static void compileAndLog(const FilePath& path) {
     if (path.getExtension() == "hlsl") {
         FilePath reflectFile = path.trimExtension().makeDirectory() + "reflection.dxri";
-        if (reflectFile.exists() && path.getLastModifyTime() <= reflectFile.getLastModifyTime()) {
+        if (!recompile && reflectFile.exists() && path.getLastModifyTime() <= reflectFile.getLastModifyTime()) {
             std::cout << "Already compiled: " + path.str() + '\n';
         } else {
             std::cout << "Compiling: " + path.str() + '\n';
@@ -215,6 +218,7 @@ int main(int argc, char** argv) {
     std::vector<FilePath> shaderPaths = FilePath::fromStr(folderName).enumerateFiles();
 
 #if 0
+    recompile = true;
     for (auto path : shaderPaths) { compileAndLog(path); }
 #else
     std::for_each(std::execution::par_unseq, shaderPaths.begin(), shaderPaths.end(), compileAndLog);

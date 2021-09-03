@@ -22,6 +22,11 @@ struct CompileResult {
 
         std::vector<CompileResult::HlslStruct::Member>::const_iterator findMember(const PGE::String& semanticName, int semanticIndex) const;
     };
+    struct Constant {
+        PGE::String type;
+        PGE::String name;
+        PGE::String value;
+    };
     struct CBuffer {
         struct Member {
             PGE::String type;
@@ -35,6 +40,7 @@ struct CompileResult {
     };
     HlslStruct inputType; PGE::String inputParameterName;
     HlslStruct returnType;
+    std::vector<Constant> constants;
     std::vector<CBuffer> cBuffers;
     std::vector<PGE::String> textureInputs;
     PGE::String hlslFunctionBody;
@@ -42,6 +48,7 @@ struct CompileResult {
 
     static CompileResult::HlslStruct parseHlslStruct(const PGE::String& hlsl, const PGE::String& structName);
 
+    static std::vector<Constant> extractConstants(const PGE::String& hlsl);
     static std::vector<PGE::String> extractHlslDeclNames(const PGE::String& hlsl, const PGE::String& declType);
     static std::vector<PGE::String> extractCBufferNames(const PGE::String& hlsl);
     static std::vector<PGE::String> extractTextureInputs(const PGE::String& hlsl);

@@ -71,6 +71,38 @@ CompileResult::HlslStruct CompileResult::parseHlslStruct(const String& hlsl, con
     return parsedStruct;
 }
 
+static const inline String CONST_SPECIFIERS = "static const ";
+
+std::vector<CompileResult::Constant> CompileResult::extractConstants(const String& hlsl) {
+    std::vector<CompileResult::Constant> ret;
+    String::Iterator constPos = hlsl.findFirst(CONST_SPECIFIERS);
+    while (constPos != hlsl.end()) {
+        ret.emplace_back();
+        String::Iterator before; String::Iterator after;
+
+        before = constPos + CONST_SPECIFIERS.length();
+        Parser::skip(before, Unicode::isSpace);
+        after = before;
+        Parser::skip(after, Parser::isIdentifierCharacter);
+        ret.back().type = hlsl.substr(before, after);
+
+        Parser::skip(after, Unicode::isSpace);
+        before = after;
+        Parser::skip(after, Parser::isIdentifierCharacter);
+        ret.back().name = hlsl.substr(before, after);
+
+        Parser::skip(after, Unicode::isSpace);
+        Parser::expectFixed(after, L'=');
+        Parser::skip(after, Unicode::isSpace);
+        before = after;
+        Parser::skip(after, [](char16 ch) { return ch != ';'; });
+        ret.back().value = hlsl.substr(before, after);
+
+        constPos = hlsl.findFirst(CONST_SPECIFIERS, after);
+    }
+    return ret;
+}
+
 std::vector<String> CompileResult::extractHlslDeclNames(const String& hlsl, const String& declType) {
     std::vector<String> retVal;
 
