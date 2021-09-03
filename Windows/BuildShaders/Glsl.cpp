@@ -9,16 +9,26 @@ using namespace PGE;
 namespace Glsl {
     String hlslToGlslTypes(const String& hlsl) {
         return hlsl
+            .replace("float2x2", "mat2")
+            .replace("float3x3", "mat3")
+            .replace("matrix", "mat4")
             .replace("float2", "vec2")
             .replace("float3", "vec3")
-            .replace("float4", "vec4")
-            .replace("matrix", "mat4");
+            .replace("float4", "vec4");
     }
 
     void writeHlslFuncs(TextWriter& writer, const String& funcBody, ShaderType shaderType) {
         //write definitions for intrinsic functions that the shader actually uses
         if (funcBody.findFirst("mul") != funcBody.end()) {
             writer.writeLine("vec4 mul(mat4 m, vec4 v) {");
+            writer.writeLine("    return v * m;");
+            writer.writeLine("}\n");
+
+            writer.writeLine("vec3 mul(mat3 m, vec3 v) {");
+            writer.writeLine("    return v * m;");
+            writer.writeLine("}\n");
+
+            writer.writeLine("vec2 mul(mat2 m, vec2 v) {");
             writer.writeLine("    return v * m;");
             writer.writeLine("}\n");
         }

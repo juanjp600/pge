@@ -100,7 +100,7 @@ class GLShader : public Resource<GLuint> {
                 glGetShaderiv(resource, GL_INFO_LOG_LENGTH, &result);
                 std::unique_ptr<GLchar[]> err = std::make_unique<GLchar[]>(result);
                 glGetShaderInfoLog(resource, result, NULL, err.get());
-                throw PGE_CREATE_EX("Failed to create shader (stage: " + String::from(stage) + "; error:" + err.get() + ")");
+                throw PGE_CREATE_EX("Failed to create shader (stage: " + String::from(stage) + "; error:\n" + err.get() + ")");
             }
         }
 
