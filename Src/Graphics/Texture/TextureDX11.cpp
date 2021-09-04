@@ -4,6 +4,9 @@ using namespace PGE;
 
 static DXGI_FORMAT getDXFormat(Texture::Format format) {
     switch (format) {
+        case Texture::Format::RGBA64: {
+            return DXGI_FORMAT_R16G16B16A16_UNORM;
+        } break;
         case Texture::Format::RGBA32: {
             return DXGI_FORMAT_R8G8B8A8_UNORM;
         } break;

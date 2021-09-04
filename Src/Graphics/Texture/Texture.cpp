@@ -6,6 +6,9 @@ using namespace PGE;
 
 int Texture::getBytesPerPixel(Format fmt) {
     switch (fmt) {
+        case Format::RGBA64: {
+            return 8;
+        }
         case Format::RGBA32:
         case Format::R32F: {
             return 4;

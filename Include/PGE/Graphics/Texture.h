@@ -12,6 +12,7 @@ class Graphics;
 class Texture : private PolymorphicHeap {
     public:
         enum class Format {
+            RGBA64,
             RGBA32,
             R32F,
             R8,
