@@ -195,7 +195,7 @@ namespace Glsl {
                     String uv = body.substr(uvStart, uvEnd);
 
                     String::Iterator sampleCallEnd = uvEnd;
-                    Parser::skip(uvStart, std::not_fn(Parser::isBlockCloser));
+                    Parser::skip(sampleCallEnd, std::not_fn(Parser::isBlockCloser));
                     sampleCallEnd++;
 
                     body = body.substr(body.begin(), sampleCallStart) +
