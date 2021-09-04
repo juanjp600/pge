@@ -19,23 +19,23 @@ namespace Glsl {
 
     void writeHlslFuncs(TextWriter& writer, const String& funcBody, ShaderType shaderType) {
         //write definitions for intrinsic functions that the shader actually uses
-        bool anyMacroUsers = false; // Macro users will be shot on sight.
+        bool macrosDefined = false;
         if (funcBody.findFirst("mul") != funcBody.end()) {
-            anyMacroUsers = true;
+            macrosDefined = true;
             writer.writeLine("#define mul(v, m) (m * v)");
         }
 
         if (funcBody.findFirst("lerp") != funcBody.end()) {
-            anyMacroUsers = true;
+            macrosDefined = true;
             writer.writeLine("#define lerp mix");
         }
 
         if (funcBody.findFirst("saturate") != funcBody.end()) {
-            anyMacroUsers = true;
+            macrosDefined = true;
             writer.writeLine("#define saturate(x) clamp(x, 0, 1)");
         }
 
-        if (anyMacroUsers) { writer.writeLine(); }
+        if (macrosDefined) { writer.writeLine(); }
 
         if (shaderType == ShaderType::VERTEX) {
             writer.writeLine("vec4 dx_to_gl_pos(vec4 v) {");
