@@ -22,33 +22,20 @@ namespace Glsl {
         bool anyMacroUsers = false; // Macro users will be shot on sight.
         if (funcBody.findFirst("mul") != funcBody.end()) {
             anyMacroUsers = true;
-            writer.writeLine("#define mul(v, m) (m * v)\n");
+            writer.writeLine("#define mul(v, m) (m * v)");
         }
 
         if (funcBody.findFirst("lerp") != funcBody.end()) {
             anyMacroUsers = true;
-            writer.writeLine("#define lerp mix\n");
+            writer.writeLine("#define lerp mix");
+        }
+
+        if (funcBody.findFirst("saturate") != funcBody.end()) {
+            anyMacroUsers = true;
+            writer.writeLine("#define saturate(x) clamp(x, 0, 1)");
         }
 
         if (anyMacroUsers) { writer.writeLine(); }
-
-        if (funcBody.findFirst("saturate") != funcBody.end()) {
-            writer.writeLine("float saturate(float f) {");
-            writer.writeLine("    return clamp(f, 0.0, 1.0);");
-            writer.writeLine("}\n");
-
-            writer.writeLine("vec2 saturate(vec2 v) {");
-            writer.writeLine("    return vec2(saturate(v.x), saturate(v.y));");
-            writer.writeLine("}\n");
-
-            writer.writeLine("vec3 saturate(vec3 v) {");
-            writer.writeLine("    return vec3(saturate(v.x), saturate(v.y), saturate(v.z));");
-            writer.writeLine("}\n");
-
-            writer.writeLine("vec4 saturate(vec4 v) {");
-            writer.writeLine("    return vec4(saturate(v.x), saturate(v.y), saturate(v.z), saturate(v.w));");
-            writer.writeLine("}\n");
-        }
 
         if (shaderType == ShaderType::VERTEX) {
             writer.writeLine("vec4 dx_to_gl_pos(vec4 v) {");
