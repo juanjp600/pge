@@ -11,25 +11,25 @@ static void textureImage(int width, int height, const byte* buffer, Texture::For
     switch (format) {
         case Texture::Format::RGBA64: {
             glInternalFormat = GL_RGBA16;
-            glFormat = GL_RGBA_INTEGER;
+            glFormat = GL_RGBA;
             glPixelType = GL_UNSIGNED_SHORT;
             bytesPerPixel = 8;
         } break;
         case Texture::Format::RGBA32: {
             glInternalFormat = GL_RGBA8;
-            glFormat = GL_RGBA_INTEGER;
+            glFormat = GL_RGBA;
             glPixelType = GL_UNSIGNED_BYTE;
             bytesPerPixel = 4;
         } break;
         case Texture::Format::R32F: {
-            glInternalFormat = GL_R32F;
+            glInternalFormat = GL_DEPTH_COMPONENT32F;
             glFormat = GL_DEPTH_COMPONENT;
             glPixelType = GL_FLOAT;
             bytesPerPixel = 4;
         } break;
         case Texture::Format::R8: {
             glInternalFormat = GL_R8;
-            glFormat = GL_RED_INTEGER;
+            glFormat = GL_RED;
             glPixelType = GL_UNSIGNED_BYTE;
             bytesPerPixel = 1;
         } break;
