@@ -38,22 +38,10 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 
     u32 samplerCount = reader.read<u32>();
 
-    D3D11_SAMPLER_DESC samplerDesc;
-    ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
-    samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-    samplerDesc.MaxAnisotropy = 8;
-    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    samplerDesc.MinLOD = 0;
-    samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-    samplerDesc.MipLODBias = -0.1f;
-
     ID3D11Device* dxDevice = graphics.getDxDevice();
     dxSamplerState.reserve(samplerCount);
     for (int i = 0; i < (int)samplerCount; i++) {
-        dxSamplerState.emplace_back(resourceManager.addNewResource<D3D11SamplerState>(dxDevice, samplerDesc));
+        dxSamplerState.emplace_back(resourceManager.addNewResource<D3D11SamplerState>(dxDevice));
     }
 
     std::vector<byte> vertexShaderBytecode = (path + "vertex.dxbc").readBytes();
@@ -159,19 +147,7 @@ ShaderDX11::CBufferInfo::CBufferInfo(const GraphicsDX11& gfx, const String& nm, 
     if ((cBufferSize % 16) != 0) { cBufferSize += 16 - (cBufferSize % 16); }
     data = new byte[cBufferSize];
 
-    D3D11_BUFFER_DESC cBufferDesc;
-    D3D11_SUBRESOURCE_DATA cBufferSubresourceData;
-
-    ZeroMemory(&cBufferDesc, sizeof(D3D11_BUFFER_DESC));
-    cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    cBufferDesc.ByteWidth = cBufferSize;
-    cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    cBufferDesc.CPUAccessFlags = 0;
-
-    ZeroMemory(&cBufferSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-    cBufferSubresourceData.pSysMem = data;
-
-    dxCBuffer = resourceManager.addNewResource<D3D11Buffer>(gfx.getDxDevice(), cBufferDesc, cBufferSubresourceData);
+    dxCBuffer = resourceManager.addNewResource<D3D11Buffer>(gfx.getDxDevice(), D3D11Buffer::Type::CONSTANT, data, cBufferSize);
 
     dxContext = gfx.getDxContext();
 

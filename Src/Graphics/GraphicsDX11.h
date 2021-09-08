@@ -47,7 +47,6 @@ class GraphicsDX11 : public GraphicsSpecialized<ShaderDX11, MeshDX11, TextureDX1
     private:
         DXGIFactory1::View dxgiFactory;
 
-        DXGI_SWAP_CHAIN_DESC dxSwapChainDesc;
         DXGISwapChain::View dxSwapChain;
 
         D3D11Device::View dxDevice;
@@ -58,10 +57,8 @@ class GraphicsDX11 : public GraphicsSpecialized<ShaderDX11, MeshDX11, TextureDX1
         D3D11DepthStencilView::View dxZBufferView;
         std::vector<ID3D11DepthStencilState*> dxDepthStencilState;
 
-        D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
         D3D11RasterizerState::View dxRasterizerState;
 
-        D3D11_BLEND_DESC dxBlendStateDesc;
         D3D11BlendState::View dxBlendState;
 
         D3D11_VIEWPORT dxViewport;

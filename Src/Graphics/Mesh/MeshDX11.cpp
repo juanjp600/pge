@@ -8,31 +8,13 @@ void MeshDX11::uploadInternalData() {
     ID3D11Device* dxDevice = graphics.getDxDevice();
 
     if (vertices.getDataSize() > 0) {
-        ZeroMemory(&dxVertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
-        dxVertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-        dxVertexBufferDesc.ByteWidth = (UINT)vertices.getDataSize();
-        dxVertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        dxVertexBufferDesc.CPUAccessFlags = 0;
-
-        ZeroMemory(&dxVertexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
-        dxVertexBufferData.pSysMem = vertices.getData();
-
         resourceManager.deleteResource(dxVertexBuffer);
-        dxVertexBuffer = resourceManager.addNewResource<D3D11Buffer>(dxDevice, dxVertexBufferDesc, dxVertexBufferData);
+        dxVertexBuffer = resourceManager.addNewResource<D3D11Buffer>(dxDevice, D3D11Buffer::Type::VERTEX, (void*)vertices.getData(), vertices.getDataSize());
     }
 
     if (indices.size() > 0) {
-        ZeroMemory(&dxIndexBufferDesc, sizeof(D3D11_BUFFER_DESC));
-        dxIndexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-        dxIndexBufferDesc.ByteWidth = sizeof(u32)*(UINT)indices.size();
-        dxIndexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-        dxIndexBufferDesc.CPUAccessFlags = 0;
-
-        ZeroMemory(&dxIndexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
-        dxIndexBufferData.pSysMem = indices.data();
-
         resourceManager.deleteResource(dxIndexBuffer);
-        dxIndexBuffer = resourceManager.addNewResource<D3D11Buffer>(dxDevice, dxIndexBufferDesc, dxIndexBufferData);
+        dxIndexBuffer = resourceManager.addNewResource<D3D11Buffer>(dxDevice, D3D11Buffer::Type::INDEX, indices.data(), sizeof(u32) * (UINT)indices.size());
     }
 }
 

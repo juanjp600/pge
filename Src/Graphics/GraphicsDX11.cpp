@@ -1,11 +1,10 @@
 #include "GraphicsDX11.h"
 
-#include <SDL_syswm.h>
 #include <stdlib.h>
 
 using namespace PGE;
 
-//REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
+// REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
 
 GraphicsDX11::GraphicsDX11(const String& name, int w, int h, bool fs, int x, int y)
     : GraphicsSpecialized("DirectX 11", name, w, h, fs, x, y, SDL_WINDOW_SHOWN) {
@@ -23,47 +22,20 @@ GraphicsDX11::GraphicsDX11(const String& name, int w, int h, bool fs, int x, int
 
     dxgiFactory = resourceManager.addNewResource<DXGIFactory1>();
 
-    SDL_SysWMinfo sysWMinfo;
-    SDL_VERSION(&sysWMinfo.version); //REMINDER: THIS LINE IS VERY IMPORTANT
-    bool validInfo = SDL_GetWindowWMInfo(getWindow(), &sysWMinfo);
-    PGE_ASSERT(validInfo, "Failed to initialize SDL version info (SDLERROR: " + String(SDL_GetError()) + ")");
-
-    ZeroMemory(&dxSwapChainDesc, sizeof(dxSwapChainDesc));
-    dxSwapChainDesc.BufferCount = 1;
-    dxSwapChainDesc.BufferDesc.Width = w;
-    dxSwapChainDesc.BufferDesc.Height = h;
-    dxSwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    dxSwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-    dxSwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-    dxSwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    dxSwapChainDesc.OutputWindow = sysWMinfo.info.win.window;
-    dxSwapChainDesc.SampleDesc.Count = 1;
-    dxSwapChainDesc.SampleDesc.Quality = 0;
-    dxSwapChainDesc.Windowed = TRUE;
-
     dxDevice = resourceManager.addNewResource<D3D11Device>();
     dxContext = resourceManager.addNewResource<D3D11ImmediateContext>(dxDevice);
-    dxSwapChain = resourceManager.addNewResource<DXGISwapChain>(dxgiFactory, dxDevice, dxSwapChainDesc);
+    dxSwapChain = resourceManager.addNewResource<DXGISwapChain>(dxDevice, dxgiFactory, w, h, getWindow());
     dxBackBufferRtv = resourceManager.addNewResource<D3D11BackBufferRtv>(dxDevice, dxSwapChain);
 
     dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::DEPTH_STENCIL, w, h, DXGI_FORMAT_D24_UNORM_S8_UINT);
 
-    dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture, DXGI_FORMAT_D24_UNORM_S8_UINT);
+    dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture);
     dxContext->OMSetRenderTargets(1, &dxBackBufferRtv, dxZBufferView);
 
     cullingMode = Culling::NONE;
     setCulling(Culling::BACK);
 
-    ZeroMemory(&dxBlendStateDesc, sizeof(D3D11_BLEND_DESC));
-    dxBlendStateDesc.RenderTarget[0].BlendEnable = true;
-    dxBlendStateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    dxBlendStateDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-    dxBlendStateDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-    dxBlendStateDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-    dxBlendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
-    dxBlendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    dxBlendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    dxBlendState = resourceManager.addNewResource<D3D11BlendState>(dxDevice, dxBlendStateDesc);
+    dxBlendState = resourceManager.addNewResource<D3D11BlendState>(dxDevice);
 
     dxContext->OMSetBlendState(dxBlendState, 0, 0xffffffff);
 
@@ -185,28 +157,7 @@ void GraphicsDX11::setCulling(Culling mode) {
         resourceManager.deleteResource(dxRasterizerState);
     }
 
-    ZeroMemory(&dxRasterizerStateDesc, sizeof(D3D11_RASTERIZER_DESC));
-    dxRasterizerStateDesc.AntialiasedLineEnable = false;
-    D3D11_CULL_MODE dxMode;
-    switch (mode) {
-        default:
-        case Culling::BACK: {
-            dxMode = D3D11_CULL_BACK;
-        } break;
-        case Culling::FRONT: {
-            dxMode = D3D11_CULL_FRONT;
-        } break;
-        case Culling::NONE: {
-            dxMode = D3D11_CULL_NONE;
-        } break;
-    }
-    dxRasterizerStateDesc.CullMode = dxMode;
-    dxRasterizerStateDesc.DepthClipEnable = true;
-    dxRasterizerStateDesc.FillMode = D3D11_FILL_SOLID;
-    dxRasterizerStateDesc.ScissorEnable = false;
-    dxRasterizerStateDesc.MultisampleEnable = false;
-    dxRasterizerStateDesc.FrontCounterClockwise = true;
-    dxRasterizerState = resourceManager.addNewResource<D3D11RasterizerState>(dxDevice, dxRasterizerStateDesc);
+    dxRasterizerState = resourceManager.addNewResource<D3D11RasterizerState>(dxDevice, mode);
 
     dxContext->RSSetState(dxRasterizerState);
 

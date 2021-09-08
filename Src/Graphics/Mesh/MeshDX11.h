@@ -23,12 +23,7 @@ class MeshDX11 : public Mesh {
     private:
         GraphicsDX11& graphics;
 
-        D3D11_BUFFER_DESC dxVertexBufferDesc;
-        D3D11_SUBRESOURCE_DATA dxVertexBufferData;
         D3D11Buffer::View dxVertexBuffer;
-
-        D3D11_BUFFER_DESC dxIndexBufferDesc;
-        D3D11_SUBRESOURCE_DATA dxIndexBufferData;
         ResourceView<ID3D11Buffer*> dxIndexBuffer;
 
         ResourceManager resourceManager;
