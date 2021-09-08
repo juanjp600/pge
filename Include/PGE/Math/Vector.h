@@ -45,7 +45,7 @@ class Vector2f : private NoHeap {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector2f(); }
             if (Math::equalFloats(1.f, lenSqr)) { }
-            return *this / sqrtf(lenSqr);
+            return *this / sqrt(lenSqr);
         }
 
         constexpr const Vector2f reflect(const Vector2f& normal) const {
@@ -55,10 +55,10 @@ class Vector2f : private NoHeap {
         }
 
         constexpr float lengthSquared() const { return x * x + y * y; }
-        inline float length() const { return sqrtf(lengthSquared()); }
+        inline float length() const { return sqrt(lengthSquared()); }
 
         constexpr float distanceSquared(const Vector2f& other) const { return (*this - other).lengthSquared(); }
-        inline float distance(const Vector2f& other) const { return sqrtf(distanceSquared(other)); }
+        inline float distance(const Vector2f& other) const { return sqrt(distanceSquared(other)); }
 };
 constexpr const Vector2f operator*(float f, const Vector2f& vec) { return vec * f; }
 
@@ -102,8 +102,8 @@ class Vector3f : private NoHeap {
         constexpr const Vector3f normalize() const {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector3f(); }
-            if (Math::equalFloats(1.f, lenSqr)) { }
-            return *this / sqrtf(lenSqr);
+            if (Math::equalFloats(1.f, lenSqr)) { return *this; }
+            return *this / sqrt(lenSqr);
         }
 
         constexpr const Vector3f reflect(const Vector3f& normal) const {
@@ -113,10 +113,10 @@ class Vector3f : private NoHeap {
         }
 
         constexpr float lengthSquared() const { return x * x + y * y + z * z; }
-        inline float length() const { return sqrtf(lengthSquared()); }
+        inline float length() const { return sqrt(lengthSquared()); }
 
         constexpr float distanceSquared(const Vector3f& other) const { return (*this - other).lengthSquared(); }
-        inline float distance(const Vector3f& other) const { return sqrtf(distanceSquared(other)); }
+        inline float distance(const Vector3f& other) const { return sqrt(distanceSquared(other)); }
 };
 constexpr const Vector3f operator*(float f, const Vector3f& vec) { return vec * f; }
 
@@ -161,7 +161,7 @@ class Vector4f : private NoHeap {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector4f(); }
             if (Math::equalFloats(1.f, lenSqr)) { }
-            return *this / sqrtf(lenSqr);
+            return *this / sqrt(lenSqr);
         }
 
         constexpr const Vector4f reflect(const Vector4f& normal) const {
@@ -171,10 +171,10 @@ class Vector4f : private NoHeap {
         }
 
         constexpr float lengthSquared() const { return x * x + y * y + z * z + w * w; }
-        inline float length() const { return sqrtf(lengthSquared()); }
+        inline float length() const { return sqrt(lengthSquared()); }
 
         constexpr float distanceSquared(const Vector4f& other) const { return (*this - other).lengthSquared(); }
-        inline float distance(const Vector4f& other) const { return sqrtf(distanceSquared(other)); }
+        inline float distance(const Vector4f& other) const { return sqrt(distanceSquared(other)); }
 };
 constexpr const Vector4f operator*(float f, const Vector4f& vec) { return vec * f; }
 
@@ -212,10 +212,10 @@ class Vector2i : private NoHeap {
         constexpr int lengthSquared() const { return x * x + y * y; }
         // Sacrificing vendor specific sqrt optimizations are not worth the constexpr here.
         // Fuck you, C++ standard!
-        inline float length() const { return sqrtf((float)lengthSquared()); }
+        inline float length() const { return sqrt((float)lengthSquared()); }
 
         constexpr int distanceSquared(const Vector2i& other) const { return ((*this) - other).lengthSquared(); }
-        inline float distance(const Vector2i& other) const { return sqrtf((float)distanceSquared(other)); }
+        inline float distance(const Vector2i& other) const { return sqrt((float)distanceSquared(other)); }
 };
 constexpr const Vector2i operator*(int i, const Vector2i& vec) { return vec * i; }
 

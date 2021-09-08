@@ -22,6 +22,13 @@ class Matrix4x4f : private NoHeap {
                 r2c0, r2c1, r2c2, r2c3,
                 r3c0, r3c1, r3c2, r3c3,
             } { }
+        // Interpreted as column vectors
+        constexpr Matrix4x4f(const Vector4f& v1, const Vector4f& v2, const Vector4f& v3, const Vector4f& v4) : elements {
+            v1.x, v2.x, v3.x, v4.x,
+            v1.y, v2.y, v3.y, v4.y,
+            v1.z, v2.z, v3.z, v4.z,
+            v1.w, v2.w, v3.w, v4.w
+        } { }
 
         static constexpr const Matrix4x4f translate(const Vector3f& position) {
             return Matrix4x4f(
@@ -62,6 +69,15 @@ class Matrix4x4f : private NoHeap {
             );
 
             return yawMat * pitchMat * rollMat;
+        }
+
+        static constexpr const Matrix4x4f lookAt(const Vector3f& from, const Vector3f& to, const Vector3f& fixedDir = Vector3f(0.f, 1.f, 0.f)) {
+            Vector3f forward = (from - to).normalize();
+            Vector3f right = fixedDir.crossProduct(forward).normalize();
+            Vector3f up = forward.crossProduct(right).normalize();
+            return Matrix4x4f(
+                Vector4f(right, 0.f), Vector4f(up, 0.f), Vector4f(forward, 0.f), Vector4f(0.f, 0.f, 0.f, 1.f)
+            );
         }
 
         static constexpr const Matrix4x4f scale(const Vector3f& scale) {
