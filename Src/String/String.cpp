@@ -969,20 +969,22 @@ const String String::toLower() const {
 }
 
 const String String::trim() const {
-    if (byteLength() == 0) { return *this; }
+    if (isEmpty()) { return *this; }
 
+    int newLen = data->_strLength;
     Iterator leading = begin();
     while (leading != end() && Unicode::isSpace(*leading)) {
-        leading++;
+        leading++; newLen--;
     }
     if (leading == end()) {
-        return "";
+        return String();
     }
 
     ReverseIterator trailing = rbegin();
-    while (Unicode::isSpace(*trailing)) { trailing++; }
+    while (Unicode::isSpace(*trailing)) { trailing++; newLen--; }
 
     String ret(*this, leading.getBytePosition(), trailing.getBytePosition() - leading.getBytePosition() + 1);
+    ret.data->_strLength = newLen;
     return ret;
 }
 
