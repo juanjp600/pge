@@ -31,6 +31,7 @@ String::Iterator::Iterator(const String& str, int byteIndex, int chIndex) {
 }
 
 void String::Iterator::increment() {
+    if (index < 0) { *this = ref->begin(); return; }
     index += Unicode::measureCodepoint(ref->cstr()[index]);
     charIndex++;
     // We reached the end and get the str length for free.
