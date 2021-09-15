@@ -71,9 +71,57 @@ CompileResult::HlslStruct CompileResult::parseHlslStruct(const String& hlsl, con
     return parsedStruct;
 }
 
+const std::vector<CompileResult::Function> CompileResult::extractFunctions(const String& hlsl) {
+    std::vector<Function> ret;
+    String::Iterator closingPos = hlsl.findFirst(")");
+    while (closingPos != hlsl.end()) {
+        String::Iterator startBody = closingPos + 1;
+        Parser::skip(startBody, Unicode::isSpace);
+        if (*startBody == L'{') {
+            // This might be a function!
+            int depth = 0;
+            String::Iterator argsBegin = closingPos;
+            while (depth >= 0) {
+                argsBegin--;
+                if (*argsBegin == L')') {
+                    depth++;
+                } else if (*argsBegin == L'(') {
+                    depth--;
+                }
+            }
+
+            String::ReverseIterator nameEnd = argsBegin - 1;
+            Parser::skip(nameEnd, Unicode::isSpace);
+            String::ReverseIterator nameBegin = nameEnd;
+            Parser::skip(nameBegin, Parser::isIdentifierCharacter);
+
+            String name = hlsl.substr(nameBegin - 1, nameEnd - 1);
+            if (name != "VS" && name != "PS") {
+                String::ReverseIterator typeEnd = nameBegin + 1;
+                Parser::skip(typeEnd, Unicode::isSpace);
+                String::ReverseIterator typeStart = typeEnd;
+                Parser::skip(typeStart, Parser::isIdentifierCharacter);
+
+                if (typeStart != typeEnd) {
+                    String::Iterator endBody = startBody;
+                    Parser::skipBlock(endBody);
+
+                    Function newFunc;
+                    newFunc.name = name;
+                    newFunc.func = hlsl.substr(typeStart - 1, endBody);
+                    ret.emplace_back(newFunc);
+                }
+            }
+        }
+
+        closingPos = hlsl.findFirst(")", closingPos + 1);
+    }
+    return ret;
+}
+
 static const inline String CONST_SPECIFIERS = "static const ";
 
-std::vector<CompileResult::Constant> CompileResult::extractConstants(const String& hlsl) {
+const std::vector<CompileResult::Constant> CompileResult::extractConstants(const String& hlsl) {
     std::vector<CompileResult::Constant> ret;
     String::Iterator constPos = hlsl.findFirst(CONST_SPECIFIERS);
     while (constPos != hlsl.end()) {
@@ -103,7 +151,7 @@ std::vector<CompileResult::Constant> CompileResult::extractConstants(const Strin
     return ret;
 }
 
-std::vector<String> CompileResult::extractHlslDeclNames(const String& hlsl, const String& declType) {
+const std::vector<String> CompileResult::extractHlslDeclNames(const String& hlsl, const String& declType) {
     std::vector<String> retVal;
 
     String::Iterator declPos = hlsl.findFirst(declType+" ");
@@ -121,11 +169,11 @@ std::vector<String> CompileResult::extractHlslDeclNames(const String& hlsl, cons
     return retVal;
 }
 
-std::vector<String> CompileResult::extractCBufferNames(const String& hlsl) {
+const std::vector<String> CompileResult::extractCBufferNames(const String& hlsl) {
     return extractHlslDeclNames(hlsl, "cbuffer");
 }
 
-std::vector<String> CompileResult::extractTextureInputs(const String& hlsl) {
+const std::vector<String> CompileResult::extractTextureInputs(const String& hlsl) {
     return extractHlslDeclNames(hlsl, "Texture2D");
 }
 

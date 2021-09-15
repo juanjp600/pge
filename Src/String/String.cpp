@@ -832,6 +832,10 @@ int String::byteLength() const {
     return data->strByteLength;
 }
 
+bool String::contains(const String& fnd) const {
+    return findFirst(fnd) != begin();
+}
+
 const String::Iterator String::findFirst(const String& fnd, int from) const {
     return findFirst(fnd, begin() + from);
 }

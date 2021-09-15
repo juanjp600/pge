@@ -27,6 +27,10 @@ struct CompileResult {
         PGE::String name;
         PGE::String value;
     };
+    struct Function {
+        PGE::String name;
+        PGE::String func;
+    };
     struct CBuffer {
         struct Member {
             PGE::String type;
@@ -40,6 +44,7 @@ struct CompileResult {
     };
     HlslStruct inputType; PGE::String inputParameterName;
     HlslStruct returnType;
+    std::vector<Function> functions;
     std::vector<Constant> constants;
     std::vector<CBuffer> cBuffers;
     std::vector<PGE::String> textureInputs;
@@ -48,10 +53,11 @@ struct CompileResult {
 
     static CompileResult::HlslStruct parseHlslStruct(const PGE::String& hlsl, const PGE::String& structName);
 
-    static std::vector<Constant> extractConstants(const PGE::String& hlsl);
-    static std::vector<PGE::String> extractHlslDeclNames(const PGE::String& hlsl, const PGE::String& declType);
-    static std::vector<PGE::String> extractCBufferNames(const PGE::String& hlsl);
-    static std::vector<PGE::String> extractTextureInputs(const PGE::String& hlsl);
+    static const std::vector<Function> extractFunctions(const PGE::String& hlsl);
+    static const std::vector<Constant> extractConstants(const PGE::String& hlsl);
+    static const std::vector<PGE::String> extractHlslDeclNames(const PGE::String& hlsl, const PGE::String& declType);
+    static const std::vector<PGE::String> extractCBufferNames(const PGE::String& hlsl);
+    static const std::vector<PGE::String> extractTextureInputs(const PGE::String& hlsl);
     static CompileResult::CBuffer parseCBuffer(const PGE::String& hlsl, const PGE::String& cBufferName);
 
     static void extractFunctionData(const PGE::String& hlsl, const PGE::String& functionName, CompileResult& compileResult);

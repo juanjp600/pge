@@ -164,6 +164,12 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
         writer.writeBytes((byte*)result.compiledD3dBlob->GetBufferPointer(), (int)result.compiledD3dBlob->GetBufferSize());
 
         CompileResult::extractFunctionData(hlsl, dxEntryPoint, result);
+        std::vector<CompileResult::Function> funcs = CompileResult::extractFunctions(hlsl);
+        for (const CompileResult::Function& f : funcs) {
+            if (result.hlslFunctionBody.contains(f.name)) {
+                result.functions.push_back(f);
+            }
+        }
         std::vector<String> cBufferNames = CompileResult::extractCBufferNames(hlsl);
         for (const String& cBufName : cBufferNames) {
             CompileResult::CBuffer cBuffer = CompileResult::parseCBuffer(hlsl, cBufName);
@@ -183,6 +189,7 @@ static void compileShader(const FilePath& path) {
     FilePath compiledPath = path.trimExtension().makeDirectory();
     compiledPath.createDirectory();
 
+    // TODO: The parsing inside here should only be done once.
     CompileResult vsResult = compileDXBC(compiledPath + "vertex.dxbc", "VS", input);
     CompileResult fsResult = compileDXBC(compiledPath + "fragment.dxbc", "PS", input); //it's called a fucking fragment shader, microsoft is wrong about this
     generateDXReflectionInformation(compiledPath + "reflection.dxri", vsResult, fsResult);
@@ -217,7 +224,7 @@ int main(int argc, char** argv) {
 
     std::vector<FilePath> shaderPaths = FilePath::fromStr(folderName).enumerateFiles();
 
-#if 0
+#if 1
     recompile = true;
     for (auto path : shaderPaths) { compileAndLog(path); }
 #else

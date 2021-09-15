@@ -25,7 +25,7 @@ bool Parser::isBlockCloser(PGE::char16 chr) {
 }
 
 bool Parser::isIdentifierCharacter(PGE::char16 chr) {
-    return !(PGE::Unicode::isSpace(chr) || (chr == ',') || (chr == ';') || (chr == ':') || (chr == '(') || (chr == ')'));
+    return !(PGE::Unicode::isSpace(chr) || (chr == ',') || (chr == ';') || (chr == ':') || isBlockOpener(chr) || isBlockCloser(chr));
 }
 
 void Parser::skipBlock(PGE::String::Iterator& it) {

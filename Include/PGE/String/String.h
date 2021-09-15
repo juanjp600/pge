@@ -218,6 +218,8 @@ class String : private NoHeap {
         /// O(1)
         int byteLength() const;
 
+        bool contains(const String& fnd) const;
+
         const Iterator findFirst(const String& fnd, int from = 0) const;
         const Iterator findFirst(const String& fnd, const Iterator& from) const;
         const ReverseIterator findLast(const String& fnd, int fromEnd = 0) const;
