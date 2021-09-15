@@ -224,7 +224,7 @@ int main(int argc, char** argv) {
 
     std::vector<FilePath> shaderPaths = FilePath::fromStr(folderName).enumerateFiles();
 
-#if 1
+#if 0
     recompile = true;
     for (auto path : shaderPaths) { compileAndLog(path); }
 #else
