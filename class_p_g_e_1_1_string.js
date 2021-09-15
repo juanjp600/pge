@@ -23,6 +23,7 @@ var class_p_g_e_1_1_string =
     [ "\u202AbinToInt", "class_p_g_e_1_1_string.html#ad39df4bc9a32f47717cc12a075e347b5", null ],
     [ "\u202AbyteLength", "class_p_g_e_1_1_string.html#ac3e19338d386c9009001969a4169c4b9", null ],
     [ "\u202AcharAt", "class_p_g_e_1_1_string.html#ade1b91ab2224997c54fba7f32da1297b", null ],
+    [ "\u202Acontains", "class_p_g_e_1_1_string.html#ac5268637dd802a9b57d83fe40eefdb3e", null ],
     [ "\u202Acstr", "class_p_g_e_1_1_string.html#adc967f43aadf3ca053a0a9c9f4d7671c", null ],
     [ "\u202Aend", "class_p_g_e_1_1_string.html#a435169022e35b301f7a0de2985ae5b4c", null ],
     [ "\u202Aequals", "class_p_g_e_1_1_string.html#a7b132547be315be041f085418b98497c", null ],
