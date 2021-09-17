@@ -141,9 +141,13 @@ void InputManagerInternal::update() {
             mousePos.x = (float)pos.x;
             // Cocoa's origin is bottom-left, convert to top-left.
             mousePos.y = (float)window->getHeight() - pos.y;
+
+            // TODO: mouseDelta on OS X.
  #else
             mousePos.x = (float)event.motion.x;
             mousePos.y = (float)event.motion.y;
+            mouseDelta.x += (float)event.motion.xrel;
+            mouseDelta.y += (float)event.motion.yrel;
  #endif
         } else if (event.type == SDL_MOUSEWHEEL) {
             mouseWheelPos.x -= event.wheel.x;
@@ -357,6 +361,12 @@ const Vector2f& InputManagerInternal::getMousePosition() const {
     return mousePos;
 }
 
+const Vector2f InputManagerInternal::consumeMouseDelta() {
+    Vector2f ret = mouseDelta;
+    mouseDelta = Vector2f();
+    return ret;
+}
+
 void InputManagerInternal::setMousePosition(const Vector2f& position) {
     if (!graphics.isWindowFocused()) { return; }
 
@@ -380,11 +390,13 @@ void InputManagerInternal::setMousePosition(const Vector2f& position) {
 #endif
 }
 
-void InputManagerInternal::setMouseVisibility(bool visible) {
-    SDL_ShowCursor(visible ? 1 : 0);
+void InputManagerInternal::setMouseRelativeInput(bool relative) {
+    int res = SDL_SetRelativeMouseMode(relative ? SDL_TRUE : SDL_FALSE);
+    // It's fine if it's not available (-1).
+    PGE_ASSERT(res == 0 || res == -1, "Could not set relative mouse input");
 }
 
-Vector2i InputManagerInternal::getMouseWheelDelta() {
+Vector2i InputManagerInternal::consumeMouseWheelDelta() {
     Vector2i mwp = mouseWheelPos;
     mouseWheelPos = Vectors::ZERO2I;
     return mwp;

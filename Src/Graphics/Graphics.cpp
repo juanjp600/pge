@@ -31,10 +31,6 @@ void Graphics::update() {
     }
 }
 
-void Graphics::setMouseCaptured(bool captured) const {
-    SDL_SetWindowGrab(((GraphicsInternal*)this)->getWindow(), captured ? SDL_TRUE : SDL_FALSE);
-}
-
 void Graphics::setScreenPosition(const Vector2i& pos) const {
     SDL_SetWindowPosition(((GraphicsInternal*)this)->getWindow(), pos.x, pos.y);
 }

@@ -24,9 +24,10 @@ class InputManager : private PolymorphicHeap {
         virtual bool isControllerValid(Controller* controller) const = 0;
 
         virtual const Vector2f& getMousePosition() const = 0;
+        virtual const Vector2f consumeMouseDelta() = 0;
         virtual void setMousePosition(const Vector2f& position) = 0;
-        virtual void setMouseVisibility(bool visible) = 0;
-        virtual Vector2i getMouseWheelDelta() = 0;
+        virtual void setMouseRelativeInput(bool relative) = 0;
+        virtual Vector2i consumeMouseWheelDelta() = 0;
     
         virtual void startTextInputCapture() const = 0;
         virtual void stopTextInputCapture() const = 0;

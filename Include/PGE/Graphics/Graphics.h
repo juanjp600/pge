@@ -73,9 +73,6 @@ class Graphics : private PolymorphicHeap {
         bool isWindowOpen() const;
         bool isWindowFocused() const;
 
-        /// Forces the mouse to stay inside the window.
-        void setMouseCaptured(bool capture) const;
-
         /// Whether z-buffering is enabled.
         /// Default is enabled.
         virtual void setDepthTest(bool isEnabled);

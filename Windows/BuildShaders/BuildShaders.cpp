@@ -225,6 +225,7 @@ int main(int argc, char** argv) {
     std::vector<FilePath> shaderPaths = FilePath::fromStr(folderName).enumerateFiles();
 
 #if 0
+#pragma message ("RECOMPILATION IS ENABLED!!!")
     recompile = true;
     for (auto path : shaderPaths) { compileAndLog(path); }
 #else

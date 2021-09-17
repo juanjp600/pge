@@ -21,6 +21,7 @@ class InputManagerInternal : public InputManager {
 
         std::unordered_set<Input*> inputs;
         Vector2f mousePos;
+        Vector2f mouseDelta;
         Vector2i mouseWheelPos;
 
         std::vector<class ControllerInternal*> openControllers;
@@ -42,9 +43,10 @@ class InputManagerInternal : public InputManager {
         bool isControllerValid(Controller* controller) const override;
 
         const Vector2f& getMousePosition() const override;
+        const Vector2f consumeMouseDelta() override;
         void setMousePosition(const Vector2f& position) override;
-        void setMouseVisibility(bool visible) override;
-        Vector2i getMouseWheelDelta() override;
+        void setMouseRelativeInput(bool relative) override;
+        Vector2i consumeMouseWheelDelta() override;
 
         void startTextInputCapture() const override;
         void stopTextInputCapture() const override;
