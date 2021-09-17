@@ -23,7 +23,6 @@ var class_p_g_e_1_1_graphics =
     [ "\u202AresetRenderTarget", "class_p_g_e_1_1_graphics.html#a57f1f66ffdf2e79ecd2581a788e572e8", null ],
     [ "\u202AsetCulling", "class_p_g_e_1_1_graphics.html#a449fc76e49f2b27cb56c077e2b33b216", null ],
     [ "\u202AsetDepthTest", "class_p_g_e_1_1_graphics.html#ad07f9d967947dab85825e31a53e2fd6e", null ],
-    [ "\u202AsetMouseCaptured", "class_p_g_e_1_1_graphics.html#a5737a1d8644235d1965564bd72be1d1a", null ],
     [ "\u202AsetRenderTarget", "class_p_g_e_1_1_graphics.html#a836e2cd6f3f94ebed4a2cec357168e63", null ],
     [ "\u202AsetRenderTargets", "class_p_g_e_1_1_graphics.html#a43b43c745c723ffd69d3d61cd0208569", null ],
     [ "\u202AsetScreenPosition", "class_p_g_e_1_1_graphics.html#ad5ab178f1e8e46afac5c519bf9a1c3b2", null ],
