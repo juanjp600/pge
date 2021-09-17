@@ -112,8 +112,10 @@ class Graphics : private PolymorphicHeap {
         Culling cullingMode;
 
         Graphics(const String& name, int w, int h, bool fs);
+
     protected:
         ResourceManager resourceManager;
+
     private:
         // Base class always automatically takes care of SysEvents and the window.
         class WindowEventSubscriber : public Resource<SysEvents::Subscriber*> {

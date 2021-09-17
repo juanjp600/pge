@@ -74,6 +74,8 @@ class FilePath : private NoHeap {
         /// @throws #PGE::Exception If the path is not initialized.
         bool exists() const;
 
+        /// Gets a unix timestamp of when the file was last modified.
+        /// @throws #PGE::Exception If the path is not initialized, or getting the timestamp failed.
         u64 getLastModifyTime() const;
 
         /// Causes a path to be interpreted as a directory.
