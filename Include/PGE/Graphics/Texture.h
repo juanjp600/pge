@@ -26,6 +26,8 @@ class Texture : private PolymorphicHeap {
         };
         static int getPixelsPerBlock(CompressedFormat fmt);
 
+        using AnyFormat = std::variant<Format, CompressedFormat>;
+
         bool isRenderTarget() const;
 
         int getWidth() const; int getHeight() const;
@@ -45,7 +47,6 @@ class Texture : private PolymorphicHeap {
         virtual ~Texture() = default;
 
     protected:
-        using AnyFormat = std::variant<Format, CompressedFormat>;
         Texture(int w, int h, bool rt, const AnyFormat& fmt);
 
         const bool isRT;
