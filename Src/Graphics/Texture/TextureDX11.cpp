@@ -2,22 +2,36 @@
 
 using namespace PGE;
 
-static DXGI_FORMAT getDXFormat(Texture::Format format) {
-    switch (format) {
+static DXGI_FORMAT getDXFormat(Texture::Format fmt) {
+    switch (fmt) {
         case Texture::Format::RGBA64: {
             return DXGI_FORMAT_R16G16B16A16_UNORM;
-        } break;
+        }
         case Texture::Format::RGBA32: {
             return DXGI_FORMAT_R8G8B8A8_UNORM;
-        } break;
+        }
         case Texture::Format::R32F: {
             return DXGI_FORMAT_R32_FLOAT;
-        } break;
+        }
         case Texture::Format::R8: {
             return DXGI_FORMAT_R8_UNORM;
-        } break;
+        }
         default: {
             return DXGI_FORMAT_UNKNOWN;
+        }
+    }
+}
+
+static DXGI_FORMAT getDXFormat(Texture::CompressedFormat fmt) {
+    switch (fmt) {
+        case Texture::CompressedFormat::BC1: {
+            return DXGI_FORMAT_BC1_UNORM;
+        }
+        case Texture::CompressedFormat::BC2: {
+            return DXGI_FORMAT_BC2_UNORM;
+        }
+        case Texture::CompressedFormat::BC3: {
+            return DXGI_FORMAT_BC3_UNORM;
         }
     }
 }
@@ -49,6 +63,20 @@ TextureDX11::TextureDX11(const Graphics& gfx, int w, int h, const byte* buffer, 
 
     dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat, false);
     dxContext->GenerateMips(dxShaderResourceView);
+}
+
+TextureDX11::TextureDX11(const Graphics& gfx, const std::vector<Texture::Mipmap>& mipmaps, CompressedFormat fmt) : Texture(mipmaps[0].width, mipmaps[0].height, false, fmt), graphics((GraphicsDX11&)gfx) {
+    ID3D11Device* dxDevice = graphics.getDxDevice();
+    ID3D11DeviceContext* dxContext = graphics.getDxContext();
+
+    DXGI_FORMAT dxFormat = getDXFormat(fmt);
+
+    dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::COMPRESSED, mipmaps[0].width, mipmaps[0].height, dxFormat);
+    for (int i = 0; i < mipmaps.size(); i++) {
+        dxContext->UpdateSubresource(dxTexture, D3D11CalcSubresource(i, 0, mipmaps.size()), NULL, mipmaps[i].buffer, mipmaps[i].width * getPixelsPerBlock(fmt), 0);
+    }
+
+    dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat, false);
 }
 
 void TextureDX11::useTexture(int index) {

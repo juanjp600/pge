@@ -104,6 +104,7 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
             DEPTH_STENCIL,
             NO_MIPMAPS,
             NORMAL,
+            COMPRESSED,
         };
         
         D3D11Texture2D(ID3D11Device* device, Type type, int width, int height, DXGI_FORMAT format) {
@@ -121,7 +122,10 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
             if (type == Type::DEPTH_STENCIL) {
                 textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
             } else {
-                textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+                textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+                if (type != Type::COMPRESSED) {
+                    textureDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
+                }
             }
             if (type == Type::NORMAL) {
                 textureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;

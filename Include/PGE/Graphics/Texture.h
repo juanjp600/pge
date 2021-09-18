@@ -19,6 +19,13 @@ class Texture : private PolymorphicHeap {
         };
         static int getBytesPerPixel(Format fmt);
 
+        enum class CompressedFormat {
+            BC1,
+            BC2,
+            BC3,
+        };
+        static int getPixelsPerBlock(CompressedFormat fmt);
+
         bool isRenderTarget() const;
 
         int getWidth() const; int getHeight() const;
@@ -29,14 +36,21 @@ class Texture : private PolymorphicHeap {
         static Texture* createRenderTarget(Graphics& gfx, int w, int h, Format fmt);
         static Texture* createBlank(Graphics& gfx, int w, int h, Format fmt, bool mipmaps);
         static Texture* load(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps = true);
+        struct Mipmap {
+            int width; int height; size_t size; const byte* buffer;
+            Mipmap(int width, int height, size_t size, const byte* buffer)
+                : width(width), height(height), size(size), buffer(buffer) { }
+        };
+        static Texture* loadCompressed(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
         virtual ~Texture() = default;
 
     protected:
-        Texture(int w, int h, bool rt, Format fmt);
+        using AnyFormat = std::variant<Format, CompressedFormat>;
+        Texture(int w, int h, bool rt, const AnyFormat& fmt);
 
         const bool isRT;
         const Vector2i dimensions;
-        const Format format;
+        const AnyFormat format;
 };
 
 }
