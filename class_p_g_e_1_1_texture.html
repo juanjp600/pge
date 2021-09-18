@@ -85,9 +85,11 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_texture.html',''); ini
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="class_p_g_e_1_1_texture-members.html">List of all members</a>  </div>
@@ -105,6 +107,11 @@ Inheritance diagram for PGE::Texture:</div>
   </map>
 </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_g_e_1_1_texture_1_1_mipmap.html">Mipmap</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:aa9b04f43fef5c31cde76b16b5281e1c9"><td class="memItemLeft" align="right" valign="top"><a id="aa9b04f43fef5c31cde76b16b5281e1c9"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Format</b> { <b>RGBA64</b>
@@ -113,6 +120,11 @@ Public Types</h2></td></tr>
 , <b>R8</b>
  }</td></tr>
 <tr class="separator:aa9b04f43fef5c31cde76b16b5281e1c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4090cc8bf8ec75a22ea79a93e388b72e"><td class="memItemLeft" align="right" valign="top"><a id="a4090cc8bf8ec75a22ea79a93e388b72e"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>CompressedFormat</b> { <b>BC1</b>
+, <b>BC2</b>
+, <b>BC3</b>
+ }</td></tr>
+<tr class="separator:a4090cc8bf8ec75a22ea79a93e388b72e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -137,6 +149,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a5ed00a7890bf202218b6e04bf5c854a7"><td class="memItemLeft" align="right" valign="top"><a id="a5ed00a7890bf202218b6e04bf5c854a7"></a>
 static int&#160;</td><td class="memItemRight" valign="bottom"><b>getBytesPerPixel</b> (Format fmt)</td></tr>
 <tr class="separator:a5ed00a7890bf202218b6e04bf5c854a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1bdb9e8b498c3d256ee3e1159b110bc"><td class="memItemLeft" align="right" valign="top"><a id="ad1bdb9e8b498c3d256ee3e1159b110bc"></a>
+static int&#160;</td><td class="memItemRight" valign="bottom"><b>getPixelsPerBlock</b> (CompressedFormat fmt)</td></tr>
+<tr class="separator:ad1bdb9e8b498c3d256ee3e1159b110bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8efa95dcc66b8f61aafb5aebfb02005b"><td class="memItemLeft" align="right" valign="top"><a id="a8efa95dcc66b8f61aafb5aebfb02005b"></a>
 static <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>createRenderTarget</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> &amp;gfx, int w, int h, Format fmt)</td></tr>
 <tr class="separator:a8efa95dcc66b8f61aafb5aebfb02005b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,12 +161,21 @@ static <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *&#160;</td
 <tr class="memitem:ab42cb3c122fe2dc4e01567d3d91dcb2a"><td class="memItemLeft" align="right" valign="top"><a id="ab42cb3c122fe2dc4e01567d3d91dcb2a"></a>
 static <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>load</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> &amp;gfx, int w, int h, const byte *buffer, Format fmt, bool mipmaps=true)</td></tr>
 <tr class="separator:ab42cb3c122fe2dc4e01567d3d91dcb2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afae5772c36acbe8f5ab480a88f9ae316"><td class="memItemLeft" align="right" valign="top"><a id="afae5772c36acbe8f5ab480a88f9ae316"></a>
+static <a class="el" href="class_p_g_e_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>loadCompressed</b> (<a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> &amp;gfx, const std::vector&lt; <a class="el" href="struct_p_g_e_1_1_texture_1_1_mipmap.html">Mipmap</a> &gt; &amp;mipmaps, CompressedFormat fmt)</td></tr>
+<tr class="separator:afae5772c36acbe8f5ab480a88f9ae316"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:a588f8c3c13164e8ddfdf471545880f60"><td class="memItemLeft" align="right" valign="top"><a id="a588f8c3c13164e8ddfdf471545880f60"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>AnyFormat</b> = std::variant&lt; Format, CompressedFormat &gt;</td></tr>
+<tr class="separator:a588f8c3c13164e8ddfdf471545880f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a09a8585698c8608b767f930bbf4055cf"><td class="memItemLeft" align="right" valign="top"><a id="a09a8585698c8608b767f930bbf4055cf"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Texture</b> (int w, int h, bool rt, Format fmt)</td></tr>
-<tr class="separator:a09a8585698c8608b767f930bbf4055cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d7db5578cfc0868ab8ef9f69003b847"><td class="memItemLeft" align="right" valign="top"><a id="a6d7db5578cfc0868ab8ef9f69003b847"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Texture</b> (int w, int h, bool rt, const AnyFormat &amp;fmt)</td></tr>
+<tr class="separator:a6d7db5578cfc0868ab8ef9f69003b847"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -161,9 +185,9 @@ const bool&#160;</td><td class="memItemRight" valign="bottom"><b>isRT</b></td></
 <tr class="memitem:ab802509d91c87d53f8d76ca8fb643a00"><td class="memItemLeft" align="right" valign="top"><a id="ab802509d91c87d53f8d76ca8fb643a00"></a>
 const <a class="el" href="class_p_g_e_1_1_vector2i.html">Vector2i</a>&#160;</td><td class="memItemRight" valign="bottom"><b>dimensions</b></td></tr>
 <tr class="separator:ab802509d91c87d53f8d76ca8fb643a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ef1603c730f4832cf3be447ff5ffb6d"><td class="memItemLeft" align="right" valign="top"><a id="a2ef1603c730f4832cf3be447ff5ffb6d"></a>
-const Format&#160;</td><td class="memItemRight" valign="bottom"><b>format</b></td></tr>
-<tr class="separator:a2ef1603c730f4832cf3be447ff5ffb6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c810d2b39170863f17382b3de5ff2a6"><td class="memItemLeft" align="right" valign="top"><a id="a7c810d2b39170863f17382b3de5ff2a6"></a>
+const AnyFormat&#160;</td><td class="memItemRight" valign="bottom"><b>format</b></td></tr>
+<tr class="separator:a7c810d2b39170863f17382b3de5ff2a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
