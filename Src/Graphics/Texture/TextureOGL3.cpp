@@ -3,56 +3,65 @@
 
 using namespace PGE;
 
-static void textureImage(int width, int height, const byte* buffer, Texture::Format format) {
+static int getCompressedFormat(Texture::CompressedFormat fmt) {
+    switch (fmt) {
+        case Texture::CompressedFormat::BC1: {
+            return GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+        }
+        case Texture::CompressedFormat::BC2: {
+            return GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+        }
+        case Texture::CompressedFormat::BC3: {
+            return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+        }
+    }
+}
+
+static void textureImage(int width, int height, const byte* buffer, Texture::Format fmt) {
     GLint glInternalFormat;
     GLenum glFormat;
     GLenum glPixelType;
-    int bytesPerPixel;
-    switch (format) {
+    switch (fmt) {
         case Texture::Format::RGBA64: {
             glInternalFormat = GL_RGBA16;
             glFormat = GL_RGBA;
             glPixelType = GL_UNSIGNED_SHORT;
-            bytesPerPixel = 8;
         } break;
         case Texture::Format::RGBA32: {
             glInternalFormat = GL_RGBA8;
             glFormat = GL_RGBA;
             glPixelType = GL_UNSIGNED_BYTE;
-            bytesPerPixel = 4;
         } break;
         case Texture::Format::R32F: {
             glInternalFormat = GL_DEPTH_COMPONENT32F;
             glFormat = GL_DEPTH_COMPONENT;
             glPixelType = GL_FLOAT;
-            bytesPerPixel = 4;
         } break;
         case Texture::Format::R8: {
             glInternalFormat = GL_R8;
             glFormat = GL_RED;
             glPixelType = GL_UNSIGNED_BYTE;
-            bytesPerPixel = 1;
         } break;
         default: {
             throw PGE_CREATE_EX("Invalid format");
         }
     }
 
-    //Flip the texture on the Y axis because OpenGL's texture coordinate system is Y-up while we expect Y-down.
-    //This matters because render targets will have to be flipped by the fragment shader, so to avoid turning
-    //shaders into a clusterfuck, they will flip all textures.
-    byte* yFlippedBuffer = (buffer != nullptr) ? new byte[width * height * bytesPerPixel] : nullptr;
-    if (yFlippedBuffer != nullptr) {
+    // Flip the texture on the Y axis because OpenGL's texture coordinate system is Y-up while we expect Y-down.
+    // This matters because render targets will have to be flipped by the fragment shader, so to avoid turning
+    // shaders into a clusterfuck, they will flip all textures.
+    std::unique_ptr<byte[]> flipped;
+    if (buffer != nullptr) {
+        int bytesPerPixel = Texture::getBytesPerPixel(fmt);
+        flipped = std::make_unique<byte[]>(width * height * bytesPerPixel);
         for (int y = 0; y < height; y++) {
-            memcpy(yFlippedBuffer + (width * y * bytesPerPixel), buffer + (width * (height - y - 1) * bytesPerPixel), width * bytesPerPixel);
+            memcpy(flipped.get() + (width * y * bytesPerPixel), buffer + (width * (height - y - 1) * bytesPerPixel), width * bytesPerPixel);
         }
     }
 
-    glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, yFlippedBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, flipped.get());
     GLenum glError = glGetError();
     PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (" + String::from(width) + "x" + String::from(height) + "; GLERROR: " + String::from(glError) + ")");
-
-    if (yFlippedBuffer != nullptr) { delete[] yFlippedBuffer; }
 }
 
 static void applyTextureParameters(bool rt) {
@@ -79,6 +88,18 @@ TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, const byte* buffer, Format
     glTexture = resourceManager.addNewResource<GLTexture>();
     textureImage(w, h, buffer, fmt);
     if (mipmaps) { glGenerateMipmap(GL_TEXTURE_2D); }
+    applyTextureParameters(false);
+}
+
+TextureOGL3::TextureOGL3(const Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt) : Texture(mipmaps[0].width, mipmaps[0].height, false, fmt), resourceManager((GraphicsOGL3&)gfx) {
+    ((GraphicsOGL3&)gfx).takeGlContext();
+    glTexture = resourceManager.addNewResource<GLTexture>();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, (GLint)(mipmaps.size() - 1));
+    for (int i = 0; i < mipmaps.size(); i++) {
+        // TODO: A flip.
+        glCompressedTexImage2D(GL_TEXTURE_2D, i, getCompressedFormat(fmt),
+            mipmaps[i].width, mipmaps[i].height, 0, (GLsizei)mipmaps[i].size, mipmaps[i].buffer);
+    }
     applyTextureParameters(false);
 }
 

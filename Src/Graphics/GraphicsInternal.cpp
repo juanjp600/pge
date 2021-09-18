@@ -103,3 +103,7 @@ Texture* Texture::load(Graphics& gfx, int w, int h, const byte* buffer, Format f
     PGE_ASSERT(buffer != nullptr, "Tried to load texture from nullptr");
     return ((GraphicsInternal&)gfx).loadTexture(w, h, buffer, fmt, mipmaps);
 }
+
+Texture* Texture::loadCompressed(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt) {
+    return ((GraphicsInternal&)gfx).loadTextureCompressed(mipmaps, fmt);
+}

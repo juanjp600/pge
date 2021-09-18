@@ -46,6 +46,7 @@ class GraphicsInternal : public Graphics {
         virtual Mesh* createMesh() = 0;
         virtual Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) = 0;
         virtual Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) = 0;
+        virtual Texture* loadTextureCompressed(const std::vector<Texture::Mipmap>& mipmaps, Texture::CompressedFormat fmt) = 0;
 
         SDL_Window* getWindow() const;
 };
@@ -75,6 +76,10 @@ class GraphicsSpecialized : public GraphicsInternal {
 
         Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) final override {
             return new TextureType(*this, w, h, buffer, fmt, mipmaps);
+        }
+        
+        Texture* loadTextureCompressed(const std::vector<Texture::Mipmap>& mipmaps, Texture::CompressedFormat fmt) final override {
+            return new TextureType(*this, mipmaps, fmt);
         }
 };
 

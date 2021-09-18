@@ -22,7 +22,19 @@ int Texture::getBytesPerPixel(Format fmt) {
     }
 }
 
-Texture::Texture(int w, int h, bool rt, Format fmt)
+int Texture::getPixelsPerBlock(CompressedFormat fmt) {
+    switch (fmt) {
+        case CompressedFormat::BC1: {
+            return 2;
+        }
+        case CompressedFormat::BC2:
+        case CompressedFormat::BC3: {
+            return 4;
+        }
+    }
+}
+
+Texture::Texture(int w, int h, bool rt, const AnyFormat& fmt)
     : dimensions(w, h), isRT(rt), format(fmt) { }
 
 bool Texture::isRenderTarget() const {
