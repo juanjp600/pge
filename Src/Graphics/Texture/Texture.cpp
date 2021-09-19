@@ -24,11 +24,13 @@ int Texture::getBytesPerPixel(Format fmt) {
 
 int Texture::getPixelsPerBlock(CompressedFormat fmt) {
     switch (fmt) {
-        case CompressedFormat::BC1: {
+        case CompressedFormat::BC1:
+        case CompressedFormat::BC4: {
             return 2;
         }
         case CompressedFormat::BC2:
-        case CompressedFormat::BC3: {
+        case CompressedFormat::BC3:
+        case CompressedFormat::BC5: {
             return 4;
         }
     }

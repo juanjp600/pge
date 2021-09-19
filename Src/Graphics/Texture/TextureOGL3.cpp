@@ -14,6 +14,12 @@ static int getCompressedFormat(Texture::CompressedFormat fmt) {
         case Texture::CompressedFormat::BC3: {
             return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
         }
+        case Texture::CompressedFormat::BC4: {
+            return GL_COMPRESSED_RED_RGTC1;
+        }
+        case Texture::CompressedFormat::BC5: {
+            return GL_COMPRESSED_RG_RGTC2;
+        }
     }
 }
 

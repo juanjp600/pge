@@ -23,6 +23,8 @@ class Texture : private PolymorphicHeap {
             BC1,
             BC2,
             BC3,
+            BC4,
+            BC5,
         };
         static int getPixelsPerBlock(CompressedFormat fmt);
 

@@ -33,6 +33,12 @@ static DXGI_FORMAT getDXFormat(Texture::CompressedFormat fmt) {
         case Texture::CompressedFormat::BC3: {
             return DXGI_FORMAT_BC3_UNORM;
         }
+        case Texture::CompressedFormat::BC4: {
+            return DXGI_FORMAT_BC4_UNORM;
+        }
+        case Texture::CompressedFormat::BC5: {
+            return DXGI_FORMAT_BC5_UNORM;
+        }
     }
 }
 
