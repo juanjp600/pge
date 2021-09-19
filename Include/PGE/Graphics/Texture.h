@@ -39,9 +39,10 @@ class Texture : private PolymorphicHeap {
         static Texture* createBlank(Graphics& gfx, int w, int h, Format fmt, bool mipmaps);
         static Texture* load(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps = true);
         struct Mipmap {
-            int width; int height; size_t size; const byte* buffer;
-            Mipmap(int width, int height, size_t size, const byte* buffer)
-                : width(width), height(height), size(size), buffer(buffer) { }
+            int width; int height; const byte* buffer; size_t size;
+            Mipmap(int width, int height, const byte* buffer, size_t size)
+                : width(width), height(height), buffer(buffer), size(size) { }
+            Mipmap() = default;
         };
         static Texture* loadCompressed(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
         virtual ~Texture() = default;
