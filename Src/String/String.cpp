@@ -44,6 +44,7 @@ void String::Iterator::increment() {
 void String::Iterator::decrement() {
     charIndex--;
     index--;
+    if (index < 0) { return; }
     // First bit 0 means it's a single byte codepoint.
     if ((ref->cstr()[index] & 0b1000'0000) != 0) {
         // Otherwise we go backwards until we find the first byte of the character.
@@ -856,7 +857,7 @@ const String::ReverseIterator String::findLast(const String& fnd, int fromEnd) c
 
 const String::ReverseIterator String::findLast(const String& fnd, const ReverseIterator& from) const {
     PGE_ASSERT(!fnd.isEmpty(), EMPTY_FIND);
-    for (auto it = from; it != rend(); it++) {
+    for (ReverseIterator it = from; it != rend(); it++) {
         if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) { return it; }
     }
     return rend();
