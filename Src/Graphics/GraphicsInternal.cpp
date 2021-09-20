@@ -28,8 +28,8 @@ NSWindow* GraphicsInternal::getCocoaWindow() const {
 }
 #endif
 
-GraphicsInternal::GraphicsInternal(const String& rendererName, const String& name, int w, int h, bool fs, int x, int y, SDL_WindowFlags windowFlags)
-    : Graphics(name, w, h, fs), RENDERER_NAME(rendererName) {
+GraphicsInternal::GraphicsInternal(const String& rendererName, const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags)
+    : Graphics(name, w, h, wm), RENDERER_NAME(rendererName) {
     sdlWindow = resourceManager.addNewResource<SDLWindow>(name, x, y, w, h, windowFlags);
 }
 
@@ -39,7 +39,7 @@ String GraphicsInternal::getInfo() const {
         + String::from(viewport.width()) + 'x' + String::from(viewport.height())
         + appendInfoLine("open", open)
         + appendInfoLine("focused", focused)
-        + appendInfoLine("fullscreen", fullscreen)
+        + appendInfoLine("windowMode", windowMode == WindowMode::Fullscreen ? "Fullscreen" : "Windowed")
         + appendInfoLine("vsync enabled", vsync)
         + appendInfoLine("depth test enabled", depthTest);
 }
@@ -57,7 +57,7 @@ GraphicsInternal::SDLWindow::~SDLWindow() {
     SDL_DestroyWindow(resource);
 }
 
-Graphics* Graphics::create(const String& name, int w, int h, bool fs, std::optional<Renderer> r, int x, int y) {
+Graphics* Graphics::create(const String& name, int w, int h, WindowMode wm, std::optional<Renderer> r, int x, int y) {
     if (!r.has_value()) {
 #ifdef _WIN32
         r = Renderer::DirectX11;
@@ -69,11 +69,11 @@ Graphics* Graphics::create(const String& name, int w, int h, bool fs, std::optio
     switch (r.value()) {
 #ifdef _WIN32
         case Renderer::DirectX11: {
-            gfx = new GraphicsDX11(name, w, h, fs, x, y);
+            gfx = new GraphicsDX11(name, w, h, wm, x, y);
         } break;
 #endif
         case Renderer::OpenGL: {
-            gfx = new GraphicsOGL3(name, w, h, fs, x, y);
+            gfx = new GraphicsOGL3(name, w, h, wm, x, y);
         } break;
         default: {
             gfx = nullptr;

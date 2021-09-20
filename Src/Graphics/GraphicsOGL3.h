@@ -18,7 +18,7 @@ namespace PGE {
 
 class GraphicsOGL3 : public GraphicsSpecialized<ShaderOGL3, MeshOGL3, TextureOGL3> {
     public:
-        GraphicsOGL3(const String& name, int w, int h, int x, int y, bool fs);
+        GraphicsOGL3(const String& name, int w, int h, WindowMode wm, int x, int y);
 
         void update() override;
         void swap() override;

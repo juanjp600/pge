@@ -17,7 +17,7 @@ namespace PGE {
 
 class GraphicsDX11 : public GraphicsSpecialized<ShaderDX11, MeshDX11, TextureDX11> {
     public:
-        GraphicsDX11(const String& name, int w, int h, bool fs, int x, int y);
+        GraphicsDX11(const String& name, int w, int h, WindowMode wm, int x, int y);
 
         void swap() override;
 

@@ -7,10 +7,10 @@
 
 using namespace PGE;
 
-Graphics::Graphics(const String& name, int w, int h, bool fs) {
+Graphics::Graphics(const String& name, int w, int h, WindowMode wm) {
     caption = name;
     dimensions = Vector2i(w, h); aspectRatio = (float)w / h;
-    fullscreen = fs;
+    windowMode = wm;
 
     eventSubscriber = resourceManager.addNewResource<WindowEventSubscriber>(*this);
 

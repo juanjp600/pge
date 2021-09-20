@@ -24,11 +24,16 @@ class Graphics : private PolymorphicHeap {
             DirectX11,
         };
 
+        enum class WindowMode {
+            Windowed,
+            Fullscreen
+        };
+
         /// Factory method.
         /// By default the optimal renderer will be chosen, depending on the platform.
         /// Windows: DX11
         /// Everything else: OGL
-        static Graphics* create(const String& name = "PGE Application", int w = 1280, int h = 720, bool fs = false,
+        static Graphics* create(const String& name = "PGE Application", int w = 1280, int h = 720, WindowMode wm = WindowMode::Windowed,
             std::optional<Renderer> r = { }, int x = Graphics::DEFAULT_SCREEN_POSITION, int y = Graphics::DEFAULT_SCREEN_POSITION);
 
         /// An instance of the Graphics class is considered active from when it was created via #create, until it is deleted.
@@ -102,7 +107,7 @@ class Graphics : private PolymorphicHeap {
         Rectanglei viewport;
 
         Vector2i dimensions; float aspectRatio;
-        bool fullscreen;
+        WindowMode windowMode;
 
         bool open;
         bool focused;
@@ -111,7 +116,7 @@ class Graphics : private PolymorphicHeap {
         bool vsync;
         Culling cullingMode;
 
-        Graphics(const String& name, int w, int h, bool fs);
+        Graphics(const String& name, int w, int h, WindowMode wm);
 
     protected:
         ResourceManager resourceManager;
