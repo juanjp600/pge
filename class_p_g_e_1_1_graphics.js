@@ -9,7 +9,11 @@ var class_p_g_e_1_1_graphics =
       [ "\u202AOpenGL", "class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83a760716b590ee7c0adc25f434f577d8be", null ],
       [ "\u202ADirectX11", "class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83ab80b8d669e3be09cdf4975ac55ab676a", null ]
     ] ],
-    [ "\u202AGraphics", "class_p_g_e_1_1_graphics.html#a49ed5cb20217ac8fd3126610df7d1a68", null ],
+    [ "\u202AWindowMode", "class_p_g_e_1_1_graphics.html#a0a62db277187f29ce4b2ebebe6c63516", [
+      [ "\u202AWindowed", "class_p_g_e_1_1_graphics.html#a0a62db277187f29ce4b2ebebe6c63516ab13311ab51c4c34757f67f26580018dd", null ],
+      [ "\u202AFullscreen", "class_p_g_e_1_1_graphics.html#a0a62db277187f29ce4b2ebebe6c63516a0829ea6734059d66e6bf87096b215dc1", null ]
+    ] ],
+    [ "\u202AGraphics", "class_p_g_e_1_1_graphics.html#a7766d846494d5fc02170533acc0b37ff", null ],
     [ "\u202Aclear", "class_p_g_e_1_1_graphics.html#ab6dd05a42685bffd85e9c128ba4241e0", null ],
     [ "\u202AgetAspectRatio", "class_p_g_e_1_1_graphics.html#a66c372dc8561f81ab19f567d1a11a58e", null ],
     [ "\u202AgetCulling", "class_p_g_e_1_1_graphics.html#a83ba3617a8d7befd0db51c4d893a0cc6", null ],
@@ -36,9 +40,9 @@ var class_p_g_e_1_1_graphics =
     [ "\u202AdepthTest", "class_p_g_e_1_1_graphics.html#a8029772008e9dfbe15595aaf39fb34fe", null ],
     [ "\u202Adimensions", "class_p_g_e_1_1_graphics.html#aa61245c7459e26034efec15d314bd348", null ],
     [ "\u202Afocused", "class_p_g_e_1_1_graphics.html#a3bf7dac02eb8a4a0a8109a52823a526c", null ],
-    [ "\u202Afullscreen", "class_p_g_e_1_1_graphics.html#a1c06dac073ba8dbe781049599267fcf7", null ],
     [ "\u202Aopen", "class_p_g_e_1_1_graphics.html#aa7a3d407bf8dd1d747e833a76acc6f49", null ],
     [ "\u202AresourceManager", "class_p_g_e_1_1_graphics.html#ab8812b70a38f12d29ae06b282b69349a", null ],
     [ "\u202Aviewport", "class_p_g_e_1_1_graphics.html#a93c7dd4cd05f09680063a03a2f3bbc35", null ],
-    [ "\u202Avsync", "class_p_g_e_1_1_graphics.html#abfdbae6c0809255bbbc1130722a1a2ee", null ]
+    [ "\u202Avsync", "class_p_g_e_1_1_graphics.html#abfdbae6c0809255bbbc1130722a1a2ee", null ],
+    [ "\u202AwindowMode", "class_p_g_e_1_1_graphics.html#aab30dbbdad6c34a422567a39709af087", null ]
 ];
