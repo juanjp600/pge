@@ -52,6 +52,8 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, int x, int y, bool 
 
     vsync = true;
     SDL_GL_SetSwapInterval(1);
+
+    updateRenderTargetFlags(false);
 }
 
 void GraphicsOGL3::update() {

@@ -30,7 +30,9 @@ int Texture::getPixelsPerBlock(CompressedFormat fmt) {
         }
         case CompressedFormat::BC2:
         case CompressedFormat::BC3:
-        case CompressedFormat::BC5: {
+        case CompressedFormat::BC5:
+        case CompressedFormat::BC6:
+        case CompressedFormat::BC7: {
             return 4;
         }
     }

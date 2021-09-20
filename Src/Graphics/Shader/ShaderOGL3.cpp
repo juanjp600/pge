@@ -26,7 +26,9 @@ ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), reso
 
     extractFragmentOutputs(fragmentSource);
 
-    graphics.addRenderTargetFlag(getVertexShaderConstant(RT_NAME));
+    Shader::Constant& rtConstant = getVertexShaderConstant(RT_NAME);
+    rtConstant.setValue(1.f);
+    graphics.addRenderTargetFlag(rtConstant);
 }
 
 ShaderOGL3::~ShaderOGL3() {

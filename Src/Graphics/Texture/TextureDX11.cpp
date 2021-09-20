@@ -24,21 +24,13 @@ static DXGI_FORMAT getDXFormat(Texture::Format fmt) {
 
 static DXGI_FORMAT getDXFormat(Texture::CompressedFormat fmt) {
     switch (fmt) {
-        case Texture::CompressedFormat::BC1: {
-            return DXGI_FORMAT_BC1_UNORM;
-        }
-        case Texture::CompressedFormat::BC2: {
-            return DXGI_FORMAT_BC2_UNORM;
-        }
-        case Texture::CompressedFormat::BC3: {
-            return DXGI_FORMAT_BC3_UNORM;
-        }
-        case Texture::CompressedFormat::BC4: {
-            return DXGI_FORMAT_BC4_UNORM;
-        }
-        case Texture::CompressedFormat::BC5: {
-            return DXGI_FORMAT_BC5_UNORM;
-        }
+        case Texture::CompressedFormat::BC1: { return DXGI_FORMAT_BC1_UNORM; }
+        case Texture::CompressedFormat::BC2: { return DXGI_FORMAT_BC2_UNORM; }
+        case Texture::CompressedFormat::BC3: { return DXGI_FORMAT_BC3_UNORM; }
+        case Texture::CompressedFormat::BC4: { return DXGI_FORMAT_BC4_UNORM; }
+        case Texture::CompressedFormat::BC5: { return DXGI_FORMAT_BC5_UNORM; }
+        case Texture::CompressedFormat::BC6: { return DXGI_FORMAT_BC6H_SF16; }
+        case Texture::CompressedFormat::BC7: { return DXGI_FORMAT_BC7_UNORM; }
     }
 }
 
