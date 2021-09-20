@@ -2,6 +2,8 @@
 
 using namespace PGE;
 
+static const String RT_NAME = "_PGE_INTERNAL_YFLIP";
+
 ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), resourceManager((GraphicsOGL3&)gfx), graphics((GraphicsOGL3&)gfx) {
     graphics.takeGlContext();
 
@@ -23,6 +25,12 @@ ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), reso
     extractFragmentUniforms(fragmentSource);
 
     extractFragmentOutputs(fragmentSource);
+
+    graphics.addRenderTargetFlag(getVertexShaderConstant(RT_NAME));
+}
+
+ShaderOGL3::~ShaderOGL3() {
+    graphics.removeRenderTargetFlag(getVertexShaderConstant(RT_NAME));
 }
 
 void ShaderOGL3::extractVertexUniforms(const String& vertexSource) {

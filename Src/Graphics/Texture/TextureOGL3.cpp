@@ -53,19 +53,7 @@ static void textureImage(int width, int height, const byte* buffer, Texture::For
         }
     }
 
-    // Flip the texture on the Y axis because OpenGL's texture coordinate system is Y-up while we expect Y-down.
-    // This matters because render targets will have to be flipped by the fragment shader, so to avoid turning
-    // shaders into a clusterfuck, they will flip all textures.
-    std::unique_ptr<byte[]> flipped;
-    if (buffer != nullptr) {
-        int bytesPerPixel = Texture::getBytesPerPixel(fmt);
-        flipped = std::make_unique<byte[]>(width * height * bytesPerPixel);
-        for (int y = 0; y < height; y++) {
-            memcpy(flipped.get() + (width * y * bytesPerPixel), buffer + (width * (height - y - 1) * bytesPerPixel), width * bytesPerPixel);
-        }
-    }
-
-    glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, flipped.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, buffer);
     GLenum glError = glGetError();
     PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (" + String::from(width) + "x" + String::from(height) + "; GLERROR: " + String::from(glError) + ")");
 }

@@ -38,23 +38,14 @@ namespace Glsl {
         if (macrosDefined) { writer.writeLine(); }
 
         if (shaderType == ShaderType::VERTEX) {
+            writer.writeLine("uniform float _PGE_INTERNAL_YFLIP;");
             writer.writeLine("vec4 dx_to_gl_pos(vec4 v) {");
             writer.writeLine("    return vec4(");
             writer.writeLine("        v.x,");
-            writer.writeLine("        v.y,");
+            writer.writeLine("        _PGE_INTERNAL_YFLIP * v.y,");
             writer.writeLine("        ((v.z/v.w)-0.5)*2*v.w,");
             writer.writeLine("        v.w);");
             writer.writeLine("}\n");
-        }
-
-        if (shaderType == ShaderType::FRAGMENT) {
-            if (funcBody.findFirst(".Sample(") != funcBody.end() || funcBody.findFirst(".SampleLevel(") != funcBody.end()) {
-                writer.writeLine("vec4 texture_yflip(sampler2D sampler, vec2 uv) {");
-                writer.writeLine("    return texture(");
-                writer.writeLine("        sampler,");
-                writer.writeLine("        vec2(uv.x, 1.0-uv.y));");
-                writer.writeLine("}\n");
-            }
         }
     }
 
@@ -186,7 +177,7 @@ namespace Glsl {
                     sampleCallEnd++;
 
                     body = body.substr(body.begin(), sampleCallStart) +
-                        "texture_yflip(" + input + ", " + uv + ")" +
+                        "texture(" + input + ", " + uv + ")" +
                         body.substr(sampleCallEnd, body.end());
 
                     sampleCallStart = body.findFirst(input + ".Sample(");
