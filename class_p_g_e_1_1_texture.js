@@ -7,7 +7,9 @@ var class_p_g_e_1_1_texture =
       [ "\u202ABC2", "class_p_g_e_1_1_texture.html#a4090cc8bf8ec75a22ea79a93e388b72ea4d2bc7c468d854a7046ae1ca6b7cf64e", null ],
       [ "\u202ABC3", "class_p_g_e_1_1_texture.html#a4090cc8bf8ec75a22ea79a93e388b72eaa9e959126c7c9b4230b56975a1ea015d", null ],
       [ "\u202ABC4", "class_p_g_e_1_1_texture.html#a4090cc8bf8ec75a22ea79a93e388b72eae64cdc788598d5cea29e5c14ce1fc381", null ],
-      [ "\u202ABC5", "class_p_g_e_1_1_texture.html#a4090cc8bf8ec75a22ea79a93e388b72eace789f624a22f7c5e6baafe4f4fe9e4d", null ]
+      [ "\u202ABC5", "class_p_g_e_1_1_texture.html#a4090cc8bf8ec75a22ea79a93e388b72eace789f624a22f7c5e6baafe4f4fe9e4d", null ],
+      [ "\u202ABC6", "class_p_g_e_1_1_texture.html#a4090cc8bf8ec75a22ea79a93e388b72ea8369ba67f113ff8c9faab3282fb87f8b", null ],
+      [ "\u202ABC7", "class_p_g_e_1_1_texture.html#a4090cc8bf8ec75a22ea79a93e388b72eaaa51ef981f910b0ec9ed8b82c65be593", null ]
     ] ],
     [ "\u202AFormat", "class_p_g_e_1_1_texture.html#aa9b04f43fef5c31cde76b16b5281e1c9", [
       [ "\u202ARGBA64", "class_p_g_e_1_1_texture.html#aa9b04f43fef5c31cde76b16b5281e1c9add1e883439a8713874b78f87ebeb48a6", null ],
