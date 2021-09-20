@@ -5,21 +5,13 @@ using namespace PGE;
 
 static int getCompressedFormat(Texture::CompressedFormat fmt) {
     switch (fmt) {
-        case Texture::CompressedFormat::BC1: {
-            return GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-        }
-        case Texture::CompressedFormat::BC2: {
-            return GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
-        }
-        case Texture::CompressedFormat::BC3: {
-            return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
-        }
-        case Texture::CompressedFormat::BC4: {
-            return GL_COMPRESSED_RED_RGTC1;
-        }
-        case Texture::CompressedFormat::BC5: {
-            return GL_COMPRESSED_RG_RGTC2;
-        }
+        case Texture::CompressedFormat::BC1: { return GL_COMPRESSED_RGBA_S3TC_DXT1_EXT; }
+        case Texture::CompressedFormat::BC2: { return GL_COMPRESSED_RGBA_S3TC_DXT3_EXT; }
+        case Texture::CompressedFormat::BC3: { return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT; }
+        case Texture::CompressedFormat::BC4: { return GL_COMPRESSED_RED_RGTC1; }
+        case Texture::CompressedFormat::BC5: { return GL_COMPRESSED_RG_RGTC2; }
+        case Texture::CompressedFormat::BC6: { return GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB; }
+        case Texture::CompressedFormat::BC7: { return GL_COMPRESSED_RGBA_BPTC_UNORM_ARB; }
     }
 }
 
@@ -53,19 +45,7 @@ static void textureImage(int width, int height, const byte* buffer, Texture::For
         }
     }
 
-    // Flip the texture on the Y axis because OpenGL's texture coordinate system is Y-up while we expect Y-down.
-    // This matters because render targets will have to be flipped by the fragment shader, so to avoid turning
-    // shaders into a clusterfuck, they will flip all textures.
-    std::unique_ptr<byte[]> flipped;
-    if (buffer != nullptr) {
-        int bytesPerPixel = Texture::getBytesPerPixel(fmt);
-        flipped = std::make_unique<byte[]>(width * height * bytesPerPixel);
-        for (int y = 0; y < height; y++) {
-            memcpy(flipped.get() + (width * y * bytesPerPixel), buffer + (width * (height - y - 1) * bytesPerPixel), width * bytesPerPixel);
-        }
-    }
-
-    glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, flipped.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, buffer);
     GLenum glError = glGetError();
     PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (" + String::from(width) + "x" + String::from(height) + "; GLERROR: " + String::from(glError) + ")");
 }

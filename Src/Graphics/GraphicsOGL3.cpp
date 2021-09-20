@@ -52,6 +52,8 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, int x, int y, bool 
 
     vsync = true;
     SDL_GL_SetSwapInterval(1);
+
+    updateRenderTargetFlags(false);
 }
 
 void GraphicsOGL3::update() {
@@ -83,6 +85,8 @@ void GraphicsOGL3::clear(const Color& color) {
 }
 
 void GraphicsOGL3::setRenderTarget(Texture& renderTarget) {
+    updateRenderTargetFlags(true);
+
     takeGlContext();
 
     glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);
@@ -96,6 +100,8 @@ void GraphicsOGL3::setRenderTarget(Texture& renderTarget) {
 }
 
 void GraphicsOGL3::setRenderTargets(const ReferenceVector<Texture>& renderTargets) {
+    updateRenderTargetFlags(true);
+
     takeGlContext();
 
     TextureOGL3* largestTarget = &(TextureOGL3&)renderTargets[0];
@@ -127,6 +133,8 @@ void GraphicsOGL3::setRenderTargets(const ReferenceVector<Texture>& renderTarget
 }
 
 void GraphicsOGL3::resetRenderTarget() {
+    updateRenderTargetFlags(false);
+
     takeGlContext();
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -163,7 +171,6 @@ void GraphicsOGL3::setVsync(bool isEnabled) {
     }
 }
 
-// TODO: Test.
 void GraphicsOGL3::setCulling(Culling mode) {
     if (mode == cullingMode) { return; }
 
@@ -173,20 +180,39 @@ void GraphicsOGL3::setCulling(Culling mode) {
         if (cullingMode == Culling::NONE) {
             glEnable(GL_CULL_FACE);
         }
-
-        GLenum glMode;
-        switch (mode) {
-            default:
-            case Culling::BACK: {
-                glMode = GL_BACK;
-            } break;
-            case Culling::FRONT: {
-                glMode = GL_FRONT;
-            } break;
-        }
-
-        glCullFace(glMode);
+        updateCullingMode(mode, renderingToRenderTarget);
     }
 
     cullingMode = mode;
+}
+
+void GraphicsOGL3::updateCullingMode(Culling newMode, bool flip) {
+    if (newMode == Culling::NONE) { return; }
+
+    GLenum glMode;
+    if ((newMode == Culling::BACK) ^ flip) {
+        glMode = GL_BACK;
+    } else {
+        glMode = GL_FRONT;
+    }
+    glCullFace(glMode);
+}
+
+void GraphicsOGL3::addRenderTargetFlag(Shader::Constant& c) {
+    renderTargetFlags.emplace(&c);
+}
+
+void GraphicsOGL3::removeRenderTargetFlag(Shader::Constant& c) {
+    renderTargetFlags.erase(&c);
+}
+
+void GraphicsOGL3::updateRenderTargetFlags(bool rt) {
+    updateCullingMode(cullingMode, rt);
+
+    float yFlip = rt ? -1.f : 1.f;
+    for (Shader::Constant* c : renderTargetFlags) {
+        c->setValue(yFlip);
+    }
+
+    renderingToRenderTarget = rt;
 }
