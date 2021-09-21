@@ -82,7 +82,6 @@ TextureOGL3::TextureOGL3(const Graphics& gfx, const std::vector<Mipmap>& mipmaps
     glTexture = resourceManager.addNewResource<GLTexture>();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, (GLint)(mipmaps.size() - 1));
     for (int i = 0; i < mipmaps.size(); i++) {
-        // TODO: A flip.
         glCompressedTexImage2D(GL_TEXTURE_2D, i, getCompressedFormat(fmt),
             mipmaps[i].width, mipmaps[i].height, 0, (GLsizei)mipmaps[i].size, mipmaps[i].buffer);
     }
