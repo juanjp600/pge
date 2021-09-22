@@ -15,7 +15,7 @@ class TextureOGL3 : public Texture {
         // Loaded texture.
         TextureOGL3(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps);
         // Loaded, compressed texture.
-        TextureOGL3(const Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
+        TextureOGL3(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
 
         GLuint getGlTexture() const;
         //GLuint getGlFramebuffer() const;

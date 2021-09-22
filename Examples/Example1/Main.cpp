@@ -33,7 +33,7 @@ class Program {
 
     public:
         Program() {
-            graphics = Graphics::create("Example 1", 1600, 900, false, Graphics::Renderer::OpenGL);
+            graphics = Graphics::create("Example 1", 1600, 900, Graphics::WindowMode::Windowed, Graphics::Renderer::OpenGL);
             shader = Shader::load(*graphics, FilePath::fromStr("Shader1").makeDirectory());
             material = Mesh::Material(*shader, Mesh::Material::Opaque::YES);
 

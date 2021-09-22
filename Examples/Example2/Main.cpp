@@ -39,7 +39,7 @@ class Program {
 
     public:
         Program() {
-            graphics = Graphics::create("Example 2", 1600, 900, false, Graphics::Renderer::OpenGL);
+            graphics = Graphics::create("Example 2", 1600, 900, Graphics::WindowMode::Windowed, Graphics::Renderer::OpenGL);
             graphics->setDepthTest(false);
 
             shader = Shader::load(*graphics, FilePath::fromStr("Shader2").makeDirectory());
