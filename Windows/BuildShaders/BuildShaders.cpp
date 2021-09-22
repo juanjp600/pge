@@ -199,10 +199,11 @@ static void compileShader(const FilePath& path) {
     Glsl::convert(compiledPath + "fragment.glsl", fsResult, Glsl::ShaderType::FRAGMENT);
 
     Vulkan::hlslToVkHlsl(path, fsResult, vsResult);
+    // TODO: FIX THIS FFS.
     char* cmd = new char[512];
-    wcstombs_s(nullptr, cmd, 512, (std::wstring(L"glslangValidator.exe -S vert -e VS -o ") + (std::wstring(compiledPath.str().wstr().data()) + L"vert.spv") + L" -V -D " + (compiledPath + "vulkan.hlsl.fun").str().wstr().data()).c_str(), 512);
+    wcstombs_s(nullptr, cmd, 512, (std::wstring(L"glslangValidator.exe -S vert -e VS -o ") + (std::wstring(compiledPath.str().wstr().data()) + L"vert.spv") + L" -V -D " + (compiledPath + "hlsl.vulkan").str().wstr().data()).c_str(), 512);
     system(cmd);
-    wcstombs_s(nullptr, cmd, 512, (std::wstring(L"glslangValidator.exe -S frag -e PS -o ") + (std::wstring(compiledPath.str().wstr().data()) + L"frag.spv") + L" -V -D " + (compiledPath + "vulkan.hlsl.fun").str().wstr().data()).c_str(), 512);
+    wcstombs_s(nullptr, cmd, 512, (std::wstring(L"glslangValidator.exe -S frag -e PS -o ") + (std::wstring(compiledPath.str().wstr().data()) + L"frag.spv") + L" -V -D " + (compiledPath + "hlsl.vulkan").str().wstr().data()).c_str(), 512);
     system(cmd);
     wcstombs_s(nullptr, cmd, 512, (std::wstring(L"spirv-link ") + (std::wstring(compiledPath.str().wstr().data()) + L"vert.spv") + L" " + (std::wstring(compiledPath.str().wstr().data()) + L"frag.spv") + (L" -o " + (std::wstring(compiledPath.str().wstr().data()) + L"shader.spv"))).c_str(), 512);
     system(cmd);

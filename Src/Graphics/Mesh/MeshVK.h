@@ -15,6 +15,8 @@ class MeshVK : public Mesh {
         MeshVK(Graphics& gfx);
 
     private:
+        GraphicsVK& graphics;
+
         VKPipeline::View pipeline;
 
         vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
@@ -24,7 +26,6 @@ class MeshVK : public Mesh {
         VKMemory::View dataMemory;
 
         ResourceManagerVK resourceManager;
-        GraphicsVK& graphics;
 
         int totalVertexSize;
 

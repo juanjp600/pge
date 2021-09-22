@@ -7,7 +7,7 @@ using namespace PGE;
 // TODO: Jesus fucking christ fuck all of this.
 bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes, const CompileResult& vertRes) {
 	std::wstring outFile = filename.str().wstr().data();
-	outFile = (filename.trimExtension() + "/vulkan.hlsl.fun").str().wstr().data();
+	outFile = (filename.trimExtension() + "/hlsl.vulkan").str().wstr().data();
 	std::ofstream out; out.open(outFile.c_str(), std::ios::out);
 
 	out << "[[vk::push_constant]]" << std::endl;

@@ -168,7 +168,7 @@ void GraphicsVK::acquireNextImage() {
 
     // Is the image we just acquired currently still being submitted?
     vk::Result result;
-    if (imagesInFlight[backBufferIndex] != VK_NULL_HANDLE) {
+    if (imagesInFlight[backBufferIndex] != (vk::Fence)VK_NULL_HANDLE) {
         // If so, wait on it!
         result = device->waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX);
         PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::hexFromInt((u32)result) + ")");
