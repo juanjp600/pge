@@ -47,6 +47,7 @@
     <ClCompile Include="..\..\Src\String\String.cpp" />
     <ClCompile Include="..\..\Src\String\Unicode.cpp" />
     <ClCompile Include="..\..\Src\String\UnicodeHelper.cpp" />
+    <ClCompile Include="..\..\Src\String\UnicodeManual.cpp" />
     <ClCompile Include="..\..\Src\StructuredData\StructuredData.cpp" />
     <ClCompile Include="..\..\Src\SysEvents\SysEvents.cpp" />
   </ItemGroup>
@@ -187,8 +188,8 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4670; 4673</DisableSpecificWarnings>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4670; 4673;4706</DisableSpecificWarnings>
     </ClCompile>
     <PreBuildEvent>
       <Command>cd ../../Src/
@@ -233,8 +234,8 @@ echo Generated %25CD%\Info.cpp!</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4670; 4673</DisableSpecificWarnings>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4670; 4673;4706</DisableSpecificWarnings>
     </ClCompile>
     <PreBuildEvent>
       <Command>cd ../../Src/
@@ -280,8 +281,8 @@ echo Generated %25CD%\Info.cpp!</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4670; 4673</DisableSpecificWarnings>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4670; 4673;4706</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -331,8 +332,8 @@ echo Generated %25CD%\Info.cpp!</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4670; 4673</DisableSpecificWarnings>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4670; 4673;4706</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

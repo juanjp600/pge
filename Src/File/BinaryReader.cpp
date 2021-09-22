@@ -52,6 +52,8 @@ template<> bool BinaryReader::tryRead(String& out) {
     return succ;
 }
 
+#pragma warning(push)
+#pragma warning(disable: 4701)
 template<> bool BinaryReader::tryRead(Vector2f& out) {
     float x; float y;
     bool succ = tryRead<float>(x) && tryRead<float>(y);
@@ -65,6 +67,7 @@ template<> bool BinaryReader::tryRead(Vector3f& out) {
     out = Vector3f(x, y, z);
     return succ;
 }
+#pragma warning(pop)
 
 void BinaryReader::readStringInto(String& ref) {
     String ret;

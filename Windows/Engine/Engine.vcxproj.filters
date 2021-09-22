@@ -180,6 +180,9 @@
     <ClCompile Include="..\..\Src\StructuredData\StructuredData.cpp">
       <Filter>Src\StructuredData</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\String\UnicodeManual.cpp">
+      <Filter>Src\String</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
