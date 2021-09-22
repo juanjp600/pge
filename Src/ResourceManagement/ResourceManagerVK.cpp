@@ -4,10 +4,8 @@
 
 using namespace PGE;
 
-ResourceManagerVK::ResourceManagerVK(Graphics* gfx, int size) : ResourceManager(size) {
-    graphics = (GraphicsVK*)gfx;
-}
+ResourceManagerVK::ResourceManagerVK(Graphics& gfx) : graphics((GraphicsVK&)gfx) { }
 
 ResourceManagerVK::~ResourceManagerVK() {
-    graphics->getDevice().waitIdle();
+    graphics.getDevice().waitIdle();
 }

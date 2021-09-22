@@ -1,203 +1,260 @@
-#include <fstream>
 #include <iostream>
 #include <unordered_set>
+#include <set>
+#include <map>
 
-#include <String/String.h>
-#include <String/Key.h>
-#include <Exception/Exception.h>
-#include <Misc/FilePath.h>
+#include <PGE/String/Key.h>
+#include <PGE/File/TextWriter.h>
+#include <PGE/File/TextReader.h>
 
 using namespace PGE;
 
-#define PGE_UNICODE_ASSERT_FILE(stream) PGE_ASSERT(stream.good(), "Stream is not good!")
+static const String INDENT = "    ";
 
-static String paramsToMapType(const String& key, const String& value) {
-    return "std::unordered_map<" + key + ", " + value + ">";
-}
+// TODO: This desperately needs refactoring.
+class SwitchWriter {
+    protected:
+        using Cases = std::set<String::OrderedKey>;
+        using StatementMap = std::map<String::OrderedKey, Cases>;
 
-static constexpr int READ_BUFFER_SIZE = 256;
-static constexpr const char* INDENT = "    ";
-static constexpr const char* TAIL = "};";
-static const String MAP_TYPE = paramsToMapType("wchar", "wchar");
-static const String MULTI_FOLD_MAP_TYPE = paramsToMapType("wchar", "std::vector<wchar>");
+        SwitchWriter(const String& name, const String& param, const String& preAction, const String& postAction, const String& retType = "void")
+            : name(name), param(param), preAction(preAction), postAction(postAction), retType(retType) { }
 
-struct Mapping {
-    String from;
-    String to;
-};
-
-struct MultiMapping {
-    String from;
-    std::vector<String> to;
-};
-
-static String rawToChar(const String& str) {
-    return "u'\\u" + str + "'";
-}
-
-static String entriesToPair(const String& a, const String& b) {
-    return "{ " + rawToChar(a) + ", " + rawToChar(b) + " },";
-}
-
-static String toMapHead(const String& mapType, const String& identifier) {
-    return "const " + mapType + " Unicode::" + identifier + " = " + mapType + " {";
-}
-
-static std::ostream& operator<<(std::ostream& stream, const std::vector<Mapping>& mappings) {
-    for (const Mapping& mapping : mappings) {
-        stream << INDENT << entriesToPair(mapping.from, mapping.to) << std::endl;
-    }
-    return stream;
-}
-
-static std::ostream& operator<<(std::ostream& stream, const std::vector<MultiMapping>& mappings) {
-    for (const MultiMapping& mapping : mappings) {
-        stream << INDENT << "{ " + rawToChar(mapping.from) << ", { ";
-        for (const String& str : mapping.to) {
-            stream << rawToChar(str) << ", ";
+        void write(TextWriter& out, const StatementMap& done) const {
+            out.writeLine(retType + " Unicode::" + name + "(" + (!param.isEmpty() ? (param + ", ") : "") + "char16 ch) {");
+            out.writeLine(INDENT + "switch (ch) {");
+            for (const auto& it : done) {
+                std::vector<String> chars = it.first.str.split(" ", true);
+                bool first = true;
+                for (const auto& sit : it.second) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        out.writeLine();
+                    }
+                    out.write(INDENT.multiply(2) + "case " + rawToChar(sit.str) + ":");
+                }
+                out.writeLine(" {");
+                for (const String& toChr : chars) {
+                    writeAction(out, rawToChar(toChr));
+                }
+                writeBreak(out);
+            }
+            out.writeLine(INDENT.multiply(2) + "default: {");
+            writeDefaultAction(out);
+            writeBreak(out);
+            out.writeLine(INDENT + "}");
+            out.writeLine("}");
         }
-        stream << "} }," << std::endl;
+
+        virtual void writeAction(TextWriter& out, const String& item) const {
+            out.writeLine(INDENT.multiply(3) + preAction + item + postAction);
+        }
+
+        virtual void writeDefaultAction(TextWriter& out) const {
+            writeAction(out, "ch");
+        }
+
+    private:
+        const String name;
+        const String param;
+        const String preAction;
+        const String postAction;
+        const String retType;
+
+        static void writeBreak(TextWriter& out) {
+            out.writeLine(INDENT.multiply(2) + "} break;");
+        }
+
+        static String rawToChar(const String& str) {
+            return "u'\\u" + str + "'";
+        }
+};
+
+// Both SwitchWriter implementations constitute degenerate builders.
+class Folder : private SwitchWriter {
+    public:
+        Folder(const String& name)
+            : SwitchWriter(name, "std::queue<char16>& queue", "queue.push(", ");") { }
+
+        void feed(const String& from, const String& to, bool dominant) {
+            // It dominantes!
+            if (dominant) {
+                pre[from] = to;
+            } else {
+                // We haven't mapped this yet!
+                if (pre.find(from) == pre.end()) {
+                    pre.emplace(from, to);
+                }
+            }
+        }
+
+        void write(TextWriter& out) const {
+            StatementMap done;
+            for (const auto& it : pre) {
+                done[it.second.str].emplace(it.first.str);
+            }
+
+            SwitchWriter::write(out, done);
+        }
+
+    private:
+        std::unordered_map<String::RedundantKey, String::RedundantKey> pre;
+};
+
+class Caser : private SwitchWriter {
+    public:
+        Caser(const String& name)
+            : SwitchWriter(name, "String& str", "str += ", ";") { }
+
+        void feed(const String& from, const String& to) {
+            // First come, first serve.
+            if (hasHad.find(from) == hasHad.end()) {
+                done[to].emplace(from);
+                hasHad.emplace(from);
+            }
+        }
+
+        void write(TextWriter& out) const {
+            SwitchWriter::write(out, done);
+        }
+
+    private:
+        StatementMap done;
+        std::unordered_set<String::Key> hasHad;
+};
+
+class Identifier : private SwitchWriter {
+    public:
+        Identifier(const String& name)
+            : SwitchWriter(name, String(), String(), String(), "bool") { }
+
+        void feed(const String& match) {
+            matchingChars.emplace(match);
+        }
+
+        void write(TextWriter& out) const {
+            StatementMap map;
+            map.emplace("TODO", matchingChars);
+            SwitchWriter::write(out, map);
+        }
+
+    private:
+        Cases matchingChars;
+
+        void writeAction(TextWriter& out, const String& item) const override {
+            out.writeLine(INDENT.multiply(3) + "return true;");
+        }
+
+        void writeDefaultAction(TextWriter& out) const override {
+            out.writeLine(INDENT.multiply(3) + "return false;");
+        }
+};
+
+namespace UnicodeParser {
+    using Consumer = std::function<void(const std::vector<String>&)>;
+
+    void parse(const FilePath& path, const Consumer& func) {
+        TextReader in(path);
+        static String line; // Fuck it, static line cache. (Remove this if used elsewhere, thx.)
+        while (!in.endOfFile()) {
+            line = String();
+            in.readLine(line);
+            if (line.byteLength() == 0 || *line.charAt(0) == L'#') { continue; }
+            std::vector<String> params = line.split(";", false);
+            params[0] = params[0].trim();
+            // We reached UTF-32 range!
+            if (params[0].byteLength() == 5) { break; }
+            func(params);
+        }
     }
-    return stream;
-}
+};
 
 int main() {
-    std::ofstream out;
-    out.open("../../Src/String/Unicode.cpp");
-    PGE_UNICODE_ASSERT_FILE(out);
+    TextWriter out(FilePath::fromStr("../../Src/String/Unicode.cpp"));
 
-    out << "// AUTOGENERATED FILE" << std::endl;
-    out << "// DO NOT EDIT" << std::endl;
-    out << std::endl;
-    out << "#include \"Unicode.h\"" << std::endl;
-    out << std::endl;
-    out << "using namespace PGE;" << std::endl;
-    out << std::endl;
+    // Incase it wasn't obvious, this doesn't apply to this file.
+    out.writeLine(
+R"(
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                                   //
+//       ###    ##     ## ########  #######   ######   ######## ##    ## ######## ########     ###    ######## ######## ########     //
+//      ## ##   ##     ##    ##    ##     ## ##    ##  ##       ###   ## ##       ##     ##   ## ##      ##    ##       ##     ##    //
+//     ##   ##  ##     ##    ##    ##     ## ##        ##       ####  ## ##       ##     ##  ##   ##     ##    ##       ##     ##    //
+//    ##     ## ##     ##    ##    ##     ## ##   #### ######   ## ## ## ######   ########  ##     ##    ##    ######   ##     ##    //
+//    ######### ##     ##    ##    ##     ## ##    ##  ##       ##  #### ##       ##   ##   #########    ##    ##       ##     ##    //
+//    ##     ## ##     ##    ##    ##     ## ##    ##  ##       ##   ### ##       ##    ##  ##     ##    ##    ##       ##     ##    //
+//    ##     ##  #######     ##     #######   ######   ######## ##    ## ######## ##     ## ##     ##    ##    ######## ########     //
+//                                                                                                                                   //
+//    ######## #### ##       ########  //  ########   #######     ##    ##  #######  ########    ######## ########  #### ########    //
+//    ##        ##  ##       ##        //  ##     ## ##     ##    ###   ## ##     ##    ##       ##       ##     ##  ##     ##       //
+//    ##        ##  ##       ##        //  ##     ## ##     ##    ####  ## ##     ##    ##       ##       ##     ##  ##     ##       //
+//    ######    ##  ##       ######    //  ##     ## ##     ##    ## ## ## ##     ##    ##       ######   ##     ##  ##     ##       //
+//    ##        ##  ##       ##        //  ##     ## ##     ##    ##  #### ##     ##    ##       ##       ##     ##  ##     ##       //
+//    ##        ##  ##       ##        //  ##     ## ##     ##    ##   ### ##     ##    ##       ##       ##     ##  ##     ##       //
+//    ##       #### ######## ########  //  ########   #######     ##    ##  #######     ##       ######## ########  ####    ##       //
+//                                                                                                                                   //
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+)" + 1 // + 1 to skip leading newline.
+    );
+    out.writeLine("#include <PGE/String/Unicode.h>");
+    out.writeLine("#include \"UnicodeInternal.h\"");
+    out.writeLine();
+    out.writeLine("using namespace PGE;");
+    out.writeLine();
 
-    std::vector<Mapping> fullFolding;
+    Folder foldedSwitch("fold");
+    UnicodeParser::parse(FilePath::fromStr("CaseFolding.txt"), [&](const std::vector<String>& params) {
+        char16 type = *params[1].trim().charAt(0);
+        // Full/Multi-char folding dominates!
+        foldedSwitch.feed(params[0], params[2], type == L'F');
+    });
+    foldedSwitch.write(out);
 
-    char buffer[READ_BUFFER_SIZE];
-    std::ifstream in;
-    in.open("CaseFolding.txt");
-    PGE_UNICODE_ASSERT_FILE(in);
+    out.writeLine();
 
-    out << toMapHead(MAP_TYPE, "FOLDING") << std::endl;
-    while (!in.eof()) {
-        in.getline(buffer, READ_BUFFER_SIZE);
-        String line = buffer;
-        if (line.byteLength() == 0 || *line.charAt(0) == L'#') { continue; }
-        std::vector<String> params = line.split(";", false);
-        params[0] = params[0].trim();
-        // We reached UTF-32 range!
-        if (params[0].byteLength() == 5) { break; }
-        wchar type = *params[1].trim().charAt(0);
-        if (type == 'C') {
-            out << INDENT << entriesToPair(params[0], params[2].trim()) << std::endl;
-        } else if (type == 'F') {
-            out << INDENT << entriesToPair(params[0], "FFFF") << std::endl;
-            fullFolding.push_back({ params[0], params[2].trim() });
-        }
-    }
-    in.close();
-    out << TAIL << std::endl;
-
-    out << std::endl;
-    out << toMapHead(MULTI_FOLD_MAP_TYPE, "MULTI_FOLDING") << std::endl;
-    for (Mapping& mapping : fullFolding) {
-        out << INDENT << "{ " << rawToChar(mapping.from) << ", { ";
-        std::vector<String> splitChars = mapping.to.split(" ", true);
-        for (String& ch : splitChars) {
-            out << rawToChar(ch) << ", ";
-        }
-        out << "} }," << std::endl;
-    }
-    out << TAIL << std::endl;
-
-    out << std::endl;
-
-    std::vector<Mapping> up;
-    std::vector<Mapping> down;
-    std::vector<MultiMapping> multiUp;
-    std::vector<MultiMapping> multiDown;
-    std::unordered_set<String::Key> setUp;
-    std::unordered_set<String::Key> setDown;
+    Caser upSwitch("up");
+    Caser downSwitch("down");
 
     // MANUAL OVERRIDE
-    up.push_back({ "00DF", "1E9E" });
-    setUp.insert("00DF");
+    upSwitch.feed("00DF", "1E9E");
     //
 
-    in.open("SpecialCasing.txt");
-    PGE_UNICODE_ASSERT_FILE(in);
-    while (!in.eof()) {
-        in.getline(buffer, READ_BUFFER_SIZE);
-        String line = buffer;
-        if (line.byteLength() == 0 || *line.charAt(0) == L'#') { continue; }
-        std::vector<String> params = line.split(";", false);
+    Identifier spaceIdent("isSpace");
+
+    UnicodeParser::parse(FilePath::fromStr("SpecialCasing.txt"), [&](const std::vector<String>& params) {
         // We don't want any conditional mappings.
-        if (*params[4].trim().charAt(0) != L'#') { continue; }
+        if (*params[4].trim().charAt(0) != L'#') { return; }
         if (params[3].byteLength() != 0) {
-            std::vector<String> split = params[3].split(" ", true);
-            // It must actually multi-fold.
-            if (split.size() != 1 && setUp.find(params[0]) == setUp.end()) {
-                multiUp.push_back({ params[0], split });
-                up.push_back({ params[0], "FFFF" });
-                setUp.insert(params[0]);
-            }
+            upSwitch.feed(params[0], params[3]);
         }
         if (params[1].byteLength() != 0) {
-            std::vector<String> split = params[1].split(" ", true);
-            // It must actually multi-fold.
-            if (split.size() != 1 && setDown.find(params[0]) == setDown.end()) {
-                multiDown.push_back({ params[0], split });
-                down.push_back({ params[0], "FFFF" });
-                setDown.insert(params[0]);
-            }
+            downSwitch.feed(params[0], params[1]);
         }
-    }
-    in.close();
+    });
 
-    in.open("UnicodeData.txt");
-    PGE_UNICODE_ASSERT_FILE(in);
-    while (!in.eof()) {
-        in.getline(buffer, READ_BUFFER_SIZE);
-        String line = buffer;
-        if (line.byteLength() == 0 || *line.charAt(0) == L'#') { continue; }
-        std::vector<String> params = line.split(";", false);
-        // We reached UTF-32 range!
-        if (params[0].byteLength() == 5) { break; }
-        if (params[12].byteLength() != 0 && setUp.find(params[0]) == setUp.end()) {
-            up.push_back({ params[0], params[12] });
+    UnicodeParser::parse(FilePath::fromStr("UnicodeData.txt"), [&](const std::vector<String>& params) {
+        if (params[12].byteLength() != 0) {
+            upSwitch.feed(params[0], params[12]);
         }
-        if (params[13].byteLength() != 0 && setDown.find(params[0]) == setDown.end()) {
-            down.push_back({ params[0], params[13] });
+        if (params[13].byteLength() != 0) {
+            downSwitch.feed(params[0], params[13]);
         }
-    }
-    in.close();
 
-    out << toMapHead(MAP_TYPE, "UP") << std::endl;
-    out << up;
-    out << TAIL << std::endl;
+        if (*params[2].charAt(0) == L'Z' || params[2] == "Cc") {
+            spaceIdent.feed(params[0]);
+        }
+    });
 
-    out << std::endl;
+    upSwitch.write(out);
 
-    out << toMapHead(MAP_TYPE, "DOWN") << std::endl;
-    out << down;
-    out << TAIL << std::endl;
+    out.writeLine();
 
-    out << std::endl;
+    downSwitch.write(out);
 
-    out << toMapHead(MULTI_FOLD_MAP_TYPE, "MULTI_UP") << std::endl;
-    out << multiUp;
-    out << TAIL << std::endl;
+    out.writeLine();
 
-    out << std::endl;
-
-    out << toMapHead(MULTI_FOLD_MAP_TYPE, "MULTI_DOWN") << std::endl;
-    out << multiDown;
-    out << TAIL << std::endl;
-
-    out.close();
+    spaceIdent.write(out);
 
     std::cout << "Generated Unicode code!" << std::endl;
     return 0;

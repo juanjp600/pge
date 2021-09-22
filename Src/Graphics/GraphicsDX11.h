@@ -3,28 +3,33 @@
 
 #include "GraphicsInternal.h"
 
+#include "Shader/ShaderDX11.h"
+#include "Mesh/MeshDX11.h"
+#include "Texture/TextureDX11.h"
+
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <d3d11.h>
 
-#include <ResourceManagement/ResourceViewVector.h>
 #include "../ResourceManagement/DX11.h"
 
 namespace PGE {
 
-class GraphicsDX11 : public GraphicsInternal {
+class GraphicsDX11 : public GraphicsSpecialized<ShaderDX11, MeshDX11, TextureDX11> {
     public:
-        GraphicsDX11(const String& name,int w,int h,bool fs);
+        GraphicsDX11(const String& name, int w, int h, WindowMode wm, int x, int y);
 
         void swap() override;
 
-        void clear(Color color) override;
+        void clear(const Color& color) override;
 
-        void setRenderTarget(Texture* renderTarget) override;
-        void setRenderTargets(const std::vector<Texture*>& renderTargets) override;
+        void setRenderTarget(Texture& renderTarget) override;
+        void setRenderTargets(const ReferenceVector<Texture>& renderTargets) override;
         void resetRenderTarget() override;
 
         void setViewport(const Rectanglei& vp) override;
+
+        void setCulling(Culling mode) override;
 
         ID3D11Device* getDxDevice() const;
         ID3D11DeviceContext* getDxContext() const;
@@ -39,12 +44,9 @@ class GraphicsDX11 : public GraphicsInternal {
 
         void setZBufferState(ZBufferStateIndex index);
 
-        PGE_GFX_OBJ_DEC
-
     private:
         DXGIFactory1::View dxgiFactory;
 
-        DXGI_SWAP_CHAIN_DESC dxSwapChainDesc;
         DXGISwapChain::View dxSwapChain;
 
         D3D11Device::View dxDevice;
@@ -53,18 +55,16 @@ class GraphicsDX11 : public GraphicsInternal {
         D3D11RenderTargetView::View dxBackBufferRtv;
         D3D11Texture2D::View dxZBufferTexture;
         D3D11DepthStencilView::View dxZBufferView;
-        ResourceViewVector<ID3D11DepthStencilState*> dxDepthStencilState;
+        std::vector<ID3D11DepthStencilState*> dxDepthStencilState;
 
-        D3D11_RASTERIZER_DESC dxRasterizerStateDesc;
         D3D11RasterizerState::View dxRasterizerState;
 
-        D3D11_BLEND_DESC dxBlendStateDesc;
         D3D11BlendState::View dxBlendState;
 
         D3D11_VIEWPORT dxViewport;
 
-        ResourceViewVector<ID3D11RenderTargetView*> currentRenderTargetViews;
-        D3D11DepthStencilView::View currentDepthStencilView;
+        std::vector<ID3D11RenderTargetView*> currentRenderTargetViews;
+        ID3D11DepthStencilView* currentDepthStencilView;
 
         ResourceManager resourceManager;
 };

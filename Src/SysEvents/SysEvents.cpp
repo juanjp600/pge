@@ -1,4 +1,4 @@
-#include <SysEvents/SysEvents.h>
+#include <PGE/SysEvents/SysEvents.h>
 #include "SysEventsInternal.h"
 #include "../Graphics/GraphicsInternal.h"
 
@@ -24,9 +24,9 @@ void SysEvents::update() {
 void SysEventsInternal::update() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-        for (auto sub : subscribers) {
+        for (SysEvents::Subscriber* sub : subscribers) {
             SubscriberInternal* subscriber = (SubscriberInternal*)sub;
-            SDL_Window* sdlWindow = ((GraphicsInternal*)subscriber->getGraphics())->getSdlWindow();
+            SDL_Window* sdlWindow = ((GraphicsInternal&)subscriber->getGraphics()).getWindow();
             bool takeEvent = false;
             if (subscriber->getEventType()==SubscriberInternal::EventType::WINDOW) {
                 if (event.type == SDL_WINDOWEVENT) {
@@ -60,13 +60,14 @@ void SysEventsInternal::update() {
     }
 }
 
-SysEventsInternal::SubscriberInternal::SubscriberInternal(Graphics* gfx,EventType et) {
-    graphics = gfx; eventType = et;
+SysEventsInternal::SubscriberInternal::SubscriberInternal(const Graphics& gfx, EventType et)
+    : graphics(gfx) {
+    eventType = et;
     receivedEvent = false;
     events.clear();
 }
 
-Graphics* SysEventsInternal::SubscriberInternal::getGraphics() const {
+const Graphics& SysEventsInternal::SubscriberInternal::getGraphics() const {
     return graphics;
 }
 
@@ -81,5 +82,5 @@ bool SysEventsInternal::SubscriberInternal::popEvent(SDL_Event& e) {
 }
 
 void SysEventsInternal::SubscriberInternal::pushEvent(SDL_Event e) {
-    events.push_back(e);
+    events.emplace_back(e);
 }

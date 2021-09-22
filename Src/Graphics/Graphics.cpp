@@ -1,36 +1,21 @@
-#include <Graphics/Graphics.h>
+#include <PGE/Graphics/Graphics.h>
 
 #include <SDL.h>
 
-#include <Exception/Exception.h>
+#include "GraphicsInternal.h"
 #include "../SysEvents/SysEventsInternal.h"
 
 using namespace PGE;
 
-static std::list<Graphics*> activeGraphics;
-
-const std::list<Graphics*>& Graphics::getActiveInstances() {
-    return activeGraphics;
-}
-
-Graphics::Graphics(const String& name, int w, int h, bool fs, uint32_t windowFlags) : resourceManager(2) {
+Graphics::Graphics(const String& name, int w, int h, WindowMode wm) {
     caption = name;
-    width = w; height = h; fullscreen = fs;
+    dimensions = Vector2i(w, h); aspectRatio = (float)w / h;
+    windowMode = wm;
 
-    eventSubscriber = resourceManager.addNewResource<WindowEventSubscriber>(this);
-
-    sdlWindow = resourceManager.addNewResource<SDLWindow>(name, w, h, windowFlags);
+    eventSubscriber = resourceManager.addNewResource<WindowEventSubscriber>(*this);
 
     open = true;
     focused = true;
-
-    depthTest = true;
-    vsync = true;
-    activeGraphics.push_back(this);
-}
-
-Graphics::~Graphics() {
-    activeGraphics.erase(std::find(activeGraphics.begin(), activeGraphics.end(), this));
 }
 
 void Graphics::update() {
@@ -46,16 +31,20 @@ void Graphics::update() {
     }
 }
 
+void Graphics::setScreenPosition(const Vector2i& pos) const {
+    SDL_SetWindowPosition(((GraphicsInternal*)this)->getWindow(), pos.x, pos.y);
+}
+
 const Rectanglei& Graphics::getViewport() const {
     return viewport;
 }
 
-int Graphics::getWidth() const {
-    return width;
+const Vector2i& Graphics::getDimensions() const {
+    return dimensions;
 }
 
-int Graphics::getHeight() const {
-    return height;
+float Graphics::getAspectRatio() const {
+    return aspectRatio;
 }
 
 bool Graphics::isWindowOpen() const {
@@ -82,10 +71,21 @@ bool Graphics::getVsync() const {
     return vsync;
 }
 
-#define APPEND(name) '\n' + #name + ": " + String::fromInt(name)
-
-String Graphics::getInfo() const {
-    return caption + " (" + getRendererName() + ") "
-        + String::fromInt(width) + 'x' + String::fromInt(height) + " / " + String::fromInt(viewport.width()) + 'x' + String::fromInt(viewport.height())
-        + APPEND(open) + APPEND(focused) + APPEND(fullscreen) + APPEND(vsync) + APPEND(depthTest);
+void Graphics::setCulling(Culling mode) {
+    cullingMode = mode;
 }
+
+Graphics::Culling Graphics::getCulling() const {
+    return cullingMode;
+}
+
+Graphics::WindowEventSubscriber::WindowEventSubscriber(const Graphics& gfx) {
+    resource = new SysEventsInternal::SubscriberInternal(gfx, SysEventsInternal::SubscriberInternal::EventType::WINDOW);
+    SysEventsInternal::subscribe(resource);
+}
+
+Graphics::WindowEventSubscriber::~WindowEventSubscriber() {
+    SysEventsInternal::unsubscribe(resource);
+}
+
+const int Graphics::DEFAULT_SCREEN_POSITION = SDL_WINDOWPOS_UNDEFINED;

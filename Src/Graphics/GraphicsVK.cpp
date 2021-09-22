@@ -2,15 +2,16 @@
 
 #include <set>
 
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 
-#include "../Shader/ShaderVK.h"
-#include "../Mesh/MeshVK.h"
-#include "../Texture/TextureVK.h"
+#include "Shader/ShaderVK.h"
+#include "Mesh/MeshVK.h"
+#include "Texture/TextureVK.h"
 
 using namespace PGE;
 
-GraphicsVK::GraphicsVK(const String& name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI), resourceManager(this, 199) {
+GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y)
+    : GraphicsSpecialized("Vulkan", name, w, h, wm, x, y, (SDL_WindowFlags)(SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI)), resourceManager(*this) {
     // Layers.
     std::vector<const char*> layers;
 #ifdef DEBUG
@@ -118,13 +119,13 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, bool fs) : GraphicsInte
 
     createSwapchain(true);
 
-    imageAvailableSemaphores = ResourceViewVector<vk::Semaphore>::withSize(MAX_FRAMES_IN_FLIGHT);
-    renderFinishedSemaphores = ResourceViewVector<vk::Semaphore>::withSize(MAX_FRAMES_IN_FLIGHT);
-    inFlightFences = ResourceViewVector<vk::Fence>::withSize(MAX_FRAMES_IN_FLIGHT);
+    imageAvailableSemaphores.reserve(MAX_FRAMES_IN_FLIGHT);
+    renderFinishedSemaphores.reserve(MAX_FRAMES_IN_FLIGHT);
+    inFlightFences.reserve(MAX_FRAMES_IN_FLIGHT);
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        imageAvailableSemaphores[i] = resourceManager.addNewResource<VKSemaphore>(device);
-        renderFinishedSemaphores[i] = resourceManager.addNewResource<VKSemaphore>(device);
-        inFlightFences[i] = resourceManager.addNewResource<VKFence>(device, i != 0);
+        imageAvailableSemaphores.emplace_back(resourceManager.addNewResource<VKSemaphore>(device));
+        renderFinishedSemaphores.emplace_back(resourceManager.addNewResource<VKSemaphore>(device));
+        inFlightFences.emplace_back(resourceManager.addNewResource<VKFence>(device, i != 0));
     }
     imagesInFlight.resize(MAX_FRAMES_IN_FLIGHT);
     acquireNextImage();
@@ -145,21 +146,21 @@ void GraphicsVK::endRender() {
 
     vk::PipelineStageFlags waitStages = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 
-    device->resetFences(inFlightFences[currentFrame]);
+    device->resetFences(inFlightFences[currentFrame].get());
     vk::SubmitInfo submitInfo = vk::SubmitInfo(1, &imageAvailableSemaphores[currentFrame], &waitStages, 1, &comBuffers[backBufferIndex], 1, &renderFinishedSemaphores[currentFrame]);
     vk::Result result;
     result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
-    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to graphics queue (VKERROR: " + String::fromInt((int)result) + ")");
+    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to graphics queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
 
     vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, (uint32_t*)&backBufferIndex, nullptr);
     result = presentQueue.presentKHR(presentInfo);
-    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::fromInt((int)result) + ")");
+    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
     // Wait until the current frames in flight are less than the max.
-    result = device->waitForFences(inFlightFences[currentFrame], false, UINT64_MAX);
-    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::fromInt((int)result) + ")");
+    result = device->waitForFences(inFlightFences[currentFrame].get(), false, UINT64_MAX);
+    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::hexFromInt((u32)result) + ")");
 }
 
 void GraphicsVK::acquireNextImage() {
@@ -170,7 +171,7 @@ void GraphicsVK::acquireNextImage() {
     if (imagesInFlight[backBufferIndex] != VK_NULL_HANDLE) {
         // If so, wait on it!
         result = device->waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX);
-        PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::fromInt((int)result) + ")");
+        PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::hexFromInt((u32)result) + ")");
         imagesInFlight[backBufferIndex] = vk::Fence(nullptr);
     }
     imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
@@ -182,7 +183,7 @@ void GraphicsVK::acquireNextImage() {
     comBuffers[backBufferIndex].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
 }
 
-void GraphicsVK::clear(Color color) {
+void GraphicsVK::clear(const Color& color) {
     vk::ClearAttachment cl = vk::ClearAttachment(vk::ImageAspectFlagBits::eColor, 0, vk::ClearValue(vk::ClearColorValue(std::array<float, 4>{ { color.red, color.green, color.blue, color.alpha }})));
     vk::ClearRect rect = vk::ClearRect(scissor, 0, 1);
     comBuffers[backBufferIndex].clearAttachments(cl, rect);
@@ -201,8 +202,8 @@ void GraphicsVK::transfer(const vk::Buffer& src, const vk::Buffer& dst, int size
 }
 
 void GraphicsVK::createSwapchain(bool vsync) {
-    resourceManager.deleteResourcefromReference(swapchain);
-    swapchain = resourceManager.addNewResource<VKSwapchain>(device, physicalDevice, surface, &swapchainExtent, width, height, swapchainFormat,
+    resourceManager.deleteResource(swapchain);
+    swapchain = resourceManager.addNewResource<VKSwapchain>(device, physicalDevice, surface, &swapchainExtent, dimensions.x, dimensions.y, swapchainFormat,
         graphicsQueueIndex, presentQueueIndex, transferQueueIndex, vsync);
 
     // Creating image views for our swapchain images to ultimately write to.
@@ -217,7 +218,7 @@ void GraphicsVK::createSwapchain(bool vsync) {
 
     pipelineInfo.init(swapchainExtent, &scissor);
 
-    resourceManager.deleteResourcefromReference(renderPass);
+    resourceManager.deleteResource(renderPass);
     renderPass = resourceManager.addNewResource<VKRenderPass>(device, swapchainFormat);
 
     framebuffers.resize(swapchainImageViews.size());
@@ -234,22 +235,22 @@ void GraphicsVK::createSwapchain(bool vsync) {
         comPools[i] = resourceManager.addNewResource<VKCommandPool>(device, graphicsQueueIndex);
         vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPools[i], vk::CommandBufferLevel::ePrimary, 1);
         result = device->allocateCommandBuffers(&comBufAllInfo, &comBuffers[i]);
-        PGE_ASSERT(result == vk::Result::eSuccess, "Failed to allocate command buffers (VKERROR: " + String::fromInt((int)result) + ")");
+        PGE_ASSERT(result == vk::Result::eSuccess, "Failed to allocate command buffers (VKERROR: " + String::hexFromInt((u32)result) + ")");
     }
 
-    resourceManager.deleteResourcefromReference(transferComPool);
+    resourceManager.deleteResource(transferComPool);
     transferComPool = resourceManager.addNewResource<VKCommandPool>(device, transferQueueIndex);
     // TODO: How many buffers should we have?
     vk::CommandBufferAllocateInfo transferComBufferInfo = vk::CommandBufferAllocateInfo(transferComPool, vk::CommandBufferLevel::ePrimary, 1);
     result = device->allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer);
-    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to allocate transfer command buffers (VKERROR: " + String::fromInt((int)result) + ")");
+    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to allocate transfer command buffers (VKERROR: " + String::hexFromInt((u32)result) + ")");
 }
 
-void GraphicsVK::setRenderTarget(Texture* renderTarget) {
+void GraphicsVK::setRenderTarget(Texture& renderTarget) {
 
 }
 
-void GraphicsVK::setRenderTargets(const std::vector<Texture*>& renderTargets) {
+void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& renderTargets) {
 
 }
 
@@ -294,5 +295,3 @@ vk::CommandBuffer GraphicsVK::getCurrentCommandBuffer() const {
 const VKPipelineInfo* GraphicsVK::getPipelineInfo() const {
     return &pipelineInfo;
 }
-
-PGE_GFX_OBJ_DEF(VK)

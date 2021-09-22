@@ -3,26 +3,28 @@
 
 #include "GraphicsInternal.h"
 
-#include <ResourceManagement/ResourceViewVector.h>
+#include "Shader/ShaderVK.h"
+#include "Mesh/MeshVK.h"
+#include "Texture/TextureVK.h"
+
 #include "../ResourceManagement/ResourceManagerVK.h"
-#include "../ResourceManagement/VK.h"
 
 namespace PGE {
 
 class ShaderVK;
 
-class GraphicsVK : public GraphicsInternal {
+class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
     public:
-        GraphicsVK(const String& name, int w = 1280, int h = 720, bool fs = false);
+        GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y);
 
         void swap() override;
 
-        void clear(Color color) override;
+        void clear(const Color& color) override;
 
         void transfer(const vk::Buffer& src, const vk::Buffer& dst, int size);
 
-        void setRenderTarget(Texture* renderTarget) override;
-        void setRenderTargets(const std::vector<Texture*>& renderTargets) override;
+        void setRenderTarget(Texture& renderTarget) override;
+        void setRenderTargets(const ReferenceVector<Texture>& renderTargets) override;
         void resetRenderTarget() override;
 
         void setViewport(const Rectanglei& vp) override;
@@ -34,8 +36,6 @@ class GraphicsVK : public GraphicsInternal {
         vk::RenderPass getRenderPass() const;
         vk::CommandBuffer getCurrentCommandBuffer() const;
         const VKPipelineInfo* getPipelineInfo() const;
-
-        PGE_GFX_OBJ_DEC
 
     private:
         // TODO: Remove.
@@ -56,7 +56,7 @@ class GraphicsVK : public GraphicsInternal {
         VKSwapchain::View swapchain;
         vk::Extent2D swapchainExtent;
         vk::SurfaceFormatKHR swapchainFormat;
-        ResourceViewVector<vk::ImageView> swapchainImageViews;
+        std::vector<VKImageView::View> swapchainImageViews;
 
         vk::Rect2D scissor;
 
@@ -64,16 +64,16 @@ class GraphicsVK : public GraphicsInternal {
 
         VKRenderPass::View renderPass;
 
-        ResourceViewVector<vk::Framebuffer> framebuffers;
+        std::vector<VKFramebuffer::View> framebuffers;
 
-        ResourceViewVector<vk::CommandPool> comPools;
+        std::vector<VKCommandPool::View> comPools;
         std::vector<vk::CommandBuffer> comBuffers;
         VKCommandPool::View transferComPool;
         vk::CommandBuffer transferComBuffer;
 
-        ResourceViewVector<vk::Semaphore> imageAvailableSemaphores;
-        ResourceViewVector<vk::Semaphore> renderFinishedSemaphores;
-        ResourceViewVector<vk::Fence> inFlightFences;
+        std::vector<VKSemaphore::View> imageAvailableSemaphores;
+        std::vector<VKSemaphore::View> renderFinishedSemaphores;
+        std::vector<VKFence::View> inFlightFences;
         // We don't actually own any resource here.
         std::vector<vk::Fence> imagesInFlight;
 

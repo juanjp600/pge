@@ -1,7 +1,8 @@
 
-#*.sln text eol=crlf
-#*.cpp text eol=lf
-#*.h text eol=lf
-#*.txt text eol=lf
-#*.md text eol=lf
-#TODO: figure out why line endings keep changing on me >:(
+*.sln text eol=crlf
+*.cpp text eol=lf
+*.h text eol=lf
+*.txt text eol=lf
+*.md text eol=lf
+*.hlsl text eol=lf
+*.glsl text eol=lf

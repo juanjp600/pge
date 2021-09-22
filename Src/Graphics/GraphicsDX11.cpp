@@ -1,87 +1,45 @@
 #include "GraphicsDX11.h"
 
-#include <SDL_syswm.h>
 #include <stdlib.h>
-
-#include "../Shader/ShaderDX11.h"
-#include "../Mesh/MeshDX11.h"
-#include "../Texture/TextureDX11.h"
 
 using namespace PGE;
 
-//REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
+// REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
 
-GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_SHOWN), resourceManager(12) {
-    HRESULT hResult = 0;
-
-    if (fullscreen) {
-        SDL_SetWindowBordered(sdlWindow, SDL_bool::SDL_FALSE);
+GraphicsDX11::GraphicsDX11(const String& name, int w, int h, WindowMode wm, int x, int y)
+    : GraphicsSpecialized("DirectX 11", name, w, h, wm, x, y, SDL_WINDOW_SHOWN) {
+    if (windowMode == WindowMode::Fullscreen) {
+        SDL_SetWindowBordered(getWindow(), SDL_bool::SDL_FALSE);
         SDL_Rect displayBounds;
-        int displayIndex = SDL_GetWindowDisplayIndex(sdlWindow);
+        int displayIndex = SDL_GetWindowDisplayIndex(getWindow());
         PGE_ASSERT(displayIndex >= 0, "Failed to determine display index (SDLERROR: " + String(SDL_GetError()) + ")");
         int errorCode = SDL_GetDisplayBounds(displayIndex, &displayBounds);
         PGE_ASSERT(errorCode == 0, "Failed to get display bounds (SDLERROR: " + String(SDL_GetError()) + ")");
-        PGE_ASSERT(displayBounds.w > 0 && displayBounds.h > 0, "Display bounds are invalid (" + String::fromInt(displayBounds.w) + "x" + String::fromInt(displayBounds.h) + ")");
-        SDL_SetWindowSize(sdlWindow, displayBounds.w, displayBounds.h);
-        SDL_SetWindowPosition(sdlWindow, 0, 0);
+        PGE_ASSERT(displayBounds.w > 0 && displayBounds.h > 0, "Display bounds are invalid (" + String::from(displayBounds.w) + "x" + String::from(displayBounds.h) + ")");
+        SDL_SetWindowSize(getWindow(), displayBounds.w, displayBounds.h);
+        SDL_SetWindowPosition(getWindow(), 0, 0);
     }
 
     dxgiFactory = resourceManager.addNewResource<DXGIFactory1>();
 
-    SDL_SysWMinfo sysWMinfo;
-    SDL_VERSION(&sysWMinfo.version); //REMINDER: THIS LINE IS VERY IMPORTANT
-    bool validInfo = SDL_GetWindowWMInfo(sdlWindow, &sysWMinfo);
-    PGE_ASSERT(validInfo, "Failed to initialize SDL version info (SDLERROR: " + String(SDL_GetError()) + ")");
-
-    ZeroMemory(&dxSwapChainDesc, sizeof(dxSwapChainDesc));
-    dxSwapChainDesc.BufferCount = 1;
-    dxSwapChainDesc.BufferDesc.Width = w;
-    dxSwapChainDesc.BufferDesc.Height = h;
-    dxSwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    dxSwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-    dxSwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-    dxSwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    dxSwapChainDesc.OutputWindow = sysWMinfo.info.win.window;
-    dxSwapChainDesc.SampleDesc.Count = 1;
-    dxSwapChainDesc.SampleDesc.Quality = 0;
-    dxSwapChainDesc.Windowed = TRUE;
-
     dxDevice = resourceManager.addNewResource<D3D11Device>();
     dxContext = resourceManager.addNewResource<D3D11ImmediateContext>(dxDevice);
-    dxSwapChain = resourceManager.addNewResource<DXGISwapChain>(dxgiFactory, dxDevice, dxSwapChainDesc);
+    dxSwapChain = resourceManager.addNewResource<DXGISwapChain>(dxDevice, dxgiFactory, w, h, getWindow());
     dxBackBufferRtv = resourceManager.addNewResource<D3D11BackBufferRtv>(dxDevice, dxSwapChain);
 
     dxZBufferTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::DEPTH_STENCIL, w, h, DXGI_FORMAT_D24_UNORM_S8_UINT);
 
-    dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture, DXGI_FORMAT_D24_UNORM_S8_UINT);
+    dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture);
     dxContext->OMSetRenderTargets(1, &dxBackBufferRtv, dxZBufferView);
 
-    ZeroMemory(&dxRasterizerStateDesc, sizeof(D3D11_RASTERIZER_DESC));
-    dxRasterizerStateDesc.AntialiasedLineEnable = false;
-    dxRasterizerStateDesc.CullMode = D3D11_CULL_BACK;
-    dxRasterizerStateDesc.DepthClipEnable = true;
-    dxRasterizerStateDesc.FillMode = D3D11_FILL_SOLID;
-    dxRasterizerStateDesc.ScissorEnable = false;
-    dxRasterizerStateDesc.MultisampleEnable = false;
-    dxRasterizerStateDesc.FrontCounterClockwise = true;
-    dxRasterizerState = resourceManager.addNewResource<D3D11RasterizerState>(dxDevice, dxRasterizerStateDesc);
-    
-    dxContext->RSSetState(dxRasterizerState);
+    cullingMode = Culling::NONE;
+    setCulling(Culling::BACK);
 
-    ZeroMemory(&dxBlendStateDesc, sizeof(D3D11_BLEND_DESC));
-    dxBlendStateDesc.RenderTarget[0].BlendEnable = true;
-    dxBlendStateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    dxBlendStateDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-    dxBlendStateDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-    dxBlendStateDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-    dxBlendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
-    dxBlendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    dxBlendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    dxBlendState = resourceManager.addNewResource<D3D11BlendState>(dxDevice, dxBlendStateDesc);
+    dxBlendState = resourceManager.addNewResource<D3D11BlendState>(dxDevice);
 
     dxContext->OMSetBlendState(dxBlendState, 0, 0xffffffff);
 
-    dxDepthStencilState = ResourceViewVector<ID3D11DepthStencilState*>::withSize(3);
+    dxDepthStencilState = std::vector<ID3D11DepthStencilState*>(3);
 
     D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
     depthStencilDesc.DepthEnable = TRUE;
@@ -113,7 +71,7 @@ GraphicsDX11::GraphicsDX11(const String& name,int w,int h,bool fs) : GraphicsInt
     dxDepthStencilState[(int)ZBufferStateIndex::DISABLED] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
 
     setViewport(Rectanglei(0,0,w,h));
-    currentRenderTargetViews.add(dxBackBufferRtv);
+    currentRenderTargetViews.emplace_back(dxBackBufferRtv);
     currentDepthStencilView = dxZBufferView;
 
     depthTest = true;
@@ -123,7 +81,7 @@ void GraphicsDX11::swap() {
     dxSwapChain->Present(vsync ? 1 : 0, 0);
 }
 
-void GraphicsDX11::clear(Color color) {
+void GraphicsDX11::clear(const Color& color) {
     float clearColor[4] = {color.red,color.green,color.blue,color.alpha};
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         dxContext->ClearRenderTargetView( currentRenderTargetViews[i], clearColor );
@@ -131,50 +89,50 @@ void GraphicsDX11::clear(Color color) {
     dxContext->ClearDepthStencilView( currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
 }
 
-void GraphicsDX11::setRenderTarget(Texture* renderTarget) {
+void GraphicsDX11::setRenderTarget(Texture& renderTarget) {
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
-    currentRenderTargetViews.clear(); currentRenderTargetViews.add(((TextureDX11*)renderTarget)->getRtv());
-    currentDepthStencilView = ((TextureDX11*)renderTarget)->getZBufferView();
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    currentRenderTargetViews.clear(); currentRenderTargetViews.emplace_back(((TextureDX11&)renderTarget).getRtv());
+    currentDepthStencilView = ((TextureDX11&)renderTarget).getZBufferView();
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
-void GraphicsDX11::setRenderTargets(const std::vector<Texture*>& renderTargets) {
+void GraphicsDX11::setRenderTargets(const ReferenceVector<Texture>& renderTargets) {
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
     currentRenderTargetViews.clear();
-    TextureDX11* maxSizeTexture = (TextureDX11*)renderTargets[0];
+    TextureDX11* maxSizeTexture = &(TextureDX11&)renderTargets[0];
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets[" + String::fromInt(i) + "] is not a valid render target");
-        currentRenderTargetViews.add(((TextureDX11*)renderTargets[i])->getRtv());
-        if (renderTargets[i]->getWidth()+renderTargets[i]->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
-            maxSizeTexture = (TextureDX11*)renderTargets[i];
+        PGE_ASSERT(renderTargets[i].get().isRenderTarget(), "renderTargets[" + String::from(i) + "] is not a valid render target");
+        currentRenderTargetViews.emplace_back(((TextureDX11&)renderTargets[i]).getRtv());
+        if (renderTargets[i].get().getWidth()+renderTargets[i].get().getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
+            maxSizeTexture = &(TextureDX11&)renderTargets[i];
         }
     }
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i]->getWidth() <= maxSizeTexture->getWidth() && renderTargets[i]->getHeight() <= maxSizeTexture->getHeight(),
-            "Render target sizes are incompatible (" + String::fromInt(maxSizeTexture->getWidth()) + "x" + String::fromInt(maxSizeTexture->getHeight()) + " vs " +
-                                                       String::fromInt(renderTargets[i]->getWidth()) + "x" + String::fromInt(renderTargets[i]->getHeight()) + ")");
+        PGE_ASSERT(renderTargets[i].get().getWidth() <= maxSizeTexture->getWidth() && renderTargets[i].get().getHeight() <= maxSizeTexture->getHeight(),
+            "Render target sizes are incompatible (" + String::from(maxSizeTexture->getWidth()) + "x" + String::from(maxSizeTexture->getHeight()) + " vs " +
+                                                       String::from(renderTargets[i].get().getWidth()) + "x" + String::from(renderTargets[i].get().getHeight()) + ")");
     }
     currentDepthStencilView = maxSizeTexture->getZBufferView();
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::resetRenderTarget() {
     for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
         currentRenderTargetViews[i] = nullptr;
     }
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
-    currentRenderTargetViews.clear(); currentRenderTargetViews.add(dxBackBufferRtv);
+    currentRenderTargetViews.clear(); currentRenderTargetViews.emplace_back(dxBackBufferRtv);
     currentDepthStencilView = dxZBufferView;
-    dxContext->OMSetRenderTargets( currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
 }
 
 void GraphicsDX11::setViewport(const Rectanglei& vp) {
@@ -189,6 +147,20 @@ void GraphicsDX11::setViewport(const Rectanglei& vp) {
         dxViewport.TopLeftY = (FLOAT)viewport.topLeftCorner().y;
         dxContext->RSSetViewports( 1, &dxViewport );
     }
+}
+
+void GraphicsDX11::setCulling(Culling mode) {
+    if (mode == cullingMode) { return; }
+
+    if (dxRasterizerState.isHoldingResource()) {
+        resourceManager.deleteResource(dxRasterizerState);
+    }
+
+    dxRasterizerState = resourceManager.addNewResource<D3D11RasterizerState>(dxDevice, mode);
+
+    dxContext->RSSetState(dxRasterizerState);
+
+    cullingMode = mode;
 }
 
 ID3D11Device* GraphicsDX11::getDxDevice() const {
@@ -210,5 +182,3 @@ ID3D11DepthStencilView* GraphicsDX11::getZBufferView() const {
 void GraphicsDX11::setZBufferState(GraphicsDX11::ZBufferStateIndex index) {
     dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)index], 0);
 }
-
-PGE_GFX_OBJ_DEF(DX11)

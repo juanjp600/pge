@@ -1,10 +1,12 @@
-#include <Math/Random.h>
+#include <PGE/Math/Random.h>
 
 #include <chrono>
 
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 
-static uint32_t rotl(uint32_t x, int8_t k) {
+using namespace PGE;
+
+static u32 rotl(u32 x, i8 k) {
     return (x << k) | (x >> (32 - k));
 }
 
@@ -14,19 +16,19 @@ namespace PGE {
 
     // SplitMix64
     // CC0
-    Random::Random(uint64_t sd) {
-        uint64_t* high = (uint64_t*)state;
+    Random::Random(u64 sd) {
+        u64* high = (u64*)state;
         for (int i = 0; i < 2; i++) {
             sd += 0x9e3779b97f4a7c15;
-            uint64_t z = sd;
+            u64 z = sd;
             z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
             z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
             high[i] = z ^ (z >> 31);
         }
     }
 
-    uint32_t Random::next() {
-        uint32_t temp = state[1] << 9;
+    u32 Random::next() {
+        u32 temp = state[1] << 9;
 
         state[2] ^= state[0];
         state[3] ^= state[1];
@@ -53,7 +55,7 @@ namespace PGE {
     }
 
     // [0, max]
-    uint32_t Random::nextInt(uint32_t max) {
+    u32 Random::nextInt(u32 max) {
         /**
         * 
         * Debiased Integer Multiplication after Lemire
@@ -85,11 +87,11 @@ namespace PGE {
         * DEALINGS IN THE SOFTWARE.
         * 
         */
-        uint64_t product = (uint64_t)next() * (uint64_t)max;
-        uint32_t lowerProduct = (uint32_t)product;
+        u64 product = (u64)next() * (u64)max;
+        u32 lowerProduct = (u32)product;
         if (lowerProduct < max) {
             // (2^32 - max) % max
-            uint32_t maxMod = 0 - max;
+            u32 maxMod = 0 - max;
             if (maxMod >= max) {
                 maxMod -= max;
                 if (maxMod >= max) {
@@ -97,8 +99,8 @@ namespace PGE {
                 }
             }
             while (lowerProduct < maxMod) {
-                product = (uint64_t)next() * (uint64_t)max;
-                lowerProduct = (uint32_t)product;
+                product = (u64)next() * (u64)max;
+                lowerProduct = (u32)product;
             }
         }
         // Return higher bits of the product.
@@ -106,8 +108,8 @@ namespace PGE {
     }
 
     // [min, max)
-    uint32_t Random::nextInt(uint32_t min, uint32_t max) {
-        PGE_ASSERT(min <= max, "min > max (min: " + String::fromInt(min) + ", max: " + String::fromInt(max) + ")");
+    u32 Random::nextInt(u32 min, u32 max) {
+        PGE_ASSERT(min <= max, "min > max (min: " + String::from(min) + ", max: " + String::from(max) + ")");
         return nextInt(max - min) + min;
     }
 

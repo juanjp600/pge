@@ -3,12 +3,10 @@
 
 #include <vector>
 
-#include <ResourceManagement/ResourceManager.h>
-
 #include <glad/gl.h>
 #include <SDL.h>
 
-#include "../ResourceManagement/Misc.h"
+#include <PGE/ResourceManagement/ResourceManager.h>
 
 namespace PGE {
 
@@ -30,7 +28,7 @@ class GLFramebuffer : public Resource<GLuint> {
         GLFramebuffer() {
             glGenFramebuffers(1, &resource);
             GLenum glError = glGetError();
-            PGE_ASSERT(glError == GL_NO_ERROR, "Failed to generate frame buffer (GLERROR: " + String::format(glError, "%u") + ")");
+            PGE_ASSERT(glError == GL_NO_ERROR, "Failed to generate frame buffer (GLERROR: " + String::from(glError) + ")");
         }
         
         ~GLFramebuffer() {
@@ -96,12 +94,14 @@ class GLShader : public Resource<GLuint> {
             glShaderSource(resource, 1, &src, nullptr);
             glCompileShader(resource);
 
-            char err[512];
-            glGetShaderInfoLog(resource, 512, NULL, err);
-
-            int result;
+            GLint result;
             glGetShaderiv(resource, GL_COMPILE_STATUS, &result);
-            PGE_ASSERT(result == GL_TRUE, "Failed to create shader (stage: " + String::format(stage, "%u") + "; error:" + err + ")");
+            if (result != GL_TRUE) {
+                glGetShaderiv(resource, GL_INFO_LOG_LENGTH, &result);
+                std::unique_ptr<GLchar[]> err = std::make_unique<GLchar[]>(result);
+                glGetShaderInfoLog(resource, result, NULL, err.get());
+                throw PGE_CREATE_EX("Failed to create shader (stage: " + String::from(stage) + "; error:\n" + err.get() + ")");
+            }
         }
 
         ~GLShader() {
@@ -119,7 +119,7 @@ class GLProgram : public Resource<GLuint> {
             glLinkProgram(resource);
             GLint result;
             glGetProgramiv(resource, GL_LINK_STATUS, &result);
-            PGE_ASSERT(result == GL_TRUE, "Failed to link shader (GLERROR:" + String::format(glGetError(), "%u") + ")");
+            PGE_ASSERT(result == GL_TRUE, "Failed to link shader (GLERROR:" + String::from(glGetError()) + ")");
         }
 
         ~GLProgram() {

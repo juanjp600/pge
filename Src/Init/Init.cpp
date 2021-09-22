@@ -1,48 +1,79 @@
 #include <SDL.h>
-#include <Init/Init.h>
-#include <Graphics/Graphics.h>
-#include <Exception/Exception.h>
-#include <Misc/FileWriter.h>
-#include <Misc/Info.h>
+
+#ifndef DEBUG
 #include <wtypes.h>
+#endif
+
+#include <PGE/Init/Init.h>
+#include <PGE/Graphics/Graphics.h>
+#include <PGE/Exception/Exception.h>
+#include <PGE/File/TextWriter.h>
+#include <PGE/Info/Info.h>
+
+#include "../Graphics/GraphicsInternal.h"
 
 using namespace PGE;
 
+#define PGE_ASSERT_SDL(CALL) PGE_ASSERT(CALL >= 0, SDL_GetError())
+
+#ifndef DEBUG
 static void showError(const String& exceptionType, const String& what) {
-    FileWriter writer = FileWriter(FilePath::fromStr("exception.txt"));
+    TextWriter writer = TextWriter(FilePath::fromStr("exception.txt"));
     writer.writeLine(Info::REPO_LINK);
     writer.writeLine(Info::BRANCH + " - " + Info::COMMIT);
     writer.writeLine(exceptionType);
     writer.writeLine(what);
-    String activeGraphics = "Active graphics: \n";
-    for (Graphics* gfx : Graphics::getActiveInstances()) {
-        activeGraphics += gfx->getInfo();
-    }
-    writer.writeLine(activeGraphics);
     SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags::SDL_MESSAGEBOX_ERROR, "Fatal Error",
         "An exception has been thrown, please send \"exception.txt\" to a developer.", NULL);
+}
+#endif
+
+// Throws PGE::Exception on error.
+void Init::init() {
+    SDL_SetMainReady();
+    PGE_ASSERT_SDL(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC));
+
+    SDL_GameControllerEventState(SDL_ENABLE);
+    PGE_ASSERT_SDL(SDL_JoystickEventState(SDL_ENABLE));
+
+    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE));
+    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3));
+    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3));
+    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8));
+}
+
+void Init::quit() {
+    SDL_Quit();
 }
 
 #ifdef DEBUG
 int main(int argc, char** argv) {
 #else
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow) {
+#pragma warning(push)
+#pragma warning(disable: 4100) // Unusued parameters.
+int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PSTR lpCmdLine, _In_ INT nCmdShow) {
+#pragma warning(pop)
     try {
 #endif
-        SDL_SetMainReady();
-        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC);
+        Init::init();
 
-        SDL_GameControllerEventState(SDL_ENABLE);
-        SDL_JoystickEventState(SDL_ENABLE);
+#ifndef DEBUG
+        int convArgc;
+        char16** convArgv = CommandLineToArgvW(GetCommandLineW(), &convArgc);
+#else
+        int convArgc = argc;
+        char** convArgv = argv;
+#endif
 
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-        SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+        std::vector<String> args(convArgc);
+        for (int i = 0; i < convArgc; i++) {
+            args[i] = convArgv[i];
+        }
 
-        int retVal = PGEMain::Main();
+        int retVal = Init::main(args);
 
-        SDL_Quit();
+        Init::quit();
+        
         return retVal;
 #ifndef DEBUG
     } catch (const Exception& e) {

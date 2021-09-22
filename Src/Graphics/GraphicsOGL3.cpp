@@ -1,14 +1,12 @@
 #include "GraphicsOGL3.h"
 
-#include "../Shader/ShaderOGL3.h"
-#include "../Mesh/MeshOGL3.h"
-#include "../Texture/TextureOGL3.h"
-
 #include <glad/gl.h>
 
 using namespace PGE;
 
-GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : GraphicsInternal(name, w, h, fs, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/), resourceManager(this, 2) {
+GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, WindowMode wm, int x, int y)
+    //TODO: this is incorrect on macOS
+    : GraphicsSpecialized("OpenGL", name, w, h, wm, x, y, (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/)), resourceManager(*this) {
 #if defined(__APPLE__) && defined(__OBJC__)
     // Figure out the de-scaled window size.
     NSRect rect = NSMakeRect(0, 0, w, h);
@@ -28,13 +26,14 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : Graphics
     //        SDL_SetWindowPosition(sdlWindow,0,0);
     //    }
 
-    glContext = resourceManager.addNewResource<GLContext>(sdlWindow);
+    glContext = resourceManager.addNewResource<GLContext>(getWindow());
 
-    PGE_ASSERT(gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress) != 0, "Failed to initialize GLAD (GLERROR: " + String::format(glGetError(), "%u") + ")");
+    PGE_ASSERT(gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress) != 0, "Failed to initialize GLAD (GLERROR: " + String::from(glGetError()) + ")");
 
     depthTest = true;
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE); glCullFace(GL_BACK);
+    cullingMode = Culling::NONE;
+    setCulling(Culling::BACK);
     glEnable(GL_BLEND);
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
     glClearDepth(1.0);
@@ -43,15 +42,17 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, bool fs) : Graphics
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     GLenum glError = glGetError();
-    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to initialize window data post-GLAD initialization (GLERROR: " + String::format(glError, "%u") + ")");
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to initialize window data post-GLAD initialization (GLERROR: " + String::from(glError) + ")");
 
-    SDL_GL_SwapWindow(sdlWindow);
+    SDL_GL_SwapWindow(getWindow());
 
     setViewport(Rectanglei(0,0,w,h));
 
     glFramebuffer = resourceManager.addNewResource<GLFramebuffer>();
 
     SDL_GL_SetSwapInterval(1);
+
+    updateRenderTargetFlags(false);
 }
 
 void GraphicsOGL3::update() {
@@ -60,12 +61,12 @@ void GraphicsOGL3::update() {
 }
 
 void GraphicsOGL3::swap() {
-    SDL_GL_SwapWindow(sdlWindow);
+    SDL_GL_SwapWindow(getWindow());
 }
 
 void GraphicsOGL3::takeGlContext() {
     if (SDL_GL_GetCurrentContext()!=glContext) {
-        SDL_GL_MakeCurrent(sdlWindow,glContext);
+        SDL_GL_MakeCurrent(getWindow(),glContext);
     }
 }
 
@@ -73,7 +74,7 @@ SDL_GLContext GraphicsOGL3::getGlContext() const {
     return glContext;
 }
 
-void GraphicsOGL3::clear(Color color) {
+void GraphicsOGL3::clear(const Color& color) {
     takeGlContext();
 
     glDepthMask(GL_TRUE);
@@ -82,23 +83,14 @@ void GraphicsOGL3::clear(Color color) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void GraphicsOGL3::setDepthTest(bool isEnabled) {
-    if (isEnabled != depthTest) {
-        depthTest = isEnabled;
-        if (isEnabled) {
-            glEnable(GL_DEPTH_TEST);
-        } else {
-            glDisable(GL_DEPTH_TEST);
-        }
-    }
-}
+void GraphicsOGL3::setRenderTarget(Texture& renderTarget) {
+    updateRenderTargetFlags(true);
 
-void GraphicsOGL3::setRenderTarget(Texture* renderTarget) {
     takeGlContext();
 
     glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, ((TextureOGL3*)renderTarget)->getGlDepthbuffer());
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ((TextureOGL3*)renderTarget)->getGlTexture(), 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, ((TextureOGL3&)renderTarget).getGlDepthbuffer());
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ((TextureOGL3&)renderTarget).getGlTexture(), 0);
 
     GLenum glAttachments[] = {
         GL_COLOR_ATTACHMENT0
@@ -106,17 +98,19 @@ void GraphicsOGL3::setRenderTarget(Texture* renderTarget) {
     glDrawBuffers(1, glAttachments);
 }
 
-void GraphicsOGL3::setRenderTargets(const std::vector<Texture*>& renderTargets) {
+void GraphicsOGL3::setRenderTargets(const ReferenceVector<Texture>& renderTargets) {
+    updateRenderTargetFlags(true);
+
     takeGlContext();
 
-    TextureOGL3* largestTarget = (TextureOGL3*)renderTargets[0];
+    TextureOGL3* largestTarget = &(TextureOGL3&)renderTargets[0];
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets["+String::fromInt(i)+"] is not a valid render target");
+        PGE_ASSERT(renderTargets[i].get().isRenderTarget(), "renderTargets["+String::from(i)+"] is not a valid render target");
 
         if (i == 0) { continue; }
 
-        if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i]->getWidth()+renderTargets[i]->getHeight())) {
-            largestTarget = (TextureOGL3*)renderTargets[i];
+        if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i].get().getWidth()+renderTargets[i].get().getHeight())) {
+            largestTarget = &(TextureOGL3&)renderTargets[i];
         }
     }
     GLenum glAttachments[] = {
@@ -132,12 +126,14 @@ void GraphicsOGL3::setRenderTargets(const std::vector<Texture*>& renderTargets) 
     glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, largestTarget->getGlDepthbuffer());
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3*)renderTargets[i])->getGlTexture(), 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3&)renderTargets[i]).getGlTexture(), 0);
     }
     glDrawBuffers((GLsizei)renderTargets.size(), glAttachments);
 }
 
 void GraphicsOGL3::resetRenderTarget() {
+    updateRenderTargetFlags(false);
+
     takeGlContext();
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -154,6 +150,17 @@ void GraphicsOGL3::setViewport(const Rectanglei& vp) {
     }
 }
 
+void GraphicsOGL3::setDepthTest(bool isEnabled) {
+    if (isEnabled != depthTest) {
+        depthTest = isEnabled;
+        if (isEnabled) {
+            glEnable(GL_DEPTH_TEST);
+        } else {
+            glDisable(GL_DEPTH_TEST);
+        }
+    }
+}
+
 void GraphicsOGL3::setVsync(bool isEnabled) {
     if (isEnabled != vsync) {
         takeGlContext();
@@ -163,4 +170,48 @@ void GraphicsOGL3::setVsync(bool isEnabled) {
     }
 }
 
-PGE_GFX_OBJ_DEF(OGL3)
+void GraphicsOGL3::setCulling(Culling mode) {
+    if (mode == cullingMode) { return; }
+
+    if (mode == Culling::NONE) {
+        glDisable(GL_CULL_FACE);
+    } else {
+        if (cullingMode == Culling::NONE) {
+            glEnable(GL_CULL_FACE);
+        }
+        updateCullingMode(mode, renderingToRenderTarget);
+    }
+
+    cullingMode = mode;
+}
+
+void GraphicsOGL3::updateCullingMode(Culling newMode, bool flip) {
+    if (newMode == Culling::NONE) { return; }
+
+    GLenum glMode;
+    if ((newMode == Culling::BACK) ^ flip) {
+        glMode = GL_BACK;
+    } else {
+        glMode = GL_FRONT;
+    }
+    glCullFace(glMode);
+}
+
+void GraphicsOGL3::addRenderTargetFlag(Shader::Constant& c) {
+    renderTargetFlags.emplace(&c);
+}
+
+void GraphicsOGL3::removeRenderTargetFlag(Shader::Constant& c) {
+    renderTargetFlags.erase(&c);
+}
+
+void GraphicsOGL3::updateRenderTargetFlags(bool rt) {
+    updateCullingMode(cullingMode, rt);
+
+    float yFlip = rt ? -1.f : 1.f;
+    for (Shader::Constant* c : renderTargetFlags) {
+        c->setValue(yFlip);
+    }
+
+    renderingToRenderTarget = rt;
+}

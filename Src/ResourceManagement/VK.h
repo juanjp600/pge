@@ -1,14 +1,14 @@
 #ifndef PGEINTERNAL_RESOURCEMANAGEMENT_VK
 #define PGEINTERNAL_RESOURCEMANAGEMENT_VK
 
-#include <ResourceManagement/ResourceManager.h>
+#include <PGE/ResourceManagement/ResourceManager.h>
 
 #include <set>
 
 #include <vulkan/vulkan.hpp>
 #include <SDL_vulkan.h>
 
-#include <Mesh/Mesh.h>
+#include <PGE/Graphics/Mesh.h>
 
 namespace PGE {
 
@@ -267,20 +267,20 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
 
     public:
         // Sadly we can't make this any more straightforward, because we're in a header and including either shader or graphics would lead to circular inclusion.
-        VKPipeline(vk::Device device, const vk::PipelineShaderStageCreateInfo* shaderInfo, const vk::PipelineVertexInputStateCreateInfo* vertexInfo, vk::PipelineLayout layout, const VKPipelineInfo* info, vk::RenderPass renderPass, Primitive::Type primitive) : VKDestroyResource(device) {
+        VKPipeline(vk::Device device, const vk::PipelineShaderStageCreateInfo* shaderInfo, const vk::PipelineVertexInputStateCreateInfo* vertexInfo, vk::PipelineLayout layout, const VKPipelineInfo* info, vk::RenderPass renderPass, Mesh::PrimitiveType type) : VKDestroyResource(device) {
             const vk::PipelineInputAssemblyStateCreateInfo* inputInfo;
-            switch (primitive) {
-                case Primitive::Type::LINE: {
+            switch (type) {
+                case Mesh::PrimitiveType::LINE: {
                     inputInfo = &inputAssemblyLines;
                 } break;
                 default:
-                case Primitive::Type::TRIANGLE: {
+                case Mesh::PrimitiveType::TRIANGLE: {
                     inputInfo = &inputAssemblyTris;
                 } break;
             }
             vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shaderInfo, vertexInfo, inputInfo, nullptr, info->getViewportInfo(), info->getRasterizationInfo(), info->getMultisamplerInfo(), nullptr, info->getColorBlendInfo(), nullptr, layout, renderPass, 0, {}, -1);
             vk::ResultValue<vk::Pipeline> creation = device.createGraphicsPipeline(nullptr, pipelineInfo);
-            PGE_ASSERT(creation.result == vk::Result::eSuccess, "Failed to create graphics pipeline (VKERROR: " + String::fromInt((int)creation.result) + ")");
+            PGE_ASSERT(creation.result == vk::Result::eSuccess, "Failed to create graphics pipeline (VKERROR: " + String::hexFromInt((u32)creation.result) + ")");
             resource = creation.value;
         }
 };

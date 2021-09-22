@@ -1,4 +1,4 @@
-#include <Exception/Exception.h>
+#include <PGE/Exception/Exception.h>
 
 #ifdef DEBUG
 #include <iostream>
@@ -6,15 +6,15 @@
 
 using namespace PGE;
 
-// TODO: Remove after ThreadManager refactor.
-Exception::Exception() {
+// TODO: Add utility to differentiate between valid and invalid exceptions.
+Exception::Exception() noexcept {
     info = ">>> INVALID EXCEPTION <<<";
 }
 
-Exception::Exception(const char* file, int line, const String& extra) {
+Exception::Exception(const String& file, int line, const String& extra) noexcept {
     info = file;
     info += ':';
-    info += String::fromInt(line);
+    info += String::from(line);
     if (extra != "") {
         info += '\n';
         info += extra;
@@ -24,6 +24,6 @@ Exception::Exception(const char* file, int line, const String& extra) {
 #endif
 }
 
-const String& Exception::what() const {
+const String& Exception::what() const noexcept {
     return info;
 }

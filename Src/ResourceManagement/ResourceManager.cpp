@@ -1,27 +1,10 @@
-#include <ResourceManagement/ResourceManager.h>
-
-#ifdef DEBUG
-#include <Exception/Exception.h>
-#endif
+#include <PGE/ResourceManagement/ResourceManager.h>
 
 using namespace PGE;
 
-ResourceManager::ResourceManager(int sz) {
-    resources.reserve(sz);
-#ifdef DEBUG
-    size = sz;
-#endif
-}
-
 ResourceManager::~ResourceManager() {
-    for (int i = (int)resources.size() - 1; i >= 0; i--) {
-        delete resources[i];
+    // TODO: C++20 can't come soon enough.
+    for (auto it = resources.rbegin(); it != resources.rend(); it++) {
+        delete *it;
     }
-}
-
-void ResourceManager::increaseSize(int count) {
-#ifdef DEBUG
-    size += count;
-#endif
-    resources.reserve(resources.capacity() + count);
 }

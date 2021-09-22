@@ -1,0 +1,30 @@
+name: Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "Include/**"
+      - "Documentation/**"
+      - ".github/workflows/doc.yml"
+
+jobs:
+  doc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+    
+      - name: Doxygen
+        uses: mattnotmitt/doxygen-action@v1.3.1
+        with:
+          working-directory: Documentation/
+
+      - name: Deploy
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: gh-pages
+          FOLDER: Documentation/html/
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
