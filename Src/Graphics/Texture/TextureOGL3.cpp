@@ -12,6 +12,7 @@ static int getCompressedFormat(Texture::CompressedFormat fmt) {
         case Texture::CompressedFormat::BC5: { return GL_COMPRESSED_RG_RGTC2; }
         case Texture::CompressedFormat::BC6: { return GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB; }
         case Texture::CompressedFormat::BC7: { return GL_COMPRESSED_RGBA_BPTC_UNORM_ARB; }
+        default: { throw PGE_CREATE_EX("Invalid compressed format"); }
     }
 }
 

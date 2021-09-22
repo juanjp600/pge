@@ -4,21 +4,11 @@ using namespace PGE;
 
 static DXGI_FORMAT getDXFormat(Texture::Format fmt) {
     switch (fmt) {
-        case Texture::Format::RGBA64: {
-            return DXGI_FORMAT_R16G16B16A16_UNORM;
-        }
-        case Texture::Format::RGBA32: {
-            return DXGI_FORMAT_R8G8B8A8_UNORM;
-        }
-        case Texture::Format::R32F: {
-            return DXGI_FORMAT_R32_FLOAT;
-        }
-        case Texture::Format::R8: {
-            return DXGI_FORMAT_R8_UNORM;
-        }
-        default: {
-            return DXGI_FORMAT_UNKNOWN;
-        }
+        case Texture::Format::RGBA64: { return DXGI_FORMAT_R16G16B16A16_UNORM; }
+        case Texture::Format::RGBA32: { return DXGI_FORMAT_R8G8B8A8_UNORM; }
+        case Texture::Format::R32F: { return DXGI_FORMAT_R32_FLOAT; }
+        case Texture::Format::R8: { return DXGI_FORMAT_R8_UNORM; }
+        default: { throw PGE_CREATE_EX("Invalid format"); }
     }
 }
 
@@ -31,6 +21,44 @@ static DXGI_FORMAT getDXFormat(Texture::CompressedFormat fmt) {
         case Texture::CompressedFormat::BC5: { return DXGI_FORMAT_BC5_UNORM; }
         case Texture::CompressedFormat::BC6: { return DXGI_FORMAT_BC6H_SF16; }
         case Texture::CompressedFormat::BC7: { return DXGI_FORMAT_BC7_UNORM; }
+        default: { throw PGE_CREATE_EX("Invalid compressed format"); }
+    }
+}
+
+static int getBytesPerPixel(Texture::Format fmt) {
+    switch (fmt) {
+        case Texture::Format::RGBA64: {
+            return 8;
+        }
+        case Texture::Format::RGBA32:
+        case Texture::Format::R32F: {
+            return 4;
+        }
+        case Texture::Format::R8: {
+            return 1;
+        }
+        default: {
+            throw PGE_CREATE_EX("Invalid format");
+        }
+    }
+}
+
+static int getBitsPerBlockOnLine(Texture::CompressedFormat fmt) {
+    switch (fmt) {
+        case Texture::CompressedFormat::BC1:
+        case Texture::CompressedFormat::BC4: {
+            return 2;
+        }
+        case Texture::CompressedFormat::BC2:
+        case Texture::CompressedFormat::BC3:
+        case Texture::CompressedFormat::BC5:
+        case Texture::CompressedFormat::BC6:
+        case Texture::CompressedFormat::BC7: {
+            return 4;
+        }
+        default: {
+            throw PGE_CREATE_EX("Invalid compressed format");
+        }
     }
 }
 
@@ -71,7 +99,7 @@ TextureDX11::TextureDX11(const Graphics& gfx, const std::vector<Texture::Mipmap>
 
     dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::COMPRESSED, mipmaps[0].width, mipmaps[0].height, dxFormat);
     for (int i = 0; i < mipmaps.size(); i++) {
-        dxContext->UpdateSubresource(dxTexture, D3D11CalcSubresource(i, 0, mipmaps.size()), NULL, mipmaps[i].buffer, mipmaps[i].width * getPixelsPerBlock(fmt), 0);
+        dxContext->UpdateSubresource(dxTexture, D3D11CalcSubresource(i, 0, (UINT)mipmaps.size()), NULL, mipmaps[i].buffer, mipmaps[i].width * getBitsPerBlockOnLine(fmt), 0);
     }
 
     dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat, false);
