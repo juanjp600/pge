@@ -42,6 +42,7 @@ var namespaces_dup =
         [ "\u202AZERO", "_matrix_8h.html#a60068e56aea133a823e257813d713bd5", null ]
       ] ],
       [ "\u202AUnicode", null, [
+        [ "\u202AisDigit", "_unicode_8h.html#ad54bda5c7d5f005b25befb8be5be41eb", null ],
         [ "\u202AisSpace", "_unicode_8h.html#a1fb4e18653c7532da0bd14f40227ac59", null ]
       ] ],
       [ "\u202AVectors", null, [
