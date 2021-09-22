@@ -15,11 +15,11 @@ class GraphicsDX11;
 class TextureDX11 : public Texture {
     public:
         // Render target.
-        TextureDX11(const Graphics& gfx, int w, int h, Format fmt);
+        TextureDX11(Graphics& gfx, int w, int h, Format fmt);
         // Loaded texture.
-        TextureDX11(const Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps);
+        TextureDX11(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps);
         // Loaded, compressed texture.
-        TextureDX11(const Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
+        TextureDX11(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
 
         void useTexture(int index);
 

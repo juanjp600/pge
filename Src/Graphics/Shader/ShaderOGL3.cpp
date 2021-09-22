@@ -4,7 +4,7 @@ using namespace PGE;
 
 static const String RT_NAME = "_PGE_INTERNAL_YFLIP";
 
-ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), resourceManager((GraphicsOGL3&)gfx), graphics((GraphicsOGL3&)gfx) {
+ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), resourceManager(gfx), graphics((GraphicsOGL3&)gfx) {
     graphics.takeGlContext();
 
     String vertexSource = (path + "vertex.glsl").readText();

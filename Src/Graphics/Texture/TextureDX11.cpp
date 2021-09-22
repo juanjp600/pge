@@ -62,7 +62,7 @@ static int getBitsPerBlockOnLine(Texture::CompressedFormat fmt) {
     }
 }
 
-TextureDX11::TextureDX11(const Graphics& gfx, int w, int h, Format fmt) : Texture(w, h, true, fmt), graphics((GraphicsDX11&)gfx) {
+TextureDX11::TextureDX11(Graphics& gfx, int w, int h, Format fmt) : Texture(w, h, true, fmt), graphics((GraphicsDX11&)gfx) {
     ID3D11Device* dxDevice = graphics.getDxDevice();
 
     DXGI_FORMAT dxFormat = getDXFormat(fmt);
@@ -78,7 +78,7 @@ TextureDX11::TextureDX11(const Graphics& gfx, int w, int h, Format fmt) : Textur
     dxZBufferView = resourceManager.addNewResource<D3D11DepthStencilView>(dxDevice, dxZBufferTexture);
 }
 
-TextureDX11::TextureDX11(const Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) : Texture(w, h, false, fmt), graphics((GraphicsDX11&)gfx) {
+TextureDX11::TextureDX11(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) : Texture(w, h, false, fmt), graphics((GraphicsDX11&)gfx) {
     ID3D11Device* dxDevice = graphics.getDxDevice();
     ID3D11DeviceContext* dxContext = graphics.getDxContext();
 
@@ -91,7 +91,7 @@ TextureDX11::TextureDX11(const Graphics& gfx, int w, int h, const byte* buffer, 
     dxContext->GenerateMips(dxShaderResourceView);
 }
 
-TextureDX11::TextureDX11(const Graphics& gfx, const std::vector<Texture::Mipmap>& mipmaps, CompressedFormat fmt) : Texture(mipmaps[0].width, mipmaps[0].height, false, fmt), graphics((GraphicsDX11&)gfx) {
+TextureDX11::TextureDX11(Graphics& gfx, const std::vector<Texture::Mipmap>& mipmaps, CompressedFormat fmt) : Texture(mipmaps[0].width, mipmaps[0].height, false, fmt), graphics((GraphicsDX11&)gfx) {
     ID3D11Device* dxDevice = graphics.getDxDevice();
     ID3D11DeviceContext* dxContext = graphics.getDxContext();
 
