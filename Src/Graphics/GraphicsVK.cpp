@@ -217,6 +217,8 @@ void GraphicsVK::createSwapchain(bool vsync) {
     scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
 
     pipelineInfo.init(swapchainExtent, &scissor);
+    cullingMode = Culling::NONE;
+    setCulling(Culling::BACK);
 
     resourceManager.deleteResource(renderPass);
     renderPass = resourceManager.addNewResource<VKRenderPass>(device, swapchainFormat);
@@ -274,6 +276,24 @@ void GraphicsVK::setVsync(bool isEnabled) {
     }
 }
 
+void GraphicsVK::setCulling(Culling mode) {
+    if (mode == cullingMode) { return; }
+
+    vk::CullModeFlagBits flags;
+    switch (mode) {
+        case Graphics::Culling::BACK: { flags = vk::CullModeFlagBits::eBack; } break;
+        case Graphics::Culling::FRONT: { flags = vk::CullModeFlagBits::eFront; } break;
+        case Graphics::Culling::NONE: { flags = vk::CullModeFlagBits::eNone; } break;
+    }
+    pipelineInfo.rasterizationInfo.cullMode = flags;
+
+    for (MeshVK* mesh : meshes) {
+        mesh->uploadPipeline();
+    }
+    
+    cullingMode = mode;
+}
+
 vk::Device GraphicsVK::getDevice() const {
     return device;
 }
@@ -294,4 +314,12 @@ vk::CommandBuffer GraphicsVK::getCurrentCommandBuffer() const {
 // When you want to pass something by reference the copy constructor must be available, even though it shouldn't be used!
 const VKPipelineInfo* GraphicsVK::getPipelineInfo() const {
     return &pipelineInfo;
+}
+
+void GraphicsVK::addMesh(MeshVK& m) {
+    meshes.emplace(&m);
+}
+
+void GraphicsVK::removeMesh(MeshVK& m) {
+    meshes.erase(&m);
 }

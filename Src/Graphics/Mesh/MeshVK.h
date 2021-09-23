@@ -13,6 +13,9 @@ namespace PGE {
 class MeshVK : public Mesh {
     public:
         MeshVK(Graphics& gfx);
+        ~MeshVK();
+
+        void uploadPipeline();
 
     private:
         GraphicsVK& graphics;

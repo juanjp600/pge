@@ -29,6 +29,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
 
         void setViewport(const Rectanglei& vp) override;
 
+        void setCulling(Culling mode) override;
+
         void setVsync(bool isEnabled) override;
 
         vk::Device getDevice() const;
@@ -36,6 +38,9 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
         vk::RenderPass getRenderPass() const;
         vk::CommandBuffer getCurrentCommandBuffer() const;
         const VKPipelineInfo* getPipelineInfo() const;
+
+        void addMesh(MeshVK& m);
+        void removeMesh(MeshVK& m);
 
     private:
         // TODO: Remove.
@@ -76,6 +81,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
         std::vector<VKFence::View> inFlightFences;
         // We don't actually own any resource here.
         std::vector<vk::Fence> imagesInFlight;
+
+        std::unordered_set<MeshVK*> meshes;
 
         const int MAX_FRAMES_IN_FLIGHT = 3;
         int currentFrame = 0;

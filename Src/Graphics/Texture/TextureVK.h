@@ -12,7 +12,7 @@ class TextureVK : public Texture {
         // Loaded texture.
         TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps);
         // Loaded, compressed texture.
-        TextureVK(const Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
+        TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
 
         void* getNative() const override;
 };

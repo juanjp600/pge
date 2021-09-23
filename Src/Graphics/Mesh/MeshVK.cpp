@@ -9,7 +9,12 @@
 using namespace PGE;
 
 MeshVK::MeshVK(Graphics& gfx) : resourceManager(gfx), graphics((GraphicsVK&)gfx) {
+	graphics.addMesh(*this);
 	// TODO test over frames in flight.
+}
+
+MeshVK::~MeshVK() {
+	graphics.removeMesh(*this);
 }
 
 void MeshVK::renderInternal() {
@@ -29,7 +34,6 @@ void MeshVK::uploadInternalData() {
 	vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
 	ShaderVK& shader = (ShaderVK&)material.getShader();
 
-	resourceManager.deleteResource(pipeline);
 	resourceManager.deleteResource(dataMemory);
 	resourceManager.deleteResource(dataBuffer);
 
@@ -56,5 +60,12 @@ void MeshVK::uploadInternalData() {
 	dataMemory = resourceManager.addNewResource<VKMemory>(device, physicalDevice, dataBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal);
 	graphics.transfer(stagingBuffer, dataBuffer, finalTotalSize);
 
-	pipeline = resourceManager.addNewResource<VKPipeline>(device, shader.getShaderStageInfo(), shader.getVertexInputInfo(), shader.getLayout(), graphics.getPipelineInfo(), graphics.getRenderPass(), primitiveType.value());
+	uploadPipeline();
+}
+
+void MeshVK::uploadPipeline() {
+	resourceManager.deleteResource(pipeline);
+	ShaderVK& shader = ((ShaderVK&)material.getShader());
+	pipeline = resourceManager.addNewResource<VKPipeline>(graphics.getDevice(), shader.getShaderStageInfo(), shader.getVertexInputInfo(), shader.getLayout(), graphics.getPipelineInfo(), graphics.getRenderPass(), primitiveType.value());
+
 }

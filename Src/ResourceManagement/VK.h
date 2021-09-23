@@ -211,8 +211,8 @@ class VKMemory : public VKFreeResource<vk::DeviceMemory> {
         }
 };
 
-class VKPipelineInfo {
-    private:
+class VKPipelineInfo : PolymorphicHeap {
+    public:
         // The extra info needs to remain in memory.
         vk::Viewport viewport;
         vk::PipelineViewportStateCreateInfo viewportInfo;
@@ -223,40 +223,20 @@ class VKPipelineInfo {
         vk::PipelineRasterizationStateCreateInfo rasterizationInfo;
         vk::PipelineMultisampleStateCreateInfo multisamplerInfo;
 
-    public:
-        VKPipelineInfo() { }
+        VKPipelineInfo() = default;
 
         void init(vk::Extent2D extent, vk::Rect2D* scissor) {
             // Creating a viewport.
             viewport = vk::Viewport(0.f, (float)extent.height, (float)extent.width, -(float)extent.height, 0.f, 1.f);
             viewportInfo = vk::PipelineViewportStateCreateInfo({}, 1, &viewport, 1, scissor);
 
-            rasterizationInfo = vk::PipelineRasterizationStateCreateInfo({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack, vk::FrontFace::eCounterClockwise, false, 0.f, 0.f, 0.f, 1.f);
+            rasterizationInfo = vk::PipelineRasterizationStateCreateInfo({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eFrontAndBack, vk::FrontFace::eCounterClockwise, false, 0.f, 0.f, 0.f, 1.f);
             multisamplerInfo = vk::PipelineMultisampleStateCreateInfo({}, vk::SampleCountFlagBits::e1, false, 0.f, nullptr, false, false);
 
             // Color blending.
             colorBlendAttachmentState = vk::PipelineColorBlendAttachmentState(false);
             colorBlendAttachmentState.colorWriteMask = vk::ColorComponentFlagBits::eA | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG;
             colorBlendInfo = vk::PipelineColorBlendStateCreateInfo({}, false, vk::LogicOp::eClear, 1, &colorBlendAttachmentState);
-        }
-
-        VKPipelineInfo(const VKPipelineInfo& other) = delete;
-        VKPipelineInfo& operator=(const VKPipelineInfo& other) = delete;
-
-        const vk::PipelineViewportStateCreateInfo* getViewportInfo() const {
-            return &viewportInfo;
-        }
-
-        const vk::PipelineRasterizationStateCreateInfo* getRasterizationInfo() const {
-            return &rasterizationInfo;
-        }
-
-        const vk::PipelineMultisampleStateCreateInfo* getMultisamplerInfo() const {
-            return &multisamplerInfo;
-        }
-
-        const vk::PipelineColorBlendStateCreateInfo* getColorBlendInfo() const {
-            return &colorBlendInfo;
         }
 };
 
@@ -278,7 +258,7 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
                     inputInfo = &inputAssemblyTris;
                 } break;
             }
-            vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shaderInfo, vertexInfo, inputInfo, nullptr, info->getViewportInfo(), info->getRasterizationInfo(), info->getMultisamplerInfo(), nullptr, info->getColorBlendInfo(), nullptr, layout, renderPass, 0, {}, -1);
+            vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shaderInfo, vertexInfo, inputInfo, nullptr, &info->viewportInfo, &info->rasterizationInfo, &info->multisamplerInfo, nullptr, &info->colorBlendInfo, nullptr, layout, renderPass, 0, {}, -1);
             vk::ResultValue<vk::Pipeline> creation = device.createGraphicsPipeline(nullptr, pipelineInfo);
             PGE_ASSERT(creation.result == vk::Result::eSuccess, "Failed to create graphics pipeline (VKERROR: " + String::hexFromInt((u32)creation.result) + ")");
             resource = creation.value;
@@ -295,7 +275,7 @@ class VKPipelineLayout : public VKDestroyResource<vk::PipelineLayout> {
 
 class VKShader : public VKDestroyResource<vk::ShaderModule> {
     public:
-        VKShader(vk::Device dev, const std::vector<uint8_t>& shaderBinary) : VKDestroyResource(dev) {
+        VKShader(vk::Device dev, const std::vector<byte>& shaderBinary) : VKDestroyResource(dev) {
             vk::ShaderModuleCreateInfo shaderCreateInfo = vk::ShaderModuleCreateInfo({}, shaderBinary.size(), (uint32_t*)shaderBinary.data());
             resource = device.createShaderModule(shaderCreateInfo);
         }
