@@ -23,9 +23,15 @@ class Program {
         using Clock = std::chrono::steady_clock;
 
         Graphics* graphics;
+
         Shader* shader;
-        Mesh::Material material;
+
         Mesh* mesh;
+
+        Mesh* mesh2;
+        Shader* shader2;
+        Texture* tex;
+
         InputManager* inputManager;
         KeyboardInput* escKey;
 
@@ -45,7 +51,6 @@ class Program {
 
             mesh = Mesh::create(*graphics);
             shader = Shader::load(*graphics, FilePath::fromStr("Shader3"));
-            //shader->getVertexShaderConstant("projectionMatrix").setValue(Matrix4x4f::constructOrthographicMat(10, 10, 0.1f, 100));
             StructuredData vertices(shader->getVertexLayout(), 4);
             vertices.setValue(0, "position", Vector2f(0, 0));
             vertices.setValue(1, "position", Vector2f(1, 0));
@@ -57,12 +62,42 @@ class Program {
             vertices.setValue(3, "color", Colors::BLUE);
             mesh->setMaterial(Mesh::Material(*shader, Mesh::Material::Opaque::NO));
             mesh->setGeometry(std::move(vertices), Mesh::PrimitiveType::TRIANGLE, { 0, 1, 2, 1, 2, 3 });
+
+            shader2 = Shader::load(*graphics, FilePath::fromStr("Shader3.2"));
+            
+            std::vector<byte> bytes = FilePath::fromStr("logo.bmp").readBytes();
+            u32 headerOffset = *(u32*)&bytes[0x000A];
+            for (int i = headerOffset; i < bytes.size() - 4; i += 4) {
+                for (int j = 0; j < 3; j++) {
+                    bytes[i + j] = bytes[i + j + 1];
+                }
+                bytes[i + 3] = 255;
+            }
+            int dim = sqrt((bytes.size() - headerOffset) / 4);
+            tex = Texture::load(*graphics, dim, dim, bytes.data() + headerOffset, Texture::Format::RGBA32);
+            
+            vertices = StructuredData(shader2->getVertexLayout(), 4);
+            vertices.setValue(0, "position", Vector2f(0, 0));
+            vertices.setValue(1, "position", Vector2f(-1, 0));
+            vertices.setValue(2, "position", Vector2f(0, -1));
+            vertices.setValue(3, "position", Vector2f(-1, -1));
+            vertices.setValue(0, "uv", Vector2f(0, 1));
+            vertices.setValue(1, "uv", Vector2f(1, 1));
+            vertices.setValue(2, "uv", Vector2f(0, 0));
+            vertices.setValue(3, "uv", Vector2f(1, 0));
+
+            mesh2 = Mesh::create(*graphics);
+            mesh2->setGeometry(std::move(vertices), Mesh::PrimitiveType::TRIANGLE, { 0, 1, 2, 1, 2, 3 });
+            mesh2->setMaterial(Mesh::Material(*shader2, *tex, Mesh::Material::Opaque::YES));
         }
 
         ~Program() {
             inputManager->untrackInput(escKey);
             delete escKey;
             delete inputManager;
+            delete mesh2;
+            delete shader2;
+            delete tex;
             delete mesh;
             delete shader;
             delete graphics;
@@ -85,9 +120,10 @@ class Program {
                 graphics->setCulling(graphics->getCulling() == Graphics::Culling::BACK ? Graphics::Culling::FRONT : Graphics::Culling::BACK);
             }
 
-            graphics->clear(Colors::BLACK);
+            graphics->clear(Colors::GRAY);
 
             mesh->render();
+            mesh2->render();
 
             graphics->swap();
 

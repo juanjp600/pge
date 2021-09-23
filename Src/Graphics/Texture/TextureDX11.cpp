@@ -25,24 +25,6 @@ static DXGI_FORMAT getDXFormat(Texture::CompressedFormat fmt) {
     }
 }
 
-static int getBytesPerPixel(Texture::Format fmt) {
-    switch (fmt) {
-        case Texture::Format::RGBA64: {
-            return 8;
-        }
-        case Texture::Format::RGBA32:
-        case Texture::Format::R32F: {
-            return 4;
-        }
-        case Texture::Format::R8: {
-            return 1;
-        }
-        default: {
-            throw PGE_CREATE_EX("Invalid format");
-        }
-    }
-}
-
 static int getBitsPerBlockOnLine(Texture::CompressedFormat fmt) {
     switch (fmt) {
         case Texture::CompressedFormat::BC1:
