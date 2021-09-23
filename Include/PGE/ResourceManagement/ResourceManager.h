@@ -10,8 +10,13 @@ namespace PGE {
 
 class ResourceBase;
 class ResourceManager : private NoHeap {
-    private:
+    protected:
         std::list<ResourceBase*> resources;
+
+        template <typename T>
+        const std::list<ResourceBase*>::iterator& getIterator(const ResourceView<T>& v) const {
+            return v.iterator;
+        }
 
     public:
         virtual ~ResourceManager();
@@ -32,8 +37,8 @@ class ResourceManager : private NoHeap {
                 return;
             }
 
-            delete *view.getManagerIterator();
-            resources.erase(view.getManagerIterator());
+            delete *view.iterator;
+            resources.erase(view.iterator);
         }
 };
 

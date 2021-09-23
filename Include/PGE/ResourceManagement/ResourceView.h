@@ -11,6 +11,8 @@ namespace PGE {
 class ResourceBase;
 template <typename T>
 class ResourceView : private NoHeap {
+    friend class ResourceManager;
+
     private:
         T internalResource;
         std::list<ResourceBase*>::iterator iterator;
@@ -34,8 +36,6 @@ class ResourceView : private NoHeap {
         const T* operator&() const { return &get(); }
 
         bool isHoldingResource() const { return holdsResource; }
-
-        const std::list<ResourceBase*>::iterator& getManagerIterator() { return iterator; }
 };
 
 }
