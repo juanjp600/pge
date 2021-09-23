@@ -42,6 +42,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
         void addMesh(MeshVK& m);
         void removeMesh(MeshVK& m);
 
+        void trash(ResourceBase& res);
+
     private:
         // TODO: Remove.
         uint32_t graphicsQueueIndex;
@@ -90,6 +92,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
         int backBufferIndex;
 
         ResourceManagerVK resourceManager;
+        std::vector<ResourceBase*> trashBin;
 
         void createSwapchain(bool vsync);
 

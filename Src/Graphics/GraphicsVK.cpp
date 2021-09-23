@@ -137,6 +137,15 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
 void GraphicsVK::swap() {
     endRender();
     
+    if (!trashBin.empty()) {
+        device->waitIdle();
+        // Clear trashbin.
+        for (ResourceBase* b : trashBin) {
+            delete b;
+        }
+        trashBin.clear();
+    }
+
     acquireNextImage();
 }
 
@@ -322,4 +331,8 @@ void GraphicsVK::addMesh(MeshVK& m) {
 
 void GraphicsVK::removeMesh(MeshVK& m) {
     meshes.erase(&m);
+}
+
+void GraphicsVK::trash(ResourceBase& res) {
+    trashBin.push_back(&res);
 }

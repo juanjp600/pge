@@ -64,7 +64,7 @@ void MeshVK::uploadInternalData() {
 }
 
 void MeshVK::uploadPipeline() {
-	resourceManager.deleteResource(pipeline);
+	resourceManager.trash(pipeline);
 	ShaderVK& shader = ((ShaderVK&)material.getShader());
 	pipeline = resourceManager.addNewResource<VKPipeline>(graphics.getDevice(), shader.getShaderStageInfo(), shader.getVertexInputInfo(), shader.getLayout(), graphics.getPipelineInfo(), graphics.getRenderPass(), primitiveType.value());
 

@@ -10,9 +10,18 @@ class ResourceManagerVK : public ResourceManager {
     private:
         class GraphicsVK& graphics;
 
+        void trashInternal(const std::list<ResourceBase*>::iterator& it);
+
     public:
         ResourceManagerVK(class Graphics& gfx);
         ~ResourceManagerVK();
+
+        // TODO: Remove with C++20.
+        template <typename T>
+        void trash(const ResourceView<T>& view) {
+            if (!view.isHoldingResource()) { return; }
+            trashInternal(getIterator(view));
+        }
 };
 
 }
