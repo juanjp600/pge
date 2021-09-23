@@ -9,6 +9,7 @@
 #include <SDL_vulkan.h>
 
 #include <PGE/Graphics/Mesh.h>
+#include <PGE/Graphics/Texture.h>
 
 namespace PGE {
 
@@ -115,7 +116,7 @@ class VKFence : public VKDestroyResource<vk::Fence> {
 class VKCommandPool : public VKDestroyResource<vk::CommandPool> {
     public:
         VKCommandPool(vk::Device dev, int queueIndex) : VKDestroyResource(dev) {
-            resource = dev.createCommandPool(vk::CommandPoolCreateInfo({}, queueIndex));
+            resource = dev.createCommandPool(vk::CommandPoolCreateInfo(vk::CommandPoolCreateFlagBits::eTransient, queueIndex));
         }
 };
 
@@ -189,8 +190,16 @@ class VKBuffer : public VKDestroyResource<vk::Buffer> {
 
 class VKMemory : public VKFreeResource<vk::DeviceMemory> {
     public:
-        VKMemory(vk::Device dev, vk::PhysicalDevice physDev, vk::Buffer buffer, vk::MemoryPropertyFlags memPropFlags) : VKFreeResource(dev) {
-            vk::MemoryRequirements memReq = device.getBufferMemoryRequirements(buffer);
+        template <typename T>
+        VKMemory(vk::Device dev, vk::PhysicalDevice physDev, T data, vk::MemoryPropertyFlags memPropFlags) : VKFreeResource(dev) {
+            vk::MemoryRequirements memReq;
+            if constexpr (std::is_same<T, vk::Image>::value) {
+                memReq = device.getImageMemoryRequirements(data);
+            } else if constexpr (std::is_same<T, vk::Buffer>::value) {
+                memReq = device.getBufferMemoryRequirements(data);
+            } else {
+                static_assert(false);
+            } 
 
             // Finding a fitting memory type.
             int memIndex = -1;
@@ -207,7 +216,13 @@ class VKMemory : public VKFreeResource<vk::DeviceMemory> {
             vk::MemoryAllocateInfo memoryInfo = vk::MemoryAllocateInfo(memReq.size, memIndex);
             resource = device.allocateMemory(memoryInfo);
 
-            device.bindBufferMemory(buffer, resource, 0);
+            if constexpr (std::is_same<T, vk::Image>::value) {
+                device.bindImageMemory(data, resource, 0);
+            } else if constexpr (std::is_same<T, vk::Buffer>::value) {
+                device.bindBufferMemory(data, resource, 0);
+            } else {
+                static_assert(false);
+            }
         }
 };
 
@@ -278,6 +293,24 @@ class VKShader : public VKDestroyResource<vk::ShaderModule> {
         VKShader(vk::Device dev, const std::vector<byte>& shaderBinary) : VKDestroyResource(dev) {
             vk::ShaderModuleCreateInfo shaderCreateInfo = vk::ShaderModuleCreateInfo({}, shaderBinary.size(), (uint32_t*)shaderBinary.data());
             resource = device.createShaderModule(shaderCreateInfo);
+        }
+};
+
+class VKImage : public VKDestroyResource<vk::Image> {
+    public:
+        VKImage(const vk::Device& dev, int w, int h, vk::Format fmt) : VKDestroyResource(dev) {
+            vk::ImageCreateInfo info{ };
+            info.setImageType(vk::ImageType::e2D);
+            info.setFormat(fmt);
+            info.setExtent(vk::Extent3D(w, h, 1));
+            info.setMipLevels(1).setArrayLayers(1);
+            info.setSamples(vk::SampleCountFlagBits::e1);
+            info.setTiling(vk::ImageTiling::eOptimal);
+            info.setInitialLayout(vk::ImageLayout::eUndefined);
+            info.setUsage(vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled);
+            info.setSharingMode(vk::SharingMode::eExclusive);
+
+            resource = device.createImage(info);
         }
 };
 

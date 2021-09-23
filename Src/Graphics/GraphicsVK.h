@@ -21,7 +21,17 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
 
         void clear(const Color& color) override;
 
-        void transfer(const vk::Buffer& src, const vk::Buffer& dst, int size);
+
+        void transformImage(vk::Image img, vk::Format fmt, vk::ImageLayout oldL, vk::ImageLayout newL);
+
+        // TODO: Optimize.
+        void transfer(const vk::Buffer& src, const vk::Buffer& dst, int size) {
+            startTransfer();
+            transferComBuffer.copyBuffer(src, dst, vk::BufferCopy(0, 0, size));
+            endTransfer();
+        }
+        
+        void transferToImage(const vk::Buffer& src, const vk::Image& dst, int w, int h);
 
         void setRenderTarget(Texture& renderTarget) override;
         void setRenderTargets(const ReferenceVector<Texture>& renderTargets) override;
@@ -86,7 +96,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
 
         std::unordered_set<MeshVK*> meshes;
 
-        const int MAX_FRAMES_IN_FLIGHT = 3;
+        static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
         int currentFrame = 0;
 
         int backBufferIndex;
@@ -98,6 +108,9 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
 
         void endRender();
         void acquireNextImage();
+
+        void startTransfer();
+        void endTransfer();
 };
 
 }

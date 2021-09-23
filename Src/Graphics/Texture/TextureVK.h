@@ -15,6 +15,12 @@ class TextureVK : public Texture {
         TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
 
         void* getNative() const override;
+
+    private:
+        ResourceManagerVK resourceManager;
+
+        VKImage::View image;
+        VKMemory::View imageMem;
 };
 
 }

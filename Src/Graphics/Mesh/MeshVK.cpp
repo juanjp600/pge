@@ -42,7 +42,7 @@ void MeshVK::uploadInternalData() {
 	int finalTotalSize = totalVertexSize + sizeof(u16) * indices.size();
 
 	VKBuffer stagingBuffer = VKBuffer(device, finalTotalSize, vk::BufferUsageFlagBits::eTransferSrc);
-	VKMemory stagingMemory = VKMemory(device, physicalDevice, stagingBuffer, vk::MemoryPropertyFlagBits::eHostVisible);
+	VKMemory stagingMemory = VKMemory(device, physicalDevice, stagingBuffer.get(), vk::MemoryPropertyFlagBits::eHostVisible);
 
 	std::vector<String> vertexInputNames = shader.getVertexInputNames();
 	float* vertexCursor = (float*)device.mapMemory(stagingMemory, 0, VK_WHOLE_SIZE);
@@ -57,7 +57,7 @@ void MeshVK::uploadInternalData() {
 	device.unmapMemory(stagingMemory);
 
 	dataBuffer = resourceManager.addNewResource<VKBuffer>(device, finalTotalSize, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer);
-	dataMemory = resourceManager.addNewResource<VKMemory>(device, physicalDevice, dataBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal);
+	dataMemory = resourceManager.addNewResource<VKMemory>(device, physicalDevice, dataBuffer.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
 	graphics.transfer(stagingBuffer, dataBuffer, finalTotalSize);
 
 	uploadPipeline();
@@ -67,5 +67,4 @@ void MeshVK::uploadPipeline() {
 	resourceManager.trash(pipeline);
 	ShaderVK& shader = ((ShaderVK&)material.getShader());
 	pipeline = resourceManager.addNewResource<VKPipeline>(graphics.getDevice(), shader.getShaderStageInfo(), shader.getVertexInputInfo(), shader.getLayout(), graphics.getPipelineInfo(), graphics.getRenderPass(), primitiveType.value());
-
 }

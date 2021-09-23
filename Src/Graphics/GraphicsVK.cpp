@@ -187,27 +187,28 @@ void GraphicsVK::acquireNextImage() {
 
     device->resetCommandPool(comPools[backBufferIndex], {});
 
-    comBuffers[backBufferIndex].begin(vk::CommandBufferBeginInfo());
+    comBuffers[backBufferIndex].begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit));
     vk::RenderPassBeginInfo beginInfo = vk::RenderPassBeginInfo(renderPass, framebuffers[backBufferIndex], scissor);
     comBuffers[backBufferIndex].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
+}
+
+void GraphicsVK::startTransfer() {
+    device->resetCommandPool(transferComPool, {});
+    transferComBuffer.begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit));
+}
+
+void GraphicsVK::endTransfer() {
+    transferComBuffer.end();
+    vk::SubmitInfo sui;
+    sui.setCommandBuffers(transferComBuffer);
+    transferQueue.submit(sui, nullptr);
+    transferQueue.waitIdle();
 }
 
 void GraphicsVK::clear(const Color& color) {
     vk::ClearAttachment cl = vk::ClearAttachment(vk::ImageAspectFlagBits::eColor, 0, vk::ClearValue(vk::ClearColorValue(std::array<float, 4>{ { color.red, color.green, color.blue, color.alpha }})));
     vk::ClearRect rect = vk::ClearRect(scissor, 0, 1);
     comBuffers[backBufferIndex].clearAttachments(cl, rect);
-}
-
-// TODO: Optimize.
-void GraphicsVK::transfer(const vk::Buffer& src, const vk::Buffer& dst, int size) {
-    device->resetCommandPool(transferComPool, {});
-    transferComBuffer.begin(vk::CommandBufferBeginInfo({}));
-    transferComBuffer.copyBuffer(src, dst, vk::BufferCopy(0, 0, size));
-    transferComBuffer.end();
-    vk::SubmitInfo sui;
-    sui.setCommandBuffers(transferComBuffer);
-    transferQueue.submit(sui, nullptr);
-    transferQueue.waitIdle();
 }
 
 void GraphicsVK::createSwapchain(bool vsync) {
@@ -255,6 +256,56 @@ void GraphicsVK::createSwapchain(bool vsync) {
     vk::CommandBufferAllocateInfo transferComBufferInfo = vk::CommandBufferAllocateInfo(transferComPool, vk::CommandBufferLevel::ePrimary, 1);
     result = device->allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer);
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to allocate transfer command buffers (VKERROR: " + String::hexFromInt((u32)result) + ")");
+}
+
+void GraphicsVK::transformImage(vk::Image img, vk::Format fmt, vk::ImageLayout oldL, vk::ImageLayout newL) {
+    startTransfer();
+
+    vk::ImageMemoryBarrier barrier;
+    barrier.setImage(img);
+    barrier.setOldLayout(oldL);
+    barrier.setNewLayout(newL);
+    barrier.setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED);
+    barrier.setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED);
+    barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+    barrier.subresourceRange.baseArrayLayer = 0;
+    barrier.subresourceRange.layerCount = 1;
+    barrier.subresourceRange.baseMipLevel = 0;
+    barrier.subresourceRange.levelCount = 1;
+
+    vk::PipelineStageFlags srcStage;
+    vk::PipelineStageFlags dstStage;
+
+    if (oldL == vk::ImageLayout::eUndefined && newL == vk::ImageLayout::eTransferDstOptimal) {
+        barrier.srcAccessMask = vk::AccessFlagBits::eNoneKHR;
+        barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
+        srcStage = vk::PipelineStageFlagBits::eTopOfPipe;
+        dstStage = vk::PipelineStageFlagBits::eTransfer;
+    } else if (oldL == vk::ImageLayout::eTransferDstOptimal && newL == vk::ImageLayout::eShaderReadOnlyOptimal) {
+        barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+        barrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
+        srcStage = vk::PipelineStageFlagBits::eTransfer;
+        dstStage = vk::PipelineStageFlagBits::eFragmentShader;
+    } else {
+        throw PGE_CREATE_EX("Invalid conversion");
+    }
+
+    transferComBuffer.pipelineBarrier(srcStage, dstStage, (vk::DependencyFlags)0, nullptr, nullptr, barrier);
+
+    endTransfer();
+}
+
+void GraphicsVK::transferToImage(const vk::Buffer& src, const vk::Image& dst, int w, int h) {
+    startTransfer();
+
+    vk::BufferImageCopy copy;
+    copy.imageSubresource.aspectMask = vk::ImageAspectFlagBits::eColor;
+    copy.imageSubresource.layerCount = 1;
+    copy.imageExtent = vk::Extent3D(w, h, 1);
+
+    transferComBuffer.copyBufferToImage(src, dst, vk::ImageLayout::eTransferDstOptimal, copy);
+
+    endTransfer();
 }
 
 void GraphicsVK::setRenderTarget(Texture& renderTarget) {
