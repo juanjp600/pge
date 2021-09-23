@@ -196,6 +196,9 @@
       <Filter>Src\Graphics\Texture</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Libraries\SPIRV-Reflect\spirv_reflect.c" />
+    <ClCompile Include="..\..\Src\String\UnicodeManual.cpp">
+      <Filter>Src\String</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">

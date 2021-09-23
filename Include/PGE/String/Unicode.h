@@ -8,7 +8,7 @@ namespace PGE {
 namespace Unicode {
 	// S and Cc.
 	bool isSpace(char16 ch);
-	static bool isDigit(char16 ch) { return ch >= L'0' && ch <= L'9'; }
+	bool isDigit(char16 ch);
 }
 
 }
