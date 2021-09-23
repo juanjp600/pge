@@ -1,5 +1,14 @@
 var NAVTREEINDEX3 =
 {
+"class_p_g_e_1_1_string.html#ae214a27004c89dbd34025573962f3f31":[1,0,0,37,53],
+"class_p_g_e_1_1_string.html#ae4ab9b20750544009ac31397aea954f0":[1,0,0,37,47],
+"class_p_g_e_1_1_string.html#ae893905a061d6a33712e4e5ba1df9d7a":[1,0,0,37,25],
+"class_p_g_e_1_1_string.html#ae9f843058b010b583c68698f4859a2b8":[1,0,0,37,38],
+"class_p_g_e_1_1_string.html#aed680a8d91f7ed32bb5a67fd26040b20":[1,0,0,37,6],
+"class_p_g_e_1_1_string.html#aed680a8d91f7ed32bb5a67fd26040b20a9e43f5291e6fcb2ad99c8e3f91acd179":[1,0,0,37,6,0],
+"class_p_g_e_1_1_string.html#aed680a8d91f7ed32bb5a67fd26040b20aa7c48ba367e019d004bfb0239b85f2b3":[1,0,0,37,6,1],
+"class_p_g_e_1_1_string.html#af3d88a942ef0ed2ff1a115340bd1e41c":[1,0,0,37,49],
+"class_p_g_e_1_1_string_1_1_iterator.html":[1,0,0,37,0],
 "class_p_g_e_1_1_string_1_1_iterator.html#a00e64926a23e32eea2240c6e23b29cdd":[1,0,0,37,0,15],
 "class_p_g_e_1_1_string_1_1_iterator.html#a0a01d49424d201752380d5d439772fae":[1,0,0,37,0,13],
 "class_p_g_e_1_1_string_1_1_iterator.html#a25f03bf4727eb16db027769529bcf1e2":[1,0,0,37,0,10],
@@ -240,14 +249,5 @@ var NAVTREEINDEX3 =
 "namespace_p_g_e_1_1_colors.html#a2beb8c7b13cd23ddaf960546e7cc9d21":[0,0,0,0,6],
 "namespace_p_g_e_1_1_colors.html#a2f2ae893c96771119539a76996ab0e5e":[0,0,0,0,8],
 "namespace_p_g_e_1_1_colors.html#a323d176fc7ce3fed43b2d3d9a9557afc":[0,0,0,0,7],
-"namespace_p_g_e_1_1_colors.html#a4ff079b8244da2076171e8457f0cddbd":[0,0,0,0,0],
-"namespace_p_g_e_1_1_colors.html#a6724db53a0318835299e7571ef2a5221":[0,0,0,0,1],
-"namespace_p_g_e_1_1_colors.html#a7dff19cbe18e740f2f61f244c6c96202":[0,0,0,0,4],
-"namespace_p_g_e_1_1_colors.html#a857185a17c4ae5424b220607fea4dd42":[0,0,0,0,5],
-"namespace_p_g_e_1_1_colors.html#ab15431133cff9647e91da21264fb5209":[0,0,0,0,3],
-"namespace_p_g_e_1_1_colors.html#abb07043309725510814286dd9bdc4556":[0,0,0,0,2],
-"namespace_p_g_e_1_1_math.html":[0,0,0,4],
-"namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78":[0,0,0,4,0],
-"namespace_p_g_e_1_1_math.html#a24b876f1c65434d6645c0b87c252dbab":[0,0,0,4,7],
-"namespace_p_g_e_1_1_math.html#a24ce35a5ad40879ca3a9498e73ecc606":[0,0,0,4,1]
+"namespace_p_g_e_1_1_colors.html#a4ff079b8244da2076171e8457f0cddbd":[0,0,0,0,0]
 };
