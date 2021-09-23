@@ -34,8 +34,8 @@ void MeshVK::uploadInternalData() {
 	vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
 	ShaderVK& shader = (ShaderVK&)material.getShader();
 
-	resourceManager.deleteResource(dataMemory);
-	resourceManager.deleteResource(dataBuffer);
+	resourceManager.trash(dataMemory);
+	resourceManager.trash(dataBuffer);
 
 	u32 vertexCount = vertices.getElementCount();
 	totalVertexSize = shader.getVertexStride() * vertexCount;
