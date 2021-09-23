@@ -1,7 +1,7 @@
 #ifndef PGEINTERNAL_GRAPHICSOGL3_H_INCLUDED
 #define PGEINTERNAL_GRAPHICSOGL3_H_INCLUDED
 
-#include <set>
+#include <unordered_set>
 
 #include <SDL.h>
 
@@ -50,7 +50,7 @@ class GraphicsOGL3 : public GraphicsSpecialized<ShaderOGL3, MeshOGL3, TextureOGL
         void updateCullingMode(Culling newMode, bool flip);
 
         bool renderingToRenderTarget = false;
-        std::set<Shader::Constant*> renderTargetFlags;
+        std::unordered_set<Shader::Constant*> renderTargetFlags;
         void updateRenderTargetFlags(bool rt);
 };
 
