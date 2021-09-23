@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.357
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31710.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example1", "Examples\Example1.vcxproj", "{4F3DC492-9C14-4804-AA5B-AB231BBBAC95}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -27,6 +27,12 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glad", "..\Libraries\glad\glad.vcxproj", "{3A84BF6D-4447-4AC4-8B18-4CEEF5B45D7E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example2", "Examples\Example2.vcxproj", "{859EFC63-2B77-43D4-874D-618E2768BA44}"
+	ProjectSection(ProjectDependencies) = postProject
+		{86FA7807-97DD-432B-BAFD-4B8304762DEA} = {86FA7807-97DD-432B-BAFD-4B8304762DEA}
+		{2D5343E1-C4C3-43FB-AB12-234001B3F5DD} = {2D5343E1-C4C3-43FB-AB12-234001B3F5DD}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example3", "Examples\Example3.vcxproj", "{9FA4BD6E-34EB-4985-A6E0-8B79A960095F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{86FA7807-97DD-432B-BAFD-4B8304762DEA} = {86FA7807-97DD-432B-BAFD-4B8304762DEA}
 		{2D5343E1-C4C3-43FB-AB12-234001B3F5DD} = {2D5343E1-C4C3-43FB-AB12-234001B3F5DD}
@@ -84,6 +90,12 @@ Global
 		{859EFC63-2B77-43D4-874D-618E2768BA44}.Release|x64.ActiveCfg = Release|x64
 		{859EFC63-2B77-43D4-874D-618E2768BA44}.Release|x64.Build.0 = Release|x64
 		{859EFC63-2B77-43D4-874D-618E2768BA44}.Release|x86.ActiveCfg = Release|x64
+		{9FA4BD6E-34EB-4985-A6E0-8B79A960095F}.Debug|x64.ActiveCfg = Debug|x64
+		{9FA4BD6E-34EB-4985-A6E0-8B79A960095F}.Debug|x64.Build.0 = Debug|x64
+		{9FA4BD6E-34EB-4985-A6E0-8B79A960095F}.Debug|x86.ActiveCfg = Debug|x64
+		{9FA4BD6E-34EB-4985-A6E0-8B79A960095F}.Release|x64.ActiveCfg = Release|x64
+		{9FA4BD6E-34EB-4985-A6E0-8B79A960095F}.Release|x64.Build.0 = Release|x64
+		{9FA4BD6E-34EB-4985-A6E0-8B79A960095F}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

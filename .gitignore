@@ -69,3 +69,5 @@ Documentation/html/
 *.dxri
 *.dxbc
 *.glsl
+*.spv
+*.vulkan
