@@ -32,33 +32,38 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     std::vector<vk::SurfaceFormatKHR> selectedPdFormats;
     std::vector<vk::PresentModeKHR> selectedPdPresentModes;
     for (vk::PhysicalDevice pd : instance->enumeratePhysicalDevices()) {
+        // Doesn't support sampler anisotropy, ignore it.
+        if (!pd.getFeatures().samplerAnisotropy) {
+            continue;
+        }
+
         // The physical device does not support any formats or present modes on this surface, ignore it.
         std::vector<vk::SurfaceFormatKHR> pdFormats;
         std::vector<vk::PresentModeKHR> pdPresentModes;
         if ((pdFormats = pd.getSurfaceFormatsKHR(surface)).empty() || (pdPresentModes = pd.getSurfacePresentModesKHR(surface)).empty()) {
-            break;
+            continue;
         }
 
         // Device must support our needed extensions.
-        std::set<long long> extensionCheckSet;
+        std::unordered_set<String::Key> extensionCheckSet;
         for (const char* de : deviceExtensions) {
-            extensionCheckSet.insert(String(de).getHashCode());
+            extensionCheckSet.insert(String(de));
         }
         for (vk::ExtensionProperties ep : pd.enumerateDeviceExtensionProperties()) {
-            extensionCheckSet.erase(String((const char*)ep.extensionName).getHashCode());
+            extensionCheckSet.erase(String((const char*)ep.extensionName));
             if (extensionCheckSet.empty()) {
                 break;
             }
         }
         // Physical device does not support all needed extensions.
-        if (!extensionCheckSet.empty()) { break; }
+        if (!extensionCheckSet.empty()) { continue; }
 
         // Checking and setting the queue indices.
         uint32_t i = 0;
         bool foundGraphics = false;
         bool foundPresent = false;
         bool foundTransfer = false;
-        for (vk::QueueFamilyProperties qfp : pd.getQueueFamilyProperties()) {
+        for (const vk::QueueFamilyProperties& qfp : pd.getQueueFamilyProperties()) {
             if (!foundGraphics && qfp.queueFlags & vk::QueueFlagBits::eGraphics) {
                 graphicsQueueIndex = i;
                 foundGraphics = true;
@@ -77,7 +82,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
             i++;
         }
         // Something we need is not supported on this GPU, ignore it.
-        if (!foundGraphics || !foundPresent) { break; }
+        if (!foundGraphics || !foundPresent) { continue; }
 
         // We didn't find a seperate transfer queue, so use the graphics one.
         if (!foundTransfer) {
@@ -117,6 +122,8 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
         }
     }
 
+    dSetLayout = resourceManager.addNewResource<VKDescriptorSetLayout>(device);
+
     createSwapchain(true);
 
     imageAvailableSemaphores.reserve(MAX_FRAMES_IN_FLIGHT);
@@ -129,6 +136,9 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     }
     imagesInFlight.resize(MAX_FRAMES_IN_FLIGHT);
     acquireNextImage();
+
+    sampler = resourceManager.addNewResource<VKSampler>(device, false);
+    samplerRT = resourceManager.addNewResource<VKSampler>(device, true);
 
     open = true;
     focused = true;
@@ -221,7 +231,7 @@ void GraphicsVK::createSwapchain(bool vsync) {
     swapchainImageViews.resize((int)swapchainImages.size());
     for (int i = 0; i < (int)swapchainImages.size(); i++) {
         resourceManager.deleteResource(swapchainImageViews[i]);
-        swapchainImageViews[i] = resourceManager.addNewResource<VKImageView>(device, swapchainImages[i], swapchainFormat);
+        swapchainImageViews[i] = resourceManager.addNewResource<VKImageView>(device, swapchainImages[i], swapchainFormat.format);
     }
     
     scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
@@ -370,10 +380,26 @@ vk::CommandBuffer GraphicsVK::getCurrentCommandBuffer() const {
     return comBuffers[backBufferIndex];
 }
 
+int GraphicsVK::getCurrBackbufferIndex() const {
+    return backBufferIndex;
+}
+
 // I fucking hate this, but C++ is stupid.
 // When you want to pass something by reference the copy constructor must be available, even though it shouldn't be used!
 const VKPipelineInfo* GraphicsVK::getPipelineInfo() const {
     return &pipelineInfo;
+}
+
+const vk::Sampler& GraphicsVK::getSampler(bool rt) const {
+    return rt ? samplerRT : sampler;
+}
+
+const vk::DescriptorSetLayout& GraphicsVK::getDescriptorSetLayout() const {
+    return dSetLayout;
+}
+
+int GraphicsVK::getSwapchainImageCount() const {
+    return swapchainImageViews.size();
 }
 
 void GraphicsVK::addMesh(MeshVK& m) {

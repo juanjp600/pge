@@ -63,16 +63,24 @@ class VKInstance : public Resource<vk::Instance> {
 };
 
 class VKDevice : public Resource<vk::Device> {
+    private:
+        static constexpr std::array priority = { 1.f };
+
     public:
         VKDevice(vk::PhysicalDevice physDev, const std::set<uint32_t>& queueIndices, const std::vector<const char*>& layers, const std::vector<const char*>& deviceExtensions) {
             // Creating the logical device.
-            constexpr float queuePriority = 1.f;
-            std::vector<vk::DeviceQueueCreateInfo> infos;
-            infos.reserve(3);
+            std::vector<vk::DeviceQueueCreateInfo> infos; infos.reserve(3);
             for (uint32_t index : queueIndices) {
-                infos.push_back(vk::DeviceQueueCreateInfo({}, index, 1, &queuePriority));
+                infos.emplace_back((vk::DeviceQueueCreateFlags)0, index, priority);
             }
-            resource = physDev.createDevice(vk::DeviceCreateInfo({}, infos, layers, deviceExtensions));
+            vk::DeviceCreateInfo info;
+            info.setQueueCreateInfos(infos);
+            info.setPEnabledLayerNames(layers);
+            info.setPEnabledExtensionNames(deviceExtensions);
+            vk::PhysicalDeviceFeatures features;
+            features.samplerAnisotropy = VK_TRUE;
+            info.pEnabledFeatures = &features;
+            resource = physDev.createDevice(info);
         }
 
         ~VKDevice() {
@@ -122,8 +130,8 @@ class VKCommandPool : public VKDestroyResource<vk::CommandPool> {
 
 class VKImageView : public VKDestroyResource<vk::ImageView> {
     public:
-        VKImageView(vk::Device dev, vk::Image swapchainImage, vk::SurfaceFormatKHR swapchainFormat) : VKDestroyResource(dev) {
-            vk::ImageViewCreateInfo ivci = vk::ImageViewCreateInfo({}, swapchainImage, vk::ImageViewType::e2D, swapchainFormat.format);
+        VKImageView(vk::Device dev, vk::Image swapchainImage, vk::Format fmt) : VKDestroyResource(dev) {
+            vk::ImageViewCreateInfo ivci = vk::ImageViewCreateInfo({}, swapchainImage, vk::ImageViewType::e2D, fmt);
             ivci.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
             resource = dev.createImageView(ivci);
         }
@@ -282,8 +290,12 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
 
 class VKPipelineLayout : public VKDestroyResource<vk::PipelineLayout> {
     public:
-        VKPipelineLayout(vk::Device dev, const std::vector<vk::PushConstantRange>& ranges) : VKDestroyResource(dev) {
-            vk::PipelineLayoutCreateInfo layoutInfo({}, 0, nullptr, (uint32_t)ranges.size(), ranges.data());
+        VKPipelineLayout(vk::Device dev, const std::vector<vk::PushConstantRange>& ranges, std::optional<vk::DescriptorSetLayout> layout = { }) : VKDestroyResource(dev) {
+            vk::PipelineLayoutCreateInfo layoutInfo;
+            layoutInfo.setPushConstantRanges(ranges);
+            if (layout.has_value()) {
+                layoutInfo.setSetLayouts(layout.value());
+            }
             resource = device.createPipelineLayout(layoutInfo);
         }
 };
@@ -311,6 +323,51 @@ class VKImage : public VKDestroyResource<vk::Image> {
             info.setSharingMode(vk::SharingMode::eExclusive);
 
             resource = device.createImage(info);
+        }
+};
+
+class VKSampler : public VKDestroyResource<vk::Sampler> {
+    public:
+        VKSampler(vk::Device dev, bool rt) : VKDestroyResource(dev) {
+            vk::SamplerCreateInfo info;
+            info.minFilter = info.magFilter = rt ? vk::Filter::eNearest : vk::Filter::eLinear;
+            info.anisotropyEnable = VK_TRUE;
+            info.maxAnisotropy = rt ? 1.f : 4.f; // TODO: Clamp with max physical device.
+            info.addressModeU = info.addressModeV = info.addressModeW = vk::SamplerAddressMode::eRepeat;
+            info.mipmapMode = vk::SamplerMipmapMode::eLinear;
+
+            resource = dev.createSampler(info);
+        }
+};
+
+class VKDescriptorSetLayout : public VKDestroyResource<vk::DescriptorSetLayout> {
+    public:
+        VKDescriptorSetLayout(vk::Device dev) : VKDestroyResource(dev) {
+            vk::DescriptorSetLayoutBinding binding;
+            binding.binding = 0;
+            binding.descriptorCount = 1;
+            binding.descriptorType = vk::DescriptorType::eCombinedImageSampler;
+            binding.stageFlags = vk::ShaderStageFlagBits::eFragment;
+
+            vk::DescriptorSetLayoutCreateInfo info;
+            info.setBindings(binding);
+
+            resource = dev.createDescriptorSetLayout(info);
+        }
+};
+
+class VKDescriptorPool : public VKDestroyResource<vk::DescriptorPool> {
+    public:
+        VKDescriptorPool(vk::Device dev, int count) : VKDestroyResource(dev) {
+            vk::DescriptorPoolSize size;
+            size.descriptorCount = count;
+            size.type = vk::DescriptorType::eCombinedImageSampler;
+
+            vk::DescriptorPoolCreateInfo info;
+            info.setPoolSizes(size);
+            info.maxSets = count;
+
+            resource = dev.createDescriptorPool(info);
         }
 };
 

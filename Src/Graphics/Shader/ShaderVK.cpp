@@ -68,16 +68,21 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
         if (!fragmentConstantMap.empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eFragment }, fragmentOffset, pushConstant.padded_size - fragmentOffset)); }
     }
 
-    layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges);
+    if (reflection.descriptor_set_count > 0) {
+        layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges, graphics.getDescriptorSetLayout());
+    } else {
+        layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges);
+    }
+    
 
     spvReflectDestroyShaderModule(&reflection);
 
     // Both constructor values need to remain in memory!
     vertexInputBinding = vk::VertexInputBindingDescription(0, vertexStride, vk::VertexInputRate::eVertex);
-    vertexInputInfo = vk::PipelineVertexInputStateCreateInfo({}, 1, &vertexInputBinding, (uint32_t)vertexInputAttributes.size(), vertexInputAttributes.data());
+    vertexInputInfo = vk::PipelineVertexInputStateCreateInfo({ }, 1, &vertexInputBinding, (uint32_t)vertexInputAttributes.size(), vertexInputAttributes.data());
 
-    vk::PipelineShaderStageCreateInfo vertexInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eVertex, vkShader, "VS");
-    vk::PipelineShaderStageCreateInfo fragmentInfo = vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eFragment, vkShader, "PS");
+    vk::PipelineShaderStageCreateInfo vertexInfo({ }, vk::ShaderStageFlagBits::eVertex, vkShader, "VS");
+    vk::PipelineShaderStageCreateInfo fragmentInfo({ }, vk::ShaderStageFlagBits::eFragment, vkShader, "PS");
     shaderStageInfo[0] = vertexInfo;
     shaderStageInfo[1] = fragmentInfo;
 }
@@ -99,8 +104,6 @@ Shader::Constant& ShaderVK::getFragmentShaderConstant(const String& name) {
         return it->second;
     }
 }
-
-static int lololol;
 
 void ShaderVK::pushConstants() {
     for (ConstantVK* c : updatedConstants) {

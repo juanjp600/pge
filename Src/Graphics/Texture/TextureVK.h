@@ -14,6 +14,8 @@ class TextureVK : public Texture {
         // Loaded, compressed texture.
         TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
 
+        const vk::DescriptorSet& getDescriptorSet(int index) const;
+
         void* getNative() const override;
 
     private:
@@ -21,6 +23,11 @@ class TextureVK : public Texture {
 
         VKImage::View image;
         VKMemory::View imageMem;
+
+        VKImageView::View imageView; // Great type name!
+
+        VKDescriptorPool::View dPool;
+        std::vector<vk::DescriptorSet> dSets;
 };
 
 }

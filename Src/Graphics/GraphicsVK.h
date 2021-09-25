@@ -47,7 +47,11 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
         vk::PhysicalDevice getPhysicalDevice() const;
         vk::RenderPass getRenderPass() const;
         vk::CommandBuffer getCurrentCommandBuffer() const;
+        int getCurrBackbufferIndex() const;
         const VKPipelineInfo* getPipelineInfo() const;
+        const vk::Sampler& getSampler(bool rt) const;
+        const vk::DescriptorSetLayout& getDescriptorSetLayout() const;
+        int getSwapchainImageCount() const;
 
         void addMesh(MeshVK& m);
         void removeMesh(MeshVK& m);
@@ -95,6 +99,11 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
         std::vector<vk::Fence> imagesInFlight;
 
         std::unordered_set<MeshVK*> meshes;
+
+        VKSampler::View sampler;
+        VKSampler::View samplerRT;
+
+        VKDescriptorSetLayout::View dSetLayout;
 
         static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
         int currentFrame = 0;

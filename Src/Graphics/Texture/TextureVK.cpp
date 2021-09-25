@@ -39,11 +39,40 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     graphics.transformImage(image, vkFmt, vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal);
     graphics.transferToImage(stagingBuffer, image, w, h);
     graphics.transformImage(image, vkFmt, vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
+
+    imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt);
+
+    dPool = resourceManager.addNewResource<VKDescriptorPool>(device, graphics.getSwapchainImageCount());
+
+    vk::DescriptorSetAllocateInfo allocInfo;
+    allocInfo.descriptorPool = dPool;
+    std::vector<vk::DescriptorSetLayout> layouts(graphics.getSwapchainImageCount(), graphics.getDescriptorSetLayout());
+    allocInfo.setSetLayouts(layouts);
+    dSets = device.allocateDescriptorSets(allocInfo);
+
+    for (int i = 0; i < graphics.getSwapchainImageCount(); i++) {
+        vk::DescriptorImageInfo info;
+        info.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+        info.imageView = imageView;
+        info.sampler = graphics.getSampler(false);
+
+        vk::WriteDescriptorSet set;
+        set.dstSet = dSets[i];
+        set.descriptorType = vk::DescriptorType::eCombinedImageSampler;
+        set.descriptorCount = 1;
+        set.setImageInfo(info);
+
+        device.updateDescriptorSets(set, { });
+    }
 }
 
 TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt)
     : Texture(mipmaps[0].width, mipmaps[0].height, false, fmt), resourceManager(gfx) {
 
+}
+
+const vk::DescriptorSet& TextureVK::getDescriptorSet(int index) const {
+    return dSets[index];
 }
 
 void* TextureVK::getNative() const {

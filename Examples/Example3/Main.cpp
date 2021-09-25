@@ -28,9 +28,12 @@ class Program {
 
         Mesh* mesh;
 
-        Mesh* mesh2;
         Shader* shader2;
+        Mesh* mesh2;
         Texture* tex;
+
+        Mesh* mesh3;
+        Texture* tex2;
 
         InputManager* inputManager;
         KeyboardInput* escKey;
@@ -39,6 +42,16 @@ class Program {
         Clock::time_point prev = Clock::now();
 
         bool closeRequested = false;
+
+        Texture* load(const FilePath& path) {
+            std::vector<byte> bytes = path.readBytes();
+            u32 headerOffset = *(u32*)&bytes[0x000A];
+            for (int i = headerOffset; i < bytes.size() - 2; i += 4) {
+                std::swap(bytes[i], bytes[i + 2]);
+            }
+            int dim = sqrt((bytes.size() - headerOffset) / 4);
+            return Texture::load(*graphics, dim, dim, bytes.data() + headerOffset, Texture::Format::RGBA32);
+        }
 
     public:
         Program() {
@@ -65,17 +78,6 @@ class Program {
 
             shader2 = Shader::load(*graphics, FilePath::fromStr("Shader3.2"));
             
-            std::vector<byte> bytes = FilePath::fromStr("logo.bmp").readBytes();
-            u32 headerOffset = *(u32*)&bytes[0x000A];
-            for (int i = headerOffset; i < bytes.size() - 4; i += 4) {
-                for (int j = 0; j < 3; j++) {
-                    bytes[i + j] = bytes[i + j + 1];
-                }
-                bytes[i + 3] = 255;
-            }
-            int dim = sqrt((bytes.size() - headerOffset) / 4);
-            tex = Texture::load(*graphics, dim, dim, bytes.data() + headerOffset, Texture::Format::RGBA32);
-            
             vertices = StructuredData(shader2->getVertexLayout(), 4);
             vertices.setValue(0, "position", Vector2f(0, 0));
             vertices.setValue(1, "position", Vector2f(-1, 0));
@@ -86,15 +88,23 @@ class Program {
             vertices.setValue(2, "uv", Vector2f(0, 0));
             vertices.setValue(3, "uv", Vector2f(1, 0));
 
+            tex = load(FilePath::fromStr("logo.bmp"));
             mesh2 = Mesh::create(*graphics);
-            mesh2->setGeometry(std::move(vertices), Mesh::PrimitiveType::TRIANGLE, { 0, 1, 2, 1, 2, 3 });
+            mesh2->setGeometry(vertices.copy(), Mesh::PrimitiveType::TRIANGLE, { 0, 1, 2, 1, 2, 3 });
             mesh2->setMaterial(Mesh::Material(*shader2, *tex, Mesh::Material::Opaque::YES));
+
+            tex2 = load(FilePath::fromStr("juan.bmp"));
+            mesh3 = Mesh::create(*graphics);
+            mesh3->setGeometry(std::move(vertices), Mesh::PrimitiveType::TRIANGLE, { 2, 1, 0, 3, 2, 1 });
+            mesh3->setMaterial(Mesh::Material(*shader2, *tex2, Mesh::Material::Opaque::YES));
         }
 
         ~Program() {
             inputManager->untrackInput(escKey);
             delete escKey;
             delete inputManager;
+            delete mesh3;
+            delete tex2;
             delete mesh2;
             delete shader2;
             delete tex;
@@ -124,6 +134,7 @@ class Program {
 
             mesh->render();
             mesh2->render();
+            mesh3->render();
 
             graphics->swap();
 
