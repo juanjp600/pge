@@ -48,6 +48,7 @@ class Program {
             u32 headerOffset = *(u32*)&bytes[0x000A];
             for (int i = headerOffset; i < bytes.size() - 2; i += 4) {
                 std::swap(bytes[i], bytes[i + 2]);
+                bytes[i + 3] = 255; // Bmp broken???
             }
             int dim = sqrt((bytes.size() - headerOffset) / 4);
             return Texture::load(*graphics, dim, dim, bytes.data() + headerOffset, Texture::Format::RGBA32);
@@ -55,8 +56,7 @@ class Program {
 
     public:
         Program() {
-            graphics = Graphics::create("Example 3", 1000, 500, Graphics::WindowMode::Windowed, Graphics::Renderer::Vulkan);
-            graphics->setCulling(Graphics::Culling::BACK);
+            graphics = Graphics::create("Example 3", 1000, 500, Graphics::WindowMode::Windowed, Graphics::Renderer::DirectX11);
 
             inputManager = InputManager::create(*graphics);
             escKey = new KeyboardInput(KeyboardInput::Keycode::ESCAPE);

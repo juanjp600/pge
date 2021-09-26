@@ -259,10 +259,17 @@ class VKPipelineInfo : PolymorphicHeap {
             rasterizationInfo = vk::PipelineRasterizationStateCreateInfo({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eFrontAndBack, vk::FrontFace::eCounterClockwise, false, 0.f, 0.f, 0.f, 1.f);
             multisamplerInfo = vk::PipelineMultisampleStateCreateInfo({}, vk::SampleCountFlagBits::e1, false, 0.f, nullptr, false, false);
 
-            // Color blending.
-            colorBlendAttachmentState = vk::PipelineColorBlendAttachmentState(false);
+            // Color blending. (No idea what's going on here, just stole it from D3D11BlendState.)
+            colorBlendAttachmentState.blendEnable = true;
+            colorBlendAttachmentState.colorBlendOp = vk::BlendOp::eAdd;
+            colorBlendAttachmentState.srcColorBlendFactor = vk::BlendFactor::eSrcAlpha;
+            colorBlendAttachmentState.dstColorBlendFactor = vk::BlendFactor::eOneMinusSrcAlpha;
+            colorBlendAttachmentState.alphaBlendOp = vk::BlendOp::eAdd;
+            colorBlendAttachmentState.srcAlphaBlendFactor = vk::BlendFactor::eOne;
+            colorBlendAttachmentState.dstAlphaBlendFactor = vk::BlendFactor::eOneMinusSrcAlpha;
             colorBlendAttachmentState.colorWriteMask = vk::ColorComponentFlagBits::eA | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG;
-            colorBlendInfo = vk::PipelineColorBlendStateCreateInfo({}, false, vk::LogicOp::eClear, 1, &colorBlendAttachmentState);
+            
+            colorBlendInfo = vk::PipelineColorBlendStateCreateInfo({ }, false, vk::LogicOp::eClear, 1, & colorBlendAttachmentState);
         }
 };
 
