@@ -110,13 +110,13 @@ class VKSurface : public Resource<vk::SurfaceKHR> {
 class VKSemaphore : public VKDestroyResource<vk::Semaphore> {
     public:
         VKSemaphore(vk::Device dev) : VKDestroyResource(dev) {
-            resource = dev.createSemaphore(vk::SemaphoreCreateInfo({}));
+            resource = dev.createSemaphore({ });
         }
 };
 
 class VKFence : public VKDestroyResource<vk::Fence> {
     public:
-        VKFence(vk::Device dev, bool signaled = false) : VKDestroyResource(dev) {
+        VKFence(vk::Device dev, bool signaled) : VKDestroyResource(dev) {
             resource = dev.createFence(vk::FenceCreateInfo(signaled ? vk::FenceCreateFlagBits::eSignaled : (vk::FenceCreateFlags)0));
         }
 };
@@ -131,9 +131,12 @@ class VKCommandPool : public VKDestroyResource<vk::CommandPool> {
 class VKImageView : public VKDestroyResource<vk::ImageView> {
     public:
         VKImageView(vk::Device dev, vk::Image swapchainImage, vk::Format fmt) : VKDestroyResource(dev) {
-            vk::ImageViewCreateInfo ivci = vk::ImageViewCreateInfo({}, swapchainImage, vk::ImageViewType::e2D, fmt);
-            ivci.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
-            resource = dev.createImageView(ivci);
+            vk::ImageViewCreateInfo info;
+            info.image = swapchainImage;
+            info.viewType = vk::ImageViewType::e2D;
+            info.format = fmt;
+            info.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
+            resource = dev.createImageView(info);
         }
 };
 
