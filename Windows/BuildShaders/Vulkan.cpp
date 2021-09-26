@@ -28,6 +28,7 @@ bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes
 
 	// TODO: Optimize by ignoring everything outside of code blocks?
 	bool inBlock = false;
+	bool inStruct = false;
 	while (!in.eof()) {
 		char line[256]; in.getline(line, 256);
 		std::string lineStr = line;
@@ -39,6 +40,16 @@ bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes
 		}
 		if (lineStr.find("cbuffer") != std::string::npos) {
 			inBlock = true;
+			continue;
+		}
+		if (lineStr.find("struct") != std::string::npos) {
+			inStruct = true;
+		}
+		if (inStruct) {
+			if (lineStr.find("}") != std::string::npos) {
+				inStruct = false;
+			}
+			out << lineStr << std::endl;
 			continue;
 		}
 		int index = 0;
