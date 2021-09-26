@@ -237,8 +237,9 @@ void GraphicsVK::createSwapchain(bool vsync) {
     scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
 
     pipelineInfo.init(swapchainExtent, &scissor);
+    Culling oldCull = cullingMode;
     cullingMode = Culling::NONE;
-    setCulling(Culling::BACK);
+    setCulling(oldCull);
 
     resourceManager.deleteResource(renderPass);
     renderPass = resourceManager.addNewResource<VKRenderPass>(device, swapchainFormat);
