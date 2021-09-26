@@ -9,6 +9,6 @@ var searchData=
   ['epsilon_5fdefault_29',['EPSILON_DEFAULT',['../namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05',1,'PGE::Math']]],
   ['equalfloats_30',['equalFloats',['../namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77',1,'PGE::Math']]],
   ['equals_31',['equals',['../class_p_g_e_1_1_color.html#a79a508235894e022b4c2a54ff79900a2',1,'PGE::Color']]],
-  ['exception_32',['Exception',['../class_p_g_e_1_1_exception.html#aa317f6af2a501553fa2f3f7a77b509e9',1,'PGE::Exception::Exception() noexcept'],['../class_p_g_e_1_1_exception.html#ab318597604bea87d0393b47f1fe33170',1,'PGE::Exception::Exception(const String &amp;file, int line, const String &amp;extra) noexcept'],['../class_p_g_e_1_1_exception.html',1,'PGE::Exception']]],
+  ['exception_32',['Exception',['../class_p_g_e_1_1_exception.html#ab324a0de749aaaa8efca0e65f4edae7c',1,'PGE::Exception::Exception() noexcept=default'],['../class_p_g_e_1_1_exception.html#ab318597604bea87d0393b47f1fe33170',1,'PGE::Exception::Exception(const String &amp;file, int line, const String &amp;extra) noexcept'],['../class_p_g_e_1_1_exception.html',1,'PGE::Exception']]],
   ['exists_33',['exists',['../class_p_g_e_1_1_file_path.html#a829fc19a7281573d543b9b16f7210d66',1,'PGE::FilePath']]]
 ];

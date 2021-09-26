@@ -108,9 +108,9 @@ Inheritance diagram for PGE::Exception:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa317f6af2a501553fa2f3f7a77b509e9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_exception.html#aa317f6af2a501553fa2f3f7a77b509e9">Exception</a> () noexcept</td></tr>
-<tr class="memdesc:aa317f6af2a501553fa2f3f7a77b509e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Invalid exception.  <a href="class_p_g_e_1_1_exception.html#aa317f6af2a501553fa2f3f7a77b509e9">More...</a><br /></td></tr>
-<tr class="separator:aa317f6af2a501553fa2f3f7a77b509e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab324a0de749aaaa8efca0e65f4edae7c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_exception.html#ab324a0de749aaaa8efca0e65f4edae7c">Exception</a> () noexcept=default</td></tr>
+<tr class="memdesc:ab324a0de749aaaa8efca0e65f4edae7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Invalid exception.  <a href="class_p_g_e_1_1_exception.html#ab324a0de749aaaa8efca0e65f4edae7c">More...</a><br /></td></tr>
+<tr class="separator:ab324a0de749aaaa8efca0e65f4edae7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab318597604bea87d0393b47f1fe33170"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_exception.html#ab318597604bea87d0393b47f1fe33170">Exception</a> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;file, int line, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;extra) noexcept</td></tr>
 <tr class="memdesc:ab318597604bea87d0393b47f1fe33170"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;DO NOT USE.  <a href="class_p_g_e_1_1_exception.html#ab318597604bea87d0393b47f1fe33170">More...</a><br /></td></tr>
 <tr class="separator:ab318597604bea87d0393b47f1fe33170"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -118,13 +118,17 @@ Public Member Functions</h2></td></tr>
 const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_exception.html#aeda7446fd34c53be8ec4d997ec706d10">what</a> () const noexcept</td></tr>
 <tr class="memdesc:aeda7446fd34c53be8ec4d997ec706d10"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Returns information about the exception, including the file and line it occured on and the user provided info. <br /></td></tr>
 <tr class="separator:aeda7446fd34c53be8ec4d997ec706d10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69c6df32527b1f8b81e5e9fc75098745"><td class="memItemLeft" align="right" valign="top"><a id="a69c6df32527b1f8b81e5e9fc75098745"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_exception.html#a69c6df32527b1f8b81e5e9fc75098745">isValid</a> () const noexcept</td></tr>
+<tr class="memdesc:a69c6df32527b1f8b81e5e9fc75098745"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Returns whether this exception is invalid (default constructed) or properly initialized. <br /></td></tr>
+<tr class="separator:a69c6df32527b1f8b81e5e9fc75098745"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p class="DocNodeLTR">Singular exception class thrown by PGE. </p>
 <dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;#PGE::PGE_CREATE_EX, #PGE::PGE_ASSERT </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aa317f6af2a501553fa2f3f7a77b509e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa317f6af2a501553fa2f3f7a77b509e9">&#9670;&nbsp;</a></span>Exception() <span class="overload">[1/2]</span></h2>
+<a id="ab324a0de749aaaa8efca0e65f4edae7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab324a0de749aaaa8efca0e65f4edae7c">&#9670;&nbsp;</a></span>Exception() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -141,7 +145,7 @@ const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;&#160;</t
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">default</span><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
