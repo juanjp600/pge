@@ -6,24 +6,23 @@
 
 using namespace PGE;
 
-// TODO: Add utility to differentiate between valid and invalid exceptions.
-Exception::Exception() noexcept {
-    info = ">>> INVALID EXCEPTION <<<";
-}
+static const inline String INVALID_EX = ">>> INVALID EXCEPTION <<<";
 
 Exception::Exception(const String& file, int line, const String& extra) noexcept {
-    info = file;
-    info += ':';
-    info += String::from(line);
-    if (extra != "") {
-        info += '\n';
-        info += extra;
+    String ex = file + ':' + String::from(line);
+    if (!extra.isEmpty()) {
+        ex += '\n' + extra;
     }
+    info = ex;
 #ifdef DEBUG
     std::cout << what() << std::endl;
 #endif
 }
 
 const String& Exception::what() const noexcept {
-    return info;
+    return info.has_value() ? info.value() : INVALID_EX;
+}
+
+bool Exception::isValid() const noexcept {
+    return info.has_value();
 }

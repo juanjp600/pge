@@ -1,6 +1,8 @@
 #ifndef PGE_EXCEPTION_H_INCLUDED
 #define PGE_EXCEPTION_H_INCLUDED
 
+#include <optional>
+
 #include <PGE/String/String.h>
 #include <PGE/ResourceManagement/NoHeap.h>
 
@@ -12,7 +14,7 @@ class Exception : private NoHeap {
     public:
         /// Invalid exception.
         /// Only ever use for storing exceptions by value.
-        Exception() noexcept;
+        Exception() noexcept = default;
 
         /// DO NOT USE.
         /// @see #PGE_CREATE_EX, #PGE_ASSERT
@@ -22,8 +24,11 @@ class Exception : private NoHeap {
         /// Returns information about the exception, including the file and line it occured on and the user provided info.
         const String& what() const noexcept;
 
+        /// Returns whether this exception is invalid (default constructed) or properly initialized.
+        bool isValid() const noexcept;
+
     private:
-        String info;
+        std::optional<String> info;
 };
 
 }
