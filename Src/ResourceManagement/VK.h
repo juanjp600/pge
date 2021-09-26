@@ -54,7 +54,21 @@ class VKInstance : public Resource<vk::Instance> {
             SDL_Vulkan_GetInstanceExtensions(window, &extensionCount, extensions.data());
 
             vk::ApplicationInfo vkAppInfo = vk::ApplicationInfo(name.cstr(), VK_MAKE_VERSION(0, 0, 0), "pulsegun engine", VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_1);
-            resource = vk::createInstance(vk::InstanceCreateInfo({}, &vkAppInfo, layers, extensions));
+            vk::InstanceCreateInfo info;
+            info.pApplicationInfo = &vkAppInfo;
+            info.setPEnabledLayerNames(layers);
+            info.setPEnabledExtensionNames(extensions);
+
+#ifdef DEBUG
+            std::array enables = {
+                vk::ValidationFeatureEnableEXT::eBestPractices,
+                vk::ValidationFeatureEnableEXT::eSynchronizationValidation,
+            };
+            vk::ValidationFeaturesEXT features; features.setEnabledValidationFeatures(enables);
+            info.pNext = &features;
+#endif
+
+            resource = vk::createInstance(info);
         }
 
         ~VKInstance() {
