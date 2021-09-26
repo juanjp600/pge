@@ -47,11 +47,9 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
         vk::PhysicalDevice getPhysicalDevice() const;
         vk::RenderPass getRenderPass() const;
         vk::CommandBuffer getCurrentCommandBuffer() const;
-        int getCurrBackbufferIndex() const;
         const VKPipelineInfo* getPipelineInfo() const;
         const vk::Sampler& getSampler(bool rt) const;
         const vk::DescriptorSetLayout& getDescriptorSetLayout() const;
-        int getSwapchainImageCount() const;
 
         void addMesh(MeshVK& m);
         void removeMesh(MeshVK& m);

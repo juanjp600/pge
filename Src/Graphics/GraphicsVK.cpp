@@ -381,10 +381,6 @@ vk::CommandBuffer GraphicsVK::getCurrentCommandBuffer() const {
     return comBuffers[backBufferIndex];
 }
 
-int GraphicsVK::getCurrBackbufferIndex() const {
-    return backBufferIndex;
-}
-
 // I fucking hate this, but C++ is stupid.
 // When you want to pass something by reference the copy constructor must be available, even though it shouldn't be used!
 const VKPipelineInfo* GraphicsVK::getPipelineInfo() const {
@@ -397,10 +393,6 @@ const vk::Sampler& GraphicsVK::getSampler(bool rt) const {
 
 const vk::DescriptorSetLayout& GraphicsVK::getDescriptorSetLayout() const {
     return dSetLayout;
-}
-
-int GraphicsVK::getSwapchainImageCount() const {
-    return swapchainImageViews.size();
 }
 
 void GraphicsVK::addMesh(MeshVK& m) {

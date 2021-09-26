@@ -42,28 +42,26 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
 
     imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt);
 
-    dPool = resourceManager.addNewResource<VKDescriptorPool>(device, graphics.getSwapchainImageCount());
+    dPool = resourceManager.addNewResource<VKDescriptorPool>(device, 1);
 
     vk::DescriptorSetAllocateInfo allocInfo;
     allocInfo.descriptorPool = dPool;
-    std::vector<vk::DescriptorSetLayout> layouts(graphics.getSwapchainImageCount(), graphics.getDescriptorSetLayout());
+    std::vector<vk::DescriptorSetLayout> layouts(1, graphics.getDescriptorSetLayout());
     allocInfo.setSetLayouts(layouts);
     dSets = device.allocateDescriptorSets(allocInfo);
 
-    for (int i = 0; i < graphics.getSwapchainImageCount(); i++) {
-        vk::DescriptorImageInfo info;
-        info.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
-        info.imageView = imageView;
-        info.sampler = graphics.getSampler(false);
+    vk::DescriptorImageInfo info;
+    info.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+    info.imageView = imageView;
+    info.sampler = graphics.getSampler(false);
 
-        vk::WriteDescriptorSet set;
-        set.dstSet = dSets[i];
-        set.descriptorType = vk::DescriptorType::eCombinedImageSampler;
-        set.descriptorCount = 1;
-        set.setImageInfo(info);
+    vk::WriteDescriptorSet set;
+    set.dstSet = dSets[0];
+    set.descriptorType = vk::DescriptorType::eCombinedImageSampler;
+    set.descriptorCount = 1;
+    set.setImageInfo(info);
 
-        device.updateDescriptorSets(set, { });
-    }
+    device.updateDescriptorSets(set, { });
 }
 
 TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt)
@@ -71,8 +69,8 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
 
 }
 
-const vk::DescriptorSet& TextureVK::getDescriptorSet(int index) const {
-    return dSets[index];
+const vk::DescriptorSet& TextureVK::getDescriptorSet() const {
+    return dSets[0];
 }
 
 void* TextureVK::getNative() const {

@@ -28,7 +28,7 @@ void MeshVK::renderInternal() {
 	if (material.getTextureCount() > 0) {
 		comBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics,
 			((ShaderVK&)material.getShader()).getLayout(), 0,
-			((TextureVK&)material.getTexture(0)).getDescriptorSet(graphics.getCurrBackbufferIndex()), { });
+			((TextureVK&)material.getTexture(0)).getDescriptorSet(), { });
 	}
 	comBuffer.drawIndexed(indices.size(), 1, 0, 0, 0);
 }
