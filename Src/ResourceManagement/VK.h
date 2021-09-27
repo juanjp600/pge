@@ -180,12 +180,10 @@ class VKSwapchain : public VKDestroyResource<vk::SwapchainKHR> {
             vk::SurfaceCapabilitiesKHR sc = physDev.getSurfaceCapabilitiesKHR(surface);
             // 0xFFFFFFFF indicates to just rely on the size of the window clamped by the given maxs and mins.
             if (sc.currentExtent.width != 0xFFFFFFFF) {
-                swapchainExtent->setWidth(sc.currentExtent.width);
-                swapchainExtent->setHeight(sc.currentExtent.height);
+                *swapchainExtent = sc.currentExtent;
             } else {
-                // TODO: Move MathUtil to PGE and use it here.
-                swapchainExtent->setWidth((uint32_t)width < sc.minImageExtent.width ? sc.minImageExtent.width : (uint32_t)width > sc.maxImageExtent.width ? sc.maxImageExtent.width : (uint32_t)width);
-                swapchainExtent->setHeight((uint32_t)height < sc.minImageExtent.height ? sc.minImageExtent.height : (uint32_t)height > sc.maxImageExtent.height ? sc.maxImageExtent.height : (uint32_t)height);
+                swapchainExtent->setWidth(std::clamp((uint32_t)width, sc.minImageExtent.width, sc.maxImageExtent.width));
+                swapchainExtent->setHeight(std::clamp((uint32_t)height, sc.minImageExtent.height, sc.maxImageExtent.height));
             }
 
             // Setting the amount of images in the swap chain.
@@ -334,7 +332,7 @@ class VKShader : public VKDestroyResource<vk::ShaderModule> {
 
 class VKImage : public VKDestroyResource<vk::Image> {
     public:
-        VKImage(const vk::Device& dev, int w, int h, vk::Format fmt) : VKDestroyResource(dev) {
+        VKImage(vk::Device dev, int w, int h, vk::Format fmt) : VKDestroyResource(dev) {
             vk::ImageCreateInfo info{ };
             info.setImageType(vk::ImageType::e2D);
             info.setFormat(fmt);
