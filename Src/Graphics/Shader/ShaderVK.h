@@ -25,7 +25,7 @@ namespace PGE {
             int getVertexStride() const;
             const std::vector<String>& getVertexInputNames() const;
 
-            const vk::PipelineShaderStageCreateInfo* getShaderStageInfo() const;
+            const std::array<vk::PipelineShaderStageCreateInfo, 2>& getShaderStageInfo() const;
             const vk::PipelineVertexInputStateCreateInfo* getVertexInputInfo() const;
             vk::PipelineLayout getLayout() const;
 
@@ -37,7 +37,7 @@ namespace PGE {
 
             VKShader::View vkShader;
 
-            vk::PipelineShaderStageCreateInfo shaderStageInfo[2];
+            std::array<vk::PipelineShaderStageCreateInfo, 2> shaderStageInfo;
 
             vk::VertexInputBindingDescription vertexInputBinding;
             std::vector<vk::VertexInputAttributeDescription> vertexInputAttributes;

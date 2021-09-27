@@ -48,7 +48,7 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     allocInfo.descriptorPool = dPool;
     std::vector<vk::DescriptorSetLayout> layouts(1, graphics.getDescriptorSetLayout());
     allocInfo.setSetLayouts(layouts);
-    dSets = device.allocateDescriptorSets(allocInfo);
+    dSet = device.allocateDescriptorSets(allocInfo).front();
 
     vk::DescriptorImageInfo info;
     info.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
@@ -56,7 +56,7 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     info.sampler = graphics.getSampler(false);
 
     vk::WriteDescriptorSet set;
-    set.dstSet = dSets[0];
+    set.dstSet = dSet;
     set.descriptorType = vk::DescriptorType::eCombinedImageSampler;
     set.descriptorCount = 1;
     set.setImageInfo(info);
@@ -70,7 +70,7 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
 }
 
 const vk::DescriptorSet& TextureVK::getDescriptorSet() const {
-    return dSets[0];
+    return dSet;
 }
 
 void* TextureVK::getNative() const {

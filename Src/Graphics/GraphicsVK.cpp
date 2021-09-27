@@ -1,7 +1,5 @@
 #include "GraphicsVK.h"
 
-#include <set>
-
 #include <PGE/Exception/Exception.h>
 
 #include "Shader/ShaderVK.h"
@@ -59,27 +57,27 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
         if (!extensionCheckSet.empty()) { continue; }
 
         // Checking and setting the queue indices.
-        uint32_t i = 0;
+        uint32_t queueIndex = 0;
         bool foundGraphics = false;
         bool foundPresent = false;
         bool foundTransfer = false;
         for (const vk::QueueFamilyProperties& qfp : pd.getQueueFamilyProperties()) {
             if (!foundGraphics && qfp.queueFlags & vk::QueueFlagBits::eGraphics) {
-                graphicsQueueIndex = i;
+                graphicsQueueIndex = queueIndex;
                 foundGraphics = true;
             }
-            if (!foundPresent && pd.getSurfaceSupportKHR(i, surface)) {
-                presentQueueIndex = i;
+            if (!foundPresent && pd.getSurfaceSupportKHR(queueIndex, surface)) {
+                presentQueueIndex = queueIndex;
                 foundPresent = true;
             }
             if (!foundTransfer && qfp.queueFlags & vk::QueueFlagBits::eTransfer && !(qfp.queueFlags & vk::QueueFlagBits::eGraphics)) {
-                transferQueueIndex = i;
+                transferQueueIndex = queueIndex;
                 foundTransfer = true;
             }
             if (foundGraphics && foundPresent) {
                 break;
             }
-            i++;
+            queueIndex++;
         }
         // Something we need is not supported on this GPU, ignore it.
         if (!foundGraphics || !foundPresent) { continue; }
@@ -106,7 +104,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     }
     PGE_ASSERT(foundCompatibleDevice, "No Vulkan compatible GPU found");
 
-    device = resourceManager.addNewResource<VKDevice>(physicalDevice, std::set { graphicsQueueIndex, presentQueueIndex, transferQueueIndex }, layers, deviceExtensions);
+    device = resourceManager.addNewResource<VKDevice>(physicalDevice, std::unordered_set { graphicsQueueIndex, presentQueueIndex, transferQueueIndex }, layers, deviceExtensions);
 
     graphicsQueue = device->getQueue(graphicsQueueIndex, 0);
     presentQueue = device->getQueue(presentQueueIndex, 0);
@@ -222,9 +220,10 @@ void GraphicsVK::clear(const Color& color) {
 }
 
 void GraphicsVK::createSwapchain(bool vsync) {
-    resourceManager.deleteResource(swapchain);
-    swapchain = resourceManager.addNewResource<VKSwapchain>(device, physicalDevice, surface, &swapchainExtent, dimensions.x, dimensions.y, swapchainFormat,
-        graphicsQueueIndex, presentQueueIndex, transferQueueIndex, vsync);
+    VKSwapchain::View oldChain = swapchain;
+    swapchain = resourceManager.addNewResource<VKSwapchain>(device, physicalDevice, surface, swapchainExtent, dimensions.x, dimensions.y, swapchainFormat,
+        graphicsQueueIndex, presentQueueIndex, transferQueueIndex, vsync, swapchain.isHoldingResource() ? swapchain.get() : VK_NULL_HANDLE);
+    resourceManager.deleteResource(oldChain);
 
     // Creating image views for our swapchain images to ultimately write to.
     std::vector<vk::Image> swapchainImages = device->getSwapchainImagesKHR(swapchain);
@@ -236,7 +235,7 @@ void GraphicsVK::createSwapchain(bool vsync) {
     
     scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
 
-    pipelineInfo.init(swapchainExtent, &scissor);
+    pipelineInfo.init(swapchainExtent, scissor);
     Culling oldCull = cullingMode;
     cullingMode = Culling::NONE;
     setCulling(oldCull);
@@ -355,6 +354,7 @@ void GraphicsVK::setCulling(Culling mode) {
         case Graphics::Culling::BACK: { flags = vk::CullModeFlagBits::eBack; } break;
         case Graphics::Culling::FRONT: { flags = vk::CullModeFlagBits::eFront; } break;
         case Graphics::Culling::NONE: { flags = vk::CullModeFlagBits::eNone; } break;
+        default: { throw PGE_CREATE_EX("Unexpected culling mode"); }
     }
     pipelineInfo.rasterizationInfo.cullMode = flags;
 

@@ -3,7 +3,7 @@
 
 #include <PGE/ResourceManagement/ResourceManager.h>
 
-#include <set>
+#include <unordered_set>
 
 #include <vulkan/vulkan.hpp>
 #include <SDL_vulkan.h>
@@ -53,9 +53,15 @@ class VKInstance : public Resource<vk::Instance> {
             std::vector<const char*> extensions = std::vector<const char*>(extensionCount);
             SDL_Vulkan_GetInstanceExtensions(window, &extensionCount, extensions.data());
 
-            vk::ApplicationInfo vkAppInfo = vk::ApplicationInfo(name.cstr(), VK_MAKE_VERSION(0, 0, 0), "pulsegun engine", VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_1);
+            vk::ApplicationInfo appInfo;
+            appInfo.pApplicationName = name.cstr();
+            appInfo.applicationVersion = VK_MAKE_VERSION(0, 0, 0);
+            appInfo.pEngineName = "pulsegun engine";
+            appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+            appInfo.apiVersion = VK_API_VERSION_1_1;
+
             vk::InstanceCreateInfo info;
-            info.pApplicationInfo = &vkAppInfo;
+            info.pApplicationInfo = &appInfo;
             info.setPEnabledLayerNames(layers);
             info.setPEnabledExtensionNames(extensions);
 
@@ -81,19 +87,22 @@ class VKDevice : public Resource<vk::Device> {
         static constexpr std::array priority = { 1.f };
 
     public:
-        VKDevice(vk::PhysicalDevice physDev, const std::set<uint32_t>& queueIndices, const std::vector<const char*>& layers, const std::vector<const char*>& deviceExtensions) {
-            // Creating the logical device.
+        VKDevice(vk::PhysicalDevice physDev, const std::unordered_set<uint32_t>& queueIndices,
+            const std::vector<const char*>& layers, const std::vector<const char*>& deviceExtensions) {
+            vk::PhysicalDeviceFeatures features;
+            features.samplerAnisotropy = VK_TRUE;
+
             std::vector<vk::DeviceQueueCreateInfo> infos; infos.reserve(3);
             for (uint32_t index : queueIndices) {
                 infos.emplace_back((vk::DeviceQueueCreateFlags)0, index, priority);
             }
+
             vk::DeviceCreateInfo info;
+            info.pEnabledFeatures = &features;
             info.setQueueCreateInfos(infos);
             info.setPEnabledLayerNames(layers);
             info.setPEnabledExtensionNames(deviceExtensions);
-            vk::PhysicalDeviceFeatures features;
-            features.samplerAnisotropy = VK_TRUE;
-            info.pEnabledFeatures = &features;
+
             resource = physDev.createDevice(info);
         }
 
@@ -110,10 +119,8 @@ class VKSurface : public Resource<vk::SurfaceKHR> {
         VKSurface(vk::Instance inst, SDL_Window* window) {
             instance = inst;
 
-            // Creating the window's surface via SDL.
             // TODO: Change SDL to be more epic.
-            bool success = SDL_Vulkan_CreateSurface(window, (VkInstance)instance, (VkSurfaceKHR*)&resource);
-            PGE_ASSERT(success, "Failed to create Vulkan surface (SDLERROR: " + String(SDL_GetError()) + ")");
+            PGE_ASSERT(SDL_Vulkan_CreateSurface(window, (VkInstance)instance, (VkSurfaceKHR*)&resource) == SDL_TRUE, "Failed to create Vulkan surface (SDLERROR: " + String(SDL_GetError()) + ")");
         }
 
         ~VKSurface() {
@@ -131,59 +138,108 @@ class VKSemaphore : public VKDestroyResource<vk::Semaphore> {
 class VKFence : public VKDestroyResource<vk::Fence> {
     public:
         VKFence(vk::Device dev, bool signaled) : VKDestroyResource(dev) {
-            resource = dev.createFence(vk::FenceCreateInfo(signaled ? vk::FenceCreateFlagBits::eSignaled : (vk::FenceCreateFlags)0));
+            vk::FenceCreateInfo info;
+            if (signaled) { info.flags = vk::FenceCreateFlagBits::eSignaled; }
+
+            resource = dev.createFence(info);
         }
 };
 
 class VKCommandPool : public VKDestroyResource<vk::CommandPool> {
     public:
         VKCommandPool(vk::Device dev, int queueIndex) : VKDestroyResource(dev) {
-            resource = dev.createCommandPool(vk::CommandPoolCreateInfo(vk::CommandPoolCreateFlagBits::eTransient, queueIndex));
+            vk::CommandPoolCreateInfo info;
+            info.flags = vk::CommandPoolCreateFlagBits::eTransient;
+            info.queueFamilyIndex = queueIndex;
+
+            resource = dev.createCommandPool(info);
         }
 };
 
 class VKImageView : public VKDestroyResource<vk::ImageView> {
     public:
-        VKImageView(vk::Device dev, vk::Image swapchainImage, vk::Format fmt) : VKDestroyResource(dev) {
+        VKImageView(vk::Device dev, vk::Image swapchainImage, vk::Format fmt)
+            : VKDestroyResource(dev) {
+            vk::ImageSubresourceRange subRange;
+            subRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+            subRange.layerCount = 1;
+            subRange.levelCount = 1;
+
             vk::ImageViewCreateInfo info;
+            info.subresourceRange = subRange;
             info.image = swapchainImage;
             info.viewType = vk::ImageViewType::e2D;
             info.format = fmt;
-            info.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
+
             resource = dev.createImageView(info);
         }
 };
 
 class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
     public:
-        VKRenderPass(vk::Device dev, vk::SurfaceFormatKHR swapchainFormat) : VKDestroyResource(dev) {
-            vk::AttachmentDescription colorAttachment = vk::AttachmentDescription({}, swapchainFormat.format, vk::SampleCountFlagBits::e1, vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eStore, vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR);
-            vk::AttachmentReference colorAttachmentRef = vk::AttachmentReference(0, vk::ImageLayout::eColorAttachmentOptimal);
-            vk::SubpassDescription subpass = vk::SubpassDescription({}, vk::PipelineBindPoint::eGraphics, 0, nullptr, 1, &colorAttachmentRef);
-            vk::SubpassDependency dependency = vk::SubpassDependency(VK_SUBPASS_EXTERNAL, 0, vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput, {}, vk::AccessFlagBits::eColorAttachmentWrite);
-            resource = dev.createRenderPass(vk::RenderPassCreateInfo({}, 1, &colorAttachment, 1, &subpass, 1, &dependency));
+        VKRenderPass(vk::Device dev, vk::SurfaceFormatKHR swapchainFormat)
+            : VKDestroyResource(dev) {
+            vk::AttachmentDescription color;
+            color.format = swapchainFormat.format;
+            color.samples = vk::SampleCountFlagBits::e1;
+            color.loadOp = vk::AttachmentLoadOp::eDontCare;
+            color.storeOp = vk::AttachmentStoreOp::eStore;
+            color.stencilLoadOp = vk::AttachmentLoadOp::eDontCare;
+            color.stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
+            color.initialLayout = vk::ImageLayout::eUndefined;
+            color.finalLayout = vk::ImageLayout::ePresentSrcKHR;
+
+            vk::AttachmentReference colorRef;
+            colorRef.layout = vk::ImageLayout::eColorAttachmentOptimal;
+
+            vk::SubpassDescription subpass;
+            subpass.pipelineBindPoint = vk::PipelineBindPoint::eGraphics;
+            subpass.setColorAttachments(colorRef);
+
+            vk::SubpassDependency dependency;
+            dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+            dependency.srcStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
+            dependency.dstStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
+            dependency.dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite;
+
+            vk::RenderPassCreateInfo info;
+            info.setAttachments(color);
+            info.setSubpasses(subpass);
+            info.setDependencies(dependency);
+
+            resource = dev.createRenderPass(vk::RenderPassCreateInfo({}, 1, &color, 1, &subpass, 1, &dependency));
         }
 };
 
 class VKFramebuffer : public VKDestroyResource<vk::Framebuffer> {
     public:
-        VKFramebuffer(vk::Device dev, vk::RenderPass renderPass, vk::ImageView swapchainImageView, vk::Extent2D swapchainExtent) : VKDestroyResource(dev) {
-            resource = dev.createFramebuffer(vk::FramebufferCreateInfo({}, renderPass, 1, &swapchainImageView, swapchainExtent.width, swapchainExtent.height, 1));
+        VKFramebuffer(vk::Device dev, vk::RenderPass renderPass, vk::ImageView swapchainImageView, const vk::Extent2D& swapchainExtent)
+            : VKDestroyResource(dev) {
+            vk::FramebufferCreateInfo info;
+            info.renderPass = renderPass;
+            info.setAttachments(swapchainImageView);
+            info.width = swapchainExtent.width;
+            info.height = swapchainExtent.height;
+            info.layers = 1;
+
+            resource = dev.createFramebuffer(info);
         }
 };
 
 class VKSwapchain : public VKDestroyResource<vk::SwapchainKHR> {
     public:
-        // TODO: Why doesn't a reference work here?
-        VKSwapchain(vk::Device dev, vk::PhysicalDevice physDev, vk::SurfaceKHR surface, vk::Extent2D* swapchainExtent, int& width, int& height, vk::SurfaceFormatKHR swapchainFormat, uint32_t gi, uint32_t pi, uint32_t ti, bool vsync) : VKDestroyResource(dev) {
+        VKSwapchain(vk::Device dev, vk::PhysicalDevice physDev, vk::SurfaceKHR surface,
+            vk::Extent2D& swapchainExtent, int& width, int& height, vk::SurfaceFormatKHR swapchainFormat,
+            uint32_t gi, uint32_t pi, uint32_t ti, bool vsync, vk::SwapchainKHR oldChain)
+            : VKDestroyResource(dev) {
             // Setting the size of the swap chain images.
             vk::SurfaceCapabilitiesKHR sc = physDev.getSurfaceCapabilitiesKHR(surface);
             // 0xFFFFFFFF indicates to just rely on the size of the window clamped by the given maxs and mins.
             if (sc.currentExtent.width != 0xFFFFFFFF) {
-                *swapchainExtent = sc.currentExtent;
+                swapchainExtent = sc.currentExtent;
             } else {
-                swapchainExtent->setWidth(std::clamp((uint32_t)width, sc.minImageExtent.width, sc.maxImageExtent.width));
-                swapchainExtent->setHeight(std::clamp((uint32_t)height, sc.minImageExtent.height, sc.maxImageExtent.height));
+                swapchainExtent.setWidth(std::clamp((uint32_t)width, sc.minImageExtent.width, sc.maxImageExtent.width));
+                swapchainExtent.setHeight(std::clamp((uint32_t)height, sc.minImageExtent.height, sc.maxImageExtent.height));
             }
 
             // Setting the amount of images in the swap chain.
@@ -192,22 +248,41 @@ class VKSwapchain : public VKDestroyResource<vk::SwapchainKHR> {
                 imageCount = sc.maxImageCount;
             }
 
-            vk::SwapchainCreateInfoKHR sci = vk::SwapchainCreateInfoKHR({}, surface, imageCount, swapchainFormat.format, swapchainFormat.colorSpace, *swapchainExtent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive, 0, nullptr, sc.currentTransform, vk::CompositeAlphaFlagBitsKHR::eOpaque, vsync ? vk::PresentModeKHR::eFifoRelaxed : vk::PresentModeKHR::eMailbox, VK_TRUE, nullptr);
+            vk::SwapchainCreateInfoKHR info;
+            info.surface = surface;
+            info.minImageCount = imageCount;
+            info.imageFormat = swapchainFormat.format;
+            info.imageColorSpace = swapchainFormat.colorSpace;
+            info.imageExtent = swapchainExtent;
+            info.imageArrayLayers = 1;
+            info.imageUsage = vk::ImageUsageFlagBits::eColorAttachment;
+            info.imageSharingMode = vk::SharingMode::eExclusive;
+            info.preTransform = sc.currentTransform;
+            info.compositeAlpha = vk::CompositeAlphaFlagBitsKHR::eOpaque;
+            info.presentMode = vsync ? vk::PresentModeKHR::eFifoRelaxed : vk::PresentModeKHR::eMailbox;
+            info.clipped = VK_TRUE;
+            info.oldSwapchain = oldChain;
+
             // TODO: Remove.
+            std::array indices{ gi, pi, ti };
             if (gi != pi || pi != ti) {
-                sci.setImageSharingMode(vk::SharingMode::eConcurrent);
-                std::vector<uint32_t> queueIndices = std::vector<uint32_t>{ gi, pi, ti };
-                sci.setQueueFamilyIndices(queueIndices);
+                info.imageSharingMode = vk::SharingMode::eConcurrent;
+                info.setQueueFamilyIndices(indices);
             }
-            resource = dev.createSwapchainKHR(sci);
+
+            resource = dev.createSwapchainKHR(info);
         }
 };
 
 class VKBuffer : public VKDestroyResource<vk::Buffer> {
     public:
         VKBuffer(vk::Device dev, vk::DeviceSize size, vk::BufferUsageFlags bufferUsage) : VKDestroyResource(dev) {
-            vk::BufferCreateInfo bufferInfo = vk::BufferCreateInfo({}, size, bufferUsage, vk::SharingMode::eExclusive);
-            resource = device.createBuffer(bufferInfo);
+            vk::BufferCreateInfo info;
+            info.size = size;
+            info.usage = bufferUsage;
+            info.sharingMode = vk::SharingMode::eExclusive;
+
+            resource = device.createBuffer(info);
         }
 };
 
@@ -236,8 +311,11 @@ class VKMemory : public VKFreeResource<vk::DeviceMemory> {
             PGE_ASSERT(memIndex != -1, "No suitable memory type found");
 
 
-            vk::MemoryAllocateInfo memoryInfo = vk::MemoryAllocateInfo(memReq.size, memIndex);
-            resource = device.allocateMemory(memoryInfo);
+            vk::MemoryAllocateInfo info;
+            info.allocationSize = memReq.size;
+            info.memoryTypeIndex = memIndex;
+
+            resource = device.allocateMemory(info);
 
             if constexpr (std::is_same<T, vk::Image>::value) {
                 device.bindImageMemory(data, resource, 0);
@@ -263,13 +341,19 @@ class VKPipelineInfo : PolymorphicHeap {
 
         VKPipelineInfo() = default;
 
-        void init(vk::Extent2D extent, vk::Rect2D* scissor) {
+        void init(vk::Extent2D extent, const vk::Rect2D& scissor) {
             // Creating a viewport.
             viewport = vk::Viewport(0.f, (float)extent.height, (float)extent.width, -(float)extent.height, 0.f, 1.f);
-            viewportInfo = vk::PipelineViewportStateCreateInfo({}, 1, &viewport, 1, scissor);
+            
+            viewportInfo.setViewports(viewport);
+            viewportInfo.setScissors(scissor);
 
-            rasterizationInfo = vk::PipelineRasterizationStateCreateInfo({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eFrontAndBack, vk::FrontFace::eCounterClockwise, false, 0.f, 0.f, 0.f, 1.f);
-            multisamplerInfo = vk::PipelineMultisampleStateCreateInfo({}, vk::SampleCountFlagBits::e1, false, 0.f, nullptr, false, false);
+            rasterizationInfo.polygonMode = vk::PolygonMode::eFill;
+            rasterizationInfo.cullMode = vk::CullModeFlagBits::eFrontAndBack;
+            rasterizationInfo.frontFace = vk::FrontFace::eCounterClockwise;
+            rasterizationInfo.lineWidth = 1.f;
+            
+            multisamplerInfo.rasterizationSamples = vk::SampleCountFlagBits::e1;
 
             // Color blending. (No idea what's going on here, just stole it from D3D11BlendState.)
             colorBlendAttachmentState.blendEnable = true;
@@ -280,19 +364,21 @@ class VKPipelineInfo : PolymorphicHeap {
             colorBlendAttachmentState.srcAlphaBlendFactor = vk::BlendFactor::eOne;
             colorBlendAttachmentState.dstAlphaBlendFactor = vk::BlendFactor::eOneMinusSrcAlpha;
             colorBlendAttachmentState.colorWriteMask = vk::ColorComponentFlagBits::eA | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG;
-            
-            colorBlendInfo = vk::PipelineColorBlendStateCreateInfo({ }, false, vk::LogicOp::eClear, 1, & colorBlendAttachmentState);
+
+            colorBlendInfo.setAttachments(colorBlendAttachmentState);
         }
 };
 
 class VKPipeline : public VKDestroyResource<vk::Pipeline> {
     private:
-        static constexpr vk::PipelineInputAssemblyStateCreateInfo inputAssemblyLines = vk::PipelineInputAssemblyStateCreateInfo({}, vk::PrimitiveTopology::eLineList, false);
-        static constexpr vk::PipelineInputAssemblyStateCreateInfo inputAssemblyTris = vk::PipelineInputAssemblyStateCreateInfo({}, vk::PrimitiveTopology::eTriangleList, false);
+        static constexpr vk::PipelineInputAssemblyStateCreateInfo inputAssemblyLines{ { }, vk::PrimitiveTopology::eLineList };
+        static constexpr vk::PipelineInputAssemblyStateCreateInfo inputAssemblyTris{ { }, vk::PrimitiveTopology::eTriangleList };
 
     public:
         // Sadly we can't make this any more straightforward, because we're in a header and including either shader or graphics would lead to circular inclusion.
-        VKPipeline(vk::Device device, const vk::PipelineShaderStageCreateInfo* shaderInfo, const vk::PipelineVertexInputStateCreateInfo* vertexInfo, vk::PipelineLayout layout, const VKPipelineInfo* info, vk::RenderPass renderPass, Mesh::PrimitiveType type) : VKDestroyResource(device) {
+        VKPipeline(vk::Device device, const std::array<vk::PipelineShaderStageCreateInfo, 2> shaderInfo, const vk::PipelineVertexInputStateCreateInfo* vertexInfo,
+            vk::PipelineLayout layout, const VKPipelineInfo* pipelineInfo, vk::RenderPass renderPass, Mesh::PrimitiveType type)
+            : VKDestroyResource(device) {
             const vk::PipelineInputAssemblyStateCreateInfo* inputInfo;
             switch (type) {
                 case Mesh::PrimitiveType::LINE: {
@@ -303,8 +389,20 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
                     inputInfo = &inputAssemblyTris;
                 } break;
             }
-            vk::GraphicsPipelineCreateInfo pipelineInfo = vk::GraphicsPipelineCreateInfo({}, 2, shaderInfo, vertexInfo, inputInfo, nullptr, &info->viewportInfo, &info->rasterizationInfo, &info->multisamplerInfo, nullptr, &info->colorBlendInfo, nullptr, layout, renderPass, 0, {}, -1);
-            vk::ResultValue<vk::Pipeline> creation = device.createGraphicsPipeline(nullptr, pipelineInfo);
+            
+            vk::GraphicsPipelineCreateInfo info;
+            info.setStages(shaderInfo);
+            info.pVertexInputState = vertexInfo;
+            info.pInputAssemblyState = inputInfo;
+            info.pViewportState = &pipelineInfo->viewportInfo;
+            info.pRasterizationState = &pipelineInfo->rasterizationInfo;
+            info.pMultisampleState = &pipelineInfo->multisamplerInfo;
+            info.pColorBlendState = &pipelineInfo->colorBlendInfo;
+            info.layout = layout;
+            info.renderPass = renderPass;
+            info.basePipelineIndex = -1;
+
+            vk::ResultValue<vk::Pipeline> creation = device.createGraphicsPipeline(nullptr, info);
             PGE_ASSERT(creation.result == vk::Result::eSuccess, "Failed to create graphics pipeline (VKERROR: " + String::hexFromInt((u32)creation.result) + ")");
             resource = creation.value;
         }
@@ -313,36 +411,42 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
 class VKPipelineLayout : public VKDestroyResource<vk::PipelineLayout> {
     public:
         VKPipelineLayout(vk::Device dev, const std::vector<vk::PushConstantRange>& ranges, std::optional<vk::DescriptorSetLayout> layout = { }) : VKDestroyResource(dev) {
-            vk::PipelineLayoutCreateInfo layoutInfo;
-            layoutInfo.setPushConstantRanges(ranges);
+            vk::PipelineLayoutCreateInfo info;
+            info.setPushConstantRanges(ranges);
             if (layout.has_value()) {
-                layoutInfo.setSetLayouts(layout.value());
+                info.setSetLayouts(layout.value());
             }
-            resource = device.createPipelineLayout(layoutInfo);
+
+            resource = device.createPipelineLayout(info);
         }
 };
 
 class VKShader : public VKDestroyResource<vk::ShaderModule> {
     public:
         VKShader(vk::Device dev, const std::vector<byte>& shaderBinary) : VKDestroyResource(dev) {
-            vk::ShaderModuleCreateInfo shaderCreateInfo = vk::ShaderModuleCreateInfo({}, shaderBinary.size(), (uint32_t*)shaderBinary.data());
-            resource = device.createShaderModule(shaderCreateInfo);
+            vk::ShaderModuleCreateInfo info;
+            // WTF is wrong with vulkan?? Code as u32 ptr, but size in bytes, makes sense!
+            info.codeSize = shaderBinary.size();
+            info.pCode = (u32*)shaderBinary.data();
+
+            resource = device.createShaderModule(info);
         }
 };
 
 class VKImage : public VKDestroyResource<vk::Image> {
     public:
         VKImage(vk::Device dev, int w, int h, vk::Format fmt) : VKDestroyResource(dev) {
-            vk::ImageCreateInfo info{ };
-            info.setImageType(vk::ImageType::e2D);
-            info.setFormat(fmt);
-            info.setExtent(vk::Extent3D(w, h, 1));
-            info.setMipLevels(1).setArrayLayers(1);
-            info.setSamples(vk::SampleCountFlagBits::e1);
-            info.setTiling(vk::ImageTiling::eOptimal);
-            info.setInitialLayout(vk::ImageLayout::eUndefined);
-            info.setUsage(vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled);
-            info.setSharingMode(vk::SharingMode::eExclusive);
+            vk::ImageCreateInfo info;
+            info.imageType = vk::ImageType::e2D;
+            info.format = fmt;
+            info.extent = vk::Extent3D(w, h, 1);
+            info.mipLevels = 1;
+            info.arrayLayers = 1;
+            info.samples = vk::SampleCountFlagBits::e1;
+            info.tiling = vk::ImageTiling::eOptimal;
+            info.initialLayout = vk::ImageLayout::eUndefined;
+            info.usage = vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled;
+            info.sharingMode = vk::SharingMode::eExclusive;
 
             resource = device.createImage(info);
         }
@@ -366,7 +470,6 @@ class VKDescriptorSetLayout : public VKDestroyResource<vk::DescriptorSetLayout> 
     public:
         VKDescriptorSetLayout(vk::Device dev) : VKDestroyResource(dev) {
             vk::DescriptorSetLayoutBinding binding;
-            binding.binding = 0;
             binding.descriptorCount = 1;
             binding.descriptorType = vk::DescriptorType::eCombinedImageSampler;
             binding.stageFlags = vk::ShaderStageFlagBits::eFragment;

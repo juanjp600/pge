@@ -27,7 +27,7 @@ class TextureVK : public Texture {
         VKImageView::View imageView; // Great type name!
 
         VKDescriptorPool::View dPool;
-        std::vector<vk::DescriptorSet> dSets;
+        vk::DescriptorSet dSet;
 };
 
 }

@@ -30,7 +30,7 @@ void MeshVK::renderInternal() {
 			((ShaderVK&)material.getShader()).getLayout(), 0,
 			((TextureVK&)material.getTexture(0)).getDescriptorSet(), { });
 	}
-	comBuffer.drawIndexed(indices.size(), 1, 0, 0, 0);
+	comBuffer.drawIndexed((u32)indices.size(), 1, 0, 0, 0);
 }
 
 // TODO: Crash when no vertices.
@@ -44,7 +44,7 @@ void MeshVK::uploadInternalData() {
 
 	u32 vertexCount = vertices.getElementCount();
 	totalVertexSize = shader.getVertexStride() * vertexCount;
-	int finalTotalSize = totalVertexSize + sizeof(u16) * indices.size();
+	int finalTotalSize = totalVertexSize + sizeof(u16) * (int)indices.size();
 
 	VKBuffer stagingBuffer = VKBuffer(device, finalTotalSize, vk::BufferUsageFlagBits::eTransferSrc);
 	VKMemory stagingMemory = VKMemory(device, physicalDevice, stagingBuffer.get(), vk::MemoryPropertyFlagBits::eHostVisible);

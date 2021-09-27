@@ -193,7 +193,7 @@ const std::vector<String>& ShaderVK::getVertexInputNames() const {
     return vertexInputNames;
 }
 
-const vk::PipelineShaderStageCreateInfo* ShaderVK::getShaderStageInfo() const {
+const std::array<vk::PipelineShaderStageCreateInfo, 2>& ShaderVK::getShaderStageInfo() const {
     return shaderStageInfo;
 }
 
