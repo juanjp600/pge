@@ -386,14 +386,9 @@ template&lt;typename T &gt; </div>
 <p>&#x202A;Attempts to read a type T from file. </p>
 <p class="DocNodeLTR">Reading can fail because some kind of IO error occured or the end of the file has been reached. <a class="el" href="class_p_g_e_1_1_binary_reader.html#a4055707079ee0daf0f1536a0edd4e50b" title="&#x202A;Whether a previous operation has attempted to read past the end of the file.">endOfFile</a> can be used to determine which of the two scenarios is the case.</p>
 <p class="DocNodeLTR">In case reading failed the contents of out are undefined (the object can safely be destructed though).</p>
-<p class="DocNodeLTR">By default the following types are supported:</p><ul class="DocNodeLTR">
-<li>&#x202A;Self explanatory: u8, u16, u32, u64, i8, i16, i32, i64, float, double, long double</li>
-<li>&#x202A;char16: 1-4 bytes interpreted as a single UTF-8 character.</li>
-<li>&#x202A;<a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a>: A null terminated <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a> of UTF-8 characters. Any content previously in the supplied <a class="el" href="class_p_g_e_1_1_string.html" title="&#x202A;A UTF-8 character sequence guaranteed to be terminated by a null byte.">String</a> is overwritten.</li>
-<li>&#x202A;<a class="el" href="class_p_g_e_1_1_vector2f.html">Vector2f</a>: Floats in order x, y.</li>
-<li>&#x202A;<a class="el" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>: Floats in order x, y, z. <dl class="section return"><dt>Returns</dt><dd>&#x202A;Whether the reading succeeded. </dd></dl>
-</li>
-</ul>
+<p class="DocNodeLTR">By default the same types as in <a class="el" href="class_p_g_e_1_1_binary_writer.html" title="&#x202A;Utility to write binary data to a file.">BinaryWriter</a> are supported.</p>
+<p class="DocNodeLTR">Note: Strings are cleared, before being written to. </p><dl class="section return"><dt>Returns</dt><dd>&#x202A;Whether the reading succeeded. </dd></dl>
+<dl class="section see DocNodeLTR"><dt>See also</dt><dd>&#x202A;<a class="el" href="class_p_g_e_1_1_binary_writer.html#a39225d800a657a49ab2bb117c9af11ce" title="&#x202A;Writes a type T to file.">BinaryWriter::write</a>. </dd></dl>
 
 </div>
 </div>

@@ -92,31 +92,29 @@ $(document).ready(function(){initNavTree('_binary_writer_8h_source.html',''); in
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define PGE_BINARY_WRITER_H_INCLUDED</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;PGE/File/AbstractIO.h&gt;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;PGE/Math/Vector.h&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>PGE {</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// TODO: Add more types to this and reader?</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_binary_writer.html">   33</a></span>&#160;<span class="comment"></span><span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_binary_writer.html">BinaryWriter</a> : <span class="keyword">private</span> <a class="code" href="class_p_g_e_1_1_abstract_i_o.html">AbstractIO</a>&lt;std::ofstream&gt; {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">using</span> <a class="code" href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">AbstractIO::earlyClose</a>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_binary_writer.html#a6f5a741aae9e62973ba147592051cd7e">   43</a></span>&#160;        <a class="code" href="class_p_g_e_1_1_binary_writer.html#a6f5a741aae9e62973ba147592051cd7e">BinaryWriter</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">FilePath</a>&amp; file, <span class="keywordtype">bool</span> append = <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_binary_writer.html#a39225d800a657a49ab2bb117c9af11ce">   55</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_binary_writer.html#a39225d800a657a49ab2bb117c9af11ce">write</a>(<span class="keyword">const</span> T&amp; val);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_binary_writer.html#ad8967933c724289554f82538a95ea3ac">   62</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_binary_writer.html#ad8967933c724289554f82538a95ea3ac">writeBytes</a>(<span class="keyword">const</span> <span class="keywordtype">byte</span>* data, <span class="keywordtype">size_t</span> amount);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;};</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_BINARY_WRITER_H_INCLUDED</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>PGE {</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_binary_writer.html">   31</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_binary_writer.html">BinaryWriter</a> : <span class="keyword">private</span> <a class="code" href="class_p_g_e_1_1_abstract_i_o.html">AbstractIO</a>&lt;std::ofstream&gt; {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">using</span> <a class="code" href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">AbstractIO::earlyClose</a>;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_binary_writer.html#a6f5a741aae9e62973ba147592051cd7e">   41</a></span>&#160;        <a class="code" href="class_p_g_e_1_1_binary_writer.html#a6f5a741aae9e62973ba147592051cd7e">BinaryWriter</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">FilePath</a>&amp; file, <span class="keywordtype">bool</span> append = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_binary_writer.html#a39225d800a657a49ab2bb117c9af11ce">   62</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_binary_writer.html#a39225d800a657a49ab2bb117c9af11ce">write</a>(<span class="keyword">const</span> T&amp; val);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_binary_writer.html#ad8967933c724289554f82538a95ea3ac">   69</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_binary_writer.html#ad8967933c724289554f82538a95ea3ac">writeBytes</a>(<span class="keyword">const</span> <span class="keywordtype">byte</span>* data, <span class="keywordtype">size_t</span> amount);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;};</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_BINARY_WRITER_H_INCLUDED</span></div>
 <div class="ttc" id="aclass_p_g_e_1_1_abstract_i_o_html"><div class="ttname"><a href="class_p_g_e_1_1_abstract_i_o.html">PGE::AbstractIO</a></div><div class="ttdoc">Utility to more easily deal with file IO streams.</div><div class="ttdef"><b>Definition:</b> AbstractIO.h:15</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_abstract_i_o_html_af252120aa787246f2c0f2df43dce0e4d"><div class="ttname"><a href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">PGE::AbstractIO::earlyClose</a></div><div class="ttdeci">void earlyClose()</div><div class="ttdoc">Closes the stream prematurely.</div><div class="ttdef"><b>Definition:</b> AbstractIO.h:45</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_binary_writer_html"><div class="ttname"><a href="class_p_g_e_1_1_binary_writer.html">PGE::BinaryWriter</a></div><div class="ttdoc">Utility to write binary data to a file.</div><div class="ttdef"><b>Definition:</b> BinaryWriter.h:33</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_binary_writer_html"><div class="ttname"><a href="class_p_g_e_1_1_binary_writer.html">PGE::BinaryWriter</a></div><div class="ttdoc">Utility to write binary data to a file.</div><div class="ttdef"><b>Definition:</b> BinaryWriter.h:31</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_binary_writer_html_a39225d800a657a49ab2bb117c9af11ce"><div class="ttname"><a href="class_p_g_e_1_1_binary_writer.html#a39225d800a657a49ab2bb117c9af11ce">PGE::BinaryWriter::write</a></div><div class="ttdeci">void write(const T &amp;val)</div><div class="ttdoc">Writes a type T to file.</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_binary_writer_html_a6f5a741aae9e62973ba147592051cd7e"><div class="ttname"><a href="class_p_g_e_1_1_binary_writer.html#a6f5a741aae9e62973ba147592051cd7e">PGE::BinaryWriter::BinaryWriter</a></div><div class="ttdeci">BinaryWriter(const FilePath &amp;file, bool append=false)</div><div class="ttdoc">Opens the stream.</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_binary_writer_html_ad8967933c724289554f82538a95ea3ac"><div class="ttname"><a href="class_p_g_e_1_1_binary_writer.html#ad8967933c724289554f82538a95ea3ac">PGE::BinaryWriter::writeBytes</a></div><div class="ttdeci">void writeBytes(const byte *data, size_t amount)</div><div class="ttdoc">Writes the given bytes to file.</div></div>
