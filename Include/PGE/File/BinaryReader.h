@@ -2,7 +2,6 @@
 #define PGE_BINARY_READER_H_INCLUDED
 
 #include <PGE/File/AbstractIO.h>
-#include <PGE/Math/Vector.h>
 
 namespace PGE {
 
@@ -37,13 +36,11 @@ class BinaryReader : private AbstractIO<std::ifstream> {
         /// 
         /// In case reading failed the contents of out are undefined (the object can safely be destructed though).
         /// 
-        /// By default the following types are supported:
-        /// - Self explanatory: u8, u16, u32, u64, i8, i16, i32, i64, float, double, long double
-        /// - char16: 1-4 bytes interpreted as a single UTF-8 character.
-        /// - String: A null terminated String of UTF-8 characters. Any content previously in the supplied String is overwritten.
-        /// - Vector2f: Floats in order x, y.
-        /// - Vector3f: Floats in order x, y, z.
+        /// By default the same types as in BinaryWriter are supported.
+        /// 
+        /// Note: Strings are cleared, before being written to.
         /// @returns Whether the reading succeeded.
+        /// @see BinaryWriter::write.
         template <typename T>
         bool tryRead(T& out);
 

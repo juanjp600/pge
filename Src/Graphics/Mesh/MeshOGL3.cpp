@@ -40,7 +40,7 @@ const static GLenum glTextureLayers[] = {
     GL_TEXTURE4,
     GL_TEXTURE5,
     GL_TEXTURE6,
-    GL_TEXTURE7
+    GL_TEXTURE7,
 };
 
 void MeshOGL3::renderInternal() {

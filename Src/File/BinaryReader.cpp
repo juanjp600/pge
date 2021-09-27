@@ -1,5 +1,12 @@
 #include <PGE/File/BinaryReader.h>
 
+#include <PGE/Math/Vector.h>
+#include <PGE/Math/Matrix.h>
+#include <PGE/Math/AABBox.h>
+#include <PGE/Math/Line.h>
+#include <PGE/Math/Plane.h>
+#include <PGE/Math/Rectangle.h>
+
 #include "../String/UnicodeHelper.h"
 
 using namespace PGE;
@@ -31,7 +38,7 @@ PGE_IO_DEFAULT_SPEC(float);
 PGE_IO_DEFAULT_SPEC(double);
 PGE_IO_DEFAULT_SPEC(long double);
 
-template<> bool BinaryReader::tryRead<char16>(char16& out) {
+template<> bool BinaryReader::tryRead(char16& out) {
     char buf[4];
     if (!tryRead<char>(buf[0])) { return false; }
     byte codepoint = Unicode::measureCodepoint(buf[0]);
@@ -52,26 +59,71 @@ template<> bool BinaryReader::tryRead(String& out) {
     return succ;
 }
 
-#pragma warning(push)
-#pragma warning(disable: 4701)
-template<> bool BinaryReader::tryRead(Vector2f& out) {
-    float x; float y;
-    bool succ = tryRead<float>(x) && tryRead<float>(y);
-    out = Vector2f(x, y);
-    return succ;
-}
-
-template<> bool BinaryReader::tryRead(Vector3f& out) {
-    float x; float y; float z;
-    bool succ = tryRead<float>(x) && tryRead<float>(y) && tryRead<float>(z);
-    out = Vector3f(x, y, z);
-    return succ;
-}
-#pragma warning(pop)
-
 void BinaryReader::readStringInto(String& ref) {
     String ret;
     PGE_ASSERT(tryRead<String>(ref), BAD_STREAM);
+}
+
+template<> bool BinaryReader::tryRead(Vector2f& out) {
+    return tryRead<float>(out.x) && tryRead<float>(out.y);
+}
+
+template<> bool BinaryReader::tryRead(Vector3f& out) {
+    return tryRead<float>(out.x) && tryRead<float>(out.y) && tryRead<float>(out.z);
+}
+
+template<> bool BinaryReader::tryRead(Vector4f& out) {
+    return tryRead<float>(out.x) && tryRead<float>(out.y) && tryRead<float>(out.z) && tryRead<float>(out.w);
+}
+
+template<> bool BinaryReader::tryRead(Vector2i& out) {
+    return tryRead<int>(out.x) && tryRead<int>(out.y);
+}
+
+template<> bool BinaryReader::tryRead(Matrix4x4f& out) {
+    stream.read((char*)out.elements, sizeof(float) * 4 * 4);
+    return stream.good();
+}
+
+template<> bool BinaryReader::tryRead(AABBox& out) {
+    Vector3f temp;
+    bool succ = tryRead<Vector3f>(temp);
+    if (!succ) { return false; }
+    out = AABBox(temp);
+    succ = tryRead<Vector3f>(temp);
+    if (!succ) { return false; }
+    out.addPoint(temp);
+    return true;
+}
+
+template<> bool BinaryReader::tryRead(Line2f& out) {
+    return tryRead<Vector2f>(out.pointA) && tryRead<Vector2f>(out.pointB);
+}
+
+template<> bool BinaryReader::tryRead(Line2i& out) {
+    return tryRead<Vector2i>(out.pointA) && tryRead<Vector2i>(out.pointB);
+}
+
+template<> bool BinaryReader::tryRead(Line3f& out) {
+    return tryRead<Vector3f>(out.pointA) && tryRead<Vector3f>(out.pointB);
+}
+
+template<> bool BinaryReader::tryRead(Plane& out) {
+    return tryRead<float>(out.distanceFromOrigin) && tryRead<Vector3f>(out.normal);
+}
+
+template<> bool BinaryReader::tryRead(Rectanglef& out) {
+    Vector2f tl; Vector2f br;
+    bool succ = tryRead<Vector2f>(tl) && tryRead<Vector2f>(br);
+    out = Rectanglef(tl, br);
+    return succ;
+}
+
+template<> bool BinaryReader::tryRead(Rectanglei& out) {
+    Vector2i tl; Vector2i br;
+    bool succ = tryRead<Vector2i>(tl) && tryRead<Vector2i>(br);
+    out = Rectanglei(tl, br);
+    return succ;
 }
 
 bool BinaryReader::tryReadBytes(size_t count, std::vector<byte>& out) {
