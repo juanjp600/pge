@@ -46,12 +46,12 @@ const static GLenum glTextureLayers[] = {
 void MeshOGL3::renderInternal() {
     prepareVertexOperation();
 
-    for (int i=0;i<material.getTextureCount();i++) {
+    for (int i=0;i<material->getTextureCount();i++) {
         glActiveTexture(glTextureLayers[i]);
-        glBindTexture(GL_TEXTURE_2D,((TextureOGL3&)material.getTexture(i)).getGlTexture());
+        glBindTexture(GL_TEXTURE_2D,((TextureOGL3&)material->getTexture(i)).getGlTexture());
     }
 
-    ((ShaderOGL3&)material.getShader()).useShader();
+    ((ShaderOGL3&)material->getShader()).useShader();
 
     GLenum glPrimitiveType = GL_TRIANGLES;
     if (primitiveType==PrimitiveType::LINE) {
@@ -63,7 +63,7 @@ void MeshOGL3::renderInternal() {
 
     glDrawElements(glPrimitiveType,(GLsizei)indices.size(),GL_UNSIGNED_INT,nullptr);
 
-    ((ShaderOGL3&)material.getShader()).unbindGLAttribs();
+    ((ShaderOGL3&)material->getShader()).unbindGLAttribs();
     glBindVertexArray(0);
 }
 

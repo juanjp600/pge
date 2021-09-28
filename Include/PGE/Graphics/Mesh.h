@@ -14,31 +14,10 @@
 
 namespace PGE {
 
+class Material;
+
 class Mesh : private PolymorphicHeap {
     public:
-        class Material {
-            public:
-                enum class Opaque {
-                    YES,
-                    NO
-                };
-
-                Material();
-                Material(class Shader& sh, Opaque o);
-                Material(Shader& sh, class Texture& tex, Opaque o);
-                Material(Shader& sh, const ReferenceVector<Texture>& texs, Opaque o);
-
-                bool isValid() const;
-                bool isOpaque() const;
-                Shader& getShader() const;
-                int getTextureCount() const;
-                Texture& getTexture(int index) const;
-            private:
-                Shader* shader;
-                ReferenceVector<Texture> textures;
-                Opaque opaque;
-        };
-
         enum class PrimitiveType {
             LINE,
             TRIANGLE,
@@ -63,7 +42,7 @@ class Mesh : private PolymorphicHeap {
         void setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u32>&& inds);
         void clearGeometry();
 
-        void setMaterial(const Material& m);
+        void setMaterial(Material* m);
 
         bool isOpaque() const;
 
@@ -73,7 +52,7 @@ class Mesh : private PolymorphicHeap {
         virtual void uploadInternalData() = 0;
         virtual void renderInternal() = 0;
 
-        Material material;
+        Material* material = nullptr;
 
         std::optional<PrimitiveType> primitiveType;
         StructuredData vertices;

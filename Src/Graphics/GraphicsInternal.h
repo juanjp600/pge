@@ -6,6 +6,7 @@
 #include <PGE/Graphics/Graphics.h>
 #include <PGE/Graphics/Mesh.h>
 #include <PGE/Graphics/Texture.h>
+#include <PGE/Graphics/Material.h>
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <AppKit/AppKit.h>
@@ -47,11 +48,12 @@ class GraphicsInternal : public Graphics {
         virtual Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) = 0;
         virtual Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) = 0;
         virtual Texture* loadTextureCompressed(const std::vector<Texture::Mipmap>& mipmaps, Texture::CompressedFormat fmt) = 0;
+        virtual Material* createMaterial(Shader& sh, const ReferenceVector<Texture>& tex, Material::Opaque o) = 0;
 
         SDL_Window* getWindow() const;
 };
 
-template <typename ShaderType, typename MeshType, typename TextureType>
+template <typename ShaderType, typename MeshType, typename TextureType, typename MaterialType = Material>
 class GraphicsSpecialized : public GraphicsInternal {
     static_assert(std::is_base_of<Shader, ShaderType>::value);
     static_assert(std::is_base_of<Mesh, MeshType>::value);
@@ -80,6 +82,10 @@ class GraphicsSpecialized : public GraphicsInternal {
         
         Texture* loadTextureCompressed(const std::vector<Texture::Mipmap>& mipmaps, Texture::CompressedFormat fmt) final override {
             return new TextureType(*this, mipmaps, fmt);
+        }
+
+        Material* createMaterial(Shader& sh, const ReferenceVector<Texture>& tex, Material::Opaque o) final override {
+            return new MaterialType(*this, sh, tex, o);
         }
 };
 
