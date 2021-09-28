@@ -3,9 +3,10 @@
 
 #include "GraphicsInternal.h"
 
+#include "Material/MaterialVK.h"
+#include "Texture/TextureVK.h"
 #include "Shader/ShaderVK.h"
 #include "Mesh/MeshVK.h"
-#include "Texture/TextureVK.h"
 
 #include "../ResourceManagement/ResourceManagerVK.h"
 
@@ -13,7 +14,7 @@ namespace PGE {
 
 class ShaderVK;
 
-class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
+class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, MaterialVK> {
     public:
         GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y);
 
@@ -49,7 +50,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
         vk::CommandBuffer getCurrentCommandBuffer() const;
         const VKPipelineInfo* getPipelineInfo() const;
         const vk::Sampler& getSampler(bool rt) const;
-        const vk::DescriptorSetLayout& getDescriptorSetLayout() const;
+        const vk::DescriptorSetLayout& getDescriptorSetLayout(int count) const;
 
         void addMesh(MeshVK& m);
         void removeMesh(MeshVK& m);
@@ -101,7 +102,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK> {
         VKSampler::View sampler;
         VKSampler::View samplerRT;
 
-        VKDescriptorSetLayout::View dSetLayout;
+        std::array<VKDescriptorSetLayout::View, 2> dSetLayout;
 
         static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
         int currentFrame = 0;

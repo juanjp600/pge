@@ -3,6 +3,7 @@
 #include <PGE/Exception/Exception.h>
 #include <PGE/Graphics/Graphics.h>
 
+#include "../Material/MaterialVK.h"
 #include "../Shader/ShaderVK.h"
 #include "../GraphicsVK.h"
 
@@ -18,17 +19,17 @@ MeshVK::~MeshVK() {
 }
 
 void MeshVK::renderInternal() {
-	((ShaderVK&)material.getShader()).pushConstants();
+	((ShaderVK&)material->getShader()).pushConstants();
 
 	vk::CommandBuffer comBuffer = graphics.getCurrentCommandBuffer();
 	// TODO: How the fuck does the buffer know how much vertex data there is???
 	comBuffer.bindVertexBuffers(0, dataBuffer.get(), (vk::DeviceSize)0);
 	comBuffer.bindIndexBuffer(dataBuffer, totalVertexSize, vk::IndexType::eUint16);
 	comBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
-	if (material.getTextureCount() > 0) {
+	if (material->getTextureCount() > 0) {
 		comBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics,
-			((ShaderVK&)material.getShader()).getLayout(), 0,
-			((TextureVK&)material.getTexture(0)).getDescriptorSet(), { });
+			((ShaderVK&)material->getShader()).getLayout(), 0,
+			((MaterialVK*)material)->getDescriptorSet(), { });
 	}
 	comBuffer.drawIndexed((u32)indices.size(), 1, 0, 0, 0);
 }
@@ -37,7 +38,7 @@ void MeshVK::renderInternal() {
 void MeshVK::uploadInternalData() {
 	vk::Device device = graphics.getDevice();
 	vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
-	ShaderVK& shader = (ShaderVK&)material.getShader();
+	ShaderVK& shader = (ShaderVK&)material->getShader();
 
 	resourceManager.trash(dataMemory);
 	resourceManager.trash(dataBuffer);
@@ -70,6 +71,6 @@ void MeshVK::uploadInternalData() {
 
 void MeshVK::uploadPipeline() {
 	resourceManager.trash(pipeline);
-	ShaderVK& shader = ((ShaderVK&)material.getShader());
+	ShaderVK& shader = ((ShaderVK&)material->getShader());
 	pipeline = resourceManager.addNewResource<VKPipeline>(graphics.getDevice(), shader.getShaderStageInfo(), shader.getVertexInputInfo(), shader.getLayout(), graphics.getPipelineInfo(), graphics.getRenderPass(), primitiveType.value());
 }

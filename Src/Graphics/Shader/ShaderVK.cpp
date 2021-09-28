@@ -69,7 +69,7 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
     }
 
     if (reflection.descriptor_set_count > 0) {
-        layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges, graphics.getDescriptorSetLayout());
+        layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges, graphics.getDescriptorSetLayout(reflection.descriptor_bindings[0].count - 1));
     } else {
         layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges);
     }

@@ -31,6 +31,7 @@
     <ClCompile Include="..\..\Src\Graphics\GraphicsInternal.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsOGL3.cpp" />
     <ClCompile Include="..\..\Src\Graphics\GraphicsVK.cpp" />
+    <ClCompile Include="..\..\Src\Graphics\Material\MaterialVK.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Mesh\Mesh.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Mesh\MeshDX11.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Mesh\MeshOGL3.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsOGL3.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsVK.h" />
+    <ClInclude Include="..\..\Src\Graphics\Material\MaterialVK.h" />
     <ClInclude Include="..\..\Src\Graphics\Mesh\MeshDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\Mesh\MeshOGL3.h" />
     <ClInclude Include="..\..\Src\Graphics\Mesh\MeshVK.h" />

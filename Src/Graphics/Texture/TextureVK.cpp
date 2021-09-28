@@ -41,27 +41,6 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     graphics.transformImage(image, vkFmt, vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
 
     imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt);
-
-    dPool = resourceManager.addNewResource<VKDescriptorPool>(device, 1);
-
-    vk::DescriptorSetAllocateInfo allocInfo;
-    allocInfo.descriptorPool = dPool;
-    std::vector<vk::DescriptorSetLayout> layouts(1, graphics.getDescriptorSetLayout());
-    allocInfo.setSetLayouts(layouts);
-    dSet = device.allocateDescriptorSets(allocInfo).front();
-
-    vk::DescriptorImageInfo info;
-    info.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
-    info.imageView = imageView;
-    info.sampler = graphics.getSampler(false);
-
-    vk::WriteDescriptorSet set;
-    set.dstSet = dSet;
-    set.descriptorType = vk::DescriptorType::eCombinedImageSampler;
-    set.descriptorCount = 1;
-    set.setImageInfo(info);
-
-    device.updateDescriptorSets(set, { });
 }
 
 TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt)
@@ -69,8 +48,8 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
 
 }
 
-const vk::DescriptorSet& TextureVK::getDescriptorSet() const {
-    return dSet;
+const vk::ImageView& TextureVK::getImageView() const {
+    return imageView;
 }
 
 void* TextureVK::getNative() const {

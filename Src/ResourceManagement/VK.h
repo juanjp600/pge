@@ -468,9 +468,9 @@ class VKSampler : public VKDestroyResource<vk::Sampler> {
 
 class VKDescriptorSetLayout : public VKDestroyResource<vk::DescriptorSetLayout> {
     public:
-        VKDescriptorSetLayout(vk::Device dev) : VKDestroyResource(dev) {
+        VKDescriptorSetLayout(vk::Device dev, int count) : VKDestroyResource(dev) {
             vk::DescriptorSetLayoutBinding binding;
-            binding.descriptorCount = 1;
+            binding.descriptorCount = count;
             binding.descriptorType = vk::DescriptorType::eCombinedImageSampler;
             binding.stageFlags = vk::ShaderStageFlagBits::eFragment;
 

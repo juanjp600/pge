@@ -199,6 +199,9 @@
     <ClCompile Include="..\..\Src\String\UnicodeManual.cpp">
       <Filter>Src\String</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Material\MaterialVK.cpp">
+      <Filter>Src\Graphics\Material</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -379,5 +382,8 @@
       <Filter>Src\Graphics\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Libraries\SPIRV-Reflect\spirv_reflect.h" />
+    <ClInclude Include="..\..\Src\Graphics\Material\MaterialVK.h">
+      <Filter>Src\Graphics\Material</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
