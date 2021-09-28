@@ -3,7 +3,6 @@ var hierarchy =
     [ "\u202APGE::Shader::Constant", "class_p_g_e_1_1_shader_1_1_constant.html", null ],
     [ "\u202APGE::StructuredData::ElemLayout", "class_p_g_e_1_1_structured_data_1_1_elem_layout.html", null ],
     [ "\u202APGE::Mesh::Line", "struct_p_g_e_1_1_mesh_1_1_line.html", null ],
-    [ "\u202APGE::Mesh::Material", "class_p_g_e_1_1_mesh_1_1_material.html", null ],
     [ "\u202APGE::Texture::Mipmap", "struct_p_g_e_1_1_texture_1_1_mipmap.html", null ],
     [ "\u202APGE::NoHeap", "class_p_g_e_1_1_no_heap.html", [
       [ "\u202APGE::AbstractIO< std::ofstream >", "class_p_g_e_1_1_abstract_i_o.html", [
@@ -54,6 +53,7 @@ var hierarchy =
         [ "\u202APGE::MouseInput", "class_p_g_e_1_1_mouse_input.html", null ]
       ] ],
       [ "\u202APGE::InputManager", "class_p_g_e_1_1_input_manager.html", null ],
+      [ "\u202APGE::Material", "class_p_g_e_1_1_material.html", null ],
       [ "\u202APGE::Mesh", "class_p_g_e_1_1_mesh.html", null ],
       [ "\u202APGE::ResourceBase", "class_p_g_e_1_1_resource_base.html", [
         [ "\u202APGE::Resource< T * >", "class_p_g_e_1_1_resource.html", [
