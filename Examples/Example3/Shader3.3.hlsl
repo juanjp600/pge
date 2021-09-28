@@ -1,4 +1,5 @@
-Texture2D tex[2];
+Texture2D tex;
+Texture2D fun;
 SamplerState smp;
 
 struct VS_INPUT {
@@ -26,6 +27,6 @@ PS_INPUT VS(VS_INPUT input) {
 
 PS_OUTPUT PS(PS_INPUT input) {
     PS_OUTPUT output = (PS_OUTPUT)0;
-    output.color = min(tex[1].Sample(smp, input.uv), tex[0].Sample(smp, input.uv));
+    output.color = min(fun.Sample(smp, input.uv), tex.Sample(smp, input.uv));
     return output;
 }
