@@ -113,7 +113,7 @@ class String : private NoHeap {
 
         template <size_t S>
         String(const char(&cstri)[S])
-            : internalData(std::monostate()), chs((char*)cstri), data(nullptr) {
+            : chs((char*)cstri) {
             initLiteral((int)S);
         }
 
