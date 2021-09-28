@@ -107,3 +107,15 @@ Texture* Texture::load(Graphics& gfx, int w, int h, const byte* buffer, Format f
 Texture* Texture::loadCompressed(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt) {
     return ((GraphicsInternal&)gfx).loadTextureCompressed(mipmaps, fmt);
 }
+
+Material* Material::create(Graphics& gfx, Shader& sh, Opaque o) {
+    return ((GraphicsInternal&)gfx).createMaterial(sh, { }, o);
+}
+
+Material* Material::create(Graphics& gfx, Shader& sh, Texture& tex, Opaque o) {
+    return ((GraphicsInternal&)gfx).createMaterial(sh, { tex }, o);
+}
+
+Material* Material::create(Graphics& gfx, Shader& sh, const ReferenceVector<Texture>& texs, Opaque o) {
+    return ((GraphicsInternal&)gfx).createMaterial(sh, texs, o);
+}

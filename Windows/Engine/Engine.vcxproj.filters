@@ -88,6 +88,9 @@
     <Filter Include="Src\Graphics\Mesh">
       <UniqueIdentifier>{6fc2247b-e4d4-4684-a5b1-76d254bd7abe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Graphics\Material">
+      <UniqueIdentifier>{e010768f-1c19-49a7-b635-c460d9623e96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp">
@@ -182,6 +185,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\String\UnicodeManual.cpp">
       <Filter>Src\String</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Material\Material.cpp">
+      <Filter>Src\Graphics\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -23,7 +23,7 @@ void MeshDX11::renderInternal() {
 
     if (!dxVertexBuffer.isHoldingResource() || !dxIndexBuffer.isHoldingResource()) { return; }
 
-    ((ShaderDX11&)material.getShader()).useVertexInputLayout();
+    ((ShaderDX11&)material->getShader()).useVertexInputLayout();
 
     UINT offset = 0; UINT stride = vertices.getLayout().getElementSize();
     dxContext->IASetVertexBuffers(0,1,&dxVertexBuffer,&stride,&offset);
@@ -36,12 +36,12 @@ void MeshDX11::renderInternal() {
 
     dxContext->IASetPrimitiveTopology(dxPrimitiveTopology);
 
-    ShaderDX11& shader = ((ShaderDX11&)material.getShader());
+    ShaderDX11& shader = ((ShaderDX11&)material->getShader());
 
     shader.useShader();
     shader.useSamplers();
-    for (int i=0;i<material.getTextureCount();i++) {
-        ((TextureDX11&)material.getTexture(i)).useTexture(i);
+    for (int i=0;i<material->getTextureCount();i++) {
+        ((TextureDX11&)material->getTexture(i)).useTexture(i);
     }
 
     graphics.setZBufferState(
@@ -52,7 +52,7 @@ void MeshDX11::renderInternal() {
     dxContext->DrawIndexed((UINT)indices.size(),0,0);
 
     ID3D11ShaderResourceView* nullResource = nullptr;
-    for (int i=0;i<material.getTextureCount();i++) {
+    for (int i=0;i<material->getTextureCount();i++) {
         dxContext->PSSetShaderResources(i,1,&nullResource);
     }
 }
