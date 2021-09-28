@@ -202,7 +202,7 @@ $(document).ready(function(){initNavTree('_string_8h_source.html',''); initResiz
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="keyword">template</span> &lt;<span class="keywordtype">size_t</span> S&gt;</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <a class="code" href="class_p_g_e_1_1_string.html">String</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>(&amp;cstri)[S])</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            : internalData(std::monostate()), chs((char*)cstri), data(nullptr) {</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            : chs((char*)cstri) {</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            initLiteral((<span class="keywordtype">int</span>)S);</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        }</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
