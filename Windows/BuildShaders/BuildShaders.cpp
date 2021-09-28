@@ -199,13 +199,13 @@ static void compileShader(const FilePath& path) {
     Glsl::convert(compiledPath + "fragment.glsl", fsResult, Glsl::ShaderType::FRAGMENT);
 
     Vulkan::hlslToVkHlsl(path, fsResult, vsResult);
-    // TODO: FIX THIS FFS.
+    // TODO: FIX THIS FFS. Prevents multithreading!
     system(("glslangValidator.exe -S vert -e VS -o " + compiledPath.str() + "vert.spv -V -D " + compiledPath.str() + "hlsl.vulkan").cstr());
     system(("glslangValidator.exe -S frag -e PS -o " + compiledPath.str() + "frag.spv -V -D " + compiledPath.str() + "hlsl.vulkan").cstr());
     system(("spirv-link " + compiledPath.str() + "vert.spv " + compiledPath.str() + "frag.spv -o " + compiledPath.str() + "shader.spv").cstr());
 }
 
-bool recompile = false;
+static bool recompile = false;
 
 static void compileAndLog(const FilePath& path) {
     if (path.getExtension() == "hlsl") {
@@ -231,7 +231,7 @@ int main(int argc, char** argv) {
 
     std::vector<FilePath> shaderPaths = FilePath::fromStr(folderName).enumerateFiles();
 
-#if 0
+#if 1
 #pragma message ("RECOMPILATION IS ENABLED!!!")
     std::cout << "Recompiling..." << std::endl;
     recompile = true;

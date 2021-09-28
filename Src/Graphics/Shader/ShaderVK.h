@@ -16,6 +16,7 @@ namespace PGE {
     class ShaderVK : public Shader {
         public:
             ShaderVK(Graphics& gfx, const FilePath& path);
+            ~ShaderVK();
 
             Constant& getVertexShaderConstant(const String& name) override;
             Constant& getFragmentShaderConstant(const String& name) override;
@@ -31,6 +32,8 @@ namespace PGE {
 
         private:
             GraphicsVK& graphics;
+
+            int textureCount;
 
             int vertexStride;
             std::vector<String> vertexInputNames;

@@ -5,17 +5,16 @@
 using namespace PGE;
 
 MaterialVK::MaterialVK(Graphics& gfx, Shader& sh, const ReferenceVector<Texture>& texs, Opaque o)
-	: Material(gfx, sh, texs, o), resourceManager(gfx) {
+	: Material(gfx, sh, texs, o), resourceManager(gfx), graphics((GraphicsVK&)gfx) {
     if (texs.empty()) { return; }
 
-    GraphicsVK& graphics = (GraphicsVK&)gfx;
     vk::Device device = graphics.getDevice();
 
     dPool = resourceManager.addNewResource<VKDescriptorPool>(device, texs.size());
 
     vk::DescriptorSetAllocateInfo allocInfo;
     allocInfo.descriptorPool = dPool;
-    std::vector<vk::DescriptorSetLayout> layouts(1, graphics.getDescriptorSetLayout(texs.size() - 1));
+    std::vector<vk::DescriptorSetLayout> layouts(1, graphics.getDescriptorSetLayout(texs.size()));
     allocInfo.setSetLayouts(layouts);
     dSet = device.allocateDescriptorSets(allocInfo).front();
     
@@ -34,6 +33,12 @@ MaterialVK::MaterialVK(Graphics& gfx, Shader& sh, const ReferenceVector<Texture>
     set.setImageInfo(infos);
 
     device.updateDescriptorSets(set, { });
+}
+
+MaterialVK::~MaterialVK() {
+    if (getTextureCount() > 0) {
+        graphics.dropDescriptorSetLayout(getTextureCount());
+    }
 }
 
 const vk::DescriptorSet& MaterialVK::getDescriptorSet() const {

@@ -119,10 +119,6 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
             break;
         }
     }
-    
-    for (int i = 0; i < 2; i++) {
-        dSetLayout[i] = resourceManager.addNewResource<VKDescriptorSetLayout>(device, i + 1);
-    }
 
     createSwapchain(true);
 
@@ -393,8 +389,23 @@ const vk::Sampler& GraphicsVK::getSampler(bool rt) const {
     return rt ? samplerRT : sampler;
 }
 
-const vk::DescriptorSetLayout& GraphicsVK::getDescriptorSetLayout(int count) const {
-    return dSetLayout[count];
+const vk::DescriptorSetLayout& GraphicsVK::getDescriptorSetLayout(int count) {
+    auto it = dSetLayouts.find(count);
+    if (it == dSetLayouts.end()) {
+        return dSetLayouts.emplace(count, DescriptorSetLayoutEntry{ resourceManager.addNewResource<VKDescriptorSetLayout>(device, count), 1 }).first->second.layout;
+    } else {
+        it->second.count++;
+        return it->second.layout;
+    }
+}
+
+void GraphicsVK::dropDescriptorSetLayout(int count) {
+    auto it = dSetLayouts.find(count);
+    it->second.count--;
+    if (it->second.count <= 0) {
+        resourceManager.deleteResource(it->second.layout);
+        dSetLayouts.erase(it);
+    }
 }
 
 void GraphicsVK::addMesh(MeshVK& m) {

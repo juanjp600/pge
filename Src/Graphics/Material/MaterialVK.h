@@ -11,10 +11,13 @@ namespace PGE {
 class MaterialVK : public Material {
 	public:
 		MaterialVK(Graphics& gfx, Shader& sh, const ReferenceVector<Texture>& texs, Opaque o);
+		~MaterialVK();
 
 		const vk::DescriptorSet& getDescriptorSet() const;
 
 	private:
+		GraphicsVK& graphics;
+
 		VKDescriptorPool::View dPool;
 		vk::DescriptorSet dSet;
 

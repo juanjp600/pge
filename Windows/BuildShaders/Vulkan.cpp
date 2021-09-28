@@ -10,19 +10,25 @@ bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes
 	outFile = (filename.trimExtension() + "/hlsl.vulkan").str().wstr().data();
 	std::ofstream out; out.open(outFile.c_str(), std::ios::out);
 
-	out << "[[vk::push_constant]]" << std::endl;
-	out << "cbuffer vulkanConstants {" << std::endl;
-	if (vertRes.cBuffers.size() > 0) {
-		for (const CompileResult::CBuffer::Member& c : vertRes.cBuffers[0].members) {
-			out << '\t' << c.type << ' ' << "vert_" << c.name << ';' << std::endl;
-		}
+	if (fragRes.textureInputs.size() > 0) {
+		out << "Texture2D tex[" << fragRes.textureInputs.size() << "];\n\n";
 	}
-	if (fragRes.cBuffers.size() > 0) {
-		for (const CompileResult::CBuffer::Member& c : fragRes.cBuffers[0].members) {
-			out << '\t' << c.type << ' ' << "frag_" << c.name << ';' << std::endl;
+
+	if (vertRes.cBuffers.size() > 0 || fragRes.cBuffers.size() > 0) {
+		out << "[[vk::push_constant]]" << std::endl;
+		out << "cbuffer vulkanConstants {" << std::endl;
+		if (vertRes.cBuffers.size() > 0) {
+			for (const CompileResult::CBuffer::Member& c : vertRes.cBuffers[0].members) {
+				out << '\t' << c.type << ' ' << "vert_" << c.name << ';' << std::endl;
+			}
 		}
+		if (fragRes.cBuffers.size() > 0) {
+			for (const CompileResult::CBuffer::Member& c : fragRes.cBuffers[0].members) {
+				out << '\t' << c.type << ' ' << "frag_" << c.name << ';' << std::endl;
+			}
+		}
+		out << "}\n\n";
 	}
-	out << "}\n\n";
 
 	std::ifstream in; in.open(filename.str().wstr().data(), std::ios_base::in);
 
@@ -32,6 +38,9 @@ bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes
 	while (!in.eof()) {
 		char line[256]; in.getline(line, 256);
 		std::string lineStr = line;
+		if (lineStr.find("Texture2D") != std::string::npos) {
+			continue;
+		}
 		if (inBlock) {
 			if (lineStr.find("}") != std::string::npos) {
 				inBlock = false;
@@ -94,7 +103,11 @@ bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes
 			index++;
 		}
 		newLine[newIndex] = '\0';
-		out << std::string(newLine) << std::endl;
+		String pgeNewLine = (char*)newLine;
+		for (int i = 0; i < fragRes.textureInputs.size(); i++) {
+			pgeNewLine = pgeNewLine.replace(fragRes.textureInputs[i], "tex[" + String::from(i) + "]");
+		}
+		out << pgeNewLine << std::endl;
 	}
 
 	in.close();

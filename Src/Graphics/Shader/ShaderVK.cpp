@@ -68,12 +68,17 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
         if (!fragmentConstantMap.empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eFragment }, fragmentOffset, pushConstant.padded_size - fragmentOffset)); }
     }
 
-    if (reflection.descriptor_set_count > 0) {
-        layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges, graphics.getDescriptorSetLayout(reflection.descriptor_bindings[0].count - 1));
-    } else {
-        layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges);
+    textureCount = 0;
+    for (int i = 0; i < reflection.descriptor_binding_count; i++) {
+        SpvReflectDescriptorBinding& binding = reflection.descriptor_bindings[i];
+        if (binding.descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_SAMPLED_IMAGE) {
+            textureCount = binding.count;
+            break;
+        }
     }
-    
+
+    layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges,
+        textureCount > 0 ? std::optional(graphics.getDescriptorSetLayout(textureCount)) : std::nullopt);
 
     spvReflectDestroyShaderModule(&reflection);
 
@@ -85,6 +90,12 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
     vk::PipelineShaderStageCreateInfo fragmentInfo({ }, vk::ShaderStageFlagBits::eFragment, vkShader, "PS");
     shaderStageInfo[0] = vertexInfo;
     shaderStageInfo[1] = fragmentInfo;
+}
+
+ShaderVK::~ShaderVK() {
+    if (textureCount > 0) {
+        graphics.dropDescriptorSetLayout(textureCount);
+    }
 }
 
 Shader::Constant& ShaderVK::getVertexShaderConstant(const String& name) {

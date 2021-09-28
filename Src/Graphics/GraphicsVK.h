@@ -50,7 +50,9 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         vk::CommandBuffer getCurrentCommandBuffer() const;
         const VKPipelineInfo* getPipelineInfo() const;
         const vk::Sampler& getSampler(bool rt) const;
-        const vk::DescriptorSetLayout& getDescriptorSetLayout(int count) const;
+
+        const vk::DescriptorSetLayout& getDescriptorSetLayout(int count);
+        void dropDescriptorSetLayout(int count);
 
         void addMesh(MeshVK& m);
         void removeMesh(MeshVK& m);
@@ -102,7 +104,12 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         VKSampler::View sampler;
         VKSampler::View samplerRT;
 
-        std::array<VKDescriptorSetLayout::View, 2> dSetLayout;
+        // Maps number of textures to a layout.
+        struct DescriptorSetLayoutEntry {
+            VKDescriptorSetLayout::View layout;
+            int count;
+        };
+        std::unordered_map<int, DescriptorSetLayoutEntry> dSetLayouts;
 
         static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
         int currentFrame = 0;
