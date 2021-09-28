@@ -2,11 +2,9 @@
 #define PGE_BINARY_WRITER_H_INCLUDED
 
 #include <PGE/File/AbstractIO.h>
-#include <PGE/Math/Vector.h>
 
 namespace PGE {
 
-// TODO: Add more types to this and reader?
 /// Utility to write binary data to a file.
 /// 
 /// In order to expand the capabilities of BinaryWriter the generic write method can be partially specialized
@@ -49,6 +47,15 @@ class BinaryWriter : private AbstractIO<std::ofstream> {
         /// - String: A null terminated String of UTF-8 characters.
         /// - Vector2f: Floats in order x, y.
         /// - Vector3f: Floats in order x, y, z.
+        /// - Vector4f: Floats in order x, y, z, w.
+        /// - Vector2i: Default-size ints in order x, y.
+        /// - Matrix4x4f: All elements as floats, same order as matrix itself.
+        /// - AABBox: The minimum and maximum Vector3fs.
+        /// - Line2f: Vector2f in order pointA, pointB.
+        /// - Line2i: Vector2i in order pointA, pointB.
+        /// - Plane: Distance to origin as float, normal vector as Vector3f.
+        /// - Rectanglef: Top left corner as Vector2f, bottom right corner as Vector2f.
+        /// - Rectanglei: Top left corner as Vector2i, bottom right corner as Vector2i.
         /// @throws Exception If any kind of error occurs, this will cause the stream to be closed.
         ///         In such a case, nothing is guaranteed to be written.
         template <typename T>
