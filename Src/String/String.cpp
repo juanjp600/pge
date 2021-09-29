@@ -216,7 +216,10 @@ void String::copy(String& dst, const String& src) {
         dst.data = &u.data;
     } else {
         dst.chs = src.chs;
-        dst.data = src.data;
+        // TODO: Revisit (literal)
+        if (src.data->cCapacity != 0) {
+            dst.data = src.data;
+        }
     }
 }
 
@@ -944,6 +947,7 @@ const String String::replace(const String& fnd, const String& rplace) const {
 // Only has to deal with data.
 void String::initLiteral(int litSize) {
     data->strByteLength = litSize - 1;
+    data->cCapacity = 0;
     //static std::unordered_map<const char*, Data> litData;
     // TODO: What a great idea to put a fucking map lookup here.
     // This breaks when multithreading!
