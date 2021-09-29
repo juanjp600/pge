@@ -4,6 +4,8 @@
 
 using namespace PGE;
 
+static const String TEXTURE_ARRAY_INTERNAL_NAME = "_PGE_INTERNAL_TEXTURES";
+
 // TODO: Jesus fucking christ fuck all of this.
 bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes, const CompileResult& vertRes) {
 	std::wstring outFile = filename.str().wstr().data();
@@ -11,7 +13,7 @@ bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes
 	std::ofstream out; out.open(outFile.c_str(), std::ios::out);
 
 	if (fragRes.textureInputs.size() > 0) {
-		out << "Texture2D tex[" << fragRes.textureInputs.size() << "];\n\n";
+		out << "Texture2D " + TEXTURE_ARRAY_INTERNAL_NAME + "[" << fragRes.textureInputs.size() << "];\n\n";
 	}
 
 	if (vertRes.cBuffers.size() > 0 || fragRes.cBuffers.size() > 0) {
@@ -38,7 +40,7 @@ bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes
 	while (!in.eof()) {
 		char line[256]; in.getline(line, 256);
 		std::string lineStr = line;
-		if (lineStr.find("Texture2D") != std::string::npos) {
+		if (lineStr.find("Texture2D ") != std::string::npos) {
 			continue;
 		}
 		if (inBlock) {
@@ -47,11 +49,11 @@ bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes
 			}
 			continue;
 		}
-		if (lineStr.find("cbuffer") != std::string::npos) {
+		if (lineStr.find("cbuffer ") != std::string::npos) {
 			inBlock = true;
 			continue;
 		}
-		if (lineStr.find("struct") != std::string::npos) {
+		if (lineStr.find("struct ") != std::string::npos) {
 			inStruct = true;
 		}
 		if (inStruct) {
@@ -105,7 +107,7 @@ bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes
 		newLine[newIndex] = '\0';
 		String pgeNewLine = (char*)newLine;
 		for (int i = 0; i < fragRes.textureInputs.size(); i++) {
-			pgeNewLine = pgeNewLine.replace(fragRes.textureInputs[i], "tex[" + String::from(i) + "]");
+			pgeNewLine = pgeNewLine.replace(fragRes.textureInputs[i] + ".Sample", TEXTURE_ARRAY_INTERNAL_NAME + "[" + String::from(i) + "].Sample");
 		}
 		out << pgeNewLine << std::endl;
 	}

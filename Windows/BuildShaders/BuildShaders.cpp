@@ -234,7 +234,7 @@ int main(int argc, char** argv) {
 #if 1
 #pragma message ("RECOMPILATION IS ENABLED!!!")
     std::cout << "Recompiling..." << std::endl;
-    recompile = true;
+    //recompile = true;
     for (auto path : shaderPaths) { compileAndLog(path); }
 #else
     std::for_each(std::execution::par_unseq, shaderPaths.begin(), shaderPaths.end(), compileAndLog);
