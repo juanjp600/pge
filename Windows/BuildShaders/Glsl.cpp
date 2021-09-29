@@ -20,17 +20,17 @@ namespace Glsl {
     void writeHlslFuncs(TextWriter& writer, const String& funcBody, ShaderType shaderType) {
         //write definitions for intrinsic functions that the shader actually uses
         bool macrosDefined = false;
-        if (funcBody.findFirst("mul") != funcBody.end()) {
+        if (funcBody.findFirst("mul(") != funcBody.end()) {
             macrosDefined = true;
             writer.writeLine("#define mul(v, m) (m * v)");
         }
 
-        if (funcBody.findFirst("lerp") != funcBody.end()) {
+        if (funcBody.findFirst("lerp(") != funcBody.end()) {
             macrosDefined = true;
             writer.writeLine("#define lerp mix");
         }
 
-        if (funcBody.findFirst("saturate") != funcBody.end()) {
+        if (funcBody.findFirst("saturate(") != funcBody.end()) {
             macrosDefined = true;
             writer.writeLine("#define saturate(x) clamp(x, 0, 1)");
         }
