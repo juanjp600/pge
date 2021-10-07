@@ -350,5 +350,6 @@
     <ClInclude Include="..\..\Include\PGE\String\Unicode.h">
       <Filter>Include\String</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Graphics\Material.h" />
   </ItemGroup>
 </Project>
