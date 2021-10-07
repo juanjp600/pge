@@ -150,13 +150,13 @@ class D3D11DepthStencilView : public DX11Resource<ID3D11DepthStencilView*> {
 
 class D3D11ShaderResourceView : public DX11Resource<ID3D11ShaderResourceView*> {
     public:
-        D3D11ShaderResourceView(ID3D11Device* device, ID3D11Texture2D* texture, DXGI_FORMAT format, bool rt) {
+        D3D11ShaderResourceView(ID3D11Device* device, ID3D11Texture2D* texture, DXGI_FORMAT format) {
             D3D11_SHADER_RESOURCE_VIEW_DESC dxShaderResourceViewDesc;
             ZeroMemory(&dxShaderResourceViewDesc, sizeof(dxShaderResourceViewDesc));
             dxShaderResourceViewDesc.Format = format;
             dxShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
             dxShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
-            dxShaderResourceViewDesc.Texture2D.MipLevels = rt ? 1 : -1;
+            dxShaderResourceViewDesc.Texture2D.MipLevels = (UINT)-1;
 
             PGE_ASSERT_DX(device->CreateShaderResourceView(texture, &dxShaderResourceViewDesc, &resource), "Create shader resource view");
         }

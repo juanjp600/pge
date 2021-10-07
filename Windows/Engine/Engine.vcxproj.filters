@@ -391,5 +391,6 @@
     <ClInclude Include="..\..\Src\Graphics\Material\MaterialVK.h">
       <Filter>Src\Graphics\Material</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Graphics\Material.h" />
   </ItemGroup>
 </Project>

@@ -51,7 +51,7 @@ TextureDX11::TextureDX11(Graphics& gfx, int w, int h, Format fmt) : Texture(w, h
 
     dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, D3D11Texture2D::Type::RENDER_TARGET, w, h, dxFormat);
 
-    dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat, true);
+    dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat);
 
     dxRtv = resourceManager.addNewResource<D3D11RenderTargetView>(dxDevice, dxTexture);
 
@@ -69,7 +69,7 @@ TextureDX11::TextureDX11(Graphics& gfx, int w, int h, const byte* buffer, Format
     dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice, mipmaps ? D3D11Texture2D::Type::NORMAL : D3D11Texture2D::Type::NO_MIPMAPS, w, h, dxFormat);
     dxContext->UpdateSubresource(dxTexture, 0, NULL, buffer, w * getBytesPerPixel(fmt), 0);
 
-    dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat, false);
+    dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat);
     dxContext->GenerateMips(dxShaderResourceView);
 }
 
@@ -84,7 +84,7 @@ TextureDX11::TextureDX11(Graphics& gfx, const std::vector<Texture::Mipmap>& mipm
         dxContext->UpdateSubresource(dxTexture, D3D11CalcSubresource(i, 0, (UINT)mipmaps.size()), NULL, mipmaps[i].buffer, mipmaps[i].width * getBitsPerBlockOnLine(fmt), 0);
     }
 
-    dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat, false);
+    dxShaderResourceView = resourceManager.addNewResource<D3D11ShaderResourceView>(dxDevice, dxTexture, dxFormat);
 }
 
 void TextureDX11::useTexture(int index) {
