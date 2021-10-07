@@ -266,39 +266,41 @@ void GraphicsVK::createSwapchain(bool vsync) {
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to allocate transfer command buffers (VKERROR: " + String::hexFromInt((u32)result) + ")");
 }
 
-void GraphicsVK::transformImage(vk::Image img, vk::Format fmt, vk::ImageLayout oldL, vk::ImageLayout newL) {
+void GraphicsVK::generateMipmaps(vk::Image img, int w, int h, int miplevels) {
     startTransfer();
 
-    vk::ImageMemoryBarrier barrier;
-    barrier.setImage(img);
-    barrier.setOldLayout(oldL);
-    barrier.setNewLayout(newL);
-    barrier.setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED);
-    barrier.setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED);
-    barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
-    barrier.subresourceRange.baseArrayLayer = 0;
-    barrier.subresourceRange.layerCount = 1;
-    barrier.subresourceRange.baseMipLevel = 0;
+    vk::ImageMemoryBarrier barrier = createBasicBarrier(img, 1);
     barrier.subresourceRange.levelCount = 1;
 
-    vk::PipelineStageFlags srcStage;
-    vk::PipelineStageFlags dstStage;
+    int mipWidth = w; int mipHeight = h;
+    for (int i = 1; i < miplevels; i++) {
+        barrier.subresourceRange.baseMipLevel = i - 1;
+        pipelineBarrier<ImageLayout::TRANSFER_DST, ImageLayout::TRANSFER_SRC>(barrier);
 
-    if (oldL == vk::ImageLayout::eUndefined && newL == vk::ImageLayout::eTransferDstOptimal) {
-        barrier.srcAccessMask = vk::AccessFlagBits::eNoneKHR;
-        barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
-        srcStage = vk::PipelineStageFlagBits::eTopOfPipe;
-        dstStage = vk::PipelineStageFlagBits::eTransfer;
-    } else if (oldL == vk::ImageLayout::eTransferDstOptimal && newL == vk::ImageLayout::eShaderReadOnlyOptimal) {
-        barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
-        barrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
-        srcStage = vk::PipelineStageFlagBits::eTransfer;
-        dstStage = vk::PipelineStageFlagBits::eFragmentShader;
-    } else {
-        throw PGE_CREATE_EX("Invalid conversion");
+        vk::ImageBlit blit;
+        blit.srcOffsets[1] = vk::Offset3D(mipWidth, mipHeight, 1);
+        blit.srcSubresource = createBasicImgSubresLayers(i - 1);
+        if (mipWidth > 1) { mipWidth /= 2; }
+        if (mipHeight > 1) { mipHeight /= 2; }
+        blit.dstOffsets[1] = vk::Offset3D(mipWidth, mipHeight, 1);
+        blit.dstSubresource = createBasicImgSubresLayers(i);
+
+        // TODO: Allow for blitting to not be supported?
+        // TODO: Can only blit on queue with gfx support, consider that.
+        transferComBuffer.blitImage(
+            img, vk::ImageLayout::eTransferSrcOptimal,
+            img, vk::ImageLayout::eTransferDstOptimal,
+            blit, vk::Filter::eLinear
+        );
     }
 
-    transferComBuffer.pipelineBarrier(srcStage, dstStage, (vk::DependencyFlags)0, nullptr, nullptr, barrier);
+    barrier.subresourceRange.baseMipLevel = miplevels - 1;
+    pipelineBarrier<ImageLayout::TRANSFER_DST, ImageLayout::SHADER_READ>(barrier);
+
+    // TODO: Keep this in the loop? (Benchmark)
+    barrier.subresourceRange.baseMipLevel = 0;
+    barrier.subresourceRange.levelCount = miplevels - 1;
+    pipelineBarrier<ImageLayout::TRANSFER_SRC, ImageLayout::SHADER_READ>(barrier);
 
     endTransfer();
 }

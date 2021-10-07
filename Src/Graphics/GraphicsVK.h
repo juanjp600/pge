@@ -16,6 +16,13 @@ class ShaderVK;
 
 class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, MaterialVK> {
     public:
+        enum class ImageLayout {
+            UNDEFINED,
+            TRANSFER_SRC,
+            TRANSFER_DST,
+            SHADER_READ,
+        };
+
         GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y);
 
         void swap() override;
@@ -23,7 +30,17 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         void clear(const Color& color) override;
 
 
-        void transformImage(vk::Image img, vk::Format fmt, vk::ImageLayout oldL, vk::ImageLayout newL);
+        void generateMipmaps(vk::Image img, int w, int h, int miplevels);
+
+        template <ImageLayout OLD, ImageLayout NEW>
+        void transformImage(vk::Image img, vk::Format fmt, int miplevels) {
+            startTransfer();
+
+            vk::ImageMemoryBarrier barrier = createBasicBarrier(img, miplevels);
+            pipelineBarrier<OLD, NEW>(barrier);
+
+            endTransfer();
+        }
 
         // TODO: Optimize.
         void transfer(const vk::Buffer& src, const vk::Buffer& dst, int size) {
@@ -120,6 +137,77 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         std::vector<ResourceBase*> trashBin;
 
         void createSwapchain(bool vsync);
+
+        // TODO: Refactor this out of Graphics?
+        // TODO: consteval C++20.
+        static constexpr vk::ImageMemoryBarrier createBasicBarrier(vk::Image img, int miplevels) {
+            vk::ImageMemoryBarrier barrier;
+            barrier.image = img;
+            barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+            barrier.subresourceRange.layerCount = 1;
+            barrier.subresourceRange.levelCount = miplevels;
+            return barrier;
+        }
+
+        static constexpr vk::ImageSubresourceLayers createBasicImgSubresLayers(int miplevel) {
+            vk::ImageSubresourceLayers layers;
+            layers.aspectMask = vk::ImageAspectFlagBits::eColor;
+            layers.mipLevel = miplevel;
+            layers.layerCount = 1;
+            return layers;
+        }
+
+        struct TransitionInfo {
+            vk::ImageLayout layout;
+            vk::AccessFlags accessFlags;
+            vk::PipelineStageFlags stageFlags;
+        };
+
+        template <ImageLayout LAYOUT>
+        static constexpr TransitionInfo infoFromLayout() {
+            TransitionInfo info;
+            switch (LAYOUT) {
+                case ImageLayout::UNDEFINED: {
+                    info.layout = vk::ImageLayout::eUndefined;
+                    info.accessFlags = vk::AccessFlagBits::eNoneKHR;
+                    info.stageFlags = vk::PipelineStageFlagBits::eTopOfPipe;
+                } break;
+                case ImageLayout::TRANSFER_DST: {
+                    info.layout = vk::ImageLayout::eTransferDstOptimal;
+                    info.accessFlags = vk::AccessFlagBits::eTransferWrite;
+                    info.stageFlags = vk::PipelineStageFlagBits::eTransfer;
+                } break;
+                case ImageLayout::TRANSFER_SRC: {
+                    info.layout = vk::ImageLayout::eTransferSrcOptimal;
+                    info.accessFlags = vk::AccessFlagBits::eTransferRead;
+                    info.stageFlags = vk::PipelineStageFlagBits::eTransfer;
+                } break;
+                case ImageLayout::SHADER_READ: {
+                    info.layout = vk::ImageLayout::eShaderReadOnlyOptimal;
+                    info.accessFlags = vk::AccessFlagBits::eShaderRead;
+                    info.stageFlags = vk::PipelineStageFlagBits::eFragmentShader;
+                } break;
+            }
+            return info;
+        }
+
+        template <ImageLayout SRC, ImageLayout DST>
+        void pipelineBarrier(vk::ImageMemoryBarrier& barrier) {
+            TransitionInfo srcInfo = infoFromLayout<SRC>();
+            TransitionInfo dstInfo = infoFromLayout<DST>();
+
+            barrier.oldLayout = srcInfo.layout;
+            barrier.newLayout = dstInfo.layout;
+            barrier.srcAccessMask = srcInfo.accessFlags;
+            barrier.dstAccessMask = dstInfo.accessFlags;
+
+            transferComBuffer.pipelineBarrier(
+                srcInfo.stageFlags, dstInfo.stageFlags,
+                (vk::DependencyFlags)0, VK_NULL_HANDLE, VK_NULL_HANDLE, barrier
+            );
+        }
 
         void endRender();
         void acquireNextImage();

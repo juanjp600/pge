@@ -43,6 +43,8 @@ class Program {
         Mesh* mesh4;
         Material* mat4;
 
+        Mesh* mesh5;
+
         InputManager* inputManager;
         KeyboardInput* escKey;
 
@@ -124,12 +126,26 @@ class Program {
             vertices.setValue(3, "uv", Vector2f(1, 0));
             mesh4->setMaterial(mat4);
             mesh4->setGeometry(std::move(vertices), Mesh::PrimitiveType::TRIANGLE, { 2, 1, 0, 3, 2, 1 });
+
+            vertices = StructuredData(shader4->getVertexLayout(), 4);
+            vertices.setValue(0, "position", Vector2f(0, 0));
+            vertices.setValue(1, "position", Vector2f(-0.1f, 0));
+            vertices.setValue(2, "position", Vector2f(0, 0.1f));
+            vertices.setValue(3, "position", Vector2f(-0.1f, 0.1f));
+            vertices.setValue(0, "uv", Vector2f(0, 1));
+            vertices.setValue(1, "uv", Vector2f(1, 1));
+            vertices.setValue(2, "uv", Vector2f(0, 0));
+            vertices.setValue(3, "uv", Vector2f(1, 0));
+            mesh5 = Mesh::create(*graphics);
+            mesh5->setMaterial(mat4);
+            mesh5->setGeometry(std::move(vertices), Mesh::PrimitiveType::TRIANGLE, { 2, 1, 0, 3, 2, 1 });
         }
 
         ~Program() {
             inputManager->untrackInput(escKey);
             delete escKey;
             delete inputManager;
+            delete mesh5;
             delete mesh4;
             delete mat4;
             delete shader4;
@@ -169,6 +185,7 @@ class Program {
             mesh2->render();
             mesh3->render();
             mesh4->render();
+            mesh5->render();
 
             graphics->swap();
 

@@ -25,22 +25,36 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     vk::Device device = graphics.getDevice();
     vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
 
+    int miplevels = 1;
+    if (mipmaps) {
+        int maxDim = std::max(w, h);
+        int pot = 2;
+        while (pot <= maxDim) {
+            pot *= 2;
+            miplevels++;
+        }
+    }
+
     int size = w * h * getBytesPerPixel(fmt);
-    VKBuffer stagingBuffer = VKBuffer(device, size, vk::BufferUsageFlagBits::eTransferSrc);
-    VKMemory stagingMemory = VKMemory(device, physicalDevice, stagingBuffer.get(), vk::MemoryPropertyFlagBits::eHostVisible);
+    VKBuffer stagingBuffer(device, size, vk::BufferUsageFlagBits::eTransferSrc);
+    VKMemory stagingMemory(device, physicalDevice, stagingBuffer.get(), vk::MemoryPropertyFlagBits::eHostVisible);
     void* mappedMem = device.mapMemory(stagingMemory, 0, VK_WHOLE_SIZE);
     memcpy(mappedMem, buffer, size);
     device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, VK_WHOLE_SIZE));
     device.unmapMemory(stagingMemory);
 
     vk::Format vkFmt = getFormat(fmt);
-    image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt);
+    image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt, miplevels, mipmaps);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
-    graphics.transformImage(image, vkFmt, vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal);
+    graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, vkFmt, miplevels);
     graphics.transferToImage(stagingBuffer, image, w, h);
-    graphics.transformImage(image, vkFmt, vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
+    if (mipmaps) {
+        graphics.generateMipmaps(image, w, h, miplevels);
+    } else {
+        graphics.transformImage<GraphicsVK::ImageLayout::TRANSFER_DST, GraphicsVK::ImageLayout::SHADER_READ>(image, vkFmt, miplevels);
+    }
 
-    imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt);
+    imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt, miplevels);
 }
 
 TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt)

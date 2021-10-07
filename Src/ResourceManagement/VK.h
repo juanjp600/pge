@@ -158,12 +158,12 @@ class VKCommandPool : public VKDestroyResource<vk::CommandPool> {
 
 class VKImageView : public VKDestroyResource<vk::ImageView> {
     public:
-        VKImageView(vk::Device dev, vk::Image swapchainImage, vk::Format fmt)
+        VKImageView(vk::Device dev, vk::Image swapchainImage, vk::Format fmt, int miplevels = 1)
             : VKDestroyResource(dev) {
             vk::ImageSubresourceRange subRange;
             subRange.aspectMask = vk::ImageAspectFlagBits::eColor;
             subRange.layerCount = 1;
-            subRange.levelCount = 1;
+            subRange.levelCount = miplevels;
 
             vk::ImageViewCreateInfo info;
             info.subresourceRange = subRange;
@@ -435,17 +435,18 @@ class VKShader : public VKDestroyResource<vk::ShaderModule> {
 
 class VKImage : public VKDestroyResource<vk::Image> {
     public:
-        VKImage(vk::Device dev, int w, int h, vk::Format fmt) : VKDestroyResource(dev) {
+        VKImage(vk::Device dev, int w, int h, vk::Format fmt, int miplevels, bool baseLevel) : VKDestroyResource(dev) {
             vk::ImageCreateInfo info;
             info.imageType = vk::ImageType::e2D;
             info.format = fmt;
             info.extent = vk::Extent3D(w, h, 1);
-            info.mipLevels = 1;
+            info.mipLevels = miplevels;
             info.arrayLayers = 1;
             info.samples = vk::SampleCountFlagBits::e1;
             info.tiling = vk::ImageTiling::eOptimal;
             info.initialLayout = vk::ImageLayout::eUndefined;
             info.usage = vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled;
+            if (baseLevel) { info.usage |= vk::ImageUsageFlagBits::eTransferSrc; }
             info.sharingMode = vk::SharingMode::eExclusive;
 
             resource = device.createImage(info);
@@ -460,6 +461,7 @@ class VKSampler : public VKDestroyResource<vk::Sampler> {
             info.anisotropyEnable = VK_TRUE;
             info.maxAnisotropy = rt ? 1.f : 4.f; // TODO: Clamp with max physical device.
             info.addressModeU = info.addressModeV = info.addressModeW = vk::SamplerAddressMode::eRepeat;
+            info.maxLod = VK_LOD_CLAMP_NONE;
             info.mipmapMode = vk::SamplerMipmapMode::eLinear;
 
             resource = dev.createSampler(info);
