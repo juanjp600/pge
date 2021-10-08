@@ -49,7 +49,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
             endTransfer();
         }
         
-        void transferToImage(const vk::Buffer& src, const vk::Image& dst, int w, int h);
+        void transferToImage(const vk::Buffer& src, const vk::Image& dst, int w, int h, int miplevel = 0);
 
         void setRenderTarget(Texture& renderTarget) override;
         void setRenderTargets(const ReferenceVector<Texture>& renderTargets) override;

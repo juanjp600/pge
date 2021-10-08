@@ -14,6 +14,18 @@ static vk::Format getFormat(Texture::Format fmt) {
     }
 }
 
+static vk::Format getFormat(Texture::CompressedFormat fmt) {
+    switch (fmt) {
+        case Texture::CompressedFormat::BC1: { return vk::Format::eBc1RgbUnormBlock; }
+        case Texture::CompressedFormat::BC2: { return vk::Format::eBc2UnormBlock; }
+        case Texture::CompressedFormat::BC3: { return vk::Format::eBc3UnormBlock; }
+        case Texture::CompressedFormat::BC4: { return vk::Format::eBc4UnormBlock; }
+        case Texture::CompressedFormat::BC5: { return vk::Format::eBc5UnormBlock; }
+        case Texture::CompressedFormat::BC6: { return vk::Format::eBc6HSfloatBlock; }
+        case Texture::CompressedFormat::BC7: { return vk::Format::eBc7UnormBlock; }
+    }
+}
+
 TextureVK::TextureVK(Graphics& gfx, int w, int h, Format fmt)
     : Texture(w, h, true, fmt), resourceManager(gfx) {
 
@@ -44,6 +56,8 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     device.unmapMemory(stagingMemory);
 
     vk::Format vkFmt = getFormat(fmt);
+    PGE_ASSERT(physicalDevice.getFormatProperties(vkFmt).optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear,
+        "Format doesn't support linear filtering");
     image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt, miplevels, mipmaps);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
     graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, vkFmt, miplevels);
@@ -59,7 +73,34 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
 
 TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt)
     : Texture(mipmaps[0].width, mipmaps[0].height, false, fmt), resourceManager(gfx) {
+    GraphicsVK& graphics = (GraphicsVK&)gfx;
+    vk::Device device = graphics.getDevice();
+    vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
 
+    vk::Format vkFmt = getFormat(fmt);
+    PGE_ASSERT(physicalDevice.getFormatProperties(vkFmt).optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear,
+        "Format doesn't support linear filtering");
+
+    image = resourceManager.addNewResource<VKImage>(device, mipmaps[0].width, mipmaps[0].height, vkFmt, mipmaps.size(), false);
+    imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
+    graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, vkFmt, mipmaps.size());
+
+    VKBuffer stagingBuffer(device, mipmaps[0].size, vk::BufferUsageFlagBits::eTransferSrc);
+    VKMemory stagingMemory(device, physicalDevice, stagingBuffer.get(), vk::MemoryPropertyFlagBits::eHostVisible);
+    void* mappedMem = device.mapMemory(stagingMemory, 0, VK_WHOLE_SIZE);
+    
+    for (int i = 0; i < mipmaps.size(); i++) {
+        memcpy(mappedMem, mipmaps[i].buffer, mipmaps[i].size);
+        // TODO: Not flush whole size?
+        device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, VK_WHOLE_SIZE));
+        graphics.transferToImage(stagingBuffer, image, mipmaps[i].width, mipmaps[i].height, i);
+    }
+
+    device.unmapMemory(stagingMemory);
+
+    graphics.transformImage<GraphicsVK::ImageLayout::TRANSFER_DST, GraphicsVK::ImageLayout::SHADER_READ>(image, vkFmt, mipmaps.size());
+
+    imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt, mipmaps.size());
 }
 
 const vk::ImageView& TextureVK::getImageView() const {

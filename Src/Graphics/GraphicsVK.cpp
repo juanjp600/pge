@@ -306,12 +306,13 @@ void GraphicsVK::generateMipmaps(vk::Image img, int w, int h, int miplevels) {
     endTransfer();
 }
 
-void GraphicsVK::transferToImage(const vk::Buffer& src, const vk::Image& dst, int w, int h) {
+void GraphicsVK::transferToImage(const vk::Buffer& src, const vk::Image& dst, int w, int h, int miplevel) {
     startTransfer();
 
     vk::BufferImageCopy copy;
     copy.imageSubresource.aspectMask = vk::ImageAspectFlagBits::eColor;
     copy.imageSubresource.layerCount = 1;
+    copy.imageSubresource.mipLevel = miplevel;
     copy.imageExtent = vk::Extent3D(w, h, 1);
 
     transferComBuffer.copyBufferToImage(src, dst, vk::ImageLayout::eTransferDstOptimal, copy);

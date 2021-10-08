@@ -47,8 +47,9 @@ void MeshVK::uploadInternalData() {
 	totalVertexSize = shader.getVertexStride() * vertexCount;
 	int finalTotalSize = totalVertexSize + sizeof(u16) * (int)indices.size();
 
-	VKBuffer stagingBuffer = VKBuffer(device, finalTotalSize, vk::BufferUsageFlagBits::eTransferSrc);
-	VKMemory stagingMemory = VKMemory(device, physicalDevice, stagingBuffer.get(), vk::MemoryPropertyFlagBits::eHostVisible);
+	// TODO: Don't allocate per update.
+	VKBuffer stagingBuffer(device, finalTotalSize, vk::BufferUsageFlagBits::eTransferSrc);
+	VKMemory stagingMemory(device, physicalDevice, stagingBuffer.get(), vk::MemoryPropertyFlagBits::eHostVisible);
 
 	std::vector<String> vertexInputNames = shader.getVertexInputNames();
 	float* vertexCursor = (float*)device.mapMemory(stagingMemory, 0, VK_WHOLE_SIZE);
