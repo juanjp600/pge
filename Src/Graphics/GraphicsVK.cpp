@@ -120,6 +120,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
         }
     }
 
+    vsync = true;
     createSwapchain(true);
 
     imageAvailableSemaphores.reserve(MAX_FRAMES_IN_FLIGHT);
