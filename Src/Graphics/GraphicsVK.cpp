@@ -114,7 +114,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     // If we don't find the one we want we'll settle for the first available one.
     swapchainFormat = selectedPdFormats[0];
     for (const auto& f : selectedPdFormats) {
-        if (f.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear && f.format == vk::Format::eB8G8R8A8Srgb) {
+        if (f.format == vk::Format::eR8G8B8Unorm) {
             swapchainFormat = f;
             break;
         }
