@@ -9,6 +9,7 @@
 #include "Mesh/MeshVK.h"
 
 #include "../ResourceManagement/ResourceManagerVK.h"
+#include <PGE/ResourceManagement/RawWrapper.h>
 
 namespace PGE {
 
@@ -59,6 +60,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         void setCulling(Culling mode) override;
 
+        void setDepthTest(bool isEnabled) override;
+
         void setVsync(bool isEnabled) override;
 
         vk::Device getDevice() const;
@@ -77,6 +80,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         void trash(ResourceBase& res);
 
     private:
+        vk::DispatchLoaderDynamic dispatch;
+
         // TODO: Remove.
         uint32_t graphicsQueueIndex;
         uint32_t presentQueueIndex;
@@ -96,6 +101,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         vk::Extent2D swapchainExtent;
         vk::SurfaceFormatKHR swapchainFormat;
         std::vector<VKImageView::View> swapchainImageViews;
+
+        RawWrapper<TextureVK>::View depthBuffer;
 
         vk::Rect2D scissor;
 

@@ -14,6 +14,9 @@ class TextureVK : public Texture {
         // Loaded, compressed texture.
         TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
 
+        // Internal usage, depth buffer.
+        TextureVK(Graphics& gfx, int w, int h);
+
         const vk::ImageView& getImageView() const;
 
         void* getNative() const override;

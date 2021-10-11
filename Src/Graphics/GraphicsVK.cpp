@@ -17,11 +17,12 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
 #endif
 
     instance = resourceManager.addNewResource<VKInstance>(sdlWindow, name, layers);
+    dispatch = vk::DispatchLoaderDynamic(instance.get(), vkGetInstanceProcAddr);
 
     surface = resourceManager.addNewResource<VKSurface>(instance, sdlWindow);
 
     // The device extensions we need.
-    std::vector<const char*> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+    std::vector<const char*> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME };
 
     // Selecting a physical device and setting up queues.
     // Currently we just pick the one that supports what we need and has the most VRAM.
@@ -134,6 +135,8 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     imagesInFlight.resize(MAX_FRAMES_IN_FLIGHT);
     acquireNextImage();
 
+    setDepthTest(true);
+
     sampler = resourceManager.addNewResource<VKSampler>(device, false);
     samplerRT = resourceManager.addNewResource<VKSampler>(device, true);
 
@@ -212,10 +215,16 @@ void GraphicsVK::endTransfer() {
     transferQueue.waitIdle();
 }
 
-void GraphicsVK::clear(const Color& color) {
-    vk::ClearAttachment cl = vk::ClearAttachment(vk::ImageAspectFlagBits::eColor, 0, vk::ClearValue(vk::ClearColorValue(std::array<float, 4>{ { color.red, color.green, color.blue, color.alpha }})));
+void GraphicsVK::clear(const Color& cc) {
+    vk::ClearAttachment color(vk::ImageAspectFlagBits::eColor, 0, vk::ClearValue(vk::ClearColorValue(std::array{ cc.red, cc.green, cc.blue, cc.alpha })));
+    vk::ClearAttachment depth;
+    depth.aspectMask = vk::ImageAspectFlagBits::eDepth;
+    depth.clearValue = vk::ClearValue(vk::ClearDepthStencilValue(1.f));
     vk::ClearRect rect = vk::ClearRect(scissor, 0, 1);
-    comBuffers[backBufferIndex].clearAttachments(cl, rect);
+
+    std::array attachments { color, depth };
+
+    comBuffers[backBufferIndex].clearAttachments(attachments, rect);
 }
 
 void GraphicsVK::createSwapchain(bool vsync) {
@@ -231,6 +240,9 @@ void GraphicsVK::createSwapchain(bool vsync) {
         resourceManager.deleteResource(swapchainImageViews[i]);
         swapchainImageViews[i] = resourceManager.addNewResource<VKImageView>(device, swapchainImages[i], swapchainFormat.format);
     }
+
+    resourceManager.deleteResource(depthBuffer);
+    depthBuffer = resourceManager.addNewResource<RawWrapper<TextureVK>>(*this, dimensions.x, dimensions.y);
     
     scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
 
@@ -245,7 +257,7 @@ void GraphicsVK::createSwapchain(bool vsync) {
     framebuffers.resize(swapchainImageViews.size());
     for (int i = 0; i < (int)swapchainImageViews.size(); i++) {
         resourceManager.deleteResource(framebuffers[i]);
-        framebuffers[i] = resourceManager.addNewResource<VKFramebuffer>(device, renderPass, swapchainImageViews[i], swapchainExtent);
+        framebuffers[i] = resourceManager.addNewResource<VKFramebuffer>(device, renderPass, swapchainImageViews[i], depthBuffer->getImageView(), swapchainExtent);
     }
 
     comPools.resize(framebuffers.size());
@@ -334,6 +346,11 @@ void GraphicsVK::resetRenderTarget() {
 
 void GraphicsVK::setViewport(const Rectanglei& vp) {
 
+}
+
+void GraphicsVK::setDepthTest(bool isEnabled) {
+    depthTest = isEnabled;
+    comBuffers[backBufferIndex].setDepthTestEnableEXT(isEnabled, dispatch);
 }
 
 void GraphicsVK::setVsync(bool isEnabled) {

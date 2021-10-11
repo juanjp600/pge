@@ -47,7 +47,6 @@ class VKFreeResource : public VKResource<T> {
 class VKInstance : public Resource<vk::Instance> {
     public:
         VKInstance(SDL_Window* window, const String& name, const std::vector<const char*>& layers) {
-            // Extensions (currently only SDL required ones).
             unsigned int extensionCount = 0;
             SDL_Vulkan_GetInstanceExtensions(window, &extensionCount, nullptr);
             std::vector<const char*> extensions = std::vector<const char*>(extensionCount);
@@ -57,7 +56,7 @@ class VKInstance : public Resource<vk::Instance> {
             appInfo.pApplicationName = name.cstr();
             appInfo.applicationVersion = VK_MAKE_VERSION(0, 0, 0);
             appInfo.pEngineName = "pulsegun engine";
-            appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+            appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 0);
             appInfo.apiVersion = VK_API_VERSION_1_1;
 
             vk::InstanceCreateInfo info;
@@ -97,10 +96,15 @@ class VKDevice : public Resource<vk::Device> {
                 infos.emplace_back((vk::DeviceQueueCreateFlags)0, index, priority);
             }
 
+            // I have no fucking idea.
+            vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extDynState;
+            extDynState.extendedDynamicState = true;
+
             vk::DeviceCreateInfo info;
+            info.pNext = &extDynState;
             info.pEnabledFeatures = &features;
             info.setQueueCreateInfos(infos);
-            info.setPEnabledLayerNames(layers);
+            info.setPEnabledLayerNames(layers); // TODO: Deprecated?
             info.setPEnabledExtensionNames(deviceExtensions);
 
             resource = physDev.createDevice(info);
@@ -158,16 +162,16 @@ class VKCommandPool : public VKDestroyResource<vk::CommandPool> {
 
 class VKImageView : public VKDestroyResource<vk::ImageView> {
     public:
-        VKImageView(vk::Device dev, vk::Image swapchainImage, vk::Format fmt, int miplevels = 1)
+        VKImageView(vk::Device dev, vk::Image image, vk::Format fmt, int miplevels = 1, vk::ImageAspectFlags mask = vk::ImageAspectFlagBits::eColor)
             : VKDestroyResource(dev) {
             vk::ImageSubresourceRange subRange;
-            subRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+            subRange.aspectMask = mask;
             subRange.layerCount = 1;
             subRange.levelCount = miplevels;
 
             vk::ImageViewCreateInfo info;
             info.subresourceRange = subRange;
-            info.image = swapchainImage;
+            info.image = image;
             info.viewType = vk::ImageViewType::e2D;
             info.format = fmt;
 
@@ -189,35 +193,56 @@ class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
             color.initialLayout = vk::ImageLayout::eUndefined;
             color.finalLayout = vk::ImageLayout::ePresentSrcKHR;
 
+            vk::AttachmentDescription depth;
+            depth.format = vk::Format::eD32Sfloat;
+            depth.samples = vk::SampleCountFlagBits::e1;
+            depth.loadOp = vk::AttachmentLoadOp::eDontCare;
+            depth.storeOp = vk::AttachmentStoreOp::eDontCare;
+            depth.stencilLoadOp = vk::AttachmentLoadOp::eDontCare;
+            depth.stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
+            depth.initialLayout = vk::ImageLayout::eUndefined;
+            depth.finalLayout = vk::ImageLayout::eDepthStencilAttachmentOptimal;
+
             vk::AttachmentReference colorRef;
+            colorRef.attachment = 0;
             colorRef.layout = vk::ImageLayout::eColorAttachmentOptimal;
+
+            vk::AttachmentReference depthRef;
+            depthRef.attachment = 1;
+            depthRef.layout = vk::ImageLayout::eDepthStencilAttachmentOptimal;
 
             vk::SubpassDescription subpass;
             subpass.pipelineBindPoint = vk::PipelineBindPoint::eGraphics;
             subpass.setColorAttachments(colorRef);
+            subpass.pDepthStencilAttachment = &depthRef;
 
             vk::SubpassDependency dependency;
             dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-            dependency.srcStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-            dependency.dstStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-            dependency.dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite;
+            dependency.srcStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests;
+            dependency.dstStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests;
+            dependency.dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite | vk::AccessFlagBits::eDepthStencilAttachmentWrite;
+
+            std::array attachments = { color, depth };
 
             vk::RenderPassCreateInfo info;
-            info.setAttachments(color);
+            info.setAttachments(attachments);
             info.setSubpasses(subpass);
             info.setDependencies(dependency);
 
-            resource = dev.createRenderPass(vk::RenderPassCreateInfo({}, 1, &color, 1, &subpass, 1, &dependency));
+            resource = dev.createRenderPass(info);
         }
 };
 
 class VKFramebuffer : public VKDestroyResource<vk::Framebuffer> {
     public:
-        VKFramebuffer(vk::Device dev, vk::RenderPass renderPass, vk::ImageView swapchainImageView, const vk::Extent2D& swapchainExtent)
+        VKFramebuffer(vk::Device dev, vk::RenderPass renderPass,
+            vk::ImageView swapchainImageView, vk::ImageView depthBuffer, const vk::Extent2D& swapchainExtent)
             : VKDestroyResource(dev) {
+            std::array attachments = { swapchainImageView, depthBuffer };
+
             vk::FramebufferCreateInfo info;
             info.renderPass = renderPass;
-            info.setAttachments(swapchainImageView);
+            info.setAttachments(attachments);
             info.width = swapchainExtent.width;
             info.height = swapchainExtent.height;
             info.layers = 1;
@@ -229,6 +254,7 @@ class VKFramebuffer : public VKDestroyResource<vk::Framebuffer> {
 class VKSwapchain : public VKDestroyResource<vk::SwapchainKHR> {
     public:
         VKSwapchain(vk::Device dev, vk::PhysicalDevice physDev, vk::SurfaceKHR surface,
+            // TODO: Reference.
             vk::Extent2D& swapchainExtent, int& width, int& height, vk::SurfaceFormatKHR swapchainFormat,
             uint32_t gi, uint32_t pi, uint32_t ti, bool vsync, vk::SwapchainKHR oldChain)
             : VKDestroyResource(dev) {
@@ -335,6 +361,7 @@ class VKPipelineInfo : PolymorphicHeap {
 
         vk::PipelineColorBlendAttachmentState colorBlendAttachmentState;
         vk::PipelineColorBlendStateCreateInfo colorBlendInfo;
+        vk::PipelineDepthStencilStateCreateInfo depthInfo;
 
         vk::PipelineRasterizationStateCreateInfo rasterizationInfo;
         vk::PipelineMultisampleStateCreateInfo multisamplerInfo;
@@ -366,6 +393,9 @@ class VKPipelineInfo : PolymorphicHeap {
             colorBlendAttachmentState.colorWriteMask = vk::ColorComponentFlagBits::eA | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG;
 
             colorBlendInfo.setAttachments(colorBlendAttachmentState);
+
+            depthInfo.depthWriteEnable = true;
+            depthInfo.depthCompareOp = vk::CompareOp::eLess;
         }
 };
 
@@ -390,7 +420,12 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
                 } break;
             }
             
+            vk::PipelineDynamicStateCreateInfo dynamicInfo;
+            vk::DynamicState state = vk::DynamicState::eDepthTestEnableEXT;
+            dynamicInfo.setDynamicStates(state);
+
             vk::GraphicsPipelineCreateInfo info;
+            info.setPDynamicState(&dynamicInfo);
             info.setStages(shaderInfo);
             info.pVertexInputState = vertexInfo;
             info.pInputAssemblyState = inputInfo;
@@ -398,6 +433,7 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
             info.pRasterizationState = &pipelineInfo->rasterizationInfo;
             info.pMultisampleState = &pipelineInfo->multisamplerInfo;
             info.pColorBlendState = &pipelineInfo->colorBlendInfo;
+            info.pDepthStencilState = &pipelineInfo->depthInfo;
             info.layout = layout;
             info.renderPass = renderPass;
             info.basePipelineIndex = -1;
@@ -435,7 +471,13 @@ class VKShader : public VKDestroyResource<vk::ShaderModule> {
 
 class VKImage : public VKDestroyResource<vk::Image> {
     public:
-        VKImage(vk::Device dev, int w, int h, vk::Format fmt, int miplevels, bool baseLevel) : VKDestroyResource(dev) {
+        enum class Usage {
+            Image,
+            ImageGenMips,
+            Depth,
+        };
+
+        VKImage(vk::Device dev, int w, int h, vk::Format fmt, int miplevels, Usage usage) : VKDestroyResource(dev) {
             vk::ImageCreateInfo info;
             info.imageType = vk::ImageType::e2D;
             info.format = fmt;
@@ -445,8 +487,17 @@ class VKImage : public VKDestroyResource<vk::Image> {
             info.samples = vk::SampleCountFlagBits::e1;
             info.tiling = vk::ImageTiling::eOptimal;
             info.initialLayout = vk::ImageLayout::eUndefined;
-            info.usage = vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled;
-            if (baseLevel) { info.usage |= vk::ImageUsageFlagBits::eTransferSrc; }
+            switch (usage) {
+                case Usage::ImageGenMips: {
+                    info.usage = vk::ImageUsageFlagBits::eTransferSrc;
+                } [[fallthrough]];
+                case Usage::Image: {
+                    info.usage |= vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled;
+                } break;
+                case Usage::Depth: {
+                    info.usage = vk::ImageUsageFlagBits::eDepthStencilAttachment;
+                } break;
+            }
             info.sharingMode = vk::SharingMode::eExclusive;
 
             resource = device.createImage(info);

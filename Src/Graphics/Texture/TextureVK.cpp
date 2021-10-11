@@ -58,7 +58,7 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     vk::Format vkFmt = getFormat(fmt);
     PGE_ASSERT(physicalDevice.getFormatProperties(vkFmt).optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear,
         "Format doesn't support linear filtering");
-    image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt, miplevels, mipmaps);
+    image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt, miplevels, mipmaps ? VKImage::Usage::ImageGenMips : VKImage::Usage::Image);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
     graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, vkFmt, miplevels);
     graphics.transferToImage(stagingBuffer, image, w, h);
@@ -81,7 +81,7 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
     PGE_ASSERT(physicalDevice.getFormatProperties(vkFmt).optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear,
         "Format doesn't support linear filtering");
 
-    image = resourceManager.addNewResource<VKImage>(device, mipmaps[0].width, mipmaps[0].height, vkFmt, mipmaps.size(), false);
+    image = resourceManager.addNewResource<VKImage>(device, mipmaps[0].width, mipmaps[0].height, vkFmt, mipmaps.size(), VKImage::Usage::Image);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
     graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, vkFmt, mipmaps.size());
 
@@ -101,6 +101,19 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
     graphics.transformImage<GraphicsVK::ImageLayout::TRANSFER_DST, GraphicsVK::ImageLayout::SHADER_READ>(image, vkFmt, mipmaps.size());
 
     imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt, mipmaps.size());
+}
+
+TextureVK::TextureVK(Graphics& gfx, int w, int h) : Texture(w, h, false, Texture::Format::R32F), resourceManager(gfx) {
+    GraphicsVK& graphics = (GraphicsVK&)gfx;
+    vk::Device device = graphics.getDevice();
+    vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
+
+    constexpr vk::Format DEPTH_FORMAT = vk::Format::eD32Sfloat;
+    PGE_ASSERT(physicalDevice.getFormatProperties(DEPTH_FORMAT).optimalTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment,
+        "Depth stencil not supported!"); // TODO: Move or sth idfk.
+    image = resourceManager.addNewResource<VKImage>(device, w, h, DEPTH_FORMAT, 1, VKImage::Usage::Depth);
+    imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
+    imageView = resourceManager.addNewResource<VKImageView>(device, image, DEPTH_FORMAT, 1, vk::ImageAspectFlagBits::eDepth);
 }
 
 const vk::ImageView& TextureVK::getImageView() const {
