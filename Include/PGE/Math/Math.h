@@ -32,6 +32,13 @@ namespace Math {
         }
     }
 
+    constexpr unsigned roundUp(unsigned value, unsigned nearest) noexcept {
+        if (value % nearest == 0) {
+            return value;
+        }
+        return (value / nearest + 1) * nearest;
+    }
+
     /// Round down a float.
     /// Rounding down is defined as always rounding towards 0.
     /// 
