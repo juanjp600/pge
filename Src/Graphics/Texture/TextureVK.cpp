@@ -91,8 +91,7 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
     
     for (int i = 0; i < mipmaps.size(); i++) {
         memcpy(mappedMem, mipmaps[i].buffer, mipmaps[i].size);
-        // TODO: Not flush whole size?
-        device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, VK_WHOLE_SIZE));
+        device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, Math::roundUp(mipmaps[i].size, graphics.getAtomSize())));
         graphics.transferToImage(stagingBuffer, image, mipmaps[i].width, mipmaps[i].height, i);
     }
 

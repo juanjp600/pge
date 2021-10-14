@@ -10,7 +10,6 @@ using namespace PGE;
 
 GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y)
     : GraphicsSpecialized("Vulkan", name, w, h, wm, x, y, (SDL_WindowFlags)(SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI)), resourceManager(*this) {
-    // Layers.
     std::vector<const char*> layers;
 #ifdef DEBUG
     layers.push_back("VK_LAYER_KHRONOS_validation");
@@ -101,6 +100,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
             selectedPdFormats = pdFormats;
             selectedPdPresentModes = pdPresentModes;
             selectedPdSize = pdSize;
+            atomSize = pd.getProperties().limits.nonCoherentAtomSize;
         }
     }
     PGE_ASSERT(foundCompatibleDevice, "No Vulkan compatible GPU found");
@@ -408,6 +408,10 @@ const VKPipelineInfo* GraphicsVK::getPipelineInfo() const {
 
 const vk::Sampler& GraphicsVK::getSampler(bool rt) const {
     return rt ? samplerRT : sampler;
+}
+
+unsigned GraphicsVK::getAtomSize() const {
+    return atomSize;
 }
 
 const vk::DescriptorSetLayout& GraphicsVK::getDescriptorSetLayout(int count) {

@@ -71,6 +71,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         const VKPipelineInfo* getPipelineInfo() const;
         const vk::Sampler& getSampler(bool rt) const;
 
+        unsigned getAtomSize() const;
+
         const vk::DescriptorSetLayout& getDescriptorSetLayout(int count);
         void dropDescriptorSetLayout(int count);
 
@@ -142,6 +144,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         ResourceManagerVK resourceManager;
         std::vector<ResourceBase*> trashBin;
+
+        unsigned atomSize;
 
         void createSwapchain(bool vsync);
 
