@@ -21,7 +21,7 @@ class ResourceManagerVK : public ResourceManager {
         void trash(ResourceView<T>& view) {
             if (!view.isHoldingResource()) { return; }
             trashInternal(getIterator(view));
-            view = ResourceView<T>();
+            view = { };
         }
 };
 

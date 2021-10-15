@@ -20,6 +20,7 @@ MeshVK::~MeshVK() {
 
 void MeshVK::renderInternal() {
 	if (!data.isHoldingResource()) { return; }
+	if (!pipeline.isHoldingResource()) { uploadPipeline(); }
 
 	((ShaderVK&)material->getShader()).pushConstants();
 
@@ -63,10 +64,9 @@ void MeshVK::uploadInternalData() {
 
 	data = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, finalTotalSize, VKMemoryBuffer::Type::DEVICE);
 	graphics.transfer(staging.getBuffer(), data->getBuffer(), finalTotalSize);
-
-	uploadPipeline(); // TODO: Do we need to call this?
 }
 
+// TODO: Move this to material.
 void MeshVK::uploadPipeline() {
 	resourceManager.trash(pipeline);
 	ShaderVK& shader = ((ShaderVK&)material->getShader());
