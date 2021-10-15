@@ -86,8 +86,7 @@ class VKDevice : public Resource<vk::Device> {
         static constexpr std::array priority = { 1.f };
 
     public:
-        VKDevice(vk::PhysicalDevice physDev, const std::unordered_set<uint32_t>& queueIndices,
-            const std::vector<const char*>& layers, const std::vector<const char*>& deviceExtensions) {
+        VKDevice(vk::PhysicalDevice physDev, const std::unordered_set<uint32_t>& queueIndices, const std::vector<const char*>& deviceExtensions) {
             vk::PhysicalDeviceFeatures features;
             features.samplerAnisotropy = VK_TRUE;
 
@@ -104,7 +103,6 @@ class VKDevice : public Resource<vk::Device> {
             info.pNext = &extDynState;
             info.pEnabledFeatures = &features;
             info.setQueueCreateInfos(infos);
-            info.setPEnabledLayerNames(layers); // TODO: Deprecated?
             info.setPEnabledExtensionNames(deviceExtensions);
 
             resource = physDev.createDevice(info);

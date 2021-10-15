@@ -25,6 +25,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         };
 
         GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y);
+        ~GraphicsVK();
 
         void swap() override;
 
@@ -142,10 +143,12 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         int backBufferIndex;
 
+        vk::DeviceSize atomSize;
+
         ResourceManagerVK resourceManager;
         std::vector<ResourceBase*> trashBin;
 
-        vk::DeviceSize atomSize;
+        void clearBin();
 
         void createSwapchain(bool vsync);
 

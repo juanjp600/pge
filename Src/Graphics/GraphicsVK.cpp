@@ -9,7 +9,7 @@
 using namespace PGE;
 
 GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y)
-    : GraphicsSpecialized("Vulkan", name, w, h, wm, x, y, (SDL_WindowFlags)(SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI)), resourceManager(*this) {
+    : GraphicsSpecialized("Vulkan", name, w, h, wm, x, y, SDL_WINDOW_VULKAN), resourceManager(*this) {
     std::vector<const char*> layers;
 #ifdef DEBUG
     layers.push_back("VK_LAYER_KHRONOS_validation");
@@ -105,7 +105,8 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     }
     PGE_ASSERT(foundCompatibleDevice, "No Vulkan compatible GPU found");
 
-    device = resourceManager.addNewResource<VKDevice>(physicalDevice, std::unordered_set { graphicsQueueIndex, presentQueueIndex, transferQueueIndex }, layers, deviceExtensions);
+    device = resourceManager.addNewResource<VKDevice>(physicalDevice,
+        std::unordered_set { graphicsQueueIndex, presentQueueIndex, transferQueueIndex }, deviceExtensions);
 
     graphicsQueue = device->getQueue(graphicsQueueIndex, 0);
     presentQueue = device->getQueue(presentQueueIndex, 0);
@@ -144,17 +145,14 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     focused = true;
 }
 
+GraphicsVK::~GraphicsVK() {
+    clearBin();
+}
+
 void GraphicsVK::swap() {
     endRender();
-    
-    if (!trashBin.empty()) {
-        device->waitIdle();
-        // Clear trashbin.
-        for (ResourceBase* b : trashBin) {
-            delete b;
-        }
-        trashBin.clear();
-    }
+
+    clearBin();
 
     acquireNextImage();
 }
@@ -225,6 +223,17 @@ void GraphicsVK::clear(const Color& cc) {
     std::array attachments { color, depth };
 
     comBuffers[backBufferIndex].clearAttachments(attachments, rect);
+}
+
+void GraphicsVK::clearBin() {
+    if (!trashBin.empty()) {
+        device->waitIdle();
+        // Clear trashbin.
+        for (ResourceBase* b : trashBin) {
+            delete b;
+        }
+        trashBin.clear();
+    }
 }
 
 void GraphicsVK::createSwapchain(bool vs) {
