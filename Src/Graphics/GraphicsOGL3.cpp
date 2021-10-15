@@ -6,7 +6,7 @@ using namespace PGE;
 
 GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, WindowMode wm, int x, int y)
     //TODO: this is incorrect on macOS
-    : GraphicsSpecialized("OpenGL", name, w, h, wm, x, y, (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI/* | SDL_WINDOW_FULLSCREEN_DESKTOP*/)), resourceManager(*this) {
+    : GraphicsSpecialized("OpenGL", name, w, h, wm, x, y, SDL_WINDOW_OPENGL), resourceManager(*this) {
 #if defined(__APPLE__) && defined(__OBJC__)
     // Figure out the de-scaled window size.
     NSRect rect = NSMakeRect(0, 0, w, h);

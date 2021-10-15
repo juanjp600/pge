@@ -7,7 +7,7 @@ using namespace PGE;
 // REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
 
 GraphicsDX11::GraphicsDX11(const String& name, int w, int h, WindowMode wm, int x, int y)
-    : GraphicsSpecialized("DirectX 11", name, w, h, wm, x, y, SDL_WINDOW_SHOWN) {
+    : GraphicsSpecialized("DirectX 11", name, w, h, wm, x, y, (SDL_WindowFlags)0) {
     if (windowMode == WindowMode::Fullscreen) {
         SDL_SetWindowBordered(getWindow(), SDL_bool::SDL_FALSE);
         SDL_Rect displayBounds;
