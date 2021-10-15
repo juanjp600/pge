@@ -31,7 +31,7 @@ NSWindow* GraphicsInternal::getCocoaWindow() const {
 
 GraphicsInternal::GraphicsInternal(const String& rendererName, const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags)
     : Graphics(name, w, h, wm), RENDERER_NAME(rendererName) {
-    sdlWindow = resourceManager.addNewResource<SDLWindow>(name, x, y, w, h, windowFlags);
+    sdlWindow = resourceManager.addNewResource<SDLWindow>(name, x, y, w, h, (SDL_WindowFlags)(windowFlags | SDL_WINDOW_ALLOW_HIGHDPI));
 }
 
 String GraphicsInternal::getInfo() const {
