@@ -23,9 +23,12 @@ class MeshVK : public Mesh {
 
         VKPipeline::View pipeline;
 
+        UpdateStrategy oldStrat = strategy;
+
         vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 
         RawWrapper<VKMemoryBuffer>::View data;
+        int dataCapacity = 0;
 
         ResourceManagerVK resourceManager;
 

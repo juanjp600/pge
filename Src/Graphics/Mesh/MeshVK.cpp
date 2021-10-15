@@ -41,29 +41,49 @@ void MeshVK::uploadInternalData() {
 	vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
 	ShaderVK& shader = (ShaderVK&)material->getShader();
 
-	resourceManager.trash(data);
-
-	u32 vertexCount = vertices.getElementCount();
-	if (vertexCount == 0) { return; }
-	totalVertexSize = shader.getVertexStride() * vertexCount;
+	totalVertexSize = vertices.getDataSize();
+	if (totalVertexSize == 0) { return; }
 	int finalTotalSize = totalVertexSize + sizeof(u16) * (int)indices.size();
 
-	// TODO: Don't allocate per update.
-	VKMemoryBuffer staging(device, physicalDevice, finalTotalSize, VKMemoryBuffer::Type::STAGING);
+	bool newData = finalTotalSize > dataCapacity || finalTotalSize * 4 < dataCapacity;
+	if (oldStrat != strategy) {
+		// We need to change the memory type.
+		if (strategy == UpdateStrategy::PER_FRAME || oldStrat == UpdateStrategy::PER_FRAME) {
+			newData = true;
+		}
+		oldStrat = strategy;
+	}
 
-	std::vector<String> vertexInputNames = shader.getVertexInputNames();
-	float* vertexCursor = (float*)staging.getData();
-	memcpy(vertexCursor, vertices.getData(), vertices.getDataSize());
+	if (newData) {
+		resourceManager.trash(data);
+		data = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, finalTotalSize,
+			strategy == UpdateStrategy::PER_FRAME ? VKMemoryBuffer::Type::STAGING_DEVICE : VKMemoryBuffer::Type::DEVICE);
+
+		dataCapacity = finalTotalSize;
+	}
+
+	VKMemoryBuffer* target;
+	std::unique_ptr<VKMemoryBuffer> potStaging;
+	if (strategy == UpdateStrategy::PER_FRAME) {
+		target = data;
+	} else {
+		potStaging = std::make_unique<VKMemoryBuffer>(device, physicalDevice, finalTotalSize, VKMemoryBuffer::Type::STAGING);
+		target = potStaging.get();
+	}
+
+	float* vertexCursor = (float*)target->getData();
+	memcpy(vertexCursor, vertices.getData(), totalVertexSize);
 
 	u16* indexCursor = (u16*)(((byte*)vertexCursor) + totalVertexSize);
 	for (u32 u : indices) {
 		*indexCursor = (u16)u;
 		indexCursor++;
 	}
-	staging.flush(VK_WHOLE_SIZE);
+	target->flush(Math::roundUp((vk::DeviceSize)finalTotalSize, graphics.getAtomSize()));
 
-	data = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, finalTotalSize, VKMemoryBuffer::Type::DEVICE);
-	graphics.transfer(staging.getBuffer(), data->getBuffer(), finalTotalSize);
+	if (target != data) {
+		graphics.transfer(target->getBuffer(), data->getBuffer(), finalTotalSize);
+	}
 }
 
 // TODO: Move this to material.

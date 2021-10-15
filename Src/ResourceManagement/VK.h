@@ -380,9 +380,11 @@ class VKMemoryBuffer {
             }
         }
 
-        static vk::MemoryPropertyFlagBits getMemoryProperties(Type t) {
+        static vk::MemoryPropertyFlags getMemoryProperties(Type t) {
             switch (t) {
-                case Type::STAGING_DEVICE: [[fallthrough]];
+                case Type::STAGING_DEVICE: {
+                    return (vk::MemoryPropertyFlags)(vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eDeviceLocal);
+                }
                 case Type::STAGING: {
                     return vk::MemoryPropertyFlagBits::eHostVisible;
                 }
