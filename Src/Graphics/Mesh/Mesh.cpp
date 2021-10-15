@@ -65,6 +65,11 @@ void Mesh::setMaterial(Material* m) {
     material = m;
 }
 
+// TODO: Implement for OGL and DX11.
+void Mesh::setUpdateStrategy(UpdateStrategy us) {
+    strategy = us;
+}
+
 bool Mesh::isOpaque() const {
     return material->isOpaque();
 }

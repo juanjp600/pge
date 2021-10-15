@@ -23,6 +23,12 @@ class Mesh : private PolymorphicHeap {
             TRIANGLE,
         };
 
+        enum class UpdateStrategy {
+            STATIC,
+            DYNAMIC,
+            PER_FRAME,
+        };
+
         struct Line {
             Line(u32 a, u32 b);
 
@@ -44,6 +50,8 @@ class Mesh : private PolymorphicHeap {
 
         void setMaterial(Material* m);
 
+        void setUpdateStrategy(UpdateStrategy us);
+
         bool isOpaque() const;
 
         void render();
@@ -53,6 +61,8 @@ class Mesh : private PolymorphicHeap {
         virtual void renderInternal() = 0;
 
         Material* material = nullptr;
+
+        UpdateStrategy strategy = UpdateStrategy::STATIC;
 
         std::optional<PrimitiveType> primitiveType;
         StructuredData vertices;
