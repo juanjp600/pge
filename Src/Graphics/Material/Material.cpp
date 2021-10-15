@@ -4,7 +4,7 @@
 
 using namespace PGE;
 
-Material::Material(Graphics& gfx, Shader& sh, const ReferenceVector<Texture>& texs, Opaque o) {
+Material::Material(Graphics&, Shader& sh, const ReferenceVector<Texture>& texs, Opaque o) {
     shader = &sh;
     textures = texs;
     opaque = o;

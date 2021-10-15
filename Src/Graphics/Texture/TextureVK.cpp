@@ -23,6 +23,7 @@ static vk::Format getFormat(Texture::CompressedFormat fmt) {
         case Texture::CompressedFormat::BC5: { return vk::Format::eBc5UnormBlock; }
         case Texture::CompressedFormat::BC6: { return vk::Format::eBc6HSfloatBlock; }
         case Texture::CompressedFormat::BC7: { return vk::Format::eBc7UnormBlock; }
+        default: { throw PGE_CREATE_EX("Invalid format"); }
     }
 }
 
@@ -57,12 +58,12 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
         "Format doesn't support linear filtering");
     image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt, miplevels, mipmaps ? VKImage::Usage::ImageGenMips : VKImage::Usage::Image);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
-    graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, vkFmt, miplevels);
+    graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, miplevels);
     graphics.transferToImage(staging.getBuffer(), image, w, h);
     if (mipmaps) {
         graphics.generateMipmaps(image, w, h, miplevels);
     } else {
-        graphics.transformImage<GraphicsVK::ImageLayout::TRANSFER_DST, GraphicsVK::ImageLayout::SHADER_READ>(image, vkFmt, miplevels);
+        graphics.transformImage<GraphicsVK::ImageLayout::TRANSFER_DST, GraphicsVK::ImageLayout::SHADER_READ>(image, miplevels);
     }
 
     imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt, miplevels);
@@ -78,9 +79,9 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
     PGE_ASSERT(physicalDevice.getFormatProperties(vkFmt).optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear,
         "Format doesn't support linear filtering");
 
-    image = resourceManager.addNewResource<VKImage>(device, mipmaps[0].width, mipmaps[0].height, vkFmt, mipmaps.size(), VKImage::Usage::Image);
+    image = resourceManager.addNewResource<VKImage>(device, mipmaps[0].width, mipmaps[0].height, vkFmt, (int)mipmaps.size(), VKImage::Usage::Image);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
-    graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, vkFmt, mipmaps.size());
+    graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, (int)mipmaps.size());
 
     VKBuffer stagingBuffer(device, mipmaps[0].size, vk::BufferUsageFlagBits::eTransferSrc);
     VKMemory stagingMemory(device, physicalDevice, stagingBuffer.get(), vk::MemoryPropertyFlagBits::eHostVisible);
@@ -88,15 +89,15 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
     
     for (int i = 0; i < mipmaps.size(); i++) {
         memcpy(mappedMem, mipmaps[i].buffer, mipmaps[i].size);
-        device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, Math::roundUp(mipmaps[i].size, graphics.getAtomSize())));
+        device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, Math::roundUp((vk::DeviceSize)mipmaps[i].size, graphics.getAtomSize())));
         graphics.transferToImage(stagingBuffer, image, mipmaps[i].width, mipmaps[i].height, i);
     }
 
     device.unmapMemory(stagingMemory);
 
-    graphics.transformImage<GraphicsVK::ImageLayout::TRANSFER_DST, GraphicsVK::ImageLayout::SHADER_READ>(image, vkFmt, mipmaps.size());
+    graphics.transformImage<GraphicsVK::ImageLayout::TRANSFER_DST, GraphicsVK::ImageLayout::SHADER_READ>(image, (int)mipmaps.size());
 
-    imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt, mipmaps.size());
+    imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt, (int)mipmaps.size());
 }
 
 TextureVK::TextureVK(Graphics& gfx, int w, int h) : Texture(w, h, false, Texture::Format::R32F), resourceManager(gfx) {
@@ -117,5 +118,5 @@ const vk::ImageView& TextureVK::getImageView() const {
 }
 
 void* TextureVK::getNative() const {
-    return nullptr;
+    return (void*)&image;
 }

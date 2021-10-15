@@ -17,6 +17,8 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
 
     // Reflect.
     SpvReflectShaderModule reflection; SpvReflectResult res = spvReflectCreateShaderModule(shaderBinary.size(), shaderBinary.data(), &reflection);
+    PGE_ASSERT(res == SpvReflectResult::SPV_REFLECT_RESULT_SUCCESS, "Reflection failed " + String::hexFromInt((u32)res));
+
     // Vertex input.
     vertexInputNames.reserve(reflection.input_variable_count);
     vertexInputAttributes.reserve(reflection.input_variable_count);
@@ -69,7 +71,7 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
     }
 
     textureCount = 0;
-    for (int i = 0; i < reflection.descriptor_binding_count; i++) {
+    for (int i = 0; i < (int)reflection.descriptor_binding_count; i++) {
         SpvReflectDescriptorBinding& binding = reflection.descriptor_bindings[i];
         if (binding.descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_SAMPLED_IMAGE) {
             textureCount = binding.count;

@@ -34,7 +34,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         void generateMipmaps(vk::Image img, int w, int h, int miplevels);
 
         template <ImageLayout OLD, ImageLayout NEW>
-        void transformImage(vk::Image img, vk::Format fmt, int miplevels) {
+        void transformImage(vk::Image img, int miplevels) {
             startTransfer();
 
             vk::ImageMemoryBarrier barrier = createBasicBarrier(img, miplevels);
@@ -71,7 +71,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         const VKPipelineInfo* getPipelineInfo() const;
         const vk::Sampler& getSampler(bool rt) const;
 
-        unsigned getAtomSize() const;
+        vk::DeviceSize getAtomSize() const;
 
         const vk::DescriptorSetLayout& getDescriptorSetLayout(int count);
         void dropDescriptorSetLayout(int count);
@@ -145,7 +145,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         ResourceManagerVK resourceManager;
         std::vector<ResourceBase*> trashBin;
 
-        unsigned atomSize;
+        vk::DeviceSize atomSize;
 
         void createSwapchain(bool vsync);
 

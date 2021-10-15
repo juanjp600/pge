@@ -227,10 +227,10 @@ void GraphicsVK::clear(const Color& cc) {
     comBuffers[backBufferIndex].clearAttachments(attachments, rect);
 }
 
-void GraphicsVK::createSwapchain(bool vsync) {
+void GraphicsVK::createSwapchain(bool vs) {
     VKSwapchain::View oldChain = swapchain;
     swapchain = resourceManager.addNewResource<VKSwapchain>(device, physicalDevice, surface, swapchainExtent, dimensions.x, dimensions.y, swapchainFormat,
-        graphicsQueueIndex, presentQueueIndex, transferQueueIndex, vsync, swapchain.isHoldingResource() ? swapchain.get() : VK_NULL_HANDLE);
+        graphicsQueueIndex, presentQueueIndex, transferQueueIndex, vs, swapchain.isHoldingResource() ? swapchain.get() : VK_NULL_HANDLE);
     resourceManager.deleteResource(oldChain);
 
     // Creating image views for our swapchain images to ultimately write to.
@@ -410,7 +410,7 @@ const vk::Sampler& GraphicsVK::getSampler(bool rt) const {
     return rt ? samplerRT : sampler;
 }
 
-unsigned GraphicsVK::getAtomSize() const {
+vk::DeviceSize GraphicsVK::getAtomSize() const {
     return atomSize;
 }
 

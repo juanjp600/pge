@@ -10,11 +10,11 @@ MaterialVK::MaterialVK(Graphics& gfx, Shader& sh, const ReferenceVector<Texture>
 
     vk::Device device = graphics.getDevice();
 
-    dPool = resourceManager.addNewResource<VKDescriptorPool>(device, texs.size());
+    dPool = resourceManager.addNewResource<VKDescriptorPool>(device, (int)texs.size());
 
     vk::DescriptorSetAllocateInfo allocInfo;
     allocInfo.descriptorPool = dPool;
-    std::vector<vk::DescriptorSetLayout> layouts(1, graphics.getDescriptorSetLayout(texs.size()));
+    std::vector<vk::DescriptorSetLayout> layouts(1, graphics.getDescriptorSetLayout((int)texs.size()));
     allocInfo.setSetLayouts(layouts);
     dSet = device.allocateDescriptorSets(allocInfo).front();
     

@@ -32,7 +32,9 @@ namespace Math {
         }
     }
 
-    constexpr unsigned roundUp(unsigned value, unsigned nearest) noexcept {
+    template <typename T>
+    constexpr T roundUp(T value, T nearest) noexcept {
+        static_assert(!std::numeric_limits<T>::is_signed);
         if (value % nearest == 0) {
             return value;
         }
