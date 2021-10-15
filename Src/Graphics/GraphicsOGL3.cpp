@@ -146,7 +146,7 @@ void GraphicsOGL3::setViewport(const Rectanglei& vp) {
         takeGlContext();
 
         viewport = vp;
-        glViewport(vp.topLeftCorner().x, vp.topLeftCorner().y, vp.width(), vp.height());
+        glViewport(vp.topLeftCorner().x, dimensions.y - vp.topLeftCorner().y - vp.height(), vp.width(), vp.height());
     }
 }
 
