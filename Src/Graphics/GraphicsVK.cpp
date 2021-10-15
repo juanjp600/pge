@@ -8,6 +8,10 @@
 
 using namespace PGE;
 
+static vk::Viewport convertViewport(const Rectanglei& rect) {
+    return vk::Viewport(rect.topLeftCorner().x, rect.topLeftCorner().y + rect.height(), rect.width(), -rect.height(), 0.f, 1.f);
+}
+
 GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y)
     : GraphicsSpecialized("Vulkan", name, w, h, wm, x, y, SDL_WINDOW_VULKAN), resourceManager(*this) {
     std::vector<const char*> layers;
@@ -122,8 +126,12 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
         }
     }
 
+    scissor = vk::Rect2D(vk::Offset2D(0, 0), vk::Extent2D(w, h));
+
+    setViewport(Rectanglei(0, 0, w, h));
+
     vsync = true;
-    createSwapchain(true);
+    createSwapchain();
 
     imageAvailableSemaphores.reserve(MAX_FRAMES_IN_FLIGHT);
     renderFinishedSemaphores.reserve(MAX_FRAMES_IN_FLIGHT);
@@ -200,6 +208,7 @@ void GraphicsVK::acquireNextImage() {
     comBuffers[backBufferIndex].begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit));
     vk::RenderPassBeginInfo beginInfo = vk::RenderPassBeginInfo(renderPass, framebuffers[backBufferIndex], scissor);
     comBuffers[backBufferIndex].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
+    comBuffers[backBufferIndex].setViewport(0, vkViewport);
 }
 
 void GraphicsVK::startTransfer() {
@@ -238,10 +247,10 @@ void GraphicsVK::clearBin() {
     }
 }
 
-void GraphicsVK::createSwapchain(bool vs) {
+void GraphicsVK::createSwapchain() {
     VKSwapchain::View oldChain = swapchain;
     swapchain = resourceManager.addNewResource<VKSwapchain>(device, physicalDevice, surface, swapchainExtent, dimensions.x, dimensions.y, swapchainFormat,
-        graphicsQueueIndex, presentQueueIndex, transferQueueIndex, vs, swapchain.isHoldingResource() ? swapchain.get() : VK_NULL_HANDLE);
+        graphicsQueueIndex, presentQueueIndex, transferQueueIndex, vsync, swapchain.isHoldingResource() ? swapchain.get() : VK_NULL_HANDLE);
     resourceManager.deleteResource(oldChain);
 
     // Creating image views for our swapchain images to ultimately write to.
@@ -254,10 +263,8 @@ void GraphicsVK::createSwapchain(bool vs) {
 
     resourceManager.deleteResource(depthBuffer);
     depthBuffer = resourceManager.addNewResource<RawWrapper<TextureVK>>(*this, dimensions.x, dimensions.y);
-    
-    scissor = vk::Rect2D(vk::Offset2D(0, 0), swapchainExtent);
 
-    pipelineInfo.init(swapchainExtent, scissor);
+    pipelineInfo.init(scissor);
     Culling oldCull = cullingMode;
     cullingMode = Culling::NONE;
     setCulling(oldCull);
@@ -356,7 +363,8 @@ void GraphicsVK::resetRenderTarget() {
 }
 
 void GraphicsVK::setViewport(const Rectanglei& vp) {
-
+    viewport = vp;
+    vkViewport = convertViewport(viewport);
 }
 
 void GraphicsVK::setDepthTest(bool isEnabled) {
@@ -371,7 +379,7 @@ void GraphicsVK::setVsync(bool isEnabled) {
         device->waitIdle();
         // TODO: Clean.
         // Don't when ending.
-        createSwapchain(isEnabled);
+        createSwapchain();
         acquireNextImage();
     }
 }

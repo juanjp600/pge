@@ -114,6 +114,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         RawWrapper<TextureVK>::View depthBuffer;
 
         vk::Rect2D scissor;
+        vk::Viewport vkViewport;
 
         VKPipelineInfo pipelineInfo;
 
@@ -163,7 +164,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         // TODO: Turn the bin into a class.
         void clearBin();
 
-        void createSwapchain(bool vsync);
+        void createSwapchain();
 
         // TODO: Refactor this out of Graphics?
         // TODO: consteval C++20.

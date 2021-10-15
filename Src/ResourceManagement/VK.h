@@ -417,7 +417,6 @@ class VKMemoryBuffer {
 class VKPipelineInfo : private PolymorphicHeap {
     public:
         // The extra info needs to remain in memory.
-        vk::Viewport viewport;
         vk::PipelineViewportStateCreateInfo viewportInfo;
 
         vk::PipelineColorBlendAttachmentState colorBlendAttachmentState;
@@ -429,11 +428,8 @@ class VKPipelineInfo : private PolymorphicHeap {
 
         VKPipelineInfo() = default;
 
-        void init(vk::Extent2D extent, const vk::Rect2D& scissor) {
-            // Creating a viewport.
-            viewport = vk::Viewport(0.f, (float)extent.height, (float)extent.width, -(float)extent.height, 0.f, 1.f);
-            
-            viewportInfo.setViewports(viewport);
+        void init(const vk::Rect2D& scissor) {
+            viewportInfo.viewportCount = 1;
             viewportInfo.setScissors(scissor);
 
             rasterizationInfo.polygonMode = vk::PolygonMode::eFill;
@@ -455,6 +451,7 @@ class VKPipelineInfo : private PolymorphicHeap {
 
             colorBlendInfo.setAttachments(colorBlendAttachmentState);
 
+            // depthTestEnable is dynamic.
             depthInfo.depthWriteEnable = true;
             depthInfo.depthCompareOp = vk::CompareOp::eLess;
         }
@@ -482,8 +479,8 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
             }
             
             vk::PipelineDynamicStateCreateInfo dynamicInfo;
-            vk::DynamicState state = vk::DynamicState::eDepthTestEnableEXT;
-            dynamicInfo.setDynamicStates(state);
+            std::array states = { vk::DynamicState::eDepthTestEnableEXT, vk::DynamicState::eViewport };
+            dynamicInfo.setDynamicStates(states);
 
             vk::GraphicsPipelineCreateInfo info;
             info.setPDynamicState(&dynamicInfo);
