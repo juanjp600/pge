@@ -353,7 +353,68 @@ class VKMemory : public VKFreeResource<vk::DeviceMemory> {
         }
 };
 
-class VKPipelineInfo : PolymorphicHeap {
+class VKMemoryBuffer {
+    public:
+        enum class Type {
+            STAGING,
+            DEVICE,
+            STAGING_DEVICE,
+        };
+
+    private:
+        vk::Device device;
+        VKBuffer buffer;
+        VKMemory memory;
+        byte* data;
+
+        static vk::BufferUsageFlags getBufferUsage(Type t) {
+            switch (t) {
+                case Type::STAGING: {
+                    return vk::BufferUsageFlagBits::eTransferSrc;
+                }
+                case Type::STAGING_DEVICE: [[fallthrough]];
+                case Type::DEVICE: {
+                    return vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer;
+                }
+                default: {
+                    throw PGE_CREATE_EX("Invalid buffer type");
+                }
+            }
+        }
+
+        static vk::MemoryPropertyFlagBits getMemoryProperties(Type t) {
+            switch (t) {
+                case Type::STAGING_DEVICE: [[fallthrough]];
+                case Type::STAGING: {
+                    return vk::MemoryPropertyFlagBits::eHostVisible;
+                }
+                case Type::DEVICE: {
+                    return vk::MemoryPropertyFlagBits::eDeviceLocal;
+                }
+                default: {
+                    throw PGE_CREATE_EX("Invalid buffer type");
+                }
+            }
+        }
+
+    public:
+        VKMemoryBuffer(vk::Device dev, vk::PhysicalDevice physDev,
+            vk::DeviceSize size, Type type)
+            : device(dev), buffer(dev, size, getBufferUsage(type)), memory(dev, physDev, buffer.get(), getMemoryProperties(type)) {
+            if (getMemoryProperties(type) & vk::MemoryPropertyFlagBits::eHostVisible) {
+                data = (byte*)dev.mapMemory(memory, 0, VK_WHOLE_SIZE);
+            }
+        }
+
+        byte* getData() { return data; }
+        vk::Buffer getBuffer() { return buffer.get(); }
+
+        void flush(vk::DeviceSize size) {
+            device.flushMappedMemoryRanges(vk::MappedMemoryRange(memory, 0, size));
+        }
+};
+
+class VKPipelineInfo : private PolymorphicHeap {
     public:
         // The extra info needs to remain in memory.
         vk::Viewport viewport;

@@ -48,12 +48,9 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     }
 
     int size = w * h * getBytesPerPixel(fmt);
-    VKBuffer stagingBuffer(device, size, vk::BufferUsageFlagBits::eTransferSrc);
-    VKMemory stagingMemory(device, physicalDevice, stagingBuffer.get(), vk::MemoryPropertyFlagBits::eHostVisible);
-    void* mappedMem = device.mapMemory(stagingMemory, 0, VK_WHOLE_SIZE);
-    memcpy(mappedMem, buffer, size);
-    device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, VK_WHOLE_SIZE));
-    device.unmapMemory(stagingMemory);
+    VKMemoryBuffer staging(device, physicalDevice, size, VKMemoryBuffer::Type::STAGING);
+    memcpy(staging.getData(), buffer, size);
+    staging.flush(VK_WHOLE_SIZE);
 
     vk::Format vkFmt = getFormat(fmt);
     PGE_ASSERT(physicalDevice.getFormatProperties(vkFmt).optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear,
@@ -61,7 +58,7 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt, miplevels, mipmaps ? VKImage::Usage::ImageGenMips : VKImage::Usage::Image);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
     graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, vkFmt, miplevels);
-    graphics.transferToImage(stagingBuffer, image, w, h);
+    graphics.transferToImage(staging.getBuffer(), image, w, h);
     if (mipmaps) {
         graphics.generateMipmaps(image, w, h, miplevels);
     } else {

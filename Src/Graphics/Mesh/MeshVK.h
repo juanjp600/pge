@@ -2,6 +2,7 @@
 #define PGEINTERNAL_MESH_VK_H_INCLUDED
 
 #include <PGE/Graphics/Mesh.h>
+#include <PGE/ResourceManagement/RawWrapper.h>
 
 #include <vulkan/vulkan.hpp>
 
@@ -24,13 +25,12 @@ class MeshVK : public Mesh {
 
         vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 
-        // TODO: Combine buffers??
-        VKBuffer::View dataBuffer;
-        VKMemory::View dataMemory;
+        RawWrapper<VKMemoryBuffer>::View data;
 
         ResourceManagerVK resourceManager;
 
         int totalVertexSize;
+        int bufferSize = 0;
 
         void uploadInternalData() override;
         void renderInternal() override;

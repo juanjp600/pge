@@ -23,8 +23,8 @@ void MeshVK::renderInternal() {
 
 	vk::CommandBuffer comBuffer = graphics.getCurrentCommandBuffer();
 	// TODO: How the fuck does the buffer know how much vertex data there is???
-	comBuffer.bindVertexBuffers(0, dataBuffer.get(), (vk::DeviceSize)0);
-	comBuffer.bindIndexBuffer(dataBuffer, totalVertexSize, vk::IndexType::eUint16);
+	comBuffer.bindVertexBuffers(0, data->getBuffer(), (vk::DeviceSize)0);
+	comBuffer.bindIndexBuffer(data->getBuffer(), totalVertexSize, vk::IndexType::eUint16);
 	comBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
 	if (material->getTextureCount() > 0) {
 		comBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics,
@@ -40,19 +40,17 @@ void MeshVK::uploadInternalData() {
 	vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
 	ShaderVK& shader = (ShaderVK&)material->getShader();
 
-	resourceManager.trash(dataMemory);
-	resourceManager.trash(dataBuffer);
+	resourceManager.trash(data);
 
 	u32 vertexCount = vertices.getElementCount();
 	totalVertexSize = shader.getVertexStride() * vertexCount;
 	int finalTotalSize = totalVertexSize + sizeof(u16) * (int)indices.size();
 
 	// TODO: Don't allocate per update.
-	VKBuffer stagingBuffer(device, finalTotalSize, vk::BufferUsageFlagBits::eTransferSrc);
-	VKMemory stagingMemory(device, physicalDevice, stagingBuffer.get(), vk::MemoryPropertyFlagBits::eHostVisible);
+	VKMemoryBuffer staging(device, physicalDevice, finalTotalSize, VKMemoryBuffer::Type::STAGING);
 
 	std::vector<String> vertexInputNames = shader.getVertexInputNames();
-	float* vertexCursor = (float*)device.mapMemory(stagingMemory, 0, VK_WHOLE_SIZE);
+	float* vertexCursor = (float*)staging.getData();
 	memcpy(vertexCursor, vertices.getData(), vertices.getDataSize());
 
 	u16* indexCursor = (u16*)(((byte*)vertexCursor) + totalVertexSize);
@@ -60,12 +58,10 @@ void MeshVK::uploadInternalData() {
 		*indexCursor = (u16)u;
 		indexCursor++;
 	}
-	device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, VK_WHOLE_SIZE));
-	device.unmapMemory(stagingMemory);
+	staging.flush(VK_WHOLE_SIZE);
 
-	dataBuffer = resourceManager.addNewResource<VKBuffer>(device, finalTotalSize, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer);
-	dataMemory = resourceManager.addNewResource<VKMemory>(device, physicalDevice, dataBuffer.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
-	graphics.transfer(stagingBuffer, dataBuffer, finalTotalSize);
+	data = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, finalTotalSize, VKMemoryBuffer::Type::DEVICE);
+	graphics.transfer(staging.getBuffer(), data->getBuffer(), finalTotalSize);
 
 	uploadPipeline();
 }
