@@ -19,10 +19,11 @@ MeshVK::~MeshVK() {
 }
 
 void MeshVK::renderInternal() {
+	if (!data.isHoldingResource()) { return; }
+
 	((ShaderVK&)material->getShader()).pushConstants();
 
 	vk::CommandBuffer comBuffer = graphics.getCurrentCommandBuffer();
-	// TODO: How the fuck does the buffer know how much vertex data there is???
 	comBuffer.bindVertexBuffers(0, data->getBuffer(), (vk::DeviceSize)0);
 	comBuffer.bindIndexBuffer(data->getBuffer(), totalVertexSize, vk::IndexType::eUint16);
 	comBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
@@ -34,7 +35,6 @@ void MeshVK::renderInternal() {
 	comBuffer.drawIndexed((u32)indices.size(), 1, 0, 0, 0);
 }
 
-// TODO: Crash when no vertices.
 void MeshVK::uploadInternalData() {
 	vk::Device device = graphics.getDevice();
 	vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
@@ -43,6 +43,7 @@ void MeshVK::uploadInternalData() {
 	resourceManager.trash(data);
 
 	u32 vertexCount = vertices.getElementCount();
+	if (vertexCount == 0) { return; }
 	totalVertexSize = shader.getVertexStride() * vertexCount;
 	int finalTotalSize = totalVertexSize + sizeof(u16) * (int)indices.size();
 
@@ -63,7 +64,7 @@ void MeshVK::uploadInternalData() {
 	data = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, finalTotalSize, VKMemoryBuffer::Type::DEVICE);
 	graphics.transfer(staging.getBuffer(), data->getBuffer(), finalTotalSize);
 
-	uploadPipeline();
+	uploadPipeline(); // TODO: Do we need to call this?
 }
 
 void MeshVK::uploadPipeline() {

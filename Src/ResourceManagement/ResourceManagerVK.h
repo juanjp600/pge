@@ -18,9 +18,10 @@ class ResourceManagerVK : public ResourceManager {
 
         // TODO: Remove with C++20.
         template <typename T>
-        void trash(const ResourceView<T>& view) {
+        void trash(ResourceView<T>& view) {
             if (!view.isHoldingResource()) { return; }
             trashInternal(getIterator(view));
+            view = ResourceView<T>();
         }
 };
 
