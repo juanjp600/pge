@@ -147,13 +147,13 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
 
 GraphicsVK::~GraphicsVK() {
     clearBin();
-    PGE_ASSERT(stageBufferSizes.empty(), "Did not unregister all staging buffers!");
+    PGE_ASSERT(cachedBufferSizesSet.empty(), "Did not unregister all staging buffers!");
 }
 
 void GraphicsVK::swap() {
     endRender();
 
-    checkBufferShrink();
+    checkCachedBufferShrink();
     clearBin();
 
     acquireNextImage();
@@ -465,29 +465,29 @@ void GraphicsVK::trash(ResourceBase& res) {
 // at least in cases where a lot of them are created in the same frame (e.g. when loading).
 
 VKMemoryBuffer& GraphicsVK::getTempStagingBuffer(int size) {
-    if (size > bufferSize) { updateBuffer(size); }
-    return *buffer;
+    if (size > cachedBufferSize) { updateCachedBuffer(size); }
+    return *cachedBuffer;
 }
 
 VKMemoryBuffer& GraphicsVK::registerStagingBuffer(int size) {
-    stageBufferSizes.emplace(size);
+    cachedBufferSizesSet.emplace(size);
     return getTempStagingBuffer(size);
 }
 
 void GraphicsVK::unregisterStagingBuffer(int size) {
-    stageBufferSizes.erase(stageBufferSizes.find(size));
+    cachedBufferSizesSet.erase(cachedBufferSizesSet.find(size));
 }
 
-void GraphicsVK::checkBufferShrink() {
-    if (stageBufferSizes.empty()) { return; }
-    int max = *stageBufferSizes.rbegin();
-    if (max * 4 < bufferSize) {
-        updateBuffer(max);
+void GraphicsVK::checkCachedBufferShrink() {
+    if (cachedBufferSizesSet.empty()) { return; }
+    int max = *cachedBufferSizesSet.rbegin();
+    if (max * 4 < cachedBufferSize) {
+        updateCachedBuffer(max);
     }
 }
 
-void GraphicsVK::updateBuffer(int size) {
-    resourceManager.trash(buffer);
-    buffer = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, size, VKMemoryBuffer::Type::STAGING);
-    bufferSize = size;
+void GraphicsVK::updateCachedBuffer(int size) {
+    resourceManager.trash(cachedBuffer);
+    cachedBuffer = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, size, VKMemoryBuffer::Type::STAGING);
+    cachedBufferSize = size;
 }

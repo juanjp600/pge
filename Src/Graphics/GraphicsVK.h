@@ -89,12 +89,6 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         void unregisterStagingBuffer(int size);
 
     private:
-        std::multiset<int> stageBufferSizes;
-        int bufferSize = 0;
-        RawWrapper<VKMemoryBuffer>::View buffer;
-        void checkBufferShrink();
-        void updateBuffer(int size);
-
         vk::DispatchLoaderDynamic dispatch;
 
         // TODO: Remove.
@@ -156,6 +150,12 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         int backBufferIndex;
 
         vk::DeviceSize atomSize;
+
+        std::multiset<int> cachedBufferSizesSet;
+        int cachedBufferSize = 0;
+        RawWrapper<VKMemoryBuffer>::View cachedBuffer;
+        void checkCachedBufferShrink();
+        void updateCachedBuffer(int size);
 
         ResourceManagerVK resourceManager;
         std::vector<ResourceBase*> trashBin;
