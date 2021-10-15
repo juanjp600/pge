@@ -9,7 +9,24 @@
 
 using namespace PGE;
 
-MeshVK::MeshVK(Graphics& gfx) : resourceManager(gfx), graphics((GraphicsVK&)gfx) {
+MeshVK::StagingCacheHandle::StagingCacheHandle(Graphics& gfx) : graphics((GraphicsVK&)gfx) { }
+
+MeshVK::StagingCacheHandle::~StagingCacheHandle() { clear(); }
+
+void MeshVK::StagingCacheHandle::clear() {
+	if (heldSize != 0) {
+		graphics.unregisterStagingBuffer(heldSize);
+		heldSize = 0;
+	}
+}
+
+void MeshVK::StagingCacheHandle::cache(int size) {
+	clear();
+	graphics.registerStagingBuffer(size);
+	heldSize = size;
+}
+
+MeshVK::MeshVK(Graphics& gfx) : resourceManager(gfx), graphics((GraphicsVK&)gfx), stagingCacheHandle(gfx) {
 	graphics.addMesh(*this);
 	// TODO test over frames in flight.
 }
@@ -36,6 +53,11 @@ void MeshVK::renderInternal() {
 	comBuffer.drawIndexed((u32)indices.size(), 1, 0, 0, 0);
 }
 
+// VK updating strategies:
+// Static: Using temporary staging buffer.
+// Dynamic: Caching staging buffer.
+// Per-frame: Not using a staging buffer, sharing memory between GPU and CPU.
+
 void MeshVK::uploadInternalData() {
 	vk::Device device = graphics.getDevice();
 	vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
@@ -51,6 +73,12 @@ void MeshVK::uploadInternalData() {
 		if (strategy == UpdateStrategy::PER_FRAME || oldStrat == UpdateStrategy::PER_FRAME) {
 			newData = true;
 		}
+
+		// We should no longer cache the staging buffer.
+		if (oldStrat == UpdateStrategy::DYNAMIC) {
+			stagingCacheHandle.clear();
+		}
+
 		oldStrat = strategy;
 	}
 
@@ -59,16 +87,18 @@ void MeshVK::uploadInternalData() {
 		data = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, finalTotalSize,
 			strategy == UpdateStrategy::PER_FRAME ? VKMemoryBuffer::Type::STAGING_DEVICE : VKMemoryBuffer::Type::DEVICE);
 
+		if (strategy == UpdateStrategy::DYNAMIC) {
+			stagingCacheHandle.cache(finalTotalSize);
+		}
+
 		dataCapacity = finalTotalSize;
 	}
 
 	VKMemoryBuffer* target;
-	std::unique_ptr<VKMemoryBuffer> potStaging;
 	if (strategy == UpdateStrategy::PER_FRAME) {
 		target = data;
 	} else {
-		potStaging = std::make_unique<VKMemoryBuffer>(device, physicalDevice, finalTotalSize, VKMemoryBuffer::Type::STAGING);
-		target = potStaging.get();
+		target = &graphics.getTempStagingBuffer(finalTotalSize);
 	}
 
 	float* vertexCursor = (float*)target->getData();

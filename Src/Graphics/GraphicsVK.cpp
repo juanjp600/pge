@@ -147,11 +147,13 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
 
 GraphicsVK::~GraphicsVK() {
     clearBin();
+    PGE_ASSERT(stageBufferSizes.empty(), "Did not unregister all staging buffers!");
 }
 
 void GraphicsVK::swap() {
     endRender();
 
+    checkBufferShrink();
     clearBin();
 
     acquireNextImage();
@@ -452,4 +454,40 @@ void GraphicsVK::removeMesh(MeshVK& m) {
 
 void GraphicsVK::trash(ResourceBase& res) {
     trashBin.push_back(&res);
+}
+
+// Explanation of the staging buffer cache:
+// By utilizing getTempStagingBuffer anyone can get a potentially cached buffer.
+// If getTempStagingBuffer needs to create a new buffer, that one is cached.
+// We check if we should shrink the cached buffer after every presentation BEFORE the trashbin is emptied.
+// (We need to do it before since we need to wait for device idle and we otherwise can't rely on a non-empty trashbin.)
+// All in all this system should allow even static meshes to have access to appropriately sized cached buffers,
+// at least in cases where a lot of them are created in the same frame (e.g. when loading).
+
+VKMemoryBuffer& GraphicsVK::getTempStagingBuffer(int size) {
+    if (size > bufferSize) { updateBuffer(size); }
+    return *buffer;
+}
+
+VKMemoryBuffer& GraphicsVK::registerStagingBuffer(int size) {
+    stageBufferSizes.emplace(size);
+    return getTempStagingBuffer(size);
+}
+
+void GraphicsVK::unregisterStagingBuffer(int size) {
+    stageBufferSizes.erase(stageBufferSizes.find(size));
+}
+
+void GraphicsVK::checkBufferShrink() {
+    if (stageBufferSizes.empty()) { return; }
+    int max = *stageBufferSizes.rbegin();
+    if (max * 4 < bufferSize) {
+        updateBuffer(max);
+    }
+}
+
+void GraphicsVK::updateBuffer(int size) {
+    resourceManager.trash(buffer);
+    buffer = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, size, VKMemoryBuffer::Type::STAGING);
+    bufferSize = size;
 }

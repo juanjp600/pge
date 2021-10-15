@@ -3,6 +3,8 @@
 
 #include "GraphicsInternal.h"
 
+#include <set>
+
 #include "Material/MaterialVK.h"
 #include "Texture/TextureVK.h"
 #include "Shader/ShaderVK.h"
@@ -82,7 +84,17 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         void trash(ResourceBase& res);
 
+        VKMemoryBuffer& getTempStagingBuffer(int size);
+        VKMemoryBuffer& registerStagingBuffer(int size);
+        void unregisterStagingBuffer(int size);
+
     private:
+        std::multiset<int> stageBufferSizes;
+        int bufferSize = 0;
+        RawWrapper<VKMemoryBuffer>::View buffer;
+        void checkBufferShrink();
+        void updateBuffer(int size);
+
         vk::DispatchLoaderDynamic dispatch;
 
         // TODO: Remove.
@@ -148,6 +160,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         ResourceManagerVK resourceManager;
         std::vector<ResourceBase*> trashBin;
 
+        // TODO: Turn the bin into a class.
         void clearBin();
 
         void createSwapchain(bool vsync);

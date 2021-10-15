@@ -19,6 +19,19 @@ class MeshVK : public Mesh {
         void uploadPipeline();
 
     private:
+        class StagingCacheHandle {
+            public:
+                StagingCacheHandle(Graphics& gfx);
+                ~StagingCacheHandle();
+
+                void clear();
+                void cache(int size);
+
+            private:
+                GraphicsVK& graphics;
+                int heldSize = 0;
+        } stagingCacheHandle;
+
         GraphicsVK& graphics;
 
         VKPipeline::View pipeline;
