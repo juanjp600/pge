@@ -119,6 +119,11 @@ Public Types</h2></td></tr>
 , <b>TRIANGLE</b>
  }</td></tr>
 <tr class="separator:a508edaf1c8ada0a5e0454a2a6aafd088"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3915246c78530368a0002fadacc33da"><td class="memItemLeft" align="right" valign="top"><a id="ae3915246c78530368a0002fadacc33da"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>UpdateStrategy</b> { <b>STATIC</b>
+, <b>DYNAMIC</b>
+, <b>PER_FRAME</b>
+ }</td></tr>
+<tr class="separator:ae3915246c78530368a0002fadacc33da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -137,6 +142,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>clearGeometry</b> ()<
 <tr class="memitem:a36f1f9b0303d592bf0c3bb4fa9626e17"><td class="memItemLeft" align="right" valign="top"><a id="a36f1f9b0303d592bf0c3bb4fa9626e17"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setMaterial</b> (<a class="el" href="class_p_g_e_1_1_material.html">Material</a> *m)</td></tr>
 <tr class="separator:a36f1f9b0303d592bf0c3bb4fa9626e17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ae36b56b54e760013630b998c85f607"><td class="memItemLeft" align="right" valign="top"><a id="a0ae36b56b54e760013630b998c85f607"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setUpdateStrategy</b> (UpdateStrategy us)</td></tr>
+<tr class="separator:a0ae36b56b54e760013630b998c85f607"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae643a1ded89ad8de2fdfd8da5bb124fa"><td class="memItemLeft" align="right" valign="top"><a id="ae643a1ded89ad8de2fdfd8da5bb124fa"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isOpaque</b> () const</td></tr>
 <tr class="separator:ae643a1ded89ad8de2fdfd8da5bb124fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,6 +172,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:ac6287068c7ad20c366fc54f74c7c3e72"><td class="memItemLeft" align="right" valign="top"><a id="ac6287068c7ad20c366fc54f74c7c3e72"></a>
 <a class="el" href="class_p_g_e_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>material</b> = nullptr</td></tr>
 <tr class="separator:ac6287068c7ad20c366fc54f74c7c3e72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fae393e1e4bf232ef64ea1a88126e2a"><td class="memItemLeft" align="right" valign="top"><a id="a9fae393e1e4bf232ef64ea1a88126e2a"></a>
+UpdateStrategy&#160;</td><td class="memItemRight" valign="bottom"><b>strategy</b> = UpdateStrategy::STATIC</td></tr>
+<tr class="separator:a9fae393e1e4bf232ef64ea1a88126e2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c0eeb4f39696638b467ff790b415758"><td class="memItemLeft" align="right" valign="top"><a id="a2c0eeb4f39696638b467ff790b415758"></a>
 std::optional&lt; PrimitiveType &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>primitiveType</b></td></tr>
 <tr class="separator:a2c0eeb4f39696638b467ff790b415758"><td class="memSeparator" colspan="2">&#160;</td></tr>

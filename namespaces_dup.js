@@ -33,7 +33,7 @@ var namespaces_dup =
         [ "\u202AequalFloats", "namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77", null ],
         [ "\u202Afloor", "namespace_p_g_e_1_1_math.html#ad64e0f41b409c339ed5644f6b24e44d8", null ],
         [ "\u202AradToDeg", "namespace_p_g_e_1_1_math.html#aec5240ab51ce3a2760c11ebe761950f4", null ],
-        [ "\u202AroundUp", "namespace_p_g_e_1_1_math.html#a5d5abec34391255e7d3b9c910546586c", null ],
+        [ "\u202AroundUp", "namespace_p_g_e_1_1_math.html#ad532a91076f09c19454ff67dec3cee66", null ],
         [ "\u202AE", "namespace_p_g_e_1_1_math.html#ab76aa745b2e0aa7029e7c0c832ed70e3", null ],
         [ "\u202AEPSILON_DEFAULT", "namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05", null ],
         [ "\u202API", "namespace_p_g_e_1_1_math.html#a24b876f1c65434d6645c0b87c252dbab", null ]
