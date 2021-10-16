@@ -72,7 +72,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         vk::PhysicalDevice getPhysicalDevice() const;
         vk::RenderPass getRenderPass() const;
         vk::CommandBuffer getCurrentCommandBuffer() const;
-        const VKPipelineInfo* getPipelineInfo() const;
+        const VKPipelineInfo& getPipelineInfo() const;
         const vk::Sampler& getSampler(bool rt) const;
 
         vk::DeviceSize getAtomSize() const;
@@ -252,6 +252,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         void startTransfer();
         void endTransfer();
+
+        void reuploadPipelines();
 };
 
 }

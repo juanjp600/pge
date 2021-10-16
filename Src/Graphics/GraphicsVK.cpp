@@ -123,6 +123,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     }
 
     scissor = vk::Rect2D(vk::Offset2D(0, 0), vk::Extent2D(w, h));
+    pipelineInfo.viewportInfo.setScissors(scissor);
 
     setViewport(Rectanglei(0, 0, w, h));
 
@@ -274,7 +275,6 @@ void GraphicsVK::createSwapchain() {
     resourceManager.deleteResource(depthBuffer);
     depthBuffer = resourceManager.addNewResource<RawWrapper<TextureVK>>(*this, dimensions.x, dimensions.y);
 
-    pipelineInfo.init(scissor);
     Culling oldCull = cullingMode;
     cullingMode = Culling::NONE;
     setCulling(oldCull);
@@ -419,10 +419,7 @@ void GraphicsVK::setCulling(Culling mode) {
         default: { throw PGE_CREATE_EX("Unexpected culling mode"); }
     }
     pipelineInfo.rasterizationInfo.cullMode = flags;
-
-    for (ShaderVK* sh : shaders) {
-        sh->uploadPipelines();
-    }
+    reuploadPipelines();
     
     cullingMode = mode;
 }
@@ -443,10 +440,8 @@ vk::CommandBuffer GraphicsVK::getCurrentCommandBuffer() const {
     return comBuffers[backBufferIndex];
 }
 
-// I fucking hate this, but C++ is stupid.
-// When you want to pass something by reference the copy constructor must be available, even though it shouldn't be used!
-const VKPipelineInfo* GraphicsVK::getPipelineInfo() const {
-    return &pipelineInfo;
+const VKPipelineInfo& GraphicsVK::getPipelineInfo() const {
+    return pipelineInfo;
 }
 
 const vk::Sampler& GraphicsVK::getSampler(bool rt) const {
@@ -522,4 +517,10 @@ void GraphicsVK::updateCachedBuffer(int size) {
     resourceManager.trash(cachedBuffer);
     cachedBuffer = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, size, VKMemoryBuffer::Type::STAGING);
     cachedBufferSize = size;
+}
+
+void GraphicsVK::reuploadPipelines() {
+    for (ShaderVK* sh : shaders) {
+        sh->uploadPipelines();
+    }
 }

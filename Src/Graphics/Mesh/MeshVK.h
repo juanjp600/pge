@@ -33,15 +33,12 @@ class MeshVK : public Mesh {
 
         UpdateStrategy oldStrat = strategy;
 
-        vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
-
         RawWrapper<VKMemoryBuffer>::View data;
         int dataCapacity = 0;
 
         ResourceManagerVK resourceManager;
 
         int totalVertexSize;
-        int bufferSize = 0;
 
         void uploadInternalData() override;
         void renderInternal() override;
