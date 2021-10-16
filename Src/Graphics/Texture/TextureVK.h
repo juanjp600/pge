@@ -30,6 +30,7 @@ class TextureVK : public Texture {
         const vk::Framebuffer getFramebuffer() const;
 
         vk::Format getFormat() const;
+        const vk::Rect2D& getScissor() const;
 
         void* getNative() const override;
 
@@ -50,6 +51,8 @@ class TextureVK : public Texture {
 
         RawWrapper<TextureVK>::View depth;
         VKFramebuffer::View framebuffer;
+
+        vk::Rect2D scissor;
 };
 
 }

@@ -179,7 +179,7 @@ class VKImageView : public VKDestroyResource<vk::ImageView> {
 
 class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
     public:
-        VKRenderPass(vk::Device dev, vk::Format fmt)
+        VKRenderPass(vk::Device dev, vk::Format fmt, bool rt = false)
             : VKDestroyResource(dev) {
             vk::AttachmentDescription color;
             color.format = fmt;
@@ -188,8 +188,8 @@ class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
             color.storeOp = vk::AttachmentStoreOp::eStore;
             color.stencilLoadOp = vk::AttachmentLoadOp::eDontCare;
             color.stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
-            color.initialLayout = vk::ImageLayout::eUndefined;
-            color.finalLayout = vk::ImageLayout::ePresentSrcKHR;
+            color.initialLayout = vk::ImageLayout::eUndefined; // TODO: eColorAttachmentOptimal?
+            color.finalLayout = rt ? vk::ImageLayout::eShaderReadOnlyOptimal : vk::ImageLayout::ePresentSrcKHR;
 
             vk::AttachmentDescription depth;
             depth.format = vk::Format::eD32Sfloat;

@@ -45,12 +45,14 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, Format fmt)
 
     image = resourceManager.addNewResource<VKImage>(device, w, h, format, 1, VKImage::Usage::RENDER_TARGET);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
-    graphics->transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::RENDER_TARGET>(image, 1);
+    graphics->transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::SHADER_READ>(image, 1);
     imageView = resourceManager.addNewResource<VKImageView>(device, image, format, 1);
 
     renderPass = graphics->requestRenderPass(format);
     depth = resourceManager.addNewResource<RawWrapper<TextureVK>>(gfx, w, h);
     framebuffer = resourceManager.addNewResource<VKFramebuffer>(device, renderPass, imageView.get(), depth->getImageView(), vk::Extent2D(w, h));
+
+    scissor = vk::Rect2D(vk::Offset2D(0, 0), vk::Extent2D(w, h));
 }
 
 TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps)
@@ -154,6 +156,10 @@ const vk::Framebuffer TextureVK::getFramebuffer() const {
 
 vk::Format TextureVK::getFormat() const {
     return format;
+}
+
+const vk::Rect2D& TextureVK::getScissor() const {
+    return scissor;
 }
 
 void* TextureVK::getNative() const {

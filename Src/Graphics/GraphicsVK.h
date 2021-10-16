@@ -121,6 +121,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         RawWrapper<TextureVK>::View depthBuffer;
 
         vk::Rect2D scissor;
+        vk::Rect2D frameScissor;
         vk::Viewport vkViewport;
 
         VKPipelineInfo pipelineInfo;
@@ -156,6 +157,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         int currentFrame = 0;
 
         int backBufferIndex;
+        int oldSwapchainBackBufferIndex;
 
         vk::DeviceSize atomSize;
 
@@ -233,9 +235,9 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
                     info.stageFlags = vk::PipelineStageFlagBits::eFragmentShader;
                 } break;
                 case ImageLayout::RENDER_TARGET: {
-                    info.layout = vk::ImageLayout::eGeneral;
-                    info.accessFlags = vk::AccessFlagBits::eShaderRead | vk::AccessFlagBits::eColorAttachmentWrite;
-                    info.stageFlags = vk::PipelineStageFlagBits::eFragmentShader | vk::PipelineStageFlagBits::eColorAttachmentOutput;
+                    info.layout = vk::ImageLayout::eColorAttachmentOptimal;
+                    info.accessFlags = vk::AccessFlagBits::eColorAttachmentWrite;
+                    info.stageFlags = vk::PipelineStageFlagBits::eColorAttachmentOutput;
                 } break;
             }
             return info;
@@ -259,6 +261,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         void endRender();
         void present();
+        void advanceFrame();
         void acquireNextImage();
         void startRender();
 

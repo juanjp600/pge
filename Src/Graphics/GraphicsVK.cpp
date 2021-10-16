@@ -162,6 +162,8 @@ void GraphicsVK::swap() {
     checkCachedBufferShrink();
     clearBin();
 
+    advanceFrame();
+
     acquireNextImage();
     startRender();
 }
@@ -169,25 +171,30 @@ void GraphicsVK::swap() {
 void GraphicsVK::endRender() {
     comBuffers[backBufferIndex].endRenderPass();
     comBuffers[backBufferIndex].end();
-}
 
-void GraphicsVK::present() {
     vk::PipelineStageFlags waitStages = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 
     device->resetFences(inFlightFences[currentFrame].get());
-    vk::SubmitInfo submitInfo = vk::SubmitInfo(1, &imageAvailableSemaphores[currentFrame], &waitStages, 1, &comBuffers[backBufferIndex], 1, &renderFinishedSemaphores[currentFrame]);
-    vk::Result result;
-    result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
+    vk::SubmitInfo submitInfo;
+    submitInfo.setWaitDstStageMask(waitStages);
+    submitInfo.setWaitSemaphores(imageAvailableSemaphores[currentFrame].get());
+    submitInfo.setCommandBuffers(comBuffers[backBufferIndex]);
+    submitInfo.setSignalSemaphores(renderFinishedSemaphores[currentFrame].get());
+    vk::Result result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to graphics queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
+}
 
+void GraphicsVK::present() {
     vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, (uint32_t*)&backBufferIndex, nullptr);
-    result = presentQueue.presentKHR(presentInfo);
+    vk::Result result = presentQueue.presentKHR(presentInfo);
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
+}
 
+void GraphicsVK::advanceFrame() {
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
     // Wait until the current frames in flight are less than the max.
-    result = device->waitForFences(inFlightFences[currentFrame].get(), false, UINT64_MAX);
+    vk::Result result = device->waitForFences(inFlightFences[currentFrame].get(), false, UINT64_MAX);
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::hexFromInt((u32)result) + ")");
 }
 
@@ -210,14 +217,16 @@ void GraphicsVK::startRender() {
 
     comBuffers[backBufferIndex].begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit));
     vk::RenderPassBeginInfo beginInfo;
-    beginInfo.renderArea = scissor;
     if (renderTarget == nullptr) {
+        frameScissor = scissor;
         beginInfo.renderPass = renderPass;
         beginInfo.framebuffer = framebuffers[backBufferIndex];
     } else {
+        frameScissor = renderTarget->getScissor();
         beginInfo.renderPass = renderTarget->getRenderPass();
         beginInfo.framebuffer = renderTarget->getFramebuffer();
     }
+    beginInfo.renderArea = frameScissor;
     comBuffers[backBufferIndex].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
     comBuffers[backBufferIndex].setViewport(0, vkViewport);
 }
@@ -240,7 +249,7 @@ void GraphicsVK::clear(const Color& cc) {
     vk::ClearAttachment depth;
     depth.aspectMask = vk::ImageAspectFlagBits::eDepth;
     depth.clearValue = vk::ClearValue(vk::ClearDepthStencilValue(1.f));
-    vk::ClearRect rect = vk::ClearRect(scissor, 0, 1);
+    vk::ClearRect rect = vk::ClearRect(frameScissor, 0, 1);
 
     std::array attachments { color, depth };
 
@@ -361,9 +370,15 @@ void GraphicsVK::transferToImage(const vk::Buffer& src, const vk::Image& dst, in
 }
 
 void GraphicsVK::setRenderTarget(Texture& rt) {
-    renderTarget = (TextureVK*)&rt;
+    if (renderTarget == nullptr) { oldSwapchainBackBufferIndex = backBufferIndex; }
 
     endRender();
+
+    renderTarget = (TextureVK*)&rt;
+
+    advanceFrame();
+
+    backBufferIndex = (backBufferIndex + 1) % MAX_FRAMES_IN_FLIGHT;
     startRender();
 }
 
@@ -374,9 +389,13 @@ void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& rt) {
 }
 
 void GraphicsVK::resetRenderTarget() {
+    endRender();
+
     renderTarget = nullptr;
 
-    endRender();
+    advanceFrame();
+
+    backBufferIndex = oldSwapchainBackBufferIndex;
     startRender();
 }
 
@@ -399,6 +418,7 @@ void GraphicsVK::setVsync(bool isEnabled) {
         vsync = isEnabled;
         endRender();
         present(); // TODO: Why present?
+        advanceFrame();
         device->waitIdle();
         // TODO: Clean.
         // Don't when ending.
@@ -489,7 +509,7 @@ vk::RenderPass GraphicsVK::getRenderPass(vk::Format fmt) {
 
 vk::RenderPass GraphicsVK::requestRenderPass(vk::Format fmt) {
     FormatRenderPass& pass = renderPasses[fmt];
-    if (pass.count == 0) { pass.pass = new VKRenderPass(device, fmt); }
+    if (pass.count == 0) { pass.pass = new VKRenderPass(device, fmt, true); }
     pass.count++;
     return *pass.pass;
 }
