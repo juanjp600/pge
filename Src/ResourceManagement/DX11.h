@@ -112,7 +112,7 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
             ZeroMemory(&textureDesc, sizeof(textureDesc));
             textureDesc.Width = (UINT)width;
             textureDesc.Height = (UINT)height;
-            if (type == Type::DEPTH_STENCIL || type == Type::NO_MIPMAPS) {
+            if (type == Type::DEPTH_STENCIL || type == Type::NO_MIPMAPS || type == Type::RENDER_TARGET) {
                 textureDesc.MipLevels = 1;
             }
             textureDesc.ArraySize = 1;
