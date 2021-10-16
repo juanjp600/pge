@@ -464,7 +464,7 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
 
     public:
         // Sadly we can't make this any more straightforward, because we're in a header and including either shader or graphics would lead to circular inclusion.
-        VKPipeline(vk::Device device, const std::array<vk::PipelineShaderStageCreateInfo, 2> shaderInfo, const vk::PipelineVertexInputStateCreateInfo* vertexInfo,
+        VKPipeline(vk::Device device, const std::array<vk::PipelineShaderStageCreateInfo, 2> shaderInfo, const vk::PipelineVertexInputStateCreateInfo& vertexInfo,
             vk::PipelineLayout layout, const VKPipelineInfo* pipelineInfo, vk::RenderPass renderPass, Mesh::PrimitiveType type)
             : VKDestroyResource(device) {
             const vk::PipelineInputAssemblyStateCreateInfo* inputInfo;
@@ -485,7 +485,7 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
             vk::GraphicsPipelineCreateInfo info;
             info.setPDynamicState(&dynamicInfo);
             info.setStages(shaderInfo);
-            info.pVertexInputState = vertexInfo;
+            info.pVertexInputState = &vertexInfo;
             info.pInputAssemblyState = inputInfo;
             info.pViewportState = &pipelineInfo->viewportInfo;
             info.pRasterizationState = &pipelineInfo->rasterizationInfo;

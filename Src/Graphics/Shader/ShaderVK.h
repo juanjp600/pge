@@ -23,20 +23,15 @@ namespace PGE {
 
             void pushConstants();
 
-            int getVertexStride() const;
-            const std::vector<String>& getVertexInputNames() const;
-
-            const std::array<vk::PipelineShaderStageCreateInfo, 2>& getShaderStageInfo() const;
-            const vk::PipelineVertexInputStateCreateInfo* getVertexInputInfo() const;
             vk::PipelineLayout getLayout() const;
+
+            void uploadPipelines();
+            vk::Pipeline getPipeline(Mesh::PrimitiveType type) const;
 
         private:
             GraphicsVK& graphics;
 
             int textureCount;
-
-            int vertexStride;
-            std::vector<String> vertexInputNames;
 
             VKShader::View vkShader;
 
@@ -47,6 +42,9 @@ namespace PGE {
             vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
 
             VKPipelineLayout::View layout;
+
+            VKPipeline::View triPipeline;
+            VKPipeline::View linePipeline;
 
             class ConstantVK : public Constant {
                 public:
@@ -71,7 +69,7 @@ namespace PGE {
                         VECTOR4F,
                         COLOR,
                         FLOAT,
-                        INT
+                        INT,
                     } valueType;
                     union {
                         Matrix4x4f matrixVal = Matrices::ZERO;
@@ -92,6 +90,9 @@ namespace PGE {
             std::unordered_set<ConstantVK*> updatedConstants;
 
             ResourceManagerVK resourceManager;
+
+            template <VKPipeline::View ShaderVK::*PIPELINE, Mesh::PrimitiveType TYPE>
+            void uploadPipeline();
     };
 
 }

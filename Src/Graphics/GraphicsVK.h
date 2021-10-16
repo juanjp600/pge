@@ -80,8 +80,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         const vk::DescriptorSetLayout& getDescriptorSetLayout(int count);
         void dropDescriptorSetLayout(int count);
 
-        void addMesh(MeshVK& m);
-        void removeMesh(MeshVK& m);
+        void addShader(ShaderVK& sh);
+        void removeShader(ShaderVK& sh);
 
         void trash(ResourceBase& res);
 
@@ -134,7 +134,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         // We don't actually own any resource here.
         std::vector<vk::Fence> imagesInFlight;
 
-        std::unordered_set<MeshVK*> meshes;
+        std::unordered_set<ShaderVK*> shaders;
 
         VKSampler::View sampler;
         VKSampler::View samplerRT;

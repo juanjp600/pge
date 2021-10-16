@@ -14,9 +14,6 @@ namespace PGE {
 class MeshVK : public Mesh {
     public:
         MeshVK(Graphics& gfx);
-        ~MeshVK();
-
-        void uploadPipeline();
 
     private:
         class StagingCacheHandle {
@@ -33,8 +30,6 @@ class MeshVK : public Mesh {
         } stagingCacheHandle;
 
         GraphicsVK& graphics;
-
-        VKPipeline::View pipeline;
 
         UpdateStrategy oldStrat = strategy;
 

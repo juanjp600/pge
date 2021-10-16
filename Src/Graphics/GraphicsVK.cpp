@@ -8,10 +8,6 @@
 
 using namespace PGE;
 
-static vk::Viewport convertViewport(const Rectanglei& rect) {
-    return vk::Viewport(rect.topLeftCorner().x, rect.topLeftCorner().y + rect.height(), rect.width(), -rect.height(), 0.f, 1.f);
-}
-
 GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y)
     : GraphicsSpecialized("Vulkan", name, w, h, wm, x, y, SDL_WINDOW_VULKAN), resourceManager(*this) {
     std::vector<const char*> layers;
@@ -156,7 +152,6 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
 
 GraphicsVK::~GraphicsVK() {
     clearBin();
-    PGE_ASSERT(cachedBufferSizesSet.empty(), "Did not unregister all staging buffers!");
 }
 
 void GraphicsVK::swap() {
@@ -368,7 +363,8 @@ void GraphicsVK::transferToImage(const vk::Buffer& src, const vk::Image& dst, in
 void GraphicsVK::setRenderTarget(Texture& rt) {
     renderTarget = (TextureVK*)&rt;
 
-    swap();
+    endRender();
+    startRender();
 }
 
 void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& rt) {
@@ -380,7 +376,12 @@ void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& rt) {
 void GraphicsVK::resetRenderTarget() {
     renderTarget = nullptr;
 
-    swap();
+    endRender();
+    startRender();
+}
+
+static constexpr vk::Viewport convertViewport(const Rectanglei& rect) {
+    return vk::Viewport(rect.topLeftCorner().x, rect.topLeftCorner().y + rect.height(), rect.width(), -rect.height(), 0.f, 1.f);
 }
 
 void GraphicsVK::setViewport(const Rectanglei& vp) {
@@ -402,6 +403,7 @@ void GraphicsVK::setVsync(bool isEnabled) {
         // TODO: Clean.
         // Don't when ending.
         createSwapchain();
+        acquireNextImage();
         startRender();
     }
 }
@@ -418,8 +420,8 @@ void GraphicsVK::setCulling(Culling mode) {
     }
     pipelineInfo.rasterizationInfo.cullMode = flags;
 
-    for (MeshVK* mesh : meshes) {
-        mesh->uploadPipeline();
+    for (ShaderVK* sh : shaders) {
+        sh->uploadPipelines();
     }
     
     cullingMode = mode;
@@ -474,12 +476,12 @@ void GraphicsVK::dropDescriptorSetLayout(int count) {
     }
 }
 
-void GraphicsVK::addMesh(MeshVK& m) {
-    meshes.emplace(&m);
+void GraphicsVK::addShader(ShaderVK& m) {
+    shaders.emplace(&m);
 }
 
-void GraphicsVK::removeMesh(MeshVK& m) {
-    meshes.erase(&m);
+void GraphicsVK::removeShader(ShaderVK& m) {
+    shaders.erase(&m);
 }
 
 void GraphicsVK::trash(ResourceBase& res) {
