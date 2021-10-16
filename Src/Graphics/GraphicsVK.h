@@ -24,6 +24,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
             TRANSFER_SRC,
             TRANSFER_DST,
             SHADER_READ,
+            RENDER_TARGET,
         };
 
         GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y);
@@ -55,8 +56,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         
         void transferToImage(const vk::Buffer& src, const vk::Image& dst, int w, int h, int miplevel = 0);
 
-        void setRenderTarget(Texture& renderTarget) override;
-        void setRenderTargets(const ReferenceVector<Texture>& renderTargets) override;
+        void setRenderTarget(Texture& rt) override;
+        void setRenderTargets(const ReferenceVector<Texture>& rt) override;
         void resetRenderTarget() override;
 
         void setViewport(const Rectanglei& vp) override;
@@ -152,6 +153,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         vk::DeviceSize atomSize;
 
+        TextureVK* renderTarget = nullptr;
+
         std::multiset<int> cachedBufferSizesSet;
         int cachedBufferSize = 0;
         RawWrapper<VKMemoryBuffer>::View cachedBuffer;
@@ -217,6 +220,11 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
                     info.accessFlags = vk::AccessFlagBits::eShaderRead;
                     info.stageFlags = vk::PipelineStageFlagBits::eFragmentShader;
                 } break;
+                case ImageLayout::RENDER_TARGET: {
+                    info.layout = vk::ImageLayout::eGeneral;
+                    info.accessFlags = vk::AccessFlagBits::eShaderRead | vk::AccessFlagBits::eColorAttachmentWrite;
+                    info.stageFlags = vk::PipelineStageFlagBits::eFragmentShader | vk::PipelineStageFlagBits::eColorAttachmentOutput;
+                } break;
             }
             return info;
         }
@@ -238,7 +246,9 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         }
 
         void endRender();
+        void present();
         void acquireNextImage();
+        void startRender();
 
         void startTransfer();
         void endTransfer();

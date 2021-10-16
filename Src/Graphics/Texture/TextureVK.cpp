@@ -29,7 +29,20 @@ static vk::Format getFormat(Texture::CompressedFormat fmt) {
 
 TextureVK::TextureVK(Graphics& gfx, int w, int h, Format fmt)
     : Texture(w, h, true, fmt), resourceManager(gfx) {
+    GraphicsVK& graphics = (GraphicsVK&)gfx;
+    vk::Device device = graphics.getDevice();
+    vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
 
+    vk::Format vkFmt = getFormat(fmt);
+
+    image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt, 1, VKImage::Usage::RENDER_TARGET);
+    imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
+    graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::RENDER_TARGET>(image, 1);
+    imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt, 1);
+
+    renderPass = resourceManager.addNewResource<VKRenderPass>(device, vkFmt);
+    depth = resourceManager.addNewResource<RawWrapper<TextureVK>>(gfx, w, h);
+    framebuffer = resourceManager.addNewResource<VKFramebuffer>(device, renderPass.get(), imageView.get(), depth->getImageView(), vk::Extent2D(w, h));
 }
 
 TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps)
@@ -56,7 +69,7 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     vk::Format vkFmt = getFormat(fmt);
     PGE_ASSERT(physicalDevice.getFormatProperties(vkFmt).optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear,
         "Format doesn't support linear filtering");
-    image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt, miplevels, mipmaps ? VKImage::Usage::ImageGenMips : VKImage::Usage::Image);
+    image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt, miplevels, mipmaps ? VKImage::Usage::IMAGE_GEN_MIPS : VKImage::Usage::IMAGE);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
     graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, miplevels);
     graphics.transferToImage(staging.getBuffer(), image, w, h);
@@ -79,7 +92,7 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
     PGE_ASSERT(physicalDevice.getFormatProperties(vkFmt).optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear,
         "Format doesn't support linear filtering");
 
-    image = resourceManager.addNewResource<VKImage>(device, mipmaps[0].width, mipmaps[0].height, vkFmt, (int)mipmaps.size(), VKImage::Usage::Image);
+    image = resourceManager.addNewResource<VKImage>(device, mipmaps[0].width, mipmaps[0].height, vkFmt, (int)mipmaps.size(), VKImage::Usage::IMAGE);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
     graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, (int)mipmaps.size());
 
@@ -108,13 +121,21 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h) : Texture(w, h, false, Texture
     constexpr vk::Format DEPTH_FORMAT = vk::Format::eD32Sfloat;
     PGE_ASSERT(physicalDevice.getFormatProperties(DEPTH_FORMAT).optimalTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment,
         "Depth stencil not supported!"); // TODO: Move or sth idfk.
-    image = resourceManager.addNewResource<VKImage>(device, w, h, DEPTH_FORMAT, 1, VKImage::Usage::Depth);
+    image = resourceManager.addNewResource<VKImage>(device, w, h, DEPTH_FORMAT, 1, VKImage::Usage::DEPTH);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
     imageView = resourceManager.addNewResource<VKImageView>(device, image, DEPTH_FORMAT, 1, vk::ImageAspectFlagBits::eDepth);
 }
 
-const vk::ImageView& TextureVK::getImageView() const {
+const vk::ImageView TextureVK::getImageView() const {
     return imageView;
+}
+
+const vk::RenderPass TextureVK::getRenderPass() const {
+    return renderPass;
+}
+
+const vk::Framebuffer TextureVK::getFramebuffer() const {
+    return framebuffer;
 }
 
 void* TextureVK::getNative() const {

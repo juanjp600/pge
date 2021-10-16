@@ -143,6 +143,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     }
     imagesInFlight.resize(MAX_FRAMES_IN_FLIGHT);
     acquireNextImage();
+    startRender();
 
     setDepthTest(true);
 
@@ -160,17 +161,21 @@ GraphicsVK::~GraphicsVK() {
 
 void GraphicsVK::swap() {
     endRender();
+    present();
 
     checkCachedBufferShrink();
     clearBin();
 
     acquireNextImage();
+    startRender();
 }
 
 void GraphicsVK::endRender() {
     comBuffers[backBufferIndex].endRenderPass();
     comBuffers[backBufferIndex].end();
+}
 
+void GraphicsVK::present() {
     vk::PipelineStageFlags waitStages = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 
     device->resetFences(inFlightFences[currentFrame].get());
@@ -202,11 +207,21 @@ void GraphicsVK::acquireNextImage() {
         imagesInFlight[backBufferIndex] = vk::Fence(nullptr);
     }
     imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
+}
 
+void GraphicsVK::startRender() {
     device->resetCommandPool(comPools[backBufferIndex], {});
 
     comBuffers[backBufferIndex].begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit));
-    vk::RenderPassBeginInfo beginInfo = vk::RenderPassBeginInfo(renderPass, framebuffers[backBufferIndex], scissor);
+    vk::RenderPassBeginInfo beginInfo;
+    beginInfo.renderArea = scissor;
+    if (renderTarget == nullptr) {
+        beginInfo.renderPass = renderPass;
+        beginInfo.framebuffer = framebuffers[backBufferIndex];
+    } else {
+        beginInfo.renderPass = renderTarget->getRenderPass();
+        beginInfo.framebuffer = renderTarget->getFramebuffer();
+    }
     comBuffers[backBufferIndex].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
     comBuffers[backBufferIndex].setViewport(0, vkViewport);
 }
@@ -350,16 +365,22 @@ void GraphicsVK::transferToImage(const vk::Buffer& src, const vk::Image& dst, in
     endTransfer();
 }
 
-void GraphicsVK::setRenderTarget(Texture& renderTarget) {
+void GraphicsVK::setRenderTarget(Texture& rt) {
+    renderTarget = (TextureVK*)&rt;
 
+    swap();
 }
 
-void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& renderTargets) {
+void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& rt) {
+    comBuffers[backBufferIndex].endRenderPass();
+    comBuffers[backBufferIndex].end();
 
 }
 
 void GraphicsVK::resetRenderTarget() {
+    renderTarget = nullptr;
 
+    swap();
 }
 
 void GraphicsVK::setViewport(const Rectanglei& vp) {
@@ -376,11 +397,12 @@ void GraphicsVK::setVsync(bool isEnabled) {
     if (isEnabled != vsync) {
         vsync = isEnabled;
         endRender();
+        present(); // TODO: Why present?
         device->waitIdle();
         // TODO: Clean.
         // Don't when ending.
         createSwapchain();
-        acquireNextImage();
+        startRender();
     }
 }
 

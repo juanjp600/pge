@@ -179,10 +179,10 @@ class VKImageView : public VKDestroyResource<vk::ImageView> {
 
 class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
     public:
-        VKRenderPass(vk::Device dev, vk::SurfaceFormatKHR swapchainFormat)
+        VKRenderPass(vk::Device dev, vk::SurfaceFormatKHR surfaceFmt)
             : VKDestroyResource(dev) {
             vk::AttachmentDescription color;
-            color.format = swapchainFormat.format;
+            color.format = surfaceFmt.format;
             color.samples = vk::SampleCountFlagBits::e1;
             color.loadOp = vk::AttachmentLoadOp::eDontCare;
             color.storeOp = vk::AttachmentStoreOp::eStore;
@@ -530,9 +530,10 @@ class VKShader : public VKDestroyResource<vk::ShaderModule> {
 class VKImage : public VKDestroyResource<vk::Image> {
     public:
         enum class Usage {
-            Image,
-            ImageGenMips,
-            Depth,
+            IMAGE,
+            IMAGE_GEN_MIPS,
+            DEPTH,
+            RENDER_TARGET,
         };
 
         VKImage(vk::Device dev, int w, int h, vk::Format fmt, int miplevels, Usage usage) : VKDestroyResource(dev) {
@@ -546,15 +547,18 @@ class VKImage : public VKDestroyResource<vk::Image> {
             info.tiling = vk::ImageTiling::eOptimal;
             info.initialLayout = vk::ImageLayout::eUndefined;
             switch (usage) {
-                case Usage::ImageGenMips: {
+                case Usage::IMAGE_GEN_MIPS: {
                     info.usage = vk::ImageUsageFlagBits::eTransferSrc;
                 } [[fallthrough]];
-                case Usage::Image: {
+                case Usage::IMAGE: {
                     info.usage |= vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled;
                 } break;
-                case Usage::Depth: {
+                case Usage::DEPTH: {
                     info.usage = vk::ImageUsageFlagBits::eDepthStencilAttachment;
                 } break;
+                case Usage::RENDER_TARGET: {
+                    info.usage = vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eColorAttachment;
+                }
             }
             info.sharingMode = vk::SharingMode::eExclusive;
 
