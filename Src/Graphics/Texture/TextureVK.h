@@ -9,6 +9,10 @@ namespace PGE {
 
 class TextureVK : public Texture {
     public:
+        static vk::Format getFormat(Texture::Format fmt);
+        static vk::Format getFormat(Texture::CompressedFormat fmt);
+        static vk::Format getFormat(const Texture::AnyFormat& fmt);
+
         // Render target.
         TextureVK(Graphics& gfx, int w, int h, Format fmt);
         // Loaded texture.
@@ -19,9 +23,13 @@ class TextureVK : public Texture {
         // Internal usage, depth buffer.
         TextureVK(Graphics& gfx, int w, int h);
 
+        ~TextureVK();
+
         const vk::ImageView getImageView() const;
         const vk::RenderPass getRenderPass() const;
         const vk::Framebuffer getFramebuffer() const;
+
+        vk::Format getFormat() const;
 
         void* getNative() const override;
 
@@ -33,7 +41,13 @@ class TextureVK : public Texture {
 
         VKImageView::View imageView; // Great type name!
 
-        VKRenderPass::View renderPass;
+
+        // TODO: RenderTargetVK
+        GraphicsVK* graphics;
+        vk::Format format;
+
+        vk::RenderPass renderPass;
+
         RawWrapper<TextureVK>::View depth;
         VKFramebuffer::View framebuffer;
 };

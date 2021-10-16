@@ -280,7 +280,7 @@ void GraphicsVK::createSwapchain() {
     setCulling(oldCull);
 
     resourceManager.deleteResource(renderPass);
-    renderPass = resourceManager.addNewResource<VKRenderPass>(device, swapchainFormat);
+    renderPass = resourceManager.addNewResource<VKRenderPass>(device, swapchainFormat.format);
 
     framebuffers.resize(swapchainImageViews.size());
     for (int i = 0; i < (int)swapchainImageViews.size(); i++) {
@@ -481,6 +481,31 @@ void GraphicsVK::removeShader(ShaderVK& m) {
 
 void GraphicsVK::trash(ResourceBase& res) {
     trashBin.push_back(&res);
+}
+
+vk::RenderPass GraphicsVK::getRenderPass(vk::Format fmt) {
+    return *renderPasses[fmt].pass;
+}
+
+vk::RenderPass GraphicsVK::requestRenderPass(vk::Format fmt) {
+    FormatRenderPass& pass = renderPasses[fmt];
+    if (pass.count == 0) { pass.pass = new VKRenderPass(device, fmt); }
+    pass.count++;
+    return *pass.pass;
+}
+
+void GraphicsVK::returnRenderPass(vk::Format fmt) {
+    FormatRenderPass& pass = renderPasses[fmt];
+    pass.count--;
+    if (pass.count == 0) { delete pass.pass; }
+}
+
+std::optional<vk::Format> GraphicsVK::getRenderTargetFormat() const {
+    if (renderTarget == nullptr) {
+        return { };
+    } else {
+        return renderTarget->getFormat();
+    }
 }
 
 // Explanation of the staging buffer cache:

@@ -179,10 +179,10 @@ class VKImageView : public VKDestroyResource<vk::ImageView> {
 
 class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
     public:
-        VKRenderPass(vk::Device dev, vk::SurfaceFormatKHR surfaceFmt)
+        VKRenderPass(vk::Device dev, vk::Format fmt)
             : VKDestroyResource(dev) {
             vk::AttachmentDescription color;
-            color.format = surfaceFmt.format;
+            color.format = fmt;
             color.samples = vk::SampleCountFlagBits::e1;
             color.loadOp = vk::AttachmentLoadOp::eDontCare;
             color.storeOp = vk::AttachmentStoreOp::eStore;

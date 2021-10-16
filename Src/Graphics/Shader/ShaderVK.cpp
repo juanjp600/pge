@@ -204,19 +204,38 @@ vk::PipelineLayout ShaderVK::getLayout() const {
     return layout;
 }
 
-template <VKPipeline::View ShaderVK::* PIPELINE, Mesh::PrimitiveType TYPE>
-void ShaderVK::uploadPipeline() {
-    resourceManager.trash(this->*PIPELINE);
-    this->*PIPELINE = resourceManager.addNewResource<VKPipeline>(graphics.getDevice(),
-        shaderStageInfo, vertexInputInfo, layout, graphics.getPipelineInfo(), graphics.getRenderPass(), TYPE);
+VKPipeline::View& ShaderVK::PipelinePair::getPipeline(Mesh::PrimitiveType type) {
+    return type == Mesh::PrimitiveType::TRIANGLE ? triPipeline : linePipeline;
+}
+
+void ShaderVK::uploadPipeline(VKPipeline::View& pipeline, vk::RenderPass pass, Mesh::PrimitiveType type) {
+    resourceManager.trash(pipeline);
+    pipeline = resourceManager.addNewResource<VKPipeline>(graphics.getDevice(),
+        shaderStageInfo, vertexInputInfo, layout, graphics.getPipelineInfo(), pass, type);
 }
 
 void ShaderVK::uploadPipelines() {
+    for (auto& [_, pair] : rtPipelines) {
+        resourceManager.trash(pair.triPipeline);
+        resourceManager.trash(pair.linePipeline);
+    }
+    rtPipelines.clear(); // TODO: IDFK.
+
     // TODO: Be lazy?
-    uploadPipeline<&ShaderVK::triPipeline, Mesh::PrimitiveType::TRIANGLE>();
-    uploadPipeline<&ShaderVK::linePipeline, Mesh::PrimitiveType::LINE>();
+    vk::RenderPass pass = graphics.getRenderPass();
+    uploadPipeline(basicPipeline.triPipeline, pass, Mesh::PrimitiveType::TRIANGLE);
+    uploadPipeline(basicPipeline.linePipeline, pass, Mesh::PrimitiveType::LINE);
 }
 
-vk::Pipeline ShaderVK::getPipeline(Mesh::PrimitiveType type) const {
-    return type == Mesh::PrimitiveType::TRIANGLE ? triPipeline : linePipeline;
+vk::Pipeline ShaderVK::getPipeline(Mesh::PrimitiveType type) {
+    std::optional<vk::Format> fmt = graphics.getRenderTargetFormat();
+    if (fmt.has_value()) {
+        VKPipeline::View& pipeline = rtPipelines[fmt.value()].getPipeline(type); // TODO: Stupid map lookup!
+        if (!pipeline.isHoldingResource()) {
+            uploadPipeline(pipeline, graphics.getRenderPass(fmt.value()), type);
+        }
+        return pipeline;
+    } else {
+        return basicPipeline.getPipeline(type);
+    }
 }

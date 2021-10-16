@@ -26,7 +26,7 @@ namespace PGE {
             vk::PipelineLayout getLayout() const;
 
             void uploadPipelines();
-            vk::Pipeline getPipeline(Mesh::PrimitiveType type) const;
+            vk::Pipeline getPipeline(Mesh::PrimitiveType type);
 
         private:
             GraphicsVK& graphics;
@@ -42,9 +42,6 @@ namespace PGE {
             vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
 
             VKPipelineLayout::View layout;
-
-            VKPipeline::View triPipeline;
-            VKPipeline::View linePipeline;
 
             class ConstantVK : public Constant {
                 public:
@@ -87,12 +84,19 @@ namespace PGE {
             };
             std::unordered_map<String::Key, ConstantVK> vertexConstantMap;
             std::unordered_map<String::Key, ConstantVK> fragmentConstantMap;
-            std::unordered_set<ConstantVK*> updatedConstants;
+            std::unordered_set<ConstantVK*> updatedConstants; // TODO: Remove?
+            
+            struct PipelinePair {
+                VKPipeline::View triPipeline;
+                VKPipeline::View linePipeline;
+                VKPipeline::View& getPipeline(Mesh::PrimitiveType type);
+            };
+            std::unordered_map<vk::Format, PipelinePair> rtPipelines;
+            PipelinePair basicPipeline;
 
             ResourceManagerVK resourceManager;
 
-            template <VKPipeline::View ShaderVK::*PIPELINE, Mesh::PrimitiveType TYPE>
-            void uploadPipeline();
+            void uploadPipeline(VKPipeline::View& pipeline, vk::RenderPass pass, Mesh::PrimitiveType type);
     };
 
 }

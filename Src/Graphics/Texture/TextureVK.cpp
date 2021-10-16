@@ -4,7 +4,7 @@
 
 using namespace PGE;
 
-static vk::Format getFormat(Texture::Format fmt) {
+vk::Format TextureVK::getFormat(Texture::Format fmt) {
     switch (fmt) {
         case Texture::Format::RGBA64: { return vk::Format::eR16G16B16A16Unorm; }
         case Texture::Format::RGBA32: { return vk::Format::eR8G8B8A8Unorm; }
@@ -14,7 +14,7 @@ static vk::Format getFormat(Texture::Format fmt) {
     }
 }
 
-static vk::Format getFormat(Texture::CompressedFormat fmt) {
+vk::Format TextureVK::getFormat(Texture::CompressedFormat fmt) {
     switch (fmt) {
         case Texture::CompressedFormat::BC1: { return vk::Format::eBc1RgbUnormBlock; }
         case Texture::CompressedFormat::BC2: { return vk::Format::eBc2UnormBlock; }
@@ -27,22 +27,30 @@ static vk::Format getFormat(Texture::CompressedFormat fmt) {
     }
 }
 
+vk::Format TextureVK::getFormat(const Texture::AnyFormat& fmt) {
+    if (std::holds_alternative<Texture::Format>(fmt)) {
+        return getFormat(std::get<Texture::Format>(fmt));
+    } else {
+        return getFormat(std::get<Texture::CompressedFormat>(fmt));
+    }
+}
+
 TextureVK::TextureVK(Graphics& gfx, int w, int h, Format fmt)
     : Texture(w, h, true, fmt), resourceManager(gfx) {
-    GraphicsVK& graphics = (GraphicsVK&)gfx;
-    vk::Device device = graphics.getDevice();
-    vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
+    graphics = (GraphicsVK*)&gfx;
+    vk::Device device = graphics->getDevice();
+    vk::PhysicalDevice physicalDevice = graphics->getPhysicalDevice();
 
-    vk::Format vkFmt = getFormat(fmt);
+    format = getFormat(fmt);
 
-    image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt, 1, VKImage::Usage::RENDER_TARGET);
+    image = resourceManager.addNewResource<VKImage>(device, w, h, format, 1, VKImage::Usage::RENDER_TARGET);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
-    graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::RENDER_TARGET>(image, 1);
-    imageView = resourceManager.addNewResource<VKImageView>(device, image, vkFmt, 1);
+    graphics->transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::RENDER_TARGET>(image, 1);
+    imageView = resourceManager.addNewResource<VKImageView>(device, image, format, 1);
 
-    renderPass = resourceManager.addNewResource<VKRenderPass>(device, vkFmt);
+    renderPass = graphics->requestRenderPass(format);
     depth = resourceManager.addNewResource<RawWrapper<TextureVK>>(gfx, w, h);
-    framebuffer = resourceManager.addNewResource<VKFramebuffer>(device, renderPass.get(), imageView.get(), depth->getImageView(), vk::Extent2D(w, h));
+    framebuffer = resourceManager.addNewResource<VKFramebuffer>(device, renderPass, imageView.get(), depth->getImageView(), vk::Extent2D(w, h));
 }
 
 TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps)
@@ -126,6 +134,12 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h) : Texture(w, h, false, Texture
     imageView = resourceManager.addNewResource<VKImageView>(device, image, DEPTH_FORMAT, 1, vk::ImageAspectFlagBits::eDepth);
 }
 
+TextureVK::~TextureVK() {
+    if (isRenderTarget()) {
+        graphics->returnRenderPass(format);
+    }
+}
+
 const vk::ImageView TextureVK::getImageView() const {
     return imageView;
 }
@@ -136,6 +150,10 @@ const vk::RenderPass TextureVK::getRenderPass() const {
 
 const vk::Framebuffer TextureVK::getFramebuffer() const {
     return framebuffer;
+}
+
+vk::Format TextureVK::getFormat() const {
+    return format;
 }
 
 void* TextureVK::getNative() const {

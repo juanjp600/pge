@@ -85,6 +85,12 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         void trash(ResourceBase& res);
 
+        vk::RenderPass getRenderPass(vk::Format fmt);
+        vk::RenderPass requestRenderPass(vk::Format fmt);
+        void returnRenderPass(vk::Format fmt);
+
+        std::optional<vk::Format> getRenderTargetFormat() const;
+
         VKMemoryBuffer& getTempStagingBuffer(int size);
         VKMemoryBuffer& registerStagingBuffer(int size);
         void unregisterStagingBuffer(int size);
@@ -154,6 +160,12 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         vk::DeviceSize atomSize;
 
         TextureVK* renderTarget = nullptr;
+
+        struct FormatRenderPass {
+            int count = 0;
+            VKRenderPass* pass;
+        };
+        std::unordered_map<vk::Format, FormatRenderPass> renderPasses;
 
         std::multiset<int> cachedBufferSizesSet;
         int cachedBufferSize = 0;
