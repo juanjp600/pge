@@ -195,7 +195,7 @@ void GraphicsVK::submit(bool wait) {
 }
 
 void GraphicsVK::present() {
-    vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, (uint32_t*)&backBufferIndex, nullptr);
+    vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, (uint32_t*)&backBufferIndex);
     vk::Result result = presentQueue.presentKHR(presentInfo);
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
 }
@@ -209,15 +209,15 @@ void GraphicsVK::advanceFrame() {
 }
 
 void GraphicsVK::acquireNextImage() {
-    backBufferIndex = device->acquireNextImageKHR(swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame], nullptr).value;
+    backBufferIndex = device->acquireNextImageKHR(swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE).value;
 
     // Is the image we just acquired currently still being submitted?
     vk::Result result;
-    if (imagesInFlight[backBufferIndex] != (vk::Fence)VK_NULL_HANDLE) {
+    if (imagesInFlight[backBufferIndex]) {
         // If so, wait on it!
         result = device->waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX);
         PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::hexFromInt((u32)result) + ")");
-        imagesInFlight[backBufferIndex] = vk::Fence(nullptr);
+        imagesInFlight[backBufferIndex] = VK_NULL_HANDLE;
     }
     imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
 }
@@ -250,7 +250,7 @@ void GraphicsVK::endTransfer() {
     transferComBuffer.end();
     vk::SubmitInfo sui;
     sui.setCommandBuffers(transferComBuffer);
-    transferQueue.submit(sui, nullptr);
+    transferQueue.submit(sui, VK_NULL_HANDLE);
     transferQueue.waitIdle();
 }
 
@@ -380,13 +380,10 @@ void GraphicsVK::transferToImage(const vk::Buffer& src, const vk::Image& dst, in
 }
 
 void GraphicsVK::setRenderTarget(Texture& rt) {
-    if (renderTarget == nullptr) { oldSwapchainBackBufferIndex = backBufferIndex; }
-
     endRender();
 
-    if (renderTarget != nullptr) {
-        submit(false);
-    }
+    if (renderTarget == nullptr) { oldSwapchainBackBufferIndex = backBufferIndex; }
+    else { submit(false); }
 
     renderTarget = (RenderTextureVK*)&rt;
 
