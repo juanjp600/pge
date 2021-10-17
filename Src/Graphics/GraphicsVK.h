@@ -260,6 +260,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         }
 
         void endRender();
+        void submit(bool wait);
         void present();
         void advanceFrame();
         void acquireNextImage();

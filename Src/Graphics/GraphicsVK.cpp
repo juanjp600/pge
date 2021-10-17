@@ -157,6 +157,7 @@ GraphicsVK::~GraphicsVK() {
 
 void GraphicsVK::swap() {
     endRender();
+    submit(true);
     present();
 
     checkCachedBufferShrink();
@@ -171,15 +172,19 @@ void GraphicsVK::swap() {
 void GraphicsVK::endRender() {
     comBuffers[backBufferIndex].endRenderPass();
     comBuffers[backBufferIndex].end();
+}
 
+void GraphicsVK::submit(bool wait) {
     vk::PipelineStageFlags waitStages = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 
     device->resetFences(inFlightFences[currentFrame].get());
     vk::SubmitInfo submitInfo;
-    submitInfo.setWaitDstStageMask(waitStages);
-    submitInfo.setWaitSemaphores(imageAvailableSemaphores[currentFrame].get());
+    if (wait) {
+        submitInfo.setWaitDstStageMask(waitStages);
+        submitInfo.setWaitSemaphores(imageAvailableSemaphores[currentFrame].get());
+    }
     submitInfo.setCommandBuffers(comBuffers[backBufferIndex]);
-    submitInfo.setSignalSemaphores(renderFinishedSemaphores[currentFrame].get());
+    if (renderTarget == nullptr) { submitInfo.setSignalSemaphores(renderFinishedSemaphores[currentFrame].get()); }
     vk::Result result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to graphics queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
 }
@@ -374,6 +379,10 @@ void GraphicsVK::setRenderTarget(Texture& rt) {
 
     endRender();
 
+    if (renderTarget != nullptr) {
+        submit(false);
+    }
+
     renderTarget = (TextureVK*)&rt;
 
     advanceFrame();
@@ -390,6 +399,10 @@ void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& rt) {
 
 void GraphicsVK::resetRenderTarget() {
     endRender();
+
+    if (renderTarget != nullptr) {
+        submit(false);
+    }
 
     renderTarget = nullptr;
 
@@ -417,7 +430,8 @@ void GraphicsVK::setVsync(bool isEnabled) {
     if (isEnabled != vsync) {
         vsync = isEnabled;
         endRender();
-        present(); // TODO: Why present?
+        submit(renderTarget == nullptr);
+        present(); // TODO: Why present???
         advanceFrame();
         device->waitIdle();
         // TODO: Clean.
