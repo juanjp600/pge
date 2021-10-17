@@ -172,8 +172,7 @@ void ShaderVK::ConstantVK::setValue(u32 value) {
 void ShaderVK::ConstantVK::push(GraphicsVK* gfx) {
     switch (valueType) {
         case Type::MATRIX: {
-            // TODO: Look into matrix order bullshit, I hate my life.
-            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), val.matrixVal.transpose().elements);
+            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), val.matrixVal.elements);
         } break;
         case Type::COLOR: {
             float value[] = { val.colorVal.red, val.colorVal.green, val.colorVal.blue, val.colorVal.alpha };

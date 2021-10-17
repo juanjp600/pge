@@ -12,6 +12,8 @@ bool Vulkan::hlslToVkHlsl(const FilePath& filename, const CompileResult& fragRes
 	outFile = (filename.trimExtension() + "/hlsl.vulkan").str().wstr().data();
 	std::ofstream out; out.open(outFile.c_str(), std::ios::out);
 
+	out << "#pragma pack_matrix(row_major)" << std::endl;
+
 	if (fragRes.textureInputs.size() > 0) {
 		out << "Texture2D " + TEXTURE_ARRAY_INTERNAL_NAME + "[" << fragRes.textureInputs.size() << "];\n\n";
 	}
