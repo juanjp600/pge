@@ -53,7 +53,7 @@ class GraphicsInternal : public Graphics {
         SDL_Window* getWindow() const;
 };
 
-template <typename ShaderType, typename MeshType, typename TextureType, typename MaterialType = Material>
+template <typename ShaderType, typename MeshType, typename TextureType, typename MaterialType = Material, typename RenderTexture = TextureType>
 class GraphicsSpecialized : public GraphicsInternal {
     static_assert(std::is_base_of<Shader, ShaderType>::value);
     static_assert(std::is_base_of<Mesh, MeshType>::value);
@@ -73,7 +73,7 @@ class GraphicsSpecialized : public GraphicsInternal {
         }
 
         Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) final override {
-            return new TextureType(*this, w, h, fmt);
+            return new RenderTexture(*this, w, h, fmt);
         }
 
         Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) final override {
