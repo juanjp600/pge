@@ -392,9 +392,7 @@ void GraphicsVK::setRenderTarget(Texture& rt) {
 }
 
 void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& rt) {
-    comBuffers[backBufferIndex].endRenderPass();
-    comBuffers[backBufferIndex].end();
-
+    // TODO: STUB
 }
 
 void GraphicsVK::resetRenderTarget() {
