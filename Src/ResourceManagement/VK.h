@@ -13,6 +13,8 @@
 
 namespace PGE {
 
+constexpr vk::Format VK_DEPTH_FORMAT = vk::Format::eD32Sfloat;
+
 template <class T>
 class VKResource : public Resource<T> {
     public:
@@ -192,7 +194,7 @@ class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
             color.finalLayout = rt ? vk::ImageLayout::eShaderReadOnlyOptimal : vk::ImageLayout::ePresentSrcKHR;
 
             vk::AttachmentDescription depth;
-            depth.format = vk::Format::eD32Sfloat;
+            depth.format = VK_DEPTH_FORMAT;
             depth.samples = vk::SampleCountFlagBits::e1;
             depth.loadOp = vk::AttachmentLoadOp::eDontCare;
             depth.storeOp = vk::AttachmentStoreOp::eDontCare;

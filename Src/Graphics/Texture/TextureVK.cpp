@@ -104,12 +104,9 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h) : Texture(w, h, false, Texture
     vk::Device device = graphics.getDevice();
     vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
 
-    constexpr vk::Format DEPTH_FORMAT = vk::Format::eD32Sfloat;
-    PGE_ASSERT(physicalDevice.getFormatProperties(DEPTH_FORMAT).optimalTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment,
-        "Depth stencil not supported!"); // TODO: Move or sth idfk.
-    image = resourceManager.addNewResource<VKImage>(device, w, h, DEPTH_FORMAT, 1, VKImage::Usage::DEPTH);
+    image = resourceManager.addNewResource<VKImage>(device, w, h, VK_DEPTH_FORMAT, 1, VKImage::Usage::DEPTH);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
-    imageView = resourceManager.addNewResource<VKImageView>(device, image, DEPTH_FORMAT, 1, vk::ImageAspectFlagBits::eDepth);
+    imageView = resourceManager.addNewResource<VKImageView>(device, image, VK_DEPTH_FORMAT, 1, vk::ImageAspectFlagBits::eDepth);
 }
 
 const vk::ImageView TextureVK::getImageView() const {

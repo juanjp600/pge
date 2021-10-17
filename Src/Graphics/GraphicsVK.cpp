@@ -35,6 +35,11 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
             continue;
         }
 
+        // Doesn't support depth buffering, ignore it.
+        if (!(pd.getFormatProperties(VK_DEPTH_FORMAT).optimalTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment)) {
+            continue;
+        }
+
         // The physical device does not support any formats or present modes on this surface, ignore it.
         std::vector<vk::SurfaceFormatKHR> pdFormats;
         std::vector<vk::PresentModeKHR> pdPresentModes;
