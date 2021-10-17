@@ -23,20 +23,15 @@ namespace PGE {
 
             void pushConstants();
 
-            int getVertexStride() const;
-            const std::vector<String>& getVertexInputNames() const;
-
-            const std::array<vk::PipelineShaderStageCreateInfo, 2>& getShaderStageInfo() const;
-            const vk::PipelineVertexInputStateCreateInfo* getVertexInputInfo() const;
             vk::PipelineLayout getLayout() const;
+
+            void uploadPipelines();
+            vk::Pipeline getPipeline(Mesh::PrimitiveType type);
 
         private:
             GraphicsVK& graphics;
 
             int textureCount;
-
-            int vertexStride;
-            std::vector<String> vertexInputNames;
 
             VKShader::View vkShader;
 
@@ -71,7 +66,7 @@ namespace PGE {
                         VECTOR4F,
                         COLOR,
                         FLOAT,
-                        INT
+                        INT,
                     } valueType;
                     union {
                         Matrix4x4f matrixVal = Matrices::ZERO;
@@ -89,9 +84,19 @@ namespace PGE {
             };
             std::unordered_map<String::Key, ConstantVK> vertexConstantMap;
             std::unordered_map<String::Key, ConstantVK> fragmentConstantMap;
-            std::unordered_set<ConstantVK*> updatedConstants;
+            std::unordered_set<ConstantVK*> updatedConstants; // TODO: Remove?
+            
+            struct PipelinePair {
+                VKPipeline::View triPipeline;
+                VKPipeline::View linePipeline;
+                VKPipeline::View& getPipeline(Mesh::PrimitiveType type);
+            };
+            std::unordered_map<vk::Format, PipelinePair> rtPipelines;
+            PipelinePair basicPipeline;
 
             ResourceManagerVK resourceManager;
+
+            void uploadPipeline(VKPipeline::View& pipeline, vk::RenderPass pass, Mesh::PrimitiveType type);
     };
 
 }

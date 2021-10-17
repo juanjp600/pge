@@ -14,9 +14,6 @@ namespace PGE {
 class MeshVK : public Mesh {
     public:
         MeshVK(Graphics& gfx);
-        ~MeshVK();
-
-        void uploadPipeline();
 
     private:
         class StagingCacheHandle {
@@ -34,11 +31,7 @@ class MeshVK : public Mesh {
 
         GraphicsVK& graphics;
 
-        VKPipeline::View pipeline;
-
         UpdateStrategy oldStrat = strategy;
-
-        vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 
         RawWrapper<VKMemoryBuffer>::View data;
         int dataCapacity = 0;
@@ -46,7 +39,6 @@ class MeshVK : public Mesh {
         ResourceManagerVK resourceManager;
 
         int totalVertexSize;
-        int bufferSize = 0;
 
         void uploadInternalData() override;
         void renderInternal() override;

@@ -8,10 +8,6 @@
 
 using namespace PGE;
 
-static vk::Viewport convertViewport(const Rectanglei& rect) {
-    return vk::Viewport(rect.topLeftCorner().x, rect.topLeftCorner().y + rect.height(), rect.width(), -rect.height(), 0.f, 1.f);
-}
-
 GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y)
     : GraphicsSpecialized("Vulkan", name, w, h, wm, x, y, SDL_WINDOW_VULKAN), resourceManager(*this) {
     std::vector<const char*> layers;
@@ -127,6 +123,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     }
 
     scissor = vk::Rect2D(vk::Offset2D(0, 0), vk::Extent2D(w, h));
+    pipelineInfo.viewportInfo.setScissors(scissor);
 
     setViewport(Rectanglei(0, 0, w, h));
 
@@ -143,6 +140,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     }
     imagesInFlight.resize(MAX_FRAMES_IN_FLIGHT);
     acquireNextImage();
+    startRender();
 
     setDepthTest(true);
 
@@ -155,38 +153,53 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
 
 GraphicsVK::~GraphicsVK() {
     clearBin();
-    PGE_ASSERT(cachedBufferSizesSet.empty(), "Did not unregister all staging buffers!");
 }
 
 void GraphicsVK::swap() {
     endRender();
+    submit(true);
+    present();
 
     checkCachedBufferShrink();
     clearBin();
 
+    advanceFrame();
+
     acquireNextImage();
+    startRender();
 }
 
 void GraphicsVK::endRender() {
     comBuffers[backBufferIndex].endRenderPass();
     comBuffers[backBufferIndex].end();
+}
 
+void GraphicsVK::submit(bool wait) {
     vk::PipelineStageFlags waitStages = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 
     device->resetFences(inFlightFences[currentFrame].get());
-    vk::SubmitInfo submitInfo = vk::SubmitInfo(1, &imageAvailableSemaphores[currentFrame], &waitStages, 1, &comBuffers[backBufferIndex], 1, &renderFinishedSemaphores[currentFrame]);
-    vk::Result result;
-    result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
+    vk::SubmitInfo submitInfo;
+    if (wait) {
+        submitInfo.setWaitDstStageMask(waitStages);
+        submitInfo.setWaitSemaphores(imageAvailableSemaphores[currentFrame].get());
+    }
+    submitInfo.setCommandBuffers(comBuffers[backBufferIndex]);
+    if (renderTarget == nullptr) { submitInfo.setSignalSemaphores(renderFinishedSemaphores[currentFrame].get()); }
+    vk::Result result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to graphics queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
+}
 
+void GraphicsVK::present() {
     vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, (uint32_t*)&backBufferIndex, nullptr);
-    result = presentQueue.presentKHR(presentInfo);
+    vk::Result result = presentQueue.presentKHR(presentInfo);
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
+}
 
+void GraphicsVK::advanceFrame() {
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
     // Wait until the current frames in flight are less than the max.
-    result = device->waitForFences(inFlightFences[currentFrame].get(), false, UINT64_MAX);
+    vk::Result result = device->waitForFences(inFlightFences[currentFrame].get(), false, UINT64_MAX);
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::hexFromInt((u32)result) + ")");
 }
 
@@ -202,11 +215,23 @@ void GraphicsVK::acquireNextImage() {
         imagesInFlight[backBufferIndex] = vk::Fence(nullptr);
     }
     imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
+}
 
+void GraphicsVK::startRender() {
     device->resetCommandPool(comPools[backBufferIndex], {});
 
     comBuffers[backBufferIndex].begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit));
-    vk::RenderPassBeginInfo beginInfo = vk::RenderPassBeginInfo(renderPass, framebuffers[backBufferIndex], scissor);
+    vk::RenderPassBeginInfo beginInfo;
+    if (renderTarget == nullptr) {
+        frameScissor = scissor;
+        beginInfo.renderPass = renderPass;
+        beginInfo.framebuffer = framebuffers[backBufferIndex];
+    } else {
+        frameScissor = renderTarget->getScissor();
+        beginInfo.renderPass = renderTarget->getRenderPass();
+        beginInfo.framebuffer = renderTarget->getFramebuffer();
+    }
+    beginInfo.renderArea = frameScissor;
     comBuffers[backBufferIndex].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
     comBuffers[backBufferIndex].setViewport(0, vkViewport);
 }
@@ -229,7 +254,7 @@ void GraphicsVK::clear(const Color& cc) {
     vk::ClearAttachment depth;
     depth.aspectMask = vk::ImageAspectFlagBits::eDepth;
     depth.clearValue = vk::ClearValue(vk::ClearDepthStencilValue(1.f));
-    vk::ClearRect rect = vk::ClearRect(scissor, 0, 1);
+    vk::ClearRect rect = vk::ClearRect(frameScissor, 0, 1);
 
     std::array attachments { color, depth };
 
@@ -264,13 +289,12 @@ void GraphicsVK::createSwapchain() {
     resourceManager.deleteResource(depthBuffer);
     depthBuffer = resourceManager.addNewResource<RawWrapper<TextureVK>>(*this, dimensions.x, dimensions.y);
 
-    pipelineInfo.init(scissor);
     Culling oldCull = cullingMode;
     cullingMode = Culling::NONE;
     setCulling(oldCull);
 
     resourceManager.deleteResource(renderPass);
-    renderPass = resourceManager.addNewResource<VKRenderPass>(device, swapchainFormat);
+    renderPass = resourceManager.addNewResource<VKRenderPass>(device, swapchainFormat.format);
 
     framebuffers.resize(swapchainImageViews.size());
     for (int i = 0; i < (int)swapchainImageViews.size(); i++) {
@@ -350,16 +374,44 @@ void GraphicsVK::transferToImage(const vk::Buffer& src, const vk::Image& dst, in
     endTransfer();
 }
 
-void GraphicsVK::setRenderTarget(Texture& renderTarget) {
+void GraphicsVK::setRenderTarget(Texture& rt) {
+    if (renderTarget == nullptr) { oldSwapchainBackBufferIndex = backBufferIndex; }
 
+    endRender();
+
+    if (renderTarget != nullptr) {
+        submit(false);
+    }
+
+    renderTarget = (TextureVK*)&rt;
+
+    advanceFrame();
+
+    backBufferIndex = (backBufferIndex + 1) % MAX_FRAMES_IN_FLIGHT;
+    startRender();
 }
 
-void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& renderTargets) {
-
+void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& rt) {
+    // TODO: STUB
 }
 
 void GraphicsVK::resetRenderTarget() {
+    endRender();
 
+    if (renderTarget != nullptr) {
+        submit(false);
+    }
+
+    renderTarget = nullptr;
+
+    advanceFrame();
+
+    backBufferIndex = oldSwapchainBackBufferIndex;
+    startRender();
+}
+
+static constexpr vk::Viewport convertViewport(const Rectanglei& rect) {
+    return vk::Viewport(rect.topLeftCorner().x, rect.topLeftCorner().y + rect.height(), rect.width(), -rect.height(), 0.f, 1.f);
 }
 
 void GraphicsVK::setViewport(const Rectanglei& vp) {
@@ -376,11 +428,15 @@ void GraphicsVK::setVsync(bool isEnabled) {
     if (isEnabled != vsync) {
         vsync = isEnabled;
         endRender();
+        submit(renderTarget == nullptr);
+        present(); // TODO: Why present???
+        advanceFrame();
         device->waitIdle();
         // TODO: Clean.
         // Don't when ending.
         createSwapchain();
         acquireNextImage();
+        startRender();
     }
 }
 
@@ -395,10 +451,7 @@ void GraphicsVK::setCulling(Culling mode) {
         default: { throw PGE_CREATE_EX("Unexpected culling mode"); }
     }
     pipelineInfo.rasterizationInfo.cullMode = flags;
-
-    for (MeshVK* mesh : meshes) {
-        mesh->uploadPipeline();
-    }
+    reuploadPipelines();
     
     cullingMode = mode;
 }
@@ -419,10 +472,8 @@ vk::CommandBuffer GraphicsVK::getCurrentCommandBuffer() const {
     return comBuffers[backBufferIndex];
 }
 
-// I fucking hate this, but C++ is stupid.
-// When you want to pass something by reference the copy constructor must be available, even though it shouldn't be used!
-const VKPipelineInfo* GraphicsVK::getPipelineInfo() const {
-    return &pipelineInfo;
+const VKPipelineInfo& GraphicsVK::getPipelineInfo() const {
+    return pipelineInfo;
 }
 
 const vk::Sampler& GraphicsVK::getSampler(bool rt) const {
@@ -452,16 +503,41 @@ void GraphicsVK::dropDescriptorSetLayout(int count) {
     }
 }
 
-void GraphicsVK::addMesh(MeshVK& m) {
-    meshes.emplace(&m);
+void GraphicsVK::addShader(ShaderVK& m) {
+    shaders.emplace(&m);
 }
 
-void GraphicsVK::removeMesh(MeshVK& m) {
-    meshes.erase(&m);
+void GraphicsVK::removeShader(ShaderVK& m) {
+    shaders.erase(&m);
 }
 
 void GraphicsVK::trash(ResourceBase& res) {
     trashBin.push_back(&res);
+}
+
+vk::RenderPass GraphicsVK::getRenderPass(vk::Format fmt) {
+    return *renderPasses[fmt].pass;
+}
+
+vk::RenderPass GraphicsVK::requestRenderPass(vk::Format fmt) {
+    FormatRenderPass& pass = renderPasses[fmt];
+    if (pass.count == 0) { pass.pass = new VKRenderPass(device, fmt, true); }
+    pass.count++;
+    return *pass.pass;
+}
+
+void GraphicsVK::returnRenderPass(vk::Format fmt) {
+    FormatRenderPass& pass = renderPasses[fmt];
+    pass.count--;
+    if (pass.count == 0) { delete pass.pass; }
+}
+
+std::optional<vk::Format> GraphicsVK::getRenderTargetFormat() const {
+    if (renderTarget == nullptr) {
+        return { };
+    } else {
+        return renderTarget->getFormat();
+    }
 }
 
 // Explanation of the staging buffer cache:
@@ -498,4 +574,10 @@ void GraphicsVK::updateCachedBuffer(int size) {
     resourceManager.trash(cachedBuffer);
     cachedBuffer = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, size, VKMemoryBuffer::Type::STAGING);
     cachedBufferSize = size;
+}
+
+void GraphicsVK::reuploadPipelines() {
+    for (ShaderVK* sh : shaders) {
+        sh->uploadPipelines();
+    }
 }

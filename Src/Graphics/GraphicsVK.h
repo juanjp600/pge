@@ -24,6 +24,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
             TRANSFER_SRC,
             TRANSFER_DST,
             SHADER_READ,
+            RENDER_TARGET,
         };
 
         GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y);
@@ -55,8 +56,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         
         void transferToImage(const vk::Buffer& src, const vk::Image& dst, int w, int h, int miplevel = 0);
 
-        void setRenderTarget(Texture& renderTarget) override;
-        void setRenderTargets(const ReferenceVector<Texture>& renderTargets) override;
+        void setRenderTarget(Texture& rt) override;
+        void setRenderTargets(const ReferenceVector<Texture>& rt) override;
         void resetRenderTarget() override;
 
         void setViewport(const Rectanglei& vp) override;
@@ -71,7 +72,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         vk::PhysicalDevice getPhysicalDevice() const;
         vk::RenderPass getRenderPass() const;
         vk::CommandBuffer getCurrentCommandBuffer() const;
-        const VKPipelineInfo* getPipelineInfo() const;
+        const VKPipelineInfo& getPipelineInfo() const;
         const vk::Sampler& getSampler(bool rt) const;
 
         vk::DeviceSize getAtomSize() const;
@@ -79,10 +80,16 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         const vk::DescriptorSetLayout& getDescriptorSetLayout(int count);
         void dropDescriptorSetLayout(int count);
 
-        void addMesh(MeshVK& m);
-        void removeMesh(MeshVK& m);
+        void addShader(ShaderVK& sh);
+        void removeShader(ShaderVK& sh);
 
         void trash(ResourceBase& res);
+
+        vk::RenderPass getRenderPass(vk::Format fmt);
+        vk::RenderPass requestRenderPass(vk::Format fmt);
+        void returnRenderPass(vk::Format fmt);
+
+        std::optional<vk::Format> getRenderTargetFormat() const;
 
         VKMemoryBuffer& getTempStagingBuffer(int size);
         VKMemoryBuffer& registerStagingBuffer(int size);
@@ -114,6 +121,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         RawWrapper<TextureVK>::View depthBuffer;
 
         vk::Rect2D scissor;
+        vk::Rect2D frameScissor;
         vk::Viewport vkViewport;
 
         VKPipelineInfo pipelineInfo;
@@ -133,7 +141,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         // We don't actually own any resource here.
         std::vector<vk::Fence> imagesInFlight;
 
-        std::unordered_set<MeshVK*> meshes;
+        std::unordered_set<ShaderVK*> shaders;
 
         VKSampler::View sampler;
         VKSampler::View samplerRT;
@@ -149,8 +157,17 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         int currentFrame = 0;
 
         int backBufferIndex;
+        int oldSwapchainBackBufferIndex;
 
         vk::DeviceSize atomSize;
+
+        TextureVK* renderTarget = nullptr;
+
+        struct FormatRenderPass {
+            int count = 0;
+            VKRenderPass* pass;
+        };
+        std::unordered_map<vk::Format, FormatRenderPass> renderPasses;
 
         std::multiset<int> cachedBufferSizesSet;
         int cachedBufferSize = 0;
@@ -217,6 +234,11 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
                     info.accessFlags = vk::AccessFlagBits::eShaderRead;
                     info.stageFlags = vk::PipelineStageFlagBits::eFragmentShader;
                 } break;
+                case ImageLayout::RENDER_TARGET: {
+                    info.layout = vk::ImageLayout::eColorAttachmentOptimal;
+                    info.accessFlags = vk::AccessFlagBits::eColorAttachmentWrite;
+                    info.stageFlags = vk::PipelineStageFlagBits::eColorAttachmentOutput;
+                } break;
             }
             return info;
         }
@@ -238,10 +260,16 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         }
 
         void endRender();
+        void submit(bool wait);
+        void present();
+        void advanceFrame();
         void acquireNextImage();
+        void startRender();
 
         void startTransfer();
         void endTransfer();
+
+        void reuploadPipelines();
 };
 
 }

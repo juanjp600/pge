@@ -27,24 +27,19 @@ void MeshVK::StagingCacheHandle::cache(int size) {
 }
 
 MeshVK::MeshVK(Graphics& gfx) : resourceManager(gfx), graphics((GraphicsVK&)gfx), stagingCacheHandle(gfx) {
-	graphics.addMesh(*this);
 	// TODO test over frames in flight.
-}
-
-MeshVK::~MeshVK() {
-	graphics.removeMesh(*this);
 }
 
 void MeshVK::renderInternal() {
 	if (!data.isHoldingResource()) { return; }
-	if (!pipeline.isHoldingResource()) { uploadPipeline(); }
 
-	((ShaderVK&)material->getShader()).pushConstants();
+	ShaderVK& shader = (ShaderVK&)material->getShader();
+	shader.pushConstants();
 
 	vk::CommandBuffer comBuffer = graphics.getCurrentCommandBuffer();
 	comBuffer.bindVertexBuffers(0, data->getBuffer(), (vk::DeviceSize)0);
 	comBuffer.bindIndexBuffer(data->getBuffer(), totalVertexSize, vk::IndexType::eUint16);
-	comBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
+	comBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, shader.getPipeline(primitiveType.value()));
 	if (material->getTextureCount() > 0) {
 		comBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics,
 			((ShaderVK&)material->getShader()).getLayout(), 0,
@@ -114,11 +109,4 @@ void MeshVK::uploadInternalData() {
 	if (target != data) {
 		graphics.transfer(target->getBuffer(), data->getBuffer(), finalTotalSize);
 	}
-}
-
-// TODO: Move this to material.
-void MeshVK::uploadPipeline() {
-	resourceManager.trash(pipeline);
-	ShaderVK& shader = ((ShaderVK&)material->getShader());
-	pipeline = resourceManager.addNewResource<VKPipeline>(graphics.getDevice(), shader.getShaderStageInfo(), shader.getVertexInputInfo(), shader.getLayout(), graphics.getPipelineInfo(), graphics.getRenderPass(), primitiveType.value());
 }

@@ -20,9 +20,8 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
     PGE_ASSERT(res == SpvReflectResult::SPV_REFLECT_RESULT_SUCCESS, "Reflection failed " + String::hexFromInt((u32)res));
 
     // Vertex input.
-    vertexInputNames.reserve(reflection.input_variable_count);
     vertexInputAttributes.reserve(reflection.input_variable_count);
-    vertexStride = 0;
+    int vertexStride = 0;
     std::vector<StructuredData::ElemLayout::Entry> entries; entries.reserve(reflection.input_variable_count);
     for (int i = 0; i < (int)reflection.input_variable_count; i++) {
         // We don't want built in variables.
@@ -32,7 +31,6 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
         String name = reflection.input_variables[0][i].name;
         // Strip the "input.".
         name = name.substr(name.findFirst(".") + 1);
-        vertexInputNames.push_back(name);
         vertexInputAttributes.push_back(vk::VertexInputAttributeDescription(reflection.input_variables[0][i].location, 0, (vk::Format)reflection.input_variables[0][i].format, vertexStride));
         // TODO: Better way to get vertex input size?
         int size = 4 * (reflection.input_variables[0][i].numeric.vector.component_count > 0 ? reflection.input_variables[0][i].numeric.vector.component_count : 1);
@@ -92,12 +90,16 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
     vk::PipelineShaderStageCreateInfo fragmentInfo({ }, vk::ShaderStageFlagBits::eFragment, vkShader, "PS");
     shaderStageInfo[0] = vertexInfo;
     shaderStageInfo[1] = fragmentInfo;
+
+    graphics.addShader(*this);
+    uploadPipelines();
 }
 
 ShaderVK::~ShaderVK() {
     if (textureCount > 0) {
         graphics.dropDescriptorSetLayout(textureCount);
     }
+    graphics.removeShader(*this);
 }
 
 Shader::Constant& ShaderVK::getVertexShaderConstant(const String& name) {
@@ -198,22 +200,42 @@ void ShaderVK::ConstantVK::push(GraphicsVK* gfx) {
     }
 }
 
-int ShaderVK::getVertexStride() const {
-    return vertexStride;
-}
-
-const std::vector<String>& ShaderVK::getVertexInputNames() const {
-    return vertexInputNames;
-}
-
-const std::array<vk::PipelineShaderStageCreateInfo, 2>& ShaderVK::getShaderStageInfo() const {
-    return shaderStageInfo;
-}
-
-const vk::PipelineVertexInputStateCreateInfo* ShaderVK::getVertexInputInfo() const {
-    return &vertexInputInfo;
-}
-
 vk::PipelineLayout ShaderVK::getLayout() const {
     return layout;
+}
+
+VKPipeline::View& ShaderVK::PipelinePair::getPipeline(Mesh::PrimitiveType type) {
+    return type == Mesh::PrimitiveType::TRIANGLE ? triPipeline : linePipeline;
+}
+
+void ShaderVK::uploadPipeline(VKPipeline::View& pipeline, vk::RenderPass pass, Mesh::PrimitiveType type) {
+    resourceManager.trash(pipeline);
+    pipeline = resourceManager.addNewResource<VKPipeline>(graphics.getDevice(),
+        shaderStageInfo, vertexInputInfo, layout, graphics.getPipelineInfo(), pass, type);
+}
+
+void ShaderVK::uploadPipelines() {
+    for (auto& [_, pair] : rtPipelines) {
+        resourceManager.trash(pair.triPipeline);
+        resourceManager.trash(pair.linePipeline);
+    }
+    rtPipelines.clear(); // TODO: IDFK.
+
+    // TODO: Be lazy?
+    vk::RenderPass pass = graphics.getRenderPass();
+    uploadPipeline(basicPipeline.triPipeline, pass, Mesh::PrimitiveType::TRIANGLE);
+    uploadPipeline(basicPipeline.linePipeline, pass, Mesh::PrimitiveType::LINE);
+}
+
+vk::Pipeline ShaderVK::getPipeline(Mesh::PrimitiveType type) {
+    std::optional<vk::Format> fmt = graphics.getRenderTargetFormat();
+    if (fmt.has_value()) {
+        VKPipeline::View& pipeline = rtPipelines[fmt.value()].getPipeline(type); // TODO: Stupid map lookup!
+        if (!pipeline.isHoldingResource()) {
+            uploadPipeline(pipeline, graphics.getRenderPass(fmt.value()), type);
+        }
+        return pipeline;
+    } else {
+        return basicPipeline.getPipeline(type);
+    }
 }

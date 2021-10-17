@@ -179,17 +179,17 @@ class VKImageView : public VKDestroyResource<vk::ImageView> {
 
 class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
     public:
-        VKRenderPass(vk::Device dev, vk::SurfaceFormatKHR swapchainFormat)
+        VKRenderPass(vk::Device dev, vk::Format fmt, bool rt = false)
             : VKDestroyResource(dev) {
             vk::AttachmentDescription color;
-            color.format = swapchainFormat.format;
+            color.format = fmt;
             color.samples = vk::SampleCountFlagBits::e1;
             color.loadOp = vk::AttachmentLoadOp::eDontCare;
             color.storeOp = vk::AttachmentStoreOp::eStore;
             color.stencilLoadOp = vk::AttachmentLoadOp::eDontCare;
             color.stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
-            color.initialLayout = vk::ImageLayout::eUndefined;
-            color.finalLayout = vk::ImageLayout::ePresentSrcKHR;
+            color.initialLayout = vk::ImageLayout::eUndefined; // TODO: eColorAttachmentOptimal?
+            color.finalLayout = rt ? vk::ImageLayout::eShaderReadOnlyOptimal : vk::ImageLayout::ePresentSrcKHR;
 
             vk::AttachmentDescription depth;
             depth.format = vk::Format::eD32Sfloat;
@@ -426,11 +426,8 @@ class VKPipelineInfo : private PolymorphicHeap {
         vk::PipelineRasterizationStateCreateInfo rasterizationInfo;
         vk::PipelineMultisampleStateCreateInfo multisamplerInfo;
 
-        VKPipelineInfo() = default;
-
-        void init(const vk::Rect2D& scissor) {
+        VKPipelineInfo() {
             viewportInfo.viewportCount = 1;
-            viewportInfo.setScissors(scissor);
 
             rasterizationInfo.polygonMode = vk::PolygonMode::eFill;
             rasterizationInfo.cullMode = vk::CullModeFlagBits::eFrontAndBack;
@@ -464,8 +461,8 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
 
     public:
         // Sadly we can't make this any more straightforward, because we're in a header and including either shader or graphics would lead to circular inclusion.
-        VKPipeline(vk::Device device, const std::array<vk::PipelineShaderStageCreateInfo, 2> shaderInfo, const vk::PipelineVertexInputStateCreateInfo* vertexInfo,
-            vk::PipelineLayout layout, const VKPipelineInfo* pipelineInfo, vk::RenderPass renderPass, Mesh::PrimitiveType type)
+        VKPipeline(vk::Device device, const std::array<vk::PipelineShaderStageCreateInfo, 2> shaderInfo, const vk::PipelineVertexInputStateCreateInfo& vertexInfo,
+            vk::PipelineLayout layout, const VKPipelineInfo& pipelineInfo, vk::RenderPass renderPass, Mesh::PrimitiveType type)
             : VKDestroyResource(device) {
             const vk::PipelineInputAssemblyStateCreateInfo* inputInfo;
             switch (type) {
@@ -485,13 +482,13 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
             vk::GraphicsPipelineCreateInfo info;
             info.setPDynamicState(&dynamicInfo);
             info.setStages(shaderInfo);
-            info.pVertexInputState = vertexInfo;
+            info.pVertexInputState = &vertexInfo;
             info.pInputAssemblyState = inputInfo;
-            info.pViewportState = &pipelineInfo->viewportInfo;
-            info.pRasterizationState = &pipelineInfo->rasterizationInfo;
-            info.pMultisampleState = &pipelineInfo->multisamplerInfo;
-            info.pColorBlendState = &pipelineInfo->colorBlendInfo;
-            info.pDepthStencilState = &pipelineInfo->depthInfo;
+            info.pViewportState = &pipelineInfo.viewportInfo;
+            info.pRasterizationState = &pipelineInfo.rasterizationInfo;
+            info.pMultisampleState = &pipelineInfo.multisamplerInfo;
+            info.pColorBlendState = &pipelineInfo.colorBlendInfo;
+            info.pDepthStencilState = &pipelineInfo.depthInfo;
             info.layout = layout;
             info.renderPass = renderPass;
             info.basePipelineIndex = -1;
@@ -530,9 +527,10 @@ class VKShader : public VKDestroyResource<vk::ShaderModule> {
 class VKImage : public VKDestroyResource<vk::Image> {
     public:
         enum class Usage {
-            Image,
-            ImageGenMips,
-            Depth,
+            IMAGE,
+            IMAGE_GEN_MIPS,
+            DEPTH,
+            RENDER_TARGET,
         };
 
         VKImage(vk::Device dev, int w, int h, vk::Format fmt, int miplevels, Usage usage) : VKDestroyResource(dev) {
@@ -546,15 +544,18 @@ class VKImage : public VKDestroyResource<vk::Image> {
             info.tiling = vk::ImageTiling::eOptimal;
             info.initialLayout = vk::ImageLayout::eUndefined;
             switch (usage) {
-                case Usage::ImageGenMips: {
+                case Usage::IMAGE_GEN_MIPS: {
                     info.usage = vk::ImageUsageFlagBits::eTransferSrc;
                 } [[fallthrough]];
-                case Usage::Image: {
+                case Usage::IMAGE: {
                     info.usage |= vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled;
                 } break;
-                case Usage::Depth: {
+                case Usage::DEPTH: {
                     info.usage = vk::ImageUsageFlagBits::eDepthStencilAttachment;
                 } break;
+                case Usage::RENDER_TARGET: {
+                    info.usage = vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eColorAttachment;
+                }
             }
             info.sharingMode = vk::SharingMode::eExclusive;
 
