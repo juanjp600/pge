@@ -72,7 +72,7 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     }
 
     int size = w * h * getBytesPerPixel(fmt);
-    VKMemoryBuffer staging(device, physicalDevice, size, VKMemoryBuffer::Type::STAGING);
+    VKMemoryBuffer& staging(graphics.getTempStagingBuffer(size));
     memcpy(staging.getData(), buffer, size);
     staging.flush(VK_WHOLE_SIZE);
 
@@ -106,17 +106,13 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
     graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, (int)mipmaps.size());
 
-    VKBuffer stagingBuffer(device, mipmaps[0].size, vk::BufferUsageFlagBits::eTransferSrc);
-    VKMemory stagingMemory(device, physicalDevice, stagingBuffer.get(), vk::MemoryPropertyFlagBits::eHostVisible);
-    void* mappedMem = device.mapMemory(stagingMemory, 0, VK_WHOLE_SIZE);
+    VKMemoryBuffer& staging = graphics.getTempStagingBuffer(mipmaps[0].size);
     
     for (int i = 0; i < mipmaps.size(); i++) {
-        memcpy(mappedMem, mipmaps[i].buffer, mipmaps[i].size);
-        device.flushMappedMemoryRanges(vk::MappedMemoryRange(stagingMemory, 0, Math::roundUp((vk::DeviceSize)mipmaps[i].size, graphics.getAtomSize())));
-        graphics.transferToImage(stagingBuffer, image, mipmaps[i].width, mipmaps[i].height, i);
+        memcpy(staging.getData(), mipmaps[i].buffer, mipmaps[i].size);
+        staging.flush(Math::roundUp((vk::DeviceSize)mipmaps[i].size, graphics.getAtomSize()));
+        graphics.transferToImage(staging.getBuffer(), image, mipmaps[i].width, mipmaps[i].height, i);
     }
-
-    device.unmapMemory(stagingMemory);
 
     graphics.transformImage<GraphicsVK::ImageLayout::TRANSFER_DST, GraphicsVK::ImageLayout::SHADER_READ>(image, (int)mipmaps.size());
 
