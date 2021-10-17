@@ -35,26 +35,6 @@ vk::Format TextureVK::getFormat(const Texture::AnyFormat& fmt) {
     }
 }
 
-TextureVK::TextureVK(Graphics& gfx, int w, int h, Format fmt)
-    : Texture(w, h, true, fmt), resourceManager(gfx) {
-    graphics = (GraphicsVK*)&gfx;
-    vk::Device device = graphics->getDevice();
-    vk::PhysicalDevice physicalDevice = graphics->getPhysicalDevice();
-
-    format = getFormat(fmt);
-
-    image = resourceManager.addNewResource<VKImage>(device, w, h, format, 1, VKImage::Usage::RENDER_TARGET);
-    imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
-    graphics->transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::SHADER_READ>(image, 1);
-    imageView = resourceManager.addNewResource<VKImageView>(device, image, format, 1);
-
-    renderPass = graphics->requestRenderPass(format);
-    depth = resourceManager.addNewResource<RawWrapper<TextureVK>>(gfx, w, h);
-    framebuffer = resourceManager.addNewResource<VKFramebuffer>(device, renderPass, imageView.get(), depth->getImageView(), vk::Extent2D(w, h));
-
-    scissor = vk::Rect2D(vk::Offset2D(0, 0), vk::Extent2D(w, h));
-}
-
 TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps)
     : Texture(w, h, false, fmt), resourceManager(gfx) {
     GraphicsVK& graphics = (GraphicsVK&)gfx;
@@ -132,30 +112,8 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h) : Texture(w, h, false, Texture
     imageView = resourceManager.addNewResource<VKImageView>(device, image, DEPTH_FORMAT, 1, vk::ImageAspectFlagBits::eDepth);
 }
 
-TextureVK::~TextureVK() {
-    if (isRenderTarget()) {
-        graphics->returnRenderPass(format);
-    }
-}
-
 const vk::ImageView TextureVK::getImageView() const {
     return imageView;
-}
-
-const vk::RenderPass TextureVK::getRenderPass() const {
-    return renderPass;
-}
-
-const vk::Framebuffer TextureVK::getFramebuffer() const {
-    return framebuffer;
-}
-
-vk::Format TextureVK::getFormat() const {
-    return format;
-}
-
-const vk::Rect2D& TextureVK::getScissor() const {
-    return scissor;
 }
 
 void* TextureVK::getNative() const {

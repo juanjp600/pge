@@ -383,7 +383,7 @@ void GraphicsVK::setRenderTarget(Texture& rt) {
         submit(false);
     }
 
-    renderTarget = (TextureVK*)&rt;
+    renderTarget = (RenderTextureVK*)&rt;
 
     advanceFrame();
 

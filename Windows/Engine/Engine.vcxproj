@@ -40,6 +40,7 @@
     <ClCompile Include="..\..\Src\Graphics\Shader\ShaderDX11.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Shader\ShaderOGL3.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Shader\ShaderVK.cpp" />
+    <ClCompile Include="..\..\Src\Graphics\Texture\RenderTextureVK.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Texture\Texture.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Texture\TextureDX11.cpp" />
     <ClCompile Include="..\..\Src\Graphics\Texture\TextureOGL3.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="..\..\Src\Graphics\Shader\ShaderDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\Shader\ShaderOGL3.h" />
     <ClInclude Include="..\..\Src\Graphics\Shader\ShaderVK.h" />
+    <ClInclude Include="..\..\Src\Graphics\Texture\RenderTextureVK.h" />
     <ClInclude Include="..\..\Src\Graphics\Texture\TextureDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\Texture\TextureOGL3.h" />
     <ClInclude Include="..\..\Src\Graphics\Texture\TextureVK.h" />

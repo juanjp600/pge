@@ -208,6 +208,9 @@
     <ClCompile Include="..\..\Src\Graphics\Material\Material.cpp">
       <Filter>Src\Graphics\Material</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Graphics\Texture\RenderTextureVK.cpp">
+      <Filter>Src\Graphics\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -393,6 +396,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\PGE\Graphics\Material.h">
       <Filter>Include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Graphics\Texture\RenderTextureVK.h">
+      <Filter>Src\Graphics\Texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

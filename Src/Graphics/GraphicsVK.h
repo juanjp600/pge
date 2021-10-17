@@ -6,6 +6,7 @@
 #include <set>
 
 #include "Material/MaterialVK.h"
+#include "Texture/RenderTextureVK.h"
 #include "Texture/TextureVK.h"
 #include "Shader/ShaderVK.h"
 #include "Mesh/MeshVK.h"
@@ -17,7 +18,7 @@ namespace PGE {
 
 class ShaderVK;
 
-class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, MaterialVK> {
+class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, MaterialVK, RenderTextureVK> {
     public:
         enum class ImageLayout {
             UNDEFINED,
@@ -153,6 +154,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         };
         std::unordered_map<int, DescriptorSetLayoutEntry> dSetLayouts;
 
+        // TODO: <3 doesn't work! Also replace the vectors with arrays.
         static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
         int currentFrame = 0;
 
@@ -161,7 +163,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         vk::DeviceSize atomSize;
 
-        TextureVK* renderTarget = nullptr;
+        RenderTextureVK* renderTarget = nullptr;
 
         struct FormatRenderPass {
             int count = 0;
