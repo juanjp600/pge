@@ -141,9 +141,9 @@ class VKSemaphore : public VKDestroyResource<vk::Semaphore> {
 
 class VKFence : public VKDestroyResource<vk::Fence> {
     public:
-        VKFence(vk::Device dev, bool signaled) : VKDestroyResource(dev) {
+        VKFence(vk::Device dev) : VKDestroyResource(dev) {
             vk::FenceCreateInfo info;
-            if (signaled) { info.flags = vk::FenceCreateFlagBits::eSignaled; }
+            info.flags = vk::FenceCreateFlagBits::eSignaled;
 
             resource = dev.createFence(info);
         }

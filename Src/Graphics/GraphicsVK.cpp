@@ -141,7 +141,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         imageAvailableSemaphores.emplace_back(resourceManager.addNewResource<VKSemaphore>(device));
         renderFinishedSemaphores.emplace_back(resourceManager.addNewResource<VKSemaphore>(device));
-        inFlightFences.emplace_back(resourceManager.addNewResource<VKFence>(device, i != 0));
+        inFlightFences.emplace_back(resourceManager.addNewResource<VKFence>(device));
     }
     imagesInFlight.resize(MAX_FRAMES_IN_FLIGHT);
     acquireNextImage();
