@@ -137,6 +137,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         vk::CommandBuffer transferComBuffer;
 
         std::vector<VKSemaphore::View> imageAvailableSemaphores;
+        int acquiredIndex = 0;
+
         std::vector<VKSemaphore::View> renderFinishedSemaphores;
         std::vector<VKFence::View> inFlightFences;
         // We don't actually own any resource here.
@@ -262,8 +264,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         }
 
         void endRender();
-        void submit(bool wait);
-        void present();
+        template <bool PRESENT>
+        void submit();
         void advanceFrame();
         void acquireNextImage();
         void startRender();

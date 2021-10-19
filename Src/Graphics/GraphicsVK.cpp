@@ -162,8 +162,7 @@ GraphicsVK::~GraphicsVK() {
 
 void GraphicsVK::swap() {
     endRender();
-    submit(true);
-    present();
+    submit<true>();
 
     checkCachedBufferShrink();
     clearBin();
@@ -179,25 +178,29 @@ void GraphicsVK::endRender() {
     comBuffers[backBufferIndex].end();
 }
 
-void GraphicsVK::submit(bool wait) {
+template <bool PRESENT>
+void GraphicsVK::submit() {
     vk::PipelineStageFlags waitStages = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 
     device->resetFences(inFlightFences[currentFrame].get());
     vk::SubmitInfo submitInfo;
-    if (wait) {
+    if constexpr (PRESENT) {
         submitInfo.setWaitDstStageMask(waitStages);
-        submitInfo.setWaitSemaphores(imageAvailableSemaphores[currentFrame].get());
+        submitInfo.setWaitSemaphores(imageAvailableSemaphores[acquiredIndex].get());
+        acquiredIndex = (acquiredIndex + 1) % swapchainImageViews.size();
+
+        submitInfo.setSignalSemaphores(renderFinishedSemaphores[currentFrame].get());
     }
     submitInfo.setCommandBuffers(comBuffers[backBufferIndex]);
-    if (renderTarget == nullptr) { submitInfo.setSignalSemaphores(renderFinishedSemaphores[currentFrame].get()); }
-    vk::Result result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
+    vk::Result result;
+    result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to graphics queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
-}
 
-void GraphicsVK::present() {
-    vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, (uint32_t*)&backBufferIndex);
-    vk::Result result = presentQueue.presentKHR(presentInfo);
-    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
+    if constexpr (PRESENT) {
+        vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, (uint32_t*)&backBufferIndex);
+        result = presentQueue.presentKHR(presentInfo);
+        PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
+    }
 }
 
 void GraphicsVK::advanceFrame() {
@@ -209,7 +212,7 @@ void GraphicsVK::advanceFrame() {
 }
 
 void GraphicsVK::acquireNextImage() {
-    backBufferIndex = device->acquireNextImageKHR(swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE).value;
+    backBufferIndex = device->acquireNextImageKHR(swapchain, UINT64_MAX, imageAvailableSemaphores[acquiredIndex], VK_NULL_HANDLE).value;
 
     // Is the image we just acquired currently still being submitted?
     vk::Result result;
@@ -217,7 +220,6 @@ void GraphicsVK::acquireNextImage() {
         // If so, wait on it!
         result = device->waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX);
         PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::hexFromInt((u32)result) + ")");
-        imagesInFlight[backBufferIndex] = VK_NULL_HANDLE;
     }
     imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
 }
@@ -383,7 +385,8 @@ void GraphicsVK::setRenderTarget(Texture& rt) {
     endRender();
 
     if (renderTarget == nullptr) { oldSwapchainBackBufferIndex = backBufferIndex; }
-    else { submit(false); }
+    
+    submit<false>();
 
     renderTarget = (RenderTextureVK*)&rt;
 
@@ -400,9 +403,7 @@ void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& rt) {
 void GraphicsVK::resetRenderTarget() {
     endRender();
 
-    if (renderTarget != nullptr) {
-        submit(false);
-    }
+    submit<false>();
 
     renderTarget = nullptr;
 
@@ -430,8 +431,7 @@ void GraphicsVK::setVsync(bool isEnabled) {
     if (isEnabled != vsync) {
         vsync = isEnabled;
         endRender();
-        submit(renderTarget == nullptr);
-        present(); // TODO: Why present???
+        submit<true>(); // TODO: Why true?
         advanceFrame();
         device->waitIdle();
         // TODO: Clean.
