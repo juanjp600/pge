@@ -200,9 +200,9 @@ static void compileShader(const FilePath& path) {
 
     Vulkan::hlslToVkHlsl(path, fsResult, vsResult);
     // TODO: FIX THIS FFS. Prevents multithreading!
-    system(("glslangValidator.exe -S vert -e VS -o " + compiledPath.str() + "vert.spv -V -D " + compiledPath.str() + "hlsl.vulkan").cstr());
-    system(("glslangValidator.exe -S frag -e PS -o " + compiledPath.str() + "frag.spv -V -D " + compiledPath.str() + "hlsl.vulkan").cstr());
-    system(("spirv-link " + compiledPath.str() + "vert.spv " + compiledPath.str() + "frag.spv -o " + compiledPath.str() + "shader.spv").cstr());
+    system(("glslangValidator.exe -S vert -e VS -o \"" + compiledPath.str() + "vert.spv\" -V -D \"" + compiledPath.str() + "hlsl.vulkan\"").cstr());
+    system(("glslangValidator.exe -S frag -e PS -o \"" + compiledPath.str() + "frag.spv\" -V -D \"" + compiledPath.str() + "hlsl.vulkan\"").cstr());
+    system(("spirv-link \"" + compiledPath.str() + "vert.spv\" \"" + compiledPath.str() + "frag.spv\" -o \"" + compiledPath.str() + "shader.spv\"").cstr());
 }
 
 static bool recompile = false;
