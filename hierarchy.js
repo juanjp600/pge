@@ -2,6 +2,7 @@ var hierarchy =
 [
     [ "\u202APGE::Shader::Constant", "class_p_g_e_1_1_shader_1_1_constant.html", null ],
     [ "\u202APGE::StructuredData::ElemLayout", "class_p_g_e_1_1_structured_data_1_1_elem_layout.html", null ],
+    [ "\u202APGE::Hasher", "class_p_g_e_1_1_hasher.html", null ],
     [ "\u202APGE::Mesh::Line", "struct_p_g_e_1_1_mesh_1_1_line.html", null ],
     [ "\u202APGE::Texture::Mipmap", "struct_p_g_e_1_1_texture_1_1_mipmap.html", null ],
     [ "\u202APGE::NoHeap", "class_p_g_e_1_1_no_heap.html", [

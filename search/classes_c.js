@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['plane_167',['Plane',['../class_p_g_e_1_1_plane.html',1,'PGE']]],
-  ['polymorphicheap_168',['PolymorphicHeap',['../class_polymorphic_heap.html',1,'']]]
+  ['orderedkey_168',['OrderedKey',['../struct_p_g_e_1_1_string_1_1_ordered_key.html',1,'PGE::String']]]
 ];

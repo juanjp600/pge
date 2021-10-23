@@ -76,6 +76,7 @@ var namespaces_dup =
       [ "\u202AControllerInput", "class_p_g_e_1_1_controller_input.html", "class_p_g_e_1_1_controller_input" ],
       [ "\u202AInputManager", "class_p_g_e_1_1_input_manager.html", "class_p_g_e_1_1_input_manager" ],
       [ "\u202AAABBox", "class_p_g_e_1_1_a_a_b_box.html", "class_p_g_e_1_1_a_a_b_box" ],
+      [ "\u202AHasher", "class_p_g_e_1_1_hasher.html", "class_p_g_e_1_1_hasher" ],
       [ "\u202ALine2f", "class_p_g_e_1_1_line2f.html", "class_p_g_e_1_1_line2f" ],
       [ "\u202ALine2i", "class_p_g_e_1_1_line2i.html", "class_p_g_e_1_1_line2i" ],
       [ "\u202ALine3f", "class_p_g_e_1_1_line3f.html", "class_p_g_e_1_1_line3f" ],

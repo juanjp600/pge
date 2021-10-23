@@ -1,12 +1,17 @@
 var searchData=
 [
-  ['textreader_115',['TextReader',['../class_p_g_e_1_1_text_reader.html',1,'PGE::TextReader'],['../class_p_g_e_1_1_text_reader.html#add793f41d06eac43920e53a08feff79a',1,'PGE::TextReader::TextReader()']]],
-  ['texture_116',['Texture',['../class_p_g_e_1_1_texture.html',1,'PGE']]],
-  ['textwriter_117',['TextWriter',['../class_p_g_e_1_1_text_writer.html',1,'PGE::TextWriter'],['../class_p_g_e_1_1_text_writer.html#aabc1eb0d15dfe6eaede253f85abca8e5',1,'PGE::TextWriter::TextWriter()']]],
-  ['transform_118',['transform',['../class_p_g_e_1_1_matrix4x4f.html#ae5cf082f0c1af6cc090c56a8cc0f3e72',1,'PGE::Matrix4x4f::transform(const Vector3f &amp;vec) const'],['../class_p_g_e_1_1_matrix4x4f.html#a624b69a56fd1c82bd3aa9657e2a2d86e',1,'PGE::Matrix4x4f::transform(const Vector4f &amp;vec) const']]],
-  ['triangle_119',['Triangle',['../struct_p_g_e_1_1_mesh_1_1_triangle.html',1,'PGE::Mesh']]],
-  ['trimextension_120',['trimExtension',['../class_p_g_e_1_1_file_path.html#ad27af26601dd4f83629b748cf65d19f7',1,'PGE::FilePath']]],
-  ['tryread_121',['tryRead',['../class_p_g_e_1_1_binary_reader.html#a1b27697fd067bb633fd1ba622f196496',1,'PGE::BinaryReader']]],
-  ['tryreadbytes_122',['tryReadBytes',['../class_p_g_e_1_1_binary_reader.html#af121837cb9a968dde26d553d31a2137f',1,'PGE::BinaryReader']]],
-  ['tryskip_123',['trySkip',['../class_p_g_e_1_1_binary_reader.html#ad25e128488012a336f98c7f168493106',1,'PGE::BinaryReader']]]
+  ['safekey_102',['SafeKey',['../struct_p_g_e_1_1_string_1_1_safe_key.html',1,'PGE::String']]],
+  ['setdepthtest_103',['setDepthTest',['../class_p_g_e_1_1_graphics.html#ad07f9d967947dab85825e31a53e2fd6e',1,'PGE::Graphics']]],
+  ['setrendertarget_104',['setRenderTarget',['../class_p_g_e_1_1_graphics.html#a836e2cd6f3f94ebed4a2cec357168e63',1,'PGE::Graphics']]],
+  ['setrendertargets_105',['setRenderTargets',['../class_p_g_e_1_1_graphics.html#a43b43c745c723ffd69d3d61cd0208569',1,'PGE::Graphics']]],
+  ['setviewport_106',['setViewport',['../class_p_g_e_1_1_graphics.html#a7fdac10172b296c64ccf5fcdc698bd55',1,'PGE::Graphics']]],
+  ['setvsync_107',['setVsync',['../class_p_g_e_1_1_graphics.html#a1d986c8ad7c097b28e683f1c4f62265e',1,'PGE::Graphics']]],
+  ['shader_108',['Shader',['../class_p_g_e_1_1_shader.html',1,'PGE']]],
+  ['skip_109',['skip',['../class_p_g_e_1_1_binary_reader.html#acf5b09de8d967c8c9c1818533d2d6972',1,'PGE::BinaryReader']]],
+  ['str_110',['str',['../class_p_g_e_1_1_file_path.html#a9c721acdf541d8e06baea01b86a22211',1,'PGE::FilePath']]],
+  ['string_111',['String',['../class_p_g_e_1_1_string.html',1,'PGE']]],
+  ['structureddata_112',['StructuredData',['../class_p_g_e_1_1_structured_data.html',1,'PGE']]],
+  ['subscriber_113',['Subscriber',['../class_p_g_e_1_1_sys_events_1_1_subscriber.html',1,'PGE::SysEvents']]],
+  ['swap_114',['swap',['../class_p_g_e_1_1_graphics.html#af7931cd5b5bb39aeffd2031967af6770',1,'PGE::Graphics']]],
+  ['sysevents_115',['SysEvents',['../class_p_g_e_1_1_sys_events.html',1,'PGE']]]
 ];
