@@ -250,8 +250,6 @@ class String : private NoHeap {
         bool isEmpty() const;
 
     private:
-        static constexpr u64 FNV_SEED = 0xcbf29ce484222325;
-
         String(int size);
         String(const String& other, int from, int cnt);
 

@@ -11,6 +11,7 @@
 #endif
 
 #include <PGE/Exception/Exception.h>
+#include <PGE/Math/Hasher.h>
 
 using namespace PGE;
 
@@ -227,7 +228,7 @@ String::String() {
     // Manual metadata:
     data->strByteLength = 0;
     data->_strLength = 0;
-    data->_hashCode = FNV_SEED;
+    data->_hashCode = Hasher().getHash();
     data->_hashCodeEvaluted = true;
     cstrNoConst()[0] = '\0';
 }
@@ -438,14 +439,7 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
 
 u64 String::getHashCode() const {
     if (!data->_hashCodeEvaluted) {
-        // FNV-1a
-        // Public domain
-        byte* buf = (byte*)cstr();
-        data->_hashCode = FNV_SEED;
-        for (int i = 0; buf[i] != '\0'; i++) {
-            data->_hashCode ^= buf[i];
-            data->_hashCode *= 0x00000100000001b3u;
-        }
+        data->_hashCode = Hasher::getHash((byte*)cstr(), byteLength());
         data->_hashCodeEvaluted = true;
     }
     return data->_hashCode;
