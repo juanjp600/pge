@@ -400,5 +400,8 @@
     <ClInclude Include="..\..\Src\Graphics\Texture\RenderTextureVK.h">
       <Filter>Src\Graphics\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Math\Hasher.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

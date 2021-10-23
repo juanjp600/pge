@@ -79,6 +79,7 @@
     <ClInclude Include="..\..\Include\PGE\Input\Input.h" />
     <ClInclude Include="..\..\Include\PGE\Input\InputManager.h" />
     <ClInclude Include="..\..\Include\PGE\Math\AABBox.h" />
+    <ClInclude Include="..\..\Include\PGE\Math\Hasher.h" />
     <ClInclude Include="..\..\Include\PGE\Math\Interpolator.h" />
     <ClInclude Include="..\..\Include\PGE\Math\Line.h" />
     <ClInclude Include="..\..\Include\PGE\Math\Math.h" />
