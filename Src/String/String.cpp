@@ -94,8 +94,8 @@ void String::ReverseIterator::operator++() {
 }
 
 void String::ReverseIterator::operator--() {
-    PGE_ASSERT(index < String::Iterator::end(*ref).index, "Tried decrementing reverse begin iterator");
-    decrement();
+    PGE_ASSERT(index < String::Iterator::end(*ref).index, "Tried incrementing begin reverse iterator");
+    increment();
 }
 
 const inline String INVALID_ITERATOR = "Tried reversing invalid iterator";
@@ -138,7 +138,7 @@ const String::ReverseIterator String::rbegin() const {
 }
 
 const String::ReverseIterator String::rend() const {
-    return String::ReverseIterator::begin(*this);
+    return String::ReverseIterator::end(*this);
 }
 
 //
