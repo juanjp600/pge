@@ -1,11 +1,11 @@
 var class_p_g_e_1_1_string =
 [
-    [ "\u202AIterator", "class_p_g_e_1_1_string_1_1_iterator.html", "class_p_g_e_1_1_string_1_1_iterator" ],
     [ "\u202AKey", "struct_p_g_e_1_1_string_1_1_key.html", "struct_p_g_e_1_1_string_1_1_key" ],
     [ "\u202AOrderedKey", "struct_p_g_e_1_1_string_1_1_ordered_key.html", "struct_p_g_e_1_1_string_1_1_ordered_key" ],
     [ "\u202ARedundantKey", "struct_p_g_e_1_1_string_1_1_redundant_key.html", "struct_p_g_e_1_1_string_1_1_redundant_key" ],
-    [ "\u202AReverseIterator", "struct_p_g_e_1_1_string_1_1_reverse_iterator.html", "struct_p_g_e_1_1_string_1_1_reverse_iterator" ],
     [ "\u202ASafeKey", "struct_p_g_e_1_1_string_1_1_safe_key.html", "struct_p_g_e_1_1_string_1_1_safe_key" ],
+    [ "\u202AIterator", "class_p_g_e_1_1_string.html#a50496f065a2bab6ba38315ab56441593", null ],
+    [ "\u202AReverseIterator", "class_p_g_e_1_1_string.html#ac338c4f6a3ee870642657dffd4184bb3", null ],
     [ "\u202ACasing", "class_p_g_e_1_1_string.html#aed680a8d91f7ed32bb5a67fd26040b20", [
       [ "\u202AUPPER", "class_p_g_e_1_1_string.html#aed680a8d91f7ed32bb5a67fd26040b20a9e43f5291e6fcb2ad99c8e3f91acd179", null ],
       [ "\u202ALOWER", "class_p_g_e_1_1_string.html#aed680a8d91f7ed32bb5a67fd26040b20aa7c48ba367e019d004bfb0239b85f2b3", null ]

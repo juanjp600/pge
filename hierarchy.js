@@ -30,9 +30,6 @@ var hierarchy =
       [ "\u202APGE::ResourceManager", "class_p_g_e_1_1_resource_manager.html", null ],
       [ "\u202APGE::ResourceView< T >", "class_p_g_e_1_1_resource_view.html", null ],
       [ "\u202APGE::String", "class_p_g_e_1_1_string.html", null ],
-      [ "\u202APGE::String::Iterator", "class_p_g_e_1_1_string_1_1_iterator.html", [
-        [ "\u202APGE::String::ReverseIterator", "struct_p_g_e_1_1_string_1_1_reverse_iterator.html", null ]
-      ] ],
       [ "\u202APGE::String::Key", "struct_p_g_e_1_1_string_1_1_key.html", null ],
       [ "\u202APGE::String::OrderedKey", "struct_p_g_e_1_1_string_1_1_ordered_key.html", null ],
       [ "\u202APGE::String::RedundantKey", "struct_p_g_e_1_1_string_1_1_redundant_key.html", null ],
