@@ -103,14 +103,14 @@ void GraphicsOGL3::setRenderTargets(const ReferenceVector<Texture>& renderTarget
 
     takeGlContext();
 
-    TextureOGL3* largestTarget = &(TextureOGL3&)renderTargets[0];
+    TextureOGL3* largestTarget = &(TextureOGL3&)renderTargets[0].get();
     for (int i = 0; i < (int)renderTargets.size(); i++) {
         PGE_ASSERT(renderTargets[i].get().isRenderTarget(), "renderTargets["+String::from(i)+"] is not a valid render target");
 
         if (i == 0) { continue; }
 
         if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i].get().getWidth()+renderTargets[i].get().getHeight())) {
-            largestTarget = &(TextureOGL3&)renderTargets[i];
+            largestTarget = &(TextureOGL3&)renderTargets[i].get();
         }
     }
     GLenum glAttachments[] = {
@@ -126,7 +126,7 @@ void GraphicsOGL3::setRenderTargets(const ReferenceVector<Texture>& renderTarget
     glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, largestTarget->getGlDepthbuffer());
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3&)renderTargets[i]).getGlTexture(), 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3&)renderTargets[i].get()).getGlTexture(), 0);
     }
     glDrawBuffers((GLsizei)renderTargets.size(), glAttachments);
 }
