@@ -26,7 +26,7 @@ class Material : private PolymorphicHeap {
 		Shader& getShader() const;
 
 		int getTextureCount() const;
-		Texture& getTexture(int index) const;
+		const Texture& getTexture(int index) const;
 
 	private:
 		Shader* shader;
