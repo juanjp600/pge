@@ -66,6 +66,7 @@ var hierarchy =
       [ "\u202APGE::Shader", "class_p_g_e_1_1_shader.html", null ],
       [ "\u202APGE::Texture", "class_p_g_e_1_1_texture.html", null ]
     ] ],
+    [ "\u202APGE::Reference< T >", "class_p_g_e_1_1_reference.html", null ],
     [ "\u202APGE::SysEvents::Subscriber", "class_p_g_e_1_1_sys_events_1_1_subscriber.html", null ],
     [ "\u202APGE::SysEvents", "class_p_g_e_1_1_sys_events.html", null ],
     [ "\u202APGE::Mesh::Triangle", "struct_p_g_e_1_1_mesh_1_1_triangle.html", null ]
