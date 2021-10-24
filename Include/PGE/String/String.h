@@ -19,13 +19,8 @@ namespace PGE {
 
 /// A UTF-8 character sequence guaranteed to be terminated by a null byte.
 class String : private NoHeap {
-    public:
-        struct Key;
-        struct RedundantKey;
-        struct SafeKey;
-        struct OrderedKey;
-
-        class Iterator : NoHeap {
+    private:
+        class BasicIterator : NoHeap {
             using iterator_category = std::bidirectional_iterator_tag;
             using difference_type = int;
             using value_type = char16;
@@ -33,75 +28,85 @@ class String : private NoHeap {
             using reference = value_type&;
 
             public:
-                static const Iterator begin(const String& str);
-                static const Iterator end(const String& str);
+                BasicIterator() = default;
 
-                Iterator();
-
-                void operator++();
-                void operator--();
-                void operator++(int);
-                void operator--(int);
-
-                const Iterator operator+(int steps) const;
-                const Iterator operator-(int steps) const;
-                void operator+=(int steps);
-                void operator-=(int steps);
-
-                int operator-(const Iterator& other) const;
+                int operator-(const BasicIterator& other) const;
 
                 char16 operator*() const;
 
-                bool operator>(const Iterator& other) const;
-                bool operator<(const Iterator& other) const;
-                bool operator>=(const Iterator& other) const;
-                bool operator<=(const Iterator& other) const;
-                bool operator==(const Iterator& other) const;
-                bool operator!=(const Iterator& other) const;
+                bool operator==(const BasicIterator& other) const;
+                bool operator!=(const BasicIterator& other) const;
 
                 int getBytePosition() const;
                 int getPosition() const;
 
             protected:
-                Iterator(const String& str, int byteIndex, int chIndex);
-
                 void increment();
                 void decrement();
 
-                const String* ref;
+                const String* ref = nullptr;
                 // Lazily evaluated, Unicode invalid character by default.
                 mutable char16 _ch = L'\uFFFF';
                 mutable int charIndex;
                 int index;
         };
 
-        //TODO: redo this, misuses inheritance
-        struct ReverseIterator : public Iterator {
-            ReverseIterator(const Iterator& it) : Iterator(it) { }
-
-            void operator++();
-            void operator--();
-            void operator++(int);
-            void operator--(int);
-
-            const ReverseIterator operator+(int steps) const { return Iterator::operator-(steps); }
-            const ReverseIterator operator-(int steps) const { return Iterator::operator+(steps); }
-            void operator+=(int steps) { Iterator::operator-=(steps); }
-            void operator-=(int steps) { Iterator::operator+=(steps); }
-
-            bool operator>(const Iterator& other) const { return Iterator::operator<(other); }
-            bool operator<(const Iterator& other) const { return Iterator::operator>(other); }
-            bool operator>=(const Iterator& other) const { return Iterator::operator<=(other); }
-            bool operator<=(const Iterator& other) const { return Iterator::operator>=(other); }
-
-            static const ReverseIterator rbegin(const String& str);
-            static const ReverseIterator rend(const String& str);
+        template <bool REVERSE>
+        class ActualIterator : public BasicIterator {
+            friend ActualIterator<!REVERSE>;
 
             private:
-                using Iterator::Iterator;
-                using Iterator::begin;
-                using Iterator::end;
+                ActualIterator(const String& str, int byteIndex, int chIndex) {
+                    ref = &str;
+                    index = byteIndex;
+                    charIndex = chIndex;
+                }
+                
+                void validate();
+
+            public:
+                ActualIterator() = default;
+
+                ActualIterator(const ActualIterator<!REVERSE>& reversed) {
+                    ref = reversed.ref;
+                    _ch = reversed._ch;
+                    charIndex = reversed.charIndex;
+                    index = reversed.index;
+                    validate();
+                }
+
+                static const ActualIterator begin(const String& str);
+                static const ActualIterator end(const String& str);
+
+                void operator++();
+                void operator--();
+                void operator++(int) { ++(*this); }
+                void operator--(int) { ++(*this); }
+
+                const ActualIterator operator+(int steps) const { ActualIterator ret(*this); ret += steps; return ret; }
+                const ActualIterator operator-(int steps) const { ActualIterator ret(*this); ret -= steps; return ret; }
+                void operator+=(int steps) {
+                    if (steps < 0) { *this -= -steps; }
+                    for (int i = 0; i < steps; i++) {
+                        ++(*this);
+                    }
+                }
+                void operator-=(int steps) {
+                    if (steps < 0) { *this += -steps; }
+                    for (int i = 0; i < steps; i++) {
+                        --(*this);
+                    }
+                }
         };
+
+    public:
+        struct Key;
+        struct RedundantKey;
+        struct SafeKey;
+        struct OrderedKey;
+
+        using Iterator = ActualIterator<false>;
+        using ReverseIterator = ActualIterator<true>;
 
         const Iterator begin() const;
         const Iterator end() const;

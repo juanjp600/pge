@@ -222,7 +222,7 @@ CompileResult::CBuffer CompileResult::parseCBuffer(const String& hlsl, const Str
 
 void CompileResult::extractFunctionData(const String& hlsl, const String& functionName, CompileResult& compileResult) {
     String::Iterator iter = hlsl.begin();
-    while (iter < hlsl.end()) {
+    while (iter != hlsl.end()) {
         iter = hlsl.findFirst(functionName, iter) + functionName.length();
         Parser::skip(iter, Unicode::isSpace);
 

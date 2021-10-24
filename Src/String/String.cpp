@@ -19,19 +19,7 @@ using namespace PGE;
 // Iterator
 //
 
-String::Iterator::Iterator() {
-    ref = nullptr;
-    index = -1;
-    charIndex = -1;
-}
-
-String::Iterator::Iterator(const String& str, int byteIndex, int chIndex) {
-    ref = &str;
-    index = byteIndex;
-    charIndex = chIndex;
-}
-
-void String::Iterator::increment() {
+void String::BasicIterator::increment() {
     if (index < 0) { *this = ref->begin(); return; }
     index += Unicode::measureCodepoint(ref->cstr()[index]);
     charIndex++;
@@ -42,7 +30,7 @@ void String::Iterator::increment() {
     _ch = L'\uFFFF';
 }
 
-void String::Iterator::decrement() {
+void String::BasicIterator::decrement() {
     charIndex--;
     index--;
     if (index < 0) { return; }
@@ -56,61 +44,11 @@ void String::Iterator::decrement() {
     _ch = L'\uFFFF';
 }
 
-void String::Iterator::operator++() {
-    PGE_ASSERT(index < ref->byteLength(), "Can't increment iterator past string end");
-    increment();
-}
-
-void String::Iterator::operator--() {
-    PGE_ASSERT(index > 0, "Can't decrement iterator prior to string beginning");
-    decrement();
-}
-
-void String::Iterator::operator++(int) {
-    ++(*this);
-}
-
-void String::Iterator::operator--(int) {
-    --(*this);
-}
-
-const String::Iterator String::Iterator::operator+(int steps) const {
-    if (steps < 0) { return *this - (-steps); }
-    String::Iterator ret = *this;
-    for (int i = 0; i < steps; i++) {
-        ret++;
-    }
-    return ret;
-}
-
-const String::Iterator String::Iterator::operator-(int steps) const {
-    if (steps < 0) { return *this + (-steps); }
-    String::Iterator ret = *this;
-    for (int i = 0; i < steps; i++) {
-        ret--;
-    }
-    return ret;
-}
-
-void String::Iterator::operator+=(int steps) {
-    if (steps < 0) { *this -= (-steps); return; }
-    for (int i = 0; i < steps; i++) {
-        (*this)++;
-    }
-}
-
-void String::Iterator::operator-=(int steps) {
-    if (steps < 0) { *this += (-steps); return; }
-    for (int i = 0; i < steps; i++) {
-        (*this)--;
-    }
-}
-
-int String::Iterator::operator-(const String::Iterator& other) const {
+int String::BasicIterator::operator-(const String::BasicIterator& other) const {
     return getPosition() - other.getPosition();
 }
 
-char16 String::Iterator::operator*() const {
+char16 String::BasicIterator::operator*() const {
     PGE_ASSERT(index >= 0 && index < ref->byteLength(), "Tried dereferencing invalid iterator");
     if (_ch == L'\uFFFF') {
         _ch = Unicode::utf8ToWChar(ref->cstr() + index);
@@ -118,35 +56,19 @@ char16 String::Iterator::operator*() const {
     return _ch;
 }
 
-bool String::Iterator::operator<(const Iterator& other) const {
-    return ref->chs == other.ref->chs && index < other.index;
-}
-
-bool String::Iterator::operator>(const Iterator& other) const {
-    return ref->chs == other.ref->chs && index > other.index;
-}
-
-bool String::Iterator::operator<=(const Iterator& other) const {
-    return ref->chs == other.ref->chs && index <= other.index;
-}
-
-bool String::Iterator::operator>=(const Iterator& other) const {
-    return ref->chs == other.ref->chs && index >= other.index;
-}
-
-bool String::Iterator::operator==(const Iterator& other) const {
+bool String::BasicIterator::operator==(const BasicIterator& other) const {
     return ref->chs == other.ref->chs && index == other.index;
 }
 
-bool String::Iterator::operator!=(const Iterator& other) const {
+bool String::BasicIterator::operator!=(const BasicIterator& other) const {
     return ref->chs != other.ref->chs || index != other.index;
 }
 
-int String::Iterator::getBytePosition() const {
+int String::BasicIterator::getBytePosition() const {
     return index;
 }
 
-int String::Iterator::getPosition() const {
+int String::BasicIterator::getPosition() const {
     if (charIndex < 0) {
         charIndex = 0;
         for (int i = 0; i < index; i += Unicode::measureCodepoint(ref->cstr()[i])) {
@@ -156,13 +78,50 @@ int String::Iterator::getPosition() const {
     return charIndex;
 }
 
-const String::Iterator String::Iterator::begin(const String& str) {
-    return Iterator(str, 0, 0);
+void String::Iterator::operator++() {
+    PGE_ASSERT(index < ref->byteLength(), "Tried incrementing end iterator");
+    increment();
 }
 
-const String::Iterator String::Iterator::end(const String& str) {
-    // We need byteLength for functionality, but length is optional.
-    return Iterator(str, str.byteLength(), str.data->_strLength);
+void String::Iterator::operator--() {
+    PGE_ASSERT(index > 0, "Tried decrementing begin iterator");
+    decrement();
+}
+
+void String::ReverseIterator::operator++() {
+    PGE_ASSERT(index >= 0, "Tried decrementing end reverse iterator");
+    decrement();
+}
+
+void String::ReverseIterator::operator--() {
+    PGE_ASSERT(index < String::Iterator::end(*ref).index, "Tried decrementing reverse begin iterator");
+    decrement();
+}
+
+const inline String INVALID_ITERATOR = "Tried reversing invalid iterator";
+
+void String::Iterator::validate() {
+    PGE_ASSERT(index >= 0, INVALID_ITERATOR);
+}
+
+void String::ReverseIterator::validate() {
+    PGE_ASSERT(index < ref->byteLength(), INVALID_ITERATOR);
+}
+
+const String::Iterator String::Iterator::begin(const String& str) {
+    return String::Iterator(str, 0, 0);
+}
+
+template <> const String::Iterator String::Iterator::end(const String& str) {
+    return String::Iterator(str, str.byteLength(), -1);
+}
+
+const String::ReverseIterator String::ReverseIterator::begin(const String& str) {
+    return String::Iterator::end(str) - 1;;
+}
+
+const String::ReverseIterator String::ReverseIterator::end(const String& str) {
+    return String::ReverseIterator(str, -1, -1);
 }
 
 const String::Iterator String::begin() const {
@@ -173,38 +132,12 @@ const String::Iterator String::end() const {
     return Iterator::end(*this);
 }
 
-void String::ReverseIterator::operator++() {
-    PGE_ASSERT(index >= 0, "Can't decrement iterator prior to string beginning");
-    decrement();
-}
-
-void String::ReverseIterator::operator++(int) {
-    ++(*this);
-}
-
-void String::ReverseIterator::operator--() {
-    PGE_ASSERT(index < ref->byteLength() - 1, "Can't increment iterator past string end");
-    increment();
-}
-
-void String::ReverseIterator::operator--(int) {
-    --(*this);
-}
-
-const String::ReverseIterator String::ReverseIterator::rbegin(const String& str) {
-    return end(str) - 1;
-}
-
-const String::ReverseIterator String::ReverseIterator::rend(const String& str) {
-    return ReverseIterator(str, -1, -1);
-}
-
 const String::ReverseIterator String::rbegin() const {
-    return String::ReverseIterator::rbegin(*this);
+    return String::ReverseIterator::begin(*this);
 }
 
 const String::ReverseIterator String::rend() const {
-    return String::ReverseIterator::rend(*this);
+    return String::ReverseIterator::begin(*this);
 }
 
 //
