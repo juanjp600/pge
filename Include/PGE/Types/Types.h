@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <vector>
 
+#include "Reference.h"
+
 namespace PGE {
 
 using byte = unsigned char;
@@ -26,7 +28,7 @@ using char16 = char16_t;
 #endif
 
 template <typename T>
-using ReferenceVector = std::vector<std::reference_wrapper<T>>;
+using ReferenceVector = std::vector<Reference<T>>;
 
 }
 

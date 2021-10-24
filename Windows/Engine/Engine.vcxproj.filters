@@ -403,5 +403,8 @@
     <ClInclude Include="..\..\Include\PGE\Math\Hasher.h">
       <Filter>Include\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Types\Reference.h">
+      <Filter>Include\Types</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

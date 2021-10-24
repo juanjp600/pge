@@ -22,7 +22,7 @@ int Material::getTextureCount() const {
     return (int)textures.size();
 }
 
-Texture& Material::getTexture(int index) const {
+const Texture& Material::getTexture(int index) const {
     PGE_ASSERT(index >= 0 && index < getTextureCount(), "Texture index out of bounds");
     return textures.at(index);
 }

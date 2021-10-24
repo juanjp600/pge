@@ -105,11 +105,11 @@ void GraphicsOGL3::setRenderTargets(const ReferenceVector<Texture>& renderTarget
 
     TextureOGL3* largestTarget = &(TextureOGL3&)renderTargets[0].get();
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i].get().isRenderTarget(), "renderTargets["+String::from(i)+"] is not a valid render target");
+        PGE_ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets["+String::from(i)+"] is not a valid render target");
 
         if (i == 0) { continue; }
 
-        if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i].get().getWidth()+renderTargets[i].get().getHeight())) {
+        if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i]->getWidth()+renderTargets[i]->getHeight())) {
             largestTarget = &(TextureOGL3&)renderTargets[i].get();
         }
     }
