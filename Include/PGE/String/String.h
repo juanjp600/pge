@@ -81,7 +81,7 @@ class String : private NoHeap {
                 void operator++();
                 void operator--();
                 void operator++(int) { ++(*this); }
-                void operator--(int) { ++(*this); }
+                void operator--(int) { --(*this); }
 
                 const ActualIterator operator+(int steps) const { ActualIterator ret(*this); ret += steps; return ret; }
                 const ActualIterator operator-(int steps) const { ActualIterator ret(*this); ret -= steps; return ret; }
