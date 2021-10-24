@@ -110,16 +110,16 @@ void GraphicsDX11::setRenderTargets(const ReferenceVector<Texture>& renderTarget
     currentRenderTargetViews.clear();
     TextureDX11* maxSizeTexture = &(TextureDX11&)renderTargets[0].get();
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i].get().isRenderTarget(), "renderTargets[" + String::from(i) + "] is not a valid render target");
+        PGE_ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets[" + String::from(i) + "] is not a valid render target");
         currentRenderTargetViews.emplace_back(((TextureDX11&)renderTargets[i].get()).getRtv());
-        if (renderTargets[i].get().getWidth()+renderTargets[i].get().getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
+        if (renderTargets[i]->getWidth()+renderTargets[i]->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
             maxSizeTexture = &(TextureDX11&)renderTargets[i].get();
         }
     }
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i].get().getWidth() <= maxSizeTexture->getWidth() && renderTargets[i].get().getHeight() <= maxSizeTexture->getHeight(),
+        PGE_ASSERT(renderTargets[i]->getWidth() <= maxSizeTexture->getWidth() && renderTargets[i]->getHeight() <= maxSizeTexture->getHeight(),
             "Render target sizes are incompatible (" + String::from(maxSizeTexture->getWidth()) + "x" + String::from(maxSizeTexture->getHeight()) + " vs " +
-                                                       String::from(renderTargets[i].get().getWidth()) + "x" + String::from(renderTargets[i].get().getHeight()) + ")");
+                                                       String::from(renderTargets[i]->getWidth()) + "x" + String::from(renderTargets[i]->getHeight()) + ")");
     }
     currentDepthStencilView = maxSizeTexture->getZBufferView();
     dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
