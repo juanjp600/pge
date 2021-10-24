@@ -108,12 +108,12 @@ void GraphicsDX11::setRenderTargets(const ReferenceVector<Texture>& renderTarget
     dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
 
     currentRenderTargetViews.clear();
-    TextureDX11* maxSizeTexture = &(TextureDX11&)renderTargets[0];
+    TextureDX11* maxSizeTexture = &(TextureDX11&)renderTargets[0].get();
     for (int i = 0; i < (int)renderTargets.size(); i++) {
         PGE_ASSERT(renderTargets[i].get().isRenderTarget(), "renderTargets[" + String::from(i) + "] is not a valid render target");
-        currentRenderTargetViews.emplace_back(((TextureDX11&)renderTargets[i]).getRtv());
+        currentRenderTargetViews.emplace_back(((TextureDX11&)renderTargets[i].get()).getRtv());
         if (renderTargets[i].get().getWidth()+renderTargets[i].get().getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
-            maxSizeTexture = &(TextureDX11&)renderTargets[i];
+            maxSizeTexture = &(TextureDX11&)renderTargets[i].get();
         }
     }
     for (int i = 0; i < (int)renderTargets.size(); i++) {
