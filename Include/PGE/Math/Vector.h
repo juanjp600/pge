@@ -12,7 +12,7 @@ class Vector2f : private NoHeap {
         float x; float y;
 
         constexpr Vector2f() : x(0.f), y(0.f) { }
-        constexpr Vector2f(float s) : x(s), y(s) { }
+        constexpr explicit Vector2f(float s) : x(s), y(s) { }
         constexpr Vector2f(float ix, float iy) : x(ix), y(iy) { }
 
         constexpr bool operator==(const Vector2f& other) const { return x == other.x && y == other.y; }
@@ -67,7 +67,7 @@ class Vector3f : private NoHeap {
         float x; float y; float z;
 
         constexpr Vector3f() : x(0.f), y(0.f), z(0.f) { }
-        constexpr Vector3f(float s) : x(s), y(s), z(s) { }
+        constexpr explicit Vector3f(float s) : x(s), y(s), z(s) { }
         constexpr Vector3f(float ix, float iy, float iz) : x(ix), y(iy), z(iz) { }
         constexpr Vector3f(const Vector2f& v2, float iz) : x(v2.x), y(v2.y), z(iz) { }
         constexpr Vector3f(float ix, const Vector2f& v2) : x(ix), y(v2.x), z(v2.y) { }
@@ -125,7 +125,7 @@ class Vector4f : private NoHeap {
         float x; float y; float z; float w;
 
         constexpr Vector4f() : x(0.f), y(0.f), z(0.f), w(0.f) { }
-        constexpr Vector4f(float s) : x(s), y(s), z(s), w(s) { }
+        constexpr explicit Vector4f(float s) : x(s), y(s), z(s), w(s) { }
         constexpr Vector4f(float ix,float iy,float iz,float iw) : x(ix), y(iy), z(iz), w(iw) { }
         constexpr Vector4f(const Vector3f& v3, float iw) : x(v3.x), y(v3.y), z(v3.z), w(iw) { }
         constexpr Vector4f(float ix, const Vector3f& v3) : x(ix), y(v3.x), z(v3.y), w(v3.z) { }
@@ -183,7 +183,7 @@ class Vector2i : private NoHeap {
         int x; int y;
 
         constexpr Vector2i() : x(0), y(0) { }
-        constexpr Vector2i(int s) : x(s), y(s) { }
+        constexpr explicit Vector2i(int s) : x(s), y(s) { }
         constexpr Vector2i(int ix, int iy) : x(ix), y(iy) { }
         constexpr explicit Vector2i(const Vector2f& vf) : x((int)vf.x), y((int)vf.y) { }
 
