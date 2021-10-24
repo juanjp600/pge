@@ -112,6 +112,7 @@ const String::Iterator String::Iterator::begin(const String& str) {
     return String::Iterator(str, 0, 0);
 }
 
+// TODO: Why does only this need template <>??
 template <> const String::Iterator String::Iterator::end(const String& str) {
     return String::Iterator(str, str.byteLength(), -1);
 }
