@@ -15,6 +15,11 @@ namespace PGE {
 
 constexpr vk::Format VK_DEPTH_FORMAT = vk::Format::eD32Sfloat;
 
+struct RenderInfo {
+    vk::RenderPass pass;
+    vk::Framebuffer buffer;
+};
+
 template <class T>
 class VKResource : public Resource<T> {
     public:
@@ -180,9 +185,33 @@ class VKImageView : public VKDestroyResource<vk::ImageView> {
 };
 
 class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
-    public:
-        VKRenderPass(vk::Device dev, vk::Format fmt, bool rt = false)
-            : VKDestroyResource(dev) {
+    private:
+        void init(vk::Device dev, const vk::ArrayProxyNoTemporaries<const vk::AttachmentDescription>& attachments,
+            const vk::ArrayProxyNoTemporaries<const vk::AttachmentReference>& colorRefs) {
+            vk::AttachmentReference depthRef;
+            depthRef.attachment = colorRefs.size();
+            depthRef.layout = vk::ImageLayout::eDepthStencilAttachmentOptimal;
+
+            vk::SubpassDescription subpass;
+            subpass.pipelineBindPoint = vk::PipelineBindPoint::eGraphics;
+            subpass.setColorAttachments(colorRefs);
+            subpass.pDepthStencilAttachment = &depthRef;
+            
+            vk::SubpassDependency dependency;
+            dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+            dependency.srcStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests;
+            dependency.dstStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests;
+            dependency.dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite | vk::AccessFlagBits::eDepthStencilAttachmentWrite;
+
+            vk::RenderPassCreateInfo info;
+            info.setAttachments(attachments);
+            info.setSubpasses(subpass);
+            info.setDependencies(dependency);
+
+            resource = dev.createRenderPass(info);
+        }
+
+        constexpr vk::AttachmentDescription getColorAttachment(vk::Format fmt, vk::ImageLayout finalLayout = vk::ImageLayout::eShaderReadOnlyOptimal) {
             vk::AttachmentDescription color;
             color.format = fmt;
             color.samples = vk::SampleCountFlagBits::e1;
@@ -191,8 +220,11 @@ class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
             color.stencilLoadOp = vk::AttachmentLoadOp::eDontCare;
             color.stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
             color.initialLayout = vk::ImageLayout::eUndefined; // TODO: eColorAttachmentOptimal?
-            color.finalLayout = rt ? vk::ImageLayout::eShaderReadOnlyOptimal : vk::ImageLayout::ePresentSrcKHR;
+            color.finalLayout = finalLayout;
+            return color;
+        }
 
+        static const inline vk::AttachmentDescription DEPTH_ATTACHMENT = []() {
             vk::AttachmentDescription depth;
             depth.format = VK_DEPTH_FORMAT;
             depth.samples = vk::SampleCountFlagBits::e1;
@@ -202,49 +234,67 @@ class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
             depth.stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
             depth.initialLayout = vk::ImageLayout::eUndefined;
             depth.finalLayout = vk::ImageLayout::eDepthStencilAttachmentOptimal;
+            return depth;
+        }();
+
+    public:
+        VKRenderPass(vk::Device dev, vk::Format fmt, bool rt = false)
+            : VKDestroyResource(dev) {
+            vk::AttachmentDescription color = getColorAttachment(fmt, rt ? vk::ImageLayout::eShaderReadOnlyOptimal : vk::ImageLayout::ePresentSrcKHR);
 
             vk::AttachmentReference colorRef;
             colorRef.attachment = 0;
             colorRef.layout = vk::ImageLayout::eColorAttachmentOptimal;
 
-            vk::AttachmentReference depthRef;
-            depthRef.attachment = 1;
-            depthRef.layout = vk::ImageLayout::eDepthStencilAttachmentOptimal;
+            std::array attachments = { color, DEPTH_ATTACHMENT };
+            init(dev, attachments, colorRef);
+        }
 
-            vk::SubpassDescription subpass;
-            subpass.pipelineBindPoint = vk::PipelineBindPoint::eGraphics;
-            subpass.setColorAttachments(colorRef);
-            subpass.pDepthStencilAttachment = &depthRef;
+        VKRenderPass(vk::Device dev, const std::vector<vk::Format>& formats)
+            : VKDestroyResource(dev) {
+            std::vector<vk::AttachmentDescription> attachments; attachments.reserve(formats.size() + 1);
+            for (vk::Format f : formats) {
+                attachments.emplace_back(getColorAttachment(f));
+            }
+            attachments.push_back(DEPTH_ATTACHMENT);
 
-            vk::SubpassDependency dependency;
-            dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-            dependency.srcStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests;
-            dependency.dstStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests;
-            dependency.dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite | vk::AccessFlagBits::eDepthStencilAttachmentWrite;
+            std::vector<vk::AttachmentReference> colorsRefs; colorsRefs.reserve(formats.size());
+            vk::AttachmentReference ref;
+            ref.layout = vk::ImageLayout::eColorAttachmentOptimal;
+            for (int i = 0; i < formats.size(); i++) {
+                ref.attachment = i;
+                colorsRefs.push_back(ref);
+            }
 
-            std::array attachments = { color, depth };
-
-            vk::RenderPassCreateInfo info;
-            info.setAttachments(attachments);
-            info.setSubpasses(subpass);
-            info.setDependencies(dependency);
-
-            resource = dev.createRenderPass(info);
+            init(dev, attachments, colorsRefs);
         }
 };
 
 class VKFramebuffer : public VKDestroyResource<vk::Framebuffer> {
     public:
         VKFramebuffer(vk::Device dev, vk::RenderPass renderPass,
-            vk::ImageView swapchainImageView, vk::ImageView depthBuffer, const vk::Extent2D& swapchainExtent)
+            vk::ImageView imageView, vk::ImageView depthBuffer, const vk::Extent2D& extent)
             : VKDestroyResource(dev) {
-            std::array attachments = { swapchainImageView, depthBuffer };
+            std::array attachments = { imageView, depthBuffer };
 
             vk::FramebufferCreateInfo info;
             info.renderPass = renderPass;
             info.setAttachments(attachments);
-            info.width = swapchainExtent.width;
-            info.height = swapchainExtent.height;
+            info.width = extent.width;
+            info.height = extent.height;
+            info.layers = 1;
+
+            resource = dev.createFramebuffer(info);
+        }
+
+        VKFramebuffer(vk::Device dev, vk::RenderPass renderPass,
+            const std::vector<vk::ImageView>& attachments, const vk::Extent2D& extent)
+            : VKDestroyResource(dev) {
+            vk::FramebufferCreateInfo info;
+            info.renderPass = renderPass;
+            info.setAttachments(attachments);
+            info.width = extent.width;
+            info.height = extent.height;
             info.layers = 1;
 
             resource = dev.createFramebuffer(info);
@@ -421,12 +471,21 @@ class VKPipelineInfo : private PolymorphicHeap {
         // The extra info needs to remain in memory.
         vk::PipelineViewportStateCreateInfo viewportInfo;
 
-        vk::PipelineColorBlendAttachmentState colorBlendAttachmentState;
+        std::vector<vk::PipelineColorBlendAttachmentState> colorBlendAttachmentStates;
         vk::PipelineColorBlendStateCreateInfo colorBlendInfo;
         vk::PipelineDepthStencilStateCreateInfo depthInfo;
 
         vk::PipelineRasterizationStateCreateInfo rasterizationInfo;
         vk::PipelineMultisampleStateCreateInfo multisamplerInfo;
+
+        void resize(int i) {
+            // Fuck it, we're leaving this allocated.
+            while (colorBlendAttachmentStates.size() < i) {
+                colorBlendAttachmentStates.push_back(colorBlendAttachmentStates[0]);
+            }
+            colorBlendInfo.pAttachments = colorBlendAttachmentStates.data();
+            colorBlendInfo.attachmentCount = i;
+        }
 
         VKPipelineInfo() {
             viewportInfo.viewportCount = 1;
@@ -439,6 +498,7 @@ class VKPipelineInfo : private PolymorphicHeap {
             multisamplerInfo.rasterizationSamples = vk::SampleCountFlagBits::e1;
 
             // Color blending. (No idea what's going on here, just stole it from D3D11BlendState.)
+            vk::PipelineColorBlendAttachmentState colorBlendAttachmentState;
             colorBlendAttachmentState.blendEnable = true;
             colorBlendAttachmentState.colorBlendOp = vk::BlendOp::eAdd;
             colorBlendAttachmentState.srcColorBlendFactor = vk::BlendFactor::eSrcAlpha;
@@ -447,8 +507,9 @@ class VKPipelineInfo : private PolymorphicHeap {
             colorBlendAttachmentState.srcAlphaBlendFactor = vk::BlendFactor::eOne;
             colorBlendAttachmentState.dstAlphaBlendFactor = vk::BlendFactor::eOneMinusSrcAlpha;
             colorBlendAttachmentState.colorWriteMask = vk::ColorComponentFlagBits::eA | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG;
+            colorBlendAttachmentStates.push_back(colorBlendAttachmentState);
 
-            colorBlendInfo.setAttachments(colorBlendAttachmentState);
+            colorBlendInfo.setAttachments(colorBlendAttachmentStates);
 
             // depthTestEnable is dynamic.
             depthInfo.depthWriteEnable = true;

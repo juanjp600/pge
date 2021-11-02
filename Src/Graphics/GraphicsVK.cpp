@@ -1,12 +1,17 @@
 #include "GraphicsVK.h"
 
 #include <PGE/Exception/Exception.h>
+#include <PGE/Math/Hasher.h>
 
 #include "Shader/ShaderVK.h"
 #include "Mesh/MeshVK.h"
 #include "Texture/TextureVK.h"
 
 using namespace PGE;
+
+static constexpr vk::Viewport convertViewport(const Rectanglei& rect) {
+    return vk::Viewport(rect.topLeftCorner().x, rect.topLeftCorner().y + rect.height(), rect.width(), -rect.height(), 0.f, 1.f);
+}
 
 GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y)
     : GraphicsSpecialized("Vulkan", name, w, h, wm, x, y, SDL_WINDOW_VULKAN), resourceManager(*this) {
@@ -130,24 +135,26 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     scissor = vk::Rect2D(vk::Offset2D(0, 0), vk::Extent2D(w, h));
     pipelineInfo.viewportInfo.setScissors(scissor);
 
-    setViewport(Rectanglei(0, 0, w, h));
-
     vsync = true;
     createSwapchain();
 
     imageAvailableSemaphores.reserve(MAX_FRAMES_IN_FLIGHT);
     renderFinishedSemaphores.reserve(MAX_FRAMES_IN_FLIGHT);
     inFlightFences.reserve(MAX_FRAMES_IN_FLIGHT);
+    fenceSentWithComBuffer.resize(MAX_FRAMES_IN_FLIGHT);
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         imageAvailableSemaphores.emplace_back(resourceManager.addNewResource<VKSemaphore>(device));
         renderFinishedSemaphores.emplace_back(resourceManager.addNewResource<VKSemaphore>(device));
         inFlightFences.emplace_back(resourceManager.addNewResource<VKFence>(device));
+        fenceSentWithComBuffer[i] = inFlightFences[i];
     }
     imagesInFlight.resize(MAX_FRAMES_IN_FLIGHT);
     acquireNextImage();
     startRender();
 
     setDepthTest(true);
+
+    setViewport(Rectanglei(0, 0, w, h));
 
     sampler = resourceManager.addNewResource<VKSampler>(device, false);
     samplerRT = resourceManager.addNewResource<VKSampler>(device, true);
@@ -194,6 +201,7 @@ void GraphicsVK::submit() {
     submitInfo.setCommandBuffers(comBuffers[backBufferIndex]);
     vk::Result result;
     result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
+    fenceSentWithComBuffer[backBufferIndex] = inFlightFences[currentFrame];
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to graphics queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
 
     if constexpr (PRESENT) {
@@ -205,10 +213,6 @@ void GraphicsVK::submit() {
 
 void GraphicsVK::advanceFrame() {
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
-
-    // Wait until the current frames in flight are less than the max.
-    vk::Result result = device->waitForFences(inFlightFences[currentFrame].get(), false, UINT64_MAX);
-    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::hexFromInt((u32)result) + ")");
 }
 
 void GraphicsVK::acquireNextImage() {
@@ -225,22 +229,23 @@ void GraphicsVK::acquireNextImage() {
 }
 
 void GraphicsVK::startRender() {
+    vk::Result result = device->waitForFences(fenceSentWithComBuffer[backBufferIndex], false, UINT64_MAX);
+    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::hexFromInt((u32)result) + ")");
     device->resetCommandPool(comPools[backBufferIndex], {});
 
     comBuffers[backBufferIndex].begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit));
     vk::RenderPassBeginInfo beginInfo;
-    if (renderTarget == nullptr) {
+    if (rtRenderInfoOverride == nullptr) {
         frameScissor = scissor;
         beginInfo.renderPass = renderPass;
         beginInfo.framebuffer = framebuffers[backBufferIndex];
     } else {
-        frameScissor = renderTarget->getScissor();
-        beginInfo.renderPass = renderTarget->getRenderPass();
-        beginInfo.framebuffer = renderTarget->getFramebuffer();
+        frameScissor = rtScissor;
+        beginInfo.renderPass = rtRenderInfoOverride->pass;
+        beginInfo.framebuffer = rtRenderInfoOverride->buffer;
     }
     beginInfo.renderArea = frameScissor;
     comBuffers[backBufferIndex].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
-    comBuffers[backBufferIndex].setViewport(0, vkViewport);
 }
 
 void GraphicsVK::startTransfer() {
@@ -257,15 +262,32 @@ void GraphicsVK::endTransfer() {
 }
 
 void GraphicsVK::clear(const Color& cc) {
-    vk::ClearAttachment color(vk::ImageAspectFlagBits::eColor, 0, vk::ClearValue(vk::ClearColorValue(std::array{ cc.red, cc.green, cc.blue, cc.alpha })));
-    vk::ClearAttachment depth;
-    depth.aspectMask = vk::ImageAspectFlagBits::eDepth;
-    depth.clearValue = vk::ClearValue(vk::ClearDepthStencilValue(1.f));
     vk::ClearRect rect = vk::ClearRect(frameScissor, 0, 1);
 
-    std::array attachments { color, depth };
+    vk::ClearAttachment color;
+    color.aspectMask = vk::ImageAspectFlagBits::eColor;
+    color.clearValue = vk::ClearColorValue(std::array{ cc.red, cc.green, cc.blue, cc.alpha });
 
-    comBuffers[backBufferIndex].clearAttachments(attachments, rect);
+    static const inline vk::ClearAttachment DEPTH_CLEAR_ATTACHMENT = []() {
+        vk::ClearAttachment depth;
+        depth.aspectMask = vk::ImageAspectFlagBits::eDepth;
+        depth.clearValue = vk::ClearDepthStencilValue(1.f);
+        return depth;
+    }();
+
+    if (rtCount > 1) {
+        if (rtCount > clearAttachments.size()) {
+            clearAttachments.resize(rtCount + 1);
+        }
+        for (int i = 0; i < rtCount; i++) {
+            clearAttachments[i] = color;
+        }
+        clearAttachments[rtCount] = DEPTH_CLEAR_ATTACHMENT;
+
+        comBuffers[backBufferIndex].clearAttachments(rtCount + 1, clearAttachments.data(), 1, &rect);
+    } else {
+        comBuffers[backBufferIndex].clearAttachments({ color, DEPTH_CLEAR_ATTACHMENT }, rect);
+    }
 }
 
 void GraphicsVK::clearBin() {
@@ -384,11 +406,17 @@ void GraphicsVK::transferToImage(const vk::Buffer& src, const vk::Image& dst, in
 void GraphicsVK::setRenderTarget(Texture& rt) {
     endRender();
 
-    if (renderTarget == nullptr) { oldSwapchainBackBufferIndex = backBufferIndex; }
+    if (rtRenderInfoOverride == nullptr) { oldSwapchainBackBufferIndex = backBufferIndex; }
     
     submit<false>();
 
-    renderTarget = (RenderTextureVK*)&rt;
+    pipelineInfo.resize(1);
+    pipelineInfo.viewportInfo.setScissors(((RenderTextureVK&)rt).getScissor());
+
+    RenderTextureVK& target = ((RenderTextureVK&)rt);
+    rtRenderInfoOverride = &target.getRenderInfo();
+    rtScissor = target.getScissor();
+    rtCount = 1;
 
     advanceFrame();
 
@@ -397,7 +425,46 @@ void GraphicsVK::setRenderTarget(Texture& rt) {
 }
 
 void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& rt) {
-    // TODO: STUB
+    endRender();
+
+    if (rtRenderInfoOverride == nullptr) { oldSwapchainBackBufferIndex = backBufferIndex; }
+
+    submit<false>();
+
+    pipelineInfo.resize(rt.size());
+    pipelineInfo.viewportInfo.setScissors(((RenderTextureVK&)rt[0].get()).getScissor());
+
+    Hasher hasher;
+    for (const Texture& tex : rt) {
+        hasher.feed((size_t)&tex);
+    }
+    MultiRTID hash = hasher.getHash();
+    auto it = multiRenderTargetInfos.find(hash);
+    if (it == multiRenderTargetInfos.end()) {
+        MultiRTResources newRes;
+        newRes.id = hash;
+        // TODO: C++20 Do this with views.
+        std::vector<vk::Format> fmts; fmts.reserve(rt.size());
+        std::vector<vk::ImageView> views; views.reserve(rt.size() + 1);
+        for (const Texture& t : rt) {
+            fmts.push_back(((RenderTextureVK&)t).getFormat());
+            views.push_back(((TextureVK&)t).getImageView());
+            ((RenderTextureVK&)t).associateMultiRTResources(hash);
+        }
+        views.push_back(((RenderTextureVK&)rt[0].get()).getDepthView());
+        newRes.pass = new VKRenderPass(device, fmts);
+        newRes.buffer = new VKFramebuffer(device, *newRes.pass, views, vk::Extent2D(rt[0]->getWidth(), rt[0]->getHeight()));
+        newRes.info = RenderInfo{ *newRes.pass, *newRes.buffer };
+        it = multiRenderTargetInfos.emplace(hash, std::move(newRes)).first;
+    }
+    rtRenderInfoOverride = &it->second.info;
+    rtScissor = ((RenderTextureVK&)rt[0].get()).getScissor();
+    rtCount = rt.size();
+
+    advanceFrame();
+
+    backBufferIndex = (backBufferIndex + 1) % MAX_FRAMES_IN_FLIGHT;
+    startRender();
 }
 
 void GraphicsVK::resetRenderTarget() {
@@ -405,7 +472,11 @@ void GraphicsVK::resetRenderTarget() {
 
     submit<false>();
 
-    renderTarget = nullptr;
+    pipelineInfo.resize(1);
+    pipelineInfo.viewportInfo.setScissors(scissor);
+
+    rtRenderInfoOverride = nullptr;
+    rtCount = 1;
 
     advanceFrame();
 
@@ -413,13 +484,10 @@ void GraphicsVK::resetRenderTarget() {
     startRender();
 }
 
-static constexpr vk::Viewport convertViewport(const Rectanglei& rect) {
-    return vk::Viewport(rect.topLeftCorner().x, rect.topLeftCorner().y + rect.height(), rect.width(), -rect.height(), 0.f, 1.f);
-}
-
 void GraphicsVK::setViewport(const Rectanglei& vp) {
     viewport = vp;
     vkViewport = convertViewport(viewport);
+    comBuffers[backBufferIndex].setViewport(0, vkViewport);
 }
 
 void GraphicsVK::setDepthTest(bool isEnabled) {
@@ -486,6 +554,15 @@ vk::DeviceSize GraphicsVK::getAtomSize() const {
     return atomSize;
 }
 
+void GraphicsVK::destroyMultiRTResources(MultiRTID id) {
+    auto it = multiRenderTargetInfos.find(id);
+    if (it != multiRenderTargetInfos.end()) {
+        delete it->second.pass;
+        delete it->second.buffer;
+        multiRenderTargetInfos.erase(it);
+    }
+}
+
 const vk::DescriptorSetLayout& GraphicsVK::getDescriptorSetLayout(int count) {
     auto it = dSetLayouts.find(count);
     if (it == dSetLayouts.end()) {
@@ -534,14 +611,6 @@ void GraphicsVK::returnRenderPass(vk::Format fmt) {
     if (pass.count == 0) { delete pass.pass; }
 }
 
-std::optional<vk::Format> GraphicsVK::getRenderTargetFormat() const {
-    if (renderTarget == nullptr) {
-        return { };
-    } else {
-        return renderTarget->getFormat();
-    }
-}
-
 // Explanation of the staging buffer cache:
 // By utilizing getTempStagingBuffer anyone can get a potentially cached buffer.
 // If getTempStagingBuffer needs to create a new buffer, that one is cached.
@@ -582,4 +651,8 @@ void GraphicsVK::reuploadPipelines() {
     for (ShaderVK* sh : shaders) {
         sh->uploadPipelines();
     }
+}
+
+const RenderInfo* GraphicsVK::getRenderInfo() const {
+    return rtRenderInfoOverride;
 }

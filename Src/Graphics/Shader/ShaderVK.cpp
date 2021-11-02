@@ -227,14 +227,14 @@ void ShaderVK::uploadPipelines() {
 }
 
 vk::Pipeline ShaderVK::getPipeline(Mesh::PrimitiveType type) {
-    std::optional<vk::Format> fmt = graphics.getRenderTargetFormat();
-    if (fmt.has_value()) {
-        VKPipeline::View& pipeline = rtPipelines[fmt.value()].getPipeline(type); // TODO: Stupid map lookup!
+    const RenderInfo* ri = graphics.getRenderInfo();
+    if (ri == nullptr) {
+        return basicPipeline.getPipeline(type);
+    } else {
+        VKPipeline::View& pipeline = rtPipelines[ri->pass].getPipeline(type); // TODO: Stupid map lookup!
         if (!pipeline.isHoldingResource()) {
-            uploadPipeline(pipeline, graphics.getRenderPass(fmt.value()), type);
+            uploadPipeline(pipeline, ri->pass, type);
         }
         return pipeline;
-    } else {
-        return basicPipeline.getPipeline(type);
     }
 }

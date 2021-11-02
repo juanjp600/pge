@@ -91,7 +91,7 @@ namespace PGE {
                 VKPipeline::View linePipeline;
                 VKPipeline::View& getPipeline(Mesh::PrimitiveType type);
             };
-            std::unordered_map<vk::Format, PipelinePair> rtPipelines;
+            std::unordered_map<vk::RenderPass, PipelinePair> rtPipelines;
             PipelinePair basicPipeline;
 
             ResourceManagerVK resourceManager;

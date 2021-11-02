@@ -14,23 +14,26 @@ RenderTextureVK::RenderTextureVK(Graphics& gfx, int w, int h, Format fmt)
     graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::SHADER_READ>(image, 1);
     imageView = resourceManager.addNewResource<VKImageView>(device, image, format, 1);
 
-    renderPass = graphics.requestRenderPass(format);
+    renderInfo.pass = graphics.requestRenderPass(format);
     depth = resourceManager.addNewResource<RawWrapper<TextureVK>>(gfx, w, h);
-    framebuffer = resourceManager.addNewResource<VKFramebuffer>(device, renderPass, imageView.get(), depth->getImageView(), vk::Extent2D(w, h));
+    renderInfo.buffer = resourceManager.addNewResource<VKFramebuffer>(device, renderInfo.pass, imageView.get(), depth->getImageView(), vk::Extent2D(w, h));
 
     scissor = vk::Rect2D(vk::Offset2D(0, 0), vk::Extent2D(w, h));
 }
 
 RenderTextureVK::~RenderTextureVK() {
     graphics.returnRenderPass(format);
+    for (u64 r : associatedMultiRTResources) {
+        graphics.destroyMultiRTResources(r);
+    }
 }
 
-const vk::RenderPass RenderTextureVK::getRenderPass() const {
-    return renderPass;
+void RenderTextureVK::associateMultiRTResources(u64 id) {
+    associatedMultiRTResources.push_back(id);
 }
 
-const vk::Framebuffer RenderTextureVK::getFramebuffer() const {
-    return framebuffer;
+const RenderInfo& RenderTextureVK::getRenderInfo() const {
+    return renderInfo;
 }
 
 vk::Format RenderTextureVK::getFormat() const {
@@ -39,4 +42,8 @@ vk::Format RenderTextureVK::getFormat() const {
 
 const vk::Rect2D& RenderTextureVK::getScissor() const {
     return scissor;
+}
+
+vk::ImageView RenderTextureVK::getDepthView() const {
+    return depth->getImageView();
 }

@@ -28,6 +28,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
             RENDER_TARGET,
         };
 
+        using MultiRTID = u64;
+
         GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y);
         ~GraphicsVK();
 
@@ -78,6 +80,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         vk::DeviceSize getAtomSize() const;
 
+        void destroyMultiRTResources(MultiRTID id);
+
         const vk::DescriptorSetLayout& getDescriptorSetLayout(int count);
         void dropDescriptorSetLayout(int count);
 
@@ -90,11 +94,11 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         vk::RenderPass requestRenderPass(vk::Format fmt);
         void returnRenderPass(vk::Format fmt);
 
-        std::optional<vk::Format> getRenderTargetFormat() const;
-
         VKMemoryBuffer& getTempStagingBuffer(int size);
         VKMemoryBuffer& registerStagingBuffer(int size);
         void unregisterStagingBuffer(int size);
+
+        const RenderInfo* getRenderInfo() const;
 
     private:
         vk::DispatchLoaderDynamic dispatch;
@@ -143,6 +147,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         std::vector<VKFence::View> inFlightFences;
         // We don't actually own any resource here.
         std::vector<vk::Fence> imagesInFlight;
+        std::vector<vk::Fence> fenceSentWithComBuffer;
 
         std::unordered_set<ShaderVK*> shaders;
 
@@ -165,13 +170,24 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         vk::DeviceSize atomSize;
 
-        RenderTextureVK* renderTarget = nullptr;
-
         struct FormatRenderPass {
             int count = 0;
             VKRenderPass* pass;
         };
         std::unordered_map<vk::Format, FormatRenderPass> renderPasses;
+
+        const RenderInfo* rtRenderInfoOverride = nullptr;
+        vk::Rect2D rtScissor;
+        struct MultiRTResources {
+            MultiRTID id;
+            RenderInfo info;
+            VKRenderPass* pass;
+            VKFramebuffer* buffer;
+        };
+        std::unordered_map<MultiRTID, MultiRTResources> multiRenderTargetInfos;
+        int rtCount = 1;
+
+        std::vector<vk::ClearAttachment> clearAttachments;
 
         std::multiset<int> cachedBufferSizesSet;
         int cachedBufferSize = 0;
