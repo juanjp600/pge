@@ -79,7 +79,7 @@ void MeshVK::uploadInternalData() {
 
 	if (newData) {
 		resourceManager.trash(data);
-		data = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, finalTotalSize,
+		data = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, graphics.getAtomSize(), finalTotalSize,
 			strategy == UpdateStrategy::PER_FRAME ? VKMemoryBuffer::Type::STAGING_DEVICE : VKMemoryBuffer::Type::DEVICE);
 
 		if (strategy == UpdateStrategy::DYNAMIC) {
@@ -104,7 +104,7 @@ void MeshVK::uploadInternalData() {
 		*indexCursor = (u16)u;
 		indexCursor++;
 	}
-	target->flush(Math::roundUp((vk::DeviceSize)finalTotalSize, graphics.getAtomSize()));
+	target->flush(finalTotalSize);
 
 	if (target != data) {
 		graphics.transfer(target->getBuffer(), data->getBuffer(), finalTotalSize);

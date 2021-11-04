@@ -31,33 +31,10 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         using MultiRTID = u64;
 
         GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y);
-        ~GraphicsVK();
 
         void swap() override;
 
         void clear(const Color& color) override;
-
-
-        void generateMipmaps(vk::Image img, int w, int h, int miplevels);
-
-        template <ImageLayout OLD, ImageLayout NEW>
-        void transformImage(vk::Image img, int miplevels) {
-            startTransfer();
-
-            vk::ImageMemoryBarrier barrier = createBasicBarrier(img, miplevels);
-            pipelineBarrier<OLD, NEW>(barrier);
-
-            endTransfer();
-        }
-
-        // TODO: Optimize.
-        void transfer(const vk::Buffer& src, const vk::Buffer& dst, int size) {
-            startTransfer();
-            transferComBuffer.copyBuffer(src, dst, vk::BufferCopy(0, 0, size));
-            endTransfer();
-        }
-        
-        void transferToImage(const vk::Buffer& src, const vk::Image& dst, int w, int h, int miplevel = 0);
 
         void setRenderTarget(Texture& rt) override;
         void setRenderTargets(const ReferenceVector<Texture>& rt) override;
@@ -71,36 +48,63 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         void setVsync(bool isEnabled) override;
 
-        vk::Device getDevice() const;
-        vk::PhysicalDevice getPhysicalDevice() const;
-        vk::RenderPass getRenderPass() const;
-        vk::CommandBuffer getCurrentCommandBuffer() const;
-        const VKPipelineInfo& getPipelineInfo() const;
-        const vk::Sampler& getSampler(bool rt) const;
 
-        vk::DeviceSize getAtomSize() const;
+        void generateMipmaps(vk::Image img, int w, int h, int miplevels);
+
+        template <ImageLayout OLD, ImageLayout NEW>
+        void transformImage(vk::Image img, int miplevels) {
+            startTransfer();
+
+            vk::ImageMemoryBarrier barrier = UtilVK::createBasicBarrier(img, miplevels);
+            pipelineBarrier<OLD, NEW>(barrier);
+
+            endTransfer();
+        }
+
+        // TODO: Optimize.
+        void transfer(const vk::Buffer& src, const vk::Buffer& dst, int size) {
+            startTransfer();
+            transferComBuffer.copyBuffer(src, dst, vk::BufferCopy(0, 0, size));
+            endTransfer();
+        }
+
+        void transferToImage(const vk::Buffer& src, const vk::Image& dst, int w, int h, int miplevel = 0);
+
+        void trash(ResourceBase& res);
 
         void destroyMultiRTResources(MultiRTID id);
 
         const vk::DescriptorSetLayout& getDescriptorSetLayout(int count);
         void dropDescriptorSetLayout(int count);
 
-        void addShader(ShaderVK& sh);
-        void removeShader(ShaderVK& sh);
-
-        void trash(ResourceBase& res);
-
         vk::RenderPass getRenderPass(vk::Format fmt);
         vk::RenderPass requestRenderPass(vk::Format fmt);
         void returnRenderPass(vk::Format fmt);
 
+        // See .cpp for documentation.
         VKMemoryBuffer& getTempStagingBuffer(int size);
         VKMemoryBuffer& registerStagingBuffer(int size);
         void unregisterStagingBuffer(int size);
 
         const RenderInfo* getRenderInfo() const;
 
+        vk::DeviceSize getAtomSize() const;
+
+        vk::Device getDevice() const;
+        vk::PhysicalDevice getPhysicalDevice() const;
+        vk::RenderPass getBasicRenderPass() const;
+        vk::CommandBuffer getCurrentCommandBuffer() const;
+        const VKPipelineInfo& getPipelineInfo() const;
+        const vk::Sampler& getSampler(bool rt) const;
+
+        // Shaders register and unregister themself here.
+        void addShader(ShaderVK& sh);
+        void removeShader(ShaderVK& sh);
+
     private:
+        ResourceManagerVK resourceManager;
+        TrashBinVK trashBin;
+
         vk::DispatchLoaderDynamic dispatch;
 
         // TODO: Remove.
@@ -127,7 +131,6 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         vk::Rect2D scissor;
         vk::Rect2D frameScissor;
-        vk::Viewport vkViewport;
 
         VKPipelineInfo pipelineInfo;
 
@@ -161,10 +164,13 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         };
         std::unordered_map<int, DescriptorSetLayoutEntry> dSetLayouts;
 
-        // TODO: <3 doesn't work! Also replace the vectors with arrays.
-        static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
         int currentFrame = 0;
 
+        // There exist exactly as many command buffers as swapchain images and the two are usually in sync.
+        // Rendering to a render target possibly requires advancing the command buffer index,
+        // while not submitting anything to the swapchain.
+        // This desync is handled by setting the resetting the backBufferIndex accordingly
+        // when changing the rendering to/from a render target.
         int backBufferIndex;
         int oldSwapchainBackBufferIndex;
 
@@ -195,34 +201,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         void checkCachedBufferShrink();
         void updateCachedBuffer(int size);
 
-        ResourceManagerVK resourceManager;
-        std::vector<ResourceBase*> trashBin;
-
-        // TODO: Turn the bin into a class.
-        void clearBin();
-
         void createSwapchain();
-
-        // TODO: Refactor this out of Graphics?
-        // TODO: consteval C++20.
-        static constexpr vk::ImageMemoryBarrier createBasicBarrier(vk::Image img, int miplevels) {
-            vk::ImageMemoryBarrier barrier;
-            barrier.image = img;
-            barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-            barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-            barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
-            barrier.subresourceRange.layerCount = 1;
-            barrier.subresourceRange.levelCount = miplevels;
-            return barrier;
-        }
-
-        static constexpr vk::ImageSubresourceLayers createBasicImgSubresLayers(int miplevel) {
-            vk::ImageSubresourceLayers layers;
-            layers.aspectMask = vk::ImageAspectFlagBits::eColor;
-            layers.mipLevel = miplevel;
-            layers.layerCount = 1;
-            return layers;
-        }
 
         struct TransitionInfo {
             vk::ImageLayout layout;
@@ -279,10 +258,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
             );
         }
 
-        void endRender();
-        template <bool PRESENT>
-        void submit();
-        void advanceFrame();
+        template <bool PRESENT> void submit();
         void acquireNextImage();
         void startRender();
 

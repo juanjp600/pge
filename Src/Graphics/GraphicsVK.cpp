@@ -9,6 +9,9 @@
 
 using namespace PGE;
 
+// TODO: <3 doesn't work! Also replace the vectors with arrays.
+constexpr int MAX_FRAMES_IN_FLIGHT = 3;
+
 static constexpr vk::Viewport convertViewport(const Rectanglei& rect) {
     return vk::Viewport(rect.topLeftCorner().x, rect.topLeftCorner().y + rect.height(), rect.width(), -rect.height(), 0.f, 1.f);
 }
@@ -41,7 +44,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
         }
 
         // Doesn't support depth buffering, ignore it.
-        if (!(pd.getFormatProperties(VK_DEPTH_FORMAT).optimalTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment)) {
+        if (!(pd.getFormatProperties(UtilVK::DEPTH_FORMAT).optimalTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment)) {
             continue;
         }
 
@@ -118,6 +121,8 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     device = resourceManager.addNewResource<VKDevice>(physicalDevice,
         std::unordered_set { graphicsQueueIndex, presentQueueIndex, transferQueueIndex }, deviceExtensions);
 
+    trashBin.init(device);
+
     graphicsQueue = device->getQueue(graphicsQueueIndex, 0);
     presentQueue = device->getQueue(presentQueueIndex, 0);
     transferQueue = device->getQueue(transferQueueIndex, 0);
@@ -163,30 +168,21 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     focused = true;
 }
 
-GraphicsVK::~GraphicsVK() {
-    clearBin();
-}
-
 void GraphicsVK::swap() {
-    endRender();
     submit<true>();
 
     checkCachedBufferShrink();
-    clearBin();
-
-    advanceFrame();
+    trashBin.clear();
 
     acquireNextImage();
     startRender();
 }
 
-void GraphicsVK::endRender() {
-    comBuffers[backBufferIndex].endRenderPass();
-    comBuffers[backBufferIndex].end();
-}
-
 template <bool PRESENT>
 void GraphicsVK::submit() {
+    comBuffers[backBufferIndex].endRenderPass();
+    comBuffers[backBufferIndex].end();
+
     vk::PipelineStageFlags waitStages = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 
     device->resetFences(inFlightFences[currentFrame].get());
@@ -209,9 +205,7 @@ void GraphicsVK::submit() {
         result = presentQueue.presentKHR(presentInfo);
         PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
     }
-}
 
-void GraphicsVK::advanceFrame() {
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }
 
@@ -268,7 +262,7 @@ void GraphicsVK::clear(const Color& cc) {
     color.aspectMask = vk::ImageAspectFlagBits::eColor;
     color.clearValue = vk::ClearColorValue(std::array{ cc.red, cc.green, cc.blue, cc.alpha });
 
-    static const inline vk::ClearAttachment DEPTH_CLEAR_ATTACHMENT = []() {
+    static const vk::ClearAttachment DEPTH_CLEAR_ATTACHMENT = []() {
         vk::ClearAttachment depth;
         depth.aspectMask = vk::ImageAspectFlagBits::eDepth;
         depth.clearValue = vk::ClearDepthStencilValue(1.f);
@@ -287,17 +281,6 @@ void GraphicsVK::clear(const Color& cc) {
         comBuffers[backBufferIndex].clearAttachments(rtCount + 1, clearAttachments.data(), 1, &rect);
     } else {
         comBuffers[backBufferIndex].clearAttachments({ color, DEPTH_CLEAR_ATTACHMENT }, rect);
-    }
-}
-
-void GraphicsVK::clearBin() {
-    if (!trashBin.empty()) {
-        device->waitIdle();
-        // Clear trashbin.
-        for (ResourceBase* b : trashBin) {
-            delete b;
-        }
-        trashBin.clear();
     }
 }
 
@@ -350,10 +333,18 @@ void GraphicsVK::createSwapchain() {
     PGE_ASSERT(result == vk::Result::eSuccess, "Failed to allocate transfer command buffers (VKERROR: " + String::hexFromInt((u32)result) + ")");
 }
 
+constexpr vk::ImageSubresourceLayers createBasicImgSubresLayers(int miplevel) {
+    vk::ImageSubresourceLayers layers;
+    layers.aspectMask = vk::ImageAspectFlagBits::eColor;
+    layers.mipLevel = miplevel;
+    layers.layerCount = 1;
+    return layers;
+}
+
 void GraphicsVK::generateMipmaps(vk::Image img, int w, int h, int miplevels) {
     startTransfer();
 
-    vk::ImageMemoryBarrier barrier = createBasicBarrier(img, 1);
+    vk::ImageMemoryBarrier barrier = UtilVK::createBasicBarrier(img, 1);
     barrier.subresourceRange.levelCount = 1;
 
     int mipWidth = w; int mipHeight = h;
@@ -404,8 +395,6 @@ void GraphicsVK::transferToImage(const vk::Buffer& src, const vk::Image& dst, in
 }
 
 void GraphicsVK::setRenderTarget(Texture& rt) {
-    endRender();
-
     if (rtRenderInfoOverride == nullptr) { oldSwapchainBackBufferIndex = backBufferIndex; }
     
     submit<false>();
@@ -418,15 +407,11 @@ void GraphicsVK::setRenderTarget(Texture& rt) {
     rtScissor = target.getScissor();
     rtCount = 1;
 
-    advanceFrame();
-
     backBufferIndex = (backBufferIndex + 1) % MAX_FRAMES_IN_FLIGHT;
     startRender();
 }
 
 void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& rt) {
-    endRender();
-
     if (rtRenderInfoOverride == nullptr) { oldSwapchainBackBufferIndex = backBufferIndex; }
 
     submit<false>();
@@ -461,15 +446,11 @@ void GraphicsVK::setRenderTargets(const ReferenceVector<Texture>& rt) {
     rtScissor = ((RenderTextureVK&)rt[0].get()).getScissor();
     rtCount = rt.size();
 
-    advanceFrame();
-
     backBufferIndex = (backBufferIndex + 1) % MAX_FRAMES_IN_FLIGHT;
     startRender();
 }
 
 void GraphicsVK::resetRenderTarget() {
-    endRender();
-
     submit<false>();
 
     pipelineInfo.resize(1);
@@ -478,16 +459,13 @@ void GraphicsVK::resetRenderTarget() {
     rtRenderInfoOverride = nullptr;
     rtCount = 1;
 
-    advanceFrame();
-
     backBufferIndex = oldSwapchainBackBufferIndex;
     startRender();
 }
 
 void GraphicsVK::setViewport(const Rectanglei& vp) {
     viewport = vp;
-    vkViewport = convertViewport(viewport);
-    comBuffers[backBufferIndex].setViewport(0, vkViewport);
+    comBuffers[backBufferIndex].setViewport(0, convertViewport(viewport));
 }
 
 void GraphicsVK::setDepthTest(bool isEnabled) {
@@ -498,9 +476,8 @@ void GraphicsVK::setDepthTest(bool isEnabled) {
 void GraphicsVK::setVsync(bool isEnabled) {
     if (isEnabled != vsync) {
         vsync = isEnabled;
-        endRender();
-        submit<true>(); // TODO: Why true?
-        advanceFrame();
+        // We need to present here, this causes a 1 frame flicker, shame!
+        submit<true>();
         device->waitIdle();
         // TODO: Clean.
         // Don't when ending.
@@ -534,7 +511,7 @@ vk::PhysicalDevice GraphicsVK::getPhysicalDevice() const {
     return physicalDevice;
 }
 
-vk::RenderPass GraphicsVK::getRenderPass() const {
+vk::RenderPass GraphicsVK::getBasicRenderPass() const {
     return renderPass;
 }
 
@@ -591,7 +568,7 @@ void GraphicsVK::removeShader(ShaderVK& m) {
 }
 
 void GraphicsVK::trash(ResourceBase& res) {
-    trashBin.push_back(&res);
+    trashBin.add(res);
 }
 
 vk::RenderPass GraphicsVK::getRenderPass(vk::Format fmt) {
@@ -643,7 +620,7 @@ void GraphicsVK::checkCachedBufferShrink() {
 
 void GraphicsVK::updateCachedBuffer(int size) {
     resourceManager.trash(cachedBuffer);
-    cachedBuffer = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, size, VKMemoryBuffer::Type::STAGING);
+    cachedBuffer = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, atomSize, size, VKMemoryBuffer::Type::STAGING);
     cachedBufferSize = size;
 }
 

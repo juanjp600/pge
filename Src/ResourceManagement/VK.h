@@ -13,7 +13,46 @@
 
 namespace PGE {
 
-constexpr vk::Format VK_DEPTH_FORMAT = vk::Format::eD32Sfloat;
+namespace UtilVK {
+    constexpr vk::Format DEPTH_FORMAT = vk::Format::eD32Sfloat;
+
+    constexpr vk::ImageMemoryBarrier createBasicBarrier(vk::Image img, int miplevels) {
+        vk::ImageMemoryBarrier barrier;
+        barrier.image = img;
+        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+        barrier.subresourceRange.layerCount = 1;
+        barrier.subresourceRange.levelCount = miplevels;
+        return barrier;
+    }
+}
+
+class TrashBinVK {
+    private:
+        std::vector<ResourceBase*> bin;
+
+        vk::Device device;
+
+    public:
+        void init(vk::Device dev) { device = dev; }
+        
+        ~TrashBinVK() { clear(); }
+
+        void add(ResourceBase& res) {
+            bin.push_back(&res);
+        }
+
+        void clear() {
+            if (!bin.empty()) {
+                device.waitIdle();
+                for (ResourceBase* b : bin) {
+                    delete b;
+                }
+                bin.clear();
+            }
+        }
+};
 
 struct RenderInfo {
     vk::RenderPass pass;
@@ -226,7 +265,7 @@ class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
 
         static const inline vk::AttachmentDescription DEPTH_ATTACHMENT = []() {
             vk::AttachmentDescription depth;
-            depth.format = VK_DEPTH_FORMAT;
+            depth.format = UtilVK::DEPTH_FORMAT;
             depth.samples = vk::SampleCountFlagBits::e1;
             depth.loadOp = vk::AttachmentLoadOp::eDontCare;
             depth.storeOp = vk::AttachmentStoreOp::eDontCare;
@@ -413,6 +452,7 @@ class VKMemoryBuffer {
 
     private:
         vk::Device device;
+        vk::DeviceSize atomSize;
         VKBuffer buffer;
         VKMemory memory;
         byte* data;
@@ -450,9 +490,8 @@ class VKMemoryBuffer {
         }
 
     public:
-        VKMemoryBuffer(vk::Device dev, vk::PhysicalDevice physDev,
-            vk::DeviceSize size, Type type)
-            : device(dev), buffer(dev, size, getBufferUsage(type)), memory(dev, physDev, buffer.get(), getMemoryProperties(type)) {
+        VKMemoryBuffer(vk::Device dev, vk::PhysicalDevice physDev, vk::DeviceSize atomSize, vk::DeviceSize size, Type type)
+            : device(dev), atomSize(atomSize), buffer(dev, size, getBufferUsage(type)), memory(dev, physDev, buffer.get(), getMemoryProperties(type)) {
             if (getMemoryProperties(type) & vk::MemoryPropertyFlagBits::eHostVisible) {
                 data = (byte*)dev.mapMemory(memory, 0, VK_WHOLE_SIZE);
             }
@@ -462,7 +501,7 @@ class VKMemoryBuffer {
         vk::Buffer getBuffer() { return buffer.get(); }
 
         void flush(vk::DeviceSize size) {
-            device.flushMappedMemoryRanges(vk::MappedMemoryRange(memory, 0, size));
+            device.flushMappedMemoryRanges(vk::MappedMemoryRange(memory, 0, Math::roundUp((vk::DeviceSize)size, atomSize)));
         }
 };
 

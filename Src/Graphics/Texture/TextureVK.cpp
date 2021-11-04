@@ -90,7 +90,7 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
     
     for (int i = 0; i < mipmaps.size(); i++) {
         memcpy(staging.getData(), mipmaps[i].buffer, mipmaps[i].size);
-        staging.flush(Math::roundUp((vk::DeviceSize)mipmaps[i].size, graphics.getAtomSize()));
+        staging.flush(mipmaps[i].size);
         graphics.transferToImage(staging.getBuffer(), image, mipmaps[i].width, mipmaps[i].height, i);
     }
 
@@ -104,9 +104,9 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h) : Texture(w, h, false, Texture
     vk::Device device = graphics.getDevice();
     vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
 
-    image = resourceManager.addNewResource<VKImage>(device, w, h, VK_DEPTH_FORMAT, 1, VKImage::Usage::DEPTH);
+    image = resourceManager.addNewResource<VKImage>(device, w, h, UtilVK::DEPTH_FORMAT, 1, VKImage::Usage::DEPTH);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
-    imageView = resourceManager.addNewResource<VKImageView>(device, image, VK_DEPTH_FORMAT, 1, vk::ImageAspectFlagBits::eDepth);
+    imageView = resourceManager.addNewResource<VKImageView>(device, image, UtilVK::DEPTH_FORMAT, 1, vk::ImageAspectFlagBits::eDepth);
 }
 
 const vk::ImageView TextureVK::getImageView() const {

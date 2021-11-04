@@ -221,7 +221,7 @@ void ShaderVK::uploadPipelines() {
     rtPipelines.clear(); // TODO: IDFK.
 
     // TODO: Be lazy?
-    vk::RenderPass pass = graphics.getRenderPass();
+    vk::RenderPass pass = graphics.getBasicRenderPass();
     uploadPipeline(basicPipeline.triPipeline, pass, Mesh::PrimitiveType::TRIANGLE);
     uploadPipeline(basicPipeline.linePipeline, pass, Mesh::PrimitiveType::LINE);
 }
