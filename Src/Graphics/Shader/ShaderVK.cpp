@@ -56,12 +56,12 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
 
         ranges.reserve(2);
         vertexConstantSize = pushConstant.padded_size;
-        fragmentConstantSize = constantData.size() - vertexConstantSize;
         for (const SpvReflectBlockVariable& cMember : vk::ArrayProxy(pushConstant.member_count, pushConstant.members)) {
             String name = cMember.name;
             bool isVert = name.substr(0, 4) == "vert";
             if (!isVert && fragmentConstantMap.empty()) {
                 vertexConstantSize = cMember.absolute_offset;
+                fragmentConstantSize = constantData.size() - vertexConstantSize;
             }
             (isVert ? vertexConstantMap : fragmentConstantMap).emplace(name.substr(5),
                 ConstantVK(*this, isVert ? vk::ShaderStageFlagBits::eVertex : vk::ShaderStageFlagBits::eFragment, constantData.data(),
