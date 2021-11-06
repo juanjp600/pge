@@ -63,6 +63,8 @@ var hierarchy =
       [ "\u202APGE::Shader", "class_p_g_e_1_1_shader.html", null ],
       [ "\u202APGE::Texture", "class_p_g_e_1_1_texture.html", null ]
     ] ],
+    [ "\u202APGE::Range< SIZE >", "class_p_g_e_1_1_range.html", null ],
+    [ "\u202APGE::Range< SIZE >::RangeIterator", "class_p_g_e_1_1_range_1_1_range_iterator.html", null ],
     [ "\u202APGE::Reference< T >", "class_p_g_e_1_1_reference.html", null ],
     [ "\u202APGE::SysEvents::Subscriber", "class_p_g_e_1_1_sys_events_1_1_subscriber.html", null ],
     [ "\u202APGE::SysEvents", "class_p_g_e_1_1_sys_events.html", null ],
