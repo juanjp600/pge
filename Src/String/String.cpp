@@ -990,7 +990,7 @@ const std::vector<String> String::split(const String& needleStr, bool removeEmpt
 }
 
 const String String::join(const std::vector<String>& vect, const String& separator) {
-    if (vect.size() == 0) {
+    if (vect.empty()) {
         return String();
     }
 
