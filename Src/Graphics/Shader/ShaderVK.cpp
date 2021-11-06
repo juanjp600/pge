@@ -23,17 +23,18 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
     vertexInputAttributes.reserve(reflection.input_variable_count);
     int vertexStride = 0;
     std::vector<StructuredData::ElemLayout::Entry> entries; entries.reserve(reflection.input_variable_count);
-    for (int i = 0; i < (int)reflection.input_variable_count; i++) {
+    // TODO: Add ArrayProxies to PGE because they're BALLING.
+    for (const SpvReflectInterfaceVariable& inputVariable : vk::ArrayProxy(reflection.input_variable_count, reflection.input_variables[0])) {
         // We don't want built in variables.
-        if (reflection.input_variables[0][i].built_in != -1) {
+        if (inputVariable.built_in != -1) {
             continue;
         }
-        String name = reflection.input_variables[0][i].name;
+        String name = inputVariable.name;
         // Strip the "input.".
         name = name.substr(name.findFirst(".") + 1);
-        vertexInputAttributes.push_back(vk::VertexInputAttributeDescription(reflection.input_variables[0][i].location, 0, (vk::Format)reflection.input_variables[0][i].format, vertexStride));
+        vertexInputAttributes.push_back(vk::VertexInputAttributeDescription(inputVariable.location, 0, (vk::Format)inputVariable.format, vertexStride));
         // TODO: Better way to get vertex input size?
-        int size = 4 * (reflection.input_variables[0][i].numeric.vector.component_count > 0 ? reflection.input_variables[0][i].numeric.vector.component_count : 1);
+        int size = 4 * (inputVariable.numeric.vector.component_count > 0 ? inputVariable.numeric.vector.component_count : 1);
         vertexStride += size;
         entries.emplace_back(name, size);
     }
@@ -43,34 +44,35 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
     // Members are supposed to begin with the vertex constants and not meant to be mixed.
     std::vector<vk::PushConstantRange> ranges;
     if (reflection.push_constant_block_count != 0) {
-        if (reflection.push_constant_block_count > 1) {
-        //    throw Exception("ShaderVK::ShaderVK", "Too many push constants (" + String::fromInt(reflection.push_constant_block_count) + ") in shader " + path.cstr());
-        } // TODO: Clean.
-        auto lol = reflection.push_constant_blocks[1];
+        // TODO: Investigte duplicate constant block.
+        //auto lol = reflection.push_constant_blocks[1];
+        //PGE_ASSERT(reflection.push_constant_block_count <= 1, "Too many push constants (" + String::from(reflection.push_constant_block_count) + ") in shader " + path.str());
+
         SpvReflectBlockVariable pushConstant = reflection.push_constant_blocks[0];
         String blockName = pushConstant.name;
         PGE_ASSERT(blockName == "vulkanConstants", "Invalid push constant (\"" + blockName + "\")");
+        
+        constantData.resize(pushConstant.size);
 
         ranges.reserve(2);
-        int fragmentOffset = pushConstant.padded_size;
-        for (int j = 0; j < (int)pushConstant.member_count; j++) {
-            String name = pushConstant.members[j].name;
-            if (name.substr(0, 4) == "vert") {
-                vertexConstantMap.emplace(name.substr(5), ConstantVK(this, vk::ShaderStageFlagBits::eVertex, pushConstant.members[j].absolute_offset));
-            } else {
-                if (fragmentConstantMap.size() == 0) {
-                    fragmentOffset = pushConstant.members[j].absolute_offset;
-                }
-                fragmentConstantMap.emplace(name.substr(5), ConstantVK(this, vk::ShaderStageFlagBits::eFragment, pushConstant.members[j].absolute_offset));
+        vertexConstantSize = pushConstant.padded_size;
+        fragmentConstantSize = constantData.size() - vertexConstantSize;
+        for (const SpvReflectBlockVariable& cMember : vk::ArrayProxy(pushConstant.member_count, pushConstant.members)) {
+            String name = cMember.name;
+            bool isVert = name.substr(0, 4) == "vert";
+            if (!isVert && fragmentConstantMap.empty()) {
+                vertexConstantSize = cMember.absolute_offset;
             }
+            (isVert ? vertexConstantMap : fragmentConstantMap).emplace(name.substr(5),
+                ConstantVK(*this, isVert ? vk::ShaderStageFlagBits::eVertex : vk::ShaderStageFlagBits::eFragment, constantData.data(),
+                    cMember.absolute_offset, cMember.size));
         }
-        if (!vertexConstantMap.empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eVertex }, 0, fragmentOffset)); }
-        if (!fragmentConstantMap.empty()) { ranges.push_back(vk::PushConstantRange({ vk::ShaderStageFlagBits::eFragment }, fragmentOffset, pushConstant.padded_size - fragmentOffset)); }
+        if (!vertexConstantMap.empty()) { ranges.emplace_back(vk::ShaderStageFlagBits::eVertex, 0, vertexConstantSize); }
+        if (!fragmentConstantMap.empty()) { ranges.emplace_back(vk::ShaderStageFlagBits::eFragment, vertexConstantSize, pushConstant.padded_size - vertexConstantSize); }
     }
 
     textureCount = 0;
-    for (int i = 0; i < (int)reflection.descriptor_binding_count; i++) {
-        SpvReflectDescriptorBinding& binding = reflection.descriptor_bindings[i];
+    for (const SpvReflectDescriptorBinding& binding : vk::ArrayProxy(reflection.descriptor_binding_count, reflection.descriptor_bindings)) {
         if (binding.descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_SAMPLED_IMAGE) {
             textureCount = binding.count;
             break;
@@ -120,83 +122,55 @@ Shader::Constant& ShaderVK::getFragmentShaderConstant(const String& name) {
     }
 }
 
-void ShaderVK::pushConstants() {
-    for (ConstantVK* c : updatedConstants) {
-        c->push(&graphics);
+void ShaderVK::pushAllConstantsLazy() {
+    if (lastFramePushed == graphics.getFrameCounter()) { return; }
+    lastFramePushed = graphics.getFrameCounter();
+
+    if (vertexConstantSize > 0) {
+        graphics.getCurrentCommandBuffer().pushConstants(getLayout(), vk::ShaderStageFlagBits::eVertex, 0, vertexConstantSize, constantData.data());
     }
-    // TODO: Why.
-    //updatedConstants.clear();
+    if (fragmentConstantSize > 0) {
+        graphics.getCurrentCommandBuffer().pushConstants(getLayout(), vk::ShaderStageFlagBits::eFragment, vertexConstantSize, fragmentConstantSize, constantData.data() + vertexConstantSize);
+    }
 }
 
-ShaderVK::ConstantVK::ConstantVK(ShaderVK* she, vk::ShaderStageFlags stg, int off) {
-    shader = she;
-    stage = stg;
-    offset = off;
-}
+ShaderVK::ConstantVK::ConstantVK(ShaderVK& shader, vk::ShaderStageFlags stage, byte* data, int offset, int size)
+    : shader(shader), stage(stage), data(data + offset), offset(offset), size(size) { }
 
 void ShaderVK::ConstantVK::setValue(const Matrix4x4f& value) {
-    val.matrixVal = value; valueType = Type::MATRIX;
-    shader->updatedConstants.emplace(this);
+    memcpy(data, value.elements, sizeof(value.elements)); push();
 }
 
 void ShaderVK::ConstantVK::setValue(const Vector2f& value) {
-    val.vector2fVal = value; valueType = Type::VECTOR2F;
-    shader->updatedConstants.emplace(this);
+    float arr[] = { value.x, value.y };
+    memcpy(data, arr, sizeof(value)); push();
 }
 
 void ShaderVK::ConstantVK::setValue(const Vector3f& value) {
-    val.vector3fVal = value; valueType = Type::VECTOR3F;
-    shader->updatedConstants.emplace(this);
+    float arr[] = { value.x, value.y, value.z };
+    memcpy(data, arr, sizeof(value)); push();
 }
 
 void ShaderVK::ConstantVK::setValue(const Vector4f& value) {
-    val.vector4fVal = value; valueType = Type::VECTOR4F;
-    shader->updatedConstants.emplace(this);
+    float arr[] = { value.x, value.y, value.z, value.w };
+    memcpy(data, arr, sizeof(value)); push();
 }
 
 void ShaderVK::ConstantVK::setValue(const Color& value) {
-    val.colorVal = value; valueType = Type::COLOR;
-    shader->updatedConstants.emplace(this);
+    float arr[] = { value.red, value.green, value.blue, value.alpha };
+    memcpy(data, arr, sizeof(value)); push();
 }
 
 void ShaderVK::ConstantVK::setValue(float value) {
-    val.floatVal = value; valueType = Type::FLOAT;
-    shader->updatedConstants.emplace(this);
+    memcpy(data, &value, sizeof(value)); push();
 }
 
 void ShaderVK::ConstantVK::setValue(u32 value) {
-    val.intVal = value; valueType = Type::INT;
-    shader->updatedConstants.emplace(this);
+    memcpy(data, &value, sizeof(value)); push();
 }
 
-void ShaderVK::ConstantVK::push(GraphicsVK* gfx) {
-    switch (valueType) {
-        case Type::MATRIX: {
-            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * 4 * sizeof(float), val.matrixVal.elements);
-        } break;
-        case Type::COLOR: {
-            float value[] = { val.colorVal.red, val.colorVal.green, val.colorVal.blue, val.colorVal.alpha };
-            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * sizeof(float), value);
-        } break;
-        case Type::FLOAT: {
-            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, sizeof(float), &val.floatVal);
-        } break;
-        case Type::INT: {
-            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, sizeof(int), &val.intVal);
-        } break;
-        case Type::VECTOR2F: {
-            float value[] = { val.vector2fVal.x, val.vector2fVal.y };
-            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 2 * sizeof(float), value);
-        } break;
-        case Type::VECTOR3F: {
-            float value[] = { val.vector3fVal.x, val.vector3fVal.y, val.vector3fVal.z };
-            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 3 * sizeof(float), value);
-        } break;
-        case Type::VECTOR4F: {
-            float value[] = { val.vector4fVal.x, val.vector4fVal.y, val.vector4fVal.z, val.vector4fVal.w };
-            gfx->getCurrentCommandBuffer().pushConstants(shader->getLayout(), stage, offset, 4 * sizeof(float), value);
-        } break;
-    }
+void ShaderVK::ConstantVK::push() {
+    shader.graphics.getCurrentCommandBuffer().pushConstants(shader.getLayout(), stage, offset, size, data);
 }
 
 vk::PipelineLayout ShaderVK::getLayout() const {

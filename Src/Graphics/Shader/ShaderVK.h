@@ -13,91 +13,79 @@
 
 namespace PGE {
 
-    class ShaderVK : public Shader {
-        public:
-            ShaderVK(Graphics& gfx, const FilePath& path);
-            ~ShaderVK();
+class ShaderVK : public Shader {
+    public:
+        ShaderVK(Graphics& gfx, const FilePath& path);
+        ~ShaderVK();
 
-            Constant& getVertexShaderConstant(const String& name) override;
-            Constant& getFragmentShaderConstant(const String& name) override;
+        Constant& getVertexShaderConstant(const String& name) override;
+        Constant& getFragmentShaderConstant(const String& name) override;
 
-            void pushConstants();
+        void pushAllConstantsLazy();
 
-            vk::PipelineLayout getLayout() const;
+        vk::PipelineLayout getLayout() const;
 
-            void uploadPipelines();
-            vk::Pipeline getPipeline(Mesh::PrimitiveType type);
+        void uploadPipelines();
+        vk::Pipeline getPipeline(Mesh::PrimitiveType type);
 
-        private:
-            GraphicsVK& graphics;
+    private:
+        GraphicsVK& graphics;
 
-            int textureCount;
+        u64 lastFramePushed = std::numeric_limits<u64>::max();
 
-            VKShader::View vkShader;
+        std::vector<byte> constantData;
+        int vertexConstantSize = 0;
+        int fragmentConstantSize = 0;
 
-            std::array<vk::PipelineShaderStageCreateInfo, 2> shaderStageInfo;
+        int textureCount;
 
-            vk::VertexInputBindingDescription vertexInputBinding;
-            std::vector<vk::VertexInputAttributeDescription> vertexInputAttributes;
-            vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
+        VKShader::View vkShader;
 
-            VKPipelineLayout::View layout;
+        std::array<vk::PipelineShaderStageCreateInfo, 2> shaderStageInfo;
 
-            class ConstantVK : public Constant {
-                public:
-                    ConstantVK(ShaderVK* she, vk::ShaderStageFlags stg, int off);
+        vk::VertexInputBindingDescription vertexInputBinding;
+        std::vector<vk::VertexInputAttributeDescription> vertexInputAttributes;
+        vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
 
-                    void setValue(const Matrix4x4f& value) override;
-                    void setValue(const Vector2f& value) override;
-                    void setValue(const Vector3f& value) override;
-                    void setValue(const Vector4f& value) override;
-                    void setValue(const Color& value) override;
-                    void setValue(float value) override;
-                    void setValue(u32 value) override;
+        VKPipelineLayout::View layout;
 
-                    void push(GraphicsVK* gfx);
+        class ConstantVK : public Constant {
+            public:
+                ConstantVK(ShaderVK& shader, vk::ShaderStageFlags stage, byte* data, int offset, int size);
 
-                private:
-                    // TODO: Remove stinky, this is only temporary.
-                    enum class Type {
-                        MATRIX,
-                        VECTOR2F,
-                        VECTOR3F,
-                        VECTOR4F,
-                        COLOR,
-                        FLOAT,
-                        INT,
-                    } valueType;
-                    union {
-                        Matrix4x4f matrixVal = Matrices::ZERO;
-                        Vector2f vector2fVal;
-                        Vector3f vector3fVal;
-                        Vector4f vector4fVal;
-                        Color colorVal;
-                        float floatVal;
-                        int intVal;
-                    } val;
+                void setValue(const Matrix4x4f& value) override;
+                void setValue(const Vector2f& value) override;
+                void setValue(const Vector3f& value) override;
+                void setValue(const Vector4f& value) override;
+                void setValue(const Color& value) override;
+                void setValue(float value) override;
+                void setValue(u32 value) override;
 
-                    ShaderVK* shader;
-                    vk::ShaderStageFlags stage;
-                    int offset;
-            };
-            std::unordered_map<String::Key, ConstantVK> vertexConstantMap;
-            std::unordered_map<String::Key, ConstantVK> fragmentConstantMap;
-            std::unordered_set<ConstantVK*> updatedConstants; // TODO: Remove?
+                void push();
+
+            private:
+                ShaderVK& shader;
+                vk::ShaderStageFlags stage;
+                byte* data;
+
+                int offset;
+                int size;
+        };
+        std::unordered_map<String::Key, ConstantVK> vertexConstantMap;
+        std::unordered_map<String::Key, ConstantVK> fragmentConstantMap;
             
-            struct PipelinePair {
-                VKPipeline::View triPipeline;
-                VKPipeline::View linePipeline;
-                VKPipeline::View& getPipeline(Mesh::PrimitiveType type);
-            };
-            std::unordered_map<vk::RenderPass, PipelinePair> rtPipelines;
-            PipelinePair basicPipeline;
+        struct PipelinePair {
+            VKPipeline::View triPipeline;
+            VKPipeline::View linePipeline;
+            VKPipeline::View& getPipeline(Mesh::PrimitiveType type);
+        };
+        std::unordered_map<vk::RenderPass, PipelinePair> rtPipelines;
+        PipelinePair basicPipeline;
 
-            ResourceManagerVK resourceManager;
+        ResourceManagerVK resourceManager;
 
-            void uploadPipeline(VKPipeline::View& pipeline, vk::RenderPass pass, Mesh::PrimitiveType type);
-    };
+        void uploadPipeline(VKPipeline::View& pipeline, vk::RenderPass pass, Mesh::PrimitiveType type);
+};
 
 }
 

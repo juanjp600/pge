@@ -88,6 +88,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         const RenderInfo* getRenderInfo() const;
 
+        u64 getFrameCounter() const;
+
         vk::DeviceSize getAtomSize() const;
 
         vk::Device getDevice() const;
@@ -163,6 +165,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
             int count;
         };
         std::unordered_map<int, DescriptorSetLayoutEntry> dSetLayouts;
+
+        u64 frameCounter = 0;
 
         int currentFrame = 0;
 

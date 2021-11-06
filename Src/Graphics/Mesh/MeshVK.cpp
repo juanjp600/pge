@@ -34,7 +34,7 @@ void MeshVK::renderInternal() {
 	if (!data.isHoldingResource()) { return; }
 
 	ShaderVK& shader = (ShaderVK&)material->getShader();
-	shader.pushConstants();
+	shader.pushAllConstantsLazy();
 
 	vk::CommandBuffer comBuffer = graphics.getCurrentCommandBuffer();
 	comBuffer.bindVertexBuffers(0, data->getBuffer(), (vk::DeviceSize)0);

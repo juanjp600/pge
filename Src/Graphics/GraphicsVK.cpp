@@ -174,6 +174,8 @@ void GraphicsVK::swap() {
     checkCachedBufferShrink();
     trashBin.clear();
 
+    frameCounter++;
+
     acquireNextImage();
     startRender();
 }
@@ -525,6 +527,10 @@ const VKPipelineInfo& GraphicsVK::getPipelineInfo() const {
 
 const vk::Sampler& GraphicsVK::getSampler(bool rt) const {
     return rt ? samplerRT : sampler;
+}
+
+u64 GraphicsVK::getFrameCounter() const {
+    return frameCounter;
 }
 
 vk::DeviceSize GraphicsVK::getAtomSize() const {
