@@ -143,25 +143,11 @@ class Matrix4x4f : private NoHeap {
         }
 
         constexpr bool operator==(const Matrix4x4f& other) const {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if (elements[i][j] != other.elements[i][j]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
+            return memcmp(elements, other.elements, sizeof(elements)) == 0;
         }
 
         constexpr bool operator!=(const Matrix4x4f& other) const {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if (elements[i][j] != other.elements[i][j]) {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return memcmp(elements, other.elements, sizeof(elements)) != 0;
         }
 
         constexpr bool equals(const Matrix4x4f& other, float epsilon = Math::EPSILON_DEFAULT) const {
