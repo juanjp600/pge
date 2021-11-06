@@ -99,6 +99,7 @@
     <ClInclude Include="..\..\Include\PGE\String\Unicode.h" />
     <ClInclude Include="..\..\Include\PGE\StructuredData\StructuredData.h" />
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h" />
+    <ClInclude Include="..\..\Include\PGE\Types\Range.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Reference.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Types.h" />
     <ClInclude Include="..\..\Libraries\SPIRV-Reflect\spirv_reflect.h" />
