@@ -159,7 +159,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         // Maps number of textures to a layout.
         struct DescriptorSetLayoutEntry {
-            VKDescriptorSetLayout::View layout;
+            VKDescriptorSetLayout* layout;
             int count;
         };
         std::unordered_map<int, DescriptorSetLayoutEntry> dSetLayouts;

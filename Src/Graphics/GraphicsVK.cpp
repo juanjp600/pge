@@ -543,10 +543,10 @@ void GraphicsVK::destroyMultiRTResources(MultiRTID id) {
 const vk::DescriptorSetLayout& GraphicsVK::getDescriptorSetLayout(int count) {
     auto it = dSetLayouts.find(count);
     if (it == dSetLayouts.end()) {
-        return dSetLayouts.emplace(count, DescriptorSetLayoutEntry{ resourceManager.addNewResource<VKDescriptorSetLayout>(device, count), 1 }).first->second.layout;
+        return *dSetLayouts.emplace(count, DescriptorSetLayoutEntry{ new VKDescriptorSetLayout(device, count), 1 }).first->second.layout;
     } else {
         it->second.count++;
-        return it->second.layout;
+        return *it->second.layout;
     }
 }
 
@@ -554,7 +554,7 @@ void GraphicsVK::dropDescriptorSetLayout(int count) {
     auto it = dSetLayouts.find(count);
     it->second.count--;
     if (it->second.count <= 0) {
-        resourceManager.deleteResource(it->second.layout);
+        delete it->second.layout;
         dSetLayouts.erase(it);
     }
 }
