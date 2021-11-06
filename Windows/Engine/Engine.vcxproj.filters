@@ -359,5 +359,8 @@
     <ClInclude Include="..\..\Include\PGE\Types\Reference.h">
       <Filter>Include\Types</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Types\Range.h">
+      <Filter>Include\Types</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
