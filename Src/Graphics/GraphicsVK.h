@@ -131,6 +131,8 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         RawWrapper<TextureVK>::View depthBuffer;
 
+        vk::Viewport vkViewport;
+
         vk::Rect2D scissor;
         vk::Rect2D frameScissor;
 

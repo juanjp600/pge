@@ -137,6 +137,9 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
         }
     }
 
+    viewport = Rectanglei(0, 0, w, h);
+    vkViewport = convertViewport(viewport);
+
     scissor = vk::Rect2D(vk::Offset2D(0, 0), vk::Extent2D(w, h));
     pipelineInfo.viewportInfo.setScissors(scissor);
 
@@ -158,8 +161,6 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     startRender();
 
     setDepthTest(true);
-
-    setViewport(Rectanglei(0, 0, w, h));
 
     sampler = resourceManager.addNewResource<VKSampler>(device, false);
     samplerRT = resourceManager.addNewResource<VKSampler>(device, true);
@@ -242,6 +243,8 @@ void GraphicsVK::startRender() {
     }
     beginInfo.renderArea = frameScissor;
     comBuffers[backBufferIndex].beginRenderPass(&beginInfo, vk::SubpassContents::eInline);
+
+    comBuffers[backBufferIndex].setViewport(0, vkViewport);
 }
 
 void GraphicsVK::startTransfer() {
@@ -467,6 +470,7 @@ void GraphicsVK::resetRenderTarget() {
 
 void GraphicsVK::setViewport(const Rectanglei& vp) {
     viewport = vp;
+    vkViewport = convertViewport(viewport);
     comBuffers[backBufferIndex].setViewport(0, convertViewport(viewport));
 }
 
