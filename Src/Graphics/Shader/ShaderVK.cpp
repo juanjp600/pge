@@ -1,6 +1,7 @@
 #include "ShaderVK.h"
 
 #include <PGE/Exception/Exception.h>
+#include <PGE/Types/Range.h>
 
 #include "../GraphicsVK.h"
 
@@ -19,6 +20,109 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
     SpvReflectShaderModule reflection; SpvReflectResult res = spvReflectCreateShaderModule(shaderBinary.size(), shaderBinary.data(), &reflection);
     PGE_ASSERT(res == SpvReflectResult::SPV_REFLECT_RESULT_SUCCESS, "Reflection failed " + String::hexFromInt((u32)res));
 
+    std::vector<vk::DescriptorSetLayoutBinding> bindings; bindings.reserve(2);
+    std::vector<vk::DescriptorPoolSize> fuck;
+
+    std::vector<vk::DescriptorSetLayout> layouts; layouts.reserve(2);
+
+    textureCount = 0;
+    for (const SpvReflectDescriptorBinding& binding : vk::ArrayProxy(reflection.descriptor_binding_count, reflection.descriptor_bindings)) {
+        if (binding.descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_SAMPLED_IMAGE) {
+            hasFuck = true;
+
+            textureCount = binding.count;
+
+            fuckingTextureBinding = binding.binding;
+
+            vk::DescriptorSetLayoutBinding layoutBinding;
+            layoutBinding.binding = binding.binding;
+            layoutBinding.descriptorCount = textureCount;
+            layoutBinding.descriptorType = vk::DescriptorType::eCombinedImageSampler;
+            layoutBinding.stageFlags = vk::ShaderStageFlagBits::eFragment;
+            layouts.push_back(resourceManager.addNewResource<VKDescriptorSetLayout>(device, std::vector{ layoutBinding }));
+
+            break;
+        }
+    }
+
+    bool asd = false;
+
+    for (const SpvReflectDescriptorBinding& binding : vk::ArrayProxy(reflection.descriptor_binding_count, reflection.descriptor_bindings)) {
+        if (binding.type_description->type_name != nullptr && binding.type_description->type_name == String("vulkanConstants")) {
+            hasFuck = true; asd = true;
+
+            vk::DescriptorSetLayoutBinding layoutBinding;
+            layoutBinding.binding = binding.binding;
+            layoutBinding.descriptorCount = 1;
+            layoutBinding.descriptorType = vk::DescriptorType::eUniformBuffer;
+            layoutBinding.stageFlags = vk::ShaderStageFlagBits::eAllGraphics;
+            bindings.push_back(layoutBinding);
+
+            descriptorLayout = resourceManager.addNewResource<VKDescriptorSetLayout>(device, bindings);
+            layouts.push_back(descriptorLayout);
+
+            vk::DescriptorPoolSize size;
+            size.descriptorCount = 1;
+            size.type = vk::DescriptorType::eUniformBuffer;
+            fuck.push_back(size);
+
+            vk::DescriptorPool pool = resourceManager.addNewResource<VKDescriptorPool>(device, fuck);
+
+            vk::DescriptorSetAllocateInfo info;
+            info.descriptorPool = pool;
+            info.descriptorSetCount = uniformSets.size();
+            std::vector<vk::DescriptorSetLayout> dupeLayouts(1, descriptorLayout);
+            info.setSetLayouts(dupeLayouts);
+            uniformSets = device.allocateDescriptorSets(info);
+
+            for (int i : Range(uniformBuffer.size())) {
+                uniformBuffer[i] = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, graphics.getPhysicalDevice(), graphics.getAtomSize(),
+                    binding.block.padded_size, VKMemoryBuffer::Type::UNIFORM);
+
+                bufferInfo.buffer = uniformBuffer[i]->getBuffer();
+                bufferInfo.offset = 0;
+                bufferInfo.range = VK_WHOLE_SIZE;
+
+                descriptorWrite.dstSet = uniformSets[i];
+                descriptorWrite.dstBinding = binding.binding;
+                descriptorWrite.descriptorType = vk::DescriptorType::eUniformBuffer;
+                descriptorWrite.descriptorCount = 1;
+                descriptorWrite.setBufferInfo(bufferInfo);
+            }
+
+            for (const SpvReflectBlockVariable& var : vk::ArrayProxy(binding.block.member_count, binding.block.members)) {
+                String name = var.name;
+                bool isVert = name.substr(0, 4) == "vert";
+                (isVert ? vertexConstantMap : fragmentConstantMap).emplace(name.substr(5),
+                    std::make_unique<UniformConstantVK>(*this, vk::ShaderStageFlagBits::eAll, uniformBuffer[0]->getData(), var.absolute_offset, var.size));
+            }
+
+            break;
+        }
+    }
+
+    
+
+    // We only have textures.
+    if (!asd && hasFuck) {
+        descriptorLayout = resourceManager.addNewResource<VKDescriptorSetLayout>(device, bindings);
+        //layouts.push_back(descriptorLayout);
+
+        vk::DescriptorPoolSize size;
+        size.descriptorCount = 1;
+        size.type = vk::DescriptorType::eUniformBuffer;
+        fuck.push_back(size);
+
+        vk::DescriptorPool pool = resourceManager.addNewResource<VKDescriptorPool>(device, fuck);
+
+        vk::DescriptorSetAllocateInfo info;
+        info.descriptorPool = pool;
+        info.descriptorSetCount = uniformSets.size();
+        std::vector<vk::DescriptorSetLayout> dupeLayouts(1, descriptorLayout);
+        info.setSetLayouts(dupeLayouts);
+        uniformSets = device.allocateDescriptorSets(info);
+    }
+    
     // Vertex input.
     vertexInputAttributes.reserve(reflection.input_variable_count);
     int vertexStride = 0;
@@ -64,23 +168,14 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
                 fragmentConstantSize = constantData.size() - vertexConstantSize;
             }
             (isVert ? vertexConstantMap : fragmentConstantMap).emplace(name.substr(5),
-                ConstantVK(*this, isVert ? vk::ShaderStageFlagBits::eVertex : vk::ShaderStageFlagBits::eFragment, constantData.data(),
+                std::make_unique<PushConstantVK>(*this, isVert ? vk::ShaderStageFlagBits::eVertex : vk::ShaderStageFlagBits::eFragment, constantData.data(),
                     cMember.absolute_offset, cMember.size));
         }
         if (!vertexConstantMap.empty()) { ranges.emplace_back(vk::ShaderStageFlagBits::eVertex, 0, vertexConstantSize); }
         if (!fragmentConstantMap.empty()) { ranges.emplace_back(vk::ShaderStageFlagBits::eFragment, vertexConstantSize, pushConstant.padded_size - vertexConstantSize); }
     }
 
-    textureCount = 0;
-    for (const SpvReflectDescriptorBinding& binding : vk::ArrayProxy(reflection.descriptor_binding_count, reflection.descriptor_bindings)) {
-        if (binding.descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_SAMPLED_IMAGE) {
-            textureCount = binding.count;
-            break;
-        }
-    }
-
-    layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges,
-        textureCount > 0 ? std::optional(graphics.getDescriptorSetLayout(textureCount)) : std::nullopt);
+    layout = resourceManager.addNewResource<VKPipelineLayout>(device, ranges, layouts);
 
     spvReflectDestroyShaderModule(&reflection);
 
@@ -99,7 +194,7 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
 
 ShaderVK::~ShaderVK() {
     if (textureCount > 0) {
-        graphics.dropDescriptorSetLayout(textureCount);
+        //graphics.dropDescriptorSetLayout(textureCount);
     }
     graphics.removeShader(*this);
 }
@@ -109,7 +204,7 @@ Shader::Constant& ShaderVK::getVertexShaderConstant(const String& name) {
     if (it == vertexConstantMap.end()) {
         throw PGE_CREATE_EX("Could not find fragment shader constant");
     } else {
-        return it->second;
+        return *it->second;
     }
 }
 
@@ -118,7 +213,7 @@ Shader::Constant& ShaderVK::getFragmentShaderConstant(const String& name) {
     if (it == fragmentConstantMap.end()) {
         throw PGE_CREATE_EX("Could not find vertex shader constant");
     } else {
-        return it->second;
+        return *it->second;
     }
 }
 
@@ -169,7 +264,11 @@ void ShaderVK::ConstantVK::setValue(u32 value) {
     memcpy(data, &value, sizeof(value)); push();
 }
 
-void ShaderVK::ConstantVK::push() {
+void ShaderVK::UniformConstantVK::push() {
+    shader.graphics.getDevice().updateDescriptorSets(shader.descriptorWrite, nullptr);
+}
+
+void ShaderVK::PushConstantVK::push() {
     shader.graphics.getCurrentCommandBuffer().pushConstants(shader.getLayout(), stage, offset, size, data);
 }
 
@@ -211,4 +310,17 @@ vk::Pipeline ShaderVK::getPipeline(Mesh::PrimitiveType type) {
         }
         return pipeline;
     }
+}
+
+const vk::WriteDescriptorSet ShaderVK::getWriter() const {
+    vk::WriteDescriptorSet writer;
+    writer.descriptorCount = textureCount;
+    writer.dstSet = uniformSets[0];
+    writer.dstBinding = fuckingTextureBinding;
+    writer.descriptorType = vk::DescriptorType::eCombinedImageSampler;
+    return writer;
+}
+
+vk::DescriptorSet ShaderVK::fuckYou() {
+    return uniformSets[0];
 }

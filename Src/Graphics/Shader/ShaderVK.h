@@ -8,6 +8,7 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include <PGE/ResourceManagement/RawWrapper.h>
 #include "../../ResourceManagement/ResourceManagerVK.h"
 #include "../../ResourceManagement/VK.h"
 
@@ -28,6 +29,11 @@ class ShaderVK : public Shader {
         void uploadPipelines();
         vk::Pipeline getPipeline(Mesh::PrimitiveType type);
 
+        const vk::WriteDescriptorSet getWriter() const;
+
+        bool hasFuck = false;
+        vk::DescriptorSet fuckYou();
+
     private:
         GraphicsVK& graphics;
 
@@ -40,6 +46,15 @@ class ShaderVK : public Shader {
         int textureCount;
 
         VKShader::View vkShader;
+
+        VKDescriptorSetLayout::View descriptorLayout;
+
+        std::array<RawWrapper<VKMemoryBuffer>::View, 1> uniformBuffer;
+        std::vector<vk::DescriptorSet> uniformSets;
+        int fuckingTextureBinding;
+
+        vk::DescriptorBufferInfo bufferInfo;
+        vk::WriteDescriptorSet descriptorWrite;
 
         std::array<vk::PipelineShaderStageCreateInfo, 2> shaderStageInfo;
 
@@ -61,9 +76,9 @@ class ShaderVK : public Shader {
                 void setValue(float value) override;
                 void setValue(u32 value) override;
 
-                void push();
+                virtual void push() = 0;
 
-            private:
+            protected:
                 ShaderVK& shader;
                 vk::ShaderStageFlags stage;
                 byte* data;
@@ -71,8 +86,20 @@ class ShaderVK : public Shader {
                 int offset;
                 int size;
         };
-        std::unordered_map<String::Key, ConstantVK> vertexConstantMap;
-        std::unordered_map<String::Key, ConstantVK> fragmentConstantMap;
+
+        class UniformConstantVK : public ConstantVK {
+            public:
+                using ConstantVK::ConstantVK;
+                void push() override;
+        };
+
+        class PushConstantVK : public ConstantVK {
+            public:
+                using ConstantVK::ConstantVK;
+                void push() override;
+        };
+        std::unordered_map<String::Key, std::unique_ptr<ConstantVK>> vertexConstantMap;
+        std::unordered_map<String::Key, std::unique_ptr<ConstantVK>> fragmentConstantMap;
             
         struct PipelinePair {
             VKPipeline::View triPipeline;
