@@ -26,13 +26,13 @@ ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), reso
 
     extractFragmentOutputs(fragmentSource);
 
-    Shader::Constant& rtConstant = getVertexShaderConstant(RT_NAME);
+    Shader::Constant& rtConstant = *getVertexShaderConstant(RT_NAME);
     rtConstant.setValue(1.f);
     graphics.addRenderTargetFlag(rtConstant);
 }
 
 ShaderOGL3::~ShaderOGL3() {
-    graphics.removeRenderTargetFlag(getVertexShaderConstant(RT_NAME));
+    graphics.removeRenderTargetFlag(*getVertexShaderConstant(RT_NAME));
 }
 
 void ShaderOGL3::extractVertexUniforms(const String& vertexSource) {
@@ -292,16 +292,16 @@ void ShaderOGL3::unbindGLAttribs() {
     }
 }
 
-Shader::Constant& ShaderOGL3::getVertexShaderConstant(const String& name) {
+Shader::Constant* ShaderOGL3::getVertexShaderConstant(const String& name) {
     auto it = vertexShaderConstants.find(name);
-    PGE_ASSERT(it != vertexShaderConstants.end(), "Could not find vertex shader constant (\"" + name + "\")");
-    return it->second;
+    if (it == vertexShaderConstants.end()) { return nullptr; }
+    return &it->second;
 }
 
-Shader::Constant& ShaderOGL3::getFragmentShaderConstant(const String& name) {
+Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
     auto it = fragmentShaderConstants.find(name);
-    PGE_ASSERT(it != fragmentShaderConstants.end(), "Could not find fragment shader constant (\"" + name + "\")");
-    return it->second;
+    if (it == fragmentShaderConstants.end()) { return nullptr; }
+    return &it->second;
 }
 
 ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk) : dataBuffer(data), graphics(gfx) {

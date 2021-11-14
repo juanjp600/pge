@@ -18,8 +18,8 @@ class ShaderOGL3 : public Shader {
         ShaderOGL3(Graphics& gfx, const FilePath& path);
         ~ShaderOGL3();
 
-        Constant& getVertexShaderConstant(const String& name) override;
-        Constant& getFragmentShaderConstant(const String& name) override;
+        Constant* getVertexShaderConstant(const String& name) override;
+        Constant* getFragmentShaderConstant(const String& name) override;
 
         void useShader();
         void unbindGLAttribs();

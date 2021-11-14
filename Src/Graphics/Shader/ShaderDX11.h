@@ -20,8 +20,8 @@ class ShaderDX11 : public Shader {
     public:
         ShaderDX11(const Graphics& gfx, const FilePath& path);
 
-        Constant& getVertexShaderConstant(const String& name) override;
-        Constant& getFragmentShaderConstant(const String& name) override;
+        Constant* getVertexShaderConstant(const String& name) override;
+        Constant* getFragmentShaderConstant(const String& name) override;
 
         void useShader();
         void useVertexInputLayout();

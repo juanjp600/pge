@@ -90,26 +90,26 @@ int ShaderDX11::dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat) {
     }
 }
 
-Shader::Constant& ShaderDX11::getVertexShaderConstant(const String& name) {
+Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
     for (CBufferInfo& cBuffer : vertexConstantBuffers) {
         auto& map = cBuffer.getConstants();
         auto it = map.find(name);
         if (it != map.end()) {
-            return it->second;
+            return &it->second;
         }
     }
-    throw PGE_CREATE_EX("Could not find vertex shader constant");
+    return nullptr;
 }
 
-Shader::Constant& ShaderDX11::getFragmentShaderConstant(const String& name) {
+Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
     for (CBufferInfo& cBuffer : fragmentConstantBuffers) {
         auto& map = cBuffer.getConstants();
         auto it = map.find(name);
         if (it != map.end()) {
-            return it->second;
+            return &it->second;
         }
     }
-    throw PGE_CREATE_EX("Could not find fragment shader constant");
+    return nullptr;
 }
 
 void ShaderDX11::useShader() {

@@ -32,8 +32,8 @@ class Shader : private PolymorphicHeap {
                 Constant() = default;
                 virtual ~Constant() = default;
         };
-        virtual Constant& getVertexShaderConstant(const String& constName) = 0;
-        virtual Constant& getFragmentShaderConstant(const String& constName) = 0;
+        virtual Constant* getVertexShaderConstant(const String& constName) = 0;
+        virtual Constant* getFragmentShaderConstant(const String& constName) = 0;
 
     protected:
         Shader(const FilePath& path) : filepath(path) { }
