@@ -42,7 +42,7 @@ var hierarchy =
       [ "\u202APGE::Vector3f", "class_p_g_e_1_1_vector3f.html", null ],
       [ "\u202APGE::Vector4f", "class_p_g_e_1_1_vector4f.html", null ]
     ] ],
-    [ "\u202APolymorphicHeap", "class_polymorphic_heap.html", [
+    [ "\u202APGE::PolymorphicHeap", "class_p_g_e_1_1_polymorphic_heap.html", [
       [ "\u202APGE::Controller", "class_p_g_e_1_1_controller.html", null ],
       [ "\u202APGE::Graphics", "class_p_g_e_1_1_graphics.html", null ],
       [ "\u202APGE::Input", "class_p_g_e_1_1_input.html", [

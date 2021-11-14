@@ -35,6 +35,7 @@ var annotated_dup =
       [ "\u202AVector4f", "class_p_g_e_1_1_vector4f.html", "class_p_g_e_1_1_vector4f" ],
       [ "\u202AVector2i", "class_p_g_e_1_1_vector2i.html", "class_p_g_e_1_1_vector2i" ],
       [ "\u202ANoHeap", "class_p_g_e_1_1_no_heap.html", "class_p_g_e_1_1_no_heap" ],
+      [ "\u202APolymorphicHeap", "class_p_g_e_1_1_polymorphic_heap.html", "class_p_g_e_1_1_polymorphic_heap" ],
       [ "\u202ARawWrapper", "class_p_g_e_1_1_raw_wrapper.html", "class_p_g_e_1_1_raw_wrapper" ],
       [ "\u202AResourceBase", "class_p_g_e_1_1_resource_base.html", null ],
       [ "\u202AResource", "class_p_g_e_1_1_resource.html", "class_p_g_e_1_1_resource" ],
@@ -45,6 +46,5 @@ var annotated_dup =
       [ "\u202ASysEvents", "class_p_g_e_1_1_sys_events.html", "class_p_g_e_1_1_sys_events" ],
       [ "\u202ARange", "class_p_g_e_1_1_range.html", "class_p_g_e_1_1_range" ],
       [ "\u202AReference", "class_p_g_e_1_1_reference.html", "class_p_g_e_1_1_reference" ]
-    ] ],
-    [ "\u202APolymorphicHeap", "class_polymorphic_heap.html", "class_polymorphic_heap" ]
+    ] ]
 ];

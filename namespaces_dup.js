@@ -29,6 +29,7 @@ var namespaces_dup =
       ] ],
       [ "\u202AMath", "namespace_p_g_e_1_1_math.html", [
         [ "\u202Aceil", "namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78", null ],
+        [ "\u202AceilLog2", "namespace_p_g_e_1_1_math.html#a190007c420b6ccf08dfc2410cb65ebb8", null ],
         [ "\u202AdegToRad", "namespace_p_g_e_1_1_math.html#a24ce35a5ad40879ca3a9498e73ecc606", null ],
         [ "\u202AequalFloats", "namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77", null ],
         [ "\u202Afloor", "namespace_p_g_e_1_1_math.html#ad64e0f41b409c339ed5644f6b24e44d8", null ],
@@ -90,6 +91,7 @@ var namespaces_dup =
       [ "\u202AVector4f", "class_p_g_e_1_1_vector4f.html", "class_p_g_e_1_1_vector4f" ],
       [ "\u202AVector2i", "class_p_g_e_1_1_vector2i.html", "class_p_g_e_1_1_vector2i" ],
       [ "\u202ANoHeap", "class_p_g_e_1_1_no_heap.html", "class_p_g_e_1_1_no_heap" ],
+      [ "\u202APolymorphicHeap", "class_p_g_e_1_1_polymorphic_heap.html", "class_p_g_e_1_1_polymorphic_heap" ],
       [ "\u202ARawWrapper", "class_p_g_e_1_1_raw_wrapper.html", "class_p_g_e_1_1_raw_wrapper" ],
       [ "\u202AResourceBase", "class_p_g_e_1_1_resource_base.html", null ],
       [ "\u202AResource", "class_p_g_e_1_1_resource.html", "class_p_g_e_1_1_resource" ],
