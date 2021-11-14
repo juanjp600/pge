@@ -41,6 +41,25 @@ namespace Math {
         return (value / nearest + 1) * nearest;
     }
 
+    template <typename T>
+    constexpr T ceilLog2(T value) {
+        bool flip;
+        if constexpr (std::numeric_limits<T>::is_signed) {
+            flip = value < 0;
+            if (flip) {
+                value = -value;
+            }
+        }
+        PGE_ASSERT(value != 0, "value mustn't be 0");
+        T ret = 0;
+        for (T i = 1; i < value; i *= 2) { ret++; }
+        if constexpr (std::numeric_limits<T>::is_signed) {
+            return ret * (flip ? -1 : 1);
+        } else {
+            return ret;
+        }
+    }
+
     /// Round down a float.
     /// Rounding down is defined as always rounding towards 0.
     /// 
