@@ -286,7 +286,7 @@ const S myMethod(const S& s) const {
 
 
 ## Never rely on default access specifiers
-**Stub!**
+**Stub.**
 
 
 ## Always utilize `override` while omitting `virtual` when overriding methods
