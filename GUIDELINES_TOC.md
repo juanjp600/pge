@@ -84,7 +84,7 @@ class MyGoodClass {
 };
 ```
 
-**Stub.**
+**Stub!**
 
 
 ## Consider preventing heap allocation for non-polymorphic classes
