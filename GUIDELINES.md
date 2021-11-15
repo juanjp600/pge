@@ -342,3 +342,42 @@ for (const auto& [key, value] : myMap) {
     // ...
 }
 ```
+
+## Consider putting enums outside of classes
+Despite nested enums establishing a more obvious connection with their respective class, if an enum on its own gives enough context as to what it seeks to express it should likely not be put inside of that class. This is because nesting an enum in a class requires specifying the class when the enum is used outside of it, which can add unnecessary noise.
+
+**Example:**
+```cpp
+// Bad!
+class MyClass {
+    public:
+        enum class MyMode {
+            A,
+            B,
+            C,
+        };
+        
+        void setMode(MyMode m);
+};
+
+// ...
+
+MyClass mc;
+mc.setMode(MyClass::MyMode::A); // Noise!
+
+
+// Good!
+enum class MyMode {
+    A,
+    B,
+    C,
+};
+
+class MyClass {
+    public:
+        void setMode(MyMode m);
+};
+// ...
+MyClass mc;
+mc.setMode(MyMode::A); // No noise!
+```
