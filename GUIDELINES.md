@@ -203,7 +203,7 @@ it++; // Yes.
 ++it; // No.
 ```
 
-## Never use the result of assignment, incrementing or decrementing.
+## Never use the result of assignment, incrementing or decrementing
 It makes your code harder to understand. Writing separate statements is always clearer.
 
 **Example:**
@@ -215,7 +215,7 @@ a = b = c; // This is bad.
 a = c; b = c; // This is good.
 ```
 
-## Define assignment, increment and decrement operators with return type void.
+## Define assignment, increment and decrement operators with return type void
 This makes it impossible to make the mistake mentioned above with custom types.
 
 **Example:**
