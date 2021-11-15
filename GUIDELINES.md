@@ -377,7 +377,9 @@ class MyClass {
     public:
         void setMode(MyMode m);
 };
+
 // ...
+
 MyClass mc;
 mc.setMode(MyMode::A); // No noise!
 ```
