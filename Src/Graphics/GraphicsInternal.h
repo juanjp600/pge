@@ -48,7 +48,7 @@ class GraphicsInternal : public Graphics {
         virtual Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) = 0;
         virtual Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) = 0;
         virtual Texture* loadTextureCompressed(const std::vector<Texture::Mipmap>& mipmaps, Texture::CompressedFormat fmt) = 0;
-        virtual Material* createMaterial(Shader& sh, const ReferenceVector<Texture>& tex, Material::Opaque o) = 0;
+        virtual Material* createMaterial(Shader& sh, const ReferenceVector<Texture>& tex, Opaque o) = 0;
 
         SDL_Window* getWindow() const;
 };
@@ -84,7 +84,7 @@ class GraphicsSpecialized : public GraphicsInternal {
             return new TextureType(*this, mipmaps, fmt);
         }
 
-        Material* createMaterial(Shader& sh, const ReferenceVector<Texture>& tex, Material::Opaque o) final override {
+        Material* createMaterial(Shader& sh, const ReferenceVector<Texture>& tex, Opaque o) final override {
             return new MaterialType(*this, sh, tex, o);
         }
 };

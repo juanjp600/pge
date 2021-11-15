@@ -15,6 +15,12 @@
 
 namespace PGE {
 
+enum class ZBufferStateIndex {
+    ENABLED_WRITE = 0,
+    ENABLED_NOWRITE = 1,
+    DISABLED = 2
+};
+
 class GraphicsDX11 : public GraphicsSpecialized<ShaderDX11, MeshDX11, TextureDX11> {
     public:
         GraphicsDX11(const String& name, int w, int h, WindowMode wm, int x, int y);
@@ -29,18 +35,12 @@ class GraphicsDX11 : public GraphicsSpecialized<ShaderDX11, MeshDX11, TextureDX1
 
         void setViewport(const Rectanglei& vp) override;
 
-        void setCulling(Culling mode) override;
+        void setCulling(CullingMode mode) override;
 
         ID3D11Device* getDxDevice() const;
         ID3D11DeviceContext* getDxContext() const;
         ID3D11RenderTargetView* getBackBufferRtv() const;
         ID3D11DepthStencilView* getZBufferView() const;
-
-        enum class ZBufferStateIndex {
-            ENABLED_WRITE = 0,
-            ENABLED_NOWRITE = 1,
-            DISABLED = 2
-        };
 
         void setZBufferState(ZBufferStateIndex index);
 

@@ -8,13 +8,13 @@ namespace PGE {
 
 class Graphics; class Shader; class Texture;
 
+enum class Opaque {
+	YES,
+	NO,
+};
+
 class Material : private PolymorphicHeap {
 	public:
-		enum class Opaque {
-			YES,
-			NO,
-		};
-
 		static Material* create(Graphics& gfx, Shader& sh, Opaque o);
 		static Material* create(Graphics& gfx, Shader& sh, Texture& tex, Opaque o);
 		static Material* create(Graphics& gfx, Shader& sh, const ReferenceVector<Texture>& texs, Opaque o);

@@ -164,20 +164,20 @@ class D3D11ShaderResourceView : public DX11Resource<ID3D11ShaderResourceView*> {
 
 class D3D11RasterizerState : public DX11Resource<ID3D11RasterizerState*> {
     public:
-        D3D11RasterizerState(ID3D11Device* device, Graphics::Culling cullMode) {
+        D3D11RasterizerState(ID3D11Device* device, CullingMode cullMode) {
             D3D11_RASTERIZER_DESC desc;
             ZeroMemory(&desc, sizeof(desc));
             desc.AntialiasedLineEnable = false;
             D3D11_CULL_MODE dxMode;
             switch (cullMode) {
                 default:
-                case Graphics::Culling::BACK: {
+                case CullingMode::BACK: {
                     dxMode = D3D11_CULL_BACK;
                 } break;
-                case Graphics::Culling::FRONT: {
+                case CullingMode::FRONT: {
                     dxMode = D3D11_CULL_FRONT;
                 } break;
-                case Graphics::Culling::NONE: {
+                case CullingMode::NONE: {
                     dxMode = D3D11_CULL_NONE;
                 } break;
             }

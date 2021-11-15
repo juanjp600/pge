@@ -46,8 +46,8 @@ void MeshDX11::renderInternal() {
 
     graphics.setZBufferState(
         graphics.getDepthTest()
-                ? (isOpaque() ? GraphicsDX11::ZBufferStateIndex::ENABLED_WRITE : GraphicsDX11::ZBufferStateIndex::ENABLED_NOWRITE)
-                : GraphicsDX11::ZBufferStateIndex::DISABLED);
+                ? (isOpaque() ? ZBufferStateIndex::ENABLED_WRITE : ZBufferStateIndex::ENABLED_NOWRITE)
+                : ZBufferStateIndex::DISABLED);
     
     dxContext->DrawIndexed((UINT)indices.size(),0,0);
 

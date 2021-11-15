@@ -10,7 +10,7 @@
 namespace Glsl {
     enum class ShaderType {
         VERTEX,
-        FRAGMENT
+        FRAGMENT,
     };
 
     void convert(const PGE::FilePath& path, const CompileResult& compileResult, ShaderType shaderType);

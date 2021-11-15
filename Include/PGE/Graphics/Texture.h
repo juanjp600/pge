@@ -17,7 +17,6 @@ class Texture : private PolymorphicHeap {
             R32F,
             R8,
         };
-        static int getBytesPerPixel(Format fmt);
 
         enum class CompressedFormat {
             BC1,
@@ -30,6 +29,8 @@ class Texture : private PolymorphicHeap {
         };
 
         using AnyFormat = std::variant<Format, CompressedFormat>;
+
+        static int getBytesPerPixel(Format fmt);
 
         bool isRenderTarget() const;
 

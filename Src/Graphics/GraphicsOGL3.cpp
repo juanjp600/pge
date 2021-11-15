@@ -32,8 +32,8 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, WindowMode wm, int 
 
     depthTest = true;
     glEnable(GL_DEPTH_TEST);
-    cullingMode = Culling::NONE;
-    setCulling(Culling::BACK);
+    cullingMode = CullingMode::NONE;
+    setCulling(CullingMode::BACK);
     glEnable(GL_BLEND);
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
     glClearDepth(1.0);
@@ -171,13 +171,13 @@ void GraphicsOGL3::setVsync(bool isEnabled) {
     }
 }
 
-void GraphicsOGL3::setCulling(Culling mode) {
+void GraphicsOGL3::setCulling(CullingMode mode) {
     if (mode == cullingMode) { return; }
 
-    if (mode == Culling::NONE) {
+    if (mode == CullingMode::NONE) {
         glDisable(GL_CULL_FACE);
     } else {
-        if (cullingMode == Culling::NONE) {
+        if (cullingMode == CullingMode::NONE) {
             glEnable(GL_CULL_FACE);
         }
         updateCullingMode(mode, renderingToRenderTarget);
@@ -186,11 +186,11 @@ void GraphicsOGL3::setCulling(Culling mode) {
     cullingMode = mode;
 }
 
-void GraphicsOGL3::updateCullingMode(Culling newMode, bool flip) {
-    if (newMode == Culling::NONE) { return; }
+void GraphicsOGL3::updateCullingMode(CullingMode newMode, bool flip) {
+    if (newMode == CullingMode::NONE) { return; }
 
     GLenum glMode;
-    if ((newMode == Culling::BACK) ^ flip) {
+    if ((newMode == CullingMode::BACK) ^ flip) {
         glMode = GL_BACK;
     } else {
         glMode = GL_FRONT;

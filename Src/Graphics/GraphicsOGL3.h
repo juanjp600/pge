@@ -33,7 +33,7 @@ class GraphicsOGL3 : public GraphicsSpecialized<ShaderOGL3, MeshOGL3, TextureOGL
 
         void setDepthTest(bool isEnabled) override;
         void setVsync(bool isEnabled) override;
-        void setCulling(Culling mode) override;
+        void setCulling(CullingMode mode) override;
 
         void takeGlContext();
         SDL_GLContext getGlContext() const;
@@ -47,7 +47,7 @@ class GraphicsOGL3 : public GraphicsSpecialized<ShaderOGL3, MeshOGL3, TextureOGL
 
         ResourceManagerOGL3 resourceManager;
 
-        void updateCullingMode(Culling newMode, bool flip);
+        void updateCullingMode(CullingMode newMode, bool flip);
 
         bool renderingToRenderTarget = false;
         std::unordered_set<Shader::Constant*> renderTargetFlags;
