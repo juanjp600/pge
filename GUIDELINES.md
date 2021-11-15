@@ -310,10 +310,6 @@ class MyDerived {
 ```
 
 
-## Use `auto` cautiously
-**Stub.**
-
-
 ## Prefer direct over copy initialization on declaration
 While they should be semantically the same in practice, direct initialization avoids repeating the type unnecessarily and avoids possibly confusing syntax.
 
