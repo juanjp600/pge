@@ -1,0 +1,22 @@
+name: Guidelines Table of Contents
+
+on:
+  push:
+    paths:
+      - "GUIDELINES.md"
+      - ".github/workflows/doc.yml"
+
+jobs:
+  toc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+    
+      - name: Generate TOC
+        run: node .github/workflows/toc.js GUIDELINES.md 
+
+      - name: Commit & Push
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
