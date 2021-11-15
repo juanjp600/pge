@@ -2,10 +2,6 @@ var class_p_g_e_1_1_mesh =
 [
     [ "\u202ALine", "struct_p_g_e_1_1_mesh_1_1_line.html", "struct_p_g_e_1_1_mesh_1_1_line" ],
     [ "\u202ATriangle", "struct_p_g_e_1_1_mesh_1_1_triangle.html", "struct_p_g_e_1_1_mesh_1_1_triangle" ],
-    [ "\u202APrimitiveType", "class_p_g_e_1_1_mesh.html#a508edaf1c8ada0a5e0454a2a6aafd088", [
-      [ "\u202ALINE", "class_p_g_e_1_1_mesh.html#a508edaf1c8ada0a5e0454a2a6aafd088a17b8ef2c330f1430e00c9de5469fc7e7", null ],
-      [ "\u202ATRIANGLE", "class_p_g_e_1_1_mesh.html#a508edaf1c8ada0a5e0454a2a6aafd088a9bcd89070cae224dce305f5011659ef4", null ]
-    ] ],
     [ "\u202AUpdateStrategy", "class_p_g_e_1_1_mesh.html#ae3915246c78530368a0002fadacc33da", [
       [ "\u202ASTATIC", "class_p_g_e_1_1_mesh.html#ae3915246c78530368a0002fadacc33daafe6f99ef1ec99efbdc19a9786cf1facc", null ],
       [ "\u202ADYNAMIC", "class_p_g_e_1_1_mesh.html#ae3915246c78530368a0002fadacc33daa0fcc90da4811c877ba9f9c12f7d60bc9", null ],

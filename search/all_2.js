@@ -11,6 +11,5 @@ var searchData=
   ['create_17',['create',['../class_p_g_e_1_1_graphics.html#ae290ebefbc33a163a240871aab3ba0a8',1,'PGE::Graphics']]],
   ['createdirectory_18',['createDirectory',['../class_p_g_e_1_1_file_path.html#a5d4e3a3ce96da0dd3ca7bf7488646c4c',1,'PGE::FilePath']]],
   ['cstr_19',['cstr',['../class_p_g_e_1_1_string.html#adc967f43aadf3ca053a0a9c9f4d7671c',1,'PGE::String']]],
-  ['culling_20',['Culling',['../class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44',1,'PGE::Graphics']]],
-  ['cyan_21',['CYAN',['../namespace_p_g_e_1_1_colors.html#abb07043309725510814286dd9bdc4556',1,'PGE::Colors']]]
+  ['cyan_20',['CYAN',['../namespace_p_g_e_1_1_colors.html#abb07043309725510814286dd9bdc4556',1,'PGE::Colors']]]
 ];

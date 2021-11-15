@@ -85,7 +85,6 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_mouse_input.html','');
 
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="class_p_g_e_1_1_mouse_input-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -103,25 +102,6 @@ Inheritance diagram for PGE::MouseInput:</div>
   </map>
 </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a3f2c701cea8d00827f7817d0fefe74d5"><td class="memItemLeft" align="right" valign="top"><a id="a3f2c701cea8d00827f7817d0fefe74d5"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Button</b> { <br />
-&#160;&#160;<b>LEFT</b>
-, <b>RIGHT</b>
-, <b>MIDDLE</b>
-, <b>SIDE1</b>
-, <br />
-&#160;&#160;<b>SIDE2</b>
-<br />
- }</td></tr>
-<tr class="separator:a3f2c701cea8d00827f7817d0fefe74d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_class_p_g_e_1_1_input"><td colspan="2" onclick="javascript:toggleInherit('pub_types_class_p_g_e_1_1_input')"><img src="closed.png" alt="-"/>&#160;&#x202A;Public Types inherited from <a class="el" href="class_p_g_e_1_1_input.html">&#x202A;PGE::Input</a></td></tr>
-<tr class="memitem:a46045d1b7334e172ed2a65119cbbda5c inherit pub_types_class_p_g_e_1_1_input"><td class="memItemLeft" align="right" valign="top"><a id="a46045d1b7334e172ed2a65119cbbda5c"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Device</b> { <b>KEYBOARD</b>
-, <b>MOUSE</b>
-, <b>CONTROLLER</b>
- }</td></tr>
-<tr class="separator:a46045d1b7334e172ed2a65119cbbda5c inherit pub_types_class_p_g_e_1_1_input"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a144b5c11a55e4765381475cc86a8d100"><td class="memItemLeft" align="right" valign="top"><a id="a144b5c11a55e4765381475cc86a8d100"></a>
@@ -130,18 +110,18 @@ virtual Device&#160;</td><td class="memItemRight" valign="bottom"><b>getDevice</
 <tr class="memitem:a70348dc92c20d1573be95a8dbf7090ef"><td class="memItemLeft" align="right" valign="top"><a id="a70348dc92c20d1573be95a8dbf7090ef"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>getKey</b> () const override</td></tr>
 <tr class="separator:a70348dc92c20d1573be95a8dbf7090ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2cae8e002b8f000c714c823c990927f4"><td class="memItemLeft" align="right" valign="top"><a id="a2cae8e002b8f000c714c823c990927f4"></a>
-Button&#160;</td><td class="memItemRight" valign="bottom"><b>getButton</b> () const</td></tr>
-<tr class="separator:a2cae8e002b8f000c714c823c990927f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0a0ed8605807861ebf38f741d9c0561"><td class="memItemLeft" align="right" valign="top"><a id="ac0a0ed8605807861ebf38f741d9c0561"></a>
+MouseButton&#160;</td><td class="memItemRight" valign="bottom"><b>getButton</b> () const</td></tr>
+<tr class="separator:ac0a0ed8605807861ebf38f741d9c0561"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acde8dfbd96a58e5255bf8b7e2ac74227"><td class="memItemLeft" align="right" valign="top"><a id="acde8dfbd96a58e5255bf8b7e2ac74227"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setClickCount</b> (int count)</td></tr>
 <tr class="separator:acde8dfbd96a58e5255bf8b7e2ac74227"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba33182d8020abf5b2b19dbd7c91dc06"><td class="memItemLeft" align="right" valign="top"><a id="aba33182d8020abf5b2b19dbd7c91dc06"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>getClickCount</b> () const</td></tr>
 <tr class="separator:aba33182d8020abf5b2b19dbd7c91dc06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95d13efac7f8f39e49978bd9c3e6941d"><td class="memItemLeft" align="right" valign="top"><a id="a95d13efac7f8f39e49978bd9c3e6941d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>MouseInput</b> (Button mouseButton)</td></tr>
-<tr class="separator:a95d13efac7f8f39e49978bd9c3e6941d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabffca32c5aa76bb3fef4ada2d51056b"><td class="memItemLeft" align="right" valign="top"><a id="aabffca32c5aa76bb3fef4ada2d51056b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>MouseInput</b> (MouseButton mouseButton)</td></tr>
+<tr class="separator:aabffca32c5aa76bb3fef4ada2d51056b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_p_g_e_1_1_input"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_p_g_e_1_1_input')"><img src="closed.png" alt="-"/>&#160;&#x202A;Public Member Functions inherited from <a class="el" href="class_p_g_e_1_1_input.html">&#x202A;PGE::Input</a></td></tr>
 <tr class="memitem:a0748f50b1e3fedac9997f4d57123f81b inherit pub_methods_class_p_g_e_1_1_input"><td class="memItemLeft" align="right" valign="top"><a id="a0748f50b1e3fedac9997f4d57123f81b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isDown</b> () const</td></tr>

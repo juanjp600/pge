@@ -86,7 +86,6 @@ $(document).ready(function(){initNavTree('class_p_g_e_1_1_graphics.html',''); in
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
@@ -112,24 +111,6 @@ Inheritance diagram for PGE::Graphics:</div>
   </map>
 </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a7ba2bbb9d3249d2a61df738fec941f83"><td class="memItemLeft" align="right" valign="top"><a id="a7ba2bbb9d3249d2a61df738fec941f83"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">Renderer</a> { <b>OpenGL</b>
-, <b>DirectX11</b>
- }</td></tr>
-<tr class="memdesc:a7ba2bbb9d3249d2a61df738fec941f83"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;The type of renderer to use. <br /></td></tr>
-<tr class="separator:a7ba2bbb9d3249d2a61df738fec941f83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a62db277187f29ce4b2ebebe6c63516"><td class="memItemLeft" align="right" valign="top"><a id="a0a62db277187f29ce4b2ebebe6c63516"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>WindowMode</b> { <b>Windowed</b>
-, <b>Fullscreen</b>
- }</td></tr>
-<tr class="separator:a0a62db277187f29ce4b2ebebe6c63516"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0982d3b9d3f6e910f3e430da961a5a44"><td class="memItemLeft" align="right" valign="top"><a id="a0982d3b9d3f6e910f3e430da961a5a44"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a> { <b>BACK</b>
-, <b>FRONT</b>
-, <b>NONE</b>
- }</td></tr>
-<tr class="memdesc:a0982d3b9d3f6e910f3e430da961a5a44"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Default is back culling. <br /></td></tr>
-<tr class="separator:a0982d3b9d3f6e910f3e430da961a5a44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:abae713b91b43026784e653f1f64c63e5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#abae713b91b43026784e653f1f64c63e5">update</a> ()</td></tr>
@@ -187,12 +168,12 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <tr class="memitem:ac95c76a48aba5940b5cca496bec027df"><td class="memItemLeft" align="right" valign="top"><a id="ac95c76a48aba5940b5cca496bec027df"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>getVsync</b> () const</td></tr>
 <tr class="separator:ac95c76a48aba5940b5cca496bec027df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a449fc76e49f2b27cb56c077e2b33b216"><td class="memItemLeft" align="right" valign="top"><a id="a449fc76e49f2b27cb56c077e2b33b216"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setCulling</b> (<a class="el" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a> mode)</td></tr>
-<tr class="separator:a449fc76e49f2b27cb56c077e2b33b216"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83ba3617a8d7befd0db51c4d893a0cc6"><td class="memItemLeft" align="right" valign="top"><a id="a83ba3617a8d7befd0db51c4d893a0cc6"></a>
-virtual <a class="el" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getCulling</b> () const</td></tr>
-<tr class="separator:a83ba3617a8d7befd0db51c4d893a0cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab89fc2bedc9aebe326fae10bcc9e00aa"><td class="memItemLeft" align="right" valign="top"><a id="ab89fc2bedc9aebe326fae10bcc9e00aa"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setCulling</b> (CullingMode mode)</td></tr>
+<tr class="separator:ab89fc2bedc9aebe326fae10bcc9e00aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f90a00fbd4b29074b75cc6f6cc9007d"><td class="memItemLeft" align="right" valign="top"><a id="a4f90a00fbd4b29074b75cc6f6cc9007d"></a>
+virtual CullingMode&#160;</td><td class="memItemRight" valign="bottom"><b>getCulling</b> () const</td></tr>
+<tr class="separator:a4f90a00fbd4b29074b75cc6f6cc9007d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4a4f0df2b99436f5e4bf8fd0ad86a21"><td class="memItemLeft" align="right" valign="top"><a id="ae4a4f0df2b99436f5e4bf8fd0ad86a21"></a>
 virtual <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#ae4a4f0df2b99436f5e4bf8fd0ad86a21">getInfo</a> () const =0</td></tr>
 <tr class="memdesc:ae4a4f0df2b99436f5e4bf8fd0ad86a21"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Gets implementation defined debug information about a graphics object. <br /></td></tr>
@@ -200,7 +181,7 @@ virtual <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><t
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ae290ebefbc33a163a240871aab3ba0a8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#ae290ebefbc33a163a240871aab3ba0a8">create</a> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;name=&quot;PGE Application&quot;, int w=1280, int h=720, WindowMode wm=WindowMode::Windowed, std::optional&lt; <a class="el" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">Renderer</a> &gt; r={ }, int x=Graphics::DEFAULT_SCREEN_POSITION, int y=Graphics::DEFAULT_SCREEN_POSITION)</td></tr>
+<tr class="memitem:ae290ebefbc33a163a240871aab3ba0a8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_p_g_e_1_1_graphics.html">Graphics</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_graphics.html#ae290ebefbc33a163a240871aab3ba0a8">create</a> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;name=&quot;PGE Application&quot;, int w=1280, int h=720, WindowMode wm=WindowMode::Windowed, std::optional&lt; Renderer &gt; r={ }, int x=Graphics::DEFAULT_SCREEN_POSITION, int y=Graphics::DEFAULT_SCREEN_POSITION)</td></tr>
 <tr class="memdesc:ae290ebefbc33a163a240871aab3ba0a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Factory method.  <a href="class_p_g_e_1_1_graphics.html#ae290ebefbc33a163a240871aab3ba0a8">More...</a><br /></td></tr>
 <tr class="separator:ae290ebefbc33a163a240871aab3ba0a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -245,9 +226,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>depthTest</b></td></t
 <tr class="memitem:abfdbae6c0809255bbbc1130722a1a2ee"><td class="memItemLeft" align="right" valign="top"><a id="abfdbae6c0809255bbbc1130722a1a2ee"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>vsync</b></td></tr>
 <tr class="separator:abfdbae6c0809255bbbc1130722a1a2ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6942641e93eb05a3d7c16ad0ff6a78f"><td class="memItemLeft" align="right" valign="top"><a id="ac6942641e93eb05a3d7c16ad0ff6a78f"></a>
-<a class="el" href="class_p_g_e_1_1_graphics.html#a0982d3b9d3f6e910f3e430da961a5a44">Culling</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cullingMode</b></td></tr>
-<tr class="separator:ac6942641e93eb05a3d7c16ad0ff6a78f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc78eb49e326450d9986da2a2e6aab7c"><td class="memItemLeft" align="right" valign="top"><a id="abc78eb49e326450d9986da2a2e6aab7c"></a>
+CullingMode&#160;</td><td class="memItemRight" valign="bottom"><b>cullingMode</b></td></tr>
+<tr class="separator:abc78eb49e326450d9986da2a2e6aab7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8812b70a38f12d29ae06b282b69349a"><td class="memItemLeft" align="right" valign="top"><a id="ab8812b70a38f12d29ae06b282b69349a"></a>
 <a class="el" href="class_p_g_e_1_1_resource_manager.html">ResourceManager</a>&#160;</td><td class="memItemRight" valign="bottom"><b>resourceManager</b></td></tr>
 <tr class="separator:ab8812b70a38f12d29ae06b282b69349a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -321,7 +302,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>vsync</b></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::optional&lt; <a class="el" href="class_p_g_e_1_1_graphics.html#a7ba2bbb9d3249d2a61df738fec941f83">Renderer</a> &gt;&#160;</td>
+          <td class="paramtype">std::optional&lt; Renderer &gt;&#160;</td>
           <td class="paramname"><em>r</em> = <code>{&#160;}</code>, </td>
         </tr>
         <tr>

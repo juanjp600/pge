@@ -1,10 +1,5 @@
 var class_p_g_e_1_1_input =
 [
-    [ "\u202ADevice", "class_p_g_e_1_1_input.html#a46045d1b7334e172ed2a65119cbbda5c", [
-      [ "\u202AKEYBOARD", "class_p_g_e_1_1_input.html#a46045d1b7334e172ed2a65119cbbda5caedda266cdb6345b9f6914cc2e7577475", null ],
-      [ "\u202AMOUSE", "class_p_g_e_1_1_input.html#a46045d1b7334e172ed2a65119cbbda5ca2ec2be318cc86a1224c0e9dcc71321e4", null ],
-      [ "\u202ACONTROLLER", "class_p_g_e_1_1_input.html#a46045d1b7334e172ed2a65119cbbda5ca42e074e8564dad9034ef033c6a6cf8b6", null ]
-    ] ],
     [ "\u202A~Input", "class_p_g_e_1_1_input.html#aac04e0cc58c5190fd5b3c628a9074973", null ],
     [ "\u202AInput", "class_p_g_e_1_1_input.html#a705019a25089f546cb1d8b7c3cd7d28b", null ],
     [ "\u202AgetDevice", "class_p_g_e_1_1_input.html#a97ade25649de527dc1b8aa674b79106c", null ],
