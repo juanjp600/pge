@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-if (process.argv.length != 3) {
+if (process.argv.length !== 3) {
     console.error("No file provided!");
     return;
 }
@@ -22,18 +22,18 @@ fs.readFile(fileName, (err, data) => {
     }
 
     const file = data.toString();
-    let index;
-    while ((index = file.indexOf("\n#", index)) != -1) {
+    let index = 0;
+    while ((index = file.indexOf("\n#", index)) !== -1) {
         index += 2;
 
         let newCategory;
 
-        if (file.charAt(index) != '#') {
+        if (file.charAt(index) !== '#') {
             index++;
             newCategory = true;
         } else {
             index++;
-            if(file.charAt(index) == '#') { // Ignore headings > level 2.
+            if(file.charAt(index) === '#') { // Ignore headings > level 2.
                 index = file.indexOf("\n", index);
                 continue;
             }
@@ -55,7 +55,7 @@ fs.readFile(fileName, (err, data) => {
 
     let newFile = "";
     for (const category of categories) {
-        function makeEntry(str) { return "[" + str + "](#" + str.toLowerCase().replaceAll(" ", "-").replace(/[^a-zA-Z0-9-_]/g, "") + ")\n" }
+        function makeEntry(str) { return `[${str}](#${str.toLowerCase().replaceAll(" ", "-").replace(/[^a-zA-Z0-9-_]/g, "")})\n` }
         newFile += "- " + makeEntry(category.name);
         for (const topic of category.elements) {
             newFile += "    * " + makeEntry(topic);
