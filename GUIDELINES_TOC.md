@@ -19,7 +19,6 @@
     * [Place `static_assert`-ions at the very top of their related scope](#place-static_assert-ions-at-the-very-top-of-their-related-scope)
     * [Never rely on default access specifiers](#never-rely-on-default-access-specifiers)
     * [Always utilize `override` while omitting `virtual` when overriding methods](#always-utilize-override-while-omitting-virtual-when-overriding-methods)
-    * [Use `auto` cautiously](#use-auto-cautiously)
     * [Prefer direct over copy initialization on declaration](#prefer-direct-over-copy-initialization-on-declaration)
     * [Utilize structured bindings](#utilize-structured-bindings)
     * [Consider putting enums outside of classes](#consider-putting-enums-outside-of-classes)
@@ -334,10 +333,6 @@ class MyDerived {
         virtual void myFuncC() override; // No.
 };
 ```
-
-
-## Use `auto` cautiously
-**Stub.**
 
 
 ## Prefer direct over copy initialization on declaration
