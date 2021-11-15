@@ -1,11 +1,11 @@
 name: Guidelines Table of Contents
 
 on:
-  workflow_dispatch:
   push:
     paths:
       - "GUIDELINES.md"
-      - ".github/workflows/doc.yml"
+      - ".github/workflows/toc.js"
+      - ".github/workflows/guide-toc.yml"
 
 jobs:
   toc:
@@ -20,9 +20,10 @@ jobs:
           node-version: "15.x"
     
       - name: Generate TOC
-        run: node .github/workflows/toc.js GUIDELINES.md 
+        run: node .github/workflows/toc.js GUIDELINES.md
 
       - name: Commit & Push
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: Update guidelines from \[${GITHUB_SHA::8}]
