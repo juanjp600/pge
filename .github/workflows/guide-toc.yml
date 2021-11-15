@@ -1,6 +1,7 @@
 name: Guidelines Table of Contents
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - "GUIDELINES.md"
@@ -10,12 +11,13 @@ jobs:
   toc:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [15.x]
-
     steps:
       - uses: actions/checkout@v2
+    
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "15.x"
     
       - name: Generate TOC
         run: node .github/workflows/toc.js GUIDELINES.md 
