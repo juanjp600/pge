@@ -5,6 +5,7 @@
 
 #include "NoHeap.h"
 #include "Resource.h"
+#include "RawWrapper.h"
 
 namespace PGE {
 
@@ -18,17 +19,30 @@ class ResourceManager : private NoHeap {
             return v.iterator;
         }
 
+        template <typename T, typename... Args>
+        typename T::View add(Args&&... args) {
+            T* res = new T(std::forward<Args>(args)...);
+            resources.emplace_back(res);
+            return ResourceView(res->get(), resources.rbegin().base());
+        }
+
     public:
         virtual ~ResourceManager();
 
         template <typename T, typename... Args>
         typename T::View addNewResource(Args&&... args) {
             static_assert(std::is_base_of<ResourceBase, T>::value);
-            T* res = new T(std::forward<Args>(args)...);
-            resources.emplace_back(res);
-            std::list<ResourceBase*>::iterator lastResourceIter = resources.end();
-            lastResourceIter--;
-            return ResourceView(res->get(), lastResourceIter);
+            return add<T>(std::forward<Args>(args)...);
+        }
+
+        template <typename T>
+        typename RawWrapper<T>::View addPointer(T* ptr) {
+            return add<RawWrapper<T>>(ptr);
+        }
+
+        template <typename T, typename... Args>
+        typename RawWrapper<T>::View addNew(Args&&... args) {
+            return add<RawWrapper<T>>(std::forward<Args>(args)...);
         }
 
         template <typename T>
