@@ -105,6 +105,7 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
             NO_MIPMAPS,
             NORMAL,
             COMPRESSED,
+            COMPRESSED_NO_MIPMAPS,
         };
         
         D3D11Texture2D(ID3D11Device* device, Type type, int width, int height, DXGI_FORMAT format) {
@@ -112,7 +113,7 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
             ZeroMemory(&textureDesc, sizeof(textureDesc));
             textureDesc.Width = (UINT)width;
             textureDesc.Height = (UINT)height;
-            if (type == Type::DEPTH_STENCIL || type == Type::NO_MIPMAPS || type == Type::RENDER_TARGET) {
+            if (type == Type::DEPTH_STENCIL || type == Type::NO_MIPMAPS || type == Type::COMPRESSED_NO_MIPMAPS || type == Type::RENDER_TARGET) {
                 textureDesc.MipLevels = 1;
             }
             textureDesc.ArraySize = 1;
@@ -123,7 +124,7 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
                 textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
             } else {
                 textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-                if (type != Type::COMPRESSED) {
+                if (type != Type::COMPRESSED && type != Type::COMPRESSED_NO_MIPMAPS) {
                     textureDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
                 }
             }
