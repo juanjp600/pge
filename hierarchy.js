@@ -4,6 +4,7 @@ var hierarchy =
     [ "\u202APGE::StructuredData::ElemLayout", "class_p_g_e_1_1_structured_data_1_1_elem_layout.html", null ],
     [ "\u202APGE::Exception", "class_p_g_e_1_1_exception.html", null ],
     [ "\u202APGE::Hasher", "class_p_g_e_1_1_hasher.html", null ],
+    [ "\u202APGE::Range< SIZE >::Iterator", "class_p_g_e_1_1_range_1_1_iterator.html", null ],
     [ "\u202APGE::Mesh::Line", "struct_p_g_e_1_1_mesh_1_1_line.html", null ],
     [ "\u202APGE::Texture::Mipmap", "struct_p_g_e_1_1_texture_1_1_mipmap.html", null ],
     [ "\u202APGE::NoHeap", "class_p_g_e_1_1_no_heap.html", [
@@ -64,7 +65,6 @@ var hierarchy =
       [ "\u202APGE::Texture", "class_p_g_e_1_1_texture.html", null ]
     ] ],
     [ "\u202APGE::Range< SIZE >", "class_p_g_e_1_1_range.html", null ],
-    [ "\u202APGE::Range< SIZE >::RangeIterator", "class_p_g_e_1_1_range_1_1_range_iterator.html", null ],
     [ "\u202APGE::Reference< T >", "class_p_g_e_1_1_reference.html", null ],
     [ "\u202APGE::SysEvents::Subscriber", "class_p_g_e_1_1_sys_events_1_1_subscriber.html", null ],
     [ "\u202APGE::SysEvents", "class_p_g_e_1_1_sys_events.html", null ],

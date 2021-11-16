@@ -1,12 +1,11 @@
 var searchData=
 [
-  ['radtodeg_77',['radToDeg',['../namespace_p_g_e_1_1_math.html#aec5240ab51ce3a2760c11ebe761950f4',1,'PGE::Math']]],
-  ['random_78',['Random',['../class_p_g_e_1_1_random.html',1,'PGE']]],
-  ['range_79',['Range',['../class_p_g_e_1_1_range.html',1,'PGE']]],
-  ['rangeiterator_80',['RangeIterator',['../class_p_g_e_1_1_range_1_1_range_iterator.html',1,'PGE::Range']]],
+  ['radtodeg_78',['radToDeg',['../namespace_p_g_e_1_1_math.html#aec5240ab51ce3a2760c11ebe761950f4',1,'PGE::Math']]],
+  ['random_79',['Random',['../class_p_g_e_1_1_random.html',1,'PGE']]],
+  ['range_80',['Range',['../class_p_g_e_1_1_range.html',1,'PGE']]],
   ['rawwrapper_81',['RawWrapper',['../class_p_g_e_1_1_raw_wrapper.html',1,'PGE']]],
   ['read_82',['read',['../class_p_g_e_1_1_binary_reader.html#ae11763f827ab471e07c104b7d65d6076',1,'PGE::BinaryReader']]],
-  ['readbytes_83',['readBytes',['../class_p_g_e_1_1_file_path.html#a0db81573a6ed28b6ddb1b63d3d3ffec0',1,'PGE::FilePath::readBytes()'],['../class_p_g_e_1_1_binary_reader.html#aa9f4d5cdfbb6bbe7a33f872c2d415109',1,'PGE::BinaryReader::readBytes(size_t count)']]],
+  ['readbytes_83',['readBytes',['../class_p_g_e_1_1_binary_reader.html#aa9f4d5cdfbb6bbe7a33f872c2d415109',1,'PGE::BinaryReader::readBytes()'],['../class_p_g_e_1_1_file_path.html#a0db81573a6ed28b6ddb1b63d3d3ffec0',1,'PGE::FilePath::readBytes()']]],
   ['readbytesinto_84',['readBytesInto',['../class_p_g_e_1_1_binary_reader.html#a0177ad10268e3c7e24aa6fc3373e1b1e',1,'PGE::BinaryReader']]],
   ['readline_85',['readLine',['../class_p_g_e_1_1_text_reader.html#a7112ccb2ec594415791d07279def0ec2',1,'PGE::TextReader::readLine(String &amp;dest)'],['../class_p_g_e_1_1_text_reader.html#a5ce17c0da98ff5433beeccafd9c65f07',1,'PGE::TextReader::readLine()']]],
   ['readlines_86',['readLines',['../class_p_g_e_1_1_file_path.html#a34cf4363c3b4c08611db37f7a0864460',1,'PGE::FilePath']]],
