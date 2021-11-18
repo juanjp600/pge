@@ -23,7 +23,7 @@ class ResourceManager : private NoHeap {
         typename T::View add(Args&&... args) {
             T* res = new T(std::forward<Args>(args)...);
             resources.emplace_back(res);
-            return ResourceView(res->get(), resources.rbegin().base());
+            return ResourceView(res->get(), --resources.end());
         }
 
     public:
