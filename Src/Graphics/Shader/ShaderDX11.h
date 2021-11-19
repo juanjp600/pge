@@ -79,6 +79,7 @@ class ShaderDX11 : public Shader {
                 D3D11Buffer::View dxCBuffer;
                 bool dirty;
         };
+        Constant* findConstantInBuffers(std::vector<CBufferInfo>& asd, const String& name);
 
         std::vector<CBufferInfo> vertexConstantBuffers;
         std::vector<CBufferInfo> fragmentConstantBuffers;

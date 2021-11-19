@@ -1,5 +1,7 @@
 #include "../GraphicsDX11.h"
 
+#include <PGE/Types/Range.h>
+
 using namespace PGE;
 
 static DXGI_FORMAT getDXFormat(Texture::Format fmt) {
@@ -82,7 +84,7 @@ TextureDX11::TextureDX11(Graphics& gfx, const std::vector<Texture::Mipmap>& mipm
     dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice,
         mipmaps.size() == 1 ? D3D11Texture2D::Type::COMPRESSED_NO_MIPMAPS : D3D11Texture2D::Type::COMPRESSED,
         mipmaps[0].width, mipmaps[0].height, dxFormat);
-    for (int i = 0; i < mipmaps.size(); i++) {
+    for (size_t i : Range(mipmaps.size())) {
         dxContext->UpdateSubresource(dxTexture, D3D11CalcSubresource(i, 0, (UINT)mipmaps.size()), NULL, mipmaps[i].buffer, mipmaps[i].width * getBitsPerBlockOnLine(fmt), 0);
     }
 
@@ -91,8 +93,7 @@ TextureDX11::TextureDX11(Graphics& gfx, const std::vector<Texture::Mipmap>& mipm
 
 void TextureDX11::useTexture(int index) {
     ID3D11DeviceContext* dxContext = graphics.getDxContext();
-    ID3D11ShaderResourceView* srvArr[] { dxShaderResourceView };
-    dxContext->PSSetShaderResources(index,1,srvArr);
+    dxContext->PSSetShaderResources(index, 1, &dxShaderResourceView);
 }
 
 ID3D11RenderTargetView* TextureDX11::getRtv() const {

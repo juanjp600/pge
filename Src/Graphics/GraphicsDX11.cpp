@@ -1,6 +1,6 @@
 #include "GraphicsDX11.h"
 
-#include <stdlib.h>
+#include <PGE/Types/Range.h>
 
 using namespace PGE;
 
@@ -61,14 +61,14 @@ GraphicsDX11::GraphicsDX11(const String& name, int w, int h, WindowMode wm, int 
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_WRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
-    dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_WRITE], 0);
+    dxDepthStencilState[ZBufferStateIndex::ENABLED_WRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxContext->OMSetDepthStencilState(dxDepthStencilState[ZBufferStateIndex::ENABLED_WRITE], 0);
 
     depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-    dxDepthStencilState[(int)ZBufferStateIndex::ENABLED_NOWRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxDepthStencilState[ZBufferStateIndex::ENABLED_NOWRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
 
     depthStencilDesc.DepthEnable = FALSE;
-    dxDepthStencilState[(int)ZBufferStateIndex::DISABLED] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
+    dxDepthStencilState[ZBufferStateIndex::DISABLED] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
 
     setViewport(Rectanglei(0,0,w,h));
     currentRenderTargetViews.emplace_back(dxBackBufferRtv);
@@ -83,37 +83,27 @@ void GraphicsDX11::swap() {
 }
 
 void GraphicsDX11::clear(const Color& color) {
-    float clearColor[4] = {color.red,color.green,color.blue,color.alpha};
-    for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
-        dxContext->ClearRenderTargetView( currentRenderTargetViews[i], clearColor );
+    float clearColor[4] = {color.red, color.green, color.blue, color.alpha};
+    for (ID3D11RenderTargetView* v : currentRenderTargetViews) {
+        dxContext->ClearRenderTargetView(v, clearColor);
     }
-    dxContext->ClearDepthStencilView( currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0 );
+    dxContext->ClearDepthStencilView(currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0);
 }
 
 void GraphicsDX11::setRenderTarget(Texture& renderTarget) {
-    for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
-        currentRenderTargetViews[i] = nullptr;
-    }
-    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
-
     currentRenderTargetViews.clear(); currentRenderTargetViews.emplace_back(((TextureDX11&)renderTarget).getRtv());
     currentDepthStencilView = ((TextureDX11&)renderTarget).getZBufferView();
-    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    dxContext->OMSetRenderTargets((UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView);
 }
 
 void GraphicsDX11::setRenderTargets(const ReferenceVector<Texture>& renderTargets) {
-    for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
-        currentRenderTargetViews[i] = nullptr;
-    }
-    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
-
     currentRenderTargetViews.clear();
     TextureDX11* maxSizeTexture = &(TextureDX11&)renderTargets[0].get();
-    for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets[" + String::from(i) + "] is not a valid render target");
-        currentRenderTargetViews.emplace_back(((TextureDX11&)renderTargets[i].get()).getRtv());
-        if (renderTargets[i]->getWidth()+renderTargets[i]->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
-            maxSizeTexture = &(TextureDX11&)renderTargets[i].get();
+    for (Reference<Texture> t : renderTargets) {
+        PGE_ASSERT(t->isRenderTarget(), "renderTargets includes non render target");
+        currentRenderTargetViews.emplace_back(((TextureDX11&)t.get()).getRtv());
+        if (t->getWidth()+ t->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
+            maxSizeTexture = &(TextureDX11&)t.get();
         }
     }
     for (int i = 0; i < (int)renderTargets.size(); i++) {
@@ -122,18 +112,13 @@ void GraphicsDX11::setRenderTargets(const ReferenceVector<Texture>& renderTarget
                                                        String::from(renderTargets[i]->getWidth()) + "x" + String::from(renderTargets[i]->getHeight()) + ")");
     }
     currentDepthStencilView = maxSizeTexture->getZBufferView();
-    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    dxContext->OMSetRenderTargets((UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView);
 }
 
 void GraphicsDX11::resetRenderTarget() {
-    for (int i = 0; i < (int)currentRenderTargetViews.size(); i++) {
-        currentRenderTargetViews[i] = nullptr;
-    }
-    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), nullptr );
-
     currentRenderTargetViews.clear(); currentRenderTargetViews.emplace_back(dxBackBufferRtv);
     currentDepthStencilView = dxZBufferView;
-    dxContext->OMSetRenderTargets( (UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView );
+    dxContext->OMSetRenderTargets((UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView);
 }
 
 void GraphicsDX11::setViewport(const Rectanglei& vp) {
@@ -146,7 +131,7 @@ void GraphicsDX11::setViewport(const Rectanglei& vp) {
         dxViewport.MaxDepth = 1.0f;
         dxViewport.TopLeftX = (FLOAT)viewport.topLeftCorner().x;
         dxViewport.TopLeftY = (FLOAT)viewport.topLeftCorner().y;
-        dxContext->RSSetViewports( 1, &dxViewport );
+        dxContext->RSSetViewports(1, &dxViewport);
     }
 }
 
@@ -181,5 +166,5 @@ ID3D11DepthStencilView* GraphicsDX11::getZBufferView() const {
 }
 
 void GraphicsDX11::setZBufferState(ZBufferStateIndex index) {
-    dxContext->OMSetDepthStencilState(dxDepthStencilState[(int)index], 0);
+    dxContext->OMSetDepthStencilState(dxDepthStencilState[index], 0);
 }
