@@ -17,7 +17,7 @@ class Range {
 				static constexpr Iterator begin(const Range& range) { return { range.start, range.step }; }
 				static constexpr Iterator end(const Range& range) { return { range.stop, range.step }; }
 
-				operator int&() { return position; }
+				operator SIZE&() { return position; }
 
 				constexpr const Iterator& operator*() const { return *this; }
 				constexpr Iterator& operator*() { return *this; }
