@@ -5,7 +5,7 @@ var class_p_g_e_1_1_range_1_1_iterator =
     [ "\u202Apointer", "class_p_g_e_1_1_range_1_1_iterator.html#a32ab737631db0306375b665a0a6346b4", null ],
     [ "\u202Areference", "class_p_g_e_1_1_range_1_1_iterator.html#af5d8377d05ce2c42652124c77e369861", null ],
     [ "\u202Avalue_type", "class_p_g_e_1_1_range_1_1_iterator.html#adadcba790424c43bce0265af3e568183", null ],
-    [ "\u202Aoperator int &", "class_p_g_e_1_1_range_1_1_iterator.html#afc81d28f7fe741a9c30be6b1c166ea7b", null ],
+    [ "\u202Aoperator SIZE &", "class_p_g_e_1_1_range_1_1_iterator.html#af39deff4ae0ca572a7798d8c773cb1f0", null ],
     [ "\u202Aoperator!=", "class_p_g_e_1_1_range_1_1_iterator.html#a54d4313cfcf17e85100792a4e338f704", null ],
     [ "\u202Aoperator*", "class_p_g_e_1_1_range_1_1_iterator.html#a8be9d33370c1197b78c60e887e595aa4", null ],
     [ "\u202Aoperator*", "class_p_g_e_1_1_range_1_1_iterator.html#a10dfe51a85eefa01949663a5e723780d", null ],
