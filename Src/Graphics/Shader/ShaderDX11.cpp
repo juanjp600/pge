@@ -42,9 +42,11 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 
     ID3D11Device* dxDevice = graphics.getDxDevice();
     dxSamplerState.reserve(samplerCount);
-    for (auto _ : Range(samplerCount)) {
+    for (int _ : Range(samplerCount)) {
         dxSamplerState.emplace_back(resourceManager.addNewResource<D3D11SamplerState>(dxDevice));
     }
+
+    textureCount = reader.read<u32>();
 
     std::vector<byte> vertexShaderBytecode = (path + "vertex.dxbc").readBytes();
     PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");

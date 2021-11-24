@@ -111,7 +111,6 @@ char16 TextReader::readChar() {
         default: {
             throw PGE_CREATE_EX(INVALID_ENCODING);
         }
-
     }
 }
 
