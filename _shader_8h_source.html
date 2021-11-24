@@ -125,16 +125,19 @@ $(document).ready(function(){initNavTree('_shader_8h_source.html',''); initResiz
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a>* getVertexShaderConstant(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; constName) = 0;</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a>* getFragmentShaderConstant(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; constName) = 0;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="code" href="class_p_g_e_1_1_shader.html">Shader</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">FilePath</a>&amp; path) : filepath(path) { }</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="code" href="class_p_g_e_1_1_structured_data_1_1_elem_layout.html">StructuredData::ElemLayout</a> vertexLayout;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">FilePath</a> filepath;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;};</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_SHADER_H_INCLUDED</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">int</span> getTextureCount()<span class="keyword"> const </span>{ PGE_ASSERT(textureCount != -1, <span class="stringliteral">&quot;Texture count has not been initialized&quot;</span>); <span class="keywordflow">return</span> textureCount; }</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="code" href="class_p_g_e_1_1_shader.html">Shader</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">FilePath</a>&amp; path) : filepath(path) { }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        StructuredData::ElemLayout vertexLayout;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">const</span> FilePath filepath;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">int</span> textureCount = -1;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;};</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_SHADER_H_INCLUDED</span></div>
 <div class="ttc" id="aclass_p_g_e_1_1_color_html"><div class="ttname"><a href="class_p_g_e_1_1_color.html">PGE::Color</a></div><div class="ttdoc">An RGBA color represented via 4 floating point numbers.</div><div class="ttdef"><b>Definition:</b> Color.h:15</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_file_path_html"><div class="ttname"><a href="class_p_g_e_1_1_file_path.html">PGE::FilePath</a></div><div class="ttdoc">String wrapper utility to deal with paths.</div><div class="ttdef"><b>Definition:</b> FilePath.h:13</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_graphics_html"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html">PGE::Graphics</a></div><div class="ttdoc">Main class for managing everything graphics related.</div><div class="ttdef"><b>Definition:</b> Graphics.h:37</div></div>
