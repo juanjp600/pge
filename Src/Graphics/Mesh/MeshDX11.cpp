@@ -1,5 +1,7 @@
 #include "../GraphicsDX11.h"
 
+#include <PGE/Types/Range.h>
+
 using namespace PGE;
 
 MeshDX11::MeshDX11(Graphics& gfx) : graphics((GraphicsDX11&)gfx) { }
@@ -26,12 +28,12 @@ void MeshDX11::renderInternal() {
     ((ShaderDX11&)material->getShader()).useVertexInputLayout();
 
     UINT offset = 0; UINT stride = vertices.getLayout().getElementSize();
-    dxContext->IASetVertexBuffers(0,1,&dxVertexBuffer,&stride,&offset);
-    dxContext->IASetIndexBuffer(dxIndexBuffer,DXGI_FORMAT_R32_UINT,0);
+    dxContext->IASetVertexBuffers(0, 1, &dxVertexBuffer, &stride, &offset);
+    dxContext->IASetIndexBuffer(dxIndexBuffer, DXGI_FORMAT_R32_UINT,0);
 
     D3D11_PRIMITIVE_TOPOLOGY dxPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-    if (primitiveType==PrimitiveType::LINE) {
-        dxPrimitiveTopology=D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
+    if (primitiveType == PrimitiveType::LINE) {
+        dxPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
     }
 
     dxContext->IASetPrimitiveTopology(dxPrimitiveTopology);
@@ -40,19 +42,14 @@ void MeshDX11::renderInternal() {
 
     shader.useShader();
     shader.useSamplers();
-    for (int i=0;i<material->getTextureCount();i++) {
+    for (int i : Range(material->getTextureCount())) {
         ((TextureDX11&)material->getTexture(i)).useTexture(i);
     }
 
     graphics.setZBufferState(
         graphics.getDepthTest()
-                ? (isOpaque() ? GraphicsDX11::ZBufferStateIndex::ENABLED_WRITE : GraphicsDX11::ZBufferStateIndex::ENABLED_NOWRITE)
-                : GraphicsDX11::ZBufferStateIndex::DISABLED);
+                ? (isOpaque() ? ZBufferStateIndex::ENABLED_WRITE : ZBufferStateIndex::ENABLED_NOWRITE)
+                : ZBufferStateIndex::DISABLED);
     
-    dxContext->DrawIndexed((UINT)indices.size(),0,0);
-
-    ID3D11ShaderResourceView* nullResource = nullptr;
-    for (int i=0;i<material->getTextureCount();i++) {
-        dxContext->PSSetShaderResources(i,1,&nullResource);
-    }
+    dxContext->DrawIndexed((UINT)indices.size(), 0, 0);
 }

@@ -18,15 +18,15 @@ class ShaderVK : public Shader {
         ShaderVK(Graphics& gfx, const FilePath& path);
         ~ShaderVK();
 
-        Constant& getVertexShaderConstant(const String& name) override;
-        Constant& getFragmentShaderConstant(const String& name) override;
+        Constant* getVertexShaderConstant(const String& name) override;
+        Constant* getFragmentShaderConstant(const String& name) override;
 
         void pushAllConstantsLazy();
 
         vk::PipelineLayout getLayout() const;
 
         void uploadPipelines();
-        vk::Pipeline getPipeline(Mesh::PrimitiveType type);
+        vk::Pipeline getPipeline(PrimitiveType type);
 
     private:
         GraphicsVK& graphics;
@@ -36,8 +36,6 @@ class ShaderVK : public Shader {
         std::vector<byte> constantData;
         int vertexConstantSize = 0;
         int fragmentConstantSize = 0;
-
-        int textureCount;
 
         VKShader::View vkShader;
 
@@ -77,14 +75,14 @@ class ShaderVK : public Shader {
         struct PipelinePair {
             VKPipeline::View triPipeline;
             VKPipeline::View linePipeline;
-            VKPipeline::View& getPipeline(Mesh::PrimitiveType type);
+            VKPipeline::View& getPipeline(PrimitiveType type);
         };
         std::unordered_map<vk::RenderPass, PipelinePair> rtPipelines;
         PipelinePair basicPipeline;
 
         ResourceManagerVK resourceManager;
 
-        void uploadPipeline(VKPipeline::View& pipeline, vk::RenderPass pass, Mesh::PrimitiveType type);
+        void uploadPipeline(VKPipeline::View& pipeline, vk::RenderPass pass, PrimitiveType type);
 };
 
 }

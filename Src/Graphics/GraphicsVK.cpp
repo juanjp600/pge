@@ -306,8 +306,8 @@ void GraphicsVK::createSwapchain() {
     resourceManager.deleteResource(depthBuffer);
     depthBuffer = resourceManager.addNewResource<RawWrapper<TextureVK>>(*this, dimensions.x, dimensions.y);
 
-    Culling oldCull = cullingMode;
-    cullingMode = Culling::NONE;
+    CullingMode oldCull = cullingMode;
+    cullingMode = CullingMode::NONE;
     setCulling(oldCull);
 
     resourceManager.deleteResource(renderPass);
@@ -493,14 +493,14 @@ void GraphicsVK::setVsync(bool isEnabled) {
     }
 }
 
-void GraphicsVK::setCulling(Culling mode) {
+void GraphicsVK::setCulling(CullingMode mode) {
     if (mode == cullingMode) { return; }
 
     vk::CullModeFlagBits flags;
     switch (mode) {
-        case Graphics::Culling::BACK: { flags = vk::CullModeFlagBits::eBack; } break;
-        case Graphics::Culling::FRONT: { flags = vk::CullModeFlagBits::eFront; } break;
-        case Graphics::Culling::NONE: { flags = vk::CullModeFlagBits::eNone; } break;
+        case CullingMode::BACK: { flags = vk::CullModeFlagBits::eBack; } break;
+        case CullingMode::FRONT: { flags = vk::CullModeFlagBits::eFront; } break;
+        case CullingMode::NONE: { flags = vk::CullModeFlagBits::eNone; } break;
         default: { throw PGE_CREATE_EX("Unexpected culling mode"); }
     }
     pipelineInfo.rasterizationInfo.cullMode = flags;

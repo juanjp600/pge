@@ -1,5 +1,7 @@
 #include "../GraphicsDX11.h"
 
+#include <PGE/Types/Range.h>
+
 using namespace PGE;
 
 ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path), graphics((GraphicsDX11&)gfx) {
@@ -14,7 +16,7 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
     // We have to keep the names in memory.
     std::vector<String> semanticNames(propertyCount);
     std::vector<D3D11_INPUT_ELEMENT_DESC> dxVertexInputElemDesc(propertyCount);
-    for (int i = 0; i < (int)propertyCount; i++) {
+    for (int i : Range(propertyCount)) {
         String name = reader.read<String>();
         semanticNames[i] = reader.read<String>();
         byte semanticIndex = reader.read<byte>();
@@ -40,9 +42,11 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 
     ID3D11Device* dxDevice = graphics.getDxDevice();
     dxSamplerState.reserve(samplerCount);
-    for (int i = 0; i < (int)samplerCount; i++) {
+    for (int _ : Range(samplerCount)) {
         dxSamplerState.emplace_back(resourceManager.addNewResource<D3D11SamplerState>(dxDevice));
     }
+
+    textureCount = reader.read<u32>();
 
     std::vector<byte> vertexShaderBytecode = (path + "vertex.dxbc").readBytes();
     PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
@@ -90,26 +94,23 @@ int ShaderDX11::dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat) {
     }
 }
 
-Shader::Constant& ShaderDX11::getVertexShaderConstant(const String& name) {
-    for (CBufferInfo& cBuffer : vertexConstantBuffers) {
+Shader::Constant* ShaderDX11::findConstantInBuffers(std::vector<CBufferInfo>& buffers, const String& name) {
+    for (CBufferInfo& cBuffer : buffers) {
         auto& map = cBuffer.getConstants();
         auto it = map.find(name);
         if (it != map.end()) {
-            return it->second;
+            return &it->second;
         }
     }
-    throw PGE_CREATE_EX("Could not find vertex shader constant");
+    return nullptr;
 }
 
-Shader::Constant& ShaderDX11::getFragmentShaderConstant(const String& name) {
-    for (CBufferInfo& cBuffer : fragmentConstantBuffers) {
-        auto& map = cBuffer.getConstants();
-        auto it = map.find(name);
-        if (it != map.end()) {
-            return it->second;
-        }
-    }
-    throw PGE_CREATE_EX("Could not find fragment shader constant");
+Shader::Constant* ShaderDX11::getVertexShaderConstant(const String& name) {
+    return findConstantInBuffers(vertexConstantBuffers, name);
+}
+
+Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
+    return findConstantInBuffers(fragmentConstantBuffers, name);
 }
 
 void ShaderDX11::useShader() {
@@ -196,7 +197,7 @@ void ShaderDX11::CBufferInfo::markAsDirty() {
 
 void ShaderDX11::CBufferInfo::update() {
     if (!dirty) { return; }
-    dxContext->UpdateSubresource(dxCBuffer,0,NULL,getData(),0,0);
+    dxContext->UpdateSubresource(dxCBuffer, 0, NULL, getData(), 0, 0);
     dirty = false;
 }
 

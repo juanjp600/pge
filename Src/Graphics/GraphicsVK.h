@@ -42,7 +42,7 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
 
         void setViewport(const Rectanglei& vp) override;
 
-        void setCulling(Culling mode) override;
+        void setCulling(CullingMode mode) override;
 
         void setDepthTest(bool isEnabled) override;
 

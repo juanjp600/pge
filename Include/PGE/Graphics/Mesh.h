@@ -16,13 +16,13 @@ namespace PGE {
 
 class Material;
 
+enum class PrimitiveType {
+    LINE,
+    TRIANGLE,
+};
+
 class Mesh : private PolymorphicHeap {
     public:
-        enum class PrimitiveType {
-            LINE,
-            TRIANGLE,
-        };
-
         enum class UpdateStrategy {
             STATIC,
             DYNAMIC,

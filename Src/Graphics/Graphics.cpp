@@ -71,16 +71,16 @@ bool Graphics::getVsync() const {
     return vsync;
 }
 
-void Graphics::setCulling(Culling mode) {
+void Graphics::setCulling(CullingMode mode) {
     cullingMode = mode;
 }
 
-Graphics::Culling Graphics::getCulling() const {
+CullingMode Graphics::getCulling() const {
     return cullingMode;
 }
 
 Graphics::WindowEventSubscriber::WindowEventSubscriber(const Graphics& gfx) {
-    resource = new SysEventsInternal::SubscriberInternal(gfx, SysEventsInternal::SubscriberInternal::EventType::WINDOW);
+    resource = new SysEventsInternal::SubscriberInternal(gfx, EventType::WINDOW);
     SysEventsInternal::subscribe(resource);
 }
 

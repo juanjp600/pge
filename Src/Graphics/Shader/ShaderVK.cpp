@@ -104,21 +104,21 @@ ShaderVK::~ShaderVK() {
     graphics.removeShader(*this);
 }
 
-Shader::Constant& ShaderVK::getVertexShaderConstant(const String& name) {
+Shader::Constant* ShaderVK::getVertexShaderConstant(const String& name) {
     auto it = vertexConstantMap.find(name);
     if (it == vertexConstantMap.end()) {
-        throw PGE_CREATE_EX("Could not find fragment shader constant");
+        return nullptr;
     } else {
-        return it->second;
+        return &it->second;
     }
 }
 
-Shader::Constant& ShaderVK::getFragmentShaderConstant(const String& name) {
+Shader::Constant* ShaderVK::getFragmentShaderConstant(const String& name) {
     auto it = fragmentConstantMap.find(name);
     if (it == fragmentConstantMap.end()) {
-        throw PGE_CREATE_EX("Could not find vertex shader constant");
+        return nullptr;
     } else {
-        return it->second;
+        return &it->second;
     }
 }
 
@@ -177,11 +177,11 @@ vk::PipelineLayout ShaderVK::getLayout() const {
     return layout;
 }
 
-VKPipeline::View& ShaderVK::PipelinePair::getPipeline(Mesh::PrimitiveType type) {
-    return type == Mesh::PrimitiveType::TRIANGLE ? triPipeline : linePipeline;
+VKPipeline::View& ShaderVK::PipelinePair::getPipeline(PrimitiveType type) {
+    return type == PrimitiveType::TRIANGLE ? triPipeline : linePipeline;
 }
 
-void ShaderVK::uploadPipeline(VKPipeline::View& pipeline, vk::RenderPass pass, Mesh::PrimitiveType type) {
+void ShaderVK::uploadPipeline(VKPipeline::View& pipeline, vk::RenderPass pass, PrimitiveType type) {
     resourceManager.trash(pipeline);
     pipeline = resourceManager.addNewResource<VKPipeline>(graphics.getDevice(),
         shaderStageInfo, vertexInputInfo, layout, graphics.getPipelineInfo(), pass, type);
@@ -196,11 +196,11 @@ void ShaderVK::uploadPipelines() {
 
     // TODO: Be lazy?
     vk::RenderPass pass = graphics.getBasicRenderPass();
-    uploadPipeline(basicPipeline.triPipeline, pass, Mesh::PrimitiveType::TRIANGLE);
-    uploadPipeline(basicPipeline.linePipeline, pass, Mesh::PrimitiveType::LINE);
+    uploadPipeline(basicPipeline.triPipeline, pass, PrimitiveType::TRIANGLE);
+    uploadPipeline(basicPipeline.linePipeline, pass, PrimitiveType::LINE);
 }
 
-vk::Pipeline ShaderVK::getPipeline(Mesh::PrimitiveType type) {
+vk::Pipeline ShaderVK::getPipeline(PrimitiveType type) {
     const RenderInfo* ri = graphics.getRenderInfo();
     if (ri == nullptr) {
         return basicPipeline.getPipeline(type);

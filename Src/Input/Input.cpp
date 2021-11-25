@@ -26,27 +26,27 @@ void Input::setReleased(bool released) {
     inputReleased = released;
 }
 
-Input::Device KeyboardInput::getDevice() const {
-    return Input::Device::KEYBOARD;
+Device KeyboardInput::getDevice() const {
+    return Device::KEYBOARD;
 }
 
 int KeyboardInput::getKey() const {
     return (int)keyCode;
 }
 
-KeyboardInput::Keycode KeyboardInput::getButton() const {
+Keycode KeyboardInput::getButton() const {
     return keyCode;
 }
 
-Input::Device MouseInput::getDevice() const {
-    return Input::Device::MOUSE;
+Device MouseInput::getDevice() const {
+    return Device::MOUSE;
 }
 
 int MouseInput::getKey() const {
     return (int)mouseButton;
 }
 
-MouseInput::Button MouseInput::getButton() const {
+MouseButton MouseInput::getButton() const {
     return mouseButton;
 }
 
@@ -58,7 +58,7 @@ int MouseInput::getClickCount() const {
     return clicks;
 }
 
-ControllerInput::ControllerInput(Controller* ctrlr, ControllerInput::Button inControllerButton, float threshold)
+ControllerInput::ControllerInput(Controller* ctrlr, ControllerButton inControllerButton, float threshold)
     : controllerButton(inControllerButton) {
     controller = ctrlr;
     stickPosition = Vectors::ZERO2F;
@@ -66,15 +66,15 @@ ControllerInput::ControllerInput(Controller* ctrlr, ControllerInput::Button inCo
     downThreshold = threshold;
 }
 
-Input::Device ControllerInput::getDevice() const {
-    return Input::Device::CONTROLLER;
+Device ControllerInput::getDevice() const {
+    return Device::CONTROLLER;
 }
 
 int ControllerInput::getKey() const {
     return (int)controllerButton;
 }
 
-ControllerInput::Button ControllerInput::getButton() const {
+ControllerButton ControllerInput::getButton() const {
     return controllerButton;
 }
 

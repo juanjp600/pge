@@ -68,6 +68,9 @@ TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, Format fmt) : Texture(w, h
     glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);*/
     glDepthbuffer = resourceManager.addNewResource<GLDepthBuffer>(w, h);
     //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, glDepthbuffer);
+
+    GLenum glError = glGetError();
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
 }
 
 TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) : Texture(w, h, false, fmt), resourceManager(gfx) {
@@ -76,6 +79,9 @@ TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, const byte* buffer, Format
     textureImage(w, h, buffer, fmt);
     if (mipmaps) { glGenerateMipmap(GL_TEXTURE_2D); }
     applyTextureParameters(false);
+
+    GLenum glError = glGetError();
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
 }
 
 TextureOGL3::TextureOGL3(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt) : Texture(mipmaps[0].width, mipmaps[0].height, false, fmt), resourceManager(gfx) {
@@ -87,6 +93,9 @@ TextureOGL3::TextureOGL3(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Comp
             mipmaps[i].width, mipmaps[i].height, 0, (GLsizei)mipmaps[i].size, mipmaps[i].buffer);
     }
     applyTextureParameters(false);
+
+    GLenum glError = glGetError();
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
 }
 
 GLuint TextureOGL3::getGlTexture() const {

@@ -5,6 +5,13 @@
 
 namespace PGE {
 
+enum class Encoding {
+    ASCII,
+    UTF8,
+    UTF16LE,
+    UTF16BE,
+};
+
 /// Utility to read text in different encodings from a file.
 /// @throws #PGE::Exception Any read operation can raise an exception if reading failed or the reader is in an invalid state.
 /// @see #endOfFile
@@ -13,13 +20,6 @@ namespace PGE {
 class TextReader : private AbstractIO<std::ifstream> {
     public:
         using AbstractIO::earlyClose;
-
-        enum class Encoding {
-            ASCII,
-            UTF8,
-            UTF16LE,
-            UTF16BE,
-        };
 
         /// Opens the stream.
         /// @param[in] file The file to read from.

@@ -10,7 +10,8 @@ namespace PGE {
 
 /// Singular exception class thrown by PGE.
 /// @see #PGE::PGE_CREATE_EX, #PGE::PGE_ASSERT
-class Exception : private NoHeap {
+// Should inherit from NoHeap, doesn't because of C4673.
+class Exception {
     public:
         /// Invalid exception.
         /// Only ever use for storing exceptions by value.

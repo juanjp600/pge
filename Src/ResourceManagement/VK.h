@@ -564,15 +564,15 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
     public:
         // Sadly we can't make this any more straightforward, because we're in a header and including either shader or graphics would lead to circular inclusion.
         VKPipeline(vk::Device device, const std::array<vk::PipelineShaderStageCreateInfo, 2> shaderInfo, const vk::PipelineVertexInputStateCreateInfo& vertexInfo,
-            vk::PipelineLayout layout, const VKPipelineInfo& pipelineInfo, vk::RenderPass renderPass, Mesh::PrimitiveType type)
+            vk::PipelineLayout layout, const VKPipelineInfo& pipelineInfo, vk::RenderPass renderPass, PrimitiveType type)
             : VKDestroyResource(device) {
             const vk::PipelineInputAssemblyStateCreateInfo* inputInfo;
             switch (type) {
-                case Mesh::PrimitiveType::LINE: {
+                case PrimitiveType::LINE: {
                     inputInfo = &inputAssemblyLines;
                 } break;
                 default:
-                case Mesh::PrimitiveType::TRIANGLE: {
+                case PrimitiveType::TRIANGLE: {
                     inputInfo = &inputAssemblyTris;
                 } break;
             }

@@ -14,22 +14,29 @@ namespace PGE {
 
 class Texture;
 
+/// The type of renderer to use.
+enum class Renderer {
+    OpenGL,
+    DirectX11,
+    Vulkan,
+};
+
+enum class WindowMode {
+    Windowed,
+    Fullscreen,
+};
+
+/// Default is back culling.
+enum class CullingMode {
+    BACK,
+    FRONT,
+    NONE,
+};
+
 /// Main class for managing everything graphics related.
 /// By default z-buffering, v-sync and backface culling are enabled.
 class Graphics : private PolymorphicHeap {
     public:
-        /// The type of renderer to use.
-        enum class Renderer {
-            OpenGL,
-            DirectX11,
-            Vulkan,
-        };
-
-        enum class WindowMode {
-            Windowed,
-            Fullscreen
-        };
-
         /// Factory method.
         /// By default the optimal renderer will be chosen, depending on the platform.
         /// Windows: DX11
@@ -88,14 +95,8 @@ class Graphics : private PolymorphicHeap {
         virtual void setVsync(bool isEnabled);
         virtual bool getVsync() const;
 
-        /// Default is back culling.
-        enum class Culling {
-            BACK,
-            FRONT,
-            NONE,
-        };
-        virtual void setCulling(Culling mode);
-        virtual Culling getCulling() const;
+        virtual void setCulling(CullingMode mode);
+        virtual CullingMode getCulling() const;
 
         /// Gets implementation defined debug information about a graphics object.
         virtual String getInfo() const = 0;
@@ -115,7 +116,7 @@ class Graphics : private PolymorphicHeap {
 
         bool depthTest;
         bool vsync;
-        Culling cullingMode;
+        CullingMode cullingMode;
 
         Graphics(const String& name, int w, int h, WindowMode wm);
 

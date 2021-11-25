@@ -1,0 +1,35 @@
+name: Guidelines Table of Contents
+
+on:
+  push:
+    paths:
+      - "GUIDELINES.md"
+      - ".github/workflows/toc.js"
+      - ".github/workflows/guide-toc.yml"
+
+jobs:
+  toc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+    
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "15.x"
+    
+      - name: Generate TOC
+        run: node .github/workflows/toc.js GUIDELINES.md
+
+      - name: Commit & Push
+        run: |
+          if git diff --exit-code; then
+            echo "Nothing to push!"
+          else
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "GitHub Actions Bot"
+            git add .
+            git commit -m "Update guidelines from [${GITHUB_SHA::8}]"
+            git push
+          fi

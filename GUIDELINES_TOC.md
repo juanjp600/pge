@@ -1,3 +1,28 @@
+- [Semantic](#semantic)
+    * [Utilize references-to-const in parameters and for-each loops](#utilize-references-to-const-in-parameters-and-for-each-loops)
+    * [Only ever return types by value as const](#only-ever-return-types-by-value-as-const)
+    * [Prefer references over pointers](#prefer-references-over-pointers)
+    * [Consider preventing heap allocation for non-polymorphic classes](#consider-preventing-heap-allocation-for-non-polymorphic-classes)
+    * [Utilize perfect forwarding for template arguments](#utilize-perfect-forwarding-for-template-arguments)
+    * [Prefer `std::vector::emplace_back` over `std::vector::push_back`](#prefer-stdvectoremplace_back-over-stdvectorpush_back)
+    * [Prefer `std::vector::reserve` over `std::vector::resize` etc.](#prefer-stdvectorreserve-over-stdvectorresize-etc)
+    * [Rely on C functions and functionality when appropriate](#rely-on-c-functions-and-functionality-when-appropriate)
+- [Style](#style)
+    * [Nothing but 1TBS in combination with 4 spaces for intendation](#nothing-but-1tbs-in-combination-with-4-spaces-for-intendation)
+    * [Indent everything but the contents of an all-encompassing namespaces](#indent-everything-but-the-contents-of-an-all-encompassing-namespaces)
+    * [Prefer postfix operations over prefix operations where the choice presents itself](#prefer-postfix-operations-over-prefix-operations-where-the-choice-presents-itself)
+    * [Never use the result of assignment, incrementing or decrementing](#never-use-the-result-of-assignment-incrementing-or-decrementing)
+    * [Define assignment, increment and decrement operators with return type void](#define-assignment-increment-and-decrement-operators-with-return-type-void)
+    * [Prefer `using` over `typedef`](#prefer-using-over-typedef)
+    * [Prefer `typename` over `class` for templates](#prefer-typename-over-class-for-templates)
+    * [Deleted methods must be public](#deleted-methods-must-be-public)
+    * [Place `static_assert`-ions at the very top of their related scope](#place-static_assert-ions-at-the-very-top-of-their-related-scope)
+    * [Never rely on default access specifiers](#never-rely-on-default-access-specifiers)
+    * [Always utilize `override` while omitting `virtual` when overriding methods](#always-utilize-override-while-omitting-virtual-when-overriding-methods)
+    * [Prefer direct over copy initialization on declaration](#prefer-direct-over-copy-initialization-on-declaration)
+    * [Utilize structured bindings](#utilize-structured-bindings)
+    * [Consider putting enums outside of classes](#consider-putting-enums-outside-of-classes)
+
 # Intro
 This document outlines some common practices, including their rationales, that help in writing efficient, readable and maintainable C++ code, which are to be enforced throughout PGE.
 

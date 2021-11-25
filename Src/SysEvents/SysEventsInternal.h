@@ -12,6 +12,14 @@ namespace PGE {
 
 class Graphics;
 
+enum class EventType {
+    WINDOW,
+    KEYBOARD,
+    MOUSE,
+    CONTROLLER,
+    TEXTINPUT,
+};
+
 class SysEventsInternal : public SysEvents {
     private:
         static std::unordered_set<Subscriber*> subscribers;
@@ -23,15 +31,6 @@ class SysEventsInternal : public SysEvents {
         static void update();
 
         class SubscriberInternal : public Subscriber {
-            public:
-                enum class EventType {
-                    WINDOW,
-                    KEYBOARD,
-                    MOUSE,
-                    CONTROLLER,
-                    TEXTINPUT
-                };
-
             private:
                 const Graphics& graphics;
                 EventType eventType;
