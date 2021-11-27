@@ -89,47 +89,6 @@ const StructuredData::ElemLayout& StructuredData::getLayout() const {
     return layout;
 }
 
-void StructuredData::setValue(int elemIndex, const String::Key& entry, float f) {
-    memcpy(data.get() + getDataIndex(elemIndex, entry, sizeof(float)), &f, sizeof(float));
-}
-
-void StructuredData::setValue(int elemIndex, const String::Key& entry, u32 u) {
-    memcpy(data.get() + getDataIndex(elemIndex, entry, sizeof(u32)), &u, sizeof(u32));
-}
-
-void StructuredData::setValue(int elemIndex, const String::Key& entry, const Vector2f& v2f) {
-    int dataIndex = getDataIndex(elemIndex, entry, sizeof(float) * 2);
-    memcpy(data.get() + dataIndex, &v2f.x, sizeof(float));
-    memcpy(data.get() + dataIndex + sizeof(float), &v2f.y, sizeof(float));
-}
-
-void StructuredData::setValue(int elemIndex, const String::Key& entry, const Vector3f& v3f) {
-    int dataIndex = getDataIndex(elemIndex, entry, sizeof(float) * 3);
-    memcpy(data.get() + dataIndex, &v3f.x, sizeof(float));
-    memcpy(data.get() + dataIndex + sizeof(float), &v3f.y, sizeof(float));
-    memcpy(data.get() + dataIndex + (sizeof(float) * 2), &v3f.z, sizeof(float));
-}
-
-void StructuredData::setValue(int elemIndex, const String::Key& entry, const Vector4f& v4f) {
-    int dataIndex = getDataIndex(elemIndex, entry, sizeof(float) * 4);
-    memcpy(data.get() + dataIndex, &v4f.x, sizeof(float));
-    memcpy(data.get() + dataIndex + sizeof(float), &v4f.y, sizeof(float));
-    memcpy(data.get() + dataIndex + (sizeof(float) * 2), &v4f.z, sizeof(float));
-    memcpy(data.get() + dataIndex + (sizeof(float) * 3), &v4f.w, sizeof(float));
-}
-
-void StructuredData::setValue(int elemIndex, const String::Key& entry, const Matrix4x4f& m) {
-    memcpy(data.get() + getDataIndex(elemIndex, entry, sizeof(float) * 4 * 4), m.elements, sizeof(float) * 4 * 4);
-}
-
-void StructuredData::setValue(int elemIndex, const String::Key& entry, const Color& c) {
-    int dataIndex = getDataIndex(elemIndex, entry, sizeof(float) * 4);
-    memcpy(data.get() + dataIndex, &c.red, sizeof(float));
-    memcpy(data.get() + dataIndex + sizeof(float), &c.green, sizeof(float));
-    memcpy(data.get() + dataIndex + (sizeof(float) * 2), &c.blue, sizeof(float));
-    memcpy(data.get() + dataIndex + (sizeof(float) * 3), &c.alpha, sizeof(float));
-}
-
 int StructuredData::getDataIndex(int elemIndex, const String::Key& entry, int expectedSize) const {
     PGE_ASSERT(elemIndex >= 0, "Requested a negative element index (" + String::from(elemIndex) + ")");
 

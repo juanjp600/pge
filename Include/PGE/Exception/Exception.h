@@ -4,13 +4,11 @@
 #include <optional>
 
 #include <PGE/String/String.h>
-#include <PGE/ResourceManagement/NoHeap.h>
 
 namespace PGE {
 
 /// Singular exception class thrown by PGE.
 /// @see #PGE::PGE_CREATE_EX, #PGE::PGE_ASSERT
-// Should inherit from NoHeap, doesn't because of C4673.
 class Exception {
     public:
         /// Invalid exception.

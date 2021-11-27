@@ -5,14 +5,13 @@
 #include <PGE/Math/Interpolator.h>
 #include <PGE/Types/Types.h>
 #include <PGE/Exception/Exception.h>
-#include <PGE/ResourceManagement/NoHeap.h>
 
 namespace PGE {
 
 /// An RGBA color represented via 4 floating point numbers.
 /// Attributes are public.
 /// @see #PGE::Colors
-class Color : private NoHeap {
+class Color {
     public:
         float red; float green; float blue; float alpha;
 
@@ -38,7 +37,7 @@ class Color : private NoHeap {
             while (h >= 360.f) { h -= 360.f; }
 
             float hh = h / 60.f;
-            int i = (int)hh;
+            byte i = (byte)hh;
             float dr = hh - i; // Decimal remainder.
 
             float x = v * (1.f - s);
@@ -46,7 +45,7 @@ class Color : private NoHeap {
             float z = v * (1.f - (s * (1.f - dr)));
 
             switch (i) {
-                default:
+                default: [[fallthrough]];
                 case 0: {
                     return Color(v, z, x, a);
                 }
@@ -103,6 +102,7 @@ class Color : private NoHeap {
         constexpr void setBlue(byte b) noexcept { blue = ((float)b) / 255.f; }
         constexpr void setAlpha(byte a) noexcept { alpha = ((float)a) / 255.f; }
 };
+static_assert(sizeof(Color) == 4 * sizeof(float));
 
 /// A few common colors.
 /// @see #PGE::Color

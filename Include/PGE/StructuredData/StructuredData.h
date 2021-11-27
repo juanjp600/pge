@@ -13,18 +13,18 @@
 
 namespace PGE {
 
-class StructuredData : NoHeap {
+class StructuredData {
     public:
         class ElemLayout {
             public:
-                struct Entry : private NoHeap {
+                struct Entry {
                     Entry(const String& nm, int sz);
 
                     String name;
                     int size;
                 };
 
-                struct LocationAndSize : private NoHeap {
+                struct LocationAndSize {
                     LocationAndSize(int loc, int sz);
 
                     // TODO: C++20 default.
@@ -64,16 +64,23 @@ class StructuredData : NoHeap {
         const ElemLayout& getLayout() const;
 
         template <typename T>
-        void setValue(int elemIndex, const String& entryName, const T& value) {
-            setValue(elemIndex, String::Key(entryName), value);
+        void setValue(int elemIndex, const String& entry, const T& value) {
+            setValue(elemIndex, String::Key(entry), value);
         }
-        void setValue(int elemIndex, const String::Key& entry, float f);
-        void setValue(int elemIndex, const String::Key& entry, u32 u);
-        void setValue(int elemIndex, const String::Key& entry, const Vector2f& v2f);
-        void setValue(int elemIndex, const String::Key& entry, const Vector3f& v3f);
-        void setValue(int elemIndex, const String::Key& entry, const Vector4f& v4f);
-        void setValue(int elemIndex, const String::Key& entry, const Matrix4x4f& m);
-        void setValue(int elemIndex, const String::Key& entry, const Color& c);
+
+        template <typename T>
+        void setValue(int elemIndex, const String::Key& entry, const T& value) {
+            static_assert(std::disjunction<
+                std::is_same<T, float>,
+                std::is_same<T, u32>,
+                std::is_same<T, Vector2f>,
+                std::is_same<T, Vector3f>,
+                std::is_same<T, Vector4f>,
+                std::is_same<T, Matrix4x4f>,
+                std::is_same<T, Color>
+            >::value);
+            memcpy(data.get() + getDataIndex(elemIndex, entry, sizeof(T)), &value, sizeof(T));
+        }
 
     private:
         int getDataIndex(int elemIndex, const String::Key& entry, int expectedSize) const;

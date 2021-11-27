@@ -5,14 +5,13 @@
 
 #include <PGE/File/FilePath.h>
 #include <PGE/Exception/Exception.h>
-#include <PGE/ResourceManagement/NoHeap.h>
 
 namespace PGE {
 
 /// Utility to more easily deal with file IO streams.
 /// Not intended to be polymorphic.
 template <typename T>
-class AbstractIO : private NoHeap {
+class AbstractIO {
     static_assert(std::is_base_of<std::ios_base, T>::value);
 
     protected:

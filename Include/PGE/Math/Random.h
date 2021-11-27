@@ -1,7 +1,6 @@
 #ifndef PGE_RANDOM_H_INCLUDED
 #define PGE_RANDOM_H_INCLUDED
 
-#include <PGE/ResourceManagement/NoHeap.h>
 #include <PGE/Types/Types.h>
 
 namespace PGE {
@@ -9,7 +8,7 @@ namespace PGE {
 // xoshiro128**
 // https://prng.di.unimi.it/
 // CC0
-class Random : private NoHeap {
+class Random {
     public:
         Random();
         Random(u64 seed);

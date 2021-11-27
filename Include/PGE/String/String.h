@@ -12,15 +12,14 @@
 #import <Foundation/NSString.h>
 #endif
 
-#include <PGE/ResourceManagement/NoHeap.h>
 #include <PGE/Types/Types.h>
 
 namespace PGE {
 
 /// A UTF-8 character sequence guaranteed to be terminated by a null byte.
-class String : private NoHeap {
+class String {
     private:
-        class BasicIterator : NoHeap {
+        class BasicIterator {
             using iterator_category = std::bidirectional_iterator_tag;
             using difference_type = int;
             using value_type = char16;

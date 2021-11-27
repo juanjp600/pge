@@ -324,9 +324,6 @@
     <ClInclude Include="..\..\Include\PGE\Types\Types.h">
       <Filter>Include\Types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\PGE\ResourceManagement\NoHeap.h">
-      <Filter>Include\ResourceManagement</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\RawWrapper.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>

@@ -3,14 +3,13 @@
 
 #include <list>
 
-#include "NoHeap.h"
 #include "Resource.h"
 #include "RawWrapper.h"
 
 namespace PGE {
 
 class ResourceBase;
-class ResourceManager : private NoHeap {
+class ResourceManager {
     protected:
         std::list<ResourceBase*> resources;
 

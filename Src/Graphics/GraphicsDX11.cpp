@@ -82,9 +82,8 @@ void GraphicsDX11::swap() {
 }
 
 void GraphicsDX11::clear(const Color& color) {
-    float clearColor[4] = {color.red, color.green, color.blue, color.alpha};
     for (ID3D11RenderTargetView* v : currentRenderTargetViews) {
-        dxContext->ClearRenderTargetView(v, clearColor);
+        dxContext->ClearRenderTargetView(v, (float*)&color);
     }
     dxContext->ClearDepthStencilView(currentDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.f, 0);
 }
