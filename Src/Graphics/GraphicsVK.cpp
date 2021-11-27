@@ -260,12 +260,12 @@ void GraphicsVK::endTransfer() {
     transferQueue.waitIdle();
 }
 
-void GraphicsVK::clear(const Color& cc) {
+void GraphicsVK::clear(const Color& color) {
     vk::ClearRect rect = vk::ClearRect(frameScissor, 0, 1);
 
-    vk::ClearAttachment color;
-    color.aspectMask = vk::ImageAspectFlagBits::eColor;
-    color.clearValue = vk::ClearColorValue(std::array{ cc.red, cc.green, cc.blue, cc.alpha });
+    vk::ClearAttachment colorAttachment;
+    colorAttachment.aspectMask = vk::ImageAspectFlagBits::eColor;
+    colorAttachment.clearValue = vk::ClearColorValue(std::array{ color.red, color.green, color.blue, color.alpha });
 
     static const vk::ClearAttachment DEPTH_CLEAR_ATTACHMENT = []() {
         vk::ClearAttachment depth;
@@ -279,13 +279,13 @@ void GraphicsVK::clear(const Color& cc) {
             clearAttachments.resize(rtCount + 1);
         }
         for (int i = 0; i < rtCount; i++) {
-            clearAttachments[i] = color;
+            clearAttachments[i] = colorAttachment;
         }
         clearAttachments[rtCount] = DEPTH_CLEAR_ATTACHMENT;
 
         comBuffers[backBufferIndex].clearAttachments(rtCount + 1, clearAttachments.data(), 1, &rect);
     } else {
-        comBuffers[backBufferIndex].clearAttachments({ color, DEPTH_CLEAR_ATTACHMENT }, rect);
+        comBuffers[backBufferIndex].clearAttachments({ colorAttachment, DEPTH_CLEAR_ATTACHMENT }, rect);
     }
 }
 

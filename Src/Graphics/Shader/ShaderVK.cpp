@@ -138,7 +138,7 @@ ShaderVK::ConstantVK::ConstantVK(ShaderVK& shader, vk::ShaderStageFlags stage, b
     : shader(shader), stage(stage), data(data + offset), offset(offset), size(size) { }
 
 void ShaderVK::ConstantVK::setValue(const Matrix4x4f& value) {
-    memcpy(data, value.elements, sizeof(value.elements)); push();
+    memcpy(data, &value, sizeof(value)); push();
 }
 
 void ShaderVK::ConstantVK::setValue(const Vector2f& value) {
