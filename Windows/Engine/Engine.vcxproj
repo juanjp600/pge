@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Exception\Exception.cpp" />
+    <ClCompile Include="..\..\Src\File\BinaryDefaultSpecializations.cpp" />
     <ClCompile Include="..\..\Src\File\BinaryReader.cpp" />
     <ClCompile Include="..\..\Src\File\BinaryWriter.cpp" />
     <ClCompile Include="..\..\Src\File\FilePath.cpp" />
@@ -42,6 +43,7 @@
     <ClCompile Include="..\..\Src\Init\Init.cpp" />
     <ClCompile Include="..\..\Src\Input\Input.cpp" />
     <ClCompile Include="..\..\Src\Input\InputManager.cpp" />
+    <ClCompile Include="..\..\Src\Math\Assertions.cpp" />
     <ClCompile Include="..\..\Src\Math\Random.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
@@ -81,7 +83,6 @@
     <ClInclude Include="..\..\Include\PGE\Math\Rectangle.h" />
     <ClInclude Include="..\..\Include\PGE\Math\Vector.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\PolymorphicHeap.h" />
-    <ClInclude Include="..\..\Include\PGE\ResourceManagement\NoHeap.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\RawWrapper.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\Resource.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceManager.h" />

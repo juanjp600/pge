@@ -42,18 +42,18 @@ class BinaryWriter : private AbstractIO<std::ofstream> {
 
         /// Writes a type T to file.
         /// By default the following types are supported:
-        /// - Self explanatory: u8, u16, u32, u64, i8, i16, i32, i64, float, double, long double
+        /// - Self explanatory: u8, u16, u32, u64, i8, i16, i32, i64, float
         /// - char16: 1-4 bytes represented as a single UTF-8 character.
         /// - String: A null terminated String of UTF-8 characters.
         /// - Vector2f: Floats in order x, y.
         /// - Vector3f: Floats in order x, y, z.
         /// - Vector4f: Floats in order x, y, z, w.
-        /// - Vector2i: Default-size ints in order x, y.
+        /// - Vector2i: 32-bit ints in order x, y.
         /// - Matrix4x4f: All elements as floats, same order as matrix itself.
         /// - AABBox: The minimum and maximum Vector3fs.
         /// - Line2f: Vector2f in order pointA, pointB.
         /// - Line2i: Vector2i in order pointA, pointB.
-        /// - Plane: Distance to origin as float, normal vector as Vector3f.
+        /// - Plane: Normal vector as Vector3f, distance to origin as float.
         /// - Rectanglef: Top left corner as Vector2f, bottom right corner as Vector2f.
         /// - Rectanglei: Top left corner as Vector2i, bottom right corner as Vector2i.
         /// @throws Exception If any kind of error occurs, this will cause the stream to be closed.

@@ -43,7 +43,7 @@
 
 namespace PGE {
 
-class Plane : private NoHeap {
+class Plane {
     public:
         Vector3f normal;
         float distanceFromOrigin;
@@ -122,6 +122,7 @@ class Plane : private NoHeap {
             return true;
         }
 };
+static_assert(sizeof(Plane) == sizeof(Vector3f) + sizeof(float));
 
 }
 

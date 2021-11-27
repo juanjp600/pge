@@ -7,7 +7,7 @@
 // If you modify one class here, apply your changes to the others as well!
 namespace PGE {
 
-class Vector2f : private NoHeap {
+class Vector2f {
     public:
         float x; float y;
 
@@ -61,8 +61,9 @@ class Vector2f : private NoHeap {
         inline float distance(const Vector2f& other) const { return sqrt(distanceSquared(other)); }
 };
 constexpr const Vector2f operator*(float f, const Vector2f& vec) { return vec * f; }
+static_assert(sizeof(Vector2f) == 2 * sizeof(float));
 
-class Vector3f : private NoHeap {
+class Vector3f {
     public:
         float x; float y; float z;
 
@@ -119,8 +120,9 @@ class Vector3f : private NoHeap {
         inline float distance(const Vector3f& other) const { return sqrt(distanceSquared(other)); }
 };
 constexpr const Vector3f operator*(float f, const Vector3f& vec) { return vec * f; }
+static_assert(sizeof(Vector3f) == 3 * sizeof(float));
 
-class Vector4f : private NoHeap {
+class Vector4f {
     public:
         float x; float y; float z; float w;
 
@@ -177,15 +179,16 @@ class Vector4f : private NoHeap {
         inline float distance(const Vector4f& other) const { return sqrt(distanceSquared(other)); }
 };
 constexpr const Vector4f operator*(float f, const Vector4f& vec) { return vec * f; }
+static_assert(sizeof(Vector4f) == 4 * sizeof(float));
 
-class Vector2i : private NoHeap {
+class Vector2i {
     public:
-        int x; int y;
+        i32 x; i32 y;
 
         constexpr Vector2i() : x(0), y(0) { }
-        constexpr explicit Vector2i(int s) : x(s), y(s) { }
-        constexpr Vector2i(int ix, int iy) : x(ix), y(iy) { }
-        constexpr explicit Vector2i(const Vector2f& vf) : x((int)vf.x), y((int)vf.y) { }
+        constexpr explicit Vector2i(i32 s) : x(s), y(s) { }
+        constexpr Vector2i(i32 ix, i32 iy) : x(ix), y(iy) { }
+        constexpr explicit Vector2i(const Vector2f& vf) : x((i32)vf.x), y((i32)vf.y) { }
 
         constexpr operator const Vector2f() const { return Vector2f((float)x, (float)y); }
 
@@ -196,28 +199,29 @@ class Vector2i : private NoHeap {
 
         constexpr void operator+=(const Vector2i& other) { x += other.x; y += other.y; }
         constexpr void operator-=(const Vector2i& other) { x -= other.x; y -= other.y; }
-        constexpr void operator+=(int i) { x += i; y += i; }
-        constexpr void operator-=(int i) { x -= i; y -= i; }
-        constexpr void operator*=(int i) { x *= i; y *= i; }
+        constexpr void operator+=(i32 i) { x += i; y += i; }
+        constexpr void operator-=(i32 i) { x -= i; y -= i; }
+        constexpr void operator*=(i32 i) { x *= i; y *= i; }
 
         constexpr const Vector2i operator+(const Vector2i& other) const { return Vector2i(x + other.x, y + other.y); }
         constexpr const Vector2i operator-(const Vector2i& other) const { return Vector2i(x - other.x, y - other.y); }
-        constexpr const Vector2i operator+(int i) const { return Vector2i(x + i, y + i); }
-        constexpr const Vector2i operator-(int i) const { return Vector2i(x - i, y - i); }
-        constexpr const Vector2i operator*(int i) const { return Vector2i(x * i, y * i); }
+        constexpr const Vector2i operator+(i32 i) const { return Vector2i(x + i, y + i); }
+        constexpr const Vector2i operator-(i32 i) const { return Vector2i(x - i, y - i); }
+        constexpr const Vector2i operator*(i32 i) const { return Vector2i(x * i, y * i); }
 
-        constexpr int dotProduct(const Vector2i& other) { return x * other.x + y * other.y; }
+        constexpr i32 dotProduct(const Vector2i& other) { return x * other.x + y * other.y; }
         constexpr const Vector2i entrywiseProduct(const Vector2i& other) const { return Vector2i(x * other.x, y * other.y); }
 
-        constexpr int lengthSquared() const { return x * x + y * y; }
+        constexpr i32 lengthSquared() const { return x * x + y * y; }
         // Sacrificing vendor specific sqrt optimizations are not worth the constexpr here.
         // Fuck you, C++ standard!
         inline float length() const { return sqrt((float)lengthSquared()); }
 
-        constexpr int distanceSquared(const Vector2i& other) const { return ((*this) - other).lengthSquared(); }
+        constexpr i32 distanceSquared(const Vector2i& other) const { return ((*this) - other).lengthSquared(); }
         inline float distance(const Vector2i& other) const { return sqrt((float)distanceSquared(other)); }
 };
-constexpr const Vector2i operator*(int i, const Vector2i& vec) { return vec * i; }
+constexpr const Vector2i operator*(i32 i, const Vector2i& vec) { return vec * i; }
+static_assert(sizeof(Vector2i) == 2 * sizeof(i32));
 
 namespace Vectors {
     constexpr Vector2f ZERO2F(0.f, 0.f);

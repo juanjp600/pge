@@ -1,14 +1,13 @@
 #ifndef PGE_AABBOX_H_INCLUDED
 #define PGE_AABBOX_H_INCLUDED
 
-#include <PGE/ResourceManagement/NoHeap.h>
 
 #include "Vector.h"
 
 namespace PGE {
 
 // Axis Aligned Bounding Box
-class AABBox : private NoHeap {
+class AABBox {
     private:
         Vector3f min; Vector3f max;
 
@@ -50,6 +49,7 @@ class AABBox : private NoHeap {
             max.z = max.z > point.z ? max.z : point.z;
         }
 };
+static_assert(sizeof(AABBox) == 2 * sizeof(Vector3f));
 
 }
 

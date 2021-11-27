@@ -647,6 +647,7 @@ const String String::fromFloatingPoint(F f) {
     if constexpr (std::is_same<F, long double>::value) {
         format = "%fL";
     } else {
+        // floats are automatically promoted to double by printf
         format = "%f";
     }
     

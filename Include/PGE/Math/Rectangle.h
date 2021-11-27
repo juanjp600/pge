@@ -5,7 +5,7 @@
 
 namespace PGE {
 
-class Rectanglef : private NoHeap {
+class Rectanglef {
     private:
         Vector2f tl; Vector2f br;
 
@@ -66,8 +66,9 @@ class Rectanglef : private NoHeap {
             return other.tl.x <= tl.x && other.br.x >= tl.x && other.tl.y <= br.y && other.br.y >= tl.y;
         }
 };
+static_assert(sizeof(Rectanglef) == 2 * sizeof(Vector2f));
 
-class Rectanglei : private NoHeap {
+class Rectanglei {
     private:
         Vector2i tl; Vector2i br;
 
@@ -122,6 +123,7 @@ class Rectanglei : private NoHeap {
             return other.tl.x <= tl.x && other.br.x >= tl.x && other.tl.y <= br.y && other.br.y >= tl.y;
         }
 };
+static_assert(sizeof(Rectanglei) == 2 * sizeof(Vector2i));
 
 }
 

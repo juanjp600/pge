@@ -6,10 +6,11 @@
 namespace PGE {
 
 /// Row-major 4x4 matrix.
-class Matrix4x4f : private NoHeap {
-    public:
+class Matrix4x4f {
+    private:
         float elements[4][4];
 
+    public:
         constexpr Matrix4x4f() : elements() { }
         constexpr Matrix4x4f(
                 float r0c0, float r0c1, float r0c2, float r0c3,
@@ -294,6 +295,7 @@ class Matrix4x4f : private NoHeap {
             return -(xAxis * elements[3][0] + yAxis * elements[3][1] + zAxis * elements[3][2]);
         }
 };
+static_assert(sizeof(Matrix4x4f) == sizeof(float[4][4]));
 
 namespace Matrices {
     constexpr Matrix4x4f ZERO = Matrix4x4f();

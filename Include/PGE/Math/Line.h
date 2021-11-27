@@ -6,7 +6,7 @@
 
 namespace PGE {
 
-class Line2f : private NoHeap {
+class Line2f {
     public:
         Vector2f pointA; Vector2f pointB;
 
@@ -59,8 +59,34 @@ class Line2f : private NoHeap {
             return pointA + aToB * t;
         }
 };
+static_assert(sizeof(Line2f) == 2 * sizeof(Vector2f));
 
-class Line2i : private NoHeap {
+class Line3f {
+    public:
+        Vector3f pointA; Vector3f pointB;
+
+        constexpr Line3f() = default;
+        constexpr Line3f(const Vector3f& a, const Vector3f& b) : pointA(a), pointB(b) { }
+        constexpr Line3f(float ax, float ay, float az, float bx, float by, float bz) : pointA(ax, ay, az), pointB(bx, by, bz) { }
+
+        constexpr const AABBox boundingBox() const { AABBox box(pointA); box.addPoint(pointB); return box; }
+
+        constexpr const Vector3f closestPoint(const Vector3f& point, bool segmentOnly = true) const {
+            Vector3f aToP = point - pointA;
+            Vector3f aToB = pointB - pointA;
+
+            float t = aToP.dotProduct(aToB) / aToB.lengthSquared();
+
+            if (segmentOnly) {
+                if (t < 0) { return pointA; }
+                if (t > 1) { return pointB; }
+            }
+            return pointA + aToB * t;
+        }
+};
+static_assert(sizeof(Line3f) == 2 * sizeof(Vector3f));
+
+class Line2i {
     public:
         Vector2i pointA; Vector2i pointB;
 
@@ -90,30 +116,7 @@ class Line2i : private NoHeap {
             return boundingBox().isPointInside(Vector2i(point)) && other.boundingBox().isPointInside(Vector2i(point));
         }
 };
-
-class Line3f : private NoHeap {
-    public:
-        Vector3f pointA; Vector3f pointB;
-
-        constexpr Line3f() = default;
-        constexpr Line3f(const Vector3f& a, const Vector3f& b) : pointA(a), pointB(b) { }
-        constexpr Line3f(float ax, float ay, float az, float bx, float by, float bz) : pointA(ax, ay, az), pointB(bx, by, bz) { }
-
-        constexpr const AABBox boundingBox() const { AABBox box(pointA); box.addPoint(pointB); return box; }
-
-        constexpr const Vector3f closestPoint(const Vector3f& point, bool segmentOnly = true) const {
-            Vector3f aToP = point - pointA;
-            Vector3f aToB = pointB - pointA;
-
-            float t = aToP.dotProduct(aToB) / aToB.lengthSquared();
-
-            if (segmentOnly) {
-                if (t < 0) { return pointA; }
-                if (t > 1) { return pointB; }
-            }
-            return pointA + aToB * t;
-        }
-};
+static_assert(sizeof(Line2i) == 2 * sizeof(Vector2i));
 
 }
 

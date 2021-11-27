@@ -1,14 +1,9 @@
 #ifndef PGE_MESH_H_INCLUDED
 #define PGE_MESH_H_INCLUDED
 
-#include <unordered_map>
 #include <optional>
 
-#include <PGE/String/Key.h>
 #include <PGE/Types/Types.h>
-#include <PGE/Color/Color.h>
-#include <PGE/Math/Vector.h>
-#include <PGE/Math/Matrix.h>
 #include <PGE/StructuredData/StructuredData.h>
 #include <PGE/ResourceManagement/PolymorphicHeap.h>
 

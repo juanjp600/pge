@@ -10,7 +10,7 @@ namespace PGE {
 
 class ResourceBase;
 template <typename T>
-class ResourceView : private NoHeap {
+class ResourceView {
     friend class ResourceManager;
 
     private:

@@ -5,27 +5,27 @@
 
 namespace PGE {
 
-struct String::Key : private NoHeap {
+struct String::Key {
     Key() = default;
     Key(const String& str) : hash(str.getHashCode()) { }
     size_t hash;
 };
 
-struct String::RedundantKey : private NoHeap {
+struct String::RedundantKey {
     RedundantKey() = default;
     RedundantKey(const String& str) : hash(str.getHashCode()), str(str) { }
     size_t hash;
     String str;
 };
 
-struct String::SafeKey : private NoHeap {
+struct String::SafeKey {
     SafeKey() = default;
     SafeKey(const String& str) : hash(str.getHashCode()), str(str) { }
     size_t hash;
     String str;
 };
 
-struct String::OrderedKey : private NoHeap {
+struct String::OrderedKey {
     OrderedKey() = default;
     OrderedKey(const String& str) : str(str) { }
     const String str;

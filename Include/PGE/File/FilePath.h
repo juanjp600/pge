@@ -10,7 +10,7 @@ namespace PGE {
 // TODO: Use wstr() for path construction consistently, or utilize C++20 char8_t for direct construction from UTF-8.
 /// String wrapper utility to deal with paths.
 /// Paths are always absolute and have sanitized path seperators.
-class FilePath : private NoHeap {
+class FilePath {
     private:
         String name;
         bool valid;
