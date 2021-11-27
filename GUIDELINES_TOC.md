@@ -2,7 +2,6 @@
     * [Utilize references-to-const in parameters and for-each loops](#utilize-references-to-const-in-parameters-and-for-each-loops)
     * [Only ever return types by value as const](#only-ever-return-types-by-value-as-const)
     * [Prefer references over pointers](#prefer-references-over-pointers)
-    * [Consider preventing heap allocation for non-polymorphic classes](#consider-preventing-heap-allocation-for-non-polymorphic-classes)
     * [Utilize perfect forwarding for template arguments](#utilize-perfect-forwarding-for-template-arguments)
     * [Prefer `std::vector::emplace_back` over `std::vector::push_back`](#prefer-stdvectoremplace_back-over-stdvectorpush_back)
     * [Prefer `std::vector::reserve` over `std::vector::resize` etc.](#prefer-stdvectorreserve-over-stdvectorresize-etc)
@@ -85,32 +84,6 @@ class MyGoodClass {
 ```
 
 **Stub!**
-
-
-## Consider preventing heap allocation for non-polymorphic classes
-Heap allocations are prone to causing issues in user code, thus disallowing them in most classes should be standard.
-
-Deleting the delete operators isn't strictly necessary, but not doing so might imply that correct usage of them is possible, which it is not.
-
-**Example:**
-```cpp
-class MyClass {
-    public:
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
-        // ...
-        // Extendable via other variations of the new and delete operators.
-};
-```
-
-**PGE specific:**
-Simply **privately** inherit from NoHeap in `<PGE/ResourceManagement/NoHeap.h>` instead of duplicating the deletion code.
-
-**See:**
-- https://en.cppreference.com/w/cpp/memory/new/operator_new
-- https://en.cppreference.com/w/cpp/memory/new/operator_delete
 
 
 ## Utilize perfect forwarding for template arguments
