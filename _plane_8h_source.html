@@ -133,7 +133,7 @@ $(document).ready(function(){initNavTree('_plane_8h_source.html',''); initResiza
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">namespace </span>PGE {</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_plane.html">   46</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_plane.html">Plane</a> : <span class="keyword">private</span> <a class="code" href="class_p_g_e_1_1_no_heap.html">NoHeap</a> {</div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_plane.html">   46</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_plane.html">Plane</a> {</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> normal;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">float</span> distanceFromOrigin;</div>
@@ -212,14 +212,14 @@ $(document).ready(function(){initNavTree('_plane_8h_source.html',''); initResiza
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        }</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;};</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;}</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MATRIX_H_INCLUDED</span></div>
-<div class="ttc" id="aclass_p_g_e_1_1_line3f_html"><div class="ttname"><a href="class_p_g_e_1_1_line3f.html">PGE::Line3f</a></div><div class="ttdef"><b>Definition:</b> Line.h:94</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_no_heap_html"><div class="ttname"><a href="class_p_g_e_1_1_no_heap.html">PGE::NoHeap</a></div><div class="ttdoc">A mixin class intended to prevent straightforward heap allocation of a class.</div><div class="ttdef"><b>Definition:</b> NoHeap.h:7</div></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;static_assert(<span class="keyword">sizeof</span>(<a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>) == <span class="keyword">sizeof</span>(<a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>) + <span class="keyword">sizeof</span>(<span class="keywordtype">float</span>));</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;}</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MATRIX_H_INCLUDED</span></div>
+<div class="ttc" id="aclass_p_g_e_1_1_line3f_html"><div class="ttname"><a href="class_p_g_e_1_1_line3f.html">PGE::Line3f</a></div><div class="ttdef"><b>Definition:</b> Line.h:64</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_plane_html"><div class="ttname"><a href="class_p_g_e_1_1_plane.html">PGE::Plane</a></div><div class="ttdef"><b>Definition:</b> Plane.h:46</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:65</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:66</div></div>
 <div class="ttc" id="anamespace_p_g_e_1_1_math_html_a254393cd3a914e459f8ecedf76802e77"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">PGE::Math::equalFloats</a></div><div class="ttdeci">constexpr bool equalFloats(float val, float other, float epsilon=EPSILON_DEFAULT) noexcept</div><div class="ttdoc">Two values are considered equal if |val - other| &lt; epsilon.</div><div class="ttdef"><b>Definition:</b> Math.h:26</div></div>
 <div class="ttc" id="anamespace_p_g_e_1_1_math_html_a6b04fd48d78229387dde0bddbe3d5c05"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">PGE::Math::EPSILON_DEFAULT</a></div><div class="ttdeci">constexpr float EPSILON_DEFAULT</div><div class="ttdoc">The default difference two floats are allowed to have in order to be considered &quot;equal&quot;.</div><div class="ttdef"><b>Definition:</b> Math.h:13</div></div>
 </div><!-- fragment --></div><!-- contents -->

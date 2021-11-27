@@ -91,62 +91,61 @@ $(document).ready(function(){initNavTree('_a_a_b_box_8h_source.html',''); initRe
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PGE_AABBOX_H_INCLUDED</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define PGE_AABBOX_H_INCLUDED</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;PGE/ResourceManagement/NoHeap.h&gt;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;Vector.h&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span>PGE {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// Axis Aligned Bounding Box</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_a_a_b_box.html">   11</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a> : <span class="keyword">private</span> <a class="code" href="class_p_g_e_1_1_no_heap.html">NoHeap</a> {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> min; <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> max;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        constexpr <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        constexpr <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; inPoint) : min(inPoint), max(inPoint) { }</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        constexpr <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> min == other.min &amp;&amp; max == other.max; }</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        constexpr <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> min != other.min || max != other.max; }</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        constexpr <span class="keywordtype">bool</span> equals(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>&amp; other, <span class="keywordtype">float</span> epsilon = <a class="code" href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">Math::EPSILON_DEFAULT</a>)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            <span class="keywordflow">return</span> min.equals(other.min, epsilon) &amp;&amp; max.equals(other.max, epsilon);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        }</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; getMin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> min; }</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; getMax()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> max; }</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> getCenter()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (min + max) * 0.5f; }</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> getDims()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> max - min; }</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        constexpr <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; point)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            <span class="keywordflow">return</span> point.x &gt;= min.x &amp;&amp; point.y &gt;= min.y &amp;&amp; point.x &lt;= max.x &amp;&amp; point.y &lt;= max.y;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        }</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        constexpr <span class="keywordtype">bool</span> intersects(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>&amp; other)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> otherMin = other.getMin();</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> otherMax = other.getMax();</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keywordflow">return</span> otherMax.x &gt;= min.x &amp;&amp; otherMax.y &gt;= min.y &amp;&amp; otherMax.z &gt;= min.z</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                &amp;&amp; otherMin.x &lt;= max.x &amp;&amp; otherMin.y &lt;= max.y &amp;&amp; otherMin.z &lt;= max.z;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        constexpr <span class="keywordtype">void</span> addPoint(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; point) {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            min.x = min.x &lt; point.x ? min.x : point.x;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            min.y = min.y &lt; point.y ? min.y : point.y;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            min.z = min.z &lt; point.z ? min.z : point.z;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            max.x = max.x &gt; point.x ? max.x : point.x;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            max.y = max.y &gt; point.y ? max.y : point.y;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            max.z = max.z &gt; point.z ? max.z : point.z;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        }</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;};</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;Vector.h&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>PGE {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// Axis Aligned Bounding Box</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_a_a_b_box.html">   10</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a> {</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> min; <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> max;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        constexpr <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        constexpr <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; inPoint) : min(inPoint), max(inPoint) { }</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        constexpr <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> min == other.min &amp;&amp; max == other.max; }</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        constexpr <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> min != other.min || max != other.max; }</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        constexpr <span class="keywordtype">bool</span> equals(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>&amp; other, <span class="keywordtype">float</span> epsilon = <a class="code" href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">Math::EPSILON_DEFAULT</a>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keywordflow">return</span> min.equals(other.min, epsilon) &amp;&amp; max.equals(other.max, epsilon);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        }</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; getMin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> min; }</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; getMax()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> max; }</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> getCenter()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (min + max) * 0.5f; }</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> getDims()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> max - min; }</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        constexpr <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; point)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keywordflow">return</span> point.x &gt;= min.x &amp;&amp; point.y &gt;= min.y &amp;&amp; point.x &lt;= max.x &amp;&amp; point.y &lt;= max.y;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        }</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        constexpr <span class="keywordtype">bool</span> intersects(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>&amp; other)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> otherMin = other.getMin();</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> otherMax = other.getMax();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <span class="keywordflow">return</span> otherMax.x &gt;= min.x &amp;&amp; otherMax.y &gt;= min.y &amp;&amp; otherMax.z &gt;= min.z</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                &amp;&amp; otherMin.x &lt;= max.x &amp;&amp; otherMin.y &lt;= max.y &amp;&amp; otherMin.z &lt;= max.z;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        constexpr <span class="keywordtype">void</span> addPoint(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; point) {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            min.x = min.x &lt; point.x ? min.x : point.x;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            min.y = min.y &lt; point.y ? min.y : point.y;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            min.z = min.z &lt; point.z ? min.z : point.z;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            max.x = max.x &gt; point.x ? max.x : point.x;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            max.y = max.y &gt; point.y ? max.y : point.y;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            max.z = max.z &gt; point.z ? max.z : point.z;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        }</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;};</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;static_assert(<span class="keyword">sizeof</span>(<a class="code" href="class_p_g_e_1_1_a_a_b_box.html">AABBox</a>) == 2 * <span class="keyword">sizeof</span>(<a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>));</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_AABBOX_H_INCLUDED</span></div>
-<div class="ttc" id="aclass_p_g_e_1_1_a_a_b_box_html"><div class="ttname"><a href="class_p_g_e_1_1_a_a_b_box.html">PGE::AABBox</a></div><div class="ttdef"><b>Definition:</b> AABBox.h:11</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_no_heap_html"><div class="ttname"><a href="class_p_g_e_1_1_no_heap.html">PGE::NoHeap</a></div><div class="ttdoc">A mixin class intended to prevent straightforward heap allocation of a class.</div><div class="ttdef"><b>Definition:</b> NoHeap.h:7</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:65</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_a_a_b_box_html"><div class="ttname"><a href="class_p_g_e_1_1_a_a_b_box.html">PGE::AABBox</a></div><div class="ttdef"><b>Definition:</b> AABBox.h:10</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:66</div></div>
 <div class="ttc" id="anamespace_p_g_e_1_1_math_html_a6b04fd48d78229387dde0bddbe3d5c05"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">PGE::Math::EPSILON_DEFAULT</a></div><div class="ttdeci">constexpr float EPSILON_DEFAULT</div><div class="ttdoc">The default difference two floats are allowed to have in order to be considered &quot;equal&quot;.</div><div class="ttdef"><b>Definition:</b> Math.h:13</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
