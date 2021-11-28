@@ -82,8 +82,6 @@
     <ClInclude Include="..\..\Include\PGE\Math\Random.h" />
     <ClInclude Include="..\..\Include\PGE\Math\Rectangle.h" />
     <ClInclude Include="..\..\Include\PGE\Math\Vector.h" />
-    <ClInclude Include="..\..\Include\PGE\ResourceManagement\PolymorphicHeap.h" />
-    <ClInclude Include="..\..\Include\PGE\ResourceManagement\RawWrapper.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\Resource.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceManager.h" />
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\ResourceView.h" />
@@ -92,6 +90,7 @@
     <ClInclude Include="..\..\Include\PGE\String\Unicode.h" />
     <ClInclude Include="..\..\Include\PGE\StructuredData\StructuredData.h" />
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h" />
+    <ClInclude Include="..\..\Include\PGE\Types\PolymorphicHeap.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Range.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Reference.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Types.h" />

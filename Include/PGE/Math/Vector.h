@@ -215,6 +215,7 @@ class Vector2i {
         constexpr i32 lengthSquared() const { return x * x + y * y; }
         // Sacrificing vendor specific sqrt optimizations are not worth the constexpr here.
         // Fuck you, C++ standard!
+        // TODO: C++23 if consteval
         inline float length() const { return sqrt((float)lengthSquared()); }
 
         constexpr i32 distanceSquared(const Vector2i& other) const { return ((*this) - other).lengthSquared(); }

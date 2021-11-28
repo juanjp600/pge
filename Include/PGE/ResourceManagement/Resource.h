@@ -4,7 +4,7 @@
 #include <type_traits>
 
 #include "ResourceView.h"
-#include "PolymorphicHeap.h"
+#include "../Types/PolymorphicHeap.h"
 
 namespace PGE {
 

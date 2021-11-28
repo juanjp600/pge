@@ -5,7 +5,7 @@
 #include <optional>
 
 #include <PGE/ResourceManagement/ResourceManager.h>
-#include <PGE/ResourceManagement/PolymorphicHeap.h>
+#include <PGE/Types/PolymorphicHeap.h>
 #include <PGE/SysEvents/SysEvents.h>
 #include <PGE/Math/Rectangle.h>
 #include <PGE/Color/Color.h>

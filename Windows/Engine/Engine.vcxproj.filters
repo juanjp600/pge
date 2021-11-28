@@ -189,6 +189,8 @@
     <ClCompile Include="..\..\Src\Graphics\Material\Material.cpp">
       <Filter>Src\Graphics\Material</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\File\BinaryDefaultSpecializations.cpp" />
+    <ClCompile Include="..\..\Src\Math\Assertions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -302,9 +304,6 @@
     <ClInclude Include="..\..\Include\PGE\Types\Types.h">
       <Filter>Include\Types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\PGE\ResourceManagement\RawWrapper.h">
-      <Filter>Include\ResourceManagement</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\PGE\ResourceManagement\Resource.h">
       <Filter>Include\ResourceManagement</Filter>
     </ClInclude>
@@ -341,9 +340,6 @@
     <ClInclude Include="..\..\Include\PGE\StructuredData\StructuredData.h">
       <Filter>Include\StructuredData</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\PGE\ResourceManagement\PolymorphicHeap.h">
-      <Filter>Include\ResourceManagement</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\PGE\String\Unicode.h">
       <Filter>Include\String</Filter>
     </ClInclude>
@@ -357,6 +353,9 @@
       <Filter>Include\Types</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\PGE\Types\Range.h">
+      <Filter>Include\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Types\PolymorphicHeap.h">
       <Filter>Include\Types</Filter>
     </ClInclude>
   </ItemGroup>
