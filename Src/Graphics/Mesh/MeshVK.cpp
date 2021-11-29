@@ -62,15 +62,17 @@ void MeshVK::uploadInternalData() {
 	if (totalVertexSize == 0) { return; }
 	int finalTotalSize = totalVertexSize + sizeof(u16) * (int)indices.size();
 
+	using enum UpdateStrategy;
+
 	bool newData = finalTotalSize > dataCapacity || finalTotalSize * 4 < dataCapacity;
 	if (oldStrat != strategy) {
 		// We need to change the memory type.
-		if (strategy == UpdateStrategy::PER_FRAME || oldStrat == UpdateStrategy::PER_FRAME) {
+		if (strategy == PER_FRAME || oldStrat == PER_FRAME) {
 			newData = true;
 		}
 
 		// We should no longer cache the staging buffer.
-		if (oldStrat == UpdateStrategy::DYNAMIC) {
+		if (oldStrat == DYNAMIC) {
 			stagingCacheHandle.clear();
 		}
 
@@ -80,9 +82,9 @@ void MeshVK::uploadInternalData() {
 	if (newData) {
 		resourceManager.trash(data);
 		data = resourceManager.addNewResource<RawWrapper<VKMemoryBuffer>>(device, physicalDevice, graphics.getAtomSize(), finalTotalSize,
-			strategy == UpdateStrategy::PER_FRAME ? VKMemoryBuffer::Type::STAGING_DEVICE : VKMemoryBuffer::Type::DEVICE);
+			strategy == PER_FRAME ? VKMemoryBuffer::Type::STAGING_DEVICE : VKMemoryBuffer::Type::DEVICE);
 
-		if (strategy == UpdateStrategy::DYNAMIC) {
+		if (strategy == DYNAMIC) {
 			stagingCacheHandle.cache(finalTotalSize);
 		}
 
@@ -90,7 +92,7 @@ void MeshVK::uploadInternalData() {
 	}
 
 	VKMemoryBuffer* target;
-	if (strategy == UpdateStrategy::PER_FRAME) {
+	if (strategy == PER_FRAME) {
 		target = data;
 	} else {
 		target = &graphics.getTempStagingBuffer(finalTotalSize);

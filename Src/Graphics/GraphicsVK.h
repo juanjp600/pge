@@ -219,28 +219,29 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
         static constexpr TransitionInfo infoFromLayout() {
             TransitionInfo info;
             switch (LAYOUT) {
-                case ImageLayout::UNDEFINED: {
-                    info.layout = vk::ImageLayout::eUndefined;
+                using enum ImageLayout;
+                case UNDEFINED: {
+                    info.layout = vk::eUndefined;
                     info.accessFlags = vk::AccessFlagBits::eNoneKHR;
                     info.stageFlags = vk::PipelineStageFlagBits::eTopOfPipe;
                 } break;
-                case ImageLayout::TRANSFER_DST: {
-                    info.layout = vk::ImageLayout::eTransferDstOptimal;
+                case TRANSFER_DST: {
+                    info.layout = vk::eTransferDstOptimal;
                     info.accessFlags = vk::AccessFlagBits::eTransferWrite;
                     info.stageFlags = vk::PipelineStageFlagBits::eTransfer;
                 } break;
-                case ImageLayout::TRANSFER_SRC: {
-                    info.layout = vk::ImageLayout::eTransferSrcOptimal;
+                case TRANSFER_SRC: {
+                    info.layout = vk::eTransferSrcOptimal;
                     info.accessFlags = vk::AccessFlagBits::eTransferRead;
                     info.stageFlags = vk::PipelineStageFlagBits::eTransfer;
                 } break;
-                case ImageLayout::SHADER_READ: {
-                    info.layout = vk::ImageLayout::eShaderReadOnlyOptimal;
+                case SHADER_READ: {
+                    info.layout = vk::eShaderReadOnlyOptimal;
                     info.accessFlags = vk::AccessFlagBits::eShaderRead;
                     info.stageFlags = vk::PipelineStageFlagBits::eFragmentShader;
                 } break;
-                case ImageLayout::RENDER_TARGET: {
-                    info.layout = vk::ImageLayout::eColorAttachmentOptimal;
+                case RENDER_TARGET: {
+                    info.layout = vk::eColorAttachmentOptimal;
                     info.accessFlags = vk::AccessFlagBits::eColorAttachmentWrite;
                     info.stageFlags = vk::PipelineStageFlagBits::eColorAttachmentOutput;
                 } break;

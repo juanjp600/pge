@@ -498,9 +498,10 @@ void GraphicsVK::setCulling(CullingMode mode) {
 
     vk::CullModeFlagBits flags;
     switch (mode) {
-        case CullingMode::BACK: { flags = vk::CullModeFlagBits::eBack; } break;
-        case CullingMode::FRONT: { flags = vk::CullModeFlagBits::eFront; } break;
-        case CullingMode::NONE: { flags = vk::CullModeFlagBits::eNone; } break;
+        using enum CullingMode;
+        case BACK: { flags = vk::CullModeFlagBits::eBack; } break;
+        case FRONT: { flags = vk::CullModeFlagBits::eFront; } break;
+        case NONE: { flags = vk::CullModeFlagBits::eNone; } break;
         default: { throw PGE_CREATE_EX("Unexpected culling mode"); }
     }
     pipelineInfo.rasterizationInfo.cullMode = flags;

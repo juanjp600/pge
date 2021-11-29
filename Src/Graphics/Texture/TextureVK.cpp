@@ -6,23 +6,25 @@ using namespace PGE;
 
 vk::Format TextureVK::getFormat(Texture::Format fmt) {
     switch (fmt) {
-        case Texture::Format::RGBA64: { return vk::Format::eR16G16B16A16Unorm; }
-        case Texture::Format::RGBA32: { return vk::Format::eR8G8B8A8Unorm; }
-        case Texture::Format::R32F: { return vk::Format::eR32Sfloat; }
-        case Texture::Format::R8: { return vk::Format::eR8Unorm; }
+        using enum Texture::Format;
+        case RGBA64: { return vk::Format::eR16G16B16A16Unorm; }
+        case RGBA32: { return vk::Format::eR8G8B8A8Unorm; }
+        case R32F: { return vk::Format::eR32Sfloat; }
+        case R8: { return vk::Format::eR8Unorm; }
         default: { throw PGE_CREATE_EX("Invalid format"); }
     }
 }
 
 vk::Format TextureVK::getFormat(Texture::CompressedFormat fmt) {
     switch (fmt) {
-        case Texture::CompressedFormat::BC1: { return vk::Format::eBc1RgbUnormBlock; }
-        case Texture::CompressedFormat::BC2: { return vk::Format::eBc2UnormBlock; }
-        case Texture::CompressedFormat::BC3: { return vk::Format::eBc3UnormBlock; }
-        case Texture::CompressedFormat::BC4: { return vk::Format::eBc4UnormBlock; }
-        case Texture::CompressedFormat::BC5: { return vk::Format::eBc5UnormBlock; }
-        case Texture::CompressedFormat::BC6: { return vk::Format::eBc6HSfloatBlock; }
-        case Texture::CompressedFormat::BC7: { return vk::Format::eBc7UnormBlock; }
+        using enum Texture::CompressedFormat;
+        case BC1: { return vk::Format::eBc1RgbUnormBlock; }
+        case BC2: { return vk::Format::eBc2UnormBlock; }
+        case BC3: { return vk::Format::eBc3UnormBlock; }
+        case BC4: { return vk::Format::eBc4UnormBlock; }
+        case BC5: { return vk::Format::eBc5UnormBlock; }
+        case BC6: { return vk::Format::eBc6HSfloatBlock; }
+        case BC7: { return vk::Format::eBc7UnormBlock; }
         default: { throw PGE_CREATE_EX("Invalid format"); }
     }
 }

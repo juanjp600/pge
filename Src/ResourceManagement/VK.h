@@ -459,11 +459,12 @@ class VKMemoryBuffer {
 
         static vk::BufferUsageFlags getBufferUsage(Type t) {
             switch (t) {
-                case Type::STAGING: {
+                using enum Type;
+                case STAGING: {
                     return vk::BufferUsageFlagBits::eTransferSrc;
                 }
-                case Type::STAGING_DEVICE: [[fallthrough]];
-                case Type::DEVICE: {
+                case STAGING_DEVICE: [[fallthrough]];
+                case DEVICE: {
                     return vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer;
                 }
                 default: {
@@ -568,11 +569,12 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
             : VKDestroyResource(device) {
             const vk::PipelineInputAssemblyStateCreateInfo* inputInfo;
             switch (type) {
-                case PrimitiveType::LINE: {
+                using enum PrimitiveType;
+                case LINE: {
                     inputInfo = &inputAssemblyLines;
                 } break;
                 default:
-                case PrimitiveType::TRIANGLE: {
+                case TRIANGLE: {
                     inputInfo = &inputAssemblyTris;
                 } break;
             }
@@ -646,16 +648,17 @@ class VKImage : public VKDestroyResource<vk::Image> {
             info.tiling = vk::ImageTiling::eOptimal;
             info.initialLayout = vk::ImageLayout::eUndefined;
             switch (usage) {
-                case Usage::IMAGE_GEN_MIPS: {
+                using enum Usage;
+                case IMAGE_GEN_MIPS: {
                     info.usage = vk::ImageUsageFlagBits::eTransferSrc;
                 } [[fallthrough]];
-                case Usage::IMAGE: {
+                case IMAGE: {
                     info.usage |= vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled;
                 } break;
-                case Usage::DEPTH: {
+                case DEPTH: {
                     info.usage = vk::ImageUsageFlagBits::eDepthStencilAttachment;
                 } break;
-                case Usage::RENDER_TARGET: {
+                case RENDER_TARGET: {
                     info.usage = vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eColorAttachment;
                 }
             }
