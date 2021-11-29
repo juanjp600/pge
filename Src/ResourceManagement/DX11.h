@@ -10,25 +10,22 @@
 
 namespace PGE {
 
-template <typename T>
-class DX11Resource : public Resource<T> {
-    static_assert(std::is_pointer<T>::value);
-    static_assert(std::is_convertible<T, IUnknown*>::value);
-
+template <std::derived_from<IUnknown> T>
+class DX11Resource : public Resource<T*> {
     protected:
         ~DX11Resource() override {
             ((IUnknown*)this->resource)->Release();
         }
 };
 
-class DXGIFactory1 : public DX11Resource<IDXGIFactory1*> {
+class DXGIFactory1 : public DX11Resource<IDXGIFactory1> {
     public:
         DXGIFactory1() {
             PGE_ASSERT_DX(CreateDXGIFactory1(IID_PPV_ARGS(&resource)), "Create DXGI factory");
         }
 };
 
-class D3D11Device : public DX11Resource<ID3D11Device*> {
+class D3D11Device : public DX11Resource<ID3D11Device> {
     public:
         D3D11Device() {
             UINT creationFlags = 0;
@@ -40,14 +37,14 @@ class D3D11Device : public DX11Resource<ID3D11Device*> {
         }
 };
 
-class D3D11ImmediateContext : public DX11Resource<ID3D11DeviceContext*> {
+class D3D11ImmediateContext : public DX11Resource<ID3D11DeviceContext> {
     public:
         D3D11ImmediateContext(ID3D11Device* device) {
             device->GetImmediateContext(&resource);
         }
 };
 
-class DXGISwapChain : public DX11Resource<IDXGISwapChain*> {
+class DXGISwapChain : public DX11Resource<IDXGISwapChain> {
     public:
         DXGISwapChain(ID3D11Device* device, IDXGIFactory1* factory, int width, int height, SDL_Window* window) {
             IDXGIDevice1* dxgiDevice;
@@ -78,14 +75,14 @@ class DXGISwapChain : public DX11Resource<IDXGISwapChain*> {
         }
 };
 
-class D3D11RenderTargetView : public DX11Resource<ID3D11RenderTargetView*> {
+class D3D11RenderTargetView : public DX11Resource<ID3D11RenderTargetView> {
     public:
         D3D11RenderTargetView(ID3D11Device* device, ID3D11Texture2D* texture) {
             PGE_ASSERT_DX(device->CreateRenderTargetView(texture, nullptr, &resource), "Create render target view");
         }
 };
 
-class D3D11BackBufferRtv : public DX11Resource<ID3D11RenderTargetView*> {
+class D3D11BackBufferRtv : public DX11Resource<ID3D11RenderTargetView> {
     public:
         D3D11BackBufferRtv(ID3D11Device* device, IDXGISwapChain* swapChain) {
             ID3D11Texture2D* backBuffer;
@@ -97,7 +94,7 @@ class D3D11BackBufferRtv : public DX11Resource<ID3D11RenderTargetView*> {
         }
 };
 
-class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
+class D3D11Texture2D : public DX11Resource<ID3D11Texture2D> {
     public:
         enum class Type {
             RENDER_TARGET,
@@ -138,7 +135,7 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
         }
 };
 
-class D3D11DepthStencilView : public DX11Resource<ID3D11DepthStencilView*> {
+class D3D11DepthStencilView : public DX11Resource<ID3D11DepthStencilView> {
     public:
         D3D11DepthStencilView(ID3D11Device* device, ID3D11Texture2D* texture) {
             D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
@@ -151,7 +148,7 @@ class D3D11DepthStencilView : public DX11Resource<ID3D11DepthStencilView*> {
         }
 };
 
-class D3D11ShaderResourceView : public DX11Resource<ID3D11ShaderResourceView*> {
+class D3D11ShaderResourceView : public DX11Resource<ID3D11ShaderResourceView> {
     public:
         D3D11ShaderResourceView(ID3D11Device* device, ID3D11Texture2D* texture, DXGI_FORMAT format) {
             D3D11_SHADER_RESOURCE_VIEW_DESC dxShaderResourceViewDesc;
@@ -165,7 +162,7 @@ class D3D11ShaderResourceView : public DX11Resource<ID3D11ShaderResourceView*> {
         }
 };
 
-class D3D11RasterizerState : public DX11Resource<ID3D11RasterizerState*> {
+class D3D11RasterizerState : public DX11Resource<ID3D11RasterizerState> {
     public:
         D3D11RasterizerState(ID3D11Device* device, CullingMode cullMode) {
             D3D11_RASTERIZER_DESC desc;
@@ -196,7 +193,7 @@ class D3D11RasterizerState : public DX11Resource<ID3D11RasterizerState*> {
         }
 };
 
-class D3D11BlendState : public DX11Resource<ID3D11BlendState*> {
+class D3D11BlendState : public DX11Resource<ID3D11BlendState> {
     public:
         D3D11BlendState(ID3D11Device* device) {
             D3D11_BLEND_DESC desc;
@@ -214,7 +211,7 @@ class D3D11BlendState : public DX11Resource<ID3D11BlendState*> {
         }
 };
 
-class D3D11SamplerState : public DX11Resource<ID3D11SamplerState*> {
+class D3D11SamplerState : public DX11Resource<ID3D11SamplerState> {
     public:
         D3D11SamplerState(ID3D11Device* device) {
             D3D11_SAMPLER_DESC desc;
@@ -233,14 +230,14 @@ class D3D11SamplerState : public DX11Resource<ID3D11SamplerState*> {
         }
 };
 
-class D3D11DepthStencilState : public DX11Resource<ID3D11DepthStencilState*> {
+class D3D11DepthStencilState : public DX11Resource<ID3D11DepthStencilState> {
     public:
         D3D11DepthStencilState(ID3D11Device* device, D3D11_DEPTH_STENCIL_DESC stencilDesc) {
             PGE_ASSERT_DX(device->CreateDepthStencilState(&stencilDesc, &resource), "Create depth stencil state");
         }
 };
 
-class D3D11Buffer : public DX11Resource<ID3D11Buffer*> {
+class D3D11Buffer : public DX11Resource<ID3D11Buffer> {
     public:
         enum class Type {
             CONSTANT,
@@ -274,21 +271,21 @@ class D3D11Buffer : public DX11Resource<ID3D11Buffer*> {
         }
 };
 
-class D3D11VertexShader : public DX11Resource<ID3D11VertexShader*> {
+class D3D11VertexShader : public DX11Resource<ID3D11VertexShader> {
     public:
         D3D11VertexShader(ID3D11Device* device, const std::vector<byte>& bytecode) {
             PGE_ASSERT_DX(device->CreateVertexShader(bytecode.data(), bytecode.size(), NULL, &resource), "Create vertex shader");
         }
 };
 
-class D3D11PixelShader : public DX11Resource<ID3D11PixelShader*> {
+class D3D11PixelShader : public DX11Resource<ID3D11PixelShader> {
     public:
         D3D11PixelShader(ID3D11Device* device, const std::vector<byte>& bytecode) {
             PGE_ASSERT_DX(device->CreatePixelShader(bytecode.data(), bytecode.size(), NULL, &resource), "Create fragment shader");
         }
 };
 
-class D3D11InputLayout : public DX11Resource<ID3D11InputLayout*> {
+class D3D11InputLayout : public DX11Resource<ID3D11InputLayout> {
     public:
         D3D11InputLayout(ID3D11Device* device, const std::vector<D3D11_INPUT_ELEMENT_DESC> vertexInputElemDesc, const std::vector<byte>& bytecode) {
             PGE_ASSERT_DX(device->CreateInputLayout(vertexInputElemDesc.data(), (UINT)vertexInputElemDesc.size(), bytecode.data(), bytecode.size(), &resource),

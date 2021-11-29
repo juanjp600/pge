@@ -2,6 +2,7 @@
 #define PGE_RESOURCE_H_INCLUDED
 
 #include <type_traits>
+#include <concepts>
 
 #include "ResourceView.h"
 #include "../Types/PolymorphicHeap.h"
@@ -10,7 +11,7 @@ namespace PGE {
 
 class ResourceBase : private PolymorphicHeap { };
 
-template <typename T>
+template <std::semiregular T>
 class Resource : public ResourceBase {
     protected:
         T resource;

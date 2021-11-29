@@ -9,7 +9,7 @@
 namespace PGE {
 
 class ResourceBase;
-template <typename T>
+template <std::semiregular T>
 class ResourceView {
     friend class ResourceManager;
 

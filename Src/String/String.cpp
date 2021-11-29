@@ -365,7 +365,7 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
 
 u64 String::getHashCode() const {
     if (!data->_hashCodeEvaluted) {
-        data->_hashCode = Hasher::getHash((byte*)cstr(), byteLength());
+        data->_hashCode = Hasher::getHash(std::span((byte*)cstr(), byteLength()));
         data->_hashCodeEvaluted = true;
     }
     return data->_hashCode;
@@ -495,19 +495,8 @@ const std::vector<char16> String::wstr() const {
     return chars;
 }
 
-template <typename I, byte BASE>
-void validateBaseWithType() {
-    // 10 digits + 26 characters = 36
-    static_assert(BASE >= 2 && BASE <= 36);
-
-    // Only unsigned numbers can be represented in other bases.
-    static_assert(BASE == 10 || !std::numeric_limits<I>::is_signed);
-}
-
-template <typename I>
+template <std::integral I>
 static consteval byte maxIntegerDigits(byte base) {
-    static_assert(std::numeric_limits<I>::is_integer);
-
     byte digits = 0;
     I max = std::numeric_limits<I>::max();
     while (max != 0) { digits++; max /= base; }
@@ -515,10 +504,8 @@ static consteval byte maxIntegerDigits(byte base) {
     return digits;
 }
 
-template <typename I, byte BASE>
+template <std::integral I, byte BASE> requires ValidBaseForType<I, BASE>
 const String String::fromInteger(I i, Casing casing) {
-    validateBaseWithType<I, BASE>();
-
     constexpr byte digits = maxIntegerDigits<I>(BASE);
     String ret(digits);
 
@@ -580,10 +567,8 @@ static bool charToDigit(byte& digit, char16 ch) {
     return false;
 }
 
-template <typename I, byte BASE = 10>
+template <std::integral I, byte BASE = 10>  requires ValidBaseForType<I, BASE>
 static I toInteger(const String& str, bool& success) {
-    validateBaseWithType<I, BASE>();
-
     success = false;
     I ret = 0;
     String::Iterator it = str.begin();
@@ -631,7 +616,7 @@ PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned int)
 PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned long)
 PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned long long)
 
-template <typename F>
+template <std::floating_point F>
 const String String::fromFloatingPoint(F f) {
     static_assert(std::is_floating_point<F>::value);
 
@@ -663,7 +648,7 @@ static const String NAN_STRING_LOWER = NAN_STRING.toLower();
 
 static constexpr char16 DECIMAL_SEPERATOR = L'.';
 
-template <typename F>
+template <std::floating_point F>
 static F toFloatingPoint(const String& str, bool& success) {
     success = true;
 
