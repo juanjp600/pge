@@ -513,7 +513,7 @@ void validateBaseWithType() {
 }
 
 template <typename I>
-static constexpr byte maxIntegerDigits(byte base) { // TODO: Consteval C++20.
+static consteval byte maxIntegerDigits(byte base) {
     static_assert(std::numeric_limits<I>::is_integer);
 
     byte digits = 0;
