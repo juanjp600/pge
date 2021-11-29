@@ -5,7 +5,7 @@
 
 #include <PGE/Types/Types.h>
 #include <PGE/StructuredData/StructuredData.h>
-#include <PGE/ResourceManagement/PolymorphicHeap.h>
+#include <PGE/Types/PolymorphicHeap.h>
 
 namespace PGE {
 

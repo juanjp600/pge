@@ -3,7 +3,7 @@
 
 #include <PGE/Math/Vector.h>
 #include <PGE/File/FilePath.h>
-#include <PGE/ResourceManagement/PolymorphicHeap.h>
+#include <PGE/Types/PolymorphicHeap.h>
 
 namespace PGE {
 

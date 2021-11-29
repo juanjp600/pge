@@ -7,7 +7,7 @@
 #include <PGE/Math/Vector.h>
 #include <PGE/Math/Matrix.h>
 #include <PGE/Color/Color.h>
-#include <PGE/ResourceManagement/PolymorphicHeap.h>
+#include <PGE/Types/PolymorphicHeap.h>
 
 #include <unordered_map>
 

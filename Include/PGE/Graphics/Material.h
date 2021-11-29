@@ -2,7 +2,7 @@
 #define PGE_MATERIAL_H_INCLUDED
 
 #include <PGE/Types/Types.h>
-#include <PGE/ResourceManagement/PolymorphicHeap.h>
+#include <PGE/Types/PolymorphicHeap.h>
 
 namespace PGE {
 
