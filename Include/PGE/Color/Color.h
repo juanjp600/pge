@@ -68,14 +68,7 @@ class Color {
         }
 
         /// Uses regular float equality.
-        constexpr bool operator==(const Color& other) const noexcept {
-            return red == other.red && blue == other.blue && green == other.green && alpha == other.alpha;
-        }
-
-        /// Uses regular float equality.
-        constexpr bool operator!=(const Color& other) const noexcept {
-            return red != other.red || blue != other.blue || green != other.green || alpha != other.alpha;
-        }
+        constexpr bool operator==(const Color& other) const noexcept = default;
 
         /// @see #PGE::Math::equalFloats()
         constexpr bool equals(const Color& other, float epsilon = Math::EPSILON_DEFAULT) const noexcept {

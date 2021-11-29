@@ -42,7 +42,6 @@ class FilePath {
         /// 
         /// Two paths differing in a trailing path seperator are not considered equal, as one could be a folder and the other a file.
         bool operator==(const FilePath& other) const noexcept;
-        bool operator!=(const FilePath& other) const noexcept;
 
         /// Appends str to a path.
         /// The path must be valid.

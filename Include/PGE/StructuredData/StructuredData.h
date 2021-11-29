@@ -27,8 +27,7 @@ class StructuredData {
                 struct LocationAndSize {
                     LocationAndSize(int loc, int sz);
 
-                    // TODO: C++20 default.
-                    bool operator==(const LocationAndSize& other) const;
+                    bool operator==(const LocationAndSize& other) const = default;
 
                     int location;
                     int size;
@@ -41,10 +40,10 @@ class StructuredData {
                 const LocationAndSize& getLocationAndSize(const String::Key& name) const;
                 int getElementSize() const;
 
-                bool operator==(const StructuredData::ElemLayout& other) const;
+                bool operator==(const StructuredData::ElemLayout& other) const = default;
             private:
-                std::unordered_map<String::Key, LocationAndSize> entries;
                 int elementSize;
+                std::unordered_map<String::Key, LocationAndSize> entries;
         };
 
         StructuredData() = default;

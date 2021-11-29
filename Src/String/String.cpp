@@ -60,10 +60,6 @@ bool String::BasicIterator::operator==(const BasicIterator& other) const {
     return ref->chs == other.ref->chs && index == other.index;
 }
 
-bool String::BasicIterator::operator!=(const BasicIterator& other) const {
-    return ref->chs != other.ref->chs || index != other.index;
-}
-
 int String::BasicIterator::getBytePosition() const {
     return index;
 }
@@ -347,10 +343,6 @@ const String PGE::operator+(char16 a, const String& b) {
 
 bool PGE::operator==(const String& a, const String& b) {
     return a.equals(b);
-}
-
-bool PGE::operator!=(const String& a, const String& b) {
-    return !a.equals(b);
 }
 
 std::ostream& PGE::operator<<(std::ostream& os, const String& s) {

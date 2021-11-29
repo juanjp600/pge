@@ -34,7 +34,6 @@ class String {
                 char16 operator*() const;
 
                 bool operator==(const BasicIterator& other) const;
-                bool operator!=(const BasicIterator& other) const;
 
                 int getBytePosition() const;
                 int getPosition() const;
@@ -302,7 +301,6 @@ class String {
         static const String fromFloatingPoint(F f);
 };
 bool operator==(const String& a, const String& b);
-bool operator!=(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);
 std::istream& operator>>(std::istream& is, String& s);
 

@@ -34,13 +34,7 @@ class Range {
 				constexpr const Iterator operator+(SIZE steps) const { return Iterator(position + step * steps, step); }
 				constexpr const Iterator operator-(SIZE steps) const { return Iterator(position - step * steps, step); }
 
-				// TODO: C++20 <=>
-				constexpr bool operator<(const Iterator& other) const { return position < other.position; }
-				constexpr bool operator>(const Iterator& other) const { return position > other.position; }
-				constexpr bool operator<=(const Iterator& other) const { return position <= other.position; }
-				constexpr bool operator>=(const Iterator& other) const { return position >= other.position; }
-				constexpr bool operator==(const Iterator& other) const { return position == other.position; }
-				constexpr bool operator!=(const Iterator& other) const { return position != other.position; }
+				constexpr const std::weak_ordering operator<=>(const Iterator& other) const { return position <=> other.position; }
 
 			private:
 				constexpr Iterator(SIZE position, SIZE step) : position(position), step(step) { }
