@@ -189,8 +189,12 @@
     <ClCompile Include="..\..\Src\Graphics\Material\Material.cpp">
       <Filter>Src\Graphics\Material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\File\BinaryDefaultSpecializations.cpp" />
-    <ClCompile Include="..\..\Src\Math\Assertions.cpp" />
+    <ClCompile Include="..\..\Src\File\BinaryDefaultSpecializations.cpp">
+      <Filter>Src\File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Math\Assertions.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">

@@ -61,8 +61,6 @@ GraphicsDX11::GraphicsDX11(const String& name, int w, int h, WindowMode wm, int 
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    using enum ZBufferStateIndex;
-
     dxDepthStencilState[ENABLED_WRITE] = resourceManager.addNewResource<D3D11DepthStencilState>(dxDevice, depthStencilDesc);
     dxContext->OMSetDepthStencilState(dxDepthStencilState[ENABLED_WRITE], 0);
 

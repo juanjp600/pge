@@ -25,13 +25,13 @@ concept ValidBaseForType = BASE == 10 && std::integral<T> || std::unsigned_integ
 class String {
     private:
         class BasicIterator {
-            using iterator_category = std::bidirectional_iterator_tag;
-            using difference_type = int;
-            using value_type = char16;
-            using pointer = value_type*;
-            using reference = value_type&;
-
             public:
+                using iterator_category = std::bidirectional_iterator_tag;
+                using difference_type = int;
+                using value_type = char16;
+                using pointer = value_type*;
+                using reference = value_type&;
+
                 BasicIterator() = default;
 
                 int operator-(const BasicIterator& other) const;
@@ -81,10 +81,11 @@ class String {
                 static const ActualIterator begin(const String& str);
                 static const ActualIterator end(const String& str);
 
-                void operator++();
-                void operator--();
-                void operator++(int) { ++(*this); }
-                void operator--(int) { --(*this); }
+                // These need to return what they return to be recognized as iterators by the STL.
+                ActualIterator& operator++();
+                ActualIterator& operator--();
+                ActualIterator operator++(int) { ActualIterator temp = *this; ++*this; return temp; }
+                ActualIterator operator--(int) { ActualIterator temp = *this; --*this; return temp; }
 
                 const ActualIterator operator+(int steps) const { ActualIterator ret(*this); ret += steps; return ret; }
                 const ActualIterator operator-(int steps) const { ActualIterator ret(*this); ret -= steps; return ret; }
