@@ -15,7 +15,7 @@
 
 namespace PGE {
 
-enum ZBufferStateIndex {
+enum class ZBufferStateIndex {
     ENABLED_WRITE = 0,
     ENABLED_NOWRITE = 1,
     DISABLED = 2

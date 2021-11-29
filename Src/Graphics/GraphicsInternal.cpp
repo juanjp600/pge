@@ -59,21 +59,22 @@ GraphicsInternal::SDLWindow::~SDLWindow() {
 }
 
 Graphics* Graphics::create(const String& name, int w, int h, WindowMode wm, std::optional<Renderer> r, int x, int y) {
+    using enum Renderer;
     if (!r.has_value()) {
 #ifdef _WIN32
-        r = Renderer::DirectX11;
+        r = DirectX11;
 #else
-        r = Renderer::OpenGL;
+        r = OpenGL;
 #endif
     }
     Graphics* gfx;
     switch (r.value()) {
 #ifdef _WIN32
-        case Renderer::DirectX11: {
+        case DirectX11: {
             gfx = new GraphicsDX11(name, w, h, wm, x, y);
         } break;
 #endif
-        case Renderer::OpenGL: {
+        case OpenGL: {
             gfx = new GraphicsOGL3(name, w, h, wm, x, y);
         } break;
         case Renderer::Vulkan: {

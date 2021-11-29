@@ -6,38 +6,41 @@ using namespace PGE;
 
 static DXGI_FORMAT getDXFormat(Texture::Format fmt) {
     switch (fmt) {
-        case Texture::Format::RGBA64: { return DXGI_FORMAT_R16G16B16A16_UNORM; }
-        case Texture::Format::RGBA32: { return DXGI_FORMAT_R8G8B8A8_UNORM; }
-        case Texture::Format::R32F: { return DXGI_FORMAT_R32_FLOAT; }
-        case Texture::Format::R8: { return DXGI_FORMAT_R8_UNORM; }
+        using enum Texture::Format;
+        case RGBA64: { return DXGI_FORMAT_R16G16B16A16_UNORM; }
+        case RGBA32: { return DXGI_FORMAT_R8G8B8A8_UNORM; }
+        case R32F: { return DXGI_FORMAT_R32_FLOAT; }
+        case R8: { return DXGI_FORMAT_R8_UNORM; }
         default: { throw PGE_CREATE_EX("Invalid format"); }
     }
 }
 
 static DXGI_FORMAT getDXFormat(Texture::CompressedFormat fmt) {
     switch (fmt) {
-        case Texture::CompressedFormat::BC1: { return DXGI_FORMAT_BC1_UNORM; }
-        case Texture::CompressedFormat::BC2: { return DXGI_FORMAT_BC2_UNORM; }
-        case Texture::CompressedFormat::BC3: { return DXGI_FORMAT_BC3_UNORM; }
-        case Texture::CompressedFormat::BC4: { return DXGI_FORMAT_BC4_UNORM; }
-        case Texture::CompressedFormat::BC5: { return DXGI_FORMAT_BC5_UNORM; }
-        case Texture::CompressedFormat::BC6: { return DXGI_FORMAT_BC6H_SF16; }
-        case Texture::CompressedFormat::BC7: { return DXGI_FORMAT_BC7_UNORM; }
+        using enum Texture::CompressedFormat;
+        case BC1: { return DXGI_FORMAT_BC1_UNORM; }
+        case BC2: { return DXGI_FORMAT_BC2_UNORM; }
+        case BC3: { return DXGI_FORMAT_BC3_UNORM; }
+        case BC4: { return DXGI_FORMAT_BC4_UNORM; }
+        case BC5: { return DXGI_FORMAT_BC5_UNORM; }
+        case BC6: { return DXGI_FORMAT_BC6H_SF16; }
+        case BC7: { return DXGI_FORMAT_BC7_UNORM; }
         default: { throw PGE_CREATE_EX("Invalid compressed format"); }
     }
 }
 
 static int getBitsPerBlockOnLine(Texture::CompressedFormat fmt) {
     switch (fmt) {
-        case Texture::CompressedFormat::BC1:
-        case Texture::CompressedFormat::BC4: {
+        using enum Texture::CompressedFormat;
+        case BC1:
+        case BC4: {
             return 2;
         }
-        case Texture::CompressedFormat::BC2:
-        case Texture::CompressedFormat::BC3:
-        case Texture::CompressedFormat::BC5:
-        case Texture::CompressedFormat::BC6:
-        case Texture::CompressedFormat::BC7: {
+        case BC2:
+        case BC3:
+        case BC5:
+        case BC6:
+        case BC7: {
             return 4;
         }
         default: {

@@ -109,26 +109,28 @@ class D3D11Texture2D : public DX11Resource<ID3D11Texture2D*> {
         };
         
         D3D11Texture2D(ID3D11Device* device, Type type, int width, int height, DXGI_FORMAT format) {
+            using enum Type;
+
             D3D11_TEXTURE2D_DESC textureDesc;
             ZeroMemory(&textureDesc, sizeof(textureDesc));
             textureDesc.Width = (UINT)width;
             textureDesc.Height = (UINT)height;
-            if (type == Type::DEPTH_STENCIL || type == Type::NO_MIPMAPS || type == Type::COMPRESSED_NO_MIPMAPS || type == Type::RENDER_TARGET) {
+            if (type == DEPTH_STENCIL || type == NO_MIPMAPS || type == COMPRESSED_NO_MIPMAPS || type == RENDER_TARGET) {
                 textureDesc.MipLevels = 1;
             }
             textureDesc.ArraySize = 1;
             textureDesc.Format = format;
             textureDesc.SampleDesc.Count = 1;
             textureDesc.Usage = D3D11_USAGE_DEFAULT;
-            if (type == Type::DEPTH_STENCIL) {
+            if (type == DEPTH_STENCIL) {
                 textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
             } else {
                 textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-                if (type != Type::COMPRESSED && type != Type::COMPRESSED_NO_MIPMAPS) {
+                if (type != COMPRESSED && type != COMPRESSED_NO_MIPMAPS) {
                     textureDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
                 }
             }
-            if (type == Type::NORMAL) {
+            if (type == NORMAL) {
                 textureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
             }
 
@@ -171,14 +173,15 @@ class D3D11RasterizerState : public DX11Resource<ID3D11RasterizerState*> {
             desc.AntialiasedLineEnable = false;
             D3D11_CULL_MODE dxMode;
             switch (cullMode) {
+                using enum CullingMode;
                 default:
-                case CullingMode::BACK: {
+                case BACK: {
                     dxMode = D3D11_CULL_BACK;
                 } break;
-                case CullingMode::FRONT: {
+                case FRONT: {
                     dxMode = D3D11_CULL_FRONT;
                 } break;
-                case CullingMode::NONE: {
+                case NONE: {
                     dxMode = D3D11_CULL_NONE;
                 } break;
             }
@@ -251,13 +254,14 @@ class D3D11Buffer : public DX11Resource<ID3D11Buffer*> {
             desc.Usage = D3D11_USAGE_DEFAULT;
             desc.ByteWidth = (UINT)size;
             switch (type) {
-                case Type::CONSTANT: {
+                using enum Type;
+                case CONSTANT: {
                     desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
                 } break;
-                case Type::VERTEX: {
+                case VERTEX: {
                     desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
                 } break;
-                case Type::INDEX: {
+                case INDEX: {
                     desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
                 } break;
             }

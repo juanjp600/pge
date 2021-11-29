@@ -39,7 +39,8 @@ void Mesh::setGeometry(StructuredData&& verts, const std::vector<Triangle>& tria
 
 void Mesh::setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u32>&& inds) {
     PGE_ASSERT_MATERIAL_LAYOUT();
-    PGE_ASSERT(type == PrimitiveType::LINE && inds.size() % 2 == 0 || type == PrimitiveType::TRIANGLE && inds.size() % 3 == 0,
+    using enum PrimitiveType;
+    PGE_ASSERT(type == LINE && inds.size() % 2 == 0 || type == TRIANGLE && inds.size() % 3 == 0,
             "Invalid primitive type or inadequate indices count");
 
     vertices = std::move(verts);
