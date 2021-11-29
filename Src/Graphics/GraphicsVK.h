@@ -221,27 +221,27 @@ class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, Mater
             switch (LAYOUT) {
                 using enum ImageLayout;
                 case UNDEFINED: {
-                    info.layout = vk::eUndefined;
+                    info.layout = vk::ImageLayout::eUndefined;
                     info.accessFlags = vk::AccessFlagBits::eNoneKHR;
                     info.stageFlags = vk::PipelineStageFlagBits::eTopOfPipe;
                 } break;
                 case TRANSFER_DST: {
-                    info.layout = vk::eTransferDstOptimal;
+                    info.layout = vk::ImageLayout::eTransferDstOptimal;
                     info.accessFlags = vk::AccessFlagBits::eTransferWrite;
                     info.stageFlags = vk::PipelineStageFlagBits::eTransfer;
                 } break;
                 case TRANSFER_SRC: {
-                    info.layout = vk::eTransferSrcOptimal;
+                    info.layout = vk::ImageLayout::eTransferSrcOptimal;
                     info.accessFlags = vk::AccessFlagBits::eTransferRead;
                     info.stageFlags = vk::PipelineStageFlagBits::eTransfer;
                 } break;
                 case SHADER_READ: {
-                    info.layout = vk::eShaderReadOnlyOptimal;
+                    info.layout = vk::ImageLayout::eShaderReadOnlyOptimal;
                     info.accessFlags = vk::AccessFlagBits::eShaderRead;
                     info.stageFlags = vk::PipelineStageFlagBits::eFragmentShader;
                 } break;
                 case RENDER_TARGET: {
-                    info.layout = vk::eColorAttachmentOptimal;
+                    info.layout = vk::ImageLayout::eColorAttachmentOptimal;
                     info.accessFlags = vk::AccessFlagBits::eColorAttachmentWrite;
                     info.stageFlags = vk::PipelineStageFlagBits::eColorAttachmentOutput;
                 } break;

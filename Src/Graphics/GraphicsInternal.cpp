@@ -77,7 +77,7 @@ Graphics* Graphics::create(const String& name, int w, int h, WindowMode wm, std:
         case OpenGL: {
             gfx = new GraphicsOGL3(name, w, h, wm, x, y);
         } break;
-        case Renderer::Vulkan: {
+        case Vulkan: {
             gfx = new GraphicsVK(name, w, h, wm, x, y);
         } break;
         default: {
