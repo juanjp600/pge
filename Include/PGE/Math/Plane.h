@@ -62,13 +62,7 @@ class Plane {
             : normal(norm.normalize()),
               distanceFromOrigin(distOrig) { }
 
-        constexpr bool operator==(const Plane& other) const {
-            return normal == other.normal && distanceFromOrigin == other.distanceFromOrigin;
-        }
-
-        constexpr bool operator!=(const Plane& other) const {
-            return normal != other.normal || distanceFromOrigin != other.distanceFromOrigin;
-        }
+        constexpr bool operator==(const Plane& other) const = default;
 
         constexpr bool equals(const Plane& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return normal.equals(other.normal, epsilon) && Math::equalFloats(distanceFromOrigin, other.distanceFromOrigin, epsilon);

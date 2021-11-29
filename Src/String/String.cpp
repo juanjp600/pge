@@ -60,10 +60,6 @@ bool String::BasicIterator::operator==(const BasicIterator& other) const {
     return ref->chs == other.ref->chs && index == other.index;
 }
 
-bool String::BasicIterator::operator!=(const BasicIterator& other) const {
-    return ref->chs != other.ref->chs || index != other.index;
-}
-
 int String::BasicIterator::getBytePosition() const {
     return index;
 }
@@ -349,10 +345,6 @@ bool PGE::operator==(const String& a, const String& b) {
     return a.equals(b);
 }
 
-bool PGE::operator!=(const String& a, const String& b) {
-    return !a.equals(b);
-}
-
 std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
     return os.write(s.cstr(), s.byteLength());
 }
@@ -513,7 +505,7 @@ void validateBaseWithType() {
 }
 
 template <typename I>
-static constexpr byte maxIntegerDigits(byte base) { // TODO: Consteval C++20.
+static consteval byte maxIntegerDigits(byte base) {
     static_assert(std::numeric_limits<I>::is_integer);
 
     byte digits = 0;

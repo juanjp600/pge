@@ -15,8 +15,7 @@ class AABBox {
         constexpr AABBox() = default;
         constexpr AABBox(const Vector3f& inPoint) : min(inPoint), max(inPoint) { }
 
-        constexpr bool operator==(const AABBox& other) const { return min == other.min && max == other.max; }
-        constexpr bool operator!=(const AABBox& other) const { return min != other.min || max != other.max; }
+        constexpr bool operator==(const AABBox& other) const = default;
 
         constexpr bool equals(const AABBox& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return min.equals(other.min, epsilon) && max.equals(other.max, epsilon);

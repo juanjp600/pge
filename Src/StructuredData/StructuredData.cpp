@@ -10,10 +10,6 @@ StructuredData::ElemLayout::LocationAndSize::LocationAndSize(int loc, int sz) {
     location = loc; size = sz;
 }
 
-bool StructuredData::ElemLayout::LocationAndSize::operator==(const ElemLayout::LocationAndSize& other) const {
-    return location == other.location && size == other.size;
-}
-
 StructuredData::ElemLayout::ElemLayout(const std::vector<Entry>& entrs) {
     int currLocation = 0;
     for (int i = 0; i < entrs.size(); i++) {
@@ -35,12 +31,6 @@ const StructuredData::ElemLayout::LocationAndSize& StructuredData::ElemLayout::g
 
 int StructuredData::ElemLayout::getElementSize() const {
     return elementSize;
-}
-
-bool StructuredData::ElemLayout::operator==(const StructuredData::ElemLayout& other) const {
-    if (this == &other) { return true; }
-    if (elementSize != other.elementSize) { return false; }
-    return entries == other.entries;
 }
 
 StructuredData::StructuredData(const ElemLayout& ly, int elemCount) {

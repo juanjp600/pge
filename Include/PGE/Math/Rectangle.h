@@ -26,8 +26,7 @@ class Rectanglef {
         constexpr Rectanglef(float il, float it, float ir, float ib) : tl(il, it), br(ir, ib) { repair(); }
         static constexpr const Rectanglef fromDims(float x, float y, float width, float height) { return Rectanglef(x, y, x + width, y + height); }
 
-        constexpr bool operator==(const Rectanglef& other) const { return tl == other.tl && br == other.br; }
-        constexpr bool operator!=(const Rectanglef& other) const { return tl != other.tl || br != other.br; }
+        constexpr bool operator==(const Rectanglef& other) const = default;
 
         constexpr bool equals(const Rectanglef& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return tl.equals(other.tl, epsilon) && br.equals(other.br, epsilon);

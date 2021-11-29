@@ -15,8 +15,7 @@ class Vector2f {
         constexpr explicit Vector2f(float s) : x(s), y(s) { }
         constexpr Vector2f(float ix, float iy) : x(ix), y(iy) { }
 
-        constexpr bool operator==(const Vector2f& other) const { return x == other.x && y == other.y; }
-        constexpr bool operator!=(const Vector2f& other) const { return x != other.x || y != other.y ; }
+        constexpr bool operator==(const Vector2f& other) const = default;
 
         constexpr bool equals(const Vector2f& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return Math::equalFloats(x, other.x, epsilon) && Math::equalFloats(y, other.y, epsilon);
@@ -73,8 +72,7 @@ class Vector3f {
         constexpr Vector3f(const Vector2f& v2, float iz) : x(v2.x), y(v2.y), z(iz) { }
         constexpr Vector3f(float ix, const Vector2f& v2) : x(ix), y(v2.x), z(v2.y) { }
 
-        constexpr bool operator==(const Vector3f& other) const { return x == other.x && y == other.y && z == other.z; }
-        constexpr bool operator!=(const Vector3f& other) const { return x != other.x || y != other.y || z != other.z; }
+        constexpr bool operator==(const Vector3f& other) const = default;
         
         constexpr bool equals(const Vector3f& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return Math::equalFloats(x, other.x, epsilon) && Math::equalFloats(y, other.y, epsilon) && Math::equalFloats(z, other.z, epsilon);
@@ -133,8 +131,7 @@ class Vector4f {
         constexpr Vector4f(float ix, const Vector3f& v3) : x(ix), y(v3.x), z(v3.y), w(v3.z) { }
         constexpr Vector4f(const Vector2f& v2a, const Vector2f& v2b) : x(v2a.x), y(v2a.y), z(v2b.x), w(v2b.y) { }
 
-        constexpr bool operator==(const Vector4f& other) const { return x == other.x && y == other.y && z == other.z && w == other.w; }
-        constexpr bool operator!=(const Vector4f& other) const { return x != other.x || y != other.y || z != other.z || w != other.w; }
+        constexpr bool operator==(const Vector4f& other) const = default;
 
         constexpr bool equals(const Vector4f& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return Math::equalFloats(x, other.x, epsilon) && Math::equalFloats(y, other.y, epsilon) && Math::equalFloats(z, other.z, epsilon) && Math::equalFloats(w, other.w, epsilon);
@@ -192,8 +189,7 @@ class Vector2i {
 
         constexpr operator const Vector2f() const { return Vector2f((float)x, (float)y); }
 
-        constexpr bool operator==(const Vector2i& other) const { return x == other.x && y == other.y; }
-        constexpr bool operator!=(const Vector2i& other) const { return x != other.x || y != other.y; }
+        constexpr bool operator==(const Vector2i& other) const = default;
 
         constexpr const Vector2i operator-() const { return Vector2i(-x, -y); }
 
