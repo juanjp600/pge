@@ -78,24 +78,28 @@ int String::BasicIterator::getPosition() const {
     return charIndex;
 }
 
-void String::Iterator::operator++() {
+String::Iterator& String::Iterator::operator++() {
     PGE_ASSERT(index < ref->byteLength(), "Tried incrementing end iterator");
     increment();
+    return *this;
 }
 
-void String::Iterator::operator--() {
+String::Iterator& String::Iterator::operator--() {
     PGE_ASSERT(index > 0, "Tried decrementing begin iterator");
     decrement();
+    return *this;
 }
 
-void String::ReverseIterator::operator++() {
+String::ReverseIterator& String::ReverseIterator::operator++() {
     PGE_ASSERT(index >= 0, "Tried decrementing end reverse iterator");
     decrement();
+    return *this;
 }
 
-void String::ReverseIterator::operator--() {
+String::ReverseIterator& String::ReverseIterator::operator--() {
     PGE_ASSERT(index < String::Iterator::end(*ref).index, "Tried incrementing begin reverse iterator");
     increment();
+    return *this;
 }
 
 const inline String INVALID_ITERATOR = "Tried reversing invalid iterator";

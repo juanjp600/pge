@@ -1,4 +1,4 @@
-﻿#ifndef PGE_MATH_H_INCLUDED
+#ifndef PGE_MATH_H_INCLUDED
 #define PGE_MATH_H_INCLUDED
 
 namespace PGE {

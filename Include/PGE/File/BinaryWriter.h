@@ -29,8 +29,6 @@ namespace PGE {
 /// @see #PGE::BinaryReader
 /// @see #PGE::TextWriter
 class BinaryWriter : private AbstractIO<std::ofstream> {
-    private:
-
     public:
         using AbstractIO::earlyClose;
 
