@@ -10,14 +10,6 @@
 
 using namespace PGE;
 
-String GraphicsInternal::appendInfoLine(const String& name, int value) {
-    return "\n" + name + ": " + String::from(value);
-}
-
-String GraphicsInternal::appendInfoLine(const String& name, bool value) {
-    return "\n" + name + ": " + (value ? "true" : "false");
-}
-
 #if defined(__APPLE__) && defined(__OBJC__)
 NSWindow* GraphicsInternal::getCocoaWindow() const {
     SDL_SysWMinfo info;
@@ -28,20 +20,9 @@ NSWindow* GraphicsInternal::getCocoaWindow() const {
 }
 #endif
 
-GraphicsInternal::GraphicsInternal(const String& rendererName, const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags)
-    : Graphics(name, w, h, wm), RENDERER_NAME(rendererName) {
+GraphicsInternal::GraphicsInternal(const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags)
+    : Graphics(name, w, h, wm) {
     sdlWindow = resourceManager.addNewResource<SDLWindow>(name, x, y, w, h, (SDL_WindowFlags)(windowFlags | SDL_WINDOW_ALLOW_HIGHDPI));
-}
-
-String GraphicsInternal::getInfo() const {
-    return caption + " (" + RENDERER_NAME + ") "
-        + String::from(dimensions.x) + 'x' + String::from(dimensions.y) + " / "
-        + String::from(viewport.width()) + 'x' + String::from(viewport.height())
-        + appendInfoLine("open", open)
-        + appendInfoLine("focused", focused)
-        + appendInfoLine("windowMode", windowMode == WindowMode::Fullscreen ? "Fullscreen" : "Windowed")
-        + appendInfoLine("vsync enabled", vsync)
-        + appendInfoLine("depth test enabled", depthTest);
 }
 
 SDL_Window* GraphicsInternal::getWindow() const {

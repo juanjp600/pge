@@ -1,6 +1,8 @@
 #ifndef PGE_BINARY_WRITER_H_INCLUDED
 #define PGE_BINARY_WRITER_H_INCLUDED
 
+#include <span>
+
 #include <PGE/File/AbstractIO.h>
 
 namespace PGE {
@@ -64,7 +66,7 @@ class BinaryWriter : private AbstractIO<std::ofstream> {
         /// 
         /// In order to be read again, the amount of bytes must be known, so it
         /// should either be constant, or stored along with the byte data manually.
-        void writeBytes(const byte* data, size_t amount);
+        void writeBytes(const std::span<byte>& data);
 };
 
 }

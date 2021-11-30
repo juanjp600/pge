@@ -162,7 +162,7 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
         throw PGE_CREATE_EX(failure);
     } else {
         BinaryWriter writer(path);
-        writer.writeBytes((byte*)result.compiledD3dBlob->GetBufferPointer(), (int)result.compiledD3dBlob->GetBufferSize());
+        writer.writeBytes(std::span((byte*)result.compiledD3dBlob->GetBufferPointer(), result.compiledD3dBlob->GetBufferSize()));
 
         CompileResult::extractFunctionData(hlsl, dxEntryPoint, result);
         std::vector<CompileResult::Function> funcs = CompileResult::extractFunctions(hlsl);

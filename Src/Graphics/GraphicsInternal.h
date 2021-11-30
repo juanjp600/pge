@@ -7,6 +7,7 @@
 #include <PGE/Graphics/Mesh.h>
 #include <PGE/Graphics/Texture.h>
 #include <PGE/Graphics/Material.h>
+#include <PGE/Types/TemplateString.h>
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <AppKit/AppKit.h>
@@ -21,9 +22,6 @@ class GraphicsInternal : public Graphics {
         using Graphics::resourceManager;
 
     protected:
-        static String appendInfoLine(const String& name, int value);
-        static String appendInfoLine(const String& name, bool value);
-
 #if defined(__APPLE__) && defined(__OBJC__)
         NSWindow* getCocoaWindow() const;
 #endif
@@ -38,11 +36,9 @@ class GraphicsInternal : public Graphics {
         };
         SDLWindow::View sdlWindow;
 
-        GraphicsInternal(const String& rendererName, const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags);
+        GraphicsInternal(const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags);
 
     public:
-        String getInfo() const override;
-
         virtual Shader* loadShader(const FilePath& path) = 0;
         virtual Mesh* createMesh() = 0;
         virtual Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) = 0;
@@ -53,12 +49,20 @@ class GraphicsInternal : public Graphics {
         SDL_Window* getWindow() const;
 };
 
-template <std::derived_from<Shader> SHADER, std::derived_from<Mesh> MESH, std::derived_from<Texture> TEXTURE,
-    std::derived_from<Material> MATERIAL = Material, std::derived_from<Texture> RENDER_TEXTURE = TEXTURE>
+template <TemplateString RENDERER_NAME, std::derived_from<Shader> SHADER, std::derived_from<Mesh> MESH,
+    std::derived_from<Texture> TEXTURE, std::derived_from<Material> MATERIAL = Material, std::derived_from<Texture> RENDER_TEXTURE = TEXTURE>
 class GraphicsSpecialized : public GraphicsInternal {
+    private:
+        static String appendInfoLine(const String& name, int value) {
+            return "\n" + name + ": " + String::from(value);
+        }
+        static String appendInfoLine(const String& name, bool value) {
+            return "\n" + name + ": " + (value ? "true" : "false");
+        }
+
     protected:
-        GraphicsSpecialized(const String& rendererName, const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags)
-            : GraphicsInternal(rendererName, name, w, h, wm, x, y, windowFlags) { }
+        GraphicsSpecialized(const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags)
+            : GraphicsInternal(name, w, h, wm, x, y, windowFlags) { }
 
     public:
         Shader* loadShader(const FilePath& path) final override {
@@ -83,6 +87,17 @@ class GraphicsSpecialized : public GraphicsInternal {
 
         Material* createMaterial(Shader& sh, const ReferenceVector<Texture>& tex, Opaque o) final override {
             return new MATERIAL(*this, sh, tex, o);
+        }
+
+        const String getInfo() const final override {
+            return caption + " (" + RENDERER_NAME + ") "
+                + String::from(dimensions.x) + 'x' + String::from(dimensions.y) + " / "
+                + String::from(viewport.width()) + 'x' + String::from(viewport.height())
+                + appendInfoLine("open", open)
+                + appendInfoLine("focused", focused)
+                + appendInfoLine("windowMode", windowMode == WindowMode::Fullscreen ? "Fullscreen" : "Windowed")
+                + appendInfoLine("vsync enabled", vsync)
+                + appendInfoLine("depth test enabled", depthTest);
         }
 };
 

@@ -94,6 +94,7 @@
     <ClInclude Include="..\..\Include\PGE\Types\PolymorphicHeap.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Range.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Reference.h" />
+    <ClInclude Include="..\..\Include\PGE\Types\TemplateString.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Types.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsInternal.h" />
