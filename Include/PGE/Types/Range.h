@@ -1,9 +1,11 @@
 #ifndef PGE_RANGE_H_INCLUDED
 #define PGE_RANGE_H_INCLUDED
 
+#include <PGE/Types/Concepts.h>
+
 namespace PGE {
 
-template <typename SIZE = int>
+template <Arithmetic SIZE = int>
 class Range {
 	public:
 		class Iterator {

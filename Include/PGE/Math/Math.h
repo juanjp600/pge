@@ -1,5 +1,7 @@
-﻿#ifndef PGE_MATH_H_INCLUDED
+#ifndef PGE_MATH_H_INCLUDED
 #define PGE_MATH_H_INCLUDED
+
+#include <concepts>
 
 namespace PGE {
 
@@ -32,16 +34,15 @@ namespace Math {
         }
     }
 
-    template <typename T>
+    template <std::unsigned_integral T>
     constexpr T roundUp(T value, T nearest) noexcept {
-        static_assert(!std::numeric_limits<T>::is_signed);
         if (value % nearest == 0) {
             return value;
         }
         return (value / nearest + 1) * nearest;
     }
 
-    template <typename T>
+    template <std::integral T>
     constexpr T ceilLog2(T value) {
         bool flip;
         if constexpr (std::numeric_limits<T>::is_signed) {

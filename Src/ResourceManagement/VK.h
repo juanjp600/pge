@@ -59,7 +59,7 @@ struct RenderInfo {
     vk::Framebuffer buffer;
 };
 
-template <class T>
+template <std::semiregular T>
 class VKResource : public Resource<T> {
     public:
         vk::Device device;
@@ -70,7 +70,7 @@ class VKResource : public Resource<T> {
         }
 };
 
-template <class T>
+template <std::semiregular T>
 class VKDestroyResource : public VKResource<T> {
     public:
         using VKResource<T>::VKResource;
@@ -80,7 +80,7 @@ class VKDestroyResource : public VKResource<T> {
         }
 };
 
-template <class T>
+template <std::semiregular T>
 class VKFreeResource : public VKResource<T> {
     public:
         using VKResource<T>::VKResource;
@@ -403,16 +403,14 @@ class VKBuffer : public VKDestroyResource<vk::Buffer> {
 
 class VKMemory : public VKFreeResource<vk::DeviceMemory> {
     public:
-        template <typename T>
+        template <OneOf<vk::Image, vk::Buffer> T>
         VKMemory(vk::Device dev, vk::PhysicalDevice physDev, T data, vk::MemoryPropertyFlags memPropFlags) : VKFreeResource(dev) {
             vk::MemoryRequirements memReq;
-            if constexpr (std::is_same<T, vk::Image>::value) {
+            if constexpr (std::same_as<T, vk::Image>) {
                 memReq = device.getImageMemoryRequirements(data);
-            } else if constexpr (std::is_same<T, vk::Buffer>::value) {
+            } else if constexpr (std::same_as<T, vk::Buffer>) {
                 memReq = device.getBufferMemoryRequirements(data);
-            } else {
-                static_assert(false);
-            } 
+            }
 
             // Finding a fitting memory type.
             int memIndex = -1;
@@ -432,12 +430,10 @@ class VKMemory : public VKFreeResource<vk::DeviceMemory> {
 
             resource = device.allocateMemory(info);
 
-            if constexpr (std::is_same<T, vk::Image>::value) {
+            if constexpr (std::same_as<T, vk::Image>) {
                 device.bindImageMemory(data, resource, 0);
-            } else if constexpr (std::is_same<T, vk::Buffer>::value) {
+            } else if constexpr (std::same_as<T, vk::Buffer>) {
                 device.bindBufferMemory(data, resource, 0);
-            } else {
-                static_assert(false);
             }
         }
 };

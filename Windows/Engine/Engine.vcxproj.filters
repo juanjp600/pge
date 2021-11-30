@@ -211,8 +211,12 @@
     <ClCompile Include="..\..\Src\Graphics\Texture\RenderTextureVK.cpp">
       <Filter>Src\Graphics\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\File\BinaryDefaultSpecializations.cpp" />
-    <ClCompile Include="..\..\Src\Math\Assertions.cpp" />
+    <ClCompile Include="..\..\Src\File\BinaryDefaultSpecializations.cpp">
+      <Filter>Src\File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Math\Assertions.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
@@ -403,6 +407,9 @@
       <Filter>Include\Types</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\PGE\Types\PolymorphicHeap.h">
+      <Filter>Include\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Types\Concepts.h">
       <Filter>Include\Types</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,14 +6,24 @@
 #include <PGE/File/FilePath.h>
 #include <PGE/Exception/Exception.h>
 
+#include <concepts>
+
 namespace PGE {
+
+template <typename T>
+concept FileStream = requires(T t) {
+    std::derived_from<T, std::ios_base>;
+    { t.close() } -> std::same_as<void>;
+    { t.is_open() } -> std::same_as<bool>;
+    { t.good() } -> std::same_as<bool>;
+} && requires(T t, const char* cstr, std::ios::openmode openMode) {
+    { t.open(cstr, openMode) } -> std::same_as<void>;
+};
 
 /// Utility to more easily deal with file IO streams.
 /// Not intended to be polymorphic.
-template <typename T>
+template <FileStream T>
 class AbstractIO {
-    static_assert(std::is_base_of<std::ios_base, T>::value);
-
     protected:
         static const inline String BAD_STREAM = "Stream turned bad";
         static const inline String INVALID_FILEPATH = "Tried using an invalid path";

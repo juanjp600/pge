@@ -53,39 +53,36 @@ class GraphicsInternal : public Graphics {
         SDL_Window* getWindow() const;
 };
 
-template <typename ShaderType, typename MeshType, typename TextureType, typename MaterialType = Material, typename RenderTexture = TextureType>
+template <std::derived_from<Shader> SHADER, std::derived_from<Mesh> MESH, std::derived_from<Texture> TEXTURE,
+    std::derived_from<Material> MATERIAL = Material, std::derived_from<Texture> RENDER_TEXTURE = TEXTURE>
 class GraphicsSpecialized : public GraphicsInternal {
-    static_assert(std::is_base_of<Shader, ShaderType>::value);
-    static_assert(std::is_base_of<Mesh, MeshType>::value);
-    static_assert(std::is_base_of<Texture, TextureType>::value);
-
     protected:
         GraphicsSpecialized(const String& rendererName, const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags)
             : GraphicsInternal(rendererName, name, w, h, wm, x, y, windowFlags) { }
 
     public:
         Shader* loadShader(const FilePath& path) final override {
-            return new ShaderType(*this, path);
+            return new SHADER(*this, path);
         }
 
         Mesh* createMesh() final override {
-            return new MeshType(*this);
+            return new MESH(*this);
         }
 
         Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) final override {
-            return new RenderTexture(*this, w, h, fmt);
+            return new RENDER_TEXTURE(*this, w, h, fmt);
         }
 
         Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) final override {
-            return new TextureType(*this, w, h, buffer, fmt, mipmaps);
+            return new TEXTURE(*this, w, h, buffer, fmt, mipmaps);
         }
         
         Texture* loadTextureCompressed(const std::vector<Texture::Mipmap>& mipmaps, Texture::CompressedFormat fmt) final override {
-            return new TextureType(*this, mipmaps, fmt);
+            return new TEXTURE(*this, mipmaps, fmt);
         }
 
         Material* createMaterial(Shader& sh, const ReferenceVector<Texture>& tex, Opaque o) final override {
-            return new MaterialType(*this, sh, tex, o);
+            return new MATERIAL(*this, sh, tex, o);
         }
 };
 

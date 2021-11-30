@@ -16,17 +16,22 @@
 
 namespace PGE {
 
+// 10 digits + 26 characters = 36
+// Only unsigned numbers can be represented in other bases.
+template <typename T, byte BASE>
+concept ValidBaseForType = BASE == 10 && std::integral<T> || std::unsigned_integral<T> && (BASE >= 2 && BASE < 36);
+
 /// A UTF-8 character sequence guaranteed to be terminated by a null byte.
 class String {
     private:
         class BasicIterator {
-            using iterator_category = std::bidirectional_iterator_tag;
-            using difference_type = int;
-            using value_type = char16;
-            using pointer = value_type*;
-            using reference = value_type&;
-
             public:
+                using iterator_category = std::bidirectional_iterator_tag;
+                using difference_type = int;
+                using value_type = char16;
+                using pointer = value_type*;
+                using reference = value_type&;
+
                 BasicIterator() = default;
 
                 int operator-(const BasicIterator& other) const;
@@ -76,10 +81,11 @@ class String {
                 static const ActualIterator begin(const String& str);
                 static const ActualIterator end(const String& str);
 
-                void operator++();
-                void operator--();
-                void operator++(int) { ++(*this); }
-                void operator--(int) { --(*this); }
+                // These need to return what they return to be recognized as iterators by the STL.
+                ActualIterator& operator++();
+                ActualIterator& operator--();
+                ActualIterator operator++(int) { ActualIterator temp = *this; ++*this; return temp; }
+                ActualIterator operator--(int) { ActualIterator temp = *this; --*this; return temp; }
 
                 const ActualIterator operator+(int steps) const { ActualIterator ret(*this); ret += steps; return ret; }
                 const ActualIterator operator-(int steps) const { ActualIterator ret(*this); ret -= steps; return ret; }
@@ -105,6 +111,8 @@ class String {
 
         using Iterator = ActualIterator<false>;
         using ReverseIterator = ActualIterator<true>;
+        static_assert(std::bidirectional_iterator<Iterator>);
+        static_assert(std::bidirectional_iterator<ReverseIterator>);
 
         const Iterator begin() const;
         const Iterator end() const;
@@ -152,9 +160,9 @@ class String {
             LOWER,
         };
 
-        template <typename I> static const String binFromInt(I i);
-        template <typename I> static const String octFromInt(I i);
-        template <typename I> static const String hexFromInt(I i, Casing casing = Casing::UPPER);
+        template <std::unsigned_integral I> static const String binFromInt(I i);
+        template <std::unsigned_integral I> static const String octFromInt(I i);
+        template <std::unsigned_integral I> static const String hexFromInt(I i, Casing casing = Casing::UPPER);
 
         void operator=(const String& other);
         void operator+=(const String& other);
@@ -184,8 +192,8 @@ class String {
             return t;
         }
 
-        template <typename I> I binToInt(bool& success) const;
-        template <typename I>
+        template <std::unsigned_integral I> I binToInt(bool& success) const;
+        template <std::unsigned_integral I>
         I binToInt() const {
             bool succ;
             I t = binToInt<I>(succ);
@@ -193,8 +201,8 @@ class String {
             return t;
         }
 
-        template <typename I> I octToInt(bool& success) const;
-        template <typename I>
+        template <std::unsigned_integral I> I octToInt(bool& success) const;
+        template <std::unsigned_integral I>
         I octToInt() const {
             bool succ;
             I t = octToInt<I>(succ);
@@ -202,8 +210,8 @@ class String {
             return t;
         }
 
-        template <typename I> I hexToInt(bool& success) const;
-        template <typename I>
+        template <std::unsigned_integral I> I hexToInt(bool& success) const;
+        template <std::unsigned_integral I>
         I hexToInt() const {
             bool succ;
             I t = hexToInt<I>(succ);
@@ -295,14 +303,17 @@ class String {
         void reallocate(int size, bool copyOldChs = false);
         char* cstrNoConst();
 
-        template <typename I, byte BASE = 10>
+        template <std::integral I, byte BASE = 10> requires ValidBaseForType<I, BASE>
         static const String fromInteger(I i, Casing casing = Casing::UPPER);
-        template <typename F>
+        template <std::floating_point F>
         static const String fromFloatingPoint(F f);
 };
 bool operator==(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);
 std::istream& operator>>(std::istream& is, String& s);
+
+static_assert(std::ranges::bidirectional_range<String>);
+static_assert(std::ranges::common_range<String>);
 
 }
 

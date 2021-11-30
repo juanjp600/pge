@@ -41,8 +41,7 @@ class BinaryReader : private AbstractIO<std::ifstream> {
         /// Note: Strings are cleared, before being written to.
         /// @returns Whether the reading succeeded.
         /// @see BinaryWriter::write.
-        template <typename T>
-        bool tryRead(T& out);
+        bool tryRead(auto& out);
 
         // TODO: Global, #PGE::Exception or just Exception??
         /// Reads a type T from file.
@@ -50,7 +49,7 @@ class BinaryReader : private AbstractIO<std::ifstream> {
         /// @returns An object of type T, if it has been read successfully.
         /// @throws Exception if any kind of error occured.
         /// @see #tryRead
-        template <typename T>
+        template <std::default_initializable T>
         const T read() {
             T val;
             PGE_ASSERT(tryRead<T>(val), BAD_STREAM);
