@@ -49,7 +49,7 @@ int String::BasicIterator::operator-(const String::BasicIterator& other) const {
 }
 
 char16 String::BasicIterator::operator*() const {
-    PGE_ASSERT(index >= 0 && index < ref->byteLength(), "Tried dereferencing invalid iterator");
+    asrt(index >= 0 && index < ref->byteLength(), "Tried dereferencing invalid iterator");
     if (_ch == L'\uFFFF') {
         _ch = Unicode::utf8ToWChar(ref->cstr() + index);
     }
@@ -75,25 +75,25 @@ int String::BasicIterator::getPosition() const {
 }
 
 String::Iterator& String::Iterator::operator++() {
-    PGE_ASSERT(index < ref->byteLength(), "Tried incrementing end iterator");
+    asrt(index < ref->byteLength(), "Tried incrementing end iterator");
     increment();
     return *this;
 }
 
 String::Iterator& String::Iterator::operator--() {
-    PGE_ASSERT(index > 0, "Tried decrementing begin iterator");
+    asrt(index > 0, "Tried decrementing begin iterator");
     decrement();
     return *this;
 }
 
 String::ReverseIterator& String::ReverseIterator::operator++() {
-    PGE_ASSERT(index >= 0, "Tried decrementing end reverse iterator");
+    asrt(index >= 0, "Tried decrementing end reverse iterator");
     decrement();
     return *this;
 }
 
 String::ReverseIterator& String::ReverseIterator::operator--() {
-    PGE_ASSERT(index < String::Iterator::end(*ref).index, "Tried incrementing begin reverse iterator");
+    asrt(index < String::Iterator::end(*ref).index, "Tried incrementing begin reverse iterator");
     increment();
     return *this;
 }
@@ -101,11 +101,11 @@ String::ReverseIterator& String::ReverseIterator::operator--() {
 const inline String INVALID_ITERATOR = "Tried reversing invalid iterator";
 
 void String::Iterator::validate() {
-    PGE_ASSERT(index >= 0, INVALID_ITERATOR);
+    asrt(index >= 0, INVALID_ITERATOR);
 }
 
 void String::ReverseIterator::validate() {
-    PGE_ASSERT(index < ref->byteLength(), INVALID_ITERATOR);
+    asrt(index < ref->byteLength(), INVALID_ITERATOR);
 }
 
 const String::Iterator String::Iterator::begin(const String& str) {
@@ -742,7 +742,7 @@ int String::length() const {
 }
 
 int String::byteLength() const {
-    PGE_ASSERT(data->strByteLength >= 0, "String byte length must always be valid");
+    asrt(data->strByteLength >= 0, "String byte length must always be valid");
     return data->strByteLength;
 }
 
@@ -757,7 +757,7 @@ const String::Iterator String::findFirst(const String& fnd, int from) const {
 static const String EMPTY_FIND = "Find string can't be empty";
 
 const String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
-    PGE_ASSERT(!fnd.isEmpty(), EMPTY_FIND);
+    asrt(!fnd.isEmpty(), EMPTY_FIND);
     for (auto it = from; it != end(); it++) {
         if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) { return it; }
     }
@@ -769,7 +769,7 @@ const String::ReverseIterator String::findLast(const String& fnd, int fromEnd) c
 }
 
 const String::ReverseIterator String::findLast(const String& fnd, const ReverseIterator& from) const {
-    PGE_ASSERT(!fnd.isEmpty(), EMPTY_FIND);
+    asrt(!fnd.isEmpty(), EMPTY_FIND);
     for (ReverseIterator it = from; it != rend(); it++) {
         if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) { return it; }
     }
@@ -790,9 +790,9 @@ const String String::substr(const Iterator& start) const {
 }
 
 const String String::substr(const Iterator& start, const Iterator& to) const {
-    PGE_ASSERT(start.getBytePosition() <= to.getBytePosition(),
+    asrt(start.getBytePosition() <= to.getBytePosition(),
         "Start iterator can't come after to iterator (start: " + from(start.getBytePosition()) + "; to: " + from(to.getBytePosition()) + "; str: " + *this + ")");
-    PGE_ASSERT(to.getBytePosition() <= end().getBytePosition(),
+    asrt(to.getBytePosition() <= end().getBytePosition(),
         "To iterator can't come after end iterator (to: " + from(to.getBytePosition()) + "; end: " + from(end().getBytePosition()) + "; str: " + *this + ")");
 
     int newSize = to.getBytePosition() - start.getBytePosition();
@@ -813,7 +813,7 @@ const String::Iterator String::charAt(int pos) const {
 }
 
 const String String::replace(const String& fnd, const String& rplace) const {
-    PGE_ASSERT(fnd.byteLength() != 0, "Find string can't be empty");
+    asrt(fnd.byteLength() != 0, "Find string can't be empty");
 
     const char* fndStr = fnd.cstr();
     const char* rplaceStr = rplace.cstr();

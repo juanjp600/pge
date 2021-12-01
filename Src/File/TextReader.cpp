@@ -85,7 +85,7 @@ char16 TextReader::readChar() {
                     int newCh = stream.rdbuf()->sbumpc();
                     if (newCh == EOF) {
                         reportEOF();
-                        throw PGE_CREATE_EX(UNEXPECTED_EOF);
+                        throw Exception(UNEXPECTED_EOF);
                     }
                     chs[i] = (char)newCh;
                 }
@@ -102,7 +102,7 @@ char16 TextReader::readChar() {
             int ch2 = stream.rdbuf()->sbumpc();
             if (ch2 == EOF) {
                 reportEOF();
-                throw PGE_CREATE_EX(UNEXPECTED_EOF);
+                throw Exception(UNEXPECTED_EOF);
             }
             if (encoding == UTF16LE) {
                 return (char16)(ch | (ch2 << 8));
@@ -111,7 +111,7 @@ char16 TextReader::readChar() {
             }
         }
         default: {
-            throw PGE_CREATE_EX(INVALID_ENCODING);
+            throw Exception(INVALID_ENCODING);
         }
     }
 }
@@ -131,7 +131,7 @@ void TextReader::spitOut(char16 ch) {
             backwards = 2;
         } break;
         default: {
-            throw PGE_CREATE_EX(INVALID_ENCODING);
+            throw Exception(INVALID_ENCODING);
         }
     }
     for (int i = 0; i < backwards; i++) {
@@ -144,6 +144,6 @@ void TextReader::spitOut(char16 ch) {
 
 void TextReader::reportEOF() {
     // Extraction failed, laugh at this reader!
-    PGE_ASSERT(!eof, "End of file has already been encountered");
+    asrt(!eof, "End of file has already been encountered");
     eof = true;
 }

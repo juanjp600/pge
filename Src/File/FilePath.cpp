@@ -89,15 +89,15 @@ bool FilePath::isValid() const noexcept {
 }
 
 bool FilePath::isDirectory() const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     std::error_code err;
     bool isDir = std::filesystem::is_directory(str().cstr(), err);
-    PGE_ASSERT(err.value() == 0, "Couldn't check if path is directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
+    asrt(err.value() == 0, "Couldn't check if path is directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
     return isDir;
 }
 
 const FilePath FilePath::makeDirectory() const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     if (*str().charAt(name.length() - 1) != '/') {
         return *this + String("/");
     }
@@ -105,7 +105,7 @@ const FilePath FilePath::makeDirectory() const {
 }
 
 const FilePath FilePath::getParentDirectory() const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     String::Iterator to = name.findLast("/");
     int index;
     if (to + 1 == name.end()) {
@@ -117,45 +117,45 @@ const FilePath FilePath::getParentDirectory() const {
 }
 
 const String FilePath::getExtension() const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     String::Iterator startIndex = name.findLast(".");
     if (startIndex == name.end()) { return ""; }
     return name.substr(startIndex+1);
 }
 
 const FilePath FilePath::trimExtension() const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     String::Iterator startIndex = name.findLast(".");
     if (startIndex == name.end()) { return *this; }
     return name.substr(name.begin(), startIndex);
 }
 
 bool FilePath::exists() const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     std::error_code err;
     bool exists = std::filesystem::exists(str().cstr(), err);
-    PGE_ASSERT(err.value() == 0, "Couldn't check if directory exists (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
+    asrt(err.value() == 0, "Couldn't check if directory exists (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
     return exists;
 }
 
 u64 FilePath::getLastModifyTime() const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     std::error_code err;
     std::filesystem::file_time_type time = std::filesystem::last_write_time(str().cstr(), err);
-    PGE_ASSERT(err.value() == 0, "Couldn't check directory modify time (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
+    asrt(err.value() == 0, "Couldn't check directory modify time (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
     return time.time_since_epoch().count();
 }
 
 bool FilePath::createDirectory() const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     std::error_code err;
     bool created = std::filesystem::create_directories(str().wstr().data(), err);
-    PGE_ASSERT(err.value() == 0, "Couldn't create directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
+    asrt(err.value() == 0, "Couldn't create directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
     return created;
 }
 
 const std::vector<FilePath> FilePath::enumerateFolders() const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     std::vector<FilePath> folders;
     for (const auto& it : std::filesystem::directory_iterator(str().cstr())) {
         if (it.is_directory()) {
@@ -166,7 +166,7 @@ const std::vector<FilePath> FilePath::enumerateFolders() const {
 }
 
 const std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     std::vector<FilePath> files;
     if (recursive) {
         for (const auto& it : std::filesystem::recursive_directory_iterator(str().cstr())) {
@@ -210,9 +210,9 @@ const std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
 }
 
 const std::vector<byte> FilePath::readBytes() const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     std::ifstream file(str().cstr(), std::ios::ate | std::ios::binary);
-    PGE_ASSERT(file.is_open(), "Couldn't read bytes from file (file: \"" + str() + "\")");
+    asrt(file.is_open(), "Couldn't read bytes from file (file: \"" + str() + "\")");
     std::vector<byte> bytes;
     size_t size = (size_t)file.tellg();
     bytes.resize(size);
@@ -222,7 +222,7 @@ const std::vector<byte> FilePath::readBytes() const {
 }
 
 const String& FilePath::str() const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     return name;
 }
 
@@ -234,11 +234,11 @@ bool FilePath::operator==(const FilePath& other) const noexcept {
 }
 
 void FilePath::operator+=(const String& str) {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     name += sanitizeFileSeperator(str);
 }
 
 const FilePath FilePath::operator+(const String& str) const {
-    PGE_ASSERT(valid, INVALID_STR);
+    asrt(valid, INVALID_STR);
     return FilePath(name + sanitizeFileSeperator(str));
 }

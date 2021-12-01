@@ -11,14 +11,6 @@
 
 using namespace PGE;
 
-String GraphicsInternal::appendInfoLine(const String& name, int value) {
-    return "\n" + name + ": " + String::from(value);
-}
-
-String GraphicsInternal::appendInfoLine(const String& name, bool value) {
-    return "\n" + name + ": " + (value ? "true" : "false");
-}
-
 #if defined(__APPLE__) && defined(__OBJC__)
 NSWindow* GraphicsInternal::getCocoaWindow() const {
     SDL_SysWMinfo info;
@@ -29,20 +21,9 @@ NSWindow* GraphicsInternal::getCocoaWindow() const {
 }
 #endif
 
-GraphicsInternal::GraphicsInternal(const String& rendererName, const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags)
-    : Graphics(name, w, h, wm), RENDERER_NAME(rendererName) {
+GraphicsInternal::GraphicsInternal(const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags)
+    : Graphics(name, w, h, wm) {
     sdlWindow = resourceManager.addNewResource<SDLWindow>(name, x, y, w, h, (SDL_WindowFlags)(windowFlags | SDL_WINDOW_ALLOW_HIGHDPI));
-}
-
-String GraphicsInternal::getInfo() const {
-    return caption + " (" + RENDERER_NAME + ") "
-        + String::from(dimensions.x) + 'x' + String::from(dimensions.y) + " / "
-        + String::from(viewport.width()) + 'x' + String::from(viewport.height())
-        + appendInfoLine("open", open)
-        + appendInfoLine("focused", focused)
-        + appendInfoLine("windowMode", windowMode == WindowMode::Fullscreen ? "Fullscreen" : "Windowed")
-        + appendInfoLine("vsync enabled", vsync)
-        + appendInfoLine("depth test enabled", depthTest);
 }
 
 SDL_Window* GraphicsInternal::getWindow() const {
@@ -51,7 +32,7 @@ SDL_Window* GraphicsInternal::getWindow() const {
 
 GraphicsInternal::SDLWindow::SDLWindow(const String& title, int x, int y, int width, int height, u32 flags) {
     resource = SDL_CreateWindow(title.cstr(), x, y, width, height, flags);
-    PGE_ASSERT(resource != nullptr, "Failed to create SDL window (SDLERROR: " + String(SDL_GetError()) + ")");
+    asrt(resource != nullptr, "Failed to create SDL window (SDLERROR: " + String(SDL_GetError()) + ")");
 }
 
 GraphicsInternal::SDLWindow::~SDLWindow() {
@@ -105,7 +86,7 @@ Texture* Texture::createBlank(Graphics& gfx, int w, int h, Format fmt, bool mipm
 }
 
 Texture* Texture::load(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) {
-    PGE_ASSERT(buffer != nullptr, "Tried to load texture from nullptr");
+    asrt(buffer != nullptr, "Tried to load texture from nullptr");
     return ((GraphicsInternal&)gfx).loadTexture(w, h, buffer, fmt, mipmaps);
 }
 

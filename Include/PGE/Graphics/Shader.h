@@ -35,7 +35,7 @@ class Shader : private PolymorphicHeap {
         virtual Constant* getVertexShaderConstant(const String& constName) = 0;
         virtual Constant* getFragmentShaderConstant(const String& constName) = 0;
 
-        int getTextureCount() const { PGE_ASSERT(textureCount != -1, "Texture count has not been initialized"); return textureCount; }
+        int getTextureCount() const { asrt(textureCount != -1, "Texture count has not been initialized"); return textureCount; }
 
     protected:
         Shader(const FilePath& path) : filepath(path) { }

@@ -1,5 +1,5 @@
-#ifndef PGEINTERNAL_RESOURCEMANAGEMENT_OGL3
-#define PGEINTERNAL_RESOURCEMANAGEMENT_OGL3
+#ifndef PGEINTERNAL_OGL3_H_INCLUDED
+#define PGEINTERNAL_OGL3_H_INCLUDED
 
 #include <vector>
 
@@ -28,7 +28,7 @@ class GLFramebuffer : public Resource<GLuint> {
         GLFramebuffer() {
             glGenFramebuffers(1, &resource);
             GLenum glError = glGetError();
-            PGE_ASSERT(glError == GL_NO_ERROR, "Failed to generate frame buffer (GLERROR: " + String::from(glError) + ")");
+            asrt(glError == GL_NO_ERROR, "Failed to generate frame buffer (GLERROR: " + String::from(glError) + ")");
         }
         
         ~GLFramebuffer() {
@@ -100,7 +100,7 @@ class GLShader : public Resource<GLuint> {
                 glGetShaderiv(resource, GL_INFO_LOG_LENGTH, &result);
                 std::unique_ptr<GLchar[]> err = std::make_unique<GLchar[]>(result);
                 glGetShaderInfoLog(resource, result, NULL, err.get());
-                throw PGE_CREATE_EX("Failed to create shader (stage: " + String::from(stage) + "; error:\n" + err.get() + ")");
+                throw Exception("Failed to create shader (stage: " + String::from(stage) + "; error:\n" + err.get() + ")");
             }
         }
 
@@ -119,7 +119,7 @@ class GLProgram : public Resource<GLuint> {
             glLinkProgram(resource);
             GLint result;
             glGetProgramiv(resource, GL_LINK_STATUS, &result);
-            PGE_ASSERT(result == GL_TRUE, "Failed to link shader (GLERROR:" + String::from(glGetError()) + ")");
+            asrt(result == GL_TRUE, "Failed to link shader (GLERROR:" + String::from(glGetError()) + ")");
         }
 
         ~GLProgram() {
@@ -129,4 +129,4 @@ class GLProgram : public Resource<GLuint> {
 
 }
 
-#endif // PGEINTERNAL_RESOURCEMANAGEMENT_OGL3
+#endif // PGEINTERNAL_OGL3_H_INCLUDED

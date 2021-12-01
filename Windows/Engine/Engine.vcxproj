@@ -99,9 +99,11 @@
     <ClInclude Include="..\..\Include\PGE\StructuredData\StructuredData.h" />
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Concepts.h" />
+    <ClInclude Include="..\..\Include\PGE\Types\TemplateEnableIf.h" />
     <ClInclude Include="..\..\Include\PGE\Types\PolymorphicHeap.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Range.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Reference.h" />
+    <ClInclude Include="..\..\Include\PGE\Types\TemplateString.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Types.h" />
     <ClInclude Include="..\..\Libraries\SPIRV-Reflect\spirv_reflect.h" />
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h" />

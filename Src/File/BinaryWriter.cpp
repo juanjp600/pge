@@ -19,8 +19,7 @@ template<> void BinaryWriter::write(const String& val) {
     validate();
 }
 
-// TODO: C++20 range.
-void BinaryWriter::writeBytes(const byte* data, size_t amount) {
-    stream.write((char*)data, amount);
+void BinaryWriter::writeBytes(const std::span<byte>& data) {
+    stream.write((char*)data.data(), data.size());
     validate();
 }

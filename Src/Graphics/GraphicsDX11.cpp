@@ -7,15 +7,15 @@ using namespace PGE;
 // REMINDER: https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef
 
 GraphicsDX11::GraphicsDX11(const String& name, int w, int h, WindowMode wm, int x, int y)
-    : GraphicsSpecialized("DirectX 11", name, w, h, wm, x, y, (SDL_WindowFlags)0) {
+    : GraphicsSpecialized(name, w, h, wm, x, y, (SDL_WindowFlags)0) {
     if (windowMode == WindowMode::Fullscreen) {
         SDL_SetWindowBordered(getWindow(), SDL_bool::SDL_FALSE);
         SDL_Rect displayBounds;
         int displayIndex = SDL_GetWindowDisplayIndex(getWindow());
-        PGE_ASSERT(displayIndex >= 0, "Failed to determine display index (SDLERROR: " + String(SDL_GetError()) + ")");
+        asrt(displayIndex >= 0, "Failed to determine display index (SDLERROR: " + String(SDL_GetError()) + ")");
         int errorCode = SDL_GetDisplayBounds(displayIndex, &displayBounds);
-        PGE_ASSERT(errorCode == 0, "Failed to get display bounds (SDLERROR: " + String(SDL_GetError()) + ")");
-        PGE_ASSERT(displayBounds.w > 0 && displayBounds.h > 0, "Display bounds are invalid (" + String::from(displayBounds.w) + "x" + String::from(displayBounds.h) + ")");
+        asrt(errorCode == 0, "Failed to get display bounds (SDLERROR: " + String(SDL_GetError()) + ")");
+        asrt(displayBounds.w > 0 && displayBounds.h > 0, "Display bounds are invalid (" + String::from(displayBounds.w) + "x" + String::from(displayBounds.h) + ")");
         SDL_SetWindowSize(getWindow(), displayBounds.w, displayBounds.h);
         SDL_SetWindowPosition(getWindow(), 0, 0);
     }
@@ -98,14 +98,14 @@ void GraphicsDX11::setRenderTargets(const ReferenceVector<Texture>& renderTarget
     currentRenderTargetViews.clear();
     TextureDX11* maxSizeTexture = &(TextureDX11&)renderTargets[0].get();
     for (Reference<Texture> t : renderTargets) {
-        PGE_ASSERT(t->isRenderTarget(), "renderTargets includes non render target");
+        asrt(t->isRenderTarget(), "renderTargets includes non render target");
         currentRenderTargetViews.emplace_back(((TextureDX11&)t.get()).getRtv());
         if (t->getWidth()+ t->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
             maxSizeTexture = &(TextureDX11&)t.get();
         }
     }
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i]->getWidth() <= maxSizeTexture->getWidth() && renderTargets[i]->getHeight() <= maxSizeTexture->getHeight(),
+        asrt(renderTargets[i]->getWidth() <= maxSizeTexture->getWidth() && renderTargets[i]->getHeight() <= maxSizeTexture->getHeight(),
             "Render target sizes are incompatible (" + String::from(maxSizeTexture->getWidth()) + "x" + String::from(maxSizeTexture->getHeight()) + " vs " +
                                                        String::from(renderTargets[i]->getWidth()) + "x" + String::from(renderTargets[i]->getHeight()) + ")");
     }

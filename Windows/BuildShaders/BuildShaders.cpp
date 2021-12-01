@@ -44,14 +44,14 @@ static DXGI_FORMAT computeDxgiFormat(const D3D11_SIGNATURE_PARAMETER_DESC& param
             case D3D_REGISTER_COMPONENT_FLOAT32: { return DXGI_FORMAT_R32G32B32A32_FLOAT; }
         }
     }
-    throw PGE_CREATE_EX("Unsupported DXGI format (" + String::from(paramDesc.Mask) + ", " + String::from<int>(paramDesc.ComponentType) + ")");
+    throw Exception("Unsupported DXGI format (" + String::from(paramDesc.Mask) + ", " + String::from<int>(paramDesc.ComponentType) + ")");
 }
 
 class ReflectionInfo {
     public:
         ReflectionInfo(ID3DBlob* shader) {
             HRESULT hr = D3DReflect(shader->GetBufferPointer(), shader->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection);
-            PGE_ASSERT(SUCCEEDED(hr), "D3DReflect failed: HRESULT " + String::from(hr));
+            asrt(SUCCEEDED(hr), "D3DReflect failed: HRESULT " + String::from(hr));
         }
 
         ReflectionInfo(const ReflectionInfo& other) {
@@ -120,7 +120,7 @@ static void generateDXReflectionInformation(const FilePath& path, const CompileR
         vsInfo->GetInputParameterDesc(i, &vsParamDesc);
 
         auto it = vsInputStruct.findMember(vsParamDesc.SemanticName, vsParamDesc.SemanticIndex);
-        PGE_ASSERT(it != vsInputStruct.members.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::from(vsParamDesc.SemanticIndex) + ")");
+        asrt(it != vsInputStruct.members.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::from(vsParamDesc.SemanticIndex) + ")");
         writer.write<String>(it->name);
         writer.write<String>(vsParamDesc.SemanticName);
         writer.write<byte>((byte)vsParamDesc.SemanticIndex);
@@ -160,10 +160,10 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
             failure += (char*)errorBlob->GetBufferPointer();
             errorBlob->Release();
         }
-        throw PGE_CREATE_EX(failure);
+        throw Exception(failure);
     } else {
         BinaryWriter writer(path);
-        writer.writeBytes((byte*)result.compiledD3dBlob->GetBufferPointer(), (int)result.compiledD3dBlob->GetBufferSize());
+        writer.writeBytes(std::span((byte*)result.compiledD3dBlob->GetBufferPointer(), result.compiledD3dBlob->GetBufferSize()));
 
         CompileResult::extractFunctionData(hlsl, dxEntryPoint, result);
         std::vector<CompileResult::Function> funcs = CompileResult::extractFunctions(hlsl);

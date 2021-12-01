@@ -49,10 +49,10 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
     textureCount = reader.read<u32>();
 
     std::vector<byte> vertexShaderBytecode = (path + "vertex.dxbc").readBytes();
-    PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
+    asrt(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
 
     std::vector<byte> fragmentShaderBytecode = (path + "fragment.dxbc").readBytes();
-    PGE_ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str() + ")");
+    asrt(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str() + ")");
 
     dxVertexShader = resourceManager.addNewResource<D3D11VertexShader>(dxDevice, vertexShaderBytecode);
     dxFragmentShader = resourceManager.addNewResource<D3D11PixelShader>(dxDevice, fragmentShaderBytecode);
@@ -89,7 +89,7 @@ int ShaderDX11::dxgiFormatToByteSize(DXGI_FORMAT dxgiFormat) {
         case DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT: { return sizeof(float) * 3; }
         case DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT: { return sizeof(float) * 4; }
         default: {
-            throw PGE_CREATE_EX("Unsupported DXGI_FORMAT: " + String::from<int>(dxgiFormat));
+            throw Exception("Unsupported DXGI_FORMAT: " + String::from<int>(dxgiFormat));
         }
     }
 }

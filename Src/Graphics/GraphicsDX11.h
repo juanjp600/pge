@@ -21,7 +21,7 @@ enum ZBufferStateIndex {
     DISABLED = 2
 };
 
-class GraphicsDX11 : public GraphicsSpecialized<ShaderDX11, MeshDX11, TextureDX11> {
+class GraphicsDX11 : public GraphicsSpecialized<"DirectX 11", ShaderDX11, MeshDX11, TextureDX11> {
     public:
         GraphicsDX11(const String& name, int w, int h, WindowMode wm, int x, int y);
 

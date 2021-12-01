@@ -1,5 +1,5 @@
-#ifndef PGE_TEXTWRITER_H_DEFINED
-#define PGE_TEXTWRITER_H_DEFINED
+#ifndef PGE_TEXTWRITER_H_INCLUDED
+#define PGE_TEXTWRITER_H_INCLUDED
 
 #include <PGE/File/AbstractIO.h>
 
@@ -31,4 +31,4 @@ class TextWriter : private AbstractIO<std::ofstream> {
 
 }
 
-#endif // PGE_TEXTWRITER_H_DEFINED
+#endif // PGE_TEXTWRITER_H_INCLUDED

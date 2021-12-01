@@ -188,7 +188,7 @@ class String {
             bool succ;
             T t = to<T>(succ);
             // TODO: C++20?
-            //PGE_ASSERT(succ, "Failed to convert");
+            //asrt(succ, "Failed to convert");
             return t;
         }
 
@@ -197,7 +197,7 @@ class String {
         I binToInt() const {
             bool succ;
             I t = binToInt<I>(succ);
-            //PGE_ASSERT(succ, "Failed to convert");
+            //asrt(succ, "Failed to convert");
             return t;
         }
 
@@ -206,7 +206,7 @@ class String {
         I octToInt() const {
             bool succ;
             I t = octToInt<I>(succ);
-            //PGE_ASSERT(succ, "Failed to convert");
+            //asrt(succ, "Failed to convert");
             return t;
         }
 
@@ -215,7 +215,7 @@ class String {
         I hexToInt() const {
             bool succ;
             I t = hexToInt<I>(succ);
-            //PGE_ASSERT(succ, "Failed to convert");
+            //asrt(succ, "Failed to convert");
             return t;
         }
 

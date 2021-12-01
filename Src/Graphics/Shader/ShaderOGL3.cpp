@@ -8,11 +8,11 @@ ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), reso
     graphics.takeGlContext();
 
     String vertexSource = (path + "vertex.glsl").readText();
-    PGE_ASSERT(!vertexSource.isEmpty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
+    asrt(!vertexSource.isEmpty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
     glVertexShader = resourceManager.addNewResource<GLShader>(GL_VERTEX_SHADER, vertexSource);
 
     String fragmentSource = (path + "fragment.glsl").readText();
-    PGE_ASSERT(!fragmentSource.isEmpty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
+    asrt(!fragmentSource.isEmpty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
     glFragmentShader = resourceManager.addNewResource<GLShader>(GL_FRAGMENT_SHADER, fragmentSource);
 
     glShaderProgram = resourceManager.addNewResource<GLProgram>(std::vector{ glVertexShader.get(), glFragmentShader.get() });
@@ -196,7 +196,7 @@ int ShaderOGL3::glSizeToByteSize(GLenum type, int size) const {
             retVal *= sizeof(GLfloat) * 4 * 4;
         } break;
         default: {
-            throw PGE_CREATE_EX("Unsupported OpenGL datatype: " + String::from(type));
+            throw Exception("Unsupported OpenGL datatype: " + String::from(type));
         } break;
     }
     return retVal;
@@ -220,7 +220,7 @@ GLenum ShaderOGL3::parsedTypeToGlType(const String& parsedType) {
     } else if (parsedType.equals("uint")) {
         return GL_UNSIGNED_INT;
     } else {
-        throw PGE_CREATE_EX("Unsupported GLSL datatype: "+parsedType);
+        throw Exception("Unsupported GLSL datatype: "+parsedType);
     }
 }
 
@@ -248,7 +248,7 @@ void ShaderOGL3::decomposeGlType(GLenum compositeType, GLenum& elemType, int& el
             elemType = GL_FLOAT; elemCount = 4 * 4;
         } break;
         default: {
-            throw PGE_CREATE_EX("Unsupported OpenGL datatype: " + String::from(compositeType));
+            throw Exception("Unsupported OpenGL datatype: " + String::from(compositeType));
         }
     }
 }
@@ -267,7 +267,7 @@ void ShaderOGL3::useShader() {
         glEnableVertexAttribArray(glAttribLocation.location);
         glVertexAttribPointer(glAttribLocation.location, glAttribLocation.elementCount, glAttribLocation.elementType, GL_FALSE, vertexLayout.getElementSize(), ptr + locationAndSizeInBuffer.location);
         glError = glGetError();
-        PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + String::hexFromInt(key.hash) + ")");
+        asrt(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + String::hexFromInt(key.hash) + ")");
     }
 
     for (auto& [_, constant] : vertexShaderConstants) {
@@ -371,7 +371,7 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
     }
 
     glError = glGetError();
-    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to set uniform value (GLERROR: " + String::from(glError) +")");
+    asrt(glError == GL_NO_ERROR, "Failed to set uniform value (GLERROR: " + String::from(glError) +")");
 }
 
 ShaderOGL3::GlAttribLocation::GlAttribLocation(GLint loc, GLenum elemType, int elemCount) {
