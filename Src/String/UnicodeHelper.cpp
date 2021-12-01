@@ -32,7 +32,7 @@ char16 Unicode::utf8ToWChar(const char* cbuffer, int codepointLen) {
     } else {
         // Decode first byte by skipping all bits that indicate the length of the codepoint.
         char16 newChar = cbuffer[0] & (0x7f >> codepointLen);
-        for (int j = 1; j < codepointLen; j++) {
+        for (int j : Range(1, codepointLen)) {
             // Decode all of the following bytes, fixed 6 bits per byte.
             newChar = (newChar << 6) | (cbuffer[j] & 0x3f);
         }
@@ -65,7 +65,7 @@ byte Unicode::wCharToUtf8(char16 chr, char* result) {
     // the first byte isn't enough to fit the remaining bits,
     // add another byte.
     char firstByte = 0x00;
-    for (int i = 0; i < len; i++) {
+    for (int i : Range(len)) {
         firstByte |= (0x1 << (7 - i));
     }
 
@@ -83,7 +83,7 @@ byte Unicode::wCharToUtf8(char16 chr, char* result) {
     if (result != nullptr) {
         result[len - 1] = firstByte;
         // Flip the result.
-        for (int i = 0; i < len / 2; i++) {
+        for (int i : Range(len / 2)) {
             char b = result[i];
             result[i] = result[len - 1 - i];
             result[len - 1 - i] = b;

@@ -42,7 +42,7 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 
     ID3D11Device* dxDevice = graphics.getDxDevice();
     dxSamplerState.reserve(samplerCount);
-    for (int _ : Range(samplerCount)) {
+    for (PGE_IT : Range(samplerCount)) {
         dxSamplerState.emplace_back(resourceManager.addNewResource<D3D11SamplerState>(dxDevice));
     }
 
@@ -64,14 +64,14 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferInfo>& constantBuffers) {
     u32 cBufferCount = reader.read<u32>();
 
-    for (int i = 0; i < (int)cBufferCount; i++) {
+    for (PGE_IT : Range(cBufferCount)) {
         String bufferName = reader.read<String>();
         u32 cBufferSize = reader.read<u32>();
         CBufferInfo& constantBuffer = constantBuffers.emplace_back(graphics, bufferName, cBufferSize, resourceManager);
 
         String varName;
         u32 varCount = reader.read<u32>();
-        for (int j = 0; j < (int)varCount; j++) {
+        for (PGE_IT : Range(varCount)) {
             varName = String();
             reader.readStringInto(varName);
             u32 varOffset = reader.read<u32>();
@@ -116,12 +116,12 @@ Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
 void ShaderDX11::useShader() {
     ID3D11DeviceContext* dxContext = graphics.getDxContext();
 
-    for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
+    for (UINT i : Range((UINT)vertexConstantBuffers.size())) {
         vertexConstantBuffers[i].update();
         dxContext->VSSetConstantBuffers(i,1,&vertexConstantBuffers[i].getDxCBuffer());
     }
 
-    for (int i = 0; i < (int)fragmentConstantBuffers.size(); i++) {
+    for (UINT i : Range((UINT)fragmentConstantBuffers.size())) {
         fragmentConstantBuffers[i].update();
         dxContext->PSSetConstantBuffers(i,1,&fragmentConstantBuffers[i].getDxCBuffer());
     }

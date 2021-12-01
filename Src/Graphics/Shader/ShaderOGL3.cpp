@@ -39,7 +39,7 @@ void ShaderOGL3::extractVertexUniforms(const String& vertexSource) {
     std::vector<ParsedShaderVar> vertexUniforms;
     extractShaderVars(vertexSource, "uniform", vertexUniforms);
     std::vector<StructuredData::ElemLayout::Entry> layoutEntries;
-    for (int i = 0; i < (int)vertexUniforms.size(); i++) {
+    for (size_t i : Range(vertexUniforms.size())) {
         int arrSize = 1; //TODO: add array support
         GLenum glType = parsedTypeToGlType(vertexUniforms[i].type);
         int byteSize = glSizeToByteSize(glType, arrSize);
@@ -66,7 +66,7 @@ void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
     extractShaderVars(vertexSource, "in", parsedAttribs);
 
     std::vector<StructuredData::ElemLayout::Entry> layoutEntries;
-    for (int i = 0; i < (int)parsedAttribs.size(); i++) {
+    for (size_t i : Range(parsedAttribs.size())) {
         String attrName = parsedAttribs[i].name;
         String sanitizedAttrName = attrName;
         if (sanitizedAttrName.findFirst(vertexInputPrefix) == sanitizedAttrName.begin()) {
@@ -95,7 +95,7 @@ void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
     std::vector<ParsedShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource, "uniform", fragmentUniforms);
     std::vector<StructuredData::ElemLayout::Entry> layoutEntries;
-    for (int i = 0; i < (int)fragmentUniforms.size(); i++) {
+    for (size_t i : Range(fragmentUniforms.size())) {
         int arrSize = 1; //TODO: add array support
         GLenum glType = parsedTypeToGlType(fragmentUniforms[i].type);
         int byteSize = glSizeToByteSize(glType, arrSize);
@@ -103,7 +103,7 @@ void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
     }
     fragmentUniformData = StructuredData(StructuredData::ElemLayout(layoutEntries), 1);
 
-    for (int i = 0; i < (int)fragmentUniforms.size(); i++) {
+    for (size_t i : Range(fragmentUniforms.size())) {
         int arrSize = 1; //TODO: add array support
         ConstantOGL3 constant(
             graphics,
@@ -121,13 +121,13 @@ void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
         }
     }
 
-    textureCount = samplerConstants.size();
+    textureCount = (int)samplerConstants.size();
 }
 
 void ShaderOGL3::extractFragmentOutputs(const String fragmentSource) {
     std::vector<ParsedShaderVar> fragmentOutputs;
     extractShaderVars(fragmentSource, "out", fragmentOutputs);
-    for (int i = 0; i < (int)fragmentOutputs.size(); i++) {
+    for (GLuint i : Range((GLuint)fragmentOutputs.size())) {
         glBindFragDataLocation(glShaderProgram, i, fragmentOutputs[i].name.cstr());
     }
 }

@@ -27,7 +27,7 @@ TextReader::TextReader(const FilePath& file, Encoding enc)
         encoding = enc;
         rewind = 3;
     }
-    for (int i = 0; i < rewind; i++) {
+    for (PGE_IT : Range(rewind)) {
         stream.rdbuf()->sungetc();
     }
 }
@@ -81,7 +81,7 @@ char16 TextReader::readChar() {
             } else {
                 char chs[3];
                 chs[0] = (char)ch;
-                for (int i = 1; i < codepoint; i++) {
+                for (int i : Range(1, codepoint)) {
                     int newCh = stream.rdbuf()->sbumpc();
                     if (newCh == EOF) {
                         reportEOF();
@@ -134,7 +134,7 @@ void TextReader::spitOut(char16 ch) {
             throw Exception(INVALID_ENCODING);
         }
     }
-    for (int i = 0; i < backwards; i++) {
+    for (PGE_IT : Range(backwards)) {
         // Fuck you, pubseekoff.
         stream.rdbuf()->sungetc();
     }

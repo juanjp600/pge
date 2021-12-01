@@ -9,10 +9,9 @@ void Mesh::setGeometry(StructuredData&& verts, const std::vector<Line>& lines) {
 
     vertices = std::move(verts);
     indices.clear();
-    indices.reserve(lines.size() * 2);
-    for (int i = 0; i < lines.size(); i++) {
-        indices.emplace_back(lines[i].indices[0]);
-        indices.emplace_back(lines[i].indices[1]);
+    indices.resize(lines.size() * 2);
+    for (size_t i : Range(lines.size())) {
+        memcpy(indices.data() + 2 * i, lines[i].indices, 2 * sizeof(u32));
     }
     primitiveType = PrimitiveType::LINE;
 
@@ -24,11 +23,9 @@ void Mesh::setGeometry(StructuredData&& verts, const std::vector<Triangle>& tria
 
     vertices = std::move(verts);
     indices.clear();
-    indices.reserve(triangles.size() * 3);
-    for (int i = 0; i < triangles.size(); i++) {
-        indices.emplace_back(triangles[i].indices[0]);
-        indices.emplace_back(triangles[i].indices[1]);
-        indices.emplace_back(triangles[i].indices[2]);
+    indices.resize(triangles.size() * 3);
+    for (size_t i : Range(triangles.size())) {
+        memcpy(indices.data() + 3 * i, triangles[i].indices, 3 * sizeof(u32));
     }
     primitiveType = PrimitiveType::TRIANGLE;
 

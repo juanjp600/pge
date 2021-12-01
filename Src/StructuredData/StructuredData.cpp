@@ -12,9 +12,9 @@ StructuredData::ElemLayout::LocationAndSize::LocationAndSize(int loc, int sz) {
 
 StructuredData::ElemLayout::ElemLayout(const std::vector<Entry>& entrs) {
     int currLocation = 0;
-    for (int i = 0; i < entrs.size(); i++) {
-        entries.emplace(entrs[i].name, LocationAndSize(currLocation, entrs[i].size));
-        currLocation += entrs[i].size;
+    for (const auto& entry : entrs) {
+        entries.emplace(entry.name, LocationAndSize(currLocation, entry.size));
+        currLocation += entry.size;
     }
     elementSize = currLocation;
 }

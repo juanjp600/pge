@@ -2,6 +2,7 @@
 #define PGE_RESOURCEMANAGER_H_INCLUDED
 
 #include <list>
+#include <ranges>
 
 #include "Resource.h"
 #include "RawWrapper.h"
@@ -26,8 +27,8 @@ class ResourceManager {
 
     public:
         ~ResourceManager() {
-            for (auto it = resources.rbegin(); it != resources.rend(); it++) {
-                delete* it;
+            for (ResourceBase* res : resources | std::views::reverse) {
+                delete res;
             }
         }
 

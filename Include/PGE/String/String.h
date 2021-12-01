@@ -13,6 +13,7 @@
 #endif
 
 #include <PGE/Types/Types.h>
+#include <PGE/Types/Range.h>
 
 namespace PGE {
 
@@ -91,13 +92,13 @@ class String {
                 const ActualIterator operator-(int steps) const { ActualIterator ret(*this); ret -= steps; return ret; }
                 void operator+=(int steps) {
                     if (steps < 0) { *this -= -steps; }
-                    for (int i = 0; i < steps; i++) {
+                    for (PGE_IT : Range(steps)) {
                         ++(*this);
                     }
                 }
                 void operator-=(int steps) {
                     if (steps < 0) { *this += -steps; }
-                    for (int i = 0; i < steps; i++) {
+                    for (PGE_IT : Range(steps)) {
                         --(*this);
                     }
                 }

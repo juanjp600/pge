@@ -419,7 +419,7 @@ bool String::equalsIgnoreCase(const String& other) const {
     std::queue<char16> queue[2];
 
     // Feed first char.
-    for (int i = 0; i < 2; i++) {
+    for (int i : Range(2)) {
         fold(buf[i], queue[i]);
     }
 
@@ -433,7 +433,7 @@ bool String::equalsIgnoreCase(const String& other) const {
         }
 
         // Try refilling.
-        for (int i = 0; i < 2; i++) {
+        for (int i : Range(2)) {
             fold(buf[i], queue[i]);
         }
     }
@@ -515,8 +515,8 @@ const std::vector<char16> String::wstr() const {
         chars.reserve(data->_strLength);
     }
     // Convert all the codepoints to wchars.
-    for (Iterator it = begin(); it != end(); it++) {
-        chars.emplace_back(*it);
+    for (char16 ch : *this) {
+        chars.emplace_back(ch);
     }
     chars.emplace_back(L'\0');
     return chars;
@@ -937,7 +937,7 @@ const String String::reverse() const {
     char* buf = ret.cstrNoConst();
     buf[len] = '\0';
     buf += len;
-    for (int i = 0; i < len;) {
+    for (int& i : Range(len)) {
         int codepoint = Unicode::measureCodepoint(cstr()[i]);
         buf -= codepoint;
         memcpy(buf, cstr() + i, codepoint);
@@ -955,7 +955,7 @@ const String String::multiply(int count, const String& separator) const {
     String ret(newLength);
     char* buf = ret.cstrNoConst();
     buf[newLength] = '\0';
-    for (int i = 0; i < count; i++) {
+    for (int i : Range(count)) {
         if (i != 0) {
             memcpy(buf, separator.cstr(), sepLength);
             buf += sepLength;
@@ -998,7 +998,7 @@ const String String::join(const std::vector<String>& vect, const String& separat
     }
 
     String retVal = vect[0];
-    for (int i = 1; i < (int)vect.size(); i++) {
+    for (int i : Range(1, (int)vect.size())) {
         retVal += separator + vect[i];
     }
 
@@ -1055,7 +1055,7 @@ String String::unHex() const {
                 }
             }
         } else {
-            for (int j = 0; j < codepoint; j++) {
+            for (int j : Range(codepoint)) {
                 retBuf[i + j] = buf[i + j];
             }
         }
