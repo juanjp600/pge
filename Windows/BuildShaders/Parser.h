@@ -1,11 +1,11 @@
 #ifndef BUILDSHADERS_PARSER_H_INCLUDED
 #define BUILDSHADERS_PARSER_H_INCLUDED
 
+#include <functional>
+
 #include <PGE/Exception/Exception.h>
 #include <PGE/String/String.h>
 #include <PGE/String/Unicode.h>
-
-#include <functional>
 
 namespace Parser {
     bool isNotDigitOrSemicolon(PGE::char16 chr);

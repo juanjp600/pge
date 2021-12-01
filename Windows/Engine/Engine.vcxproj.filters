@@ -368,5 +368,8 @@
     <ClInclude Include="..\..\Include\PGE\Types\TemplateString.h">
       <Filter>Include\Types</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Types\TemplateEnableIf.h">
+      <Filter>Include\Types</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

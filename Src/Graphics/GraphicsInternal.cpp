@@ -31,7 +31,7 @@ SDL_Window* GraphicsInternal::getWindow() const {
 
 GraphicsInternal::SDLWindow::SDLWindow(const String& title, int x, int y, int width, int height, u32 flags) {
     resource = SDL_CreateWindow(title.cstr(), x, y, width, height, flags);
-    PGE_ASSERT(resource != nullptr, "Failed to create SDL window (SDLERROR: " + String(SDL_GetError()) + ")");
+    assert(resource != nullptr, "Failed to create SDL window (SDLERROR: " + String(SDL_GetError()) + ")");
 }
 
 GraphicsInternal::SDLWindow::~SDLWindow() {
@@ -82,7 +82,7 @@ Texture* Texture::createBlank(Graphics& gfx, int w, int h, Format fmt, bool mipm
 }
 
 Texture* Texture::load(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) {
-    PGE_ASSERT(buffer != nullptr, "Tried to load texture from nullptr");
+    assert(buffer != nullptr, "Tried to load texture from nullptr");
     return ((GraphicsInternal&)gfx).loadTexture(w, h, buffer, fmt, mipmaps);
 }
 

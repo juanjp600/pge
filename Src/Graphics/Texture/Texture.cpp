@@ -21,7 +21,7 @@ int Texture::getBytesPerPixel(Texture::Format fmt) {
         }
         default:
         {
-            throw PGE_CREATE_EX("Invalid format");
+            throw Exception("Invalid format");
         }
     }
 }

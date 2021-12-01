@@ -52,7 +52,7 @@ class BinaryReader : private AbstractIO<std::ifstream> {
         template <std::default_initializable T>
         const T read() {
             T val;
-            PGE_ASSERT(tryRead<T>(val), BAD_STREAM);
+            assert(tryRead<T>(val), BAD_STREAM);
             return val;
         }
 

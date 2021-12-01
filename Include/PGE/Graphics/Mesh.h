@@ -65,6 +65,8 @@ class Mesh : private PolymorphicHeap {
 
     private:
         bool mustReuploadInternalData = true;
+
+        void assertMaterialLayout(const StructuredData& verts, const std::source_location& location = std::source_location::current());
 };
 
 }

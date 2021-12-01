@@ -11,7 +11,7 @@ static DXGI_FORMAT getDXFormat(Texture::Format fmt) {
         case RGBA32: { return DXGI_FORMAT_R8G8B8A8_UNORM; }
         case R32F: { return DXGI_FORMAT_R32_FLOAT; }
         case R8: { return DXGI_FORMAT_R8_UNORM; }
-        default: { throw PGE_CREATE_EX("Invalid format"); }
+        default: { throw Exception("Invalid format"); }
     }
 }
 
@@ -25,7 +25,7 @@ static DXGI_FORMAT getDXFormat(Texture::CompressedFormat fmt) {
         case BC5: { return DXGI_FORMAT_BC5_UNORM; }
         case BC6: { return DXGI_FORMAT_BC6H_SF16; }
         case BC7: { return DXGI_FORMAT_BC7_UNORM; }
-        default: { throw PGE_CREATE_EX("Invalid compressed format"); }
+        default: { throw Exception("Invalid compressed format"); }
     }
 }
 
@@ -44,7 +44,7 @@ static int getBitsPerBlockOnLine(Texture::CompressedFormat fmt) {
             return 4;
         }
         default: {
-            throw PGE_CREATE_EX("Invalid compressed format");
+            throw Exception("Invalid compressed format");
         }
     }
 }

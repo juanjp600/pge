@@ -1,9 +1,12 @@
 #include "UnicodeHelper.h"
 
 #include <PGE/Exception/Exception.h>
-#define PGE_ASSERT_CHAR(chr) char16 PGE_TMP = chr; PGE_ASSERT(PGE_TMP != 0 && PGE_TMP != 0xFFFF && PGE_TMP != 0xFFFE, "Invalid character (" + String::hexFromInt<u16>(PGE_TMP) + ")")
 
 using namespace PGE;
+
+static void assertChar(char16 chr, const std::source_location& location = std::source_location::current()) {
+    assert(chr != 0 && chr != 0xFFFF && chr != 0xFFFE, "Invalid character (" + String::hexFromInt<u16>(chr) + ")", location);
+}
 
 byte Unicode::measureCodepoint(byte chr) {
     if ((chr & 0x80) == 0x00) {
@@ -33,7 +36,7 @@ char16 Unicode::utf8ToWChar(const char* cbuffer, int codepointLen) {
             // Decode all of the following bytes, fixed 6 bits per byte.
             newChar = (newChar << 6) | (cbuffer[j] & 0x3f);
         }
-        PGE_ASSERT_CHAR(newChar);
+        assertChar(newChar);
         return newChar;
     }
 }
@@ -41,7 +44,7 @@ char16 Unicode::utf8ToWChar(const char* cbuffer, int codepointLen) {
 
 // TODO: Take into account UTF-16 surrogate pairs.
 byte Unicode::wCharToUtf8(char16 chr, char* result) {
-    PGE_ASSERT_CHAR(chr);
+    assertChar(chr);
 
     // Fits in standard ASCII, just return the char as-is.
     if ((chr & 0x7f) == chr) {

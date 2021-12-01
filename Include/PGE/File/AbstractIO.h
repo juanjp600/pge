@@ -1,5 +1,5 @@
-#ifndef PGE_INTERNAL_ABSTRACTIO_H_DEFINED
-#define PGE_INTERNAL_ABSTRACTIO_H_DEFINED
+#ifndef PGE_INTERNAL_ABSTRACTIO_H_INCLUDED
+#define PGE_INTERNAL_ABSTRACTIO_H_INCLUDED
 
 #include <fstream>
 
@@ -31,15 +31,15 @@ class AbstractIO {
         T stream;
 
         AbstractIO(const PGE::FilePath& file, std::ios::openmode mode = std::ios::binary) {
-            PGE_ASSERT(file.isValid(), INVALID_FILEPATH);
+            assert(file.isValid(), INVALID_FILEPATH);
             stream.open(file.str().cstr(), mode);
-            PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
+            assert(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
         }
 
         void validate() {
             if (!stream.good()) {
                 stream.close();
-                throw PGE_CREATE_EX(BAD_STREAM);
+                throw Exception(BAD_STREAM);
             }
         }
 
@@ -53,10 +53,10 @@ class AbstractIO {
         /// @throws #PGE::Exception if closing was not wholly successful.
         void earlyClose() {
             stream.close();
-            PGE_ASSERT(stream.good(), BAD_STREAM);
+            assert(stream.good(), BAD_STREAM);
         }
 };
 
 }
 
-#endif // PGE_INTERNAL_ABSTRACTIO_H_DEFINED
+#endif // PGE_INTERNAL_ABSTRACTIO_H_INCLUDED

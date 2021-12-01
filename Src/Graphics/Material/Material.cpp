@@ -6,7 +6,7 @@
 using namespace PGE;
 
 Material::Material(Graphics&, Shader& sh, const ReferenceVector<Texture>& texs, Opaque o) {
-    PGE_ASSERT(sh.getTextureCount() == texs.size(), "Mismatched texture count");
+    assert(sh.getTextureCount() == texs.size(), "Mismatched texture count");
 
     shader = &sh;
     textures = texs;
@@ -26,6 +26,6 @@ int Material::getTextureCount() const {
 }
 
 const Texture& Material::getTexture(int index) const {
-    PGE_ASSERT(index >= 0 && index < getTextureCount(), "Texture index out of bounds");
+    assert(index >= 0 && index < getTextureCount(), "Texture index out of bounds");
     return textures.at(index);
 }
