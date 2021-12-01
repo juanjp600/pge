@@ -1,6 +1,6 @@
 var class_p_g_e_1_1_resource_manager =
 [
-    [ "\u202A~ResourceManager", "class_p_g_e_1_1_resource_manager.html#a730fa82e567d319b3783abb5d7173f0c", null ],
+    [ "\u202A~ResourceManager", "class_p_g_e_1_1_resource_manager.html#a7fcd16ccdd69b2565188cbef65b9ce9e", null ],
     [ "\u202Aadd", "class_p_g_e_1_1_resource_manager.html#a443b07872d0467c874e5f32097757e40", null ],
     [ "\u202AaddNew", "class_p_g_e_1_1_resource_manager.html#a1c4447e1bcebe6adcaaff252bcc6de0f", null ],
     [ "\u202AaddNewResource", "class_p_g_e_1_1_resource_manager.html#a3addce5dd4f3624c31ec106bfdf02527", null ],
