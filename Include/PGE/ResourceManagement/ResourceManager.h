@@ -2,7 +2,6 @@
 #define PGE_RESOURCEMANAGER_H_INCLUDED
 
 #include <list>
-#include <ranges>
 
 #include "Resource.h"
 #include "RawWrapper.h"
@@ -21,13 +20,14 @@ class ResourceManager {
         template <std::derived_from<ResourceBase> T, typename... Args>
         typename T::View add(Args&&... args) {
             T* res = new T(std::forward<Args>(args)...);
-            resources.emplace_back(res);
-            return ResourceView(res->get(), --resources.end());
+            resources.emplace_front(res);
+            return ResourceView(res->get(), resources.begin());
         }
 
     public:
         ~ResourceManager() {
-            for (ResourceBase* res : resources | std::views::reverse) {
+            // We do this because destruction order is not specified.
+            for (ResourceBase* res : resources) {
                 delete res;
             }
         }
