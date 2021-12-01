@@ -144,6 +144,8 @@ class String {
             memcpy(cstrNoConst(), cstri, len + 1);
         }
 
+        String(const char8_t* cstr);
+
         String(const std::string& cppstr);
         String(const char16* wstr);
 #if defined(__APPLE__) && defined(__OBJC__)
@@ -180,6 +182,7 @@ class String {
         /// 
         /// O(1)
         const char* cstr() const;
+        const char8_t* c8str() const;
         const std::vector<char16> wstr() const;
 
         template <typename T> const T to(bool& success) const;
@@ -187,7 +190,7 @@ class String {
         const T to() const {
             bool succ;
             T t = to<T>(succ);
-            // TODO: C++20?
+            // TODO: C++20 Modules.
             //asrt(succ, "Failed to convert");
             return t;
         }
@@ -255,6 +258,8 @@ class String {
         //String unHex() const;
 
         u64 getHashCode() const;
+
+        const std::weak_ordering compare(const String& other) const;
 
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;

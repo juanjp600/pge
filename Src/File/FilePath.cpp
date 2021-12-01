@@ -4,8 +4,6 @@
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
-#else
-#include <filesystem>
 #endif
 
 #ifdef _WIN32
@@ -30,12 +28,12 @@ static const String sanitizeFileSeperator(const String& str) {
 // Already sanitized.
 static const String& getResourceStr() {
     static String resourceStr;
-    if (resourceStr.byteLength() == 0) {
+    if (resourceStr.isEmpty()) {
 #if defined(__APPLE__) && defined(__OBJC__)
         NSBundle* bundle = [NSBundle mainBundle];
         resourceStr = String(bundle.resourcePath);
 #else
-        resourceStr = String(std::filesystem::current_path().c_str());
+        resourceStr = String(std::filesystem::current_path().generic_u8string().c_str());
 #endif
         resourceStr = sanitizeFileSeperator(resourceStr);
         resourceStr += '/';
@@ -66,7 +64,10 @@ const FilePath& FilePath::getDataPath() {
 
 FilePath::FilePath(const String& str) noexcept {
     name = str;
-    valid = true;
+}
+
+FilePath::FilePath(const std::filesystem::path& path) {
+    name = path.generic_u8string().c_str();
 }
 
 FilePath::FilePath() noexcept {
@@ -75,7 +76,7 @@ FilePath::FilePath() noexcept {
 }
 
 const FilePath FilePath::fromStr(const String& str) {
-    std::filesystem::path pth(str.cstr());
+    std::filesystem::path pth(str.c8str());
     String sanitizedStr = sanitizeFileSeperator(str);
     if (pth.is_absolute()) {
         return FilePath(sanitizedStr);
@@ -91,7 +92,7 @@ bool FilePath::isValid() const noexcept {
 bool FilePath::isDirectory() const {
     asrt(valid, INVALID_STR);
     std::error_code err;
-    bool isDir = std::filesystem::is_directory(str().cstr(), err);
+    bool isDir = std::filesystem::is_directory(str().c8str(), err);
     asrt(err.value() == 0, "Couldn't check if path is directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
     return isDir;
 }
@@ -133,7 +134,7 @@ const FilePath FilePath::trimExtension() const {
 bool FilePath::exists() const {
     asrt(valid, INVALID_STR);
     std::error_code err;
-    bool exists = std::filesystem::exists(str().cstr(), err);
+    bool exists = std::filesystem::exists(str().c8str(), err);
     asrt(err.value() == 0, "Couldn't check if directory exists (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
     return exists;
 }
@@ -141,7 +142,7 @@ bool FilePath::exists() const {
 u64 FilePath::getLastModifyTime() const {
     asrt(valid, INVALID_STR);
     std::error_code err;
-    std::filesystem::file_time_type time = std::filesystem::last_write_time(str().cstr(), err);
+    std::filesystem::file_time_type time = std::filesystem::last_write_time(str().c8str(), err);
     asrt(err.value() == 0, "Couldn't check directory modify time (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
     return time.time_since_epoch().count();
 }
@@ -149,7 +150,7 @@ u64 FilePath::getLastModifyTime() const {
 bool FilePath::createDirectory() const {
     asrt(valid, INVALID_STR);
     std::error_code err;
-    bool created = std::filesystem::create_directories(str().wstr().data(), err);
+    bool created = std::filesystem::create_directories(str().c8str(), err);
     asrt(err.value() == 0, "Couldn't create directory (dir: " + str() + "; err: " + err.message() + " (" + PGE::String::from(err.value()) + "))");
     return created;
 }
@@ -157,9 +158,9 @@ bool FilePath::createDirectory() const {
 const std::vector<FilePath> FilePath::enumerateFolders() const {
     asrt(valid, INVALID_STR);
     std::vector<FilePath> folders;
-    for (const auto& it : std::filesystem::directory_iterator(str().cstr())) {
+    for (const auto& it : std::filesystem::directory_iterator(str().c8str())) {
         if (it.is_directory()) {
-            folders.emplace_back(FilePath::fromStr(it.path().c_str()));
+            folders.emplace_back(FilePath(it.path()));
         }
     }
     return folders;
@@ -169,15 +170,15 @@ const std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
     asrt(valid, INVALID_STR);
     std::vector<FilePath> files;
     if (recursive) {
-        for (const auto& it : std::filesystem::recursive_directory_iterator(str().cstr())) {
+        for (const auto& it : std::filesystem::recursive_directory_iterator(str().c8str())) {
             if (it.is_regular_file()) {
-                files.emplace_back(FilePath::fromStr(it.path().c_str()));
+                files.emplace_back(FilePath(it.path()));
             }
         }
     } else {
-        for (const auto& it : std::filesystem::directory_iterator(str().cstr())) {
+        for (const auto& it : std::filesystem::directory_iterator(str().c8str())) {
             if (it.is_regular_file()) {
-                files.emplace_back(FilePath::fromStr(it.path().c_str()));
+                files.emplace_back(FilePath(it.path()));
             }
         }
     }
@@ -211,7 +212,7 @@ const std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
 
 const std::vector<byte> FilePath::readBytes() const {
     asrt(valid, INVALID_STR);
-    std::ifstream file(str().cstr(), std::ios::ate | std::ios::binary);
+    std::ifstream file(str().c8str(), std::ios::ate | std::ios::binary);
     asrt(file.is_open(), "Couldn't read bytes from file (file: \"" + str() + "\")");
     std::vector<byte> bytes;
     size_t size = (size_t)file.tellg();

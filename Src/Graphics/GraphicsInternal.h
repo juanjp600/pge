@@ -26,9 +26,6 @@ class GraphicsInternal : public Graphics {
         NSWindow* getCocoaWindow() const;
 #endif
 
-        // TODO: The more appropriate template solution is available in C++20.
-        const String RENDERER_NAME;
-
         class SDLWindow : public Resource<SDL_Window*> {
             public:
                 SDLWindow(const String& title, int x, int y, int width, int height, u32 flags);

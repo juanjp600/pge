@@ -8,7 +8,7 @@
 
 namespace PGE {
 
-// TODO: C++20 Make monomorphic.
+// TODO: C++20 Modules make monomorphic.
 class InputManager : private PolymorphicHeap {
     public:
         static InputManager* create(const class Graphics& gfx);

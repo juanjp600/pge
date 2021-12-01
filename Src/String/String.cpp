@@ -171,6 +171,8 @@ String::String(const String& other) {
     copy(*this, other);
 }
 
+String::String(const char8_t* cstr) : String((const char*)cstr) { }
+
 String::String(const std::string& cppstr) {
     int len = (int)cppstr.size();
     reallocate(len);
@@ -375,12 +377,29 @@ u64 String::getHashCode() const {
     return data->_hashCode;
 }
 
+const std::weak_ordering String::compare(const String& other) const {
+    String::Iterator a = begin();
+    String::Iterator b = other.begin();
+    while (a != end() && b != other.end() && *a == *b) { a++; b++; }
+    if (a == end()) {
+        if (b == other.end()) {
+            return std::weak_ordering::equivalent;
+        } else {
+            return std::weak_ordering::greater;
+        }
+    } else if (b == other.end()) {
+        return std::weak_ordering::less;
+    } else {
+        return *a <=> *b;
+    }
+}
+
 bool String::equals(const String& other) const {
     if (chs == other.chs) { return true; }
     if (byteLength() != other.byteLength()) { return false; }
     if (data->_strLength >= 0 && other.data->_strLength >= 0 && length() != other.length()) { return false; }
     if (data->_hashCodeEvaluted && other.data->_hashCodeEvaluted) { return getHashCode() == other.getHashCode(); }
-    return strcmp(cstr(), other.cstr()) == 0;
+    return memcmp(cstr(), other.cstr(), byteLength()) == 0;
 }
 
 static void fold(const char*& buf, std::queue<char16>& queue) {
@@ -480,6 +499,10 @@ void String::reallocate(int size, bool copyOldChs) {
 
 const char* String::cstr() const {
     return chs;
+}
+
+const char8_t* String::c8str() const {
+    return (const char8_t*)chs;
 }
 
 char* String::cstrNoConst() {
@@ -622,8 +645,6 @@ PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned long long)
 
 template <std::floating_point F>
 const String String::fromFloatingPoint(F f) {
-    static_assert(std::is_floating_point<F>::value);
-
     const char* format;
     if constexpr (std::is_same<F, long double>::value) {
         format = "%fL";

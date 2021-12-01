@@ -30,7 +30,7 @@ struct String::OrderedKey {
     OrderedKey(const String& str) : str(str) { }
     const String str;
     const std::weak_ordering operator<=>(const OrderedKey& other) {
-        return strcmp(str.cstr(), other.str.cstr()) <=> 0;
+        return str.compare(other.str);
     }
 };
 
