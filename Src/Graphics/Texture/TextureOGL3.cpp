@@ -50,7 +50,7 @@ static void textureImage(int width, int height, const byte* buffer, Texture::For
 
     glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, buffer);
     GLenum glError = glGetError();
-    assert(glError == GL_NO_ERROR, "Failed to create texture (" + String::from(width) + "x" + String::from(height) + "; GLERROR: " + String::from(glError) + ")");
+    asrt(glError == GL_NO_ERROR, "Failed to create texture (" + String::from(width) + "x" + String::from(height) + "; GLERROR: " + String::from(glError) + ")");
 }
 
 static void applyTextureParameters(bool rt) {
@@ -72,7 +72,7 @@ TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, Format fmt) : Texture(w, h
     //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, glDepthbuffer);
 
     GLenum glError = glGetError();
-    assert(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
+    asrt(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
 }
 
 TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) : Texture(w, h, false, fmt), resourceManager(gfx) {
@@ -83,7 +83,7 @@ TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, const byte* buffer, Format
     applyTextureParameters(false);
 
     GLenum glError = glGetError();
-    assert(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
+    asrt(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
 }
 
 TextureOGL3::TextureOGL3(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt) : Texture(mipmaps[0].width, mipmaps[0].height, false, fmt), resourceManager(gfx) {
@@ -97,7 +97,7 @@ TextureOGL3::TextureOGL3(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Comp
     applyTextureParameters(false);
 
     GLenum glError = glGetError();
-    assert(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
+    asrt(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
 }
 
 GLuint TextureOGL3::getGlTexture() const {

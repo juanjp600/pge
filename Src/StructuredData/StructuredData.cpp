@@ -25,7 +25,7 @@ const StructuredData::ElemLayout::LocationAndSize& StructuredData::ElemLayout::g
 
 const StructuredData::ElemLayout::LocationAndSize& StructuredData::ElemLayout::getLocationAndSize(const String::Key& key) const {
     auto iter = entries.find(key);
-    assert(iter != entries.end(), "No entry with key \"" + String::hexFromInt(key.hash) + "\"");
+    asrt(iter != entries.end(), "No entry with key \"" + String::hexFromInt(key.hash) + "\"");
     return iter->second;
 }
 
@@ -80,15 +80,15 @@ const StructuredData::ElemLayout& StructuredData::getLayout() const {
 }
 
 int StructuredData::getDataIndex(int elemIndex, const String::Key& entry, int expectedSize) const {
-    assert(elemIndex >= 0, "Requested a negative element index (" + String::from(elemIndex) + ")");
+    asrt(elemIndex >= 0, "Requested a negative element index (" + String::from(elemIndex) + ")");
 
     int elemOffset = elemIndex * layout.getElementSize();
-    assert(elemOffset <= (size - layout.getElementSize()),
+    asrt(elemOffset <= (size - layout.getElementSize()),
         "Requested an element index greater than the number of elements ("
         + String::from(elemOffset) + " > " + String::from((int)(size - layout.getElementSize())) + ")");
 
     const ElemLayout::LocationAndSize& locAndSize = layout.getLocationAndSize(entry);
-    assert(locAndSize.size == expectedSize,
+    asrt(locAndSize.size == expectedSize,
         "Entry \"" + String::hexFromInt(entry.hash) + "\" size mismatch (expected " + String::from(locAndSize.size)
         + ", got " + String::from(expectedSize) + ")");
 

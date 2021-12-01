@@ -38,7 +38,7 @@ void Mesh::setGeometry(StructuredData&& verts, const std::vector<Triangle>& tria
 void Mesh::setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u32>&& inds) {
     assertMaterialLayout(verts);
     using enum PrimitiveType;
-    assert(type == LINE && inds.size() % 2 == 0 || type == TRIANGLE && inds.size() % 3 == 0,
+    asrt(type == LINE && inds.size() % 2 == 0 || type == TRIANGLE && inds.size() % 3 == 0,
             "Invalid primitive type or inadequate indices count");
 
     vertices = std::move(verts);
@@ -55,7 +55,7 @@ void Mesh::clearGeometry() {
 }
 
 void Mesh::setMaterial(Material* m) {
-    assert(
+    asrt(
         m == nullptr ||
         vertices.getDataSize() <= 0 ||
         m->getShader().getVertexLayout() == vertices.getLayout(),
@@ -92,7 +92,7 @@ Mesh::Triangle::Triangle(u32 a, u32 b, u32 c) {
 }
 
 void Mesh::assertMaterialLayout(const StructuredData& verts, const std::source_location& location) {
-    assert(material == nullptr
+    asrt(material == nullptr
         || verts.getDataSize() <= 0
         || material->getShader().getVertexLayout() == verts.getLayout(),
         "Material must be set before geometry can be set", location);

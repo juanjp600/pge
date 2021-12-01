@@ -12,10 +12,10 @@ GraphicsDX11::GraphicsDX11(const String& name, int w, int h, WindowMode wm, int 
         SDL_SetWindowBordered(getWindow(), SDL_bool::SDL_FALSE);
         SDL_Rect displayBounds;
         int displayIndex = SDL_GetWindowDisplayIndex(getWindow());
-        assert(displayIndex >= 0, "Failed to determine display index (SDLERROR: " + String(SDL_GetError()) + ")");
+        asrt(displayIndex >= 0, "Failed to determine display index (SDLERROR: " + String(SDL_GetError()) + ")");
         int errorCode = SDL_GetDisplayBounds(displayIndex, &displayBounds);
-        assert(errorCode == 0, "Failed to get display bounds (SDLERROR: " + String(SDL_GetError()) + ")");
-        assert(displayBounds.w > 0 && displayBounds.h > 0, "Display bounds are invalid (" + String::from(displayBounds.w) + "x" + String::from(displayBounds.h) + ")");
+        asrt(errorCode == 0, "Failed to get display bounds (SDLERROR: " + String(SDL_GetError()) + ")");
+        asrt(displayBounds.w > 0 && displayBounds.h > 0, "Display bounds are invalid (" + String::from(displayBounds.w) + "x" + String::from(displayBounds.h) + ")");
         SDL_SetWindowSize(getWindow(), displayBounds.w, displayBounds.h);
         SDL_SetWindowPosition(getWindow(), 0, 0);
     }
@@ -99,14 +99,14 @@ void GraphicsDX11::setRenderTargets(const ReferenceVector<Texture>& renderTarget
     currentRenderTargetViews.clear();
     TextureDX11* maxSizeTexture = &(TextureDX11&)renderTargets[0].get();
     for (Reference<Texture> t : renderTargets) {
-        assert(t->isRenderTarget(), "renderTargets includes non render target");
+        asrt(t->isRenderTarget(), "renderTargets includes non render target");
         currentRenderTargetViews.emplace_back(((TextureDX11&)t.get()).getRtv());
         if (t->getWidth()+ t->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
             maxSizeTexture = &(TextureDX11&)t.get();
         }
     }
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        assert(renderTargets[i]->getWidth() <= maxSizeTexture->getWidth() && renderTargets[i]->getHeight() <= maxSizeTexture->getHeight(),
+        asrt(renderTargets[i]->getWidth() <= maxSizeTexture->getWidth() && renderTargets[i]->getHeight() <= maxSizeTexture->getHeight(),
             "Render target sizes are incompatible (" + String::from(maxSizeTexture->getWidth()) + "x" + String::from(maxSizeTexture->getHeight()) + " vs " +
                                                        String::from(renderTargets[i]->getWidth()) + "x" + String::from(renderTargets[i]->getHeight()) + ")");
     }

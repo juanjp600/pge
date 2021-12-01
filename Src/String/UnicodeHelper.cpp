@@ -5,7 +5,7 @@
 using namespace PGE;
 
 static void assertChar(char16 chr, const std::source_location& location = std::source_location::current()) {
-    assert(chr != 0 && chr != 0xFFFF && chr != 0xFFFE, "Invalid character (" + String::hexFromInt<u16>(chr) + ")", location);
+    asrt(chr != 0 && chr != 0xFFFF && chr != 0xFFFE, "Invalid character (" + String::hexFromInt<u16>(chr) + ")", location);
 }
 
 byte Unicode::measureCodepoint(byte chr) {

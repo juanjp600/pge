@@ -6,8 +6,6 @@
 
 #include <PGE/String/String.h>
 
-#undef assert
-
 namespace PGE {
 
 /// Singular exception class thrown by PGE.
@@ -30,7 +28,7 @@ class Exception {
         std::optional<String> info;
 };
 
-constexpr void assert(bool predicate, const String& info, const std::source_location& location = std::source_location::current()) {
+constexpr void asrt(bool predicate, const String& info, const std::source_location& location = std::source_location::current()) {
     if (!predicate) {
         throw Exception(info, location);
     }

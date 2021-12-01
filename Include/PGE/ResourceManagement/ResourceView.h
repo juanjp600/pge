@@ -24,7 +24,7 @@ class ResourceView {
         ResourceView(T res, const std::list<ResourceBase*>::iterator& iter) { internalResource = res; holdsResource = true; iterator = iter; }
 
         // Force cast.
-        const T& get() const { assert(holdsResource, "Reference not filled"); return internalResource; }
+        const T& get() const { asrt(holdsResource, "Reference not filled"); return internalResource; }
 
         operator const T&() const { return get(); }
 

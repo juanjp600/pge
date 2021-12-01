@@ -7,7 +7,7 @@
 #include <d3d11.h>
 
 static void assertDX(HRESULT hRes, const PGE::String& action, const std::source_location& location = std::source_location::current()) {
-    assert(!FAILED(hRes), "DX11 Operation failed: " + action + " (HRESULT: " + PGE::String::hexFromInt<unsigned long>(hRes) + ")", location);
+    asrt(!FAILED(hRes), "DX11 Operation failed: " + action + " (HRESULT: " + PGE::String::hexFromInt<unsigned long>(hRes) + ")", location);
 }
 
 namespace PGE {
@@ -55,7 +55,7 @@ class DXGISwapChain : public DX11Resource<IDXGISwapChain> {
             SDL_SysWMinfo sysWMinfo;
             SDL_VERSION(&sysWMinfo.version); // REMINDER: THIS LINE IS VERY IMPORTANT!
             bool validInfo = SDL_GetWindowWMInfo(window, &sysWMinfo);
-            assert(validInfo, "Failed to initialize SDL version info (SDLERROR: " + String(SDL_GetError()) + ")");
+            asrt(validInfo, "Failed to initialize SDL version info (SDLERROR: " + String(SDL_GetError()) + ")");
 
             DXGI_SWAP_CHAIN_DESC desc;
             ZeroMemory(&desc, sizeof(desc));

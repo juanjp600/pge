@@ -144,6 +144,6 @@ void TextReader::spitOut(char16 ch) {
 
 void TextReader::reportEOF() {
     // Extraction failed, laugh at this reader!
-    assert(!eof, "End of file has already been encountered");
+    asrt(!eof, "End of file has already been encountered");
     eof = true;
 }

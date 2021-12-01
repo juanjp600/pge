@@ -28,7 +28,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, WindowMode wm, int 
 
     glContext = resourceManager.addNewResource<GLContext>(getWindow());
 
-    assert(gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress) != 0, "Failed to initialize GLAD (GLERROR: " + String::from(glGetError()) + ")");
+    asrt(gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress) != 0, "Failed to initialize GLAD (GLERROR: " + String::from(glGetError()) + ")");
 
     depthTest = true;
     glEnable(GL_DEPTH_TEST);
@@ -42,7 +42,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, WindowMode wm, int 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     GLenum glError = glGetError();
-    assert(glError == GL_NO_ERROR, "Failed to initialize window data post-GLAD initialization (GLERROR: " + String::from(glError) + ")");
+    asrt(glError == GL_NO_ERROR, "Failed to initialize window data post-GLAD initialization (GLERROR: " + String::from(glError) + ")");
 
     SDL_GL_SwapWindow(getWindow());
 
@@ -106,7 +106,7 @@ void GraphicsOGL3::setRenderTargets(const ReferenceVector<Texture>& renderTarget
 
     TextureOGL3* largestTarget = &(TextureOGL3&)renderTargets[0].get();
     for (int i = 0; i < (int)renderTargets.size(); i++) {
-        assert(renderTargets[i]->isRenderTarget(), "renderTargets["+String::from(i)+"] is not a valid render target");
+        asrt(renderTargets[i]->isRenderTarget(), "renderTargets["+String::from(i)+"] is not a valid render target");
 
         if (i == 0) { continue; }
 

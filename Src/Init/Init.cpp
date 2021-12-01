@@ -15,7 +15,7 @@
 using namespace PGE;
 
 static void assertSDL(int retCode, const std::source_location& location = std::source_location::current()) {
-    assert(retCode >= 0, SDL_GetError(), location);
+    asrt(retCode >= 0, SDL_GetError(), location);
 }
 
 #ifndef DEBUG

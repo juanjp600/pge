@@ -28,7 +28,7 @@ class GLFramebuffer : public Resource<GLuint> {
         GLFramebuffer() {
             glGenFramebuffers(1, &resource);
             GLenum glError = glGetError();
-            assert(glError == GL_NO_ERROR, "Failed to generate frame buffer (GLERROR: " + String::from(glError) + ")");
+            asrt(glError == GL_NO_ERROR, "Failed to generate frame buffer (GLERROR: " + String::from(glError) + ")");
         }
         
         ~GLFramebuffer() {
@@ -119,7 +119,7 @@ class GLProgram : public Resource<GLuint> {
             glLinkProgram(resource);
             GLint result;
             glGetProgramiv(resource, GL_LINK_STATUS, &result);
-            assert(result == GL_TRUE, "Failed to link shader (GLERROR:" + String::from(glGetError()) + ")");
+            asrt(result == GL_TRUE, "Failed to link shader (GLERROR:" + String::from(glGetError()) + ")");
         }
 
         ~GLProgram() {

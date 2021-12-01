@@ -398,7 +398,7 @@ void InputManagerInternal::setMousePosition(const Vector2f& position) {
 void InputManagerInternal::setMouseRelativeInput(bool relative) {
     int res = SDL_SetRelativeMouseMode(relative ? SDL_TRUE : SDL_FALSE);
     // It's fine if it's not available (-1).
-    assert(res == 0 || res == -1, "Could not set relative mouse input (SDLERROR: " + String(SDL_GetError()) + ")");
+    asrt(res == 0 || res == -1, "Could not set relative mouse input (SDLERROR: " + String(SDL_GetError()) + ")");
 }
 
 Vector2i InputManagerInternal::consumeMouseWheelDelta() {

@@ -8,11 +8,11 @@ ShaderOGL3::ShaderOGL3(Graphics& gfx, const FilePath& path) : Shader(path), reso
     graphics.takeGlContext();
 
     String vertexSource = (path + "vertex.glsl").readText();
-    assert(!vertexSource.isEmpty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
+    asrt(!vertexSource.isEmpty(), "Failed to find vertex.glsl (filepath: " + path.str() + ")");
     glVertexShader = resourceManager.addNewResource<GLShader>(GL_VERTEX_SHADER, vertexSource);
 
     String fragmentSource = (path + "fragment.glsl").readText();
-    assert(!fragmentSource.isEmpty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
+    asrt(!fragmentSource.isEmpty(), "Failed to find fragment shader (filepath: " + path.str() + ")");
     glFragmentShader = resourceManager.addNewResource<GLShader>(GL_FRAGMENT_SHADER, fragmentSource);
 
     glShaderProgram = resourceManager.addNewResource<GLProgram>(std::vector{ glVertexShader.get(), glFragmentShader.get() });
@@ -267,7 +267,7 @@ void ShaderOGL3::useShader() {
         glEnableVertexAttribArray(glAttribLocation.location);
         glVertexAttribPointer(glAttribLocation.location, glAttribLocation.elementCount, glAttribLocation.elementType, GL_FALSE, vertexLayout.getElementSize(), ptr + locationAndSizeInBuffer.location);
         glError = glGetError();
-        assert(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + String::hexFromInt(key.hash) + ")");
+        asrt(glError == GL_NO_ERROR, "Failed to set vertex attribute (filepath: " + filepath.str() + "; attrib: " + String::hexFromInt(key.hash) + ")");
     }
 
     for (auto& [_, constant] : vertexShaderConstants) {
@@ -371,7 +371,7 @@ void ShaderOGL3::ConstantOGL3::setUniform() {
     }
 
     glError = glGetError();
-    assert(glError == GL_NO_ERROR, "Failed to set uniform value (GLERROR: " + String::from(glError) +")");
+    asrt(glError == GL_NO_ERROR, "Failed to set uniform value (GLERROR: " + String::from(glError) +")");
 }
 
 ShaderOGL3::GlAttribLocation::GlAttribLocation(GLint loc, GLenum elemType, int elemCount) {
