@@ -8,7 +8,6 @@
 
 namespace PGE {
 
-class ResourceBase;
 class ResourceManager {
     protected:
         std::list<ResourceBase*> resources;
@@ -26,7 +25,11 @@ class ResourceManager {
         }
 
     public:
-        virtual ~ResourceManager();
+        ~ResourceManager() {
+            for (auto it = resources.rbegin(); it != resources.rend(); it++) {
+                delete* it;
+            }
+        }
 
         template <std::derived_from<ResourceBase> T, typename... Args>
         typename T::View addNewResource(Args&&... args) {
