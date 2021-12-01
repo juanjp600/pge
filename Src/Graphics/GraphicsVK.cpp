@@ -17,7 +17,7 @@ static constexpr vk::Viewport convertViewport(const Rectanglei& rect) {
 }
 
 GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, int y)
-    : GraphicsSpecialized("Vulkan", name, w, h, wm, x, y, SDL_WINDOW_VULKAN), resourceManager(*this) {
+    : GraphicsSpecialized(name, w, h, wm, x, y, SDL_WINDOW_VULKAN), resourceManager(*this) {
     std::vector<const char*> layers;
 #ifdef DEBUG
     layers.push_back("VK_LAYER_KHRONOS_validation");
@@ -116,7 +116,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
             atomSize = pd.getProperties().limits.nonCoherentAtomSize;
         }
     }
-    PGE_ASSERT(foundCompatibleDevice, "No Vulkan compatible GPU found");
+    asrt(foundCompatibleDevice, "No Vulkan compatible GPU found");
 
     device = resourceManager.addNewResource<VKDevice>(physicalDevice,
         std::unordered_set { graphicsQueueIndex, presentQueueIndex, transferQueueIndex }, deviceExtensions);
@@ -201,12 +201,12 @@ void GraphicsVK::submit() {
     vk::Result result;
     result = graphicsQueue.submit(1, &submitInfo, inFlightFences[currentFrame]);
     fenceSentWithComBuffer[backBufferIndex] = inFlightFences[currentFrame];
-    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to graphics queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
+    assertVKResult(result, "Failed to submit to graphics queue");
 
     if constexpr (PRESENT) {
         vk::PresentInfoKHR presentInfo = vk::PresentInfoKHR(1, &renderFinishedSemaphores[currentFrame], 1, &swapchain, (uint32_t*)&backBufferIndex);
         result = presentQueue.presentKHR(presentInfo);
-        PGE_ASSERT(result == vk::Result::eSuccess, "Failed to submit to present queue (VKERROR: " + String::hexFromInt((u32)result) + ")");
+        assertVKResult(result, "Failed to submit to present queue");
     }
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
@@ -220,14 +220,14 @@ void GraphicsVK::acquireNextImage() {
     if (imagesInFlight[backBufferIndex]) {
         // If so, wait on it!
         result = device->waitForFences(imagesInFlight[backBufferIndex], false, UINT64_MAX);
-        PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::hexFromInt((u32)result) + ")");
+        assertVKResult(result, "Failed to wait for fences");
     }
     imagesInFlight[backBufferIndex] = inFlightFences[currentFrame];
 }
 
 void GraphicsVK::startRender() {
     vk::Result result = device->waitForFences(fenceSentWithComBuffer[backBufferIndex], false, UINT64_MAX);
-    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to wait for fences (VKERROR: " + String::hexFromInt((u32)result) + ")");
+    assertVKResult(result, "Failed to wait for fences");
     device->resetCommandPool(comPools[backBufferIndex], {});
 
     comBuffers[backBufferIndex].begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit));
@@ -327,7 +327,7 @@ void GraphicsVK::createSwapchain() {
         comPools[i] = resourceManager.addNewResource<VKCommandPool>(device, graphicsQueueIndex);
         vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPools[i], vk::CommandBufferLevel::ePrimary, 1);
         result = device->allocateCommandBuffers(&comBufAllInfo, &comBuffers[i]);
-        PGE_ASSERT(result == vk::Result::eSuccess, "Failed to allocate command buffers (VKERROR: " + String::hexFromInt((u32)result) + ")");
+        assertVKResult(result, "Failed to allocate command buffers");
     }
 
     resourceManager.deleteResource(transferComPool);
@@ -335,7 +335,7 @@ void GraphicsVK::createSwapchain() {
     // TODO: How many buffers should we have?
     vk::CommandBufferAllocateInfo transferComBufferInfo = vk::CommandBufferAllocateInfo(transferComPool, vk::CommandBufferLevel::ePrimary, 1);
     result = device->allocateCommandBuffers(&transferComBufferInfo, &transferComBuffer);
-    PGE_ASSERT(result == vk::Result::eSuccess, "Failed to allocate transfer command buffers (VKERROR: " + String::hexFromInt((u32)result) + ")");
+    assertVKResult(result, "Failed to allocate transfer command buffers");
 }
 
 constexpr vk::ImageSubresourceLayers createBasicImgSubresLayers(int miplevel) {
@@ -502,7 +502,7 @@ void GraphicsVK::setCulling(CullingMode mode) {
         case BACK: { flags = vk::CullModeFlagBits::eBack; } break;
         case FRONT: { flags = vk::CullModeFlagBits::eFront; } break;
         case NONE: { flags = vk::CullModeFlagBits::eNone; } break;
-        default: { throw PGE_CREATE_EX("Unexpected culling mode"); }
+        default: { throw Exception("Unexpected culling mode"); }
     }
     pipelineInfo.rasterizationInfo.cullMode = flags;
     reuploadPipelines();

@@ -17,7 +17,7 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
 
     // Reflect.
     SpvReflectShaderModule reflection; SpvReflectResult res = spvReflectCreateShaderModule(shaderBinary.size(), shaderBinary.data(), &reflection);
-    PGE_ASSERT(res == SpvReflectResult::SPV_REFLECT_RESULT_SUCCESS, "Reflection failed " + String::hexFromInt((u32)res));
+    asrt(res == SpvReflectResult::SPV_REFLECT_RESULT_SUCCESS, "Reflection failed " + String::hexFromInt((u32)res));
 
     // Vertex input.
     vertexInputAttributes.reserve(reflection.input_variable_count);
@@ -46,11 +46,11 @@ ShaderVK::ShaderVK(Graphics& gfx, const FilePath& path) : Shader(path), graphics
     if (reflection.push_constant_block_count != 0) {
         // TODO: Investigte duplicate constant block.
         //auto lol = reflection.push_constant_blocks[1];
-        //PGE_ASSERT(reflection.push_constant_block_count <= 1, "Too many push constants (" + String::from(reflection.push_constant_block_count) + ") in shader " + path.str());
+        //asrt(reflection.push_constant_block_count <= 1, "Too many push constants (" + String::from(reflection.push_constant_block_count) + ") in shader " + path.str());
 
         SpvReflectBlockVariable pushConstant = reflection.push_constant_blocks[0];
         String blockName = pushConstant.name;
-        PGE_ASSERT(blockName == "vulkanConstants", "Invalid push constant (\"" + blockName + "\")");
+        asrt(blockName == "vulkanConstants", "Invalid push constant (\"" + blockName + "\")");
         
         constantData.resize(pushConstant.size);
 

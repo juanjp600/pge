@@ -28,6 +28,10 @@ namespace UtilVK {
     }
 }
 
+static void assertVKResult(vk::Result result, const String& message, const std::source_location& location = std::source_location::current()) {
+    asrt(result == vk::Result::eSuccess, message + "(VKERROR: " + String::hexFromInt((u32)result) + ")", location);
+}
+
 class TrashBinVK {
     private:
         std::vector<ResourceBase*> bin;
@@ -168,7 +172,8 @@ class VKSurface : public Resource<vk::SurfaceKHR> {
             instance = inst;
 
             // TODO: Change SDL to be more epic.
-            PGE_ASSERT(SDL_Vulkan_CreateSurface(window, (VkInstance)instance, (VkSurfaceKHR*)&resource) == SDL_TRUE, "Failed to create Vulkan surface (SDLERROR: " + String(SDL_GetError()) + ")");
+            asrt(SDL_Vulkan_CreateSurface(window, (VkInstance)instance, (VkSurfaceKHR*)&resource) == SDL_TRUE,
+                "Failed to create Vulkan surface (SDLERROR: " + String(SDL_GetError()) + ")");
         }
 
         ~VKSurface() {
@@ -421,7 +426,7 @@ class VKMemory : public VKFreeResource<vk::DeviceMemory> {
                     break;
                 }
             }
-            PGE_ASSERT(memIndex != -1, "No suitable memory type found");
+            asrt(memIndex != -1, "No suitable memory type found");
 
 
             vk::MemoryAllocateInfo info;
@@ -464,7 +469,7 @@ class VKMemoryBuffer {
                     return vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer;
                 }
                 default: {
-                    throw PGE_CREATE_EX("Invalid buffer type");
+                    throw Exception("Invalid buffer type");
                 }
             }
         }
@@ -481,7 +486,7 @@ class VKMemoryBuffer {
                     return vk::MemoryPropertyFlagBits::eDeviceLocal;
                 }
                 default: {
-                    throw PGE_CREATE_EX("Invalid buffer type");
+                    throw Exception("Invalid buffer type");
                 }
             }
         }
@@ -594,7 +599,7 @@ class VKPipeline : public VKDestroyResource<vk::Pipeline> {
             info.basePipelineIndex = -1;
 
             vk::ResultValue<vk::Pipeline> creation = device.createGraphicsPipeline(nullptr, info);
-            PGE_ASSERT(creation.result == vk::Result::eSuccess, "Failed to create graphics pipeline (VKERROR: " + String::hexFromInt((u32)creation.result) + ")");
+            assertVKResult(creation.result, "Failed to create graphics pipeline");
             resource = creation.value;
         }
 };

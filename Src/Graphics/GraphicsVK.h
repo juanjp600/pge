@@ -18,7 +18,7 @@ namespace PGE {
 
 class ShaderVK;
 
-class GraphicsVK : public GraphicsSpecialized<ShaderVK, MeshVK, TextureVK, MaterialVK, RenderTextureVK> {
+class GraphicsVK : public GraphicsSpecialized<"Vulkan", ShaderVK, MeshVK, TextureVK, MaterialVK, RenderTextureVK> {
     public:
         enum class ImageLayout {
             UNDEFINED,

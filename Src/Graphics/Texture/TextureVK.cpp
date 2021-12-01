@@ -4,6 +4,12 @@
 
 using namespace PGE;
 
+static void assertVKLinearFilteringSupport(const vk::FormatProperties& properties,
+    const std::source_location& location = std::source_location::current()) {
+    asrt((properties.optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear) != (vk::FormatFeatureFlagBits)0,
+        "Format doesn't support linear filtering", location);
+}
+
 vk::Format TextureVK::getFormat(Texture::Format fmt) {
     switch (fmt) {
         using enum Texture::Format;
@@ -11,7 +17,7 @@ vk::Format TextureVK::getFormat(Texture::Format fmt) {
         case RGBA32: { return vk::Format::eR8G8B8A8Unorm; }
         case R32F: { return vk::Format::eR32Sfloat; }
         case R8: { return vk::Format::eR8Unorm; }
-        default: { throw PGE_CREATE_EX("Invalid format"); }
+        default: { throw Exception("Invalid format"); }
     }
 }
 
@@ -25,7 +31,7 @@ vk::Format TextureVK::getFormat(Texture::CompressedFormat fmt) {
         case BC5: { return vk::Format::eBc5UnormBlock; }
         case BC6: { return vk::Format::eBc6HSfloatBlock; }
         case BC7: { return vk::Format::eBc7UnormBlock; }
-        default: { throw PGE_CREATE_EX("Invalid format"); }
+        default: { throw Exception("Invalid format"); }
     }
 }
 
@@ -59,8 +65,7 @@ TextureVK::TextureVK(Graphics& gfx, int w, int h, const byte* buffer, Format fmt
     staging.flush(VK_WHOLE_SIZE);
 
     vk::Format vkFmt = getFormat(fmt);
-    PGE_ASSERT(physicalDevice.getFormatProperties(vkFmt).optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear,
-        "Format doesn't support linear filtering");
+    assertVKLinearFilteringSupport(physicalDevice.getFormatProperties(vkFmt));
     image = resourceManager.addNewResource<VKImage>(device, w, h, vkFmt, miplevels, mipmaps ? VKImage::Usage::IMAGE_GEN_MIPS : VKImage::Usage::IMAGE);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
     graphics.transformImage<GraphicsVK::ImageLayout::UNDEFINED, GraphicsVK::ImageLayout::TRANSFER_DST>(image, miplevels);
@@ -81,8 +86,7 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
     vk::PhysicalDevice physicalDevice = graphics.getPhysicalDevice();
 
     vk::Format vkFmt = getFormat(fmt);
-    PGE_ASSERT(physicalDevice.getFormatProperties(vkFmt).optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear,
-        "Format doesn't support linear filtering");
+    assertVKLinearFilteringSupport(physicalDevice.getFormatProperties(vkFmt));
 
     image = resourceManager.addNewResource<VKImage>(device, mipmaps[0].width, mipmaps[0].height, vkFmt, (int)mipmaps.size(), VKImage::Usage::IMAGE);
     imageMem = resourceManager.addNewResource<VKMemory>(device, physicalDevice, image.get(), vk::MemoryPropertyFlagBits::eDeviceLocal);
