@@ -38,25 +38,24 @@ ShaderOGL3::~ShaderOGL3() {
 void ShaderOGL3::extractVertexUniforms(const String& vertexSource) {
     std::vector<ParsedShaderVar> vertexUniforms;
     extractShaderVars(vertexSource, "uniform", vertexUniforms);
-    std::vector<StructuredData::ElemLayout::Entry> layoutEntries;
-    for (size_t i : Range(vertexUniforms.size())) {
+    int vertexUniformSize = 0;
+    for (const ParsedShaderVar& var : vertexUniforms) {
         int arrSize = 1; //TODO: add array support
-        GLenum glType = parsedTypeToGlType(vertexUniforms[i].type);
-        int byteSize = glSizeToByteSize(glType, arrSize);
-        layoutEntries.emplace_back(vertexUniforms[i].name, byteSize);
+        GLenum glType = parsedTypeToGlType(var.type);
         vertexShaderConstants.emplace(
-            vertexUniforms[i].name,
+            var.name,
             ConstantOGL3(
                 graphics,
-                glGetUniformLocation(glShaderProgram, vertexUniforms[i].name.cstr()),
+                glGetUniformLocation(glShaderProgram, var.name.cstr()),
                 glType,
                 arrSize,
                 vertexUniformData,
-                String::Key(vertexUniforms[i].name)
+                vertexUniformSize // Acts as offset here
             )
         );
+        vertexUniformSize += glSizeToByteSize(glType, arrSize);
     }
-    vertexUniformData = StructuredData(StructuredData::ElemLayout(layoutEntries), 1);
+    vertexUniformData = std::make_unique<byte[]>(vertexUniformSize);
 }
 
 void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
@@ -94,30 +93,35 @@ void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
 void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
     std::vector<ParsedShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource, "uniform", fragmentUniforms);
-    std::vector<StructuredData::ElemLayout::Entry> layoutEntries;
-    for (size_t i : Range(fragmentUniforms.size())) {
+    int fragmentUniformSize = 0;
+    for (const ParsedShaderVar& var : fragmentUniforms) {
         int arrSize = 1; //TODO: add array support
-        GLenum glType = parsedTypeToGlType(fragmentUniforms[i].type);
-        int byteSize = glSizeToByteSize(glType, arrSize);
-        layoutEntries.emplace_back(fragmentUniforms[i].name, byteSize);
+        fragmentUniformSize += glSizeToByteSize(parsedTypeToGlType(var.type), arrSize);
     }
-    fragmentUniformData = StructuredData(StructuredData::ElemLayout(layoutEntries), 1);
 
-    for (size_t i : Range(fragmentUniforms.size())) {
+    fragmentUniformData = std::make_unique<byte[]>(fragmentUniformSize);
+
+    fragmentUniformSize = 0;
+    for (const ParsedShaderVar& var : fragmentUniforms) {
         int arrSize = 1; //TODO: add array support
+        GLenum glType = parsedTypeToGlType(var.type);
+
         ConstantOGL3 constant(
             graphics,
-            glGetUniformLocation(glShaderProgram, fragmentUniforms[i].name.cstr()),
-            parsedTypeToGlType(fragmentUniforms[i].type),
+            glGetUniformLocation(glShaderProgram, var.name.cstr()),
+            glType,
             arrSize,
             fragmentUniformData,
-            String::Key(fragmentUniforms[i].name)
+            fragmentUniformSize // Offset
         );
-        if (fragmentUniforms[i].type.equals("sampler2D")) {
+
+        fragmentUniformSize += glSizeToByteSize(glType, arrSize);
+
+        if (var.type.equals("sampler2D")) {
             constant.setValue((u32)samplerConstants.size());
-            samplerConstants.emplace(fragmentUniforms[i].name, constant);
+            samplerConstants.emplace(var.name, constant);
         } else {
-            fragmentShaderConstants.emplace(fragmentUniforms[i].name, constant);
+            fragmentShaderConstants.emplace(var.name, constant);
         }
     }
 
@@ -303,74 +307,44 @@ Shader::Constant* ShaderOGL3::getFragmentShaderConstant(const String& name) {
     return &it->second;
 }
 
-ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk) : dataBuffer(data), graphics(gfx) {
-    glLocation = glLoc;
-    glType = glTyp;
-    glArraySize = glArrSz;
-    dataKey = dk;
-}
+ShaderOGL3::ConstantOGL3::ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glType, int glArrSz,
+    std::unique_ptr<byte[]>& data, int offset)
+    : graphics(gfx), glLocation(glLoc), glType(glType), glArraySize(glArrSz),
+    data(data), offset(offset) { }
 
-void ShaderOGL3::ConstantOGL3::setValue(const Matrix4x4f& value) {
-    dataBuffer.setValue(0, dataKey, value);
-}
-
-void ShaderOGL3::ConstantOGL3::setValue(const Vector2f& value) {
-    dataBuffer.setValue(0, dataKey, value);
-}
-
-void ShaderOGL3::ConstantOGL3::setValue(const Vector3f& value) {
-    dataBuffer.setValue(0, dataKey, value);
-}
-
-void ShaderOGL3::ConstantOGL3::setValue(const Vector4f& value) {
-    dataBuffer.setValue(0, dataKey, value);
-}
-
-void ShaderOGL3::ConstantOGL3::setValue(const Color& value) {
-    dataBuffer.setValue(0, dataKey, value);
-}
-
-void ShaderOGL3::ConstantOGL3::setValue(float value) {
-    dataBuffer.setValue(0, dataKey, value);
-}
-
-void ShaderOGL3::ConstantOGL3::setValue(u32 value) {
-    dataBuffer.setValue(0, dataKey, value);
+void ShaderOGL3::ConstantOGL3::setValueInternal(const std::span<byte>& value) {
+    memcpy(&data[offset], value.data(), value.size());
 }
 
 void ShaderOGL3::ConstantOGL3::setUniform() {
-    GLuint glError = GL_NO_ERROR;
-
     graphics.takeGlContext();
-    const void* dataPtr = dataBuffer.getData() + dataBuffer.getLayout().getLocationAndSize(dataKey).location;
+    const byte* dataPtr = &data[offset];
     const GLfloat* dataPtrF = (GLfloat*)dataPtr;
-    const GLint* dataPtrI = (GLint*)dataPtr;
-    const GLuint* dataPtrU = (GLuint*)dataPtr;
     switch (glType) {
         case GL_FLOAT_MAT4: {
             glUniformMatrix4fv(glLocation, 1, GL_FALSE, dataPtrF);
         } break;
         case GL_FLOAT_VEC2: {
-            glUniform2f(glLocation, *dataPtrF, *(dataPtrF + 1));
+            glUniform2f(glLocation, dataPtrF[0], dataPtrF[1]);
         } break;
         case GL_FLOAT_VEC3: {
-            glUniform3f(glLocation, *dataPtrF, *(dataPtrF + 1), *(dataPtrF + 2));
+            glUniform3f(glLocation, dataPtrF[0], dataPtrF[1], dataPtrF[2]);
         } break;
         case GL_FLOAT_VEC4: {
-            glUniform4f(glLocation, *dataPtrF, *(dataPtrF + 1), *(dataPtrF + 2), *(dataPtrF + 3));
+            glUniform4f(glLocation, dataPtrF[0], dataPtrF[1], dataPtrF[2], dataPtrF[3]);
         } break;
         case GL_FLOAT: {
             glUniform1f(glLocation, *dataPtrF);
         } break;
         case GL_INT: {
-            glUniform1i(glLocation, *dataPtrI);
+            glUniform1i(glLocation, *(GLint*)dataPtr);
         } break;
         case GL_UNSIGNED_INT: {
-            glUniform1ui(glLocation, *dataPtrU);
+            glUniform1ui(glLocation, *(GLuint*)dataPtr);
         } break;
     }
 
-    glError = glGetError();
+    GLuint glError = glGetError();
     asrt(glError == GL_NO_ERROR, "Failed to set uniform value (GLERROR: " + String::from(glError) +")");
 }
 

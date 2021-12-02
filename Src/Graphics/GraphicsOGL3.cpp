@@ -28,7 +28,8 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, WindowMode wm, int 
 
     glContext = resourceManager.addNewResource<GLContext>(getWindow());
 
-    asrt(gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress) != 0, "Failed to initialize GLAD (GLERROR: " + String::from(glGetError()) + ")");
+    int res = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
+    asrt(res != 0, "Failed to initialize GLAD (GLERROR: " + String::from(res) + ")");
 
     depthTest = true;
     glEnable(GL_DEPTH_TEST);
