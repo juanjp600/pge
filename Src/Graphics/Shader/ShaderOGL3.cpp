@@ -124,7 +124,7 @@ void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
     textureCount = samplerConstants.size();
 }
 
-void ShaderOGL3::extractFragmentOutputs(const String fragmentSource) {
+void ShaderOGL3::extractFragmentOutputs(const String& fragmentSource) {
     std::vector<ParsedShaderVar> fragmentOutputs;
     extractShaderVars(fragmentSource, "out", fragmentOutputs);
     for (int i = 0; i < (int)fragmentOutputs.size(); i++) {
