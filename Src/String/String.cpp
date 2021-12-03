@@ -537,11 +537,16 @@ const String String::fromInteger(I i, Casing casing) {
     char* buf = ret.cstrNoConst();
     byte count = 0;
     if constexpr (std::numeric_limits<I>::is_signed) {
-        if (i < 0) { buf[0] = '-'; buf++; count++; i = -i; }
+        if (i < 0) { buf[0] = '-'; buf++; count++; }
     }
     if (i == 0) { buf[0] = '0'; count = 1; }
     while (i != 0) {
-        byte digit = i % BASE;
+        byte digit;
+        if constexpr (std::numeric_limits<I>::is_signed) {
+            digit = abs(i % BASE);
+        } else {
+            digit = i % BASE;
+        }
         i /= BASE;
         if constexpr (BASE <= 10) {
             buf[count] = '0' + digit;
@@ -610,11 +615,16 @@ static I toInteger(const String& str, bool& success) {
         byte digit;
         if (!charToDigit<BASE>(digit, ch)) { return 0; }
         if (ret > std::numeric_limits<I>::max() - digit) { return 0; }
-        ret += digit;
+        if constexpr (std::numeric_limits<I>::is_signed) {
+            if (neg && ret < std::numeric_limits<I>::min() + digit) { return 0; }
+            ret += neg ? -digit : digit;
+        } else {
+            ret += digit;
+        }
     }
     success = true;
     if constexpr (std::numeric_limits<I>::is_signed) {
-        return neg ? -ret : ret; // TODO: Most negative number.
+        return ret;
     } else {
         return ret;
     }
