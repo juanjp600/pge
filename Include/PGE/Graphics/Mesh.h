@@ -2,6 +2,7 @@
 #define PGE_MESH_H_INCLUDED
 
 #include <optional>
+#include <span>
 
 #include <PGE/Types/Types.h>
 #include <PGE/StructuredData/StructuredData.h>

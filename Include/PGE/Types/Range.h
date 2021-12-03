@@ -9,7 +9,7 @@
 #define PGE_INTERNAL_CONCAT_INNER(a, b) a ## b
 
 #ifdef __COUNTER__
-#define PGE_IT [[maybe_unused]] const auto& PGE_INTERNAL_CONCAT(PGE_INTERNAL_CONCAT(PGE_INTERNAL_CONCAT(PGE_INTERNAL_CONCAT(_, __LINE__), _PGE_INTERNAL_ITERATOR_), __COUNTER__), _)
+#define PGE_IT [[maybe_unused]] const auto& PGE_INTERNAL_CONCAT(PGE_INTERNAL_CONCAT(_, __COUNTER__), _PGE_INTERNAL_ITERATOR_)
 #else
 #define PGE_IT [[maybe_unused]] const auto& PGE_INTERNAL_CONCAT(PGE_INTERNAL_CONCAT(_, __LINE__), _PGE_INTERNAL_ITERATOR_)
 #endif
