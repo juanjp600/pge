@@ -992,19 +992,6 @@ const std::vector<String> String::split(const String& needleStr, bool removeEmpt
     return split;
 }
 
-const String String::join(const std::vector<String>& vect, const String& separator) {
-    if (vect.empty()) {
-        return String();
-    }
-
-    String retVal = vect[0];
-    for (int i : Range(1, (int)vect.size())) {
-        retVal += separator + vect[i];
-    }
-
-    return retVal;
-}
-
 const std::cmatch String::regexMatch(const std::regex& pattern) const {
     const char* s = cstr();
     std::cmatch m;

@@ -29,17 +29,25 @@ class Mesh : private PolymorphicHeap {
 
             u32 indices[2];
         };
+        static_assert(sizeof(Line) == 2 * sizeof(u32));
 
         struct Triangle {
             Triangle(u32 a, u32 b, u32 c);
 
             u32 indices[3];
         };
+        static_assert(sizeof(Triangle) == 3 * sizeof(u32));
 
         static Mesh* create(class Graphics& gfx);
 
-        void setGeometry(StructuredData&& verts, const std::vector<Line>& lines);
-        void setGeometry(StructuredData&& verts, const std::vector<Triangle>& triangles);
+        void setGeometry(StructuredData&& verts, const std::span<Line>& primitives) {
+            setGeometryInternal<2, PrimitiveType::LINE>(std::move(verts), primitives);
+        }
+
+        void setGeometry(StructuredData&& verts, const std::span<Triangle>& primitives) {
+            setGeometryInternal<3, PrimitiveType::TRIANGLE>(std::move(verts), primitives);
+        }
+
         void setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u32>&& inds);
         void clearGeometry();
 
@@ -65,6 +73,19 @@ class Mesh : private PolymorphicHeap {
 
     private:
         bool mustReuploadInternalData = true;
+
+        template <byte VERTS_PER_PRIM, PrimitiveType PRIM_TYPE, OneOf<Line, Triangle> PRIMITIVE>
+        void setGeometryInternal(StructuredData&& verts, const std::span<PRIMITIVE>& primitives) {
+            assertMaterialLayout(verts);
+
+            vertices = std::move(verts);
+            indices.clear();
+            indices.resize(primitives.size() * VERTS_PER_PRIM);
+            memcpy(indices.data(), primitives.data(), primitives.size_bytes());
+            primitiveType = PRIM_TYPE;
+
+            mustReuploadInternalData = true;
+        }
 
         void assertMaterialLayout(const StructuredData& verts, const std::source_location& location = std::source_location::current());
 };

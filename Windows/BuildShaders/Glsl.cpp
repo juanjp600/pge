@@ -107,14 +107,14 @@ namespace Glsl {
         writer.writeLine("}\n");
     }
 
-    void writeConstants(TextWriter& writer, const std::vector<CompileResult::Constant>& constants) {
+    void writeConstants(TextWriter& writer, const Enumerable<CompileResult::Constant> auto& constants) {
         for (const CompileResult::Constant& c : constants) {
             writer.writeLine("const " + hlslToGlslTypes(c.type) + " " + c.name + " = " + hlslToGlslTypes(c.value) + ";");
         }
         writer.writeLine();
     }
 
-    void writeCBuffersAsUniforms(TextWriter& writer, const std::vector<CompileResult::CBuffer>& cBuffers) {
+    void writeCBuffersAsUniforms(TextWriter& writer, const Enumerable<CompileResult::CBuffer> auto& cBuffers) {
         for (const CompileResult::CBuffer& cBuffer : cBuffers) {
             for (CompileResult::CBuffer::Member member : cBuffer.members) {
                 writer.writeLine("uniform " + hlslToGlslTypes(member.type) + " " + member.name + ";");
@@ -123,7 +123,7 @@ namespace Glsl {
         }
     }
 
-    void writeTextureInputsAsUniforms(TextWriter& writer, const std::vector<String>& textureInputs) {
+    void writeTextureInputsAsUniforms(TextWriter& writer, const Enumerable<String> auto& textureInputs) {
         for (const String& input : textureInputs) {
             writer.writeLine("uniform sampler2D " + input + ";");
         }
@@ -157,7 +157,7 @@ namespace Glsl {
         }
     }
 
-    void handleTextureSamples(String& body, const std::vector<String>& textureInputs) {
+    void handleTextureSamples(String& body, const Enumerable<String> auto& textureInputs) {
         for (const String& input : textureInputs) {
             for (int i = 0; i < 2; i++) {
                 String find = input + (i == 0 ? ".Sample(" : ".SampleLevel(");
@@ -191,7 +191,7 @@ namespace Glsl {
             .replace("[loop]", "");
     }
 
-    void writeFuncs(TextWriter& writer, const std::vector<CompileResult::Function>& funcs) {
+    void writeFuncs(TextWriter& writer, const Enumerable<CompileResult::Function> auto& funcs) {
         for (const CompileResult::Function& f : funcs) {
             writer.writeLine(handleFunc(f.func));
             writer.writeLine();

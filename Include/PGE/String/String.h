@@ -252,7 +252,21 @@ class String {
         const String reverse() const;
         const String multiply(int count, const String& separator = "") const;
         const std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
-        static const String join(const std::vector<String>& vect, const String& separator);
+        static const String join(const Enumerable<String> auto& vect, const String& separator) {
+            if (std::ranges::empty(vect)) {
+                return String();
+            }
+
+            auto it = std::ranges::begin(vect);
+
+            String retVal = *it;
+            it++;
+            for (; it != std::ranges::end(vect); it++) {
+                retVal += separator + *it;
+            }
+
+            return retVal;
+        }
 
         const std::cmatch regexMatch(const std::regex& pattern) const;
 

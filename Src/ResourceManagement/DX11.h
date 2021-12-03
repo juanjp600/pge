@@ -275,21 +275,21 @@ class D3D11Buffer : public DX11Resource<ID3D11Buffer> {
 
 class D3D11VertexShader : public DX11Resource<ID3D11VertexShader> {
     public:
-        D3D11VertexShader(ID3D11Device* device, const std::vector<byte>& bytecode) {
+        D3D11VertexShader(ID3D11Device* device, const std::span<byte>& bytecode) {
             assertDX(device->CreateVertexShader(bytecode.data(), bytecode.size(), NULL, &resource), "Create vertex shader");
         }
 };
 
 class D3D11PixelShader : public DX11Resource<ID3D11PixelShader> {
     public:
-        D3D11PixelShader(ID3D11Device* device, const std::vector<byte>& bytecode) {
+        D3D11PixelShader(ID3D11Device* device, const std::span<byte>& bytecode) {
             assertDX(device->CreatePixelShader(bytecode.data(), bytecode.size(), NULL, &resource), "Create fragment shader");
         }
 };
 
 class D3D11InputLayout : public DX11Resource<ID3D11InputLayout> {
     public:
-        D3D11InputLayout(ID3D11Device* device, const std::vector<D3D11_INPUT_ELEMENT_DESC> vertexInputElemDesc, const std::vector<byte>& bytecode) {
+        D3D11InputLayout(ID3D11Device* device, const std::span<D3D11_INPUT_ELEMENT_DESC> vertexInputElemDesc, const std::span<byte>& bytecode) {
             assertDX(device->CreateInputLayout(vertexInputElemDesc.data(), (UINT)vertexInputElemDesc.size(), bytecode.data(), bytecode.size(), &resource),
                 "Create input layout");
         }
