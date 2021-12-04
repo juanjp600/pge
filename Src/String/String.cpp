@@ -623,11 +623,7 @@ static I toInteger(const String& str, bool& success) {
         }
     }
     success = true;
-    if constexpr (std::numeric_limits<I>::is_signed) {
-        return ret;
-    } else {
-        return ret;
-    }
+    return ret;
 }
 
 #define PGE_STRING_TO_FROM_SIGNED_INTEGER(TYPE) \
@@ -960,7 +956,8 @@ const String String::reverse() const {
     return ret;
 }
 
-const String String::multiply(int count, const String& separator) const {
+const String String::multiply(unsigned count, const String& separator) const {
+    if (count == 0) { return String(); }
     int curLength = byteLength();
     int sepLength = separator.byteLength();
     int newLength = curLength * count + sepLength * (count - 1);
