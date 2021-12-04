@@ -26,12 +26,7 @@ TEST_CASE("Very basic tests") {
 
 TEST_CASE("Basic iterator tests") {
 	String a;
-	SUBCASE("A") {
-		a = "A";
-	}
-	SUBCASE("Ä") {
-		a = u8"Ä";
-	}
+	SUBCASE_P(a, "A", u8"Ä");
 
 	CHECK(a.begin() == a.rbegin());
 	CHECK(a.begin() + 1 == a.end());
