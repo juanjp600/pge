@@ -1,12 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"class_p_g_e_1_1_vector4f.html#ad8ee6d535aecacb91fc8cdf2fab81db0":[1,0,0,31,11],
-"class_p_g_e_1_1_vector4f.html#ae7bcb2b0f02deef66b7ed41822a8d484":[1,0,0,31,20],
-"class_p_g_e_1_1_vector4f.html#afa8610f1045f58f63c1bec9f2ca7faa5":[1,0,0,31,14],
-"classes.html":[1,1],
-"functions.html":[1,3,0],
-"functions_func.html":[1,3,1],
-"hierarchy.html":[1,2],
 "index.html":[],
 "namespace_p_g_e_1_1_colors.html":[0,0,0,0],
 "namespace_p_g_e_1_1_colors.html#a121027dfd1eb4b69ee86c4696b59ec2b":[0,0,0,0,9],
@@ -76,5 +69,12 @@ var NAVTREEINDEX4 =
 "struct_p_g_e_1_1_texture_1_1_mipmap.html#ab509edec39dffc6d85fc866ad908c02a":[1,0,0,12,0,3],
 "struct_p_g_e_1_1_texture_1_1_mipmap.html#ae0bb17cb9a33cb7f842015168e862cee":[1,0,0,12,0,0],
 "struct_p_g_e_1_1_texture_1_1_mipmap.html#ae2a324777c9fab8d9d18690428662645":[1,0,0,12,0,4],
-"struct_p_g_e_1_1_texture_1_1_mipmap.html#aebe318e8eb6b1b21e3616e4bfa0319e0":[1,0,0,12,0,1]
+"struct_p_g_e_1_1_texture_1_1_mipmap.html#aebe318e8eb6b1b21e3616e4bfa0319e0":[1,0,0,12,0,1],
+"":[0,0,0,7],
+"":[0,0,0,1],
+"":[0,0,0,2],
+"":[0,0,0,6],
+"":[0,0,0],
+"":[0,0,0,5],
+"":[0,0,0,3]
 };

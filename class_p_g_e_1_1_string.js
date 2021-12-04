@@ -37,7 +37,7 @@ var class_p_g_e_1_1_string =
     [ "\u202AhexToInt", "class_p_g_e_1_1_string.html#ada936edeebb07043a57777dd14096dd0", null ],
     [ "\u202AisEmpty", "class_p_g_e_1_1_string.html#a6b6561fc4431b3e4ecea3b4e42cdd28e", null ],
     [ "\u202Alength", "class_p_g_e_1_1_string.html#a8c0da5319ef56356fa252848a9faf9d8", null ],
-    [ "\u202Amultiply", "class_p_g_e_1_1_string.html#a560582df243fda5751babfa536323a93", null ],
+    [ "\u202Amultiply", "class_p_g_e_1_1_string.html#a8b4cd913b0622a404fbe4be5ea5343de", null ],
     [ "\u202AoctToInt", "class_p_g_e_1_1_string.html#a52196cb2959f833400d7379becc2d39b", null ],
     [ "\u202AoctToInt", "class_p_g_e_1_1_string.html#a883c2d98979098a4f9fa8ed2b5664bc5", null ],
     [ "\u202Aoperator+=", "class_p_g_e_1_1_string.html#a3510236c878aba295685ae0bbc8816ab", null ],
