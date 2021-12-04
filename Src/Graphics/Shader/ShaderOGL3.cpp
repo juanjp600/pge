@@ -38,7 +38,7 @@ ShaderOGL3::~ShaderOGL3() {
 void ShaderOGL3::extractVertexUniforms(const String& vertexSource) {
     std::vector<ParsedShaderVar> vertexUniforms;
     extractShaderVars(vertexSource, "uniform", vertexUniforms);
-    int vertexUniformSize = 0;
+    int vertexUniformOffset = 0;
     for (const ParsedShaderVar& var : vertexUniforms) {
         int arrSize = 1; //TODO: add array support
         GLenum glType = parsedTypeToGlType(var.type);
@@ -50,12 +50,12 @@ void ShaderOGL3::extractVertexUniforms(const String& vertexSource) {
                 glType,
                 arrSize,
                 vertexUniformData,
-                vertexUniformSize // Acts as offset here
+                vertexUniformOffset
             )
         );
-        vertexUniformSize += glSizeToByteSize(glType, arrSize);
+        vertexUniformOffset += glSizeToByteSize(glType, arrSize);
     }
-    vertexUniformData = std::make_unique<byte[]>(vertexUniformSize);
+    vertexUniformData = std::make_unique<byte[]>(vertexUniformOffset); // Final offset == size
 }
 
 void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
@@ -93,15 +93,15 @@ void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
 void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
     std::vector<ParsedShaderVar> fragmentUniforms;
     extractShaderVars(fragmentSource, "uniform", fragmentUniforms);
-    int fragmentUniformSize = 0;
+    int vertexUniformOffset = 0;
     for (const ParsedShaderVar& var : fragmentUniforms) {
         int arrSize = 1; //TODO: add array support
-        fragmentUniformSize += glSizeToByteSize(parsedTypeToGlType(var.type), arrSize);
+        vertexUniformOffset += glSizeToByteSize(parsedTypeToGlType(var.type), arrSize);
     }
 
-    fragmentUniformData = std::make_unique<byte[]>(fragmentUniformSize);
+    fragmentUniformData = std::make_unique<byte[]>(vertexUniformOffset); // Final offset == size
 
-    fragmentUniformSize = 0;
+    vertexUniformOffset = 0;
     for (const ParsedShaderVar& var : fragmentUniforms) {
         int arrSize = 1; //TODO: add array support
         GLenum glType = parsedTypeToGlType(var.type);
@@ -112,10 +112,10 @@ void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
             glType,
             arrSize,
             fragmentUniformData,
-            fragmentUniformSize // Offset
+            vertexUniformOffset
         );
 
-        fragmentUniformSize += glSizeToByteSize(glType, arrSize);
+        vertexUniformOffset += glSizeToByteSize(glType, arrSize);
 
         if (var.type.equals("sampler2D")) {
             constant.setValue((u32)samplerConstants.size());
@@ -128,7 +128,7 @@ void ShaderOGL3::extractFragmentUniforms(const String& fragmentSource) {
     textureCount = (int)samplerConstants.size();
 }
 
-void ShaderOGL3::extractFragmentOutputs(const String fragmentSource) {
+void ShaderOGL3::extractFragmentOutputs(const String& fragmentSource) {
     std::vector<ParsedShaderVar> fragmentOutputs;
     extractShaderVars(fragmentSource, "out", fragmentOutputs);
     for (GLuint i : Range((GLuint)fragmentOutputs.size())) {

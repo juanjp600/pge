@@ -121,7 +121,9 @@ myVec.emplace_back(myComplicatedString); // Works just as well!
 
 
 ## Prefer `std::vector::reserve` over `std::vector::resize` etc.
-`reserve` does not have the costs associated with initializing objects.
+`reserve` does not have the costs associated with initializing objects as well as guarding against possible mismatches between the amount of reserved objects and the amount of actually added objects.
+
+**Warning:** In the case of primitives and trivially-constructible types the added overhead of using `emplace_back` over simple assignment outweights any performance gain of using reserve by a significant margin, which is why for those types `resize` *should* be used.
 
 **Example:**
 ```cpp

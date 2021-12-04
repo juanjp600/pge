@@ -70,7 +70,7 @@ class ShaderOGL3 : public Shader {
         void extractVertexUniforms(const String& vertexSource);
         void extractVertexAttributes(const String& vertexSource);
         void extractFragmentUniforms(const String& fragmentSource);
-        void extractFragmentOutputs(const String fragmentSource);
+        void extractFragmentOutputs(const String& fragmentSource);
 
         struct ParsedShaderVar {
             String name;
