@@ -115,9 +115,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a39225d800a657a49ab2bb117c9af11ce"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a39225d800a657a49ab2bb117c9af11ce">write</a> (const T &amp;val)</td></tr>
 <tr class="memdesc:a39225d800a657a49ab2bb117c9af11ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes a type T to file.  <a href="class_p_g_e_1_1_binary_writer.html#a39225d800a657a49ab2bb117c9af11ce">More...</a><br /></td></tr>
 <tr class="separator:a39225d800a657a49ab2bb117c9af11ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8967933c724289554f82538a95ea3ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#ad8967933c724289554f82538a95ea3ac">writeBytes</a> (const byte *data, size_t amount)</td></tr>
-<tr class="memdesc:ad8967933c724289554f82538a95ea3ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes the given bytes to file.  <a href="class_p_g_e_1_1_binary_writer.html#ad8967933c724289554f82538a95ea3ac">More...</a><br /></td></tr>
-<tr class="separator:ad8967933c724289554f82538a95ea3ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c9105f28af9a170b456cd5e0da65d55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#a8c9105f28af9a170b456cd5e0da65d55">writeBytes</a> (const std::span&lt; byte &gt; &amp;data)</td></tr>
+<tr class="memdesc:a8c9105f28af9a170b456cd5e0da65d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Writes the given bytes to file.  <a href="class_p_g_e_1_1_binary_writer.html#a8c9105f28af9a170b456cd5e0da65d55">More...</a><br /></td></tr>
+<tr class="separator:a8c9105f28af9a170b456cd5e0da65d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af252120aa787246f2c0f2df43dce0e4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_g_e_1_1_binary_writer.html#af252120aa787246f2c0f2df43dce0e4d">earlyClose</a> ()</td></tr>
 <tr class="memdesc:af252120aa787246f2c0f2df43dce0e4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Closes the stream prematurely.  <a href="class_p_g_e_1_1_binary_writer.html#af252120aa787246f2c0f2df43dce0e4d">More...</a><br /></td></tr>
 <tr class="separator:af252120aa787246f2c0f2df43dce0e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -258,8 +258,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ad8967933c724289554f82538a95ea3ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8967933c724289554f82538a95ea3ac">&#9670;&nbsp;</a></span>writeBytes()</h2>
+<a id="a8c9105f28af9a170b456cd5e0da65d55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c9105f28af9a170b456cd5e0da65d55">&#9670;&nbsp;</a></span>writeBytes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -267,19 +267,9 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">void PGE::BinaryWriter::writeBytes </td>
           <td>(</td>
-          <td class="paramtype">const byte *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const std::span&lt; byte &gt; &amp;&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>amount</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

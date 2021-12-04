@@ -98,9 +98,12 @@ var namespaces_dup =
       [ "\u202AString", "class_p_g_e_1_1_string.html", "class_p_g_e_1_1_string" ],
       [ "\u202AStructuredData", "class_p_g_e_1_1_structured_data.html", "class_p_g_e_1_1_structured_data" ],
       [ "\u202ASysEvents", "class_p_g_e_1_1_sys_events.html", "class_p_g_e_1_1_sys_events" ],
+      [ "\u202AMeta", "struct_p_g_e_1_1_meta.html", "struct_p_g_e_1_1_meta" ],
+      [ "\u202ANegator", "struct_p_g_e_1_1_negator.html", "struct_p_g_e_1_1_negator" ],
       [ "\u202APolymorphicHeap", "class_p_g_e_1_1_polymorphic_heap.html", "class_p_g_e_1_1_polymorphic_heap" ],
       [ "\u202ARange", "class_p_g_e_1_1_range.html", "class_p_g_e_1_1_range" ],
       [ "\u202AReference", "class_p_g_e_1_1_reference.html", "class_p_g_e_1_1_reference" ],
+      [ "\u202ATemplateString", "struct_p_g_e_1_1_template_string.html", "struct_p_g_e_1_1_template_string" ],
       [ "\u202Abyte", "_types_8h.html#a615ae4c1ab00a4e8253437f0986cf7f1", null ],
       [ "\u202Achar16", "_types_8h.html#ad52b6a978fb975e439aaadddc671e00a", null ],
       [ "\u202Ai16", "_types_8h.html#a3f5f39ad9214460161fb9752e6fc7ccf", null ],
@@ -414,13 +417,22 @@ var namespaces_dup =
         [ "\u202AWindowed", "_graphics_8h.html#a7b8d26803e0de6aeecd63c92b0854a33ab13311ab51c4c34757f67f26580018dd", null ],
         [ "\u202AFullscreen", "_graphics_8h.html#a7b8d26803e0de6aeecd63c92b0854a33a0829ea6734059d66e6bf87096b215dc1", null ]
       ] ],
-      [ "\u202Aoperator!=", "_string_8h.html#ae97572a5fbe3765c468caccc90d77222", null ],
+      [ "\u202Aasrt", "_exception_8h.html#a8527b2a836becaa6729b15c2910f8bb1", null ],
       [ "\u202Aoperator*", "_vector_8h.html#aede1e38254b1febf3792d45919f0386b", null ],
       [ "\u202Aoperator*", "_vector_8h.html#ac6f0de44e835b79052cff41c95a71f69", null ],
       [ "\u202Aoperator*", "_vector_8h.html#a409a53c8665ffdf904d0ab7873e411e4", null ],
       [ "\u202Aoperator*", "_vector_8h.html#ac933edcd292915ac97dd90e865653684", null ],
       [ "\u202Aoperator<<", "_string_8h.html#a16cf69148d6888a3a15f7fbd879d4325", null ],
       [ "\u202Aoperator==", "_string_8h.html#a93165ff0bbfe3d5a7fe2c351a81cab29", null ],
-      [ "\u202Aoperator>>", "_string_8h.html#a9593b30614c942154e11567af2cf0ae9", null ]
+      [ "\u202Aoperator>>", "_string_8h.html#a9593b30614c942154e11567af2cf0ae9", null ],
+      [ "\u202AAll", "_concepts_8h.html#ac0551ce50cbfe4b5bcc2685912e846f9", null ],
+      [ "\u202AAllExcept", "_concepts_8h.html#a0c9093318c92ebc12266cb8caa591809", null ],
+      [ "\u202AAny", "_concepts_8h.html#a64679c47798200552b4f2c7000a238c1", null ],
+      [ "\u202AArithmetic", "_concepts_8h.html#afcfb3d935167439420ae8f42d972caba", null ],
+      [ "\u202AEnumerable", "_concepts_8h.html#a9759ad6cd1a0f8f51ec5a9e106945ecb", null ],
+      [ "\u202AFileStream", "_abstract_i_o_8h.html#ac6b9ba9acf1f426d48555c50f4747823", null ],
+      [ "\u202AOneOf", "_concepts_8h.html#a392274878ae97540e3725ef8c135d254", null ],
+      [ "\u202AStructuredType", "_structured_data_8h.html#ada924621754a0850cf8de6c546d60a79", null ],
+      [ "\u202AValidBaseForType", "_string_8h.html#a9dd9d338dff6e547a9a684f7931f7bee", null ]
     ] ]
 ];

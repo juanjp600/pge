@@ -91,72 +91,79 @@ $(document).ready(function(){initNavTree('_range_8h_source.html',''); initResiza
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PGE_RANGE_H_INCLUDED</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define PGE_RANGE_H_INCLUDED</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">namespace </span>PGE {</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;iterator&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> SIZE = <span class="keywordtype">int</span>&gt;</div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_range.html">    7</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_range.html">Range</a> {</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_range_1_1_iterator.html">    9</a></span>&#160;        <span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a> {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;            <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                <span class="keyword">using</span> difference_type = SIZE;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                <span class="keyword">using</span> value_type = SIZE;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                <span class="keyword">using</span> pointer = SIZE*;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                <span class="keyword">using</span> reference = SIZE&amp;;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                <span class="keyword">using</span> iterator_category = std::random_access_iterator_tag;</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;PGE/Types/Concepts.h&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#define PGE_INTERNAL_CONCAT(a, b) PGE_INTERNAL_CONCAT_INNER(a, b)</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define PGE_INTERNAL_CONCAT_INNER(a, b) a ## b</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#ifdef __COUNTER__</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#define PGE_IT [[maybe_unused]] const auto&amp; PGE_INTERNAL_CONCAT(PGE_INTERNAL_CONCAT(_, __COUNTER__), _PGE_INTERNAL_ITERATOR_)</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#define PGE_IT [[maybe_unused]] const auto&amp; PGE_INTERNAL_CONCAT(PGE_INTERNAL_CONCAT(_, __LINE__), _PGE_INTERNAL_ITERATOR_)</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                <span class="keyword">static</span> constexpr <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a> begin(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range.html">Range</a>&amp; range) { <span class="keywordflow">return</span> { range.start, range.step }; }</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                <span class="keyword">static</span> constexpr <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a> end(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range.html">Range</a>&amp; range) { <span class="keywordflow">return</span> { range.stop, range.step }; }</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                <span class="keyword">operator</span> SIZE&amp;() { <span class="keywordflow">return</span> position; }</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;                constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; operator*()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> *<span class="keyword">this</span>; }</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                constexpr <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; operator*() { <span class="keywordflow">return</span> *<span class="keyword">this</span>; }</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                constexpr SIZE operator[](SIZE offset)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position + step * offset; }</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                constexpr SIZE operator-(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position - other.position; }</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                constexpr <span class="keywordtype">void</span> operator++() { position += step; }</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                constexpr <span class="keywordtype">void</span> operator--() { position -= step; }</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                constexpr <span class="keywordtype">void</span> operator++(<span class="keywordtype">int</span>) { position += step; }</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                constexpr <span class="keywordtype">void</span> operator--(<span class="keywordtype">int</span>) { position -= step; }</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                constexpr <span class="keywordtype">void</span> operator+=(SIZE steps) { position += step * steps; }</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                constexpr <span class="keywordtype">void</span> operator-=(SIZE steps) { position -= step * steps; }</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a> operator+(SIZE steps)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>(position + step * steps, step); }</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a> operator-(SIZE steps)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>(position - step * steps, step); }</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                <span class="comment">// TODO: C++20 &lt;=&gt;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                constexpr <span class="keywordtype">bool</span> operator&lt;(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position &lt; other.position; }</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                constexpr <span class="keywordtype">bool</span> operator&gt;(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position &gt; other.position; }</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                constexpr <span class="keywordtype">bool</span> operator&lt;=(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position &lt;= other.position; }</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                constexpr <span class="keywordtype">bool</span> operator&gt;=(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position &gt;= other.position; }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                constexpr <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position == other.position; }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                constexpr <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position != other.position; }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                constexpr <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>(SIZE position, SIZE step) : position(position), step(step) { }</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                SIZE position;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                SIZE step;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        };</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span>PGE {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">template</span> &lt;Arithmetic SIZE = <span class="keywordtype">int</span>&gt;</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_range.html">   20</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_range.html">Range</a> {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_range_1_1_iterator.html">   22</a></span>&#160;        <span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a> {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                <span class="keyword">using</span> difference_type = SIZE;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                <span class="keyword">using</span> value_type = SIZE;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                <span class="keyword">using</span> pointer = SIZE*;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                <span class="keyword">using</span> reference = SIZE&amp;;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                <span class="keyword">using</span> iterator_category = std::random_access_iterator_tag;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                <span class="keyword">static</span> constexpr <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a> begin(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range.html">Range</a>&amp; range) { <span class="keywordflow">return</span> { range.start, range.step }; }</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                <span class="keyword">static</span> constexpr <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a> end(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range.html">Range</a>&amp; range) { <span class="keywordflow">return</span> { range.stop, range.step }; }</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                constexpr <span class="keyword">operator</span> SIZE&amp;() { <span class="keywordflow">return</span> position; }</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; operator*()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> *<span class="keyword">this</span>; }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                constexpr <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; operator*() { <span class="keywordflow">return</span> *<span class="keyword">this</span>; }</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                constexpr SIZE operator[](SIZE offset)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position + step * offset; }</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                constexpr SIZE operator-(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position - other.position; }</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                constexpr <span class="keywordtype">void</span> operator++() { position += step; }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                constexpr <span class="keywordtype">void</span> operator--() { position -= step; }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                constexpr <span class="keywordtype">void</span> operator++(<span class="keywordtype">int</span>) { position += step; }</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                constexpr <span class="keywordtype">void</span> operator--(<span class="keywordtype">int</span>) { position -= step; }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                constexpr <span class="keywordtype">void</span> operator+=(SIZE steps) { position += step * steps; }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                constexpr <span class="keywordtype">void</span> operator-=(SIZE steps) { position -= step * steps; }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a> operator+(SIZE steps)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>(position + step * steps, step); }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                constexpr <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a> operator-(SIZE steps)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>(position - step * steps, step); }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                constexpr <span class="keyword">const</span> std::weak_ordering operator&lt;=&gt;(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position &lt;=&gt; other.position; }</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        constexpr <a class="code" href="class_p_g_e_1_1_range.html">Range</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        constexpr <a class="code" href="class_p_g_e_1_1_range.html">Range</a>(SIZE end) : stop(end) { }</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        constexpr <a class="code" href="class_p_g_e_1_1_range.html">Range</a>(SIZE begin, SIZE end, SIZE step = 1) : start(begin), stop(end), step(step) { }</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        constexpr Iterator begin() { <span class="keywordflow">return</span> Iterator::begin(*<span class="keyword">this</span>); }</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        constexpr Iterator end() { <span class="keywordflow">return</span> Iterator::end(*<span class="keyword">this</span>); }</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                constexpr <a class="code" href="class_p_g_e_1_1_range_1_1_iterator.html">Iterator</a>(SIZE position, SIZE step) : position(position), step(step) { }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                SIZE position;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                SIZE step;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        };</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">private</span>:    </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        SIZE start = 0;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        SIZE stop = 0;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        SIZE step = 1;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;};</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_RANGE_H_INCLUDED</span></div>
-<div class="ttc" id="aclass_p_g_e_1_1_range_1_1_iterator_html"><div class="ttname"><a href="class_p_g_e_1_1_range_1_1_iterator.html">PGE::Range::Iterator</a></div><div class="ttdef"><b>Definition:</b> Range.h:9</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_range_html"><div class="ttname"><a href="class_p_g_e_1_1_range.html">PGE::Range</a></div><div class="ttdef"><b>Definition:</b> Range.h:7</div></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        constexpr <a class="code" href="class_p_g_e_1_1_range.html">Range</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        constexpr <a class="code" href="class_p_g_e_1_1_range.html">Range</a>(SIZE end) : stop(end) { }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        constexpr <a class="code" href="class_p_g_e_1_1_range.html">Range</a>(SIZE begin, SIZE end, SIZE step = 1) : start(begin), stop(end), step(step) { }</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        constexpr Iterator begin() { <span class="keywordflow">return</span> Iterator::begin(*<span class="keyword">this</span>); }</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        constexpr Iterator end() { <span class="keywordflow">return</span> Iterator::end(*<span class="keyword">this</span>); }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">private</span>:    </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        SIZE start = 0;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        SIZE stop = 0;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        SIZE step = 1;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;};</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_RANGE_H_INCLUDED</span></div>
+<div class="ttc" id="aclass_p_g_e_1_1_range_1_1_iterator_html"><div class="ttname"><a href="class_p_g_e_1_1_range_1_1_iterator.html">PGE::Range::Iterator</a></div><div class="ttdef"><b>Definition:</b> Range.h:22</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_range_html"><div class="ttname"><a href="class_p_g_e_1_1_range.html">PGE::Range</a></div><div class="ttdef"><b>Definition:</b> Range.h:20</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

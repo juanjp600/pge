@@ -91,65 +91,58 @@ $(document).ready(function(){initNavTree('_shader_8h_source.html',''); initResiz
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PGE_SHADER_H_INCLUDED</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define PGE_SHADER_H_INCLUDED</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;PGE/File/FilePath.h&gt;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;PGE/Math/Matrix.h&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;PGE/Math/Vector.h&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;PGE/Color/Color.h&gt;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;PGE/StructuredData/StructuredData.h&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;PGE/Types/PolymorphicHeap.h&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>PGE {</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;span&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;PGE/File/FilePath.h&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;PGE/Math/Matrix.h&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;PGE/Math/Vector.h&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;PGE/Color/Color.h&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;PGE/StructuredData/StructuredData.h&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;PGE/Types/PolymorphicHeap.h&gt;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_shader.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_shader.html">Shader</a> : <span class="keyword">private</span> <a class="code" href="class_p_g_e_1_1_polymorphic_heap.html">PolymorphicHeap</a> {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">static</span> <a class="code" href="class_p_g_e_1_1_shader.html">Shader</a>* load(<span class="keyword">class</span> <a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>&amp; gfx, <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">FilePath</a>&amp; path);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="class_p_g_e_1_1_shader.html">Shader</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_structured_data_1_1_elem_layout.html">StructuredData::ElemLayout</a>&amp; getVertexLayout() { <span class="keywordflow">return</span> vertexLayout; }</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span>PGE {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_shader.html">   15</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_shader.html">Shader</a> : <span class="keyword">private</span> <a class="code" href="class_p_g_e_1_1_polymorphic_heap.html">PolymorphicHeap</a> {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">static</span> <a class="code" href="class_p_g_e_1_1_shader.html">Shader</a>* load(<span class="keyword">class</span> <a class="code" href="class_p_g_e_1_1_graphics.html">Graphics</a>&amp; gfx, <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">FilePath</a>&amp; path);</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="class_p_g_e_1_1_shader.html">Shader</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="comment">// This is not heap-only to allow it as a map value.</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_shader_1_1_constant.html">   21</a></span>&#160;        <span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a> {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span> setValue(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_matrix4x4f.html">Matrix4x4f</a>&amp; value) = 0;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span> setValue(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector2f.html">Vector2f</a>&amp; value) = 0;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span> setValue(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; value) = 0;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span> setValue(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector4f.html">Vector4f</a>&amp; value) = 0;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span> setValue(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_color.html">Color</a>&amp; value) = 0;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span> setValue(<span class="keywordtype">float</span> value) = 0;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span> setValue(u32 value) = 0;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_structured_data_1_1_elem_layout.html">StructuredData::ElemLayout</a>&amp; getVertexLayout() { <span class="keywordflow">return</span> vertexLayout; }</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="comment">// This is not heap-only to allow it as a map value.</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_shader_1_1_constant.html">   23</a></span>&#160;        <span class="keyword">class </span><a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a> {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                <span class="keywordtype">void</span> setValue(<span class="keyword">const</span> StructuredType <span class="keyword">auto</span>&amp; value) { setValueInternal(std::span&lt;byte&gt;((<span class="keywordtype">byte</span>*)&amp;value, <span class="keyword">sizeof</span>(value))); }</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                <a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                <span class="keyword">virtual</span> ~<a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                <a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                <span class="keyword">virtual</span> ~<a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        };</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a>* getVertexShaderConstant(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; constName) = 0;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a>* getFragmentShaderConstant(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; constName) = 0;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span> setValueInternal(<span class="keyword">const</span> std::span&lt;byte&gt;&amp; data) = 0;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        };</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a>* getVertexShaderConstant(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; constName) = 0;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="class_p_g_e_1_1_shader_1_1_constant.html">Constant</a>* getFragmentShaderConstant(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; constName) = 0;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordtype">int</span> getTextureCount()<span class="keyword"> const </span>{ asrt(textureCount != -1, <span class="stringliteral">&quot;Texture count has not been initialized&quot;</span>); <span class="keywordflow">return</span> textureCount; }</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">int</span> getTextureCount()<span class="keyword"> const </span>{ PGE_ASSERT(textureCount != -1, <span class="stringliteral">&quot;Texture count has not been initialized&quot;</span>); <span class="keywordflow">return</span> textureCount; }</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="code" href="class_p_g_e_1_1_shader.html">Shader</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">FilePath</a>&amp; path) : filepath(path) { }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        StructuredData::ElemLayout vertexLayout;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">const</span> FilePath filepath;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">int</span> textureCount = -1;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;};</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="code" href="class_p_g_e_1_1_shader.html">Shader</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">FilePath</a>&amp; path) : filepath(path) { }</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        StructuredData::ElemLayout vertexLayout;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">const</span> FilePath filepath;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">int</span> textureCount = -1;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;};</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_SHADER_H_INCLUDED</span></div>
-<div class="ttc" id="aclass_p_g_e_1_1_color_html"><div class="ttname"><a href="class_p_g_e_1_1_color.html">PGE::Color</a></div><div class="ttdoc">An RGBA color represented via 4 floating point numbers.</div><div class="ttdef"><b>Definition:</b> Color.h:14</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_file_path_html"><div class="ttname"><a href="class_p_g_e_1_1_file_path.html">PGE::FilePath</a></div><div class="ttdoc">String wrapper utility to deal with paths.</div><div class="ttdef"><b>Definition:</b> FilePath.h:13</div></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_SHADER_H_INCLUDED</span></div>
+<div class="ttc" id="aclass_p_g_e_1_1_file_path_html"><div class="ttname"><a href="class_p_g_e_1_1_file_path.html">PGE::FilePath</a></div><div class="ttdoc">String wrapper utility to deal with paths.</div><div class="ttdef"><b>Definition:</b> FilePath.h:14</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_graphics_html"><div class="ttname"><a href="class_p_g_e_1_1_graphics.html">PGE::Graphics</a></div><div class="ttdoc">Main class for managing everything graphics related.</div><div class="ttdef"><b>Definition:</b> Graphics.h:37</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_matrix4x4f_html"><div class="ttname"><a href="class_p_g_e_1_1_matrix4x4f.html">PGE::Matrix4x4f</a></div><div class="ttdoc">Row-major 4x4 matrix.</div><div class="ttdef"><b>Definition:</b> Matrix.h:9</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_polymorphic_heap_html"><div class="ttname"><a href="class_p_g_e_1_1_polymorphic_heap.html">PGE::PolymorphicHeap</a></div><div class="ttdef"><b>Definition:</b> PolymorphicHeap.h:6</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_shader_1_1_constant_html"><div class="ttname"><a href="class_p_g_e_1_1_shader_1_1_constant.html">PGE::Shader::Constant</a></div><div class="ttdef"><b>Definition:</b> Shader.h:21</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_shader_html"><div class="ttname"><a href="class_p_g_e_1_1_shader.html">PGE::Shader</a></div><div class="ttdef"><b>Definition:</b> Shader.h:13</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_string_html"><div class="ttname"><a href="class_p_g_e_1_1_string.html">PGE::String</a></div><div class="ttdoc">A UTF-8 character sequence guaranteed to be terminated by a null byte.</div><div class="ttdef"><b>Definition:</b> String.h:20</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_structured_data_1_1_elem_layout_html"><div class="ttname"><a href="class_p_g_e_1_1_structured_data_1_1_elem_layout.html">PGE::StructuredData::ElemLayout</a></div><div class="ttdef"><b>Definition:</b> StructuredData.h:18</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_vector2f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector2f.html">PGE::Vector2f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:10</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:66</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_vector4f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector4f.html">PGE::Vector4f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:125</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_shader_1_1_constant_html"><div class="ttname"><a href="class_p_g_e_1_1_shader_1_1_constant.html">PGE::Shader::Constant</a></div><div class="ttdef"><b>Definition:</b> Shader.h:23</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_shader_html"><div class="ttname"><a href="class_p_g_e_1_1_shader.html">PGE::Shader</a></div><div class="ttdef"><b>Definition:</b> Shader.h:15</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_string_html"><div class="ttname"><a href="class_p_g_e_1_1_string.html">PGE::String</a></div><div class="ttdoc">A UTF-8 character sequence guaranteed to be terminated by a null byte.</div><div class="ttdef"><b>Definition:</b> String.h:26</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_structured_data_1_1_elem_layout_html"><div class="ttname"><a href="class_p_g_e_1_1_structured_data_1_1_elem_layout.html">PGE::StructuredData::ElemLayout</a></div><div class="ttdef"><b>Definition:</b> StructuredData.h:22</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

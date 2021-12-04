@@ -42,8 +42,11 @@ var annotated_dup =
       [ "\u202AString", "class_p_g_e_1_1_string.html", "class_p_g_e_1_1_string" ],
       [ "\u202AStructuredData", "class_p_g_e_1_1_structured_data.html", "class_p_g_e_1_1_structured_data" ],
       [ "\u202ASysEvents", "class_p_g_e_1_1_sys_events.html", "class_p_g_e_1_1_sys_events" ],
+      [ "\u202AMeta", "struct_p_g_e_1_1_meta.html", "struct_p_g_e_1_1_meta" ],
+      [ "\u202ANegator", "struct_p_g_e_1_1_negator.html", "struct_p_g_e_1_1_negator" ],
       [ "\u202APolymorphicHeap", "class_p_g_e_1_1_polymorphic_heap.html", "class_p_g_e_1_1_polymorphic_heap" ],
       [ "\u202ARange", "class_p_g_e_1_1_range.html", "class_p_g_e_1_1_range" ],
-      [ "\u202AReference", "class_p_g_e_1_1_reference.html", "class_p_g_e_1_1_reference" ]
+      [ "\u202AReference", "class_p_g_e_1_1_reference.html", "class_p_g_e_1_1_reference" ],
+      [ "\u202ATemplateString", "struct_p_g_e_1_1_template_string.html", "struct_p_g_e_1_1_template_string" ]
     ] ]
 ];

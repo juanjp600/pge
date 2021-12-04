@@ -8,7 +8,7 @@ var class_p_g_e_1_1_binary_reader =
     [ "\u202AreadBytesInto", "class_p_g_e_1_1_binary_reader.html#a0177ad10268e3c7e24aa6fc3373e1b1e", null ],
     [ "\u202AreadStringInto", "class_p_g_e_1_1_binary_reader.html#ac3e03554a4bdd27507e8f66411b0ee51", null ],
     [ "\u202Askip", "class_p_g_e_1_1_binary_reader.html#acf5b09de8d967c8c9c1818533d2d6972", null ],
-    [ "\u202AtryRead", "class_p_g_e_1_1_binary_reader.html#a1b27697fd067bb633fd1ba622f196496", null ],
+    [ "\u202AtryRead", "class_p_g_e_1_1_binary_reader.html#aef2575a4aadf20582c9bcecd4260c5a8", null ],
     [ "\u202AtryReadBytes", "class_p_g_e_1_1_binary_reader.html#af121837cb9a968dde26d553d31a2137f", null ],
     [ "\u202AtrySkip", "class_p_g_e_1_1_binary_reader.html#ad25e128488012a336f98c7f168493106", null ]
 ];

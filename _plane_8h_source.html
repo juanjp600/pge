@@ -152,76 +152,71 @@ $(document).ready(function(){initNavTree('_plane_8h_source.html',''); initResiza
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            : normal(norm.normalize()),</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;              distanceFromOrigin(distOrig) { }</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        constexpr <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>&amp; other)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <span class="keywordflow">return</span> normal == other.normal &amp;&amp; distanceFromOrigin == other.distanceFromOrigin;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        }</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        constexpr <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>&amp; other)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">return</span> normal != other.normal || distanceFromOrigin != other.distanceFromOrigin;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        constexpr <span class="keywordtype">bool</span> equals(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>&amp; other, <span class="keywordtype">float</span> epsilon = <a class="code" href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">Math::EPSILON_DEFAULT</a>)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="keywordflow">return</span> normal.equals(other.normal, epsilon) &amp;&amp; <a class="code" href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">Math::equalFloats</a>(distanceFromOrigin, other.distanceFromOrigin, epsilon);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        constexpr <span class="keywordtype">float</span> evalAtPoint(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; co)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <span class="keywordflow">return</span> normal.dotProduct(co) - distanceFromOrigin;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        constexpr <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>&amp; other) <span class="keyword">const</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        constexpr <span class="keywordtype">bool</span> equals(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>&amp; other, <span class="keywordtype">float</span> epsilon = <a class="code" href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">Math::EPSILON_DEFAULT</a>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <span class="keywordflow">return</span> normal.equals(other.normal, epsilon) &amp;&amp; <a class="code" href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">Math::equalFloats</a>(distanceFromOrigin, other.distanceFromOrigin, epsilon);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        constexpr <span class="keywordtype">float</span> evalAtPoint(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; co)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordflow">return</span> normal.dotProduct(co) - distanceFromOrigin;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        }</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keyword">enum class</span> PointRelation {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            ON,</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            BELOW,</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            ABOVE,</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        };</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keyword">enum class</span> PointRelation {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            ON,</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            BELOW,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            ABOVE,</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        };</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        constexpr PointRelation onPlane(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; co, <span class="keywordtype">float</span> epsilon = <a class="code" href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">Math::EPSILON_DEFAULT</a>)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keywordtype">float</span> res = evalAtPoint(co);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">Math::equalFloats</a>(epsilon, 0.f)) { <span class="keywordflow">return</span> PointRelation::ON; }</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <span class="keywordflow">if</span> (res &lt; 0) { <span class="keywordflow">return</span> PointRelation::BELOW; }</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="keywordflow">return</span> PointRelation::ABOVE;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        constexpr <span class="keywordtype">bool</span> intersects(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_line3f.html">Line3f</a>&amp; line, <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; intersectionPoint, <span class="keywordtype">float</span>&amp; coveredAmount, <span class="keywordtype">bool</span> ignoreDirection = <span class="keyword">false</span>, <span class="keywordtype">bool</span> ignoreSegment = <span class="keyword">false</span>)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="comment">// http://softsurfer.com/Archive/algorithm_0104/algorithm_0104B.htm#Line%20Intersections</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="comment">// http://paulbourke.net/geometry/planeline/</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> dir = line.pointB - line.pointA;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            <span class="keywordtype">float</span> denominator = -normal.dotProduct(dir);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordtype">float</span> numerator = normal.dotProduct(line.pointA + normal * -distanceFromOrigin);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">Math::equalFloats</a>(denominator, 0.f) || (!ignoreDirection &amp;&amp; denominator &lt; 0)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <span class="keywordtype">float</span> u = numerator / denominator;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">if</span> (!ignoreSegment &amp;&amp; (u &lt; 0 || u &gt; 1)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            intersectionPoint = line.pointA + dir * u;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            coveredAmount = u;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        }</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> intersect(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>&amp; p2, <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>&amp; p3, <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; intersectionPoint) {</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <span class="comment">// http://paulbourke.net/geometry/3planes/</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> c1 = p2.normal.crossProduct(p3.normal);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> c2 = p3.normal.crossProduct(p1.normal);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> c3 = p1.normal.crossProduct(p2.normal);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="keywordtype">float</span> denom = p1.normal.dotProduct(c1);</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            <span class="comment">// No intersection, planes must be parallel</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">Math::equalFloats</a>(denom, 0.f)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> numer = c1 * p1.distanceFromOrigin + c2 * p2.distanceFromOrigin + c3 * p3.distanceFromOrigin;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            intersectionPoint = numer / denom;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        }</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;};</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;static_assert(<span class="keyword">sizeof</span>(<a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>) == <span class="keyword">sizeof</span>(<a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>) + <span class="keyword">sizeof</span>(<span class="keywordtype">float</span>));</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;}</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MATRIX_H_INCLUDED</span></div>
-<div class="ttc" id="aclass_p_g_e_1_1_line3f_html"><div class="ttname"><a href="class_p_g_e_1_1_line3f.html">PGE::Line3f</a></div><div class="ttdef"><b>Definition:</b> Line.h:64</div></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        constexpr PointRelation onPlane(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; co, <span class="keywordtype">float</span> epsilon = <a class="code" href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">Math::EPSILON_DEFAULT</a>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordtype">float</span> res = evalAtPoint(co);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            <span class="keyword">using</span> <span class="keyword">enum</span> PointRelation;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">Math::equalFloats</a>(epsilon, 0.f)) { <span class="keywordflow">return</span> ON; }</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            <span class="keywordflow">if</span> (res &lt; 0) { <span class="keywordflow">return</span> BELOW; }</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            <span class="keywordflow">return</span> ABOVE;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        constexpr <span class="keywordtype">bool</span> intersects(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_line3f.html">Line3f</a>&amp; line, <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; intersectionPoint, <span class="keywordtype">float</span>&amp; coveredAmount, <span class="keywordtype">bool</span> ignoreDirection = <span class="keyword">false</span>, <span class="keywordtype">bool</span> ignoreSegment = <span class="keyword">false</span>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <span class="comment">// http://softsurfer.com/Archive/algorithm_0104/algorithm_0104B.htm#Line%20Intersections</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="comment">// http://paulbourke.net/geometry/planeline/</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> dir = line.pointB - line.pointA;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="keywordtype">float</span> denominator = -normal.dotProduct(dir);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keywordtype">float</span> numerator = normal.dotProduct(line.pointA + normal * -distanceFromOrigin);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">Math::equalFloats</a>(denominator, 0.f) || (!ignoreDirection &amp;&amp; denominator &lt; 0)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            <span class="keywordtype">float</span> u = numerator / denominator;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <span class="keywordflow">if</span> (!ignoreSegment &amp;&amp; (u &lt; 0 || u &gt; 1)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            intersectionPoint = line.pointA + dir * u;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            coveredAmount = u;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        }</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> intersect(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>&amp; p2, <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>&amp; p3, <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>&amp; intersectionPoint) {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="comment">// http://paulbourke.net/geometry/3planes/</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> c1 = p2.normal.crossProduct(p3.normal);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> c2 = p3.normal.crossProduct(p1.normal);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> c3 = p1.normal.crossProduct(p2.normal);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            <span class="keywordtype">float</span> denom = p1.normal.dotProduct(c1);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <span class="comment">// No intersection, planes must be parallel</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">Math::equalFloats</a>(denom, 0.f)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            <a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a> numer = c1 * p1.distanceFromOrigin + c2 * p2.distanceFromOrigin + c3 * p3.distanceFromOrigin;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            intersectionPoint = numer / denom;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        }</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;};</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;static_assert(<span class="keyword">sizeof</span>(<a class="code" href="class_p_g_e_1_1_plane.html">Plane</a>) == <span class="keyword">sizeof</span>(<a class="code" href="class_p_g_e_1_1_vector3f.html">Vector3f</a>) + <span class="keyword">sizeof</span>(<span class="keywordtype">float</span>));</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;}</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_MATRIX_H_INCLUDED</span></div>
+<div class="ttc" id="aclass_p_g_e_1_1_line3f_html"><div class="ttname"><a href="class_p_g_e_1_1_line3f.html">PGE::Line3f</a></div><div class="ttdef"><b>Definition:</b> Line.h:60</div></div>
 <div class="ttc" id="aclass_p_g_e_1_1_plane_html"><div class="ttname"><a href="class_p_g_e_1_1_plane.html">PGE::Plane</a></div><div class="ttdef"><b>Definition:</b> Plane.h:46</div></div>
-<div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:66</div></div>
-<div class="ttc" id="anamespace_p_g_e_1_1_math_html_a254393cd3a914e459f8ecedf76802e77"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">PGE::Math::equalFloats</a></div><div class="ttdeci">constexpr bool equalFloats(float val, float other, float epsilon=EPSILON_DEFAULT) noexcept</div><div class="ttdoc">Two values are considered equal if |val - other| &lt; epsilon.</div><div class="ttdef"><b>Definition:</b> Math.h:26</div></div>
-<div class="ttc" id="anamespace_p_g_e_1_1_math_html_a6b04fd48d78229387dde0bddbe3d5c05"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">PGE::Math::EPSILON_DEFAULT</a></div><div class="ttdeci">constexpr float EPSILON_DEFAULT</div><div class="ttdoc">The default difference two floats are allowed to have in order to be considered &quot;equal&quot;.</div><div class="ttdef"><b>Definition:</b> Math.h:13</div></div>
+<div class="ttc" id="aclass_p_g_e_1_1_vector3f_html"><div class="ttname"><a href="class_p_g_e_1_1_vector3f.html">PGE::Vector3f</a></div><div class="ttdef"><b>Definition:</b> Vector.h:65</div></div>
+<div class="ttc" id="anamespace_p_g_e_1_1_math_html_a254393cd3a914e459f8ecedf76802e77"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77">PGE::Math::equalFloats</a></div><div class="ttdeci">constexpr bool equalFloats(float val, float other, float epsilon=EPSILON_DEFAULT) noexcept</div><div class="ttdoc">Two values are considered equal if |val - other| &lt; epsilon.</div><div class="ttdef"><b>Definition:</b> Math.h:28</div></div>
+<div class="ttc" id="anamespace_p_g_e_1_1_math_html_a6b04fd48d78229387dde0bddbe3d5c05"><div class="ttname"><a href="namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05">PGE::Math::EPSILON_DEFAULT</a></div><div class="ttdeci">constexpr float EPSILON_DEFAULT</div><div class="ttdoc">The default difference two floats are allowed to have in order to be considered &quot;equal&quot;.</div><div class="ttdef"><b>Definition:</b> Math.h:15</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

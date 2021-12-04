@@ -11,7 +11,6 @@ var class_p_g_e_1_1_vector2i =
     [ "\u202Alength", "class_p_g_e_1_1_vector2i.html#a3189f54bca532a58f22f0d62f14838ff", null ],
     [ "\u202AlengthSquared", "class_p_g_e_1_1_vector2i.html#a68a9f6ba015ba3558aac0c7b35a8d314", null ],
     [ "\u202Aoperator const Vector2f", "class_p_g_e_1_1_vector2i.html#a510b2cdf55d48dc305f49d16a0f2ec24", null ],
-    [ "\u202Aoperator!=", "class_p_g_e_1_1_vector2i.html#a37ff66c0ef033569071248a1e5f089a7", null ],
     [ "\u202Aoperator*", "class_p_g_e_1_1_vector2i.html#a96479359c7b70cfb778a8cc80125862e", null ],
     [ "\u202Aoperator*=", "class_p_g_e_1_1_vector2i.html#aae2029dc6e525bd3b29261b4ec6445bc", null ],
     [ "\u202Aoperator+", "class_p_g_e_1_1_vector2i.html#a7f861a05b9348beb687b1be193a7717b", null ],
@@ -23,7 +22,7 @@ var class_p_g_e_1_1_vector2i =
     [ "\u202Aoperator-", "class_p_g_e_1_1_vector2i.html#ad47e486f1f69d0bd79b1af44e94f1274", null ],
     [ "\u202Aoperator-=", "class_p_g_e_1_1_vector2i.html#a10571fddfbd39e6394490804c10da127", null ],
     [ "\u202Aoperator-=", "class_p_g_e_1_1_vector2i.html#abab88c222325e0c1c91572fea6751a25", null ],
-    [ "\u202Aoperator==", "class_p_g_e_1_1_vector2i.html#a1cd7c065d8238e315f241e3f2f730ccc", null ],
+    [ "\u202Aoperator==", "class_p_g_e_1_1_vector2i.html#a03bd028b1f02446ec80b36177f2dd345", null ],
     [ "\u202Ax", "class_p_g_e_1_1_vector2i.html#ae57876f565db2afc4bacfc238e4c4dc5", null ],
     [ "\u202Ay", "class_p_g_e_1_1_vector2i.html#aaa912c443f1393e27e818086c2de6d1b", null ]
 ];

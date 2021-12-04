@@ -13,8 +13,7 @@ var class_p_g_e_1_1_plane =
     [ "\u202AevalAtPoint", "class_p_g_e_1_1_plane.html#a65a2aa978a8ec70161ec23adaf381853", null ],
     [ "\u202Aintersects", "class_p_g_e_1_1_plane.html#a089074f119235ffacd7683c82e38979e", null ],
     [ "\u202AonPlane", "class_p_g_e_1_1_plane.html#a1a7e446e920730daaaecba13755df3db", null ],
-    [ "\u202Aoperator!=", "class_p_g_e_1_1_plane.html#a6fe1df4a67e3999db7c1ed8440e0f47e", null ],
-    [ "\u202Aoperator==", "class_p_g_e_1_1_plane.html#aab216da823540d933405e38ea7d8b294", null ],
+    [ "\u202Aoperator==", "class_p_g_e_1_1_plane.html#aa3584896448e60be56a99544532b02bd", null ],
     [ "\u202AdistanceFromOrigin", "class_p_g_e_1_1_plane.html#abbe2479fea476629668394a15868e368", null ],
     [ "\u202Anormal", "class_p_g_e_1_1_plane.html#a69d3c42ae532bd9c5fb753ad33cbd61a", null ]
 ];
