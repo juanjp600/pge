@@ -18,10 +18,6 @@ class Line2f {
             return pointA == other.pointA && pointB == other.pointB || pointA == other.pointB && pointB == other.pointA;
         }
 
-        constexpr bool operator!=(const Line2f& other) const {
-            return pointA != other.pointA || pointB != other.pointB && pointA != other.pointB || pointB != other.pointA;
-        }
-
         constexpr bool equals(const Line2f& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return pointA.equals(other.pointA, epsilon) && pointB.equals(other.pointB, epsilon)
                 || pointA.equals(other.pointB, epsilon) && pointB.equals(other.pointA, epsilon);

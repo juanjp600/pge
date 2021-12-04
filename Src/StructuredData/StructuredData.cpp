@@ -10,37 +10,18 @@ StructuredData::ElemLayout::LocationAndSize::LocationAndSize(int loc, int sz) {
     location = loc; size = sz;
 }
 
-bool StructuredData::ElemLayout::LocationAndSize::operator==(const ElemLayout::LocationAndSize& other) const {
-    return location == other.location && size == other.size;
-}
-
-StructuredData::ElemLayout::ElemLayout(const std::vector<Entry>& entrs) {
-    int currLocation = 0;
-    for (int i = 0; i < entrs.size(); i++) {
-        entries.emplace(entrs[i].name, LocationAndSize(currLocation, entrs[i].size));
-        currLocation += entrs[i].size;
-    }
-    elementSize = currLocation;
-}
-
 const StructuredData::ElemLayout::LocationAndSize& StructuredData::ElemLayout::getLocationAndSize(const String& name) const {
     return getLocationAndSize(String::Key(name));
 }
 
 const StructuredData::ElemLayout::LocationAndSize& StructuredData::ElemLayout::getLocationAndSize(const String::Key& key) const {
     auto iter = entries.find(key);
-    PGE_ASSERT(iter != entries.end(), "No entry with key \"" + String::hexFromInt(key.hash) + "\"");
+    asrt(iter != entries.end(), "No entry with key \"" + String::hexFromInt(key.hash) + "\"");
     return iter->second;
 }
 
 int StructuredData::ElemLayout::getElementSize() const {
     return elementSize;
-}
-
-bool StructuredData::ElemLayout::operator==(const StructuredData::ElemLayout& other) const {
-    if (this == &other) { return true; }
-    if (elementSize != other.elementSize) { return false; }
-    return entries == other.entries;
 }
 
 StructuredData::StructuredData(const ElemLayout& ly, int elemCount) {
@@ -90,15 +71,15 @@ const StructuredData::ElemLayout& StructuredData::getLayout() const {
 }
 
 int StructuredData::getDataIndex(int elemIndex, const String::Key& entry, int expectedSize) const {
-    PGE_ASSERT(elemIndex >= 0, "Requested a negative element index (" + String::from(elemIndex) + ")");
+    asrt(elemIndex >= 0, "Requested a negative element index (" + String::from(elemIndex) + ")");
 
     int elemOffset = elemIndex * layout.getElementSize();
-    PGE_ASSERT(elemOffset <= (size - layout.getElementSize()),
+    asrt(elemOffset <= (size - layout.getElementSize()),
         "Requested an element index greater than the number of elements ("
         + String::from(elemOffset) + " > " + String::from((int)(size - layout.getElementSize())) + ")");
 
     const ElemLayout::LocationAndSize& locAndSize = layout.getLocationAndSize(entry);
-    PGE_ASSERT(locAndSize.size == expectedSize,
+    asrt(locAndSize.size == expectedSize,
         "Entry \"" + String::hexFromInt(entry.hash) + "\" size mismatch (expected " + String::from(locAndSize.size)
         + ", got " + String::from(expectedSize) + ")");
 

@@ -49,7 +49,7 @@ int String::BasicIterator::operator-(const String::BasicIterator& other) const {
 }
 
 char16 String::BasicIterator::operator*() const {
-    PGE_ASSERT(index >= 0 && index < ref->byteLength(), "Tried dereferencing invalid iterator");
+    asrt(index >= 0 && index < ref->byteLength(), "Tried dereferencing invalid iterator");
     if (_ch == L'\uFFFF') {
         _ch = Unicode::utf8ToWChar(ref->cstr() + index);
     }
@@ -58,10 +58,6 @@ char16 String::BasicIterator::operator*() const {
 
 bool String::BasicIterator::operator==(const BasicIterator& other) const {
     return ref->chs == other.ref->chs && index == other.index;
-}
-
-bool String::BasicIterator::operator!=(const BasicIterator& other) const {
-    return ref->chs != other.ref->chs || index != other.index;
 }
 
 int String::BasicIterator::getBytePosition() const {
@@ -79,25 +75,25 @@ int String::BasicIterator::getPosition() const {
 }
 
 String::Iterator& String::Iterator::operator++() {
-    PGE_ASSERT(index < ref->byteLength(), "Tried incrementing end iterator");
+    asrt(index < ref->byteLength(), "Tried incrementing end iterator");
     increment();
     return *this;
 }
 
 String::Iterator& String::Iterator::operator--() {
-    PGE_ASSERT(index > 0, "Tried decrementing begin iterator");
+    asrt(index > 0, "Tried decrementing begin iterator");
     decrement();
     return *this;
 }
 
 String::ReverseIterator& String::ReverseIterator::operator++() {
-    PGE_ASSERT(index >= 0, "Tried decrementing end reverse iterator");
+    asrt(index >= 0, "Tried decrementing end reverse iterator");
     decrement();
     return *this;
 }
 
 String::ReverseIterator& String::ReverseIterator::operator--() {
-    PGE_ASSERT(index < String::Iterator::end(*ref).index, "Tried incrementing begin reverse iterator");
+    asrt(index < String::Iterator::end(*ref).index, "Tried incrementing begin reverse iterator");
     increment();
     return *this;
 }
@@ -105,11 +101,11 @@ String::ReverseIterator& String::ReverseIterator::operator--() {
 const inline String INVALID_ITERATOR = "Tried reversing invalid iterator";
 
 void String::Iterator::validate() {
-    PGE_ASSERT(index >= 0, INVALID_ITERATOR);
+    asrt(index >= 0, INVALID_ITERATOR);
 }
 
 void String::ReverseIterator::validate() {
-    PGE_ASSERT(index < ref->byteLength(), INVALID_ITERATOR);
+    asrt(index < ref->byteLength(), INVALID_ITERATOR);
 }
 
 const String::Iterator String::Iterator::begin(const String& str) {
@@ -174,6 +170,8 @@ String::String() {
 String::String(const String& other) {
     copy(*this, other);
 }
+
+String::String(const char8_t* cstr) : String((const char*)cstr) { }
 
 String::String(const std::string& cppstr) {
     int len = (int)cppstr.size();
@@ -353,10 +351,6 @@ bool PGE::operator==(const String& a, const String& b) {
     return a.equals(b);
 }
 
-bool PGE::operator!=(const String& a, const String& b) {
-    return !a.equals(b);
-}
-
 std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
     return os.write(s.cstr(), s.byteLength());
 }
@@ -377,10 +371,27 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
 
 u64 String::getHashCode() const {
     if (!data->_hashCodeEvaluted) {
-        data->_hashCode = Hasher::getHash((byte*)cstr(), byteLength());
+        data->_hashCode = Hasher::getHash(std::span((byte*)cstr(), byteLength()));
         data->_hashCodeEvaluted = true;
     }
     return data->_hashCode;
+}
+
+const std::weak_ordering String::compare(const String& other) const {
+    String::Iterator a = begin();
+    String::Iterator b = other.begin();
+    while (a != end() && b != other.end() && *a == *b) { a++; b++; }
+    if (a == end()) {
+        if (b == other.end()) {
+            return std::weak_ordering::equivalent;
+        } else {
+            return std::weak_ordering::greater;
+        }
+    } else if (b == other.end()) {
+        return std::weak_ordering::less;
+    } else {
+        return *a <=> *b;
+    }
 }
 
 bool String::equals(const String& other) const {
@@ -388,7 +399,7 @@ bool String::equals(const String& other) const {
     if (byteLength() != other.byteLength()) { return false; }
     if (data->_strLength >= 0 && other.data->_strLength >= 0 && length() != other.length()) { return false; }
     if (data->_hashCodeEvaluted && other.data->_hashCodeEvaluted) { return getHashCode() == other.getHashCode(); }
-    return strcmp(cstr(), other.cstr()) == 0;
+    return memcmp(cstr(), other.cstr(), byteLength()) == 0;
 }
 
 static void fold(const char*& buf, std::queue<char16>& queue) {
@@ -408,7 +419,7 @@ bool String::equalsIgnoreCase(const String& other) const {
     std::queue<char16> queue[2];
 
     // Feed first char.
-    for (int i = 0; i < 2; i++) {
+    for (int i : Range(2)) {
         fold(buf[i], queue[i]);
     }
 
@@ -422,7 +433,7 @@ bool String::equalsIgnoreCase(const String& other) const {
         }
 
         // Try refilling.
-        for (int i = 0; i < 2; i++) {
+        for (int i : Range(2)) {
             fold(buf[i], queue[i]);
         }
     }
@@ -490,6 +501,10 @@ const char* String::cstr() const {
     return chs;
 }
 
+const char8_t* String::c8str() const {
+    return (const char8_t*)chs;
+}
+
 char* String::cstrNoConst() {
     return chs;
 }
@@ -500,26 +515,15 @@ const std::vector<char16> String::wstr() const {
         chars.reserve(data->_strLength);
     }
     // Convert all the codepoints to wchars.
-    for (Iterator it = begin(); it != end(); it++) {
-        chars.emplace_back(*it);
+    for (char16 ch : *this) {
+        chars.emplace_back(ch);
     }
     chars.emplace_back(L'\0');
     return chars;
 }
 
-template <typename I, byte BASE>
-void validateBaseWithType() {
-    // 10 digits + 26 characters = 36
-    static_assert(BASE >= 2 && BASE <= 36);
-
-    // Only unsigned numbers can be represented in other bases.
-    static_assert(BASE == 10 || !std::numeric_limits<I>::is_signed);
-}
-
-template <typename I>
-static constexpr byte maxIntegerDigits(byte base) { // TODO: Consteval C++20.
-    static_assert(std::numeric_limits<I>::is_integer);
-
+template <std::integral I>
+static consteval byte maxIntegerDigits(byte base) {
     byte digits = 0;
     I max = std::numeric_limits<I>::max();
     while (max != 0) { digits++; max /= base; }
@@ -527,10 +531,8 @@ static constexpr byte maxIntegerDigits(byte base) { // TODO: Consteval C++20.
     return digits;
 }
 
-template <typename I, byte BASE>
+template <std::integral I, byte BASE> requires ValidBaseForType<I, BASE>
 const String String::fromInteger(I i, Casing casing) {
-    validateBaseWithType<I, BASE>();
-
     constexpr byte digits = maxIntegerDigits<I>(BASE);
     String ret(digits);
 
@@ -597,10 +599,8 @@ static bool charToDigit(byte& digit, char16 ch) {
     return false;
 }
 
-template <typename I, byte BASE = 10>
+template <std::integral I, byte BASE = 10>  requires ValidBaseForType<I, BASE>
 static I toInteger(const String& str, bool& success) {
-    validateBaseWithType<I, BASE>();
-
     success = false;
     I ret = 0;
     String::Iterator it = str.begin();
@@ -649,10 +649,8 @@ PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned int)
 PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned long)
 PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned long long)
 
-template <typename F>
+template <std::floating_point F>
 const String String::fromFloatingPoint(F f) {
-    static_assert(std::is_floating_point<F>::value);
-
     const char* format;
     if constexpr (std::is_same<F, long double>::value) {
         format = "%fL";
@@ -681,7 +679,7 @@ static const String NAN_STRING_LOWER = NAN_STRING.toLower();
 
 static constexpr char16 DECIMAL_SEPERATOR = L'.';
 
-template <typename F>
+template <std::floating_point F>
 static F toFloatingPoint(const String& str, bool& success) {
     success = true;
 
@@ -771,7 +769,7 @@ int String::length() const {
 }
 
 int String::byteLength() const {
-    PGE_ASSERT(data->strByteLength >= 0, "String byte length must always be valid");
+    asrt(data->strByteLength >= 0, "String byte length must always be valid");
     return data->strByteLength;
 }
 
@@ -786,7 +784,7 @@ const String::Iterator String::findFirst(const String& fnd, int from) const {
 static const String EMPTY_FIND = "Find string can't be empty";
 
 const String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
-    PGE_ASSERT(!fnd.isEmpty(), EMPTY_FIND);
+    asrt(!fnd.isEmpty(), EMPTY_FIND);
     for (auto it = from; it != end(); it++) {
         if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) { return it; }
     }
@@ -798,7 +796,7 @@ const String::ReverseIterator String::findLast(const String& fnd, int fromEnd) c
 }
 
 const String::ReverseIterator String::findLast(const String& fnd, const ReverseIterator& from) const {
-    PGE_ASSERT(!fnd.isEmpty(), EMPTY_FIND);
+    asrt(!fnd.isEmpty(), EMPTY_FIND);
     for (ReverseIterator it = from; it != rend(); it++) {
         if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) { return it; }
     }
@@ -819,9 +817,9 @@ const String String::substr(const Iterator& start) const {
 }
 
 const String String::substr(const Iterator& start, const Iterator& to) const {
-    PGE_ASSERT(start.getBytePosition() <= to.getBytePosition(),
+    asrt(start.getBytePosition() <= to.getBytePosition(),
         "Start iterator can't come after to iterator (start: " + from(start.getBytePosition()) + "; to: " + from(to.getBytePosition()) + "; str: " + *this + ")");
-    PGE_ASSERT(to.getBytePosition() <= end().getBytePosition(),
+    asrt(to.getBytePosition() <= end().getBytePosition(),
         "To iterator can't come after end iterator (to: " + from(to.getBytePosition()) + "; end: " + from(end().getBytePosition()) + "; str: " + *this + ")");
 
     int newSize = to.getBytePosition() - start.getBytePosition();
@@ -842,7 +840,7 @@ const String::Iterator String::charAt(int pos) const {
 }
 
 const String String::replace(const String& fnd, const String& rplace) const {
-    PGE_ASSERT(fnd.byteLength() != 0, "Find string can't be empty");
+    asrt(fnd.byteLength() != 0, "Find string can't be empty");
 
     const char* fndStr = fnd.cstr();
     const char* rplaceStr = rplace.cstr();
@@ -945,7 +943,7 @@ const String String::reverse() const {
     char* buf = ret.cstrNoConst();
     buf[len] = '\0';
     buf += len;
-    for (int i = 0; i < len;) {
+    for (int& i : Range(len)) {
         int codepoint = Unicode::measureCodepoint(cstr()[i]);
         buf -= codepoint;
         memcpy(buf, cstr() + i, codepoint);
@@ -964,7 +962,7 @@ const String String::multiply(unsigned count, const String& separator) const {
     String ret(newLength);
     char* buf = ret.cstrNoConst();
     buf[newLength] = '\0';
-    for (int i = 0; i < count; i++) {
+    for (int i : Range(count)) {
         if (i != 0) {
             memcpy(buf, separator.cstr(), sepLength);
             buf += sepLength;
@@ -999,19 +997,6 @@ const std::vector<String> String::split(const String& needleStr, bool removeEmpt
         split.emplace_back(String(*this, cut, endAddSize));
     }
     return split;
-}
-
-const String String::join(const std::vector<String>& vect, const String& separator) {
-    if (vect.empty()) {
-        return String();
-    }
-
-    String retVal = vect[0];
-    for (int i = 1; i < (int)vect.size(); i++) {
-        retVal += separator + vect[i];
-    }
-
-    return retVal;
 }
 
 const std::cmatch String::regexMatch(const std::regex& pattern) const {
@@ -1064,7 +1049,7 @@ String String::unHex() const {
                 }
             }
         } else {
-            for (int j = 0; j < codepoint; j++) {
+            for (int j : Range(codepoint)) {
                 retBuf[i + j] = buf[i + j];
             }
         }

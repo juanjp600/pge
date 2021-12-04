@@ -1,5 +1,5 @@
-#ifndef PGE_TEXTREADER_H_DEFINED
-#define PGE_TEXTREADER_H_DEFINED
+#ifndef PGE_TEXTREADER_H_INCLUDED
+#define PGE_TEXTREADER_H_INCLUDED
 
 #include <PGE/File/AbstractIO.h>
 
@@ -54,4 +54,4 @@ class TextReader : private AbstractIO<std::ifstream> {
 
 }
 
-#endif // PGE_TEXTREADER_H_DEFINED
+#endif // PGE_TEXTREADER_H_INCLUDED

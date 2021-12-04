@@ -14,7 +14,9 @@
 
 using namespace PGE;
 
-#define PGE_ASSERT_SDL(CALL) PGE_ASSERT(CALL >= 0, SDL_GetError())
+static void assertSDL(int retCode, const std::source_location& location = std::source_location::current()) {
+    asrt(retCode >= 0, SDL_GetError(), location);
+}
 
 #ifndef DEBUG
 static void showError(const String& exceptionType, const String& what) {
@@ -31,15 +33,15 @@ static void showError(const String& exceptionType, const String& what) {
 // Throws PGE::Exception on error.
 void Init::init() {
     SDL_SetMainReady();
-    PGE_ASSERT_SDL(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC));
+    assertSDL(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC));
 
     SDL_GameControllerEventState(SDL_ENABLE);
-    PGE_ASSERT_SDL(SDL_JoystickEventState(SDL_ENABLE));
+    assertSDL(SDL_JoystickEventState(SDL_ENABLE));
 
-    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE));
-    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3));
-    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3));
-    PGE_ASSERT_SDL(SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8));
+    assertSDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE));
+    assertSDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3));
+    assertSDL(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3));
+    assertSDL(SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8));
 }
 
 void Init::quit() {
@@ -66,7 +68,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #endif
 
         std::vector<String> args(convArgc);
-        for (int i = 0; i < convArgc; i++) {
+        for (int i : Range(convArgc)) {
             args[i] = convArgv[i];
         }
 

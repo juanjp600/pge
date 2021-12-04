@@ -1,14 +1,15 @@
 #ifndef PGE_HASHER_H_INCLUDED
 #define PGE_HASHER_H_INCLUDED
 
+#include <span>
+
 namespace PGE {
 
 // FNV-1a
 // Public domain
 class Hasher {
 	public:
-		template <typename T>
-		constexpr void feed(T value) {
+		constexpr void feed(std::integral auto value) {
 			hash ^= value;
 			hash *= 0x00000100000001b3u;
 		}
@@ -17,11 +18,11 @@ class Hasher {
 			return hash;
 		}
 
-		template <typename T>
-		static constexpr u64 getHash(const T* data, size_t size) {
+		template <std::integral T>
+		static constexpr u64 getHash(const std::span<T>& data) {
 			Hasher hasher;
-			for (size_t i = 0; i < size; i++) {
-				hasher.feed(data[i]);
+			for (T t : data) {
+				hasher.feed(t);
 			}
 			return hasher.getHash();
 		}

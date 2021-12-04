@@ -1,9 +1,12 @@
 #include "UnicodeHelper.h"
 
 #include <PGE/Exception/Exception.h>
-#define PGE_ASSERT_CHAR(chr) char16 PGE_TMP = chr; PGE_ASSERT(PGE_TMP != 0 && PGE_TMP != 0xFFFF && PGE_TMP != 0xFFFE, "Invalid character (" + String::hexFromInt<u16>(PGE_TMP) + ")")
 
 using namespace PGE;
+
+static void assertChar(char16 chr, const std::source_location& location = std::source_location::current()) {
+    asrt(chr != 0 && chr != 0xFFFF && chr != 0xFFFE, "Invalid character (" + String::hexFromInt<u16>(chr) + ")", location);
+}
 
 byte Unicode::measureCodepoint(byte chr) {
     if ((chr & 0x80) == 0x00) {
@@ -29,11 +32,11 @@ char16 Unicode::utf8ToWChar(const char* cbuffer, int codepointLen) {
     } else {
         // Decode first byte by skipping all bits that indicate the length of the codepoint.
         char16 newChar = cbuffer[0] & (0x7f >> codepointLen);
-        for (int j = 1; j < codepointLen; j++) {
+        for (int j : Range(1, codepointLen)) {
             // Decode all of the following bytes, fixed 6 bits per byte.
             newChar = (newChar << 6) | (cbuffer[j] & 0x3f);
         }
-        PGE_ASSERT_CHAR(newChar);
+        assertChar(newChar);
         return newChar;
     }
 }
@@ -41,7 +44,7 @@ char16 Unicode::utf8ToWChar(const char* cbuffer, int codepointLen) {
 
 // TODO: Take into account UTF-16 surrogate pairs.
 byte Unicode::wCharToUtf8(char16 chr, char* result) {
-    PGE_ASSERT_CHAR(chr);
+    assertChar(chr);
 
     // Fits in standard ASCII, just return the char as-is.
     if ((chr & 0x7f) == chr) {
@@ -62,7 +65,7 @@ byte Unicode::wCharToUtf8(char16 chr, char* result) {
     // the first byte isn't enough to fit the remaining bits,
     // add another byte.
     char firstByte = 0x00;
-    for (int i = 0; i < len; i++) {
+    for (int i : Range(len)) {
         firstByte |= (0x1 << (7 - i));
     }
 
@@ -80,7 +83,7 @@ byte Unicode::wCharToUtf8(char16 chr, char* result) {
     if (result != nullptr) {
         result[len - 1] = firstByte;
         // Flip the result.
-        for (int i = 0; i < len / 2; i++) {
+        for (int i : Range(len / 2)) {
             char b = result[i];
             result[i] = result[len - 1 - i];
             result[len - 1 - i] = b;

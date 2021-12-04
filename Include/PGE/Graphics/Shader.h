@@ -1,6 +1,8 @@
 #ifndef PGE_SHADER_H_INCLUDED
 #define PGE_SHADER_H_INCLUDED
 
+#include <span>
+
 #include <PGE/File/FilePath.h>
 #include <PGE/Math/Matrix.h>
 #include <PGE/Math/Vector.h>
@@ -20,22 +22,18 @@ class Shader : private PolymorphicHeap {
         // This is not heap-only to allow it as a map value.
         class Constant {
             public:
-                virtual void setValue(const Matrix4x4f& value) = 0;
-                virtual void setValue(const Vector2f& value) = 0;
-                virtual void setValue(const Vector3f& value) = 0;
-                virtual void setValue(const Vector4f& value) = 0;
-                virtual void setValue(const Color& value) = 0;
-                virtual void setValue(float value) = 0;
-                virtual void setValue(u32 value) = 0;
+                void setValue(const StructuredType auto& value) { setValueInternal(std::span<byte>((byte*)&value, sizeof(value))); }
 
             protected:
                 Constant() = default;
                 virtual ~Constant() = default;
+
+                virtual void setValueInternal(const std::span<byte>& data) = 0;
         };
         virtual Constant* getVertexShaderConstant(const String& constName) = 0;
         virtual Constant* getFragmentShaderConstant(const String& constName) = 0;
 
-        int getTextureCount() const { PGE_ASSERT(textureCount != -1, "Texture count has not been initialized"); return textureCount; }
+        int getTextureCount() const { asrt(textureCount != -1, "Texture count has not been initialized"); return textureCount; }
 
     protected:
         Shader(const FilePath& path) : filepath(path) { }

@@ -1,19 +1,29 @@
-#ifndef PGE_INTERNAL_ABSTRACTIO_H_DEFINED
-#define PGE_INTERNAL_ABSTRACTIO_H_DEFINED
+#ifndef PGE_INTERNAL_ABSTRACTIO_H_INCLUDED
+#define PGE_INTERNAL_ABSTRACTIO_H_INCLUDED
 
 #include <fstream>
 
 #include <PGE/File/FilePath.h>
 #include <PGE/Exception/Exception.h>
 
+#include <concepts>
+
 namespace PGE {
+
+template <typename T>
+concept FileStream = requires(T t) {
+    std::derived_from<T, std::ios_base>;
+    { t.close() } -> std::same_as<void>;
+    { t.is_open() } -> std::same_as<bool>;
+    { t.good() } -> std::same_as<bool>;
+} && requires(T t, const char* cstr, std::ios::openmode openMode) {
+    { t.open(cstr, openMode) } -> std::same_as<void>;
+};
 
 /// Utility to more easily deal with file IO streams.
 /// Not intended to be polymorphic.
-template <typename T>
+template <FileStream T>
 class AbstractIO {
-    static_assert(std::is_base_of<std::ios_base, T>::value);
-
     protected:
         static const inline String BAD_STREAM = "Stream turned bad";
         static const inline String INVALID_FILEPATH = "Tried using an invalid path";
@@ -21,15 +31,15 @@ class AbstractIO {
         T stream;
 
         AbstractIO(const PGE::FilePath& file, std::ios::openmode mode = std::ios::binary) {
-            PGE_ASSERT(file.isValid(), INVALID_FILEPATH);
-            stream.open(file.str().cstr(), mode);
-            PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
+            asrt(file.isValid(), INVALID_FILEPATH);
+            stream.open(file.str().c8str(), mode);
+            asrt(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
         }
 
         void validate() {
             if (!stream.good()) {
                 stream.close();
-                throw PGE_CREATE_EX(BAD_STREAM);
+                throw Exception(BAD_STREAM);
             }
         }
 
@@ -43,10 +53,10 @@ class AbstractIO {
         /// @throws #PGE::Exception if closing was not wholly successful.
         void earlyClose() {
             stream.close();
-            PGE_ASSERT(stream.good(), BAD_STREAM);
+            asrt(stream.good(), BAD_STREAM);
         }
 };
 
 }
 
-#endif // PGE_INTERNAL_ABSTRACTIO_H_DEFINED
+#endif // PGE_INTERNAL_ABSTRACTIO_H_INCLUDED

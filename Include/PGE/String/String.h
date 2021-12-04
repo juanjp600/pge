@@ -13,8 +13,14 @@
 #endif
 
 #include <PGE/Types/Types.h>
+#include <PGE/Types/Range.h>
 
 namespace PGE {
+
+// 10 digits + 26 characters = 36
+// Only unsigned numbers can be represented in other bases.
+template <typename T, byte BASE>
+concept ValidBaseForType = BASE == 10 && std::integral<T> || std::unsigned_integral<T> && (BASE >= 2 && BASE < 36);
 
 /// A UTF-8 character sequence guaranteed to be terminated by a null byte.
 class String {
@@ -34,7 +40,6 @@ class String {
                 char16 operator*() const;
 
                 bool operator==(const BasicIterator& other) const;
-                bool operator!=(const BasicIterator& other) const;
 
                 int getBytePosition() const;
                 int getPosition() const;
@@ -87,13 +92,13 @@ class String {
                 const ActualIterator operator-(int steps) const { ActualIterator ret(*this); ret -= steps; return ret; }
                 void operator+=(int steps) {
                     if (steps < 0) { *this -= -steps; }
-                    for (int i = 0; i < steps; i++) {
+                    for (PGE_IT : Range(steps)) {
                         ++(*this);
                     }
                 }
                 void operator-=(int steps) {
                     if (steps < 0) { *this += -steps; }
-                    for (int i = 0; i < steps; i++) {
+                    for (PGE_IT : Range(steps)) {
                         --(*this);
                     }
                 }
@@ -107,6 +112,8 @@ class String {
 
         using Iterator = ActualIterator<false>;
         using ReverseIterator = ActualIterator<true>;
+        static_assert(std::bidirectional_iterator<Iterator>);
+        static_assert(std::bidirectional_iterator<ReverseIterator>);
 
         const Iterator begin() const;
         const Iterator end() const;
@@ -138,6 +145,8 @@ class String {
             memcpy(cstrNoConst(), cstri, len + 1);
         }
 
+        String(const char8_t* cstr);
+
         String(const std::string& cppstr);
         String(const char16* wstr);
 #if defined(__APPLE__) && defined(__OBJC__)
@@ -154,9 +163,9 @@ class String {
             LOWER,
         };
 
-        template <typename I> static const String binFromInt(I i);
-        template <typename I> static const String octFromInt(I i);
-        template <typename I> static const String hexFromInt(I i, Casing casing = Casing::UPPER);
+        template <std::unsigned_integral I> static const String binFromInt(I i);
+        template <std::unsigned_integral I> static const String octFromInt(I i);
+        template <std::unsigned_integral I> static const String hexFromInt(I i, Casing casing = Casing::UPPER);
 
         void operator=(const String& other);
         void operator+=(const String& other);
@@ -174,6 +183,7 @@ class String {
         /// 
         /// O(1)
         const char* cstr() const;
+        const char8_t* c8str() const;
         const std::vector<char16> wstr() const;
 
         template <typename T> const T to(bool& success) const;
@@ -181,35 +191,35 @@ class String {
         const T to() const {
             bool succ;
             T t = to<T>(succ);
-            // TODO: C++20?
-            //PGE_ASSERT(succ, "Failed to convert");
+            // TODO: C++20 Modules.
+            //asrt(succ, "Failed to convert");
             return t;
         }
 
-        template <typename I> I binToInt(bool& success) const;
-        template <typename I>
+        template <std::unsigned_integral I> I binToInt(bool& success) const;
+        template <std::unsigned_integral I>
         I binToInt() const {
             bool succ;
             I t = binToInt<I>(succ);
-            //PGE_ASSERT(succ, "Failed to convert");
+            //asrt(succ, "Failed to convert");
             return t;
         }
 
-        template <typename I> I octToInt(bool& success) const;
-        template <typename I>
+        template <std::unsigned_integral I> I octToInt(bool& success) const;
+        template <std::unsigned_integral I>
         I octToInt() const {
             bool succ;
             I t = octToInt<I>(succ);
-            //PGE_ASSERT(succ, "Failed to convert");
+            //asrt(succ, "Failed to convert");
             return t;
         }
 
-        template <typename I> I hexToInt(bool& success) const;
-        template <typename I>
+        template <std::unsigned_integral I> I hexToInt(bool& success) const;
+        template <std::unsigned_integral I>
         I hexToInt() const {
             bool succ;
             I t = hexToInt<I>(succ);
-            //PGE_ASSERT(succ, "Failed to convert");
+            //asrt(succ, "Failed to convert");
             return t;
         }
 
@@ -242,13 +252,29 @@ class String {
         const String reverse() const;
         const String multiply(unsigned count, const String& separator = "") const;
         const std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
-        static const String join(const std::vector<String>& vect, const String& separator);
+        static const String join(const Enumerable<String> auto& vect, const String& separator) {
+            if (std::ranges::empty(vect)) {
+                return String();
+            }
+
+            auto it = std::ranges::begin(vect);
+
+            String retVal = *it;
+            it++;
+            for (; it != std::ranges::end(vect); it++) {
+                retVal += separator + *it;
+            }
+
+            return retVal;
+        }
 
         const std::cmatch regexMatch(const std::regex& pattern) const;
 
         //String unHex() const;
 
         u64 getHashCode() const;
+
+        const std::weak_ordering compare(const String& other) const;
 
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
@@ -297,15 +323,17 @@ class String {
         void reallocate(int size, bool copyOldChs = false);
         char* cstrNoConst();
 
-        template <typename I, byte BASE = 10>
+        template <std::integral I, byte BASE = 10> requires ValidBaseForType<I, BASE>
         static const String fromInteger(I i, Casing casing = Casing::UPPER);
-        template <typename F>
+        template <std::floating_point F>
         static const String fromFloatingPoint(F f);
 };
 bool operator==(const String& a, const String& b);
-bool operator!=(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);
 std::istream& operator>>(std::istream& is, String& s);
+
+static_assert(std::ranges::bidirectional_range<String>);
+static_assert(std::ranges::common_range<String>);
 
 }
 

@@ -1,11 +1,11 @@
 #ifndef BUILDSHADERS_PARSER_H_INCLUDED
 #define BUILDSHADERS_PARSER_H_INCLUDED
 
+#include <functional>
+
 #include <PGE/Exception/Exception.h>
 #include <PGE/String/String.h>
 #include <PGE/String/Unicode.h>
-
-#include <functional>
 
 namespace Parser {
     bool isNotDigitOrSemicolon(PGE::char16 chr);
@@ -16,7 +16,8 @@ namespace Parser {
     bool isBlockCloser(PGE::char16 chr);
     bool isIdentifierCharacter(PGE::char16 chr);
 
-    template <typename T>
+    template <std::input_or_output_iterator T>
+        requires std::same_as<typename std::iterator_traits<T>::value_type, PGE::char16>
     void skip(T& it, const std::function<bool(PGE::char16)>& predicate) {
         while (predicate(*it)) {
             it++;

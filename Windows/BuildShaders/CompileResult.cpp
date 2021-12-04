@@ -260,7 +260,7 @@ void CompileResult::extractFunctionData(const String& hlsl, const String& functi
             return;
         }
     }
-    throw PGE_CREATE_EX("Failed to locate function \"" + functionName + "\"");
+    throw Exception("Failed to locate function \"" + functionName + "\"");
 }
 
 std::vector<CompileResult::HlslStruct::Member>::const_iterator CompileResult::HlslStruct::findMember(const PGE::String& semanticName, int semanticIndex) const {

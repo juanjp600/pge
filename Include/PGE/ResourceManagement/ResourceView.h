@@ -5,11 +5,12 @@
 #include <type_traits>
 
 #include <PGE/Exception/Exception.h>
+#include <PGE/Types/TemplateEnableIf.h>
 
 namespace PGE {
 
 class ResourceBase;
-template <typename T>
+template <std::semiregular T>
 class ResourceView {
     friend class ResourceManager;
 
@@ -23,14 +24,14 @@ class ResourceView {
         ResourceView(T res, const std::list<ResourceBase*>::iterator& iter) { internalResource = res; holdsResource = true; iterator = iter; }
 
         // Force cast.
-        const T& get() const { PGE_ASSERT(holdsResource, "Reference not filled"); return internalResource; }
+        const T& get() const { asrt(holdsResource, "Reference not filled"); return internalResource; }
 
-        operator const T& () const { return get(); }
+        operator const T&() const { return get(); }
 
-        template <typename Y = T, typename = typename std::enable_if<std::is_pointer<Y>::value>::type>
+        PGE_TEMPLATE_ENABLE_IF(std::is_pointer<Y>)
         const T& operator->() const { return get(); }
 
-        template <typename Y = T, typename = typename std::enable_if<std::negation<std::is_pointer<Y>>::value>::type>
+        PGE_TEMPLATE_ENABLE_IF(std::negation<std::is_pointer<Y>>)
         const T* operator->() const { return &get(); }
 
         const T* operator&() const { return &get(); }

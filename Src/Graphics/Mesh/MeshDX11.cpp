@@ -46,10 +46,11 @@ void MeshDX11::renderInternal() {
         ((TextureDX11&)material->getTexture(i)).useTexture(i);
     }
 
+    using enum ZBufferStateIndex;
     graphics.setZBufferState(
         graphics.getDepthTest()
-                ? (isOpaque() ? ZBufferStateIndex::ENABLED_WRITE : ZBufferStateIndex::ENABLED_NOWRITE)
-                : ZBufferStateIndex::DISABLED);
+                ? (isOpaque() ? ENABLED_WRITE : ENABLED_NOWRITE)
+                : DISABLED);
     
     dxContext->DrawIndexed((UINT)indices.size(), 0, 0);
 }

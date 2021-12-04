@@ -8,10 +8,14 @@
 #include <PGE/Math/Matrix.h>
 #include <PGE/Color/Color.h>
 #include <PGE/Types/PolymorphicHeap.h>
+#include <PGE/Types/Concepts.h>
 
 #include <unordered_map>
 
 namespace PGE {
+
+template <typename T>
+concept StructuredType = OneOf<T, float, u32, Vector2f, Vector3f, Vector4f, Matrix4x4f, Color>;
 
 class StructuredData {
     public:
@@ -27,24 +31,30 @@ class StructuredData {
                 struct LocationAndSize {
                     LocationAndSize(int loc, int sz);
 
-                    // TODO: C++20 default.
-                    bool operator==(const LocationAndSize& other) const;
+                    bool operator==(const LocationAndSize& other) const = default;
 
                     int location;
                     int size;
                 };
 
                 ElemLayout() = default;
-                ElemLayout(const std::vector<Entry>& entrs);
+                ElemLayout(const Enumerable<Entry> auto& entrs) {
+                    int currLocation = 0;
+                    for (const auto& entry : entrs) {
+                        entries.emplace(entry.name, LocationAndSize(currLocation, entry.size));
+                        currLocation += entry.size;
+                    }
+                    elementSize = currLocation;
+                }
 
                 const LocationAndSize& getLocationAndSize(const String& name) const;
                 const LocationAndSize& getLocationAndSize(const String::Key& name) const;
                 int getElementSize() const;
 
-                bool operator==(const StructuredData::ElemLayout& other) const;
+                bool operator==(const StructuredData::ElemLayout& other) const = default;
             private:
-                std::unordered_map<String::Key, LocationAndSize> entries;
                 int elementSize;
+                std::unordered_map<String::Key, LocationAndSize> entries;
         };
 
         StructuredData() = default;
@@ -63,23 +73,12 @@ class StructuredData {
         int getElementCount() const;
         const ElemLayout& getLayout() const;
 
-        template <typename T>
-        void setValue(int elemIndex, const String& entry, const T& value) {
+        void setValue(int elemIndex, const String& entry, const StructuredType auto& value) {
             setValue(elemIndex, String::Key(entry), value);
         }
 
-        template <typename T>
-        void setValue(int elemIndex, const String::Key& entry, const T& value) {
-            static_assert(std::disjunction<
-                std::is_same<T, float>,
-                std::is_same<T, u32>,
-                std::is_same<T, Vector2f>,
-                std::is_same<T, Vector3f>,
-                std::is_same<T, Vector4f>,
-                std::is_same<T, Matrix4x4f>,
-                std::is_same<T, Color>
-            >::value);
-            memcpy(data.get() + getDataIndex(elemIndex, entry, sizeof(T)), &value, sizeof(T));
+        void setValue(int elemIndex, const String::Key& entry, const StructuredType auto& value) {
+            memcpy(data.get() + getDataIndex(elemIndex, entry, sizeof(value)), &value, sizeof(value));
         }
 
     private:

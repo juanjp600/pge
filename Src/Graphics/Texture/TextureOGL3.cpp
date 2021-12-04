@@ -5,14 +5,15 @@ using namespace PGE;
 
 static int getCompressedFormat(Texture::CompressedFormat fmt) {
     switch (fmt) {
-        case Texture::CompressedFormat::BC1: { return GL_COMPRESSED_RGBA_S3TC_DXT1_EXT; }
-        case Texture::CompressedFormat::BC2: { return GL_COMPRESSED_RGBA_S3TC_DXT3_EXT; }
-        case Texture::CompressedFormat::BC3: { return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT; }
-        case Texture::CompressedFormat::BC4: { return GL_COMPRESSED_RED_RGTC1; }
-        case Texture::CompressedFormat::BC5: { return GL_COMPRESSED_RG_RGTC2; }
-        case Texture::CompressedFormat::BC6: { return GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB; }
-        case Texture::CompressedFormat::BC7: { return GL_COMPRESSED_RGBA_BPTC_UNORM_ARB; }
-        default: { throw PGE_CREATE_EX("Invalid compressed format"); }
+        using enum Texture::CompressedFormat;
+        case BC1: { return GL_COMPRESSED_RGBA_S3TC_DXT1_EXT; }
+        case BC2: { return GL_COMPRESSED_RGBA_S3TC_DXT3_EXT; }
+        case BC3: { return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT; }
+        case BC4: { return GL_COMPRESSED_RED_RGTC1; }
+        case BC5: { return GL_COMPRESSED_RG_RGTC2; }
+        case BC6: { return GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB; }
+        case BC7: { return GL_COMPRESSED_RGBA_BPTC_UNORM_ARB; }
+        default: { throw Exception("Invalid compressed format"); }
     }
 }
 
@@ -21,34 +22,35 @@ static void textureImage(int width, int height, const byte* buffer, Texture::For
     GLenum glFormat;
     GLenum glPixelType;
     switch (fmt) {
-        case Texture::Format::RGBA64: {
+        using enum Texture::Format;
+        case RGBA64: {
             glInternalFormat = GL_RGBA16;
             glFormat = GL_RGBA;
             glPixelType = GL_UNSIGNED_SHORT;
         } break;
-        case Texture::Format::RGBA32: {
+        case RGBA32: {
             glInternalFormat = GL_RGBA8;
             glFormat = GL_RGBA;
             glPixelType = GL_UNSIGNED_BYTE;
         } break;
-        case Texture::Format::R32F: {
+        case R32F: {
             glInternalFormat = GL_DEPTH_COMPONENT32F;
             glFormat = GL_DEPTH_COMPONENT;
             glPixelType = GL_FLOAT;
         } break;
-        case Texture::Format::R8: {
+        case R8: {
             glInternalFormat = GL_R8;
             glFormat = GL_RED;
             glPixelType = GL_UNSIGNED_BYTE;
         } break;
         default: {
-            throw PGE_CREATE_EX("Invalid format");
+            throw Exception("Invalid format");
         }
     }
 
     glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glPixelType, buffer);
     GLenum glError = glGetError();
-    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (" + String::from(width) + "x" + String::from(height) + "; GLERROR: " + String::from(glError) + ")");
+    asrt(glError == GL_NO_ERROR, "Failed to create texture (" + String::from(width) + "x" + String::from(height) + "; GLERROR: " + String::from(glError) + ")");
 }
 
 static void applyTextureParameters(bool rt) {
@@ -70,7 +72,7 @@ TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, Format fmt) : Texture(w, h
     //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, glDepthbuffer);
 
     GLenum glError = glGetError();
-    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
+    asrt(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
 }
 
 TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, const byte* buffer, Format fmt, bool mipmaps) : Texture(w, h, false, fmt), resourceManager(gfx) {
@@ -81,21 +83,21 @@ TextureOGL3::TextureOGL3(Graphics& gfx, int w, int h, const byte* buffer, Format
     applyTextureParameters(false);
 
     GLenum glError = glGetError();
-    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
+    asrt(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
 }
 
 TextureOGL3::TextureOGL3(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt) : Texture(mipmaps[0].width, mipmaps[0].height, false, fmt), resourceManager(gfx) {
     ((GraphicsOGL3&)gfx).takeGlContext();
     glTexture = resourceManager.addNewResource<GLTexture>();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, (GLint)(mipmaps.size() - 1));
-    for (int i = 0; i < mipmaps.size(); i++) {
+    for (GLint i : Range((GLint)mipmaps.size())) {
         glCompressedTexImage2D(GL_TEXTURE_2D, i, getCompressedFormat(fmt),
             mipmaps[i].width, mipmaps[i].height, 0, (GLsizei)mipmaps[i].size, mipmaps[i].buffer);
     }
     applyTextureParameters(false);
 
     GLenum glError = glGetError();
-    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
+    asrt(glError == GL_NO_ERROR, "Failed to create texture (GLERROR: " + String::from(glError) + ")");
 }
 
 GLuint TextureOGL3::getGlTexture() const {

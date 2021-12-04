@@ -1,6 +1,7 @@
 #ifndef PGE_MATRIX_H_INCLUDED
 #define PGE_MATRIX_H_INCLUDED
 
+#include <PGE/Types/Range.h>
 #include "Vector.h"
 
 namespace PGE {
@@ -143,31 +144,11 @@ class Matrix4x4f {
             return elements[x];
         }
 
-        constexpr bool operator==(const Matrix4x4f& other) const {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if (elements[i][j] != other.elements[i][j]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        constexpr bool operator!=(const Matrix4x4f& other) const {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if (elements[i][j] != other.elements[i][j]) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
+        constexpr bool operator==(const Matrix4x4f& other) const = default;
 
         constexpr bool equals(const Matrix4x4f& other, float epsilon = Math::EPSILON_DEFAULT) const {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
+            for (int i : Range(4)) {
+                for (int j : Range(4)) {
                     if (Math::equalFloats(elements[i][j], other.elements[i][j], epsilon)) {
                         return true;
                     }
@@ -177,18 +158,18 @@ class Matrix4x4f {
         }
 
         constexpr void operator+=(const Matrix4x4f& other) {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    this->elements[i][j] += other.elements[i][j];
+            for (int i : Range(4)) {
+                for (int j : Range(4)) {
+                    elements[i][j] += other.elements[i][j];
                 }
             }
         }
 
         constexpr void operator*=(const Matrix4x4f& other) {
             Matrix4x4f retVal;
-            for (int i = 0; i < 4; i++) {
-                for (int k = 0; k < 4; k++) {
-                    for (int j = 0; j < 4; j++) {
+            for (int i : Range(4)) {
+                for (int k : Range(4)) {
+                    for (int j : Range(4)) {
                         retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
                     }
                 }
@@ -197,17 +178,17 @@ class Matrix4x4f {
         }
 
         constexpr void operator*=(float scalar) {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    this->elements[i][j] *= scalar;
+            for (int i : Range(4)) {
+                for (int j : Range(4)) {
+                    elements[i][j] *= scalar;
                 }
             }
         }
 
         constexpr const Matrix4x4f operator+(const Matrix4x4f& other) const {
             Matrix4x4f retVal = *this;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
+            for (int i : Range(4)) {
+                for (int j : Range(4)) {
                     retVal.elements[i][j] += other.elements[i][j];
                 }
             }
@@ -216,9 +197,9 @@ class Matrix4x4f {
 
         constexpr const Matrix4x4f operator*(const Matrix4x4f& other) const {
             Matrix4x4f retVal;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    for (int k = 0; k < 4; k++) {
+            for (int i : Range(4)) {
+                for (int j : Range(4)) {
+                    for (int k : Range(4)) {
                         retVal.elements[i][j] += elements[i][k] * other.elements[k][j];
                     }
                 }
@@ -228,8 +209,8 @@ class Matrix4x4f {
 
         constexpr const Matrix4x4f operator*(float scalar) const {
             Matrix4x4f retVal = *this;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
+            for (int i : Range(4)) {
+                for (int j : Range(4)) {
                     retVal.elements[i][j] *= scalar;
                 }
             }
@@ -272,8 +253,8 @@ class Matrix4x4f {
 
         constexpr const Matrix4x4f transpose() const {
             Matrix4x4f retVal;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
+            for (int i : Range(4)) {
+                for (int j : Range(4)) {
                     retVal.elements[i][j] = elements[j][i];
                 }
             }

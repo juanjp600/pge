@@ -62,13 +62,7 @@ class Plane {
             : normal(norm.normalize()),
               distanceFromOrigin(distOrig) { }
 
-        constexpr bool operator==(const Plane& other) const {
-            return normal == other.normal && distanceFromOrigin == other.distanceFromOrigin;
-        }
-
-        constexpr bool operator!=(const Plane& other) const {
-            return normal != other.normal || distanceFromOrigin != other.distanceFromOrigin;
-        }
+        constexpr bool operator==(const Plane& other) const = default;
 
         constexpr bool equals(const Plane& other, float epsilon = Math::EPSILON_DEFAULT) const {
             return normal.equals(other.normal, epsilon) && Math::equalFloats(distanceFromOrigin, other.distanceFromOrigin, epsilon);
@@ -86,9 +80,10 @@ class Plane {
 
         constexpr PointRelation onPlane(const Vector3f& co, float epsilon = Math::EPSILON_DEFAULT) const {
             float res = evalAtPoint(co);
-            if (Math::equalFloats(epsilon, 0.f)) { return PointRelation::ON; }
-            if (res < 0) { return PointRelation::BELOW; }
-            return PointRelation::ABOVE;
+            using enum PointRelation;
+            if (Math::equalFloats(epsilon, 0.f)) { return ON; }
+            if (res < 0) { return BELOW; }
+            return ABOVE;
         }
         
         constexpr bool intersects(const Line3f& line, Vector3f& intersectionPoint, float& coveredAmount, bool ignoreDirection = false, bool ignoreSegment = false) const {

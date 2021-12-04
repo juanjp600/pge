@@ -98,7 +98,7 @@ class Graphics : private PolymorphicHeap {
         virtual CullingMode getCulling() const;
 
         /// Gets implementation defined debug information about a graphics object.
-        virtual String getInfo() const = 0;
+        virtual const String getInfo() const = 0;
 
         static const int DEFAULT_SCREEN_POSITION;
 

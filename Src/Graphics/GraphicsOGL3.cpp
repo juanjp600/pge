@@ -6,7 +6,7 @@ using namespace PGE;
 
 GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, WindowMode wm, int x, int y)
     //TODO: this is incorrect on macOS
-    : GraphicsSpecialized("OpenGL", name, w, h, wm, x, y, SDL_WINDOW_OPENGL), resourceManager(*this) {
+    : GraphicsSpecialized(name, w, h, wm, x, y, SDL_WINDOW_OPENGL), resourceManager(*this) {
 #if defined(__APPLE__) && defined(__OBJC__)
     // Figure out the de-scaled window size.
     NSRect rect = NSMakeRect(0, 0, w, h);
@@ -28,7 +28,8 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, WindowMode wm, int 
 
     glContext = resourceManager.addNewResource<GLContext>(getWindow());
 
-    PGE_ASSERT(gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress) != 0, "Failed to initialize GLAD (GLERROR: " + String::from(glGetError()) + ")");
+    int res = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
+    asrt(res != 0, "Failed to initialize GLAD (GLERROR: " + String::from(res) + ")");
 
     depthTest = true;
     glEnable(GL_DEPTH_TEST);
@@ -42,7 +43,7 @@ GraphicsOGL3::GraphicsOGL3(const String& name, int w, int h, WindowMode wm, int 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     GLenum glError = glGetError();
-    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to initialize window data post-GLAD initialization (GLERROR: " + String::from(glError) + ")");
+    asrt(glError == GL_NO_ERROR, "Failed to initialize window data post-GLAD initialization (GLERROR: " + String::from(glError) + ")");
 
     SDL_GL_SwapWindow(getWindow());
 
@@ -105,16 +106,19 @@ void GraphicsOGL3::setRenderTargets(const ReferenceVector<Texture>& renderTarget
     takeGlContext();
 
     TextureOGL3* largestTarget = &(TextureOGL3&)renderTargets[0].get();
-    for (int i = 0; i < (int)renderTargets.size(); i++) {
-        PGE_ASSERT(renderTargets[i]->isRenderTarget(), "renderTargets["+String::from(i)+"] is not a valid render target");
+    for (size_t i : Range(renderTargets.size())) {
+        TextureOGL3& rt = (TextureOGL3&)renderTargets[i].get();
+
+        asrt(rt.isRenderTarget(), "renderTargets[" + String::from(i) + "] is not a valid render target");
 
         if (i == 0) { continue; }
 
-        if ((largestTarget->getWidth()+largestTarget->getHeight())<(renderTargets[i]->getWidth()+renderTargets[i]->getHeight())) {
-            largestTarget = &(TextureOGL3&)renderTargets[i].get();
+        if ((largestTarget->getWidth() + largestTarget->getHeight()) < (rt.getWidth() + rt.getHeight())) {
+            largestTarget = &rt;
         }
     }
-    GLenum glAttachments[] = {
+
+    constexpr GLenum glAttachments[] = {
         GL_COLOR_ATTACHMENT0,
         GL_COLOR_ATTACHMENT1,
         GL_COLOR_ATTACHMENT2,
@@ -124,9 +128,10 @@ void GraphicsOGL3::setRenderTargets(const ReferenceVector<Texture>& renderTarget
         GL_COLOR_ATTACHMENT6,
         GL_COLOR_ATTACHMENT7
     };
+
     glBindFramebuffer(GL_FRAMEBUFFER,glFramebuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, largestTarget->getGlDepthbuffer());
-    for (int i = 0; i < (int)renderTargets.size(); i++) {
+    for (size_t i : Range(renderTargets.size())) {
         glFramebufferTexture(GL_FRAMEBUFFER, glAttachments[i], ((TextureOGL3&)renderTargets[i].get()).getGlTexture(), 0);
     }
     glDrawBuffers((GLsizei)renderTargets.size(), glAttachments);

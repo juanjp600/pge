@@ -29,11 +29,8 @@ struct String::OrderedKey {
     OrderedKey() = default;
     OrderedKey(const String& str) : str(str) { }
     const String str;
-    bool operator<(const OrderedKey& other) const {
-        return strcmp(str.cstr(), other.str.cstr()) < 0;
-    }
-    bool operator>(const OrderedKey& other) const {
-        return strcmp(str.cstr(), other.str.cstr()) > 0;
+    const std::weak_ordering operator<=>(const OrderedKey& other) {
+        return str.compare(other.str);
     }
 };
 

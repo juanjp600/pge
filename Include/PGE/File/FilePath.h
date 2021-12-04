@@ -1,21 +1,23 @@
 #ifndef PGE_FILEPATH_H_INCLUDED
 #define PGE_FILEPATH_H_INCLUDED
 
+#include <filesystem>
+
 #include <PGE/Types/Types.h>
 #include <PGE/String/String.h>
 
 namespace PGE {
 
 // TODO: Possibly restructure iteration.
-// TODO: Use wstr() for path construction consistently, or utilize C++20 char8_t for direct construction from UTF-8.
 /// String wrapper utility to deal with paths.
 /// Paths are always absolute and have sanitized path seperators.
 class FilePath {
     private:
         String name;
-        bool valid;
+        bool valid = true;
 
         FilePath(const String& str) noexcept;
+        FilePath(const std::filesystem::path& path);
 
     public:
         /// Invalid path.
@@ -42,7 +44,6 @@ class FilePath {
         /// 
         /// Two paths differing in a trailing path seperator are not considered equal, as one could be a folder and the other a file.
         bool operator==(const FilePath& other) const noexcept;
-        bool operator!=(const FilePath& other) const noexcept;
 
         /// Appends str to a path.
         /// The path must be valid.

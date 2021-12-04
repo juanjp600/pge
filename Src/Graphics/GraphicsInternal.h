@@ -7,6 +7,7 @@
 #include <PGE/Graphics/Mesh.h>
 #include <PGE/Graphics/Texture.h>
 #include <PGE/Graphics/Material.h>
+#include <PGE/Types/TemplateString.h>
 
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <AppKit/AppKit.h>
@@ -21,15 +22,9 @@ class GraphicsInternal : public Graphics {
         using Graphics::resourceManager;
 
     protected:
-        static String appendInfoLine(const String& name, int value);
-        static String appendInfoLine(const String& name, bool value);
-
 #if defined(__APPLE__) && defined(__OBJC__)
         NSWindow* getCocoaWindow() const;
 #endif
-
-        // TODO: The more appropriate template solution is available in C++20.
-        const String RENDERER_NAME;
 
         class SDLWindow : public Resource<SDL_Window*> {
             public:
@@ -38,11 +33,9 @@ class GraphicsInternal : public Graphics {
         };
         SDLWindow::View sdlWindow;
 
-        GraphicsInternal(const String& rendererName, const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags);
+        GraphicsInternal(const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags);
 
     public:
-        String getInfo() const override;
-
         virtual Shader* loadShader(const FilePath& path) = 0;
         virtual Mesh* createMesh() = 0;
         virtual Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) = 0;
@@ -53,39 +46,55 @@ class GraphicsInternal : public Graphics {
         SDL_Window* getWindow() const;
 };
 
-template <typename ShaderType, typename MeshType, typename TextureType, typename MaterialType = Material, typename RenderTexture = TextureType>
+template <TemplateString RENDERER_NAME, std::derived_from<Shader> SHADER, std::derived_from<Mesh> MESH,
+    std::derived_from<Texture> TEXTURE, std::derived_from<Material> MATERIAL = Material, std::derived_from<Texture> RENDER_TEXTURE = TEXTURE>
 class GraphicsSpecialized : public GraphicsInternal {
-    static_assert(std::is_base_of<Shader, ShaderType>::value);
-    static_assert(std::is_base_of<Mesh, MeshType>::value);
-    static_assert(std::is_base_of<Texture, TextureType>::value);
+    private:
+        static String appendInfoLine(const String& name, int value) {
+            return "\n" + name + ": " + String::from(value);
+        }
+        static String appendInfoLine(const String& name, bool value) {
+            return "\n" + name + ": " + (value ? "true" : "false");
+        }
 
     protected:
-        GraphicsSpecialized(const String& rendererName, const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags)
-            : GraphicsInternal(rendererName, name, w, h, wm, x, y, windowFlags) { }
+        GraphicsSpecialized(const String& name, int w, int h, WindowMode wm, int x, int y, SDL_WindowFlags windowFlags)
+            : GraphicsInternal(name, w, h, wm, x, y, windowFlags) { }
 
     public:
         Shader* loadShader(const FilePath& path) final override {
-            return new ShaderType(*this, path);
+            return new SHADER(*this, path);
         }
 
         Mesh* createMesh() final override {
-            return new MeshType(*this);
+            return new MESH(*this);
         }
 
         Texture* createRenderTargetTexture(int w, int h, Texture::Format fmt) final override {
-            return new RenderTexture(*this, w, h, fmt);
+            return new RENDER_TEXTURE(*this, w, h, fmt);
         }
 
         Texture* loadTexture(int w, int h, const byte* buffer, Texture::Format fmt, bool mipmaps) final override {
-            return new TextureType(*this, w, h, buffer, fmt, mipmaps);
+            return new TEXTURE(*this, w, h, buffer, fmt, mipmaps);
         }
         
         Texture* loadTextureCompressed(const std::vector<Texture::Mipmap>& mipmaps, Texture::CompressedFormat fmt) final override {
-            return new TextureType(*this, mipmaps, fmt);
+            return new TEXTURE(*this, mipmaps, fmt);
         }
 
         Material* createMaterial(Shader& sh, const ReferenceVector<Texture>& tex, Opaque o) final override {
-            return new MaterialType(*this, sh, tex, o);
+            return new MATERIAL(*this, sh, tex, o);
+        }
+
+        const String getInfo() const final override {
+            return caption + " (" + RENDERER_NAME + ") "
+                + String::from(dimensions.x) + 'x' + String::from(dimensions.y) + " / "
+                + String::from(viewport.width()) + 'x' + String::from(viewport.height())
+                + appendInfoLine("open", open)
+                + appendInfoLine("focused", focused)
+                + appendInfoLine("windowMode", windowMode == WindowMode::Fullscreen ? "Fullscreen" : "Windowed")
+                + appendInfoLine("vsync enabled", vsync)
+                + appendInfoLine("depth test enabled", depthTest);
         }
 };
 

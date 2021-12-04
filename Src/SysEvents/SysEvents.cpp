@@ -22,33 +22,35 @@ void SysEvents::update() {
 }
 
 void SysEventsInternal::update() {
+    using enum EventType;
+
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         for (SysEvents::Subscriber* sub : subscribers) {
             SubscriberInternal* subscriber = (SubscriberInternal*)sub;
             SDL_Window* sdlWindow = ((GraphicsInternal&)subscriber->getGraphics()).getWindow();
             bool takeEvent = false;
-            if (subscriber->getEventType()==EventType::WINDOW) {
+            if (subscriber->getEventType()==WINDOW) {
                 if (event.type == SDL_WINDOWEVENT) {
                     takeEvent = event.window.windowID == SDL_GetWindowID(sdlWindow);
                 }
-            } else if (subscriber->getEventType()==EventType::KEYBOARD) {
+            } else if (subscriber->getEventType()==KEYBOARD) {
                 if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
                     takeEvent = SDL_GetKeyboardFocus()==sdlWindow;
                 }
-            } else if (subscriber->getEventType()==EventType::MOUSE) {
+            } else if (subscriber->getEventType()==MOUSE) {
                 if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP ||
                     event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEWHEEL) {
                     takeEvent = SDL_GetMouseFocus()==sdlWindow;
                 }
-            } else if (subscriber->getEventType()==EventType::CONTROLLER) {
+            } else if (subscriber->getEventType()==CONTROLLER) {
                 if (event.type == SDL_CONTROLLERBUTTONDOWN || event.type == SDL_CONTROLLERBUTTONUP ||
                     event.type == SDL_CONTROLLERAXISMOTION ||
                     event.type == SDL_CONTROLLERDEVICEADDED || event.type == SDL_CONTROLLERDEVICEREMOVED ||
                     event.type == SDL_CONTROLLERDEVICEREMAPPED) {
                     takeEvent = true;
                 }
-            } else if (subscriber->getEventType()==EventType::TEXTINPUT) {
+            } else if (subscriber->getEventType()==TEXTINPUT) {
                 if (event.type == SDL_TEXTINPUT) {
                     takeEvent = SDL_GetKeyboardFocus()==sdlWindow;
                 }

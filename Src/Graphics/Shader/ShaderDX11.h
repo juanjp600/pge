@@ -37,19 +37,13 @@ class ShaderDX11 : public Shader {
             public:
                 ConstantDX11(CBufferInfo& cBuffer, int offst, int sz);
 
-                void setValue(const Matrix4x4f& value) override;
-                void setValue(const Vector2f& value) override;
-                void setValue(const Vector3f& value) override;
-                void setValue(const Vector4f& value) override;
-                void setValue(const Color& value) override;
-                void setValue(float value) override;
-                void setValue(u32 value) override;
-
             private:
                 CBufferInfo& constantBuffer;
 
                 int offset;
                 int size;
+
+                void setValueInternal(const std::span<byte>& data);
         };
 
         class CBufferInfo {

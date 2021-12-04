@@ -12,28 +12,28 @@ class ResourceManager {
     protected:
         std::list<ResourceBase*> resources;
 
-        template <typename T>
+        template <std::semiregular T>
         const std::list<ResourceBase*>::iterator& getIterator(const ResourceView<T>& v) const {
             return v.iterator;
         }
 
-        template <typename T, typename... Args>
+        template <std::derived_from<ResourceBase> T, typename... Args>
         typename T::View add(Args&&... args) {
             T* res = new T(std::forward<Args>(args)...);
-            resources.emplace_back(res);
-            return ResourceView(res->get(), --resources.end());
+            resources.emplace_front(res);
+            return ResourceView(res->get(), resources.begin());
         }
 
     public:
         ~ResourceManager() {
-            for (auto it = resources.rbegin(); it != resources.rend(); it++) {
-                delete* it;
+            // We do this because destruction order is not specified.
+            for (ResourceBase* res : resources) {
+                delete res;
             }
         }
 
-        template <typename T, typename... Args>
+        template <std::derived_from<ResourceBase> T, typename... Args>
         typename T::View addNewResource(Args&&... args) {
-            static_assert(std::is_base_of<ResourceBase, T>::value);
             return add<T>(std::forward<Args>(args)...);
         }
 
@@ -47,7 +47,7 @@ class ResourceManager {
             return add<RawWrapper<T>>(std::forward<Args>(args)...);
         }
 
-        template <typename T>
+        template <std::semiregular T>
         void deleteResource(ResourceView<T> view) {
             if (!view.isHoldingResource()) {
                 return;

@@ -64,11 +64,11 @@ class Program {
 
     public:
         Program() {
-            graphics = Graphics::create("Example 3", 1000, 500, Graphics::WindowMode::Windowed, Graphics::Renderer::DirectX11);
-            graphics->setCulling(Graphics::Culling::BACK);
+            graphics = Graphics::create("Example 3", 1000, 500, WindowMode::Windowed, Renderer::DirectX11);
+            graphics->setCulling(CullingMode::BACK);
 
             inputManager = InputManager::create(*graphics);
-            escKey = new KeyboardInput(KeyboardInput::Keycode::ESCAPE);
+            escKey = new KeyboardInput(Keycode::ESCAPE);
             inputManager->trackInput(escKey);
 
             mesh = Mesh::create(*graphics);
@@ -82,9 +82,9 @@ class Program {
             vertices.setValue(1, "color", Colors::GREEN);
             vertices.setValue(2, "color", Colors::GREEN);
             vertices.setValue(3, "color", Colors::BLUE);
-            mat = Material::create(*graphics, *shader, Material::Opaque::NO);
+            mat = Material::create(*graphics, *shader, Opaque::NO);
             mesh->setMaterial(mat);
-            mesh->setGeometry(std::move(vertices), Mesh::PrimitiveType::TRIANGLE, { 0, 1, 2, 1, 2, 3 });
+            mesh->setGeometry(std::move(vertices), PrimitiveType::TRIANGLE, { 0, 1, 2, 1, 2, 3 });
 
             shader2 = Shader::load(*graphics, FilePath::fromStr("Shader3.2"));
             
@@ -110,20 +110,20 @@ class Program {
             vertices.setValue(3, "uv", Vector2f(1, 0));
 
             tex = load(FilePath::fromStr("logo.bmp"));
-            mat2 = Material::create(*graphics, *shader2, *tex, Material::Opaque::YES);
+            mat2 = Material::create(*graphics, *shader2, *tex, Opaque::YES);
             mesh2 = Mesh::create(*graphics);
-            mesh2->setGeometry(vertices.copy(), Mesh::PrimitiveType::TRIANGLE, { 0, 1, 2, 1, 2, 3 });
+            mesh2->setGeometry(vertices.copy(), PrimitiveType::TRIANGLE, { 0, 1, 2, 1, 2, 3 });
             mesh2->setMaterial(mat2);
 
             tex2 = load(FilePath::fromStr("juan.bmp"));
-            mat3 = Material::create(*graphics, *shader2, *tex2, Material::Opaque::YES);
+            mat3 = Material::create(*graphics, *shader2, *tex2, Opaque::YES);
             mesh3 = Mesh::create(*graphics);
-            mesh3->setGeometry(std::move(vertices), Mesh::PrimitiveType::TRIANGLE, { 2, 1, 0, 3, 2, 1 });
+            mesh3->setGeometry(std::move(vertices), PrimitiveType::TRIANGLE, { 2, 1, 0, 3, 2, 1 });
             mesh3->setMaterial(mat3);
 
             shader4 = Shader::load(*graphics, FilePath::fromStr("Shader3.3"));
             mesh4 = Mesh::create(*graphics);
-            mat4 = Material::create(*graphics, *shader4, ReferenceVector<Texture>{ *tex, *tex2 }, Material::Opaque::YES);
+            mat4 = Material::create(*graphics, *shader4, ReferenceVector<Texture>{ *tex, *tex2 }, Opaque::YES);
 
             vertices = StructuredData(shader4->getVertexLayout(), 4);
             vertices.setValue(0, "position", Vector2f(0, 0));
@@ -135,7 +135,7 @@ class Program {
             vertices.setValue(2, "uv", Vector2f(0, 0));
             vertices.setValue(3, "uv", Vector2f(1, 0));
             mesh4->setMaterial(mat4);
-            mesh4->setGeometry(std::move(vertices), Mesh::PrimitiveType::TRIANGLE, { 2, 1, 0, 3, 2, 1 });
+            mesh4->setGeometry(std::move(vertices), PrimitiveType::TRIANGLE, { 2, 1, 0, 3, 2, 1 });
         }
 
         ~Program() {
@@ -172,7 +172,7 @@ class Program {
             constexpr u64 SECOND = std::chrono::duration_cast<Clock::duration>(std::chrono::seconds(1)).count();
             if (counter > SECOND) {
                 counter %= SECOND;
-                graphics->setCulling(graphics->getCulling() == Graphics::Culling::BACK ? Graphics::Culling::FRONT : Graphics::Culling::BACK);
+                graphics->setCulling(graphics->getCulling() == CullingMode::BACK ? CullingMode::FRONT : CullingMode::BACK);
             }
 
             graphics->clear(Colors::GRAY);
