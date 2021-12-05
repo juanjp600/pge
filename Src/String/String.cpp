@@ -112,16 +112,15 @@ const String::Iterator String::Iterator::begin(const String& str) {
     return String::Iterator(str, 0, 0);
 }
 
-// TODO: Why does only this need template <>??
 template <> const String::Iterator String::Iterator::end(const String& str) {
-    return String::Iterator(str, str.byteLength(), -1);
+    return String::Iterator(str, str.byteLength(), str.data->_strLength);
 }
 
 const String::ReverseIterator String::ReverseIterator::begin(const String& str) {
-    return String::Iterator::end(str) - 1;;
+    return str.isEmpty() ? end(str) : (ReverseIterator)(Iterator::end(str) - 1);
 }
 
-const String::ReverseIterator String::ReverseIterator::end(const String& str) {
+template <> const String::ReverseIterator String::ReverseIterator::end(const String& str) {
     return String::ReverseIterator(str, -1, -1);
 }
 
@@ -545,7 +544,7 @@ const String String::fromInteger(I i, Casing casing) {
     while (i != 0) {
         byte digit;
         if constexpr (std::numeric_limits<I>::is_signed) {
-            digit = abs(i % BASE);
+            digit = (byte)abs(i % BASE);
         } else {
             digit = i % BASE;
         }
