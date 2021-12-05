@@ -946,7 +946,6 @@ const String String::reverse() const {
         int codepoint = Unicode::measureCodepoint(cstr()[i]);
         buf -= codepoint;
         memcpy(buf, cstr() + i, codepoint);
-        i += codepoint;
     }
     ret.data->strByteLength = len;
     ret.data->_strLength = data->_strLength;

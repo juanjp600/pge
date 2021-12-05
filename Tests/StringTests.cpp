@@ -58,4 +58,20 @@ TEST_CASE("Multiplication explicit") {
 	CHECK(u.multiply(5, ", ") == u8"Ä, Ä, Ä, Ä, Ä");
 }
 
+TEST_CASE("Reverse explicit: 'String::reverse()'") {
+	String c = "";
+	CHECK(c.reverse() == "");
+
+	String a = "reverse";
+	String b = "esrever";
+	CHECK(a.reverse() == b);
+}
+
+TEST_CASE("Split explicit: 'String::split()'") {
+	String a = "pulseyesgun";
+	CHECK(a.split("yes", true) == std::vector<String>{"pulse", "gun"});
+	CHECK(a.split("pulseyesgun", false) == std::vector<String>{""});
+	CHECK(a.split("pulseyesgun", true).empty() == true);
+}
+
 }
