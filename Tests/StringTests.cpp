@@ -1,5 +1,7 @@
 #include "Util.h"
 
+#include <iostream>
+
 #include <PGE/String/String.h>
 #include <PGE/Exception/Exception.h>
 
@@ -65,12 +67,43 @@ TEST_CASE("Reverse explicit") {
 }
 
 TEST_CASE("Split explicit") {
+	String e;
+	CHECK(e.split("", true).empty());
+	CHECK(e.split("", false) == std::vector<String>(2, ""));
+	CHECK(e.split("asd", false) == std::vector<String>{ "" });
+
 	String a = "pulseyesgun";
-	CHECK(a.split("yes", true) == std::vector<String>{"pulse", "gun"});
+	CHECK(a.split("yes", true) == std::vector<String>{ "pulse", "gun" });
 	CHECK(a.split("pulse", false) == std::vector<String>{ "", "yesgun" });
+	CHECK(a.split("pulse", true) == std::vector<String>{ "yesgun" });
 	CHECK(a.split("gun", false) == std::vector<String>{ "pulseyes", "" });
+	CHECK(a.split("gun", true) == std::vector<String>{ "pulseyes" });
 	CHECK(a.split("pulseyesgun", false) == std::vector<String>(2));
-	CHECK(a.split("pulseyesgun", true).empty() == true);
+	CHECK(a.split("pulseyesgun", true).empty());
+	CHECK(a.split("", false).size() == a.length() + 2);
+	CHECK(a.split("", true).size() == a.length());
+
+	String u = L"ÖöäÄäüÜ";
+	CHECK(u.split(u8"Ö", false) == std::vector<String>{ "", L"öäÄäüÜ" });
+	CHECK(u.split(u8"Ä", false) == std::vector<String>{ L"Ööä", L"äüÜ" });
+	CHECK(u.split(u8"Ü", false) == std::vector<String>{ L"ÖöäÄäü", "" });
+	CHECK(u.split("", false).size() == u.length() + 2);
+
+	CHECK(String(L"ßßßßßß").split(L"ßß", false) == std::vector<String>(4, ""));
+	CHECK(String(L"ßßßßßßß").split(L"ßß", false) == std::vector<String>{ "", "", "", L"ß" });
+	CHECK(String(L"ßßß").split(L"ß", false) == std::vector<String>(4, ""));
+}
+
+TEST_CASE("Multiply split join same") {
+	String a; String sep; int i;
+	SUBCASE_PARAMETERIZE(
+		(a, "A", L"ÄäÄ"),
+		(sep, ",", "", "   ", "ö"),
+		(i, 10, 1, 0, 100)
+	);
+
+	a = a.multiply(i, sep);	
+	CHECK(a == String::join(a.split(sep, true), sep));
 }
 
 }

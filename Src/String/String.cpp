@@ -977,22 +977,27 @@ const String String::multiply(unsigned count, const String& separator) const {
 const std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
     std::vector<String> split;
     const char* haystack = cstr();
-    const char* needle = needleStr.cstr();
     int codepoint;
+    int needleLen = needleStr.byteLength();
     int cut = 0;
-    for (int i = 0; i <= byteLength() - needleStr.byteLength(); i += codepoint) {
+    for (int i = 0; i <= byteLength() - needleLen; i += codepoint) {
         codepoint = Unicode::measureCodepoint(haystack[i]);
-        if (memcmp(haystack + i, needle, codepoint) == 0) {
+        if (needleStr.isEmpty() || memcmp(haystack + i, needleStr.cstr(), needleLen) == 0) {
             int addSize = i - cut;
-            if (!removeEmptyEntries || addSize != 0) {
+            if (addSize > 0) {
                 split.emplace_back(String(*this, cut, addSize));
+            } else if (!removeEmptyEntries) {
+                split.emplace_back();
             }
-            cut = i + needleStr.byteLength();
+            cut = i + needleLen;
+            if (needleLen > codepoint) {
+                i += needleLen - codepoint;
+            }
         }
     }
     // Add the rest of the string to the vector.
     int endAddSize = byteLength() - cut;
-    if (!removeEmptyEntries || endAddSize != 0) {
+    if (!removeEmptyEntries || endAddSize > 0) {
         split.emplace_back(String(*this, cut, endAddSize));
     }
     return split;
