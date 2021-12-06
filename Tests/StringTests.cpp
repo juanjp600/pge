@@ -124,4 +124,16 @@ TEST_CASE("Multiply split join same") {
 	CHECK(a == String::join(a.split(sep, true), sep));
 }
 
+TEST_CASE("Comparison strcmp compatibility") {
+	String a; String b;
+	// No Unicode allowed!
+	#define COMPARISON_CASES "A", "B", "C", "ASD", "FFF", "1", "9", "109", "A1", "aA1", "2FO", "222222222", "asddsad"
+	SUBCASE_PARAMETERIZE(
+		(a, COMPARISON_CASES),
+		(b, COMPARISON_CASES)
+	);
+	#undef COMPARISON_CASES
+	CHECK(a.compare(b) == (strcmp(a.cstr(), b.cstr()) <=> 0));
+}
+
 }
