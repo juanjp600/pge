@@ -26,7 +26,7 @@ TEST_CASE("Very basic tests") {
 
 TEST_CASE("Basic iterator tests") {
 	String a;
-	SUBCASE_P(a, "A", u8"Ä");
+	SUBCASE_PARAMETERIZE((a, "A", u8"Ä"));
 
 	CHECK(a.begin() == a.rbegin());
 	CHECK(a.begin() + 1 == a.end());
@@ -37,9 +37,9 @@ TEST_CASE("Basic iterator tests") {
 
 TEST_CASE("Multiplication") {
 	String a; String sep;
-	SUBCASE_PR(
-		SUBCASE_P(sep, "", ", "),
-		a, "A", u8"Ä"
+	SUBCASE_PARAMETERIZE(
+		(a, "A", u8"Ä"),
+		(sep, "", ", ")
 	);
 
 	CHECK(a.multiply(0) == String());
