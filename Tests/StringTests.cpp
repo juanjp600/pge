@@ -9,39 +9,54 @@ using namespace PGE;
 
 TEST_SUITE("Strings") {
 
-TEST_CASE("Very basic tests") {
-	CHECK(String().byteLength() == 0);
-	CHECK(String().length() == 0);
+static void checkLength(const String& str, int byteLength, int length) {
+	CHECK(str.byteLength() == byteLength);
+	CHECK(str.length() == length);
+}
 
-	CHECK(String() == "");
-	CHECK(String().equalsIgnoreCase(""));
-
-	String empty;
-	CHECK(empty.begin() == empty.end());
-	CHECK(empty.rbegin() == empty.rend());
-
-	CHECK(empty.begin() != empty.rbegin());
-	CHECK(empty.end() != empty.rend());
-	CHECK(empty.rbegin() != empty.end());
-	CHECK(empty.begin() != empty.rend());
+TEST_CASE("Lengths") {
+	checkLength("", 0, 0);
+	checkLength("A", 1, 1);
+	checkLength(L"Ä", 2, 1);
+	checkLength(u8"ÜÖÄ", 6, 3);
+	checkLength(L"ÄAA", 4, 3);
+	checkLength(u8"AÄA", 4, 3);
+	checkLength(L"AAÄ", 4, 3);
+	checkLength("Hello, this is a very long string, it is very long, yeah, very long, like very long.\n"
+		u8"Ok, I'll also make it include special characters like Ä and Ü and idfk \u2764 (it's a heart)", 176, 172);
 }
 
 TEST_CASE("Basic iterator tests") {
 	String a;
-	SUBCASE_PARAMETERIZE((a, "A", u8"Ä"));
+	SUBCASE_PARAMETERIZE((a, "A", u8"Ä", L"\u2764"));
 
 	CHECK(a.begin() == a.rbegin());
 	CHECK(a.begin() + 1 == a.end());
 	CHECK(a.begin() == a.end() - 1);
 	CHECK(a.rbegin() + 1 == a.rend());
 	CHECK(a.rbegin() == a.rend() - 1);
+
+	String e;
+	CHECK(e.begin() == e.end());
+	CHECK(e.rbegin() == e.rend());
+
+	CHECK(e.begin() != e.rbegin());
+	CHECK(e.end() != e.rend());
+	CHECK(e.rbegin() != e.end());
+	CHECK(e.begin() != e.rend());
+
+	String o;
+	CHECK(e.begin() != o.begin());
+	CHECK(e.end() != o.end());
+	CHECK(e.rbegin() != o.rbegin());
+	CHECK(e.rend() != o.rend());
 }
 
 TEST_CASE("Multiplication") {
 	String a; String sep;
 	SUBCASE_PARAMETERIZE(
-		(a, "A", u8"Ä"),
-		(sep, "", ", ")
+		(a, "A", u8"Ä", "ASDFG", u8"ÄADß", u8"Öaaa", u8"oooÄ"),
+		(sep, "", ", ", "A", u8"ÖÜÖ")
 	);
 
 	CHECK(a.multiply(0) == String());
@@ -51,7 +66,6 @@ TEST_CASE("Multiplication") {
 
 TEST_CASE("Multiplication explicit") {
 	String a = "A";
-
 	CHECK(a.multiply(5) == "AAAAA");
 	CHECK(a.multiply(5, ", ") == "A, A, A, A, A");
 
@@ -62,6 +76,9 @@ TEST_CASE("Multiplication explicit") {
 
 TEST_CASE("Reverse explicit") {
 	CHECK(String().reverse() == "");
+	String a = L"gÄnÄg";
+	CHECK(a.reverse() == a);
+	CHECK(String(L"Ä").reverse() == L"Ä");
 	CHECK(String("reverse").reverse() == "esrever");
 	CHECK(String(L"ÄBC").reverse() == L"CBÄ");
 }
@@ -88,6 +105,7 @@ TEST_CASE("Split explicit") {
 	CHECK(u.split(u8"Ä", false) == std::vector<String>{ L"Ööä", L"äüÜ" });
 	CHECK(u.split(u8"Ü", false) == std::vector<String>{ L"ÖöäÄäü", "" });
 	CHECK(u.split("", false).size() == u.length() + 2);
+	CHECK(u.split("", true).size() == u.length());
 
 	CHECK(String(L"ßßßßßß").split(L"ßß", false) == std::vector<String>(4, ""));
 	CHECK(String(L"ßßßßßßß").split(L"ßß", false) == std::vector<String>{ "", "", "", L"ß" });

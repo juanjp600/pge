@@ -942,7 +942,7 @@ const String String::reverse() const {
     char* buf = ret.cstrNoConst();
     buf[len] = '\0';
     buf += len;
-    for (int& i : Range(0, len, 0)) {
+    for (int i = 0; i < len;) {
         int codepoint = Unicode::measureCodepoint(cstr()[i]);
         buf -= codepoint;
         memcpy(buf, cstr() + i, codepoint);
