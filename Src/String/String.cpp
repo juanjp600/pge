@@ -942,10 +942,11 @@ const String String::reverse() const {
     char* buf = ret.cstrNoConst();
     buf[len] = '\0';
     buf += len;
-    for (int& i : Range(len)) {
+    for (int& i : Range(0, len, 0)) {
         int codepoint = Unicode::measureCodepoint(cstr()[i]);
         buf -= codepoint;
         memcpy(buf, cstr() + i, codepoint);
+        i += codepoint;
     }
     ret.data->strByteLength = len;
     ret.data->_strLength = data->_strLength;
@@ -991,7 +992,7 @@ const std::vector<String> String::split(const String& needleStr, bool removeEmpt
     }
     // Add the rest of the string to the vector.
     int endAddSize = byteLength() - cut;
-    if (endAddSize != 0) {
+    if (!removeEmptyEntries || endAddSize != 0) {
         split.emplace_back(String(*this, cut, endAddSize));
     }
     return split;
