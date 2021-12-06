@@ -30,7 +30,7 @@ class SwitchWriter {
                     if (first) {
                         first = false;
                     } else {
-                        out.writeLine();
+                        out.writeLine(" [[fallthrough]];");
                     }
                     out.write(INDENT.multiply(2) + "case " + rawToChar(sit.str) + ":");
                 }
