@@ -784,8 +784,10 @@ static const String EMPTY_FIND = "Find string can't be empty";
 
 const String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
     asrt(!fnd.isEmpty(), EMPTY_FIND);
-    for (auto it = from; it != end(); it++) {
-        if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) { return it; }
+    for (String::Iterator it = from; it.getBytePosition() < byteLength() - fnd.byteLength(); it++) {
+        if (memcmp(cstr() + it.getBytePosition(), fnd.cstr(), fnd.byteLength()) == 0) {
+            return it;
+        }
     }
     return end();
 }
@@ -796,7 +798,11 @@ const String::ReverseIterator String::findLast(const String& fnd, int fromEnd) c
 
 const String::ReverseIterator String::findLast(const String& fnd, const ReverseIterator& from) const {
     asrt(!fnd.isEmpty(), EMPTY_FIND);
-    for (ReverseIterator it = from; it != rend(); it++) {
+    String::Iterator it = from;
+    while (it.getBytePosition() > byteLength() - fnd.byteLength()) {
+        it++;
+    }
+    for (; it != rend(); it++) {
         if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) { return it; }
     }
     return rend();
@@ -846,13 +852,8 @@ const String String::replace(const String& fnd, const String& rplace) const {
     const char* thisStr = cstr();
 
     std::vector<int> foundPositions;
-    for (int i = 0; i <= byteLength() - fnd.byteLength();) {
-        if (memcmp(fndStr, thisStr + i, fnd.byteLength()) == 0) {
-            foundPositions.emplace_back(i);
-            i += fnd.byteLength();
-        } else {
-            i++;
-        }
+    for (String::Iterator it = findFirst(fnd); it != end(); it = findFirst(fnd, it)) {
+        foundPositions.emplace_back(it.getBytePosition());
     }
     
     int newSize = byteLength() + (int)foundPositions.size() * (rplace.byteLength() - fnd.byteLength());
@@ -980,7 +981,7 @@ const std::vector<String> String::split(const String& needleStr, bool removeEmpt
     int codepoint;
     int needleLen = needleStr.byteLength();
     int cut = 0;
-    for (int i = 0; i <= byteLength() - needleLen; i += codepoint) {
+    for (int i = 0; i <= byteLength() - needleLen;) {
         codepoint = Unicode::measureCodepoint(haystack[i]);
         if (needleStr.isEmpty() || memcmp(haystack + i, needleStr.cstr(), needleLen) == 0) {
             int addSize = i - cut;
@@ -991,9 +992,11 @@ const std::vector<String> String::split(const String& needleStr, bool removeEmpt
             }
             cut = i + needleLen;
             if (needleLen > codepoint) {
-                i += needleLen - codepoint;
+                i += needleLen;
+                continue;
             }
         }
+        i += codepoint;
     }
     // Add the rest of the string to the vector.
     int endAddSize = byteLength() - cut;
