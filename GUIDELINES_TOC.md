@@ -21,6 +21,7 @@
     * [Prefer direct over copy initialization on declaration](#prefer-direct-over-copy-initialization-on-declaration)
     * [Utilize structured bindings](#utilize-structured-bindings)
     * [Consider putting enums outside of classes](#consider-putting-enums-outside-of-classes)
+    * [`switch` etiquette](#switch-etiquette)
 
 # Intro
 This document outlines some common practices, including their rationales, that help in writing efficient, readable and maintainable C++ code, which are to be enforced throughout PGE.
@@ -339,6 +340,7 @@ for (const auto& [key, value] : myMap) {
 }
 ```
 
+
 ## Consider putting enums outside of classes
 Despite nested enums establishing a more obvious connection with their respective class, if an enum on its own gives enough context as to what it seeks to express it should likely not be put inside of that class. This is because nesting an enum in a class requires specifying the class when the enum is used outside of it, which can add unnecessary noise.
 
@@ -378,4 +380,56 @@ class MyClass {
 
 MyClass mc;
 mc.setMode(MyMode::A); // No noise!
+```
+
+
+## `switch` etiquette
+### Every non-empty, non-fallthrough `case` must get its own scope
+This prevents possible issues from wanting to declare the same variable in multiple cases and increases visual cohesion inside a case.
+### Place `break` and `[[fallthrough]]` statements outside the scope
+This helps gauge the general structure of the switch. `[[fallthrough]]` is optional and in most cases not recommended since the discrete scopes provide enough visual clarity.
+
+Break is generally not necessary when the case **very clearly** returns all of the time.
+
+When mixing return statements with breaks and/or fallthroughs it is recommended to use `[[fallthrough]]`.
+
+### Use `using enum` when switching on an enum
+Greatly reduces duplication of the (potentially qualified) enum name.
+
+### Every switch statement must have a default case
+Other cases may fallthrough to it, in most cases throwing an exception is most appropriate.
+
+**Example:**
+```cpp
+switch (var) {
+    case 1: {
+        ...
+    } break;
+    case 2: {
+        ...
+    } [[fallthrough]]; // Recommended here.
+    case 3: {
+        return ...;
+    }
+    case 4:
+    default: {
+        throw Exception("Unexpected!");
+    }
+}
+
+switch (e) {
+    using enum MyEnum;
+    case A: {
+        ...
+        if (...) { return ... }
+    } [[fallthrough]]; // Recommended here.
+    case B: // Unannotated fallthroughs, ok.
+    case C:
+    case D: {
+        ...
+    } break;
+    default: {
+        throw Exception("Unexpected!");
+    }
+}
 ```
