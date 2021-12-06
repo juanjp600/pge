@@ -384,10 +384,10 @@ const std::weak_ordering String::compare(const String& other) const {
         if (b == other.end()) {
             return std::weak_ordering::equivalent;
         } else {
-            return std::weak_ordering::greater;
+            return std::weak_ordering::less;
         }
     } else if (b == other.end()) {
-        return std::weak_ordering::less;
+        return std::weak_ordering::greater;
     } else {
         return *a <=> *b;
     }

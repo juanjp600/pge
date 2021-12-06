@@ -29,7 +29,7 @@ struct String::OrderedKey {
     OrderedKey() = default;
     OrderedKey(const String& str) : str(str) { }
     const String str;
-    const std::weak_ordering operator<=>(const OrderedKey& other) {
+    const std::weak_ordering operator<=>(const OrderedKey& other) const {
         return str.compare(other.str);
     }
 };
