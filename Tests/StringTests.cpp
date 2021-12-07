@@ -136,4 +136,59 @@ TEST_CASE("Comparison strcmp compatibility") {
 	CHECK(a.compare(b) == (strcmp(a.cstr(), b.cstr()) <=> 0));
 }
 
+TEST_CASE("Trim explicit") {
+	CHECK(String("          trollge    ").trim() == "trollge");
+	CHECK(String("                ").trim() == "");
+	CHECK(String().trim() == "");
+	CHECK(String(L"    ÄßC ").trim() == L"ÄßC");
+	CHECK(String(u8"    ÄßC ").trim() == u8"ÄßC");
+	CHECK(String(u8"\u2009ÄßC \u00A0 \f \n").trim() == u8"ÄßC");
+}
+
+TEST_CASE("RegEx explicit") {
+	std::regex regexfull("[A-Za-z]+");
+	CHECK(String("pulsegun").regexMatch(regexfull).empty() == false);
+	CHECK(String().regexMatch(regexfull).empty() == true);
+
+	String b = "Ä";
+	CHECK(b.regexMatch(std::regex("[\u00C4]")).empty() == false);
+	CHECK(b.regexMatch(std::regex("[\u00E4]")).empty() == true);
+}
+
+TEST_CASE("Uppercase explicit") {
+	CHECK(String("juano").toUpper() == "JUANO");
+	CHECK(String(u8"jüano").toUpper() == u8"JÜANO");
+	CHECK(String(u8"jü !@#$%^&*() ano").toUpper() == u8"JÜ !@#$%^&*() ANO");
+	// To be worked on
+	//CHECK(String(u8"\uFB05").toUpper() == u8"\uFB05");
+}
+
+TEST_CASE("Replace explicit") {
+	String a = "pulsegoop";
+	CHECK(a.replace("goop", "gun") == "pulsegun");
+	CHECK(a.replace("p", "gun") == "gunulsegoogun");
+	CHECK(a.replace("goopa", "not") == "pulsegoop");
+	CHECK(a.replace("NOT", "") == "pulsegoop");
+	CHECK(a.replace("pulsegoop", "") == "");
+	CHECK(a.replace("goop", "") == "pulse");
+	CHECK(a.replace(u8"\u2009", "") == "pulsegoop");
+	CHECK(a.replace("goop", u8"\uFB05\uFB05\uFB05") == u8"pulse\uFB05\uFB05\uFB05");
+	CHECK(String("pulse gu n").replace(" ", "") == "pulsegun");
+	CHECK(String(u8"pülse gü nü").replace(" ", "") == u8"pülsegünü");
+
+	//CHECK_THROWS(a.replace("", "cannot search for an empty"));
+}
+
+TEST_CASE("Substring explicit") {
+	String a = "pulsegoop";
+	CHECK(a.substr(5) == "goop");
+	CHECK(a.substr(9) == "");
+	//CHECK_THROWS(String().substr(9) == "");
+	CHECK(String(L"ÖöäÄäüÜ").substr(3) == L"ÄäüÜ");
+
+	CHECK(a.substr(0, 0) == "");
+	CHECK(String().substr(0, 0) == "");
+	CHECK(a.substr(0, 5) == "pulse");
+}
+
 }

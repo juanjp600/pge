@@ -784,8 +784,8 @@ static const String EMPTY_FIND = "Find string can't be empty";
 
 const String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
     asrt(!fnd.isEmpty(), EMPTY_FIND);
-    for (String::Iterator it = from; it.getBytePosition() < byteLength() - fnd.byteLength(); it++) {
-        if (memcmp(cstr() + it.getBytePosition(), fnd.cstr(), fnd.byteLength()) == 0) {
+    for (String::Iterator it = from; it.getBytePosition() <= byteLength() - fnd.byteLength(); it++) {
+        if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) {
             return it;
         }
     }
@@ -852,7 +852,7 @@ const String String::replace(const String& fnd, const String& rplace) const {
     const char* thisStr = cstr();
 
     std::vector<int> foundPositions;
-    for (String::Iterator it = findFirst(fnd); it != end(); it = findFirst(fnd, it)) {
+    for (String::Iterator it = findFirst(fnd); it != end(); it = findFirst(fnd, it + 1)) {
         foundPositions.emplace_back(it.getBytePosition());
     }
     
