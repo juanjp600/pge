@@ -798,7 +798,7 @@ const String::ReverseIterator String::findLast(const String& fnd, int fromEnd) c
 
 const String::ReverseIterator String::findLast(const String& fnd, const ReverseIterator& from) const {
     asrt(!fnd.isEmpty(), EMPTY_FIND);
-    String::Iterator it = from;
+    String::ReverseIterator it = from;
     while (it.getBytePosition() > byteLength() - fnd.byteLength()) {
         it++;
     }
