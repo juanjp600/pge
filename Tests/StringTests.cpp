@@ -22,7 +22,7 @@ TEST_CASE("Lengths") {
 	checkLength(L"ÄAA", 4, 3);
 	checkLength(u8"AÄA", 4, 3);
 	checkLength(L"AAÄ", 4, 3);
-	checkLength("Hello, this is a very long string, it is very long, yeah, very long, like very long.\n"
+	checkLength(u8"Hello, this is a very long string, it is very long, yeah, very long, like very long.\n"
 		u8"Ok, I'll also make it include special characters like Ä and Ü and idfk \u2764 (it's a heart)", 176, 172);
 }
 
@@ -52,26 +52,29 @@ TEST_CASE("Basic iterator tests") {
 	CHECK(e.rend() != o.rend());
 }
 
-TEST_CASE("Multiplication") {
+TEST_CASE("Repeat") {
 	String a; String sep;
 	SUBCASE_PARAMETERIZE(
 		(a, "A", u8"Ä", "ASDFG", u8"ÄADß", u8"Öaaa", u8"oooÄ"),
 		(sep, "", ", ", "A", u8"ÖÜÖ")
 	);
 
-	CHECK(a.multiply(0) == String());
-	CHECK(a.multiply(1) == a);
+	CHECK(a.repeat(0) == String());
+	CHECK(a.repeat(1) == a);
 	
 }
 
-TEST_CASE("Multiplication explicit") {
+TEST_CASE("Repeat explicit") {
 	String a = "A";
-	CHECK(a.multiply(5) == "AAAAA");
-	CHECK(a.multiply(5, ", ") == "A, A, A, A, A");
+	CHECK(a.repeat(5) == "AAAAA");
+	CHECK(a.repeat(5, ", ") == "A, A, A, A, A");
 
 	String u = u8"Ä";
-	CHECK(u.multiply(5) == u8"ÄÄÄÄÄ");
-	CHECK(u.multiply(5, ", ") == u8"Ä, Ä, Ä, Ä, Ä");
+	CHECK(u.repeat(5) == u8"ÄÄÄÄÄ");
+	CHECK(u.repeat(5, ", ") == u8"Ä, Ä, Ä, Ä, Ä");
+
+	CHECK_THROWS(a.repeat(-1));
+	CHECK_THROWS(u.repeat(-1));
 }
 
 TEST_CASE("Reverse explicit") {
@@ -120,7 +123,7 @@ TEST_CASE("Multiply split join same") {
 		(i, 10, 1, 0, 100)
 	);
 
-	a = a.multiply(i, sep);	
+	a = a.repeat(i, sep);	
 	CHECK(a == String::join(a.split(sep, true), sep));
 }
 
@@ -146,21 +149,21 @@ TEST_CASE("Trim explicit") {
 }
 
 TEST_CASE("RegEx explicit") {
-	std::regex regexfull("[A-Za-z]+");
-	CHECK(String("pulsegun").regexMatch(regexfull).empty() == false);
-	CHECK(String().regexMatch(regexfull).empty() == true);
+	String regexfull("[A-Za-z]+");
+	CHECK(String("pulsegun").regexMatch(regexfull) == "pulsegun");
+	CHECK(String().regexMatch(regexfull).isEmpty());
 
-	String b = "Ä";
-	CHECK(b.regexMatch(std::regex("[\u00C4]")).empty() == false);
-	CHECK(b.regexMatch(std::regex("[\u00E4]")).empty() == true);
+	auto _ = String(u8"Ä").wstr();
+
+	String b = u8"Ä";
+	CHECK(b.regexMatch(u8"[Ä]") == u8"Ä");
+	CHECK(b.regexMatch(u8"[ä]").isEmpty());
 }
 
 TEST_CASE("Uppercase explicit") {
 	CHECK(String("juano").toUpper() == "JUANO");
 	CHECK(String(u8"jüano").toUpper() == u8"JÜANO");
-	CHECK(String(u8"jü !@#$%^&*() ano").toUpper() == u8"JÜ !@#$%^&*() ANO");
-	// To be worked on
-	//CHECK(String(u8"\uFB05").toUpper() == u8"\uFB05");
+	CHECK(String(u8"jü !@#$%^\u2764&*() ano\u2764").toUpper() == u8"JÜ !@#$%^\u2764&*() ANO\u2764");
 }
 
 TEST_CASE("Replace explicit") {
@@ -175,20 +178,22 @@ TEST_CASE("Replace explicit") {
 	CHECK(a.replace("goop", u8"\uFB05\uFB05\uFB05") == u8"pulse\uFB05\uFB05\uFB05");
 	CHECK(String("pulse gu n").replace(" ", "") == "pulsegun");
 	CHECK(String(u8"pülse gü nü").replace(" ", "") == u8"pülsegünü");
-
-	//CHECK_THROWS(a.replace("", "cannot search for an empty"));
+	CHECK(String(u8"p ü l s e  g ü  n ü").replace("  ", "") == u8"p ü l s eg ün ü");
+	CHECK(String(L"ÄßD").replace("", "|") == L"|Ä|ß|D|");
+	CHECK(String().replace("", "|") == "|");
 }
 
 TEST_CASE("Substring explicit") {
 	String a = "pulsegoop";
 	CHECK(a.substr(5) == "goop");
 	CHECK(a.substr(9) == "");
-	//CHECK_THROWS(String().substr(9) == "");
 	CHECK(String(L"ÖöäÄäüÜ").substr(3) == L"ÄäüÜ");
 
 	CHECK(a.substr(0, 0) == "");
-	CHECK(String().substr(0, 0) == "");
 	CHECK(a.substr(0, 5) == "pulse");
+	CHECK(String().substr(0, 0) == "");
+
+	CHECK_THROWS(a.substr(10));
 }
 
 }

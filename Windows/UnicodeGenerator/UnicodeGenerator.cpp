@@ -32,7 +32,7 @@ class SwitchWriter {
                     } else {
                         out.writeLine(" [[fallthrough]];");
                     }
-                    out.write(INDENT.multiply(2) + "case " + rawToChar(sit.str) + ":");
+                    out.write(INDENT.repeat(2) + "case " + rawToChar(sit.str) + ":");
                 }
                 out.writeLine(" {");
                 for (const String& toChr : chars) {
@@ -40,7 +40,7 @@ class SwitchWriter {
                 }
                 writeBreak(out);
             }
-            out.writeLine(INDENT.multiply(2) + "default: {");
+            out.writeLine(INDENT.repeat(2) + "default: {");
             writeDefaultAction(out);
             writeBreak(out);
             out.writeLine(INDENT + "}");
@@ -48,7 +48,7 @@ class SwitchWriter {
         }
 
         virtual void writeAction(TextWriter& out, const String& item) const {
-            out.writeLine(INDENT.multiply(3) + preAction + item + postAction);
+            out.writeLine(INDENT.repeat(3) + preAction + item + postAction);
         }
 
         virtual void writeDefaultAction(TextWriter& out) const {
@@ -63,7 +63,7 @@ class SwitchWriter {
         const String retType;
 
         static void writeBreak(TextWriter& out) {
-            out.writeLine(INDENT.multiply(2) + "} break;");
+            out.writeLine(INDENT.repeat(2) + "} break;");
         }
 
         static String rawToChar(const String& str) {
@@ -143,11 +143,11 @@ class Identifier : private SwitchWriter {
         Cases matchingChars;
 
         void writeAction(TextWriter& out, const String& item) const override {
-            out.writeLine(INDENT.multiply(3) + "return true;");
+            out.writeLine(INDENT.repeat(3) + "return true;");
         }
 
         void writeDefaultAction(TextWriter& out) const override {
-            out.writeLine(INDENT.multiply(3) + "return false;");
+            out.writeLine(INDENT.repeat(3) + "return false;");
         }
 };
 

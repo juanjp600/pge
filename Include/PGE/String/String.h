@@ -250,7 +250,7 @@ class String {
         const String toLower() const;
         const String trim() const;
         const String reverse() const;
-        const String multiply(unsigned count, const String& separator = "") const;
+        const String repeat(int count, const String& separator = "") const;
         const std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
         static const String join(const Enumerable<String> auto& vect, const String& separator) {
             if (std::ranges::empty(vect)) {
@@ -268,7 +268,7 @@ class String {
             return retVal;
         }
 
-        const std::cmatch regexMatch(const std::regex& pattern) const;
+        const String regexMatch(const String& pattern) const;
 
         //String unHex() const;
 

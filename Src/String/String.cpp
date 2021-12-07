@@ -783,7 +783,7 @@ const String::Iterator String::findFirst(const String& fnd, int from) const {
 static const String EMPTY_FIND = "Find string can't be empty";
 
 const String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
-    asrt(!fnd.isEmpty(), EMPTY_FIND);
+    if (fnd.isEmpty()) { return from; }
     for (String::Iterator it = from; it.getBytePosition() <= byteLength() - fnd.byteLength(); it++) {
         if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) {
             return it;
@@ -845,16 +845,11 @@ const String::Iterator String::charAt(int pos) const {
 }
 
 const String String::replace(const String& fnd, const String& rplace) const {
-    asrt(fnd.byteLength() != 0, "Find string can't be empty");
-
-    const char* fndStr = fnd.cstr();
-    const char* rplaceStr = rplace.cstr();
-    const char* thisStr = cstr();
-
     std::vector<int> foundPositions;
     for (String::Iterator it = findFirst(fnd); it != end(); it = findFirst(fnd, it + 1)) {
         foundPositions.emplace_back(it.getBytePosition());
     }
+    if (fnd.isEmpty()) { foundPositions.emplace_back(byteLength()); }
     
     int newSize = byteLength() + (int)foundPositions.size() * (rplace.byteLength() - fnd.byteLength());
     String retVal(newSize);
@@ -865,14 +860,14 @@ const String String::replace(const String& fnd, const String& rplace) const {
     int thisPos = 0;
     for (int pos : foundPositions) {
         int thisLen = pos - thisPos;
-        memcpy(retBuf + retPos, thisStr + thisPos, thisLen);
+        memcpy(retBuf + retPos, cstr() + thisPos, thisLen);
         retPos += thisLen;
-        memcpy(retBuf + retPos, rplaceStr, rplace.byteLength());
+        memcpy(retBuf + retPos, rplace.cstr(), rplace.byteLength());
         retPos += rplace.byteLength();
         thisPos = pos + fnd.byteLength();
     }
     // Append the rest of the string, including terminating byte.
-    memcpy(retBuf + retPos, thisStr + thisPos, byteLength() - thisPos + 1);
+    memcpy(retBuf + retPos, cstr() + thisPos, byteLength() - thisPos + 1);
    
     // If the string that is being operated on already has had its length calculated, we assume it to be worth it to pre-calculate the new string's length.
     if (data->_strLength >= 0) {
@@ -954,7 +949,8 @@ const String String::reverse() const {
     return ret;
 }
 
-const String String::multiply(unsigned count, const String& separator) const {
+const String String::repeat(int count, const String& separator) const {
+    asrt(count >= 0, "count must be non-negative");
     if (count == 0) { return String(); }
     int curLength = byteLength();
     int sepLength = separator.byteLength();
@@ -1006,12 +1002,16 @@ const std::vector<String> String::split(const String& needleStr, bool removeEmpt
     return split;
 }
 
-const std::cmatch String::regexMatch(const std::regex& pattern) const {
-    const char* s = cstr();
-    std::cmatch m;
-    std::regex_search(s, m, pattern);
+const String String::regexMatch(const String& pattern) const {
+    // TODO: C++23 will add support for char8_t and/or deprecate std::regex
+    // We will have to react accordingly. Perhaps implementing our own regex matcher.
+    std::vector<char16> s = wstr();
+    std::wcmatch m;
+    std::regex_search(s.data(), m, std::wregex(pattern.wstr().data()));
 
-    return m;
+    s[m.position() + m.length()] = '\0';
+    String ret(s.data() + m.position());
+    return ret;
 }
 
 /* TODO: Improve this if we get MacOS support back. Non-fixed return value size and possibly propagating more metadata.
