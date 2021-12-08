@@ -2,6 +2,14 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest/doctest.h>
 
+#include <PGE/Exception/Exception.h>
+
+using namespace PGE;
+
+REGISTER_EXCEPTION_TRANSLATOR(const Exception& e) {
+	return e.what().cstr();
+}
+
 TEST_CASE("Test test framework") {
 	CHECK(1 == 1);
 }

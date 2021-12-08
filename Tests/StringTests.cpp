@@ -73,8 +73,8 @@ TEST_CASE("Repeat explicit") {
 	CHECK(u.repeat(5) == u8"ÄÄÄÄÄ");
 	CHECK(u.repeat(5, ", ") == u8"Ä, Ä, Ä, Ä, Ä");
 
-	CHECK_THROWS(a.repeat(-1));
-	CHECK_THROWS(u.repeat(-1));
+	CHECK_THROWS_PGE(a.repeat(-1));
+	CHECK_THROWS_PGE(u.repeat(-1));
 }
 
 TEST_CASE("Reverse explicit") {
@@ -153,8 +153,6 @@ TEST_CASE("RegEx explicit") {
 	CHECK(String("pulsegun").regexMatch(regexfull) == "pulsegun");
 	CHECK(String().regexMatch(regexfull).isEmpty());
 
-	auto _ = String(u8"Ä").wstr();
-
 	String b = u8"Ä";
 	CHECK(b.regexMatch(u8"[Ä]") == u8"Ä");
 	CHECK(b.regexMatch(u8"[ä]").isEmpty());
@@ -184,16 +182,25 @@ TEST_CASE("Replace explicit") {
 }
 
 TEST_CASE("Substring explicit") {
-	String a = "pulsegoop";
-	CHECK(a.substr(5) == "goop");
+	String a = L"pulsegöop";
+	CHECK(a.substr(5) == L"göop");
 	CHECK(a.substr(9) == "");
 	CHECK(String(L"ÖöäÄäüÜ").substr(3) == L"ÄäüÜ");
 
 	CHECK(a.substr(0, 0) == "");
 	CHECK(a.substr(0, 5) == "pulse");
-	CHECK(String().substr(0, 0) == "");
+	CHECK(a.substr(1, 2) == "ul");
+	CHECK(a.substr(a.length(), 0) == "");
+	CHECK(a.substr(0, a.length()) == a);
+	CHECK(a.substr(a.begin(), a.end()) == a);
+	CHECK(a.substr(a.findFirst(L"ö") + 1) == "op");
+	CHECK(a.substr(a.end(), a.begin()) == "");
 
-	CHECK_THROWS(a.substr(10));
+	CHECK(String().substr(0, 0) == "");
+	
+	CHECK_THROWS_PGE(a.substr(0, a.byteLength() + 1));
+	CHECK_THROWS_PGE(a.substr(a.byteLength(), 1));
+	CHECK_THROWS_PGE(a.substr(10));
 }
 
 }

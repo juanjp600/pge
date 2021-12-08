@@ -248,12 +248,31 @@ String::String(const String& a, const String& b) {
     }
 }
 
+const String PGE::StringLiterals::operator""_PGE(const char* cstr, size_t size) {
+    return String(cstr, size);
+}
+
+const String PGE::StringLiterals::operator""_PGE(const char8_t* cstr, size_t size) {
+    return String((char*)cstr, size);
+}
+
+const String PGE::StringLiterals::operator""_PGE(const char16* wstr, size_t) {
+    return String(wstr);
+}
+
+
 //
 // Private constructors.
 //
 
 String::String(int size) {
     reallocate(size);
+}
+
+// Literal
+String::String(const char* cstr, size_t size)
+    : chs((char*)cstr) {
+    initLiteral((int)size);
 }
 
 // Byte substr.
@@ -774,10 +793,9 @@ const String String::substr(const Iterator& start) const {
 }
 
 const String String::substr(const Iterator& start, const Iterator& to) const {
-    asrt(start.getBytePosition() <= to.getBytePosition(),
-        "Start iterator can't come after to iterator (start: " + from(start.getBytePosition()) + "; to: " + from(to.getBytePosition()) + "; str: " + *this + ")");
-    asrt(to.getBytePosition() <= end().getBytePosition(),
-        "To iterator can't come after end iterator (to: " + from(to.getBytePosition()) + "; end: " + from(end().getBytePosition()) + "; str: " + *this + ")");
+    if (start.getBytePosition() >= to.getBytePosition()) {
+        return String();
+    }
 
     int newSize = to.getBytePosition() - start.getBytePosition();
     String retVal(newSize);

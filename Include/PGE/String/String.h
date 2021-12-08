@@ -22,6 +22,14 @@ namespace PGE {
 template <typename T, byte BASE>
 concept ValidBaseForType = BASE == 10 && std::integral<T> || std::unsigned_integral<T> && (BASE >= 2 && BASE < 36);
 
+class String;
+
+inline namespace StringLiterals {
+    const String operator""_PGE(const char* cstr, size_t size);
+    const String operator""_PGE(const char8_t* cstr, size_t size);
+    const String operator""_PGE(const char16 * wstr, size_t size);
+}
+
 /// A UTF-8 character sequence guaranteed to be terminated by a null byte.
 class String {
     private:
@@ -125,9 +133,7 @@ class String {
 
         template <size_t S>
         String(const char(&cstri)[S])
-            : chs((char*)cstri) {
-            initLiteral((int)S);
-        }
+            : String(cstri, S) { }
 
         template <typename T, typename = typename std::enable_if<
             std::conjunction<
@@ -156,6 +162,10 @@ class String {
         String(char16 w);
 
         String(const String& a, const String& b);
+
+        friend const String StringLiterals::operator""_PGE(const char* cstr, size_t size);
+        friend const String StringLiterals::operator""_PGE(const char8_t* cstr, size_t size);
+        friend const String StringLiterals::operator""_PGE(const char16* wstr, size_t size);
 
         template <typename T>
         static const String from(const T& t);
@@ -277,6 +287,7 @@ class String {
 
     private:
         String(int size);
+        String(const char* cstr, size_t size);
         String(const String& other, int from, int cnt);
 
         static void copy(String& dst, const String& src);
