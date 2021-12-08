@@ -155,6 +155,8 @@ class String {
         String(char c);
         String(char16 w);
 
+        String(const String& a, const String& b);
+
         template <typename T>
         static const String from(const T& t);
 
@@ -170,13 +172,6 @@ class String {
         void operator=(const String& other);
         void operator+=(const String& other);
         void operator+=(char16 ch);
-
-        // TODO: Remove (juan hates his friends).
-        friend const String operator+(const String& a, const String& b);
-        friend const String operator+(const char* a, const String& b);
-        friend const String operator+(const String& a, const char* b);
-        friend const String operator+(const String& a, char16 b);
-        friend const String operator+(char16 a, const String& b);
 
         /// Gets the UTF-8 data the string is composed of, without transferring ownership.
         /// Guaranteed to have a null byte appended to the string's content.
@@ -328,6 +323,7 @@ class String {
         template <std::floating_point F>
         static const String fromFloatingPoint(F f);
 };
+const String operator+(const String& a, const String& b);
 bool operator==(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);
 std::istream& operator>>(std::istream& is, String& s);

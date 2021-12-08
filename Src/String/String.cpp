@@ -235,6 +235,19 @@ String::String(char16 w) {
     buf[data->strByteLength] = '\0';
 }
 
+String::String(const String& a, const String& b) {
+    int aLen = a.byteLength();
+    int bLen = b.byteLength();
+    reallocate(aLen + bLen);
+    char* buf = cstrNoConst();
+    memcpy(buf, a.cstr(), aLen);
+    memcpy(buf + aLen, b.cstr(), bLen + 1);
+    data->strByteLength = aLen + bLen;
+    if (a.data->_strLength >= 0 && b.data->_strLength >= 0) {
+        data->_strLength = a.length() + b.length();
+    }
+}
+
 //
 // Private constructors.
 //
@@ -282,68 +295,7 @@ void String::operator+=(char16 ch) {
 }
 
 const String PGE::operator+(const String& a, const String& b) {
-    int aLen = a.byteLength();
-    int bLen = b.byteLength();
-    String ret(aLen + bLen);
-    char* buf = ret.cstrNoConst();
-    memcpy(buf, a.cstr(), aLen);
-    memcpy(buf + aLen, b.cstr(), bLen + 1);
-    ret.data->strByteLength = aLen + bLen;
-    if (a.data->_strLength >= 0 && b.data->_strLength >= 0) {
-        ret.data->_strLength = a.length() + b.length();
-    }
-    return ret;
-}
-
-const String PGE::operator+(const char* a, const String& b) {
-    int aLen = (int)strlen(a);
-    int bLen = b.byteLength();
-    String ret(aLen + bLen);
-    char* buf = ret.cstrNoConst();
-    memcpy(buf, a, aLen);
-    memcpy(buf + aLen, b.cstr(), bLen + 1);
-    ret.data->strByteLength = aLen + bLen;
-    return ret;
-}
-
-const String PGE::operator+(const String& a, const char* b) {
-    int aLen = a.byteLength();
-    int bLen = (int)strlen(b);
-    String ret(aLen + bLen);
-    char* buf = ret.cstrNoConst();
-    memcpy(buf, a.cstr(), aLen);
-    memcpy(buf + aLen, b, bLen + 1);
-    ret.data->strByteLength = aLen + bLen;
-    return ret;
-}
-
-const String PGE::operator+(const String& a, char16 b) {
-    int aLen = a.byteLength();
-    String ret(aLen + 4);
-    char* buf = ret.cstrNoConst();
-    memcpy(buf, a.cstr(), aLen);
-    int actualSize = aLen + Unicode::wCharToUtf8(b, buf + aLen);
-    buf[actualSize] = '\0';
-    ret.data->strByteLength = actualSize;
-    if (a.data->_strLength >= 0) {
-        ret.data->_strLength = a.length() + 1;
-    }
-    return ret;
-}
-
-const String PGE::operator+(char16 a, const String& b) {
-    int bLen = b.byteLength();
-    String ret(4 + bLen);
-    char* buf = ret.cstrNoConst();
-    int writtenChars = Unicode::wCharToUtf8(a, buf);
-    memcpy(buf + writtenChars, b.cstr(), bLen);
-    int actualSize = writtenChars + bLen;
-    buf[actualSize] = '\0';
-    ret.data->strByteLength = actualSize;
-    if (b.data->_strLength >= 0) {
-        ret.data->_strLength = b.length() + 1;
-    }
-    return ret;
+    return String(a, b);
 }
 
 bool PGE::operator==(const String& a, const String& b) {
@@ -356,7 +308,7 @@ std::ostream& PGE::operator<<(std::ostream& os, const String& s) {
 
 // ASCII, fuck you.
 std::istream& PGE::operator>>(std::istream& is, String& s) {
-    // See xstring for reference.
+    // See MSVC xstring for reference.
 
     int ch;
     while ((ch = is.rdbuf()->sbumpc()) != EOF && ch != '\r' && ch != '\n') {
