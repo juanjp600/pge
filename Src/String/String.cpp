@@ -6,6 +6,7 @@
 #include <limits>
 #include <iostream>
 #include <queue>
+#include <mutex>
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
 #endif
@@ -170,14 +171,8 @@ String::String(const String& other) {
     copy(*this, other);
 }
 
-String::String(const char8_t* cstr) : String((const char*)cstr) { }
-
-String::String(const std::string& cppstr) {
-    int len = (int)cppstr.size();
-    reallocate(len);
-    data->strByteLength = len;
-    memcpy(cstrNoConst(), cppstr.c_str(), len + 1);
-}
+String::String(const char8_t* cstr)
+    : String((const char*)cstr) { }
 
 String::String(const char16* wstri) {
     wCharToUtf8Str(wstri);
@@ -200,6 +195,13 @@ void String::wCharToUtf8Str(const char16* wbuffer) {
     }
     buf[newCap] = '\0';
     data->strByteLength = newCap;
+}
+
+String::String(const std::string& cppstr) {
+    int len = (int)cppstr.size();
+    reallocate(len);
+    data->strByteLength = len;
+    memcpy(cstrNoConst(), cppstr.c_str(), len + 1);
 }
 
 #if defined(__APPLE__) && defined(__OBJC__)
@@ -226,6 +228,9 @@ String::String(char c) {
     }
     data->_strLength = 1;
 }
+
+String::String(char8_t c)
+    : String((char)c) { }
 
 String::String(char16 w) {
     reallocate(4);
@@ -341,6 +346,13 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
 
 u64 String::getHashCode() const {
     if (!data->_hashCodeEvaluted) {
+        if (data->cCapacity == 0) {
+            getOrAddLiteralData();
+            if (data->_hashCodeEvaluted) {
+                return data->_hashCode;
+            }
+        }
+
         data->_hashCode = Hasher::getHash(std::span((byte*)cstr(), byteLength()));
         data->_hashCodeEvaluted = true;
     }
@@ -729,6 +741,13 @@ PGE_STRING_TO_FLOAT(long double)
 
 int String::length() const {
     if (data->_strLength < 0) {
+        if (data->cCapacity == 0) {
+            getOrAddLiteralData();
+            if (data->_strLength >= 0) {
+                return data->_strLength;
+            }
+        }
+
         const char* buf = cstr();
         data->_strLength = 0;
         for (int i = 0; buf[i] != '\0'; i += Unicode::measureCodepoint(buf[i])) {
@@ -850,17 +869,28 @@ const String String::replace(const String& fnd, const String& rplace) const {
 void String::initLiteral(int litSize) {
     data->strByteLength = litSize - 1;
     data->cCapacity = 0;
-    //static std::unordered_map<const char*, Data> litData;
-    // TODO: What a great idea to put a fucking map lookup here.
-    // This breaks when multithreading!
-    /*const auto& it = litData.find(chs);
+}
+
+void String::getOrAddLiteralData() const {
+    static std::unordered_map<const char*, String::Data> litData;
+    static std::mutex litMut;
+
+    const auto& it = litData.find(chs);
     if (it != litData.end()) {
         data = &it->second;
     } else {
-        data = &litData.emplace(chs, Data()).first->second;
-        data->cCapacity = 0;
-        data->strByteLength = litSize - 1;
-    }*/
+        int litSize = data->strByteLength;
+        { // This needs to be synced.
+            std::lock_guard lock(litMut);
+            data = &litData.emplace(
+                chs,
+                Data{
+                    .strByteLength = litSize,
+                    .cCapacity = 0
+                }
+            ).first->second;
+        }
+    }
 }
 
 // TODO: Funny special cases!

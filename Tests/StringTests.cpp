@@ -123,7 +123,7 @@ TEST_CASE("Multiply split join same") {
 		(i, 10, 1, 0, 100)
 	);
 
-	a = a.repeat(i, sep);	
+	a = a.repeat(i, sep);
 	CHECK(a == String::join(a.split(sep, true), sep));
 }
 

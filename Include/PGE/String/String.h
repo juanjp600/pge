@@ -152,13 +152,14 @@ class String {
         }
 
         String(const char8_t* cstr);
+        String(const char16* wstr);
 
         String(const std::string& cppstr);
-        String(const char16* wstr);
 #if defined(__APPLE__) && defined(__OBJC__)
         String(const NSString* nsstr);
 #endif
         String(char c);
+        String(char8_t c);
         String(char16 w);
 
         String(const String& a, const String& b);
@@ -316,12 +317,12 @@ class String {
         };
 
         // Default initialized with Unique.
-        std::variant<Unique, std::shared_ptr<Shared>, std::monostate> internalData;
-        // TODO: Investigate whether calculating these instead is worth it.
+        std::variant<Unique, std::shared_ptr<Shared>> internalData;
         char* chs = std::get<Unique>(internalData).chs;
-        Data* data = &std::get<Unique>(internalData).data;
+        mutable Data* data = &std::get<Unique>(internalData).data;
 
         void initLiteral(int litSize);
+        void getOrAddLiteralData() const;
 
         const String performCaseConversion(const std::function<void(String&, char16)>& func) const;
 
