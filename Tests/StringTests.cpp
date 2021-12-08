@@ -194,10 +194,11 @@ TEST_CASE("Substring explicit") {
 	CHECK(a.substr(0, a.length()) == a);
 	CHECK(a.substr(a.begin(), a.end()) == a);
 	CHECK(a.substr(a.findFirst(L"ö") + 1) == "op");
-	CHECK(a.substr(a.end(), a.begin()) == "");
 
 	CHECK(String().substr(0, 0) == "");
 	
+	CHECK_THROWS_PGE(a.substr(a.end(), a.begin()));
+	CHECK_THROWS_PGE(a.substr(a.end(), a.end() - 1));
 	CHECK_THROWS_PGE(a.substr(0, a.byteLength() + 1));
 	CHECK_THROWS_PGE(a.substr(a.byteLength(), 1));
 	CHECK_THROWS_PGE(a.substr(10));

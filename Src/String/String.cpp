@@ -793,9 +793,9 @@ const String String::substr(const Iterator& start) const {
 }
 
 const String String::substr(const Iterator& start, const Iterator& to) const {
-    if (start.getBytePosition() >= to.getBytePosition()) {
-        return String();
-    }
+    asrt(start.getBytePosition() <= to.getBytePosition(),
+        "start iterator can't come after to iterator (start: " + from(start.getBytePosition())
+        + "; to: " + from(to.getBytePosition()) + "; str: " + *this + ")");
 
     int newSize = to.getBytePosition() - start.getBytePosition();
     String retVal(newSize);
