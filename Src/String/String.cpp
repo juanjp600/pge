@@ -274,10 +274,11 @@ String::String(int size) {
     reallocate(size);
 }
 
-// Literal
+// Literal, size is WITHOUT terminating null byte!
 String::String(const char* cstr, size_t size)
     : chs((char*)cstr) {
-    initLiteral((int)size);
+    data->strByteLength = (int)size;
+    data->cCapacity = 0;
 }
 
 // Byte substr.
@@ -863,12 +864,6 @@ const String String::replace(const String& fnd, const String& rplace) const {
         retVal.data->_strLength = data->_strLength + (int)foundPositions.size() * (rplace.length() - fnd.length());
     }
     return retVal;
-}
-
-// Only has to deal with data.
-void String::initLiteral(int litSize) {
-    data->strByteLength = litSize - 1;
-    data->cCapacity = 0;
 }
 
 void String::getOrAddLiteralData() const {

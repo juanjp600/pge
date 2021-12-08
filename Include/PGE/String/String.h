@@ -133,7 +133,7 @@ class String {
 
         template <size_t S>
         String(const char(&cstri)[S])
-            : String(cstri, S) { }
+            : String(cstri, S - 1) { }
 
         template <typename T, typename = typename std::enable_if<
             std::conjunction<
@@ -321,7 +321,6 @@ class String {
         char* chs = std::get<Unique>(internalData).chs;
         mutable Data* data = &std::get<Unique>(internalData).data;
 
-        void initLiteral(int litSize);
         void getOrAddLiteralData() const;
 
         const String performCaseConversion(const std::function<void(String&, char16)>& func) const;
