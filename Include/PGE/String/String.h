@@ -317,7 +317,7 @@ class String {
         };
 
         // Default initialized with Unique.
-        std::variant<Unique, std::shared_ptr<Shared>> internalData;
+        mutable std::variant<Unique, std::shared_ptr<Shared>, std::monostate> internalData;
         char* chs = std::get<Unique>(internalData).chs;
         mutable Data* data = &std::get<Unique>(internalData).data;
 

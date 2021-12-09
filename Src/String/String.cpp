@@ -146,14 +146,19 @@ const String::ReverseIterator String::rend() const {
 void String::copy(String& dst, const String& src) {
     dst.internalData = src.internalData;
     if (src.data->cCapacity == SHORT_STR_CAPACITY) {
+        // It's a short string.
         Unique& u = std::get<Unique>(dst.internalData);
         dst.chs = u.chs;
         dst.data = &u.data;
     } else {
         dst.chs = src.chs;
-        // TODO: Revisit (literal)
-        if (src.data->cCapacity != 0) {
+        if (std::holds_alternative<std::monostate>(src.internalData)
+            || src.data->cCapacity != 0) {
+            // It's a shared string or a string literal with shared data.
             dst.data = src.data;
+        } else {
+            // It's a literal whose data hasn't been loaded yet.
+            dst.data = &std::get<Unique>(dst.internalData).data;
         }
     }
 }
@@ -886,6 +891,8 @@ void String::getOrAddLiteralData() const {
             ).first->second;
         }
     }
+
+    internalData = std::monostate();
 }
 
 // TODO: Funny special cases!
