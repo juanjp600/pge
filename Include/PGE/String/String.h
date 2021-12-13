@@ -147,7 +147,7 @@ class String {
         String(T cstri) {
             int len = (int)strlen(cstri);
             reallocate(len);
-            data->strByteLength = len;
+            getData()->strByteLength = len;
             memcpy(cstrNoConst(), cstri, len + 1);
         }
 
@@ -293,7 +293,7 @@ class String {
 
         static void copy(String& dst, const String& src);
 
-        static constexpr int SHORT_STR_CAPACITY = 16;
+        static constexpr int SHORT_STR_CAPACITY = 40;
 
         struct Data {
             // Lazily evaluated.
@@ -316,12 +316,14 @@ class String {
 
         struct Literal {
             std::variant<Data, Data*> data;
+            char* chs;
         };
 
         // Default initialized with Unique.
         mutable std::variant<Unique, std::shared_ptr<Shared>, Literal> internalData;
-        char* chs = std::get<Unique>(internalData).chs;
-        mutable Data* data = &std::get<Unique>(internalData).data;
+
+        char* getChars() const;
+        Data* getData() const;
 
         void getOrAddLiteralData() const;
 
@@ -335,7 +337,12 @@ class String {
         static const String fromInteger(I i, Casing casing = Casing::UPPER);
         template <std::floating_point F>
         static const String fromFloatingPoint(F f);
+
+        struct CharVisitor; struct DataVisitor;
 };
+
+constexpr auto _ = sizeof(String);
+
 const String operator+(const String& a, const String& b);
 bool operator==(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);
