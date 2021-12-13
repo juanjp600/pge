@@ -145,20 +145,22 @@ const String::ReverseIterator String::rend() const {
 
 void String::copy(String& dst, const String& src) {
     dst.internalData = src.internalData;
-    if (src.data->cCapacity == SHORT_STR_CAPACITY) {
+    if (std::holds_alternative<Unique>(src.internalData)) {
         // It's a short string.
         Unique& u = std::get<Unique>(dst.internalData);
         dst.chs = u.chs;
         dst.data = &u.data;
     } else {
         dst.chs = src.chs;
-        if (std::holds_alternative<std::monostate>(src.internalData)
-            || src.data->cCapacity != 0) {
-            // It's a shared string or a string literal with shared data.
-            dst.data = src.data;
+        if (std::holds_alternative<Literal>(src.internalData)) {
+            Literal& lit = std::get<Literal>(dst.internalData);
+            if (std::holds_alternative<Data>(lit.data)) {
+                dst.data = &std::get<Data>(lit.data);
+            } else {
+                dst.data = src.data;
+            }
         } else {
-            // It's a literal whose data hasn't been loaded yet.
-            dst.data = &std::get<Unique>(dst.internalData).data;
+            dst.data = src.data;
         }
     }
 }
@@ -168,7 +170,6 @@ String::String() {
     data->strByteLength = 0;
     data->_strLength = 0;
     data->_hashCode = Hasher().getHash();
-    data->_hashCodeEvaluted = true;
     cstrNoConst()[0] = '\0';
 }
 
@@ -282,8 +283,9 @@ String::String(int size) {
 // Literal, size is WITHOUT terminating null byte!
 String::String(const char* cstr, size_t size)
     : chs((char*)cstr) {
+    internalData.emplace<Literal>();
+    data = &std::get<Data>(std::get<Literal>(internalData).data);
     data->strByteLength = (int)size;
-    data->cCapacity = 0;
 }
 
 // Byte substr.
@@ -321,7 +323,7 @@ void String::operator+=(char16 ch) {
     if (data->_strLength >= 0) {
         data->_strLength++;
     }
-    data->_hashCodeEvaluted = false; // TODO: Deal with partially evaluated hashcode.
+    data->_hashCode = 0; // TODO: Deal with partially evaluated hashcode.
 }
 
 const String PGE::operator+(const String& a, const String& b) {
@@ -351,16 +353,15 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
 }
 
 u64 String::getHashCode() const {
-    if (!data->_hashCodeEvaluted) {
-        if (data->cCapacity == 0) {
+    if (data->_hashCode == 0) {
+        if (std::holds_alternative<Literal>(internalData)) {
             getOrAddLiteralData();
-            if (data->_hashCodeEvaluted) {
+            if (data->_hashCode != 0) {
                 return data->_hashCode;
             }
         }
 
         data->_hashCode = Hasher::getHash(std::span((byte*)cstr(), byteLength()));
-        data->_hashCodeEvaluted = true;
     }
     return data->_hashCode;
 }
@@ -386,7 +387,7 @@ bool String::equals(const String& other) const {
     if (chs == other.chs) { return true; }
     if (byteLength() != other.byteLength()) { return false; }
     if (data->_strLength >= 0 && other.data->_strLength >= 0 && length() != other.length()) { return false; }
-    if (data->_hashCodeEvaluted && other.data->_hashCodeEvaluted) { return getHashCode() == other.getHashCode(); }
+    if (data->_hashCode != 0 && other.data->_hashCode != 0) { return getHashCode() == other.getHashCode(); }
     return memcmp(cstr(), other.cstr(), byteLength()) == 0;
 }
 
@@ -401,7 +402,7 @@ static void fold(const char*& buf, std::queue<char16>& queue) {
 
 bool String::equalsIgnoreCase(const String& other) const {
     if (chs == other.chs) { return true; }
-    if (data->_hashCodeEvaluted && other.data->_hashCodeEvaluted && getHashCode() == other.getHashCode()) { return true; }
+    if (data->_hashCode != 0 && other.data->_hashCode != 0 && getHashCode() == other.getHashCode()) { return true; }
 
     const char* buf[2] = { cstr(), other.cstr() };
     std::queue<char16> queue[2];
@@ -438,37 +439,30 @@ void String::reallocate(int size, bool copyOldChs) {
     // Accounting for the terminating byte.
     size++;
 
-    int targetCapacity = data->cCapacity;
-
-    // Initialized with String literal.
-    if (data->cCapacity == 0) {
+    if (std::holds_alternative<Literal>(internalData)) {
         if (size <= SHORT_STR_CAPACITY) {
+            int prevLen = data->strByteLength;
             Unique& u = internalData.emplace<Unique>();
             if (copyOldChs) {
-                memcpy(u.chs, chs, data->strByteLength);
+                memcpy(u.chs, chs, prevLen);
             }
             u.data = *data;
-            u.data.cCapacity = SHORT_STR_CAPACITY;
             chs = u.chs;
             data = &u.data;
             return;
-        } else {
-            targetCapacity = SHORT_STR_CAPACITY;
+        }
+    } else if (std::holds_alternative<Unique>(internalData)) {
+        if (size <= SHORT_STR_CAPACITY) {
+            return;
         }
     } else {
-        if (size <= data->cCapacity) {
-            if (data->cCapacity == SHORT_STR_CAPACITY) {
-                return;
-            }
-            std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
-            if (s.use_count() == 1) {
-                chs = s->chs.get();
-                data = &s->data;
-                return;
-            }
+        std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
+        if (size <= s->cCapacity && s.use_count() == 1) {
+            return;
         }
     }
 
+    int targetCapacity = 1;
     while (targetCapacity < size) { targetCapacity <<= 1; }
 
     std::unique_ptr<char[]> newChs = std::make_unique<char[]>(targetCapacity);
@@ -479,10 +473,10 @@ void String::reallocate(int size, bool copyOldChs) {
     internalData = std::make_shared<Shared>();
     std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
     s->chs = std::move(newChs);
+    s->cCapacity = targetCapacity;
 
     chs = s->chs.get();
     data = &s->data;
-    data->cCapacity = targetCapacity;
 }
 
 const char* String::cstr() const {
@@ -747,7 +741,7 @@ PGE_STRING_TO_FLOAT(long double)
 
 int String::length() const {
     if (data->_strLength < 0) {
-        if (data->cCapacity == 0) {
+        if (std::holds_alternative<Literal>(internalData)) {
             getOrAddLiteralData();
             if (data->_strLength >= 0) {
                 return data->_strLength;
@@ -884,15 +878,13 @@ void String::getOrAddLiteralData() const {
             std::lock_guard lock(litMut);
             data = &litData.emplace(
                 chs,
-                Data{
+                Data {
                     .strByteLength = litSize,
-                    .cCapacity = 0
                 }
             ).first->second;
         }
     }
-
-    internalData = std::monostate();
+    std::get<Literal>(internalData).data.emplace<Data*>(data);
 }
 
 // TODO: Funny special cases!

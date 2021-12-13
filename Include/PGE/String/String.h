@@ -296,18 +296,16 @@ class String {
         static constexpr int SHORT_STR_CAPACITY = 16;
 
         struct Data {
-            int strByteLength = -1;
-
-            int cCapacity = SHORT_STR_CAPACITY;
-
             // Lazily evaluated.
-            mutable u64 _hashCode;
+            mutable u64 _hashCode = 0;
             mutable int _strLength = -1;
-            mutable bool _hashCodeEvaluted = false;
+
+            int strByteLength = -1;
         };
 
         struct Shared {
             Data data;
+            int cCapacity;
             std::unique_ptr<char[]> chs;
         };
 
@@ -316,8 +314,12 @@ class String {
             char chs[SHORT_STR_CAPACITY];
         };
 
+        struct Literal {
+            std::variant<Data, Data*> data;
+        };
+
         // Default initialized with Unique.
-        mutable std::variant<Unique, std::shared_ptr<Shared>, std::monostate> internalData;
+        mutable std::variant<Unique, std::shared_ptr<Shared>, Literal> internalData;
         char* chs = std::get<Unique>(internalData).chs;
         mutable Data* data = &std::get<Unique>(internalData).data;
 
