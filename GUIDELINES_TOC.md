@@ -3,6 +3,7 @@
     * [Only ever return types by value as const](#only-ever-return-types-by-value-as-const)
     * [Prefer references over pointers](#prefer-references-over-pointers)
     * [Utilize perfect forwarding for template arguments](#utilize-perfect-forwarding-for-template-arguments)
+    * [Prefer concepts and `std::span` over concrete parameter types](#prefer-concepts-and-stdspan-over-concrete-parameter-types)
     * [Prefer `std::vector::emplace_back` over `std::vector::push_back`](#prefer-stdvectoremplace_back-over-stdvectorpush_back)
     * [Prefer `std::vector::reserve` over `std::vector::resize` etc.](#prefer-stdvectorreserve-over-stdvectorresize-etc)
     * [Rely on C functions and functionality when appropriate](#rely-on-c-functions-and-functionality-when-appropriate)
@@ -14,6 +15,7 @@
     * [Define assignment, increment and decrement operators with return type void](#define-assignment-increment-and-decrement-operators-with-return-type-void)
     * [Prefer `using` over `typedef`](#prefer-using-over-typedef)
     * [Prefer `typename` over `class` for templates](#prefer-typename-over-class-for-templates)
+    * [Utilize abbreviated function templates](#utilize-abbreviated-function-templates)
     * [Deleted methods must be public](#deleted-methods-must-be-public)
     * [Place `static_assert`-ions at the very top of their related scope](#place-static_assert-ions-at-the-very-top-of-their-related-scope)
     * [Never rely on default access specifiers](#never-rely-on-default-access-specifiers)
@@ -100,6 +102,21 @@ T* addNewResource(Args&&... args) { // Note the double ampersand.
 
 **See:**
 - https://en.cppreference.com/w/cpp/utility/forward
+
+
+## Prefer concepts and `std::span` over concrete parameter types
+This allows clients to pass the most appropriate type for their task, requiring only what is absolutely necessary from the passed argument.
+
+`std::span` should be used if the function simply requires some contiguous memory to be passed.
+
+**Example:**
+```cpp
+void myFunc(const std::vector<int>& ints); // Bad.
+void myFunc(const std::span<int>& ints); // Good.
+
+void myFunc2(const std::list<int>& ints); // Bad.
+void myFunc2(const Enumerable<int> auto& ints); // Good.
+```
 
 
 ## Prefer `std::vector::emplace_back` over `std::vector::push_back`
@@ -247,6 +264,27 @@ class MyClass { ... }
 // v No.
 template <class T>
 class MyClass { ... }
+```
+
+
+## Utilize abbreviated function templates
+They provide a much cleaner syntax.
+
+Functions in which the parameterized type acts as more than just a single parameter, using the regular template syntax is preferable to avoid having to use `decltype`.
+
+**Example:**
+```cpp
+template <typename T>
+void myFunc(const T& item); // Bad.
+void myFunc(const auto& item); // Good.
+
+template <std::ranges::range T>
+void myFunc2(const T& range); // Bad.
+void myFunc2(const std::ranges::range auto& range); // Good.
+
+void myFunc3(const auto& a, const auto& b) requires std::same_as<decltype(a), decltype(b)>; // Bad. 
+template <typename T>
+void myFunc3(const T& a, const T& b); // Good.
 ```
 
 

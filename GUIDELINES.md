@@ -77,6 +77,21 @@ T* addNewResource(Args&&... args) { // Note the double ampersand.
 - https://en.cppreference.com/w/cpp/utility/forward
 
 
+## Prefer concepts and `std::span` over concrete parameter types
+This allows clients to pass the most appropriate type for their task, requiring only what is absolutely necessary from the passed argument.
+
+`std::span` should be used if the function simply requires some contiguous memory to be passed.
+
+**Example:**
+```cpp
+void myFunc(const std::vector<int>& ints); // Bad.
+void myFunc(const std::span<int>& ints); // Good.
+
+void myFunc2(const std::list<int>& ints); // Bad.
+void myFunc2(const Enumerable<int> auto& ints); // Good.
+```
+
+
 ## Prefer `std::vector::emplace_back` over `std::vector::push_back`
 `emplace_back` is able to construct elements in place via perfect forwarding, where `push_back` has to copy an existing object.
 
@@ -222,6 +237,27 @@ class MyClass { ... }
 // v No.
 template <class T>
 class MyClass { ... }
+```
+
+
+## Utilize abbreviated function templates
+They provide a much cleaner syntax.
+
+Functions in which the parameterized type acts as more than just a single parameter, using the regular template syntax is preferable to avoid having to use `decltype`.
+
+**Example:**
+```cpp
+template <typename T>
+void myFunc(const T& item); // Bad.
+void myFunc(const auto& item); // Good.
+
+template <std::ranges::range T>
+void myFunc2(const T& range); // Bad.
+void myFunc2(const std::ranges::range auto& range); // Good.
+
+void myFunc3(const auto& a, const auto& b) requires std::same_as<decltype(a), decltype(b)>; // Bad. 
+template <typename T>
+void myFunc3(const T& a, const T& b); // Good.
 ```
 
 
