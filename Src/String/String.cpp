@@ -266,6 +266,8 @@ void String::operator+=(const String& other) {
     data->strByteLength = newSize;
     if (data->_strLength >= 0 && other.data->_strLength >= 0) {
         data->_strLength += other.length();
+    } else {
+        data->_strLength = -1;
     }
 }
 
