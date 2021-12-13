@@ -46,7 +46,7 @@ const static GLenum glTextureLayers[] = {
 void MeshOGL3::renderInternal() {
     prepareVertexOperation();
 
-    for (int i=0;i<material->getTextureCount();i++) {
+    for (int i : Range(material->getTextureCount())) {
         glActiveTexture(glTextureLayers[i]);
         glBindTexture(GL_TEXTURE_2D,((TextureOGL3&)material->getTexture(i)).getGlTexture());
     }

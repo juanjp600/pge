@@ -77,6 +77,21 @@ T* addNewResource(Args&&... args) { // Note the double ampersand.
 - https://en.cppreference.com/w/cpp/utility/forward
 
 
+## Prefer concepts and `std::span` over concrete parameter types
+This allows clients to pass the most appropriate type for their task, requiring only what is absolutely necessary from the passed argument.
+
+`std::span` should be used if the function simply requires some contiguous memory to be passed.
+
+**Example:**
+```cpp
+void myFunc(const std::vector<int>& ints); // Bad.
+void myFunc(const std::span<int>& ints); // Good.
+
+void myFunc2(const std::list<int>& ints); // Bad.
+void myFunc2(const Enumerable<int> auto& ints); // Good.
+```
+
+
 ## Prefer `std::vector::emplace_back` over `std::vector::push_back`
 `emplace_back` is able to construct elements in place via perfect forwarding, where `push_back` has to copy an existing object.
 
@@ -97,7 +112,9 @@ myVec.emplace_back(myComplicatedString); // Works just as well!
 
 
 ## Prefer `std::vector::reserve` over `std::vector::resize` etc.
-`reserve` does not have the costs associated with initializing objects.
+`reserve` does not have the costs associated with initializing objects as well as guarding against possible mismatches between the amount of reserved objects and the amount of actually added objects.
+
+**Warning:** In the case of primitives and trivially-constructible types the added overhead of using `emplace_back` over simple assignment outweights any performance gain of using reserve by a significant margin, which is why for those types `resize` *should* be used.
 
 **Example:**
 ```cpp
@@ -223,6 +240,27 @@ class MyClass { ... }
 ```
 
 
+## Utilize abbreviated function templates
+They provide a much cleaner syntax.
+
+Functions in which the parameterized type acts as more than just a single parameter, using the regular template syntax is preferable to avoid having to use `decltype`.
+
+**Example:**
+```cpp
+template <typename T>
+void myFunc(const T& item); // Bad.
+void myFunc(const auto& item); // Good.
+
+template <std::ranges::range T>
+void myFunc2(const T& range); // Bad.
+void myFunc2(const std::ranges::range auto& range); // Good.
+
+void myFunc3(const auto& a, const auto& b) requires std::same_as<decltype(a), decltype(b)>; // Bad. 
+template <typename T>
+void myFunc3(const T& a, const T& b); // Good.
+```
+
+
 ## Deleted methods must be public
 This prevents the compiler from possibly issuing a superfluous access violation.
 
@@ -313,6 +351,7 @@ for (const auto& [key, value] : myMap) {
 }
 ```
 
+
 ## Consider putting enums outside of classes
 Despite nested enums establishing a more obvious connection with their respective class, if an enum on its own gives enough context as to what it seeks to express it should likely not be put inside of that class. This is because nesting an enum in a class requires specifying the class when the enum is used outside of it, which can add unnecessary noise.
 
@@ -352,4 +391,56 @@ class MyClass {
 
 MyClass mc;
 mc.setMode(MyMode::A); // No noise!
+```
+
+
+## `switch` etiquette
+### Every non-empty, non-fallthrough `case` must get its own scope
+This prevents possible issues from wanting to declare the same variable in multiple cases and increases visual cohesion inside a case.
+### Place `break` and `[[fallthrough]]` statements outside the scope
+This helps gauge the general structure of the switch. `[[fallthrough]]` is optional and in most cases not recommended since the discrete scopes provide enough visual clarity.
+
+Break is generally not necessary when the case **very clearly** returns all of the time.
+
+When mixing return statements with breaks and/or fallthroughs it is recommended to use `[[fallthrough]]`.
+
+### Use `using enum` when switching on an enum
+Greatly reduces duplication of the (potentially qualified) enum name.
+
+### Every switch statement must have a default case
+Other cases may fallthrough to it, in most cases throwing an exception is most appropriate.
+
+**Example:**
+```cpp
+switch (var) {
+    case 1: {
+        ...
+    } break;
+    case 2: {
+        ...
+    } [[fallthrough]]; // Recommended here.
+    case 3: {
+        return ...;
+    }
+    case 4:
+    default: {
+        throw Exception("Unexpected!");
+    }
+}
+
+switch (e) {
+    using enum MyEnum;
+    case A: {
+        ...
+        if (...) { return ... }
+    } [[fallthrough]]; // Recommended here.
+    case B: // Unannotated fallthroughs, ok.
+    case C:
+    case D: {
+        ...
+    } break;
+    default: {
+        throw Exception("Unexpected!");
+    }
+}
 ```

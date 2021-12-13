@@ -171,6 +171,8 @@ String::String(const String& other) {
     copy(*this, other);
 }
 
+String::String(const char8_t* cstr) : String((const char*)cstr) { }
+
 String::String(const std::string& cppstr) {
     int len = (int)cppstr.size();
     reallocate(len);
@@ -375,12 +377,29 @@ u64 String::getHashCode() const {
     return data->_hashCode;
 }
 
+const std::weak_ordering String::compare(const String& other) const {
+    String::Iterator a = begin();
+    String::Iterator b = other.begin();
+    while (a != end() && b != other.end() && *a == *b) { a++; b++; }
+    if (a == end()) {
+        if (b == other.end()) {
+            return std::weak_ordering::equivalent;
+        } else {
+            return std::weak_ordering::greater;
+        }
+    } else if (b == other.end()) {
+        return std::weak_ordering::less;
+    } else {
+        return *a <=> *b;
+    }
+}
+
 bool String::equals(const String& other) const {
     if (chs == other.chs) { return true; }
     if (byteLength() != other.byteLength()) { return false; }
     if (data->_strLength >= 0 && other.data->_strLength >= 0 && length() != other.length()) { return false; }
     if (data->_hashCodeEvaluted && other.data->_hashCodeEvaluted) { return getHashCode() == other.getHashCode(); }
-    return strcmp(cstr(), other.cstr()) == 0;
+    return memcmp(cstr(), other.cstr(), byteLength()) == 0;
 }
 
 static void fold(const char*& buf, std::queue<char16>& queue) {
@@ -400,7 +419,7 @@ bool String::equalsIgnoreCase(const String& other) const {
     std::queue<char16> queue[2];
 
     // Feed first char.
-    for (int i = 0; i < 2; i++) {
+    for (int i : Range(2)) {
         fold(buf[i], queue[i]);
     }
 
@@ -414,7 +433,7 @@ bool String::equalsIgnoreCase(const String& other) const {
         }
 
         // Try refilling.
-        for (int i = 0; i < 2; i++) {
+        for (int i : Range(2)) {
             fold(buf[i], queue[i]);
         }
     }
@@ -482,6 +501,10 @@ const char* String::cstr() const {
     return chs;
 }
 
+const char8_t* String::c8str() const {
+    return (const char8_t*)chs;
+}
+
 char* String::cstrNoConst() {
     return chs;
 }
@@ -492,8 +515,8 @@ const std::vector<char16> String::wstr() const {
         chars.reserve(data->_strLength);
     }
     // Convert all the codepoints to wchars.
-    for (Iterator it = begin(); it != end(); it++) {
-        chars.emplace_back(*it);
+    for (char16 ch : *this) {
+        chars.emplace_back(ch);
     }
     chars.emplace_back(L'\0');
     return chars;
@@ -516,11 +539,16 @@ const String String::fromInteger(I i, Casing casing) {
     char* buf = ret.cstrNoConst();
     byte count = 0;
     if constexpr (std::numeric_limits<I>::is_signed) {
-        if (i < 0) { buf[0] = '-'; buf++; count++; i = -i; }
+        if (i < 0) { buf[0] = '-'; buf++; count++; }
     }
     if (i == 0) { buf[0] = '0'; count = 1; }
     while (i != 0) {
-        byte digit = i % BASE;
+        byte digit;
+        if constexpr (std::numeric_limits<I>::is_signed) {
+            digit = abs(i % BASE);
+        } else {
+            digit = i % BASE;
+        }
         i /= BASE;
         if constexpr (BASE <= 10) {
             buf[count] = '0' + digit;
@@ -587,14 +615,15 @@ static I toInteger(const String& str, bool& success) {
         byte digit;
         if (!charToDigit<BASE>(digit, ch)) { return 0; }
         if (ret > std::numeric_limits<I>::max() - digit) { return 0; }
-        ret += digit;
+        if constexpr (std::numeric_limits<I>::is_signed) {
+            if (neg && ret < std::numeric_limits<I>::min() + digit) { return 0; }
+            ret += neg ? -digit : digit;
+        } else {
+            ret += digit;
+        }
     }
     success = true;
-    if constexpr (std::numeric_limits<I>::is_signed) {
-        return neg ? -ret : ret; // TODO: Most negative number.
-    } else {
-        return ret;
-    }
+    return ret;
 }
 
 #define PGE_STRING_TO_FROM_SIGNED_INTEGER(TYPE) \
@@ -622,8 +651,6 @@ PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned long long)
 
 template <std::floating_point F>
 const String String::fromFloatingPoint(F f) {
-    static_assert(std::is_floating_point<F>::value);
-
     const char* format;
     if constexpr (std::is_same<F, long double>::value) {
         format = "%fL";
@@ -916,7 +943,7 @@ const String String::reverse() const {
     char* buf = ret.cstrNoConst();
     buf[len] = '\0';
     buf += len;
-    for (int i = 0; i < len;) {
+    for (int& i : Range(len)) {
         int codepoint = Unicode::measureCodepoint(cstr()[i]);
         buf -= codepoint;
         memcpy(buf, cstr() + i, codepoint);
@@ -927,14 +954,15 @@ const String String::reverse() const {
     return ret;
 }
 
-const String String::multiply(int count, const String& separator) const {
+const String String::multiply(unsigned count, const String& separator) const {
+    if (count == 0) { return String(); }
     int curLength = byteLength();
     int sepLength = separator.byteLength();
     int newLength = curLength * count + sepLength * (count - 1);
     String ret(newLength);
     char* buf = ret.cstrNoConst();
     buf[newLength] = '\0';
-    for (int i = 0; i < count; i++) {
+    for (int i : Range(count)) {
         if (i != 0) {
             memcpy(buf, separator.cstr(), sepLength);
             buf += sepLength;
@@ -969,19 +997,6 @@ const std::vector<String> String::split(const String& needleStr, bool removeEmpt
         split.emplace_back(String(*this, cut, endAddSize));
     }
     return split;
-}
-
-const String String::join(const std::vector<String>& vect, const String& separator) {
-    if (vect.empty()) {
-        return String();
-    }
-
-    String retVal = vect[0];
-    for (int i = 1; i < (int)vect.size(); i++) {
-        retVal += separator + vect[i];
-    }
-
-    return retVal;
 }
 
 const std::cmatch String::regexMatch(const std::regex& pattern) const {
@@ -1034,7 +1049,7 @@ String String::unHex() const {
                 }
             }
         } else {
-            for (int j = 0; j < codepoint; j++) {
+            for (int j : Range(codepoint)) {
                 retBuf[i + j] = buf[i + j];
             }
         }

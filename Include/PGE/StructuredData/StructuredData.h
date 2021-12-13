@@ -38,7 +38,14 @@ class StructuredData {
                 };
 
                 ElemLayout() = default;
-                ElemLayout(const std::vector<Entry>& entrs);
+                ElemLayout(const Enumerable<Entry> auto& entrs) {
+                    int currLocation = 0;
+                    for (const auto& entry : entrs) {
+                        entries.emplace(entry.name, LocationAndSize(currLocation, entry.size));
+                        currLocation += entry.size;
+                    }
+                    elementSize = currLocation;
+                }
 
                 const LocationAndSize& getLocationAndSize(const String& name) const;
                 const LocationAndSize& getLocationAndSize(const String::Key& name) const;

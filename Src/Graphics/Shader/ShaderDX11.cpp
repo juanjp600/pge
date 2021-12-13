@@ -42,7 +42,7 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 
     ID3D11Device* dxDevice = graphics.getDxDevice();
     dxSamplerState.reserve(samplerCount);
-    for (int _ : Range(samplerCount)) {
+    for (PGE_IT : Range(samplerCount)) {
         dxSamplerState.emplace_back(resourceManager.addNewResource<D3D11SamplerState>(dxDevice));
     }
 
@@ -64,14 +64,14 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
 void ShaderDX11::readConstantBuffers(BinaryReader& reader, std::vector<CBufferInfo>& constantBuffers) {
     u32 cBufferCount = reader.read<u32>();
 
-    for (int i = 0; i < (int)cBufferCount; i++) {
+    for (PGE_IT : Range(cBufferCount)) {
         String bufferName = reader.read<String>();
         u32 cBufferSize = reader.read<u32>();
         CBufferInfo& constantBuffer = constantBuffers.emplace_back(graphics, bufferName, cBufferSize, resourceManager);
 
         String varName;
         u32 varCount = reader.read<u32>();
-        for (int j = 0; j < (int)varCount; j++) {
+        for (PGE_IT : Range(varCount)) {
             varName = String();
             reader.readStringInto(varName);
             u32 varOffset = reader.read<u32>();
@@ -116,12 +116,12 @@ Shader::Constant* ShaderDX11::getFragmentShaderConstant(const String& name) {
 void ShaderDX11::useShader() {
     ID3D11DeviceContext* dxContext = graphics.getDxContext();
 
-    for (int i = 0; i < (int)vertexConstantBuffers.size(); i++) {
+    for (UINT i : Range((UINT)vertexConstantBuffers.size())) {
         vertexConstantBuffers[i].update();
         dxContext->VSSetConstantBuffers(i,1,&vertexConstantBuffers[i].getDxCBuffer());
     }
 
-    for (int i = 0; i < (int)fragmentConstantBuffers.size(); i++) {
+    for (UINT i : Range((UINT)fragmentConstantBuffers.size())) {
         fragmentConstantBuffers[i].update();
         dxContext->PSSetConstantBuffers(i,1,&fragmentConstantBuffers[i].getDxCBuffer());
     }
@@ -211,46 +211,8 @@ ShaderDX11::ConstantDX11::ConstantDX11(ShaderDX11::CBufferInfo& cBuffer, int off
     size = sz;
 }
 
-void ShaderDX11::ConstantDX11::setValue(const Matrix4x4f& value) {
-    memcpy(constantBuffer.getData()+offset,&value,16*sizeof(float));
-    constantBuffer.markAsDirty();
-}
-
-void ShaderDX11::ConstantDX11::setValue(const Vector2f& value) {
-    float arr[2]; arr[0] = value.x; arr[1] = value.y;
-    memcpy(constantBuffer.getData() + offset, arr, 2 * sizeof(float));
-    constantBuffer.markAsDirty();
-}
-
-void ShaderDX11::ConstantDX11::setValue(const Vector3f& value) {
-    float arr[3]; arr[0] = value.x; arr[1] = value.y; arr[2] = value.z;
-    memcpy(constantBuffer.getData() + offset, arr, 3 * sizeof(float));
-    if (size == 4 * sizeof(float)) {
-        float one = 1.f;
-        memcpy(constantBuffer.getData() + offset + (3 * sizeof(float)), &one, sizeof(float));
-    }
-    constantBuffer.markAsDirty();
-}
-
-void ShaderDX11::ConstantDX11::setValue(const Vector4f& value) {
-    float arr[4]; arr[0] = value.x; arr[1] = value.y; arr[2] = value.z; arr[3] = value.w;
-    memcpy(constantBuffer.getData()+offset,arr,4*sizeof(float));
-    constantBuffer.markAsDirty();
-}
-
-void ShaderDX11::ConstantDX11::setValue(const Color& value) {
-    float arr[4]; arr[0] = value.red; arr[1] = value.green; arr[2] = value.blue; arr[3] = value.alpha;
-    memcpy(constantBuffer.getData()+offset,arr,4*sizeof(float));
-    constantBuffer.markAsDirty();
-}
-
-void ShaderDX11::ConstantDX11::setValue(float value) {
-    memcpy(constantBuffer.getData()+offset,&value,sizeof(float));
-    constantBuffer.markAsDirty();
-}
-
-void ShaderDX11::ConstantDX11::setValue(u32 value) {
-    memcpy(constantBuffer.getData()+offset,&value,sizeof(u32));
+void ShaderDX11::ConstantDX11::setValueInternal(const std::span<byte>& data) {
+    memcpy(constantBuffer.getData() + offset, data.data(), data.size());
     constantBuffer.markAsDirty();
 }
 

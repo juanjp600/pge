@@ -13,6 +13,7 @@
 #endif
 
 #include <PGE/Types/Types.h>
+#include <PGE/Types/Range.h>
 
 namespace PGE {
 
@@ -91,13 +92,13 @@ class String {
                 const ActualIterator operator-(int steps) const { ActualIterator ret(*this); ret -= steps; return ret; }
                 void operator+=(int steps) {
                     if (steps < 0) { *this -= -steps; }
-                    for (int i = 0; i < steps; i++) {
+                    for (PGE_IT : Range(steps)) {
                         ++(*this);
                     }
                 }
                 void operator-=(int steps) {
                     if (steps < 0) { *this += -steps; }
-                    for (int i = 0; i < steps; i++) {
+                    for (PGE_IT : Range(steps)) {
                         --(*this);
                     }
                 }
@@ -144,6 +145,8 @@ class String {
             memcpy(cstrNoConst(), cstri, len + 1);
         }
 
+        String(const char8_t* cstr);
+
         String(const std::string& cppstr);
         String(const char16* wstr);
 #if defined(__APPLE__) && defined(__OBJC__)
@@ -180,6 +183,7 @@ class String {
         /// 
         /// O(1)
         const char* cstr() const;
+        const char8_t* c8str() const;
         const std::vector<char16> wstr() const;
 
         template <typename T> const T to(bool& success) const;
@@ -187,7 +191,7 @@ class String {
         const T to() const {
             bool succ;
             T t = to<T>(succ);
-            // TODO: C++20?
+            // TODO: C++20 Modules.
             //asrt(succ, "Failed to convert");
             return t;
         }
@@ -246,15 +250,31 @@ class String {
         const String toLower() const;
         const String trim() const;
         const String reverse() const;
-        const String multiply(int count, const String& separator = "") const;
+        const String multiply(unsigned count, const String& separator = "") const;
         const std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
-        static const String join(const std::vector<String>& vect, const String& separator);
+        static const String join(const Enumerable<String> auto& vect, const String& separator) {
+            if (std::ranges::empty(vect)) {
+                return String();
+            }
+
+            auto it = std::ranges::begin(vect);
+
+            String retVal = *it;
+            it++;
+            for (; it != std::ranges::end(vect); it++) {
+                retVal += separator + *it;
+            }
+
+            return retVal;
+        }
 
         const std::cmatch regexMatch(const std::regex& pattern) const;
 
         //String unHex() const;
 
         u64 getHashCode() const;
+
+        const std::weak_ordering compare(const String& other) const;
 
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;

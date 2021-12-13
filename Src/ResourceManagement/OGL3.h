@@ -111,7 +111,7 @@ class GLShader : public Resource<GLuint> {
 
 class GLProgram : public Resource<GLuint> {
     public:
-        GLProgram(const std::vector<GLuint>& shaders) {
+        GLProgram(const Enumerable<GLuint> auto& shaders) {
             resource = glCreateProgram();
             for (GLuint s : shaders) {
                 glAttachShader(resource, s);

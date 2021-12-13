@@ -1,5 +1,7 @@
 #include <PGE/File/BinaryReader.h>
 
+#include <PGE/Types/Range.h>
+
 #include "../String/UnicodeHelper.h"
 
 using namespace PGE;
@@ -15,7 +17,7 @@ template<> bool BinaryReader::tryRead(char16& out) {
     byte buf[4];
     if (!tryRead<byte>(buf[0])) { return false; }
     byte codepoint = Unicode::measureCodepoint(buf[0]);
-    for (int i = 1; i < codepoint; i++) {
+    for (int i : Range(1, (int)codepoint)) {
         if (!tryRead<byte>(buf[i])) { return false; }
     }
     out = Unicode::utf8ToWChar((char*)buf, codepoint);

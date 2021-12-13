@@ -48,6 +48,7 @@ class Texture : private PolymorphicHeap {
                 : width(width), height(height), buffer(buffer), size(size) { }
             Mipmap() = default;
         };
+        // TODO: Can be replaced with Enumerable with C++20 Modules
         static Texture* loadCompressed(Graphics& gfx, const std::vector<Mipmap>& mipmaps, CompressedFormat fmt);
         virtual ~Texture() = default;
 

@@ -36,8 +36,8 @@ InputManagerInternal::InputManagerInternal(const Graphics& gfx) : graphics(gfx) 
 }
 
 InputManagerInternal::~InputManagerInternal() {
-    for (int i = 0; i < (int)openControllers.size(); i++) {
-        delete openControllers[i];
+    for (ControllerInternal* ci : openControllers) {
+        delete ci;
     }
     openControllers.clear();
 
@@ -210,27 +210,27 @@ void InputManagerInternal::update() {
         } else if (event.type == SDL_CONTROLLERDEVICEREMAPPED) {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
             SDL_GameController* sdlController = SDL_GameControllerOpen(deviceEvent.which);
-            for (int i = 0; i < (int)openControllers.size(); i++) {
-                if (&openControllers[i]->getSdlController() == sdlController) {
-                    openControllers[i]->setName(SDL_GameControllerName(sdlController));
+            for (ControllerInternal* c : openControllers) {
+                if (&c->getSdlController() == sdlController) {
+                    c->setName(SDL_GameControllerName(sdlController));
                     break;
                 }
             }
         } else if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
             SDL_GameController* sdlController = SDL_GameControllerFromInstanceID(deviceEvent.which);
-            for (int i = 0; i < (int)openControllers.size(); i++) {
-                if (&openControllers[i]->getSdlController() == sdlController) {
+            for (auto it = openControllers.begin(); it != openControllers.end(); it++) {
+                if ((&(*it)->getSdlController()) == sdlController) {
                     for (Input* input : inputs) {
                         if (input->getDevice()==CONTROLLER) {
                             ControllerInput* controllerInput = (ControllerInput*)input;
-                            if (controllerInput->getController() == openControllers[i]) {
+                            if (controllerInput->getController() == *it) {
                                 controllerInput->removeController();
                             }
                         }
                     }
-                    delete openControllers[i];
-                    openControllers.erase(openControllers.begin()+i);
+                    delete *it;
+                    openControllers.erase(it);
                     break;
                 }
             }
@@ -428,8 +428,8 @@ Controller* InputManagerInternal::getController(int index) const {
 }
 
 bool InputManagerInternal::isControllerValid(Controller* controller) const {
-    for (int i = 0; i < (int)openControllers.size(); i++) {
-        if (openControllers[i]==controller) { return true; }
+    for (Controller* c : openControllers) {
+        if (c == controller) { return true; }
     }
     return false;
 }

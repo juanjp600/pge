@@ -87,7 +87,7 @@ TextureDX11::TextureDX11(Graphics& gfx, const std::vector<Texture::Mipmap>& mipm
     dxTexture = resourceManager.addNewResource<D3D11Texture2D>(dxDevice,
         mipmaps.size() == 1 ? D3D11Texture2D::Type::COMPRESSED_NO_MIPMAPS : D3D11Texture2D::Type::COMPRESSED,
         mipmaps[0].width, mipmaps[0].height, dxFormat);
-    for (size_t i : Range(mipmaps.size())) {
+    for (UINT i : Range((UINT)mipmaps.size())) {
         dxContext->UpdateSubresource(dxTexture, D3D11CalcSubresource(i, 0, (UINT)mipmaps.size()), NULL, mipmaps[i].buffer, mipmaps[i].width * getBitsPerBlockOnLine(fmt), 0);
     }
 

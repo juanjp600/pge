@@ -18,7 +18,7 @@ namespace PGE {
     // CC0
     Random::Random(u64 sd) {
         u64* high = (u64*)state;
-        for (int i = 0; i < 2; i++) {
+        for (int i : Range(2)) {
             sd += 0x9e3779b97f4a7c15;
             u64 z = sd;
             z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;

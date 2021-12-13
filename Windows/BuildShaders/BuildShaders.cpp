@@ -143,7 +143,7 @@ static void generateDXReflectionInformation(const FilePath& path, const CompileR
         }
     }
     writer.write<u32>(samplerCount);
-    writer.write<u32>(fsCompileResult.textureInputs.size());
+    writer.write<u32>((u32)fsCompileResult.textureInputs.size());
 
     fsCompileResult.compiledD3dBlob->Release();
 }

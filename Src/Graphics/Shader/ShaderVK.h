@@ -51,13 +51,7 @@ class ShaderVK : public Shader {
             public:
                 ConstantVK(ShaderVK& shader, vk::ShaderStageFlags stage, byte* data, int offset, int size);
 
-                void setValue(const Matrix4x4f& value) override;
-                void setValue(const Vector2f& value) override;
-                void setValue(const Vector3f& value) override;
-                void setValue(const Vector4f& value) override;
-                void setValue(const Color& value) override;
-                void setValue(float value) override;
-                void setValue(u32 value) override;
+                void setValueInternal(const std::span<byte>& value) override;
 
                 void push();
 

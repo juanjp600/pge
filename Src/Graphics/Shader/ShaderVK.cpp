@@ -137,36 +137,8 @@ void ShaderVK::pushAllConstantsLazy() {
 ShaderVK::ConstantVK::ConstantVK(ShaderVK& shader, vk::ShaderStageFlags stage, byte* data, int offset, int size)
     : shader(shader), stage(stage), data(data + offset), offset(offset), size(size) { }
 
-void ShaderVK::ConstantVK::setValue(const Matrix4x4f& value) {
-    memcpy(data, &value, sizeof(value)); push();
-}
-
-void ShaderVK::ConstantVK::setValue(const Vector2f& value) {
-    float arr[] = { value.x, value.y };
-    memcpy(data, arr, sizeof(value)); push();
-}
-
-void ShaderVK::ConstantVK::setValue(const Vector3f& value) {
-    float arr[] = { value.x, value.y, value.z };
-    memcpy(data, arr, sizeof(value)); push();
-}
-
-void ShaderVK::ConstantVK::setValue(const Vector4f& value) {
-    float arr[] = { value.x, value.y, value.z, value.w };
-    memcpy(data, arr, sizeof(value)); push();
-}
-
-void ShaderVK::ConstantVK::setValue(const Color& value) {
-    float arr[] = { value.red, value.green, value.blue, value.alpha };
-    memcpy(data, arr, sizeof(value)); push();
-}
-
-void ShaderVK::ConstantVK::setValue(float value) {
-    memcpy(data, &value, sizeof(value)); push();
-}
-
-void ShaderVK::ConstantVK::setValue(u32 value) {
-    memcpy(data, &value, sizeof(value)); push();
+void ShaderVK::ConstantVK::setValueInternal(const std::span<byte>& value) {
+    memcpy(data, value.data(), value.size()); push();
 }
 
 void ShaderVK::ConstantVK::push() {

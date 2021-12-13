@@ -1,7 +1,18 @@
 #ifndef PGE_RANGE_H_INCLUDED
 #define PGE_RANGE_H_INCLUDED
 
+#include <iterator>
+
 #include <PGE/Types/Concepts.h>
+
+#define PGE_INTERNAL_CONCAT(a, b) PGE_INTERNAL_CONCAT_INNER(a, b)
+#define PGE_INTERNAL_CONCAT_INNER(a, b) a ## b
+
+#ifdef __COUNTER__
+#define PGE_IT [[maybe_unused]] const auto& PGE_INTERNAL_CONCAT(PGE_INTERNAL_CONCAT(_, __COUNTER__), _PGE_INTERNAL_ITERATOR_)
+#else
+#define PGE_IT [[maybe_unused]] const auto& PGE_INTERNAL_CONCAT(PGE_INTERNAL_CONCAT(_, __LINE__), _PGE_INTERNAL_ITERATOR_)
+#endif
 
 namespace PGE {
 
@@ -19,7 +30,7 @@ class Range {
 				static constexpr Iterator begin(const Range& range) { return { range.start, range.step }; }
 				static constexpr Iterator end(const Range& range) { return { range.stop, range.step }; }
 
-				operator SIZE&() { return position; }
+				constexpr operator SIZE&() { return position; }
 
 				constexpr const Iterator& operator*() const { return *this; }
 				constexpr Iterator& operator*() { return *this; }

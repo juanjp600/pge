@@ -29,15 +29,7 @@ class ShaderOGL3 : public Shader {
 
         class ConstantOGL3 : public Constant {
             public:
-                ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, StructuredData& data, const String::Key& dk);
-
-                void setValue(const Matrix4x4f& value) override;
-                void setValue(const Vector2f& value) override;
-                void setValue(const Vector3f& value) override;
-                void setValue(const Vector4f& value) override;
-                void setValue(const Color& value) override;
-                void setValue(float value) override;
-                void setValue(u32 value) override;
+                ConstantOGL3(GraphicsOGL3& gfx, GLint glLoc, GLenum glTyp, int glArrSz, std::unique_ptr<byte[]>& data, int offset);
 
                 void setUniform();
 
@@ -47,8 +39,11 @@ class ShaderOGL3 : public Shader {
                 GLint glLocation;
                 GLenum glType;
                 int glArraySize;
-                StructuredData& dataBuffer;
-                String::Key dataKey;
+
+                std::unique_ptr<byte[]>& data;
+                int offset;
+
+                void setValueInternal(const std::span<byte>& value) override;
         };
 
         std::unordered_map<String::Key, ConstantOGL3> vertexShaderConstants;
@@ -65,8 +60,8 @@ class ShaderOGL3 : public Shader {
 
         std::unordered_map<String::Key, GlAttribLocation> glVertexAttribLocations;
 
-        StructuredData vertexUniformData;
-        StructuredData fragmentUniformData;
+        std::unique_ptr<byte[]> vertexUniformData;
+        std::unique_ptr<byte[]> fragmentUniformData;
 
         int glSizeToByteSize(GLenum type, int size) const;
         GLenum parsedTypeToGlType(const String& parsedType);
@@ -75,7 +70,7 @@ class ShaderOGL3 : public Shader {
         void extractVertexUniforms(const String& vertexSource);
         void extractVertexAttributes(const String& vertexSource);
         void extractFragmentUniforms(const String& fragmentSource);
-        void extractFragmentOutputs(const String fragmentSource);
+        void extractFragmentOutputs(const String& fragmentSource);
 
         struct ParsedShaderVar {
             String name;

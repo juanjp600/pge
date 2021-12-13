@@ -4,37 +4,6 @@
 
 using namespace PGE;
 
-void Mesh::setGeometry(StructuredData&& verts, const std::vector<Line>& lines) {
-    assertMaterialLayout(verts);
-
-    vertices = std::move(verts);
-    indices.clear();
-    indices.reserve(lines.size() * 2);
-    for (int i = 0; i < lines.size(); i++) {
-        indices.emplace_back(lines[i].indices[0]);
-        indices.emplace_back(lines[i].indices[1]);
-    }
-    primitiveType = PrimitiveType::LINE;
-
-    mustReuploadInternalData = true;
-}
-
-void Mesh::setGeometry(StructuredData&& verts, const std::vector<Triangle>& triangles) {
-    assertMaterialLayout(verts);
-
-    vertices = std::move(verts);
-    indices.clear();
-    indices.reserve(triangles.size() * 3);
-    for (int i = 0; i < triangles.size(); i++) {
-        indices.emplace_back(triangles[i].indices[0]);
-        indices.emplace_back(triangles[i].indices[1]);
-        indices.emplace_back(triangles[i].indices[2]);
-    }
-    primitiveType = PrimitiveType::TRIANGLE;
-
-    mustReuploadInternalData = true;
-}
-
 void Mesh::setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u32>&& inds) {
     assertMaterialLayout(verts);
     using enum PrimitiveType;

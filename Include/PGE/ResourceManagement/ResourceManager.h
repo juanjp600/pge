@@ -8,7 +8,6 @@
 
 namespace PGE {
 
-class ResourceBase;
 class ResourceManager {
     protected:
         std::list<ResourceBase*> resources;
@@ -21,12 +20,17 @@ class ResourceManager {
         template <std::derived_from<ResourceBase> T, typename... Args>
         typename T::View add(Args&&... args) {
             T* res = new T(std::forward<Args>(args)...);
-            resources.emplace_back(res);
-            return ResourceView(res->get(), --resources.end());
+            resources.emplace_front(res);
+            return ResourceView(res->get(), resources.begin());
         }
 
     public:
-        virtual ~ResourceManager();
+        ~ResourceManager() {
+            // We do this because destruction order is not specified.
+            for (ResourceBase* res : resources) {
+                delete res;
+            }
+        }
 
         template <std::derived_from<ResourceBase> T, typename... Args>
         typename T::View addNewResource(Args&&... args) {

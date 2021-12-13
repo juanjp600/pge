@@ -52,7 +52,6 @@
     <ClCompile Include="..\..\Src\Input\InputManager.cpp" />
     <ClCompile Include="..\..\Src\Math\Assertions.cpp" />
     <ClCompile Include="..\..\Src\Math\Random.cpp" />
-    <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerVK.cpp" />
     <ClCompile Include="..\..\Src\String\String.cpp" />
@@ -183,15 +182,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include;$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/</IncludePath>
+    <IncludePath>../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include;$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include;$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/</IncludePath>
+    <IncludePath>../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include;$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include;$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;$(IncludePath)</IncludePath>
+    <IncludePath>../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include;$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/;$(IncludePath);$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../../Include;../../Libraries/SDL2/include;../../Libraries/glad/include;$(VK_SDK_PATH)/Include;../../Libraries/SPIRV-Reflect/</IncludePath>
@@ -214,7 +213,8 @@
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4670; 4673;4706</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4706</DisableSpecificWarnings>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <PreBuildEvent>
       <Command>cd ../../Src/
@@ -260,7 +260,8 @@ echo Generated %25CD%\Info.cpp!</Command>
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4670; 4673;4706</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4706</DisableSpecificWarnings>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <PreBuildEvent>
       <Command>cd ../../Src/
@@ -307,7 +308,8 @@ echo Generated %25CD%\Info.cpp!</Command>
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4670; 4673;4706</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4706</DisableSpecificWarnings>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -358,7 +360,8 @@ echo Generated %25CD%\Info.cpp!</Command>
       <OpenMPSupport>false</OpenMPSupport>
       <EnableModules>false</EnableModules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4670; 4673;4706</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4706</DisableSpecificWarnings>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

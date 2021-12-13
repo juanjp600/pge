@@ -40,11 +40,11 @@ class Program {
 
     public:
         Program() {
-            graphics = Graphics::create("Example 2", 1600, 900, Graphics::WindowMode::Windowed, Graphics::Renderer::OpenGL);
+            graphics = Graphics::create("Example 2", 1600, 900, WindowMode::Windowed, Renderer::OpenGL);
             graphics->setDepthTest(false);
 
             shader = Shader::load(*graphics, FilePath::fromStr("Shader2").makeDirectory());
-            material = Material::create(*graphics, *shader, Material::Opaque::NO);
+            material = Material::create(*graphics, *shader, Opaque::NO);
 
             vertexDataGpuTransform = StructuredData(shader->getVertexLayout(), 5);
 
@@ -89,7 +89,7 @@ class Program {
             mesh->setGeometry(vertexDataGpuTransform.copy(), triangles);
             
             inputManager = InputManager::create(*graphics);
-            escKey = new KeyboardInput(KeyboardInput::Keycode::ESCAPE);
+            escKey = new KeyboardInput(Keycode::ESCAPE);
             inputManager->trackInput(escKey);
 
             state1 = 0.f;
@@ -140,9 +140,9 @@ class Program {
 
             graphics->clear(Colors::BLACK);
 
-            shader->getVertexShaderConstant("worldMatrix").setValue(worldMatrix);
-            shader->getVertexShaderConstant("viewMatrix").setValue(viewMatrix);
-            shader->getVertexShaderConstant("projectionMatrix").setValue(projectionMatrix);
+            shader->getVertexShaderConstant("worldMatrix")->setValue(worldMatrix);
+            shader->getVertexShaderConstant("viewMatrix")->setValue(viewMatrix);
+            shader->getVertexShaderConstant("projectionMatrix")->setValue(projectionMatrix);
             mesh->setGeometry(vertexDataGpuTransform.copy(), triangles);
             mesh->render();
 
@@ -150,9 +150,9 @@ class Program {
                 vertexDataCpuTransform.setValue(i, "position", stackedMatrices.transform(vertexPositions[i]));
             }
 
-            shader->getVertexShaderConstant("worldMatrix").setValue(Matrices::IDENTITY);
-            shader->getVertexShaderConstant("viewMatrix").setValue(Matrices::IDENTITY);
-            shader->getVertexShaderConstant("projectionMatrix").setValue(Matrices::IDENTITY);
+            shader->getVertexShaderConstant("worldMatrix")->setValue(Matrices::IDENTITY);
+            shader->getVertexShaderConstant("viewMatrix")->setValue(Matrices::IDENTITY);
+            shader->getVertexShaderConstant("projectionMatrix")->setValue(Matrices::IDENTITY);
             mesh->setGeometry(vertexDataCpuTransform.copy(), triangles);
             mesh->render();
 

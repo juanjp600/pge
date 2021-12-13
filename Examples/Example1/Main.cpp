@@ -34,9 +34,9 @@ class Program {
 
     public:
         Program() {
-            graphics = Graphics::create("Example 1", 1600, 900, Graphics::WindowMode::Windowed, Graphics::Renderer::Vulkan);
+            graphics = Graphics::create("Example 1", 1600, 900, WindowMode::Windowed, Renderer::DirectX11);
             shader = Shader::load(*graphics, FilePath::fromStr("Shader1").makeDirectory());
-            material = Material::create(*graphics, *shader, Material::Opaque::YES);
+            material = Material::create(*graphics, *shader, Opaque::YES);
 
             vertexData = StructuredData(shader->getVertexLayout(), 5);
             
@@ -56,7 +56,7 @@ class Program {
             mesh->setGeometry(vertexData.copy(), triangles);
             
             inputManager = InputManager::create(*graphics);
-            escKey = new KeyboardInput(KeyboardInput::Keycode::ESCAPE);
+            escKey = new KeyboardInput(Keycode::ESCAPE);
             inputManager->trackInput(escKey);
 
             state = 0.f;

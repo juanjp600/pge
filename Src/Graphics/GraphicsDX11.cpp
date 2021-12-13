@@ -97,17 +97,18 @@ void GraphicsDX11::setRenderTarget(Texture& renderTarget) {
 void GraphicsDX11::setRenderTargets(const ReferenceVector<Texture>& renderTargets) {
     currentRenderTargetViews.clear();
     TextureDX11* maxSizeTexture = &(TextureDX11&)renderTargets[0].get();
-    for (Reference<Texture> t : renderTargets) {
-        asrt(t->isRenderTarget(), "renderTargets includes non render target");
-        currentRenderTargetViews.emplace_back(((TextureDX11&)t.get()).getRtv());
-        if (t->getWidth()+ t->getHeight()>maxSizeTexture->getWidth()+maxSizeTexture->getHeight()) {
-            maxSizeTexture = &(TextureDX11&)t.get();
+    for (Reference<Texture> rt : renderTargets) {
+        asrt(rt->isRenderTarget(), "renderTargets includes non render target");
+        currentRenderTargetViews.emplace_back(((TextureDX11&)rt.get()).getRtv());
+        if (rt->getWidth() + rt->getHeight() > maxSizeTexture->getWidth() + maxSizeTexture->getHeight()) {
+            maxSizeTexture = &(TextureDX11&)rt.get();
         }
     }
-    for (int i = 0; i < (int)renderTargets.size(); i++) {
-        asrt(renderTargets[i]->getWidth() <= maxSizeTexture->getWidth() && renderTargets[i]->getHeight() <= maxSizeTexture->getHeight(),
-            "Render target sizes are incompatible (" + String::from(maxSizeTexture->getWidth()) + "x" + String::from(maxSizeTexture->getHeight()) + " vs " +
-                                                       String::from(renderTargets[i]->getWidth()) + "x" + String::from(renderTargets[i]->getHeight()) + ")");
+    for (Reference<Texture> rt : renderTargets) {
+        asrt(rt->getWidth() <= maxSizeTexture->getWidth() && rt->getHeight() <= maxSizeTexture->getHeight(),
+            "Render target sizes are incompatible (" +
+            String::from(maxSizeTexture->getWidth()) + "x" + String::from(maxSizeTexture->getHeight()) + " vs " +
+            String::from(rt->getWidth()) + "x" + String::from(rt->getHeight()) + ")");
     }
     currentDepthStencilView = maxSizeTexture->getZBufferView();
     dxContext->OMSetRenderTargets((UINT)currentRenderTargetViews.size(), currentRenderTargetViews.data(), currentDepthStencilView);

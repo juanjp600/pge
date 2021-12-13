@@ -68,7 +68,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #endif
 
         std::vector<String> args(convArgc);
-        for (int i = 0; i < convArgc; i++) {
+        for (int i : Range(convArgc)) {
             args[i] = convArgv[i];
         }
 

@@ -120,9 +120,6 @@
     <ClCompile Include="..\..\Src\Graphics\GraphicsVK.cpp">
       <Filter>Src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\ResourceManagement\ResourceManager.cpp">
-      <Filter>Src\ResourceManagement</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\String\String.cpp">
       <Filter>Src\String</Filter>
     </ClCompile>
