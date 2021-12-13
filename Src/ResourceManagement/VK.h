@@ -305,7 +305,7 @@ class VKRenderPass : public VKDestroyResource<vk::RenderPass> {
             std::vector<vk::AttachmentReference> colorsRefs; colorsRefs.reserve(formats.size());
             vk::AttachmentReference ref;
             ref.layout = vk::ImageLayout::eColorAttachmentOptimal;
-            for (int i = 0; i < formats.size(); i++) {
+            for (u32 i : Range((u32)formats.size())) {
                 ref.attachment = i;
                 colorsRefs.push_back(ref);
             }
@@ -420,7 +420,7 @@ class VKMemory : public VKFreeResource<vk::DeviceMemory> {
             // Finding a fitting memory type.
             int memIndex = -1;
             vk::PhysicalDeviceMemoryProperties memProps = physDev.getMemoryProperties();
-            for (int i = 0; i < (int)memProps.memoryTypeCount; i++) {
+            for (u32 i : Range(memProps.memoryTypeCount)) {
                 if ((memReq.memoryTypeBits & (1 << i)) && (memProps.memoryTypes[i].propertyFlags & memPropFlags) == memPropFlags) {
                     memIndex = i;
                     break;

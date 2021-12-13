@@ -94,10 +94,10 @@ TextureVK::TextureVK(Graphics& gfx, const std::vector<Mipmap>& mipmaps, Compress
 
     VKMemoryBuffer& staging = graphics.getTempStagingBuffer(mipmaps[0].size);
     
-    for (int i = 0; i < mipmaps.size(); i++) {
-        memcpy(staging.getData(), mipmaps[i].buffer, mipmaps[i].size);
-        staging.flush(mipmaps[i].size);
-        graphics.transferToImage(staging.getBuffer(), image, mipmaps[i].width, mipmaps[i].height, i);
+    for (const Mipmap& m : mipmaps) {
+        memcpy(staging.getData(), m.buffer, m.size);
+        staging.flush(m.size);
+        graphics.transferToImage(staging.getBuffer(), image, m.width, m.height, i);
     }
 
     graphics.transformImage<GraphicsVK::ImageLayout::TRANSFER_DST, GraphicsVK::ImageLayout::SHADER_READ>(image, (int)mipmaps.size());

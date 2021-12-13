@@ -19,7 +19,7 @@ MaterialVK::MaterialVK(Graphics& gfx, Shader& sh, const ReferenceVector<Texture>
     dSet = device.allocateDescriptorSets(allocInfo).front();
     
     std::vector<vk::DescriptorImageInfo> infos(texs.size());
-    for (int i = 0; i < infos.size(); i++) {
+    for (int i : Range(infos.size())) {
         TextureVK& tex = (TextureVK&)texs[i].get();
 
         infos[i].imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;

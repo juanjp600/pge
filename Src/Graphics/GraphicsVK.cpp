@@ -103,8 +103,8 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
         // Calculate complete VRAM size.
         vk::DeviceSize pdSize = 0;
         vk::PhysicalDeviceMemoryProperties pdmp = pd.getMemoryProperties();
-        for (int i = 0; i < (int)pdmp.memoryHeapCount; i++) {
-            pdSize += pdmp.memoryHeaps.at(i).size;
+        for (u32 i : Range(pdmp.memoryHeapCount)) {
+            pdSize += pdmp.memoryHeaps[i].size;
         }
 
         if (pdSize > selectedPdSize) {
@@ -150,7 +150,7 @@ GraphicsVK::GraphicsVK(const String& name, int w, int h, WindowMode wm, int x, i
     renderFinishedSemaphores.reserve(MAX_FRAMES_IN_FLIGHT);
     inFlightFences.reserve(MAX_FRAMES_IN_FLIGHT);
     fenceSentWithComBuffer.resize(MAX_FRAMES_IN_FLIGHT);
-    for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+    for (int i : Range(MAX_FRAMES_IN_FLIGHT)) {
         imageAvailableSemaphores.emplace_back(resourceManager.addNewResource<VKSemaphore>(device));
         renderFinishedSemaphores.emplace_back(resourceManager.addNewResource<VKSemaphore>(device));
         inFlightFences.emplace_back(resourceManager.addNewResource<VKFence>(device));
@@ -278,8 +278,8 @@ void GraphicsVK::clear(const Color& color) {
         if (rtCount > clearAttachments.size()) {
             clearAttachments.resize(rtCount + 1);
         }
-        for (int i = 0; i < rtCount; i++) {
-            clearAttachments[i] = colorAttachment;
+        for (vk::ClearAttachment& attach : clearAttachments) {
+            attach = colorAttachment;
         }
         clearAttachments[rtCount] = DEPTH_CLEAR_ATTACHMENT;
 
@@ -298,7 +298,7 @@ void GraphicsVK::createSwapchain() {
     // Creating image views for our swapchain images to ultimately write to.
     std::vector<vk::Image> swapchainImages = device->getSwapchainImagesKHR(swapchain);
     swapchainImageViews.resize((int)swapchainImages.size());
-    for (int i = 0; i < (int)swapchainImages.size(); i++) {
+    for (size_t i : Range(swapchainImages.size())) {
         resourceManager.deleteResource(swapchainImageViews[i]);
         swapchainImageViews[i] = resourceManager.addNewResource<VKImageView>(device, swapchainImages[i], swapchainFormat.format);
     }
@@ -314,7 +314,7 @@ void GraphicsVK::createSwapchain() {
     renderPass = resourceManager.addNewResource<VKRenderPass>(device, swapchainFormat.format);
 
     framebuffers.resize(swapchainImageViews.size());
-    for (int i = 0; i < (int)swapchainImageViews.size(); i++) {
+    for (size_t i : Range(swapchainImageViews.size())) {
         resourceManager.deleteResource(framebuffers[i]);
         framebuffers[i] = resourceManager.addNewResource<VKFramebuffer>(device, renderPass, swapchainImageViews[i], depthBuffer->getImageView(), swapchainExtent);
     }
@@ -322,7 +322,7 @@ void GraphicsVK::createSwapchain() {
     comPools.resize(framebuffers.size());
     comBuffers.resize(framebuffers.size());
     vk::Result result;
-    for (int i = 0; i < (int)framebuffers.size(); i++) {
+    for (size_t i : Range(framebuffers.size())) {
         resourceManager.deleteResource(comPools[i]);
         comPools[i] = resourceManager.addNewResource<VKCommandPool>(device, graphicsQueueIndex);
         vk::CommandBufferAllocateInfo comBufAllInfo = vk::CommandBufferAllocateInfo(comPools[i], vk::CommandBufferLevel::ePrimary, 1);
@@ -353,7 +353,7 @@ void GraphicsVK::generateMipmaps(vk::Image img, int w, int h, int miplevels) {
     barrier.subresourceRange.levelCount = 1;
 
     int mipWidth = w; int mipHeight = h;
-    for (int i = 1; i < miplevels; i++) {
+    for (int i : Range(1, miplevels)) {
         barrier.subresourceRange.baseMipLevel = i - 1;
         pipelineBarrier<ImageLayout::TRANSFER_DST, ImageLayout::TRANSFER_SRC>(barrier);
 
