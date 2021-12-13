@@ -5,6 +5,9 @@
 #include <PGE/String/String.h>
 #include <PGE/Exception/Exception.h>
 
+#define DOCTEST_STL_STRINGIFY_FLIP
+#include <doctest/extensions/stl_stringifier.h>
+
 using namespace PGE;
 
 TEST_SUITE("Strings") {
