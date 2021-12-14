@@ -290,7 +290,8 @@ class String {
         bool isEmpty() const;
 
     private:
-        String(nullptr_t) { } // Dummy constructor
+        struct Metadata;
+        String(int sz, char*& charBuffer, Metadata*& data);
         String(const char* cstr, size_t size);
         String(const String& other, int from, int cnt);
 

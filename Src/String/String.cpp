@@ -16,10 +16,6 @@
 
 using namespace PGE;
 
-#define PGE_STRING_WITH_SIZE(ret, cstrBuf, data, size) \
-String ret(nullptr); \
-auto [cstrBuf, data] = ret.reallocate(size)
-
 //
 // Iterator
 //
@@ -248,6 +244,11 @@ const String PGE::StringLiterals::operator""_PGE(const char16* wstr, size_t) {
 //
 // Private constructors.
 //
+
+String::String(int sz, char*& charBuffer, Metadata*& data) {
+    const auto& [chs, dt] = reallocate(sz);
+    charBuffer = chs; data = dt;
+}
 
 // Literal, size is WITHOUT terminating null byte!
 String::String(const char* cstr, size_t size)
@@ -483,7 +484,8 @@ static consteval byte maxIntegerDigits(byte base) {
 template <std::integral I, byte BASE> requires ValidBaseForType<I, BASE>
 const String String::fromInteger(I i, Casing casing) {
     constexpr byte digits = maxIntegerDigits<I>(BASE);
-    PGE_STRING_WITH_SIZE(ret, buf, retData, digits);
+    char* buf; Metadata* retData;
+    String ret(digits, buf, retData);
 
     byte count = 0;
     if constexpr (std::numeric_limits<I>::is_signed) {
@@ -608,7 +610,8 @@ const String String::fromFloatingPoint(F f) {
     }
     
     int size = snprintf(nullptr, 0, format, f);
-    PGE_STRING_WITH_SIZE(ret, buf, retData, size + 1);
+    char* buf; Metadata* retData;
+    String ret(size + 1, buf, retData);
     snprintf(buf, size + 1, format, f);
 
     retData->strByteLength = size;
@@ -712,7 +715,7 @@ int String::length() const {
             LiteralData& lit = std::get<LiteralData>(internalData);
             if (std::holds_alternative<Metadata>(lit.data)) {
                 data = lit.shareData();
-                if (data->_strLength < 0) {
+                if (data->_strLength >= 0) {
                     return data->_strLength;
                 }
             }
@@ -788,7 +791,8 @@ const String String::substr(const Iterator& start, const Iterator& to) const {
         + "; to: " + from(to.getBytePosition()) + "; str: " + *this + ")");
 
     int newSize = to.getBytePosition() - start.getBytePosition();
-    PGE_STRING_WITH_SIZE(ret, buf, retData, newSize);
+    char* buf; Metadata* retData;
+    String ret(newSize, buf, retData);
     retData->strByteLength = newSize;
     // Due to not being friends with Iterators, we just bite the bullet here and hope for the best.
     retData->_strLength = to.getPosition() - start.getPosition();
@@ -811,7 +815,8 @@ const String String::replace(const String& fnd, const String& rplace) const {
     if (fnd.isEmpty()) { foundPositions.emplace_back(byteLength()); }
     
     int newSize = byteLength() + (int)foundPositions.size() * (rplace.byteLength() - fnd.byteLength());
-    PGE_STRING_WITH_SIZE(ret, buf, retData, newSize);
+    char* buf; Metadata* retData;
+    String ret(newSize, buf, retData);
     retData->strByteLength = newSize;
 
     int retPos = 0;
@@ -881,7 +886,8 @@ String::Metadata* String::LiteralData::shareData() {
 
 // TODO: Funny special cases!
 const String String::performCaseConversion(const std::function<void (String&, char16)>& func) const {
-    PGE_STRING_WITH_SIZE(ret, buf, retData, byteLength());
+    char* buf; Metadata* retData;
+    String ret(byteLength(), buf, retData);
     retData->strByteLength = 0;
     retData->_strLength = 0;
     for (char16 ch : *this) {
@@ -920,7 +926,8 @@ const String String::trim() const {
 
 const String String::reverse() const {
     int len = byteLength();
-    PGE_STRING_WITH_SIZE(ret, buf, retData, len);
+    char* buf; Metadata* retData;
+    String ret(len, buf, retData);
     buf[len] = '\0';
     buf += len;
     for (int i = 0; i < len;) {
@@ -940,7 +947,8 @@ const String String::repeat(int count, const String& separator) const {
     int curLength = byteLength();
     int sepLength = separator.byteLength();
     int newSize = curLength * count + sepLength * (count - 1);
-    PGE_STRING_WITH_SIZE(ret, buf, retData, newSize);
+    char* buf; Metadata* retData;
+    String ret(newSize, buf, retData);
     buf[newSize] = '\0';
     for (int i : Range(count)) {
         if (i != 0) {
