@@ -933,9 +933,9 @@ const String String::repeat(int count, const String& separator) const {
     if (count == 0) { return String(); }
     int curLength = byteLength();
     int sepLength = separator.byteLength();
-    int newLength = curLength * count + sepLength * (count - 1);
-    PGE_STRING_WITH_SIZE(ret, buf, retData, newLength);
-    buf[newLength] = '\0';
+    int newSize = curLength * count + sepLength * (count - 1);
+    PGE_STRING_WITH_SIZE(ret, buf, retData, newSize);
+    buf[newSize] = '\0';
     for (int i : Range(count)) {
         if (i != 0) {
             memcpy(buf, separator.cstr(), sepLength);
@@ -944,7 +944,7 @@ const String String::repeat(int count, const String& separator) const {
         memcpy(buf, cstr(), curLength);
         buf += curLength;
     }
-    retData->strByteLength = newLength;
+    retData->strByteLength = newSize;
     if (getData()->_strLength >= 0) { retData->_strLength = length() * count + separator.length() * (count - 1); }
     return ret;
 }
