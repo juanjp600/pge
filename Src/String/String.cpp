@@ -16,9 +16,9 @@
 
 using namespace PGE;
 
-#define PGE_STRING_WITH_SIZE(ret, chs, data, size) \
+#define PGE_STRING_WITH_SIZE(ret, cstrBuf, data, size) \
 String ret(nullptr); \
-auto [chs, data] = ret.reallocate(size)
+auto [cstrBuf, data] = ret.reallocate(size)
 
 //
 // Iterator
@@ -150,7 +150,7 @@ const String::ReverseIterator String::rend() const {
 String::String()
     : internalData(StackAllocData {
         .data = { ._hashCode = Hasher().getHash(), ._strLength = 0, .strByteLength = 0 },
-        .chs = { '\0' }
+        .cstrBuf = { '\0' }
       }) { }
 
 String::String(const char8_t* cstr)
@@ -253,7 +253,7 @@ const String PGE::StringLiterals::operator""_PGE(const char16* wstr, size_t) {
 String::String(const char* cstr, size_t size)
     : internalData(LiteralData {
         .data = Metadata{ .strByteLength = (int)size },
-        .chs = (char*)cstr
+        .cstrBuf = (char*)cstr
       }) { }
 
 // Byte substr.
@@ -415,7 +415,7 @@ const String::CoreInfo String::reallocate(int size, bool copyOldChs) {
             int prevLen = data->strByteLength;
             StackAllocData& u = internalData.emplace<StackAllocData>();
             if (copyOldChs) {
-                memcpy(u.chs, lit.chs, prevLen);
+                memcpy(u.cstrBuf, lit.cstrBuf, prevLen);
             }
             u.data = *data;
             return u.get();
@@ -439,11 +439,11 @@ const String::CoreInfo String::reallocate(int size, bool copyOldChs) {
 
     std::unique_ptr<char[]> newChs = std::make_unique<char[]>(targetCapacity);
     if (copyOldChs) {
-        memcpy(newChs.get(), str.chs, str.data->strByteLength);
+        memcpy(newChs.get(), str.cstrBuf, str.data->strByteLength);
     }
 
     std::shared_ptr<HeapAllocData>& s = internalData.emplace<std::shared_ptr<HeapAllocData>>(std::make_shared<HeapAllocData>());
-    s->chs = std::move(newChs);
+    s->cstrBuf = std::move(newChs);
     s->cCapacity = targetCapacity;
 
     return s->get();
@@ -838,11 +838,11 @@ const String String::replace(const String& fnd, const String& rplace) const {
 
 char* String::getChars() const {
     if (std::holds_alternative<StackAllocData>(internalData)) {
-        return std::get<StackAllocData>(internalData).chs;
+        return std::get<StackAllocData>(internalData).cstrBuf;
     } else if (std::holds_alternative<std::shared_ptr<HeapAllocData>>(internalData)) {
-        return std::get<std::shared_ptr<HeapAllocData>>(internalData)->chs.get();
+        return std::get<std::shared_ptr<HeapAllocData>>(internalData)->cstrBuf.get();
     } else {
-        return std::get<LiteralData>(internalData).chs;
+        return std::get<LiteralData>(internalData).cstrBuf;
     }
 }
 
@@ -861,7 +861,7 @@ String::Metadata* String::LiteralData::shareData() {
     static std::mutex litMut;
 
     Metadata* newData;
-    const auto& it = litData.find(chs);
+    const auto& it = litData.find(cstrBuf);
     if (it != litData.end()) {
         newData = &it->second;
     } else {
@@ -869,7 +869,7 @@ String::Metadata* String::LiteralData::shareData() {
         { // This needs to be synced.
             std::lock_guard lock(litMut);
             newData = &litData.emplace(
-                chs,
+                cstrBuf,
                 Metadata {
                     .strByteLength = litSize,
                 }

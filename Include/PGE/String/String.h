@@ -150,9 +150,9 @@ class String {
         >::type>
         String(T cstri) {
             int len = (int)strlen(cstri);
-            const auto& [chs, data] = reallocate(len);
+            const auto& [cstrBuf, data] = reallocate(len);
             data->strByteLength = len;
-            memcpy(chs, cstri, len + 1);
+            memcpy(cstrBuf, cstri, len + 1);
         }
 
         String(const char8_t* cstr);
@@ -305,30 +305,30 @@ class String {
         };
 
         struct CoreInfo {
-            char* chs;
+            char* cstrBuf;
             Metadata* data;
         };
 
         struct HeapAllocData {
             Metadata data;
             int cCapacity;
-            std::unique_ptr<char[]> chs;
+            std::unique_ptr<char[]> cstrBuf;
             const CoreInfo get() {
-                return { chs.get(), &data };
+                return { cstrBuf.get(), &data };
             }
         };
 
         struct StackAllocData {
             Metadata data;
-            char chs[SHORT_STR_CAPACITY];
+            char cstrBuf[SHORT_STR_CAPACITY];
             const CoreInfo get() {
-                return { chs, &data };
+                return { cstrBuf, &data };
             }
         };
 
         struct LiteralData {
             std::variant<Metadata, Metadata*> data;
-            char* chs;
+            char* cstrBuf;
             Metadata* shareData();
             Metadata* getData() {
                 if (std::holds_alternative<Metadata>(data)) {
@@ -338,7 +338,7 @@ class String {
                 }
             }
             const CoreInfo get() {
-                return { chs, getData() };
+                return { cstrBuf, getData() };
             }
         };
 
