@@ -150,9 +150,9 @@ class String {
         >::type>
         String(T cstri) {
             int len = (int)strlen(cstri);
-            reallocate(len);
-            getData()->strByteLength = len;
-            memcpy(getChars(), cstri, len + 1);
+            const auto& [chs, data] = reallocate(len);
+            data->strByteLength = len;
+            memcpy(chs, cstri, len + 1);
         }
 
         String(const char8_t* cstr);
