@@ -148,7 +148,7 @@ const String::ReverseIterator String::rend() const {
 //
 
 String::String()
-    : internalData(Unique {
+    : internalData(StackAllocData {
         .data = { ._hashCode = Hasher().getHash(), ._strLength = 0, .strByteLength = 0 },
         .chs = { '\0' }
       }) { }
@@ -251,8 +251,8 @@ const String PGE::StringLiterals::operator""_PGE(const char16* wstr, size_t) {
 
 // Literal, size is WITHOUT terminating null byte!
 String::String(const char* cstr, size_t size)
-    : internalData(Literal{
-        .data = Data{ .strByteLength = (int)size },
+    : internalData(LiteralData {
+        .data = Metadata{ .strByteLength = (int)size },
         .chs = (char*)cstr
       }) { }
 
@@ -316,12 +316,15 @@ std::istream& PGE::operator>>(std::istream& is, String& s) {
 }
 
 u64 String::getHashCode() const {
-    Data* data = getData();
+    Metadata* data = getData();
     if (data->_hashCode == 0) {
-        if (std::holds_alternative<Literal>(internalData)) {
-            data = std::get<Literal>(internalData).shareData();
-            if (data->_hashCode != 0) {
-                return data->_hashCode;
+        if (std::holds_alternative<LiteralData>(internalData)) {
+            LiteralData& lit = std::get<LiteralData>(internalData);
+            if (std::holds_alternative<Metadata>(lit.data)) {
+                data = lit.shareData();
+                if (data->_hashCode != 0) {
+                    return data->_hashCode;
+                }
             }
         }
 
@@ -350,7 +353,7 @@ const std::weak_ordering String::compare(const String& other) const {
 bool String::equals(const String& other) const {
     if (getChars() == other.getChars()) { return true; }
     if (byteLength() != other.byteLength()) { return false; }
-    Data* data = getData(); Data* otherData = other.getData();
+    Metadata* data = getData(); Metadata* otherData = other.getData();
     if (data->_strLength >= 0 && otherData->_strLength >= 0 && length() != other.length()) { return false; }
     if (data->_hashCode != 0 && otherData->_hashCode != 0) { return getHashCode() == other.getHashCode(); }
     return memcmp(cstr(), other.cstr(), byteLength()) == 0;
@@ -405,26 +408,26 @@ const String::CoreInfo String::reallocate(int size, bool copyOldChs) {
     size++;
 
     CoreInfo str;
-    if (std::holds_alternative<Literal>(internalData)) {
+    if (std::holds_alternative<LiteralData>(internalData)) {
         if (size <= SHORT_STR_CAPACITY) {
-            Literal& lit = std::get<Literal>(internalData);
-            Data* data = lit.getData();
+            LiteralData& lit = std::get<LiteralData>(internalData);
+            Metadata* data = lit.getData();
             int prevLen = data->strByteLength;
-            Unique& u = internalData.emplace<Unique>();
+            StackAllocData& u = internalData.emplace<StackAllocData>();
             if (copyOldChs) {
                 memcpy(u.chs, lit.chs, prevLen);
             }
             u.data = *data;
             return u.get();
         }
-        str = std::get<Literal>(internalData).get();
-    } else if (std::holds_alternative<Unique>(internalData)) {
+        str = std::get<LiteralData>(internalData).get();
+    } else if (std::holds_alternative<StackAllocData>(internalData)) {
         if (size <= SHORT_STR_CAPACITY) {
-            return std::get<Unique>(internalData).get();
+            return std::get<StackAllocData>(internalData).get();
         }
-        str = std::get<Unique>(internalData).get();
+        str = std::get<StackAllocData>(internalData).get();
     } else {
-        std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
+        std::shared_ptr<HeapAllocData>& s = std::get<std::shared_ptr<HeapAllocData>>(internalData);
         if (size <= s->cCapacity && s.use_count() == 1) {
             return s->get();
         }
@@ -439,7 +442,7 @@ const String::CoreInfo String::reallocate(int size, bool copyOldChs) {
         memcpy(newChs.get(), str.chs, str.data->strByteLength);
     }
 
-    std::shared_ptr<Shared>& s = internalData.emplace<std::shared_ptr<Shared>>(std::make_shared<Shared>());
+    std::shared_ptr<HeapAllocData>& s = internalData.emplace<std::shared_ptr<HeapAllocData>>(std::make_shared<HeapAllocData>());
     s->chs = std::move(newChs);
     s->cCapacity = targetCapacity;
 
@@ -456,7 +459,7 @@ const char8_t* String::c8str() const {
 
 const std::vector<char16> String::wstr() const {
     std::vector<char16> chars;
-    Data* data = getData();
+    Metadata* data = getData();
     if (data->_strLength >= 0) {
         chars.reserve(data->_strLength);
     }
@@ -703,12 +706,15 @@ PGE_STRING_TO_FLOAT(double)
 PGE_STRING_TO_FLOAT(long double)
 
 int String::length() const {
-    Data* data = getData();
+    Metadata* data = getData();
     if (data->_strLength < 0) {
-        if (std::holds_alternative<Literal>(internalData)) {
-            data = std::get<Literal>(internalData).shareData();
-            if (data->_strLength >= 0) {
-                return data->_strLength;
+        if (std::holds_alternative<LiteralData>(internalData)) {
+            LiteralData& lit = std::get<LiteralData>(internalData);
+            if (std::holds_alternative<Metadata>(lit.data)) {
+                data = lit.shareData();
+                if (data->_strLength < 0) {
+                    return data->_strLength;
+                }
             }
         }
 
@@ -722,7 +728,7 @@ int String::length() const {
 }
 
 int String::byteLength() const {
-    Data* data = getData();
+    Metadata* data = getData();
     asrt(data->strByteLength >= 0, "String byte length must always be valid");
     return data->strByteLength;
 }
@@ -821,7 +827,7 @@ const String String::replace(const String& fnd, const String& rplace) const {
     // Append the rest of the string, including terminating byte.
     memcpy(buf + retPos, cstr() + thisPos, byteLength() - thisPos + 1);
    
-    Data* data = getData();
+    Metadata* data = getData();
 
     // If the string that is being operated on already has had its length calculated, we assume it to be worth it to pre-calculate the new string's length.
     if (data->_strLength >= 0) {
@@ -831,30 +837,30 @@ const String String::replace(const String& fnd, const String& rplace) const {
 }
 
 char* String::getChars() const {
-    if (std::holds_alternative<Unique>(internalData)) {
-        return std::get<Unique>(internalData).chs;
-    } else if (std::holds_alternative<std::shared_ptr<Shared>>(internalData)) {
-        return std::get<std::shared_ptr<Shared>>(internalData)->chs.get();
+    if (std::holds_alternative<StackAllocData>(internalData)) {
+        return std::get<StackAllocData>(internalData).chs;
+    } else if (std::holds_alternative<std::shared_ptr<HeapAllocData>>(internalData)) {
+        return std::get<std::shared_ptr<HeapAllocData>>(internalData)->chs.get();
     } else {
-        return std::get<Literal>(internalData).chs;
+        return std::get<LiteralData>(internalData).chs;
     }
 }
 
-String::Data* String::getData() const {
-    if (std::holds_alternative<Unique>(internalData)) {
-        return &std::get<Unique>(internalData).data;
-    } else if (std::holds_alternative<std::shared_ptr<Shared>>(internalData)) {
-        return &std::get<std::shared_ptr<Shared>>(internalData)->data;
+String::Metadata* String::getData() const {
+    if (std::holds_alternative<StackAllocData>(internalData)) {
+        return &std::get<StackAllocData>(internalData).data;
+    } else if (std::holds_alternative<std::shared_ptr<HeapAllocData>>(internalData)) {
+        return &std::get<std::shared_ptr<HeapAllocData>>(internalData)->data;
     } else {
-        return std::get<Literal>(internalData).getData();
+        return std::get<LiteralData>(internalData).getData();
     }
 }
 
-String::Data* String::Literal::shareData() {
-    static std::unordered_map<const char*, String::Data> litData;
+String::Metadata* String::LiteralData::shareData() {
+    static std::unordered_map<const char*, String::Metadata> litData;
     static std::mutex litMut;
 
-    Data* newData;
+    Metadata* newData;
     const auto& it = litData.find(chs);
     if (it != litData.end()) {
         newData = &it->second;
@@ -864,13 +870,13 @@ String::Data* String::Literal::shareData() {
             std::lock_guard lock(litMut);
             newData = &litData.emplace(
                 chs,
-                Data {
+                Metadata {
                     .strByteLength = litSize,
                 }
             ).first->second;
         }
     }
-    return data.emplace<Data*>(newData);
+    return data.emplace<Metadata*>(newData);
 }
 
 // TODO: Funny special cases!

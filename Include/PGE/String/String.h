@@ -296,7 +296,7 @@ class String {
 
         static constexpr int SHORT_STR_CAPACITY = 40;
 
-        struct Data {
+        struct Metadata {
             // Lazily evaluated.
             mutable u64 _hashCode = 0;
             mutable int _strLength = -1;
@@ -306,11 +306,11 @@ class String {
 
         struct CoreInfo {
             char* chs;
-            Data* data;
+            Metadata* data;
         };
 
-        struct Shared {
-            Data data;
+        struct HeapAllocData {
+            Metadata data;
             int cCapacity;
             std::unique_ptr<char[]> chs;
             const CoreInfo get() {
@@ -318,23 +318,23 @@ class String {
             }
         };
 
-        struct Unique {
-            Data data;
+        struct StackAllocData {
+            Metadata data;
             char chs[SHORT_STR_CAPACITY];
             const CoreInfo get() {
                 return { chs, &data };
             }
         };
 
-        struct Literal {
-            std::variant<Data, Data*> data;
+        struct LiteralData {
+            std::variant<Metadata, Metadata*> data;
             char* chs;
-            Data* shareData();
-            Data* getData() {
-                if (std::holds_alternative<Data>(data)) {
-                    return &std::get<Data>(data);
+            Metadata* shareData();
+            Metadata* getData() {
+                if (std::holds_alternative<Metadata>(data)) {
+                    return &std::get<Metadata>(data);
                 } else {
-                    return std::get<Data*>(data);
+                    return std::get<Metadata*>(data);
                 }
             }
             const CoreInfo get() {
@@ -343,10 +343,10 @@ class String {
         };
 
         // Default initialized with Unique.
-        mutable std::variant<Unique, std::shared_ptr<Shared>, Literal> internalData;
+        mutable std::variant<StackAllocData, std::shared_ptr<HeapAllocData>, LiteralData> internalData;
 
         char* getChars() const;
-        Data* getData() const;
+        Metadata* getData() const;
 
         const String performCaseConversion(const std::function<void(String&, char16)>& func) const;
 
