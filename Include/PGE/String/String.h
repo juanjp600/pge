@@ -129,11 +129,15 @@ class String {
         const ReverseIterator rend() const;
         
         String();
-        String(const String& other);
 
-        template <size_t S>
+        template <size_t S> requires (S > 1)
         String(const char(&cstri)[S])
             : String(cstri, S - 1) { }
+
+        // Empty string literal.
+        template <size_t S> requires (S == 1)
+        String(const char(&)[S])
+            : String() { }
 
         template <typename T, typename = typename std::enable_if<
             std::conjunction<
@@ -146,9 +150,9 @@ class String {
         >::type>
         String(T cstri) {
             int len = (int)strlen(cstri);
-            reallocate(len);
+            const auto& [cstrBuf, data] = reallocate(len);
             data->strByteLength = len;
-            memcpy(cstrNoConst(), cstri, len + 1);
+            memcpy(cstrBuf, cstri, len + 1);
         }
 
         String(const char8_t* cstr);
@@ -180,7 +184,6 @@ class String {
         template <std::unsigned_integral I> static const String octFromInt(I i);
         template <std::unsigned_integral I> static const String hexFromInt(I i, Casing casing = Casing::UPPER);
 
-        void operator=(const String& other);
         void operator+=(const String& other);
         void operator+=(char16 ch);
 
@@ -287,47 +290,69 @@ class String {
         bool isEmpty() const;
 
     private:
-        String(int size);
+        struct Metadata;
+        String(int sz, char*& charBuffer, Metadata*& data);
         String(const char* cstr, size_t size);
         String(const String& other, int from, int cnt);
 
-        static void copy(String& dst, const String& src);
+        static constexpr int SHORT_STR_CAPACITY = 40;
 
-        static constexpr int SHORT_STR_CAPACITY = 16;
-
-        struct Data {
-            int strByteLength = -1;
-
-            int cCapacity = SHORT_STR_CAPACITY;
-
+        struct Metadata {
             // Lazily evaluated.
-            mutable u64 _hashCode;
+            mutable u64 _hashCode = 0;
             mutable int _strLength = -1;
-            mutable bool _hashCodeEvaluted = false;
+
+            int strByteLength = -1;
         };
 
-        struct Shared {
-            Data data;
-            std::unique_ptr<char[]> chs;
+        struct CoreInfo {
+            char* cstrBuf;
+            Metadata* data;
         };
 
-        struct Unique {
-            Data data;
-            char chs[SHORT_STR_CAPACITY];
+        struct HeapAllocData {
+            Metadata data;
+            int cCapacity;
+            std::unique_ptr<char[]> cstrBuf;
+            const CoreInfo get() {
+                return { cstrBuf.get(), &data };
+            }
+        };
+
+        struct StackAllocData {
+            Metadata data;
+            char cstrBuf[SHORT_STR_CAPACITY];
+            const CoreInfo get() {
+                return { cstrBuf, &data };
+            }
+        };
+
+        struct LiteralData {
+            std::variant<Metadata, Metadata*> data;
+            char* cstrBuf;
+            Metadata* shareData();
+            Metadata* getData() {
+                if (std::holds_alternative<Metadata>(data)) {
+                    return &std::get<Metadata>(data);
+                } else {
+                    return std::get<Metadata*>(data);
+                }
+            }
+            const CoreInfo get() {
+                return { cstrBuf, getData() };
+            }
         };
 
         // Default initialized with Unique.
-        mutable std::variant<Unique, std::shared_ptr<Shared>, std::monostate> internalData;
-        char* chs = std::get<Unique>(internalData).chs;
-        mutable Data* data = &std::get<Unique>(internalData).data;
+        mutable std::variant<StackAllocData, std::shared_ptr<HeapAllocData>, LiteralData> internalData;
 
-        void getOrAddLiteralData() const;
+        char* getChars() const;
+        Metadata* getData() const;
 
         const String performCaseConversion(const std::function<void(String&, char16)>& func) const;
 
         void wCharToUtf8Str(const char16* wbuffer);
-        void reallocate(int size, bool copyOldChs = false);
-        char* cstrNoConst();
+        const CoreInfo reallocate(int size, bool copyOldChs = false);
 
         template <std::integral I, byte BASE = 10> requires ValidBaseForType<I, BASE>
         static const String fromInteger(I i, Casing casing = Casing::UPPER);
