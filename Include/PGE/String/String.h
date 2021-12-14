@@ -129,11 +129,15 @@ class String {
         const ReverseIterator rend() const;
         
         String();
-        String(const String& other);
 
-        template <size_t S>
+        template <size_t S> requires (S > 1)
         String(const char(&cstri)[S])
             : String(cstri, S - 1) { }
+
+        // Empty string literal.
+        template <size_t S> requires (S == 1)
+        String(const char(&)[S])
+            : String() { }
 
         template <typename T, typename = typename std::enable_if<
             std::conjunction<
@@ -148,7 +152,7 @@ class String {
             int len = (int)strlen(cstri);
             reallocate(len);
             getData()->strByteLength = len;
-            memcpy(cstrNoConst(), cstri, len + 1);
+            memcpy(getChars(), cstri, len + 1);
         }
 
         String(const char8_t* cstr);
@@ -180,7 +184,6 @@ class String {
         template <std::unsigned_integral I> static const String octFromInt(I i);
         template <std::unsigned_integral I> static const String hexFromInt(I i, Casing casing = Casing::UPPER);
 
-        void operator=(const String& other);
         void operator+=(const String& other);
         void operator+=(char16 ch);
 
@@ -287,11 +290,9 @@ class String {
         bool isEmpty() const;
 
     private:
-        String(int size);
+        String(nullptr_t) { } // Dummy constructor
         String(const char* cstr, size_t size);
         String(const String& other, int from, int cnt);
-
-        static void copy(String& dst, const String& src);
 
         static constexpr int SHORT_STR_CAPACITY = 40;
 
@@ -303,20 +304,42 @@ class String {
             int strByteLength = -1;
         };
 
+        struct CoreInfo {
+            char* chs;
+            Data* data;
+        };
+
         struct Shared {
             Data data;
             int cCapacity;
             std::unique_ptr<char[]> chs;
+            const CoreInfo get() {
+                return { chs.get(), &data };
+            }
         };
 
         struct Unique {
             Data data;
             char chs[SHORT_STR_CAPACITY];
+            const CoreInfo get() {
+                return { chs, &data };
+            }
         };
 
         struct Literal {
             std::variant<Data, Data*> data;
             char* chs;
+            Data* shareData();
+            Data* getData() {
+                if (std::holds_alternative<Data>(data)) {
+                    return &std::get<Data>(data);
+                } else {
+                    return std::get<Data*>(data);
+                }
+            }
+            const CoreInfo get() {
+                return { chs, getData() };
+            }
         };
 
         // Default initialized with Unique.
@@ -325,24 +348,16 @@ class String {
         char* getChars() const;
         Data* getData() const;
 
-        void getOrAddLiteralData() const;
-
         const String performCaseConversion(const std::function<void(String&, char16)>& func) const;
 
         void wCharToUtf8Str(const char16* wbuffer);
-        void reallocate(int size, bool copyOldChs = false);
-        char* cstrNoConst();
+        const CoreInfo reallocate(int size, bool copyOldChs = false);
 
         template <std::integral I, byte BASE = 10> requires ValidBaseForType<I, BASE>
         static const String fromInteger(I i, Casing casing = Casing::UPPER);
         template <std::floating_point F>
         static const String fromFloatingPoint(F f);
-
-        struct CharVisitor; struct DataVisitor;
 };
-
-constexpr auto _ = sizeof(String);
-
 const String operator+(const String& a, const String& b);
 bool operator==(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);

@@ -16,6 +16,10 @@
 
 using namespace PGE;
 
+#define PGE_STRING_WITH_SIZE(ret, chs, data, size) \
+String ret(nullptr); \
+auto [chs, data] = ret.reallocate(size)
+
 //
 // Iterator
 //
@@ -143,22 +147,11 @@ const String::ReverseIterator String::rend() const {
 
 //
 
-void String::copy(String& dst, const String& src) {
-    dst.internalData = src.internalData;
-}
-
-String::String() {
-    // Manual metadata:
-    Data* data = getData();
-    data->strByteLength = 0;
-    data->_strLength = 0;
-    data->_hashCode = Hasher().getHash();
-    cstrNoConst()[0] = '\0';
-}
-
-String::String(const String& other) {
-    copy(*this, other);
-}
+String::String()
+    : internalData(Unique {
+        .data = { ._hashCode = Hasher().getHash(), ._strLength = 0, .strByteLength = 0 },
+        .chs = { '\0' }
+      }) { }
 
 String::String(const char8_t* cstr)
     : String((const char*)cstr) { }
@@ -173,12 +166,10 @@ void String::wCharToUtf8Str(const char16* wbuffer) {
     for (int i = 0; wbuffer[i] != L'\0'; i++) {
         newCap += Unicode::wCharToUtf8(wbuffer[i], nullptr);
     }
-    reallocate(newCap);
+    const auto& [buf, data] = reallocate(newCap);
 
     // Convert all the wchars to codepoints.
-    char* buf = cstrNoConst();
     int cIndex = 0;
-    Data* data = getData();
     // We get _strLength "for free" here.
     for (data->_strLength = 0; wbuffer[data->_strLength] != L'\0'; data->_strLength++) {
         cIndex += Unicode::wCharToUtf8(wbuffer[data->_strLength], &buf[cIndex]);
@@ -189,44 +180,41 @@ void String::wCharToUtf8Str(const char16* wbuffer) {
 
 String::String(const std::string& cppstr) {
     int len = (int)cppstr.size();
-    reallocate(len);
-    getData()->strByteLength = len;
-    memcpy(cstrNoConst(), cppstr.c_str(), len + 1);
+    const auto& [buf, data] = reallocate(len);
+    data->strByteLength = len;
+    memcpy(buf, cppstr.c_str(), len + 1);
 }
 
 #if defined(__APPLE__) && defined(__OBJC__)
 String::String(const NSString* nsstr) {
     const char* cPath = [nsstr cStringUsingEncoding: NSUTF8StringEncoding];
     int len = (int)strlen(cPath);
-    reallocate(len);
+    const auto& [buf, data] = reallocate(len);
     strByteLength = len;
-    memcpy(cstrNoConst(), cPath, len + 1);
+    memcpy(buf, cPath, len + 1);
 }
 #endif
 
 String::String(char c) {
-    Data* data = getData();
-    char* buf = cstrNoConst();
     if (c < 0) {
-        reallocate(2);
+        const auto& [buf, data] = reallocate(2);
         data->strByteLength = Unicode::wCharToUtf8((char16)(unsigned char)c, buf);
+        data->_strLength = 1;
         buf[data->strByteLength] = '\0';
     } else {
-        reallocate(1);
+        const auto& [buf, data] = reallocate(1);
         data->strByteLength = 1;
+        data->_strLength = 1;
         buf[0] = c;
         buf[1] = '\0';
     }
-    data->_strLength = 1;
 }
 
 String::String(char8_t c)
     : String((char)c) { }
 
 String::String(char16 w) {
-    reallocate(4);
-    Data* data = getData();
-    char* buf = cstrNoConst();
+    const auto& [buf, data] = reallocate(4);
     data->strByteLength = Unicode::wCharToUtf8(w, buf);
     data->_strLength = 1;
     buf[data->strByteLength] = '\0';
@@ -235,11 +223,9 @@ String::String(char16 w) {
 String::String(const String& a, const String& b) {
     int aLen = a.byteLength();
     int bLen = b.byteLength();
-    reallocate(aLen + bLen);
-    char* buf = cstrNoConst();
+    const auto& [buf, data] = reallocate(aLen + bLen);
     memcpy(buf, a.cstr(), aLen);
     memcpy(buf + aLen, b.cstr(), bLen + 1);
-    Data* data = getData();
     data->strByteLength = aLen + bLen;
     if (a.getData()->_strLength >= 0 && b.getData()->_strLength >= 0) {
         data->_strLength = a.length() + b.length();
@@ -263,37 +249,26 @@ const String PGE::StringLiterals::operator""_PGE(const char16* wstr, size_t) {
 // Private constructors.
 //
 
-String::String(int size) {
-    reallocate(size);
-}
-
 // Literal, size is WITHOUT terminating null byte!
-String::String(const char* cstr, size_t size) {
-    internalData.emplace<Literal>();
-    std::get<Literal>(internalData).chs = (char*)cstr;
-    getData()->strByteLength = (int)size;
-}
+String::String(const char* cstr, size_t size)
+    : internalData(Literal{
+        .data = Data{ .strByteLength = (int)size },
+        .chs = (char*)cstr
+      }) { }
 
 // Byte substr.
 String::String(const String& other, int from, int cnt) {
-    reallocate(cnt);
-    getData()->strByteLength = cnt;
-    char* buf = cstrNoConst();
+    const auto& [buf, data] = reallocate(cnt);
+    data->strByteLength = cnt;
     memcpy(buf, other.cstr() + from, cnt);
     buf[cnt] = '\0';
-}
-
-void String::operator=(const String& other) {
-    copy(*this, other);
 }
 
 void String::operator+=(const String& other) {
     int oldByteSize = byteLength();
     int newSize = oldByteSize + other.byteLength();
-    reallocate(newSize, true);
-    char* buf = cstrNoConst();
+    const auto& [buf, data] = reallocate(newSize, true);
     memcpy(buf + oldByteSize, other.cstr(), other.byteLength() + 1);
-    Data* data = getData();
     data->strByteLength = newSize;
     if (data->_strLength >= 0 && other.getData()->_strLength >= 0) {
         data->_strLength += other.length();
@@ -304,9 +279,7 @@ void String::operator+=(const String& other) {
 
 void String::operator+=(char16 ch) {
     int aLen = byteLength();
-    reallocate(aLen + 4, true);
-    Data* data = getData();
-    char* buf = cstrNoConst();
+    const auto& [buf, data] = reallocate(aLen + 4, true);
     int actualSize = aLen + Unicode::wCharToUtf8(ch, buf + aLen);
     buf[actualSize] = '\0';
     data->strByteLength = actualSize;
@@ -346,7 +319,7 @@ u64 String::getHashCode() const {
     Data* data = getData();
     if (data->_hashCode == 0) {
         if (std::holds_alternative<Literal>(internalData)) {
-            getOrAddLiteralData();
+            data = std::get<Literal>(internalData).shareData();
             if (data->_hashCode != 0) {
                 return data->_hashCode;
             }
@@ -427,31 +400,35 @@ bool String::isEmpty() const {
     return getChars()[0] == '\0';
 }
 
-void String::reallocate(int size, bool copyOldChs) {
+const String::CoreInfo String::reallocate(int size, bool copyOldChs) {
     // Accounting for the terminating byte.
     size++;
 
+    CoreInfo str;
     if (std::holds_alternative<Literal>(internalData)) {
         if (size <= SHORT_STR_CAPACITY) {
-            Data* data = getData();
+            Literal& lit = std::get<Literal>(internalData);
+            Data* data = lit.getData();
             int prevLen = data->strByteLength;
-            char* chs = getChars();
             Unique& u = internalData.emplace<Unique>();
             if (copyOldChs) {
-                memcpy(u.chs, chs, prevLen);
+                memcpy(u.chs, lit.chs, prevLen);
             }
             u.data = *data;
-            return;
+            return u.get();
         }
+        str = std::get<Literal>(internalData).get();
     } else if (std::holds_alternative<Unique>(internalData)) {
         if (size <= SHORT_STR_CAPACITY) {
-            return;
+            return std::get<Unique>(internalData).get();
         }
+        str = std::get<Unique>(internalData).get();
     } else {
         std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
         if (size <= s->cCapacity && s.use_count() == 1) {
-            return;
+            return s->get();
         }
+        str = s->get();
     }
 
     int targetCapacity = 1;
@@ -459,13 +436,14 @@ void String::reallocate(int size, bool copyOldChs) {
 
     std::unique_ptr<char[]> newChs = std::make_unique<char[]>(targetCapacity);
     if (copyOldChs) {
-        memcpy(newChs.get(), cstr(), getData()->strByteLength);
+        memcpy(newChs.get(), str.chs, str.data->strByteLength);
     }
 
-    internalData = std::make_shared<Shared>();
-    std::shared_ptr<Shared>& s = std::get<std::shared_ptr<Shared>>(internalData);
+    std::shared_ptr<Shared>& s = internalData.emplace<std::shared_ptr<Shared>>(std::make_shared<Shared>());
     s->chs = std::move(newChs);
     s->cCapacity = targetCapacity;
+
+    return s->get();
 }
 
 const char* String::cstr() const {
@@ -474,10 +452,6 @@ const char* String::cstr() const {
 
 const char8_t* String::c8str() const {
     return (const char8_t*)getChars();
-}
-
-char* String::cstrNoConst() {
-    return getChars();
 }
 
 const std::vector<char16> String::wstr() const {
@@ -506,9 +480,8 @@ static consteval byte maxIntegerDigits(byte base) {
 template <std::integral I, byte BASE> requires ValidBaseForType<I, BASE>
 const String String::fromInteger(I i, Casing casing) {
     constexpr byte digits = maxIntegerDigits<I>(BASE);
-    String ret(digits);
+    PGE_STRING_WITH_SIZE(ret, buf, retData, digits);
 
-    char* buf = ret.cstrNoConst();
     byte count = 0;
     if constexpr (std::numeric_limits<I>::is_signed) {
         if (i < 0) { buf[0] = '-'; buf++; count++; }
@@ -535,7 +508,6 @@ const String String::fromInteger(I i, Casing casing) {
     }
     std::reverse(buf, buf + count);
 
-    Data* retData = ret.getData();
     retData->strByteLength = count;
     retData->_strLength = retData->strByteLength;
     return ret;
@@ -633,10 +605,9 @@ const String String::fromFloatingPoint(F f) {
     }
     
     int size = snprintf(nullptr, 0, format, f);
-    String ret(size + 1);
-    snprintf(ret.cstrNoConst(), size + 1, format, f);
+    PGE_STRING_WITH_SIZE(ret, buf, retData, size + 1);
+    snprintf(buf, size + 1, format, f);
 
-    Data* retData = ret.getData();
     retData->strByteLength = size;
     retData->_strLength = size;
 
@@ -735,7 +706,7 @@ int String::length() const {
     Data* data = getData();
     if (data->_strLength < 0) {
         if (std::holds_alternative<Literal>(internalData)) {
-            getOrAddLiteralData();
+            data = std::get<Literal>(internalData).shareData();
             if (data->_strLength >= 0) {
                 return data->_strLength;
             }
@@ -811,15 +782,13 @@ const String String::substr(const Iterator& start, const Iterator& to) const {
         + "; to: " + from(to.getBytePosition()) + "; str: " + *this + ")");
 
     int newSize = to.getBytePosition() - start.getBytePosition();
-    String retVal(newSize);
-    Data* retData = retVal.getData();
+    PGE_STRING_WITH_SIZE(ret, buf, retData, newSize);
     retData->strByteLength = newSize;
     // Due to not being friends with Iterators, we just bite the bullet here and hope for the best.
     retData->_strLength = to.getPosition() - start.getPosition();
-    char* retBuf = retVal.cstrNoConst();
-    memcpy(retBuf, cstr() + start.getBytePosition(), newSize);
-    retBuf[newSize] = '\0';
-    return retVal;
+    memcpy(buf, cstr() + start.getBytePosition(), newSize);
+    buf[newSize] = '\0';
+    return ret;
 }
 
 const String::Iterator String::charAt(int pos) const {
@@ -836,23 +805,21 @@ const String String::replace(const String& fnd, const String& rplace) const {
     if (fnd.isEmpty()) { foundPositions.emplace_back(byteLength()); }
     
     int newSize = byteLength() + (int)foundPositions.size() * (rplace.byteLength() - fnd.byteLength());
-    String retVal(newSize);
-    Data* retData = retVal.getData();
+    PGE_STRING_WITH_SIZE(ret, buf, retData, newSize);
     retData->strByteLength = newSize;
 
-    char* retBuf = retVal.cstrNoConst();
     int retPos = 0;
     int thisPos = 0;
     for (int pos : foundPositions) {
         int thisLen = pos - thisPos;
-        memcpy(retBuf + retPos, cstr() + thisPos, thisLen);
+        memcpy(buf + retPos, cstr() + thisPos, thisLen);
         retPos += thisLen;
-        memcpy(retBuf + retPos, rplace.cstr(), rplace.byteLength());
+        memcpy(buf + retPos, rplace.cstr(), rplace.byteLength());
         retPos += rplace.byteLength();
         thisPos = pos + fnd.byteLength();
     }
     // Append the rest of the string, including terminating byte.
-    memcpy(retBuf + retPos, cstr() + thisPos, byteLength() - thisPos + 1);
+    memcpy(buf + retPos, cstr() + thisPos, byteLength() - thisPos + 1);
    
     Data* data = getData();
 
@@ -860,56 +827,42 @@ const String String::replace(const String& fnd, const String& rplace) const {
     if (data->_strLength >= 0) {
         retData->_strLength = data->_strLength + (int)foundPositions.size() * (rplace.length() - fnd.length());
     }
-    return retVal;
+    return ret;
 }
-
-struct String::CharVisitor {
-    char* operator()(const Unique& u) {
-        return (char*)u.chs;
-    }
-    char* operator()(const std::shared_ptr<Shared>& ptr) {
-        return ptr->chs.get();
-    }
-    char* operator()(const Literal& lit) {
-        return lit.chs;
-    }
-};
 
 char* String::getChars() const {
-    return std::visit(CharVisitor(), internalData);
+    if (std::holds_alternative<Unique>(internalData)) {
+        return std::get<Unique>(internalData).chs;
+    } else if (std::holds_alternative<std::shared_ptr<Shared>>(internalData)) {
+        return std::get<std::shared_ptr<Shared>>(internalData)->chs.get();
+    } else {
+        return std::get<Literal>(internalData).chs;
+    }
 }
-
-struct String::DataVisitor {
-    Data* operator()(const Unique& u) {
-        return (Data*)&u.data;
-    }
-    Data* operator()(const std::shared_ptr<Shared>& ptr) {
-        return &ptr->data;
-    }
-    Data* operator()(const Literal& lit) {
-        return std::holds_alternative<Data>(lit.data) ? (Data*)&std::get<Data>(lit.data) : std::get<Data*>(lit.data);
-    }
-};
 
 String::Data* String::getData() const {
-    return std::visit(DataVisitor(), internalData);
+    if (std::holds_alternative<Unique>(internalData)) {
+        return &std::get<Unique>(internalData).data;
+    } else if (std::holds_alternative<std::shared_ptr<Shared>>(internalData)) {
+        return &std::get<std::shared_ptr<Shared>>(internalData)->data;
+    } else {
+        return std::get<Literal>(internalData).getData();
+    }
 }
 
-void String::getOrAddLiteralData() const {
+String::Data* String::Literal::shareData() {
     static std::unordered_map<const char*, String::Data> litData;
     static std::mutex litMut;
 
-    char* chs = getChars();
-
-    Data* data;
+    Data* newData;
     const auto& it = litData.find(chs);
     if (it != litData.end()) {
-        data = &it->second;
+        newData = &it->second;
     } else {
         int litSize = getData()->strByteLength;
         { // This needs to be synced.
             std::lock_guard lock(litMut);
-            data = &litData.emplace(
+            newData = &litData.emplace(
                 chs,
                 Data {
                     .strByteLength = litSize,
@@ -917,13 +870,12 @@ void String::getOrAddLiteralData() const {
             ).first->second;
         }
     }
-    std::get<Literal>(internalData).data.emplace<Data*>(data);
+    return data.emplace<Data*>(newData);
 }
 
 // TODO: Funny special cases!
 const String String::performCaseConversion(const std::function<void (String&, char16)>& func) const {
-    String ret(byteLength());
-    Data* retData = ret.getData();
+    PGE_STRING_WITH_SIZE(ret, buf, retData, byteLength());
     retData->strByteLength = 0;
     retData->_strLength = 0;
     for (char16 ch : *this) {
@@ -962,8 +914,7 @@ const String String::trim() const {
 
 const String String::reverse() const {
     int len = byteLength();
-    String ret(len);
-    char* buf = ret.cstrNoConst();
+    PGE_STRING_WITH_SIZE(ret, buf, retData, len);
     buf[len] = '\0';
     buf += len;
     for (int i = 0; i < len;) {
@@ -972,7 +923,6 @@ const String String::reverse() const {
         memcpy(buf, cstr() + i, codepoint);
         i += codepoint;
     }
-    Data* retData = ret.getData();
     retData->strByteLength = len;
     retData->_strLength = getData()->_strLength;
     return ret;
@@ -984,8 +934,7 @@ const String String::repeat(int count, const String& separator) const {
     int curLength = byteLength();
     int sepLength = separator.byteLength();
     int newLength = curLength * count + sepLength * (count - 1);
-    String ret(newLength);
-    char* buf = ret.cstrNoConst();
+    PGE_STRING_WITH_SIZE(ret, buf, retData, newLength);
     buf[newLength] = '\0';
     for (int i : Range(count)) {
         if (i != 0) {
@@ -995,7 +944,6 @@ const String String::repeat(int count, const String& separator) const {
         memcpy(buf, cstr(), curLength);
         buf += curLength;
     }
-    Data* retData = ret.getData();
     retData->strByteLength = newLength;
     if (getData()->_strLength >= 0) { retData->_strLength = length() * count + separator.length() * (count - 1); }
     return ret;
@@ -1051,7 +999,7 @@ String String::unHex() const {
     const char* buf = cstr();
 
     String ret(64);
-    char* retBuf = ret.cstrNoConst();
+    char* buf = ret.getChars();
     int resultSize = 0;
 
     int tempAscVal = 0;
@@ -1063,7 +1011,7 @@ String String::unHex() const {
                 if (buf[i] == '%') {
                     isUnhexing = 1;
                 } else {
-                    retBuf[resultSize] = buf[i];
+                    buf[resultSize] = buf[i];
                     resultSize++;
                 }
             } else {
@@ -1080,18 +1028,18 @@ String String::unHex() const {
                     isUnhexing = 2;
                 } else if (isUnhexing == 2) {
                     tempAscVal |= toDec;
-                    retBuf[resultSize] = tempAscVal;
+                    buf[resultSize] = tempAscVal;
                     resultSize++;
                     isUnhexing = 0;
                 }
             }
         } else {
             for (int j : Range(codepoint)) {
-                retBuf[i + j] = buf[i + j];
+                buf[i + j] = buf[i + j];
             }
         }
     }
-    retBuf[resultSize] = '\0';
+    buf[resultSize] = '\0';
     ret.strByteLength = resultSize;
     return ret;
 }*/
