@@ -2,7 +2,9 @@
 	path = Libraries/SDL2
 	url = git@github.com:juanjp600/SDL.git
 	branch = main-2.0.14
-	
 [submodule "Libraries/SPIRV-Reflect"]
 	path = Libraries/SPIRV-Reflect
 	url = git@github.com:KhronosGroup/SPIRV-Reflect.git
+[submodule "Tests/doctest"]
+	path = Tests/doctest
+	url = git@github.com:doctest/doctest.git

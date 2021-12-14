@@ -93,7 +93,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
             queue.push(u'\u006A');
             queue.push(u'\u030C');
         } break;
-        case u'\u004B':
+        case u'\u004B': [[fallthrough]];
         case u'\u212A': {
             queue.push(u'\u006B');
         } break;
@@ -118,16 +118,16 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u0052': {
             queue.push(u'\u0072');
         } break;
-        case u'\u0053':
+        case u'\u0053': [[fallthrough]];
         case u'\u017F': {
             queue.push(u'\u0073');
         } break;
-        case u'\u00DF':
+        case u'\u00DF': [[fallthrough]];
         case u'\u1E9E': {
             queue.push(u'\u0073');
             queue.push(u'\u0073');
         } break;
-        case u'\uFB05':
+        case u'\uFB05': [[fallthrough]];
         case u'\uFB06': {
             queue.push(u'\u0073');
             queue.push(u'\u0074');
@@ -180,7 +180,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u00C4': {
             queue.push(u'\u00E4');
         } break;
-        case u'\u00C5':
+        case u'\u00C5': [[fallthrough]];
         case u'\u212B': {
             queue.push(u'\u00E5');
         } break;
@@ -505,15 +505,15 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u01F7': {
             queue.push(u'\u01BF');
         } break;
-        case u'\u01C4':
+        case u'\u01C4': [[fallthrough]];
         case u'\u01C5': {
             queue.push(u'\u01C6');
         } break;
-        case u'\u01C7':
+        case u'\u01C7': [[fallthrough]];
         case u'\u01C8': {
             queue.push(u'\u01C9');
         } break;
-        case u'\u01CA':
+        case u'\u01CA': [[fallthrough]];
         case u'\u01CB': {
             queue.push(u'\u01CC');
         } break;
@@ -571,7 +571,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u01EE': {
             queue.push(u'\u01EF');
         } break;
-        case u'\u01F1':
+        case u'\u01F1': [[fallthrough]];
         case u'\u01F2': {
             queue.push(u'\u01F3');
         } break;
@@ -857,12 +857,12 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
             queue.push(u'\u0342');
             queue.push(u'\u03B9');
         } break;
-        case u'\u1FB3':
+        case u'\u1FB3': [[fallthrough]];
         case u'\u1FBC': {
             queue.push(u'\u03B1');
             queue.push(u'\u03B9');
         } break;
-        case u'\u0392':
+        case u'\u0392': [[fallthrough]];
         case u'\u03D0': {
             queue.push(u'\u03B2');
         } break;
@@ -872,7 +872,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u0394': {
             queue.push(u'\u03B4');
         } break;
-        case u'\u0395':
+        case u'\u0395': [[fallthrough]];
         case u'\u03F5': {
             queue.push(u'\u03B5');
         } break;
@@ -891,18 +891,18 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
             queue.push(u'\u0342');
             queue.push(u'\u03B9');
         } break;
-        case u'\u1FC3':
+        case u'\u1FC3': [[fallthrough]];
         case u'\u1FCC': {
             queue.push(u'\u03B7');
             queue.push(u'\u03B9');
         } break;
-        case u'\u0398':
-        case u'\u03D1':
+        case u'\u0398': [[fallthrough]];
+        case u'\u03D1': [[fallthrough]];
         case u'\u03F4': {
             queue.push(u'\u03B8');
         } break;
-        case u'\u0345':
-        case u'\u0399':
+        case u'\u0345': [[fallthrough]];
+        case u'\u0399': [[fallthrough]];
         case u'\u1FBE': {
             queue.push(u'\u03B9');
         } break;
@@ -911,7 +911,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
             queue.push(u'\u0308');
             queue.push(u'\u0300');
         } break;
-        case u'\u0390':
+        case u'\u0390': [[fallthrough]];
         case u'\u1FD3': {
             queue.push(u'\u03B9');
             queue.push(u'\u0308');
@@ -926,14 +926,14 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
             queue.push(u'\u03B9');
             queue.push(u'\u0342');
         } break;
-        case u'\u039A':
+        case u'\u039A': [[fallthrough]];
         case u'\u03F0': {
             queue.push(u'\u03BA');
         } break;
         case u'\u039B': {
             queue.push(u'\u03BB');
         } break;
-        case u'\u00B5':
+        case u'\u00B5': [[fallthrough]];
         case u'\u039C': {
             queue.push(u'\u03BC');
         } break;
@@ -946,11 +946,11 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u039F': {
             queue.push(u'\u03BF');
         } break;
-        case u'\u03A0':
+        case u'\u03A0': [[fallthrough]];
         case u'\u03D6': {
             queue.push(u'\u03C0');
         } break;
-        case u'\u03A1':
+        case u'\u03A1': [[fallthrough]];
         case u'\u03F1': {
             queue.push(u'\u03C1');
         } break;
@@ -958,7 +958,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
             queue.push(u'\u03C1');
             queue.push(u'\u0313');
         } break;
-        case u'\u03A3':
+        case u'\u03A3': [[fallthrough]];
         case u'\u03C2': {
             queue.push(u'\u03C3');
         } break;
@@ -973,7 +973,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
             queue.push(u'\u0308');
             queue.push(u'\u0300');
         } break;
-        case u'\u03B0':
+        case u'\u03B0': [[fallthrough]];
         case u'\u1FE3': {
             queue.push(u'\u03C5');
             queue.push(u'\u0308');
@@ -1007,7 +1007,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
             queue.push(u'\u03C5');
             queue.push(u'\u0342');
         } break;
-        case u'\u03A6':
+        case u'\u03A6': [[fallthrough]];
         case u'\u03D5': {
             queue.push(u'\u03C6');
         } break;
@@ -1017,7 +1017,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u03A8': {
             queue.push(u'\u03C8');
         } break;
-        case u'\u03A9':
+        case u'\u03A9': [[fallthrough]];
         case u'\u2126': {
             queue.push(u'\u03C9');
         } break;
@@ -1030,7 +1030,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
             queue.push(u'\u0342');
             queue.push(u'\u03B9');
         } break;
-        case u'\u1FF3':
+        case u'\u1FF3': [[fallthrough]];
         case u'\u1FFC': {
             queue.push(u'\u03C9');
             queue.push(u'\u03B9');
@@ -1111,14 +1111,14 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u0411': {
             queue.push(u'\u0431');
         } break;
-        case u'\u0412':
+        case u'\u0412': [[fallthrough]];
         case u'\u1C80': {
             queue.push(u'\u0432');
         } break;
         case u'\u0413': {
             queue.push(u'\u0433');
         } break;
-        case u'\u0414':
+        case u'\u0414': [[fallthrough]];
         case u'\u1C81': {
             queue.push(u'\u0434');
         } break;
@@ -1149,7 +1149,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u041D': {
             queue.push(u'\u043D');
         } break;
-        case u'\u041E':
+        case u'\u041E': [[fallthrough]];
         case u'\u1C82': {
             queue.push(u'\u043E');
         } break;
@@ -1159,12 +1159,12 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u0420': {
             queue.push(u'\u0440');
         } break;
-        case u'\u0421':
+        case u'\u0421': [[fallthrough]];
         case u'\u1C83': {
             queue.push(u'\u0441');
         } break;
-        case u'\u0422':
-        case u'\u1C84':
+        case u'\u0422': [[fallthrough]];
+        case u'\u1C84': [[fallthrough]];
         case u'\u1C85': {
             queue.push(u'\u0442');
         } break;
@@ -1189,7 +1189,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u0429': {
             queue.push(u'\u0449');
         } break;
-        case u'\u042A':
+        case u'\u042A': [[fallthrough]];
         case u'\u1C86': {
             queue.push(u'\u044A');
         } break;
@@ -1259,7 +1259,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u0460': {
             queue.push(u'\u0461');
         } break;
-        case u'\u0462':
+        case u'\u0462': [[fallthrough]];
         case u'\u1C87': {
             queue.push(u'\u0463');
         } break;
@@ -2244,7 +2244,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1E5E': {
             queue.push(u'\u1E5F');
         } break;
-        case u'\u1E60':
+        case u'\u1E60': [[fallthrough]];
         case u'\u1E9B': {
             queue.push(u'\u1E61');
         } break;
@@ -2473,7 +2473,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F08': {
             queue.push(u'\u1F00');
         } break;
-        case u'\u1F80':
+        case u'\u1F80': [[fallthrough]];
         case u'\u1F88': {
             queue.push(u'\u1F00');
             queue.push(u'\u03B9');
@@ -2481,7 +2481,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F09': {
             queue.push(u'\u1F01');
         } break;
-        case u'\u1F81':
+        case u'\u1F81': [[fallthrough]];
         case u'\u1F89': {
             queue.push(u'\u1F01');
             queue.push(u'\u03B9');
@@ -2489,7 +2489,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F0A': {
             queue.push(u'\u1F02');
         } break;
-        case u'\u1F82':
+        case u'\u1F82': [[fallthrough]];
         case u'\u1F8A': {
             queue.push(u'\u1F02');
             queue.push(u'\u03B9');
@@ -2497,7 +2497,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F0B': {
             queue.push(u'\u1F03');
         } break;
-        case u'\u1F83':
+        case u'\u1F83': [[fallthrough]];
         case u'\u1F8B': {
             queue.push(u'\u1F03');
             queue.push(u'\u03B9');
@@ -2505,7 +2505,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F0C': {
             queue.push(u'\u1F04');
         } break;
-        case u'\u1F84':
+        case u'\u1F84': [[fallthrough]];
         case u'\u1F8C': {
             queue.push(u'\u1F04');
             queue.push(u'\u03B9');
@@ -2513,7 +2513,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F0D': {
             queue.push(u'\u1F05');
         } break;
-        case u'\u1F85':
+        case u'\u1F85': [[fallthrough]];
         case u'\u1F8D': {
             queue.push(u'\u1F05');
             queue.push(u'\u03B9');
@@ -2521,7 +2521,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F0E': {
             queue.push(u'\u1F06');
         } break;
-        case u'\u1F86':
+        case u'\u1F86': [[fallthrough]];
         case u'\u1F8E': {
             queue.push(u'\u1F06');
             queue.push(u'\u03B9');
@@ -2529,7 +2529,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F0F': {
             queue.push(u'\u1F07');
         } break;
-        case u'\u1F87':
+        case u'\u1F87': [[fallthrough]];
         case u'\u1F8F': {
             queue.push(u'\u1F07');
             queue.push(u'\u03B9');
@@ -2555,7 +2555,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F28': {
             queue.push(u'\u1F20');
         } break;
-        case u'\u1F90':
+        case u'\u1F90': [[fallthrough]];
         case u'\u1F98': {
             queue.push(u'\u1F20');
             queue.push(u'\u03B9');
@@ -2563,7 +2563,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F29': {
             queue.push(u'\u1F21');
         } break;
-        case u'\u1F91':
+        case u'\u1F91': [[fallthrough]];
         case u'\u1F99': {
             queue.push(u'\u1F21');
             queue.push(u'\u03B9');
@@ -2571,7 +2571,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F2A': {
             queue.push(u'\u1F22');
         } break;
-        case u'\u1F92':
+        case u'\u1F92': [[fallthrough]];
         case u'\u1F9A': {
             queue.push(u'\u1F22');
             queue.push(u'\u03B9');
@@ -2579,7 +2579,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F2B': {
             queue.push(u'\u1F23');
         } break;
-        case u'\u1F93':
+        case u'\u1F93': [[fallthrough]];
         case u'\u1F9B': {
             queue.push(u'\u1F23');
             queue.push(u'\u03B9');
@@ -2587,7 +2587,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F2C': {
             queue.push(u'\u1F24');
         } break;
-        case u'\u1F94':
+        case u'\u1F94': [[fallthrough]];
         case u'\u1F9C': {
             queue.push(u'\u1F24');
             queue.push(u'\u03B9');
@@ -2595,7 +2595,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F2D': {
             queue.push(u'\u1F25');
         } break;
-        case u'\u1F95':
+        case u'\u1F95': [[fallthrough]];
         case u'\u1F9D': {
             queue.push(u'\u1F25');
             queue.push(u'\u03B9');
@@ -2603,7 +2603,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F2E': {
             queue.push(u'\u1F26');
         } break;
-        case u'\u1F96':
+        case u'\u1F96': [[fallthrough]];
         case u'\u1F9E': {
             queue.push(u'\u1F26');
             queue.push(u'\u03B9');
@@ -2611,7 +2611,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F2F': {
             queue.push(u'\u1F27');
         } break;
-        case u'\u1F97':
+        case u'\u1F97': [[fallthrough]];
         case u'\u1F9F': {
             queue.push(u'\u1F27');
             queue.push(u'\u03B9');
@@ -2673,7 +2673,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F68': {
             queue.push(u'\u1F60');
         } break;
-        case u'\u1FA0':
+        case u'\u1FA0': [[fallthrough]];
         case u'\u1FA8': {
             queue.push(u'\u1F60');
             queue.push(u'\u03B9');
@@ -2681,7 +2681,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F69': {
             queue.push(u'\u1F61');
         } break;
-        case u'\u1FA1':
+        case u'\u1FA1': [[fallthrough]];
         case u'\u1FA9': {
             queue.push(u'\u1F61');
             queue.push(u'\u03B9');
@@ -2689,7 +2689,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F6A': {
             queue.push(u'\u1F62');
         } break;
-        case u'\u1FA2':
+        case u'\u1FA2': [[fallthrough]];
         case u'\u1FAA': {
             queue.push(u'\u1F62');
             queue.push(u'\u03B9');
@@ -2697,7 +2697,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F6B': {
             queue.push(u'\u1F63');
         } break;
-        case u'\u1FA3':
+        case u'\u1FA3': [[fallthrough]];
         case u'\u1FAB': {
             queue.push(u'\u1F63');
             queue.push(u'\u03B9');
@@ -2705,7 +2705,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F6C': {
             queue.push(u'\u1F64');
         } break;
-        case u'\u1FA4':
+        case u'\u1FA4': [[fallthrough]];
         case u'\u1FAC': {
             queue.push(u'\u1F64');
             queue.push(u'\u03B9');
@@ -2713,7 +2713,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F6D': {
             queue.push(u'\u1F65');
         } break;
-        case u'\u1FA5':
+        case u'\u1FA5': [[fallthrough]];
         case u'\u1FAD': {
             queue.push(u'\u1F65');
             queue.push(u'\u03B9');
@@ -2721,7 +2721,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F6E': {
             queue.push(u'\u1F66');
         } break;
-        case u'\u1FA6':
+        case u'\u1FA6': [[fallthrough]];
         case u'\u1FAE': {
             queue.push(u'\u1F66');
             queue.push(u'\u03B9');
@@ -2729,7 +2729,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\u1F6F': {
             queue.push(u'\u1F67');
         } break;
-        case u'\u1FA7':
+        case u'\u1FA7': [[fallthrough]];
         case u'\u1FAF': {
             queue.push(u'\u1F67');
             queue.push(u'\u03B9');
@@ -3400,7 +3400,7 @@ void Unicode::fold(std::queue<char16>& queue, char16 ch) {
         case u'\uA648': {
             queue.push(u'\uA649');
         } break;
-        case u'\u1C88':
+        case u'\u1C88': [[fallthrough]];
         case u'\uA64A': {
             queue.push(u'\uA64B');
         } break;
@@ -3827,7 +3827,7 @@ void Unicode::up(String& str, char16 ch) {
             str += u'\u004A';
             str += u'\u030C';
         } break;
-        case u'\uFB05':
+        case u'\uFB05': [[fallthrough]];
         case u'\uFB06': {
             str += u'\u0053';
             str += u'\u0054';
@@ -3872,7 +3872,7 @@ void Unicode::up(String& str, char16 ch) {
             str += u'\u0342';
             str += u'\u0399';
         } break;
-        case u'\u1FB3':
+        case u'\u1FB3': [[fallthrough]];
         case u'\u1FBC': {
             str += u'\u0391';
             str += u'\u0399';
@@ -3886,7 +3886,7 @@ void Unicode::up(String& str, char16 ch) {
             str += u'\u0342';
             str += u'\u0399';
         } break;
-        case u'\u1FC3':
+        case u'\u1FC3': [[fallthrough]];
         case u'\u1FCC': {
             str += u'\u0397';
             str += u'\u0399';
@@ -3896,7 +3896,7 @@ void Unicode::up(String& str, char16 ch) {
             str += u'\u0308';
             str += u'\u0300';
         } break;
-        case u'\u0390':
+        case u'\u0390': [[fallthrough]];
         case u'\u1FD3': {
             str += u'\u0399';
             str += u'\u0308';
@@ -3920,7 +3920,7 @@ void Unicode::up(String& str, char16 ch) {
             str += u'\u0308';
             str += u'\u0300';
         } break;
-        case u'\u03B0':
+        case u'\u03B0': [[fallthrough]];
         case u'\u1FE3': {
             str += u'\u03A5';
             str += u'\u0308';
@@ -3963,7 +3963,7 @@ void Unicode::up(String& str, char16 ch) {
             str += u'\u0342';
             str += u'\u0399';
         } break;
-        case u'\u1FF3':
+        case u'\u1FF3': [[fallthrough]];
         case u'\u1FFC': {
             str += u'\u03A9';
             str += u'\u0399';
@@ -3992,122 +3992,122 @@ void Unicode::up(String& str, char16 ch) {
             str += u'\u054E';
             str += u'\u0546';
         } break;
-        case u'\u1F80':
+        case u'\u1F80': [[fallthrough]];
         case u'\u1F88': {
             str += u'\u1F08';
             str += u'\u0399';
         } break;
-        case u'\u1F81':
+        case u'\u1F81': [[fallthrough]];
         case u'\u1F89': {
             str += u'\u1F09';
             str += u'\u0399';
         } break;
-        case u'\u1F82':
+        case u'\u1F82': [[fallthrough]];
         case u'\u1F8A': {
             str += u'\u1F0A';
             str += u'\u0399';
         } break;
-        case u'\u1F83':
+        case u'\u1F83': [[fallthrough]];
         case u'\u1F8B': {
             str += u'\u1F0B';
             str += u'\u0399';
         } break;
-        case u'\u1F84':
+        case u'\u1F84': [[fallthrough]];
         case u'\u1F8C': {
             str += u'\u1F0C';
             str += u'\u0399';
         } break;
-        case u'\u1F85':
+        case u'\u1F85': [[fallthrough]];
         case u'\u1F8D': {
             str += u'\u1F0D';
             str += u'\u0399';
         } break;
-        case u'\u1F86':
+        case u'\u1F86': [[fallthrough]];
         case u'\u1F8E': {
             str += u'\u1F0E';
             str += u'\u0399';
         } break;
-        case u'\u1F87':
+        case u'\u1F87': [[fallthrough]];
         case u'\u1F8F': {
             str += u'\u1F0F';
             str += u'\u0399';
         } break;
-        case u'\u1F90':
+        case u'\u1F90': [[fallthrough]];
         case u'\u1F98': {
             str += u'\u1F28';
             str += u'\u0399';
         } break;
-        case u'\u1F91':
+        case u'\u1F91': [[fallthrough]];
         case u'\u1F99': {
             str += u'\u1F29';
             str += u'\u0399';
         } break;
-        case u'\u1F92':
+        case u'\u1F92': [[fallthrough]];
         case u'\u1F9A': {
             str += u'\u1F2A';
             str += u'\u0399';
         } break;
-        case u'\u1F93':
+        case u'\u1F93': [[fallthrough]];
         case u'\u1F9B': {
             str += u'\u1F2B';
             str += u'\u0399';
         } break;
-        case u'\u1F94':
+        case u'\u1F94': [[fallthrough]];
         case u'\u1F9C': {
             str += u'\u1F2C';
             str += u'\u0399';
         } break;
-        case u'\u1F95':
+        case u'\u1F95': [[fallthrough]];
         case u'\u1F9D': {
             str += u'\u1F2D';
             str += u'\u0399';
         } break;
-        case u'\u1F96':
+        case u'\u1F96': [[fallthrough]];
         case u'\u1F9E': {
             str += u'\u1F2E';
             str += u'\u0399';
         } break;
-        case u'\u1F97':
+        case u'\u1F97': [[fallthrough]];
         case u'\u1F9F': {
             str += u'\u1F2F';
             str += u'\u0399';
         } break;
-        case u'\u1FA0':
+        case u'\u1FA0': [[fallthrough]];
         case u'\u1FA8': {
             str += u'\u1F68';
             str += u'\u0399';
         } break;
-        case u'\u1FA1':
+        case u'\u1FA1': [[fallthrough]];
         case u'\u1FA9': {
             str += u'\u1F69';
             str += u'\u0399';
         } break;
-        case u'\u1FA2':
+        case u'\u1FA2': [[fallthrough]];
         case u'\u1FAA': {
             str += u'\u1F6A';
             str += u'\u0399';
         } break;
-        case u'\u1FA3':
+        case u'\u1FA3': [[fallthrough]];
         case u'\u1FAB': {
             str += u'\u1F6B';
             str += u'\u0399';
         } break;
-        case u'\u1FA4':
+        case u'\u1FA4': [[fallthrough]];
         case u'\u1FAC': {
             str += u'\u1F6C';
             str += u'\u0399';
         } break;
-        case u'\u1FA5':
+        case u'\u1FA5': [[fallthrough]];
         case u'\u1FAD': {
             str += u'\u1F6D';
             str += u'\u0399';
         } break;
-        case u'\u1FA6':
+        case u'\u1FA6': [[fallthrough]];
         case u'\u1FAE': {
             str += u'\u1F6E';
             str += u'\u0399';
         } break;
-        case u'\u1FA7':
+        case u'\u1FA7': [[fallthrough]];
         case u'\u1FAF': {
             str += u'\u1F6F';
             str += u'\u0399';
@@ -4148,7 +4148,7 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u0068': {
             str += u'\u0048';
         } break;
-        case u'\u0069':
+        case u'\u0069': [[fallthrough]];
         case u'\u0131': {
             str += u'\u0049';
         } break;
@@ -4179,7 +4179,7 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u0072': {
             str += u'\u0052';
         } break;
-        case u'\u0073':
+        case u'\u0073': [[fallthrough]];
         case u'\u017F': {
             str += u'\u0053';
         } break;
@@ -4588,15 +4588,15 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u01BD': {
             str += u'\u01BC';
         } break;
-        case u'\u01C5':
+        case u'\u01C5': [[fallthrough]];
         case u'\u01C6': {
             str += u'\u01C4';
         } break;
-        case u'\u01C8':
+        case u'\u01C8': [[fallthrough]];
         case u'\u01C9': {
             str += u'\u01C7';
         } break;
-        case u'\u01CB':
+        case u'\u01CB': [[fallthrough]];
         case u'\u01CC': {
             str += u'\u01CA';
         } break;
@@ -4651,7 +4651,7 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u01EF': {
             str += u'\u01EE';
         } break;
-        case u'\u01F2':
+        case u'\u01F2': [[fallthrough]];
         case u'\u01F3': {
             str += u'\u01F1';
         } break;
@@ -4829,7 +4829,7 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u03B1': {
             str += u'\u0391';
         } break;
-        case u'\u03B2':
+        case u'\u03B2': [[fallthrough]];
         case u'\u03D0': {
             str += u'\u0392';
         } break;
@@ -4839,7 +4839,7 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u03B4': {
             str += u'\u0394';
         } break;
-        case u'\u03B5':
+        case u'\u03B5': [[fallthrough]];
         case u'\u03F5': {
             str += u'\u0395';
         } break;
@@ -4849,23 +4849,23 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u03B7': {
             str += u'\u0397';
         } break;
-        case u'\u03B8':
+        case u'\u03B8': [[fallthrough]];
         case u'\u03D1': {
             str += u'\u0398';
         } break;
-        case u'\u0345':
-        case u'\u03B9':
+        case u'\u0345': [[fallthrough]];
+        case u'\u03B9': [[fallthrough]];
         case u'\u1FBE': {
             str += u'\u0399';
         } break;
-        case u'\u03BA':
+        case u'\u03BA': [[fallthrough]];
         case u'\u03F0': {
             str += u'\u039A';
         } break;
         case u'\u03BB': {
             str += u'\u039B';
         } break;
-        case u'\u00B5':
+        case u'\u00B5': [[fallthrough]];
         case u'\u03BC': {
             str += u'\u039C';
         } break;
@@ -4878,15 +4878,15 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u03BF': {
             str += u'\u039F';
         } break;
-        case u'\u03C0':
+        case u'\u03C0': [[fallthrough]];
         case u'\u03D6': {
             str += u'\u03A0';
         } break;
-        case u'\u03C1':
+        case u'\u03C1': [[fallthrough]];
         case u'\u03F1': {
             str += u'\u03A1';
         } break;
-        case u'\u03C2':
+        case u'\u03C2': [[fallthrough]];
         case u'\u03C3': {
             str += u'\u03A3';
         } break;
@@ -4896,7 +4896,7 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u03C5': {
             str += u'\u03A5';
         } break;
-        case u'\u03C6':
+        case u'\u03C6': [[fallthrough]];
         case u'\u03D5': {
             str += u'\u03A6';
         } break;
@@ -5026,14 +5026,14 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u0431': {
             str += u'\u0411';
         } break;
-        case u'\u0432':
+        case u'\u0432': [[fallthrough]];
         case u'\u1C80': {
             str += u'\u0412';
         } break;
         case u'\u0433': {
             str += u'\u0413';
         } break;
-        case u'\u0434':
+        case u'\u0434': [[fallthrough]];
         case u'\u1C81': {
             str += u'\u0414';
         } break;
@@ -5064,7 +5064,7 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u043D': {
             str += u'\u041D';
         } break;
-        case u'\u043E':
+        case u'\u043E': [[fallthrough]];
         case u'\u1C82': {
             str += u'\u041E';
         } break;
@@ -5074,12 +5074,12 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u0440': {
             str += u'\u0420';
         } break;
-        case u'\u0441':
+        case u'\u0441': [[fallthrough]];
         case u'\u1C83': {
             str += u'\u0421';
         } break;
-        case u'\u0442':
-        case u'\u1C84':
+        case u'\u0442': [[fallthrough]];
+        case u'\u1C84': [[fallthrough]];
         case u'\u1C85': {
             str += u'\u0422';
         } break;
@@ -5104,7 +5104,7 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u0449': {
             str += u'\u0429';
         } break;
-        case u'\u044A':
+        case u'\u044A': [[fallthrough]];
         case u'\u1C86': {
             str += u'\u042A';
         } break;
@@ -5126,7 +5126,7 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u0461': {
             str += u'\u0460';
         } break;
-        case u'\u0463':
+        case u'\u0463': [[fallthrough]];
         case u'\u1C87': {
             str += u'\u0462';
         } break;
@@ -6198,7 +6198,7 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u1E5F': {
             str += u'\u1E5E';
         } break;
-        case u'\u1E61':
+        case u'\u1E61': [[fallthrough]];
         case u'\u1E9B': {
             str += u'\u1E60';
         } break;
@@ -7126,7 +7126,7 @@ void Unicode::up(String& str, char16 ch) {
         case u'\uA649': {
             str += u'\uA648';
         } break;
-        case u'\u1C88':
+        case u'\u1C88': [[fallthrough]];
         case u'\uA64B': {
             str += u'\uA64A';
         } break;
@@ -7604,106 +7604,106 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u1F56': {
             str += u'\u1F56';
         } break;
-        case u'\u1F80':
+        case u'\u1F80': [[fallthrough]];
         case u'\u1F88': {
             str += u'\u1F80';
         } break;
-        case u'\u1F81':
+        case u'\u1F81': [[fallthrough]];
         case u'\u1F89': {
             str += u'\u1F81';
         } break;
-        case u'\u1F82':
+        case u'\u1F82': [[fallthrough]];
         case u'\u1F8A': {
             str += u'\u1F82';
         } break;
-        case u'\u1F83':
+        case u'\u1F83': [[fallthrough]];
         case u'\u1F8B': {
             str += u'\u1F83';
         } break;
-        case u'\u1F84':
+        case u'\u1F84': [[fallthrough]];
         case u'\u1F8C': {
             str += u'\u1F84';
         } break;
-        case u'\u1F85':
+        case u'\u1F85': [[fallthrough]];
         case u'\u1F8D': {
             str += u'\u1F85';
         } break;
-        case u'\u1F86':
+        case u'\u1F86': [[fallthrough]];
         case u'\u1F8E': {
             str += u'\u1F86';
         } break;
-        case u'\u1F87':
+        case u'\u1F87': [[fallthrough]];
         case u'\u1F8F': {
             str += u'\u1F87';
         } break;
-        case u'\u1F90':
+        case u'\u1F90': [[fallthrough]];
         case u'\u1F98': {
             str += u'\u1F90';
         } break;
-        case u'\u1F91':
+        case u'\u1F91': [[fallthrough]];
         case u'\u1F99': {
             str += u'\u1F91';
         } break;
-        case u'\u1F92':
+        case u'\u1F92': [[fallthrough]];
         case u'\u1F9A': {
             str += u'\u1F92';
         } break;
-        case u'\u1F93':
+        case u'\u1F93': [[fallthrough]];
         case u'\u1F9B': {
             str += u'\u1F93';
         } break;
-        case u'\u1F94':
+        case u'\u1F94': [[fallthrough]];
         case u'\u1F9C': {
             str += u'\u1F94';
         } break;
-        case u'\u1F95':
+        case u'\u1F95': [[fallthrough]];
         case u'\u1F9D': {
             str += u'\u1F95';
         } break;
-        case u'\u1F96':
+        case u'\u1F96': [[fallthrough]];
         case u'\u1F9E': {
             str += u'\u1F96';
         } break;
-        case u'\u1F97':
+        case u'\u1F97': [[fallthrough]];
         case u'\u1F9F': {
             str += u'\u1F97';
         } break;
-        case u'\u1FA0':
+        case u'\u1FA0': [[fallthrough]];
         case u'\u1FA8': {
             str += u'\u1FA0';
         } break;
-        case u'\u1FA1':
+        case u'\u1FA1': [[fallthrough]];
         case u'\u1FA9': {
             str += u'\u1FA1';
         } break;
-        case u'\u1FA2':
+        case u'\u1FA2': [[fallthrough]];
         case u'\u1FAA': {
             str += u'\u1FA2';
         } break;
-        case u'\u1FA3':
+        case u'\u1FA3': [[fallthrough]];
         case u'\u1FAB': {
             str += u'\u1FA3';
         } break;
-        case u'\u1FA4':
+        case u'\u1FA4': [[fallthrough]];
         case u'\u1FAC': {
             str += u'\u1FA4';
         } break;
-        case u'\u1FA5':
+        case u'\u1FA5': [[fallthrough]];
         case u'\u1FAD': {
             str += u'\u1FA5';
         } break;
-        case u'\u1FA6':
+        case u'\u1FA6': [[fallthrough]];
         case u'\u1FAE': {
             str += u'\u1FA6';
         } break;
-        case u'\u1FA7':
+        case u'\u1FA7': [[fallthrough]];
         case u'\u1FAF': {
             str += u'\u1FA7';
         } break;
         case u'\u1FB2': {
             str += u'\u1FB2';
         } break;
-        case u'\u1FB3':
+        case u'\u1FB3': [[fallthrough]];
         case u'\u1FBC': {
             str += u'\u1FB3';
         } break;
@@ -7719,7 +7719,7 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u1FC2': {
             str += u'\u1FC2';
         } break;
-        case u'\u1FC3':
+        case u'\u1FC3': [[fallthrough]];
         case u'\u1FCC': {
             str += u'\u1FC3';
         } break;
@@ -7762,7 +7762,7 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u1FF2': {
             str += u'\u1FF2';
         } break;
-        case u'\u1FF3':
+        case u'\u1FF3': [[fallthrough]];
         case u'\u1FFC': {
             str += u'\u1FF3';
         } break;
@@ -7841,7 +7841,7 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u004A': {
             str += u'\u006A';
         } break;
-        case u'\u004B':
+        case u'\u004B': [[fallthrough]];
         case u'\u212A': {
             str += u'\u006B';
         } break;
@@ -7908,7 +7908,7 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u00C4': {
             str += u'\u00E4';
         } break;
-        case u'\u00C5':
+        case u'\u00C5': [[fallthrough]];
         case u'\u212B': {
             str += u'\u00E5';
         } break;
@@ -8233,15 +8233,15 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u01F7': {
             str += u'\u01BF';
         } break;
-        case u'\u01C4':
+        case u'\u01C4': [[fallthrough]];
         case u'\u01C5': {
             str += u'\u01C6';
         } break;
-        case u'\u01C7':
+        case u'\u01C7': [[fallthrough]];
         case u'\u01C8': {
             str += u'\u01C9';
         } break;
-        case u'\u01CA':
+        case u'\u01CA': [[fallthrough]];
         case u'\u01CB': {
             str += u'\u01CC';
         } break;
@@ -8299,7 +8299,7 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u01EE': {
             str += u'\u01EF';
         } break;
-        case u'\u01F1':
+        case u'\u01F1': [[fallthrough]];
         case u'\u01F2': {
             str += u'\u01F3';
         } break;
@@ -8582,7 +8582,7 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u0397': {
             str += u'\u03B7';
         } break;
-        case u'\u0398':
+        case u'\u0398': [[fallthrough]];
         case u'\u03F4': {
             str += u'\u03B8';
         } break;
@@ -8631,7 +8631,7 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u03A8': {
             str += u'\u03C8';
         } break;
-        case u'\u03A9':
+        case u'\u03A9': [[fallthrough]];
         case u'\u2126': {
             str += u'\u03C9';
         } break;
@@ -11223,89 +11223,89 @@ void Unicode::down(String& str, char16 ch) {
 
 bool Unicode::isSpace(char16 ch) {
     switch (ch) {
-        case u'\u0000':
-        case u'\u0001':
-        case u'\u0002':
-        case u'\u0003':
-        case u'\u0004':
-        case u'\u0005':
-        case u'\u0006':
-        case u'\u0007':
-        case u'\u0008':
-        case u'\u0009':
-        case u'\u000A':
-        case u'\u000B':
-        case u'\u000C':
-        case u'\u000D':
-        case u'\u000E':
-        case u'\u000F':
-        case u'\u0010':
-        case u'\u0011':
-        case u'\u0012':
-        case u'\u0013':
-        case u'\u0014':
-        case u'\u0015':
-        case u'\u0016':
-        case u'\u0017':
-        case u'\u0018':
-        case u'\u0019':
-        case u'\u001A':
-        case u'\u001B':
-        case u'\u001C':
-        case u'\u001D':
-        case u'\u001E':
-        case u'\u001F':
-        case u'\u0020':
-        case u'\u007F':
-        case u'\u0080':
-        case u'\u0081':
-        case u'\u0082':
-        case u'\u0083':
-        case u'\u0084':
-        case u'\u0085':
-        case u'\u0086':
-        case u'\u0087':
-        case u'\u0088':
-        case u'\u0089':
-        case u'\u008A':
-        case u'\u008B':
-        case u'\u008C':
-        case u'\u008D':
-        case u'\u008E':
-        case u'\u008F':
-        case u'\u0090':
-        case u'\u0091':
-        case u'\u0092':
-        case u'\u0093':
-        case u'\u0094':
-        case u'\u0095':
-        case u'\u0096':
-        case u'\u0097':
-        case u'\u0098':
-        case u'\u0099':
-        case u'\u009A':
-        case u'\u009B':
-        case u'\u009C':
-        case u'\u009D':
-        case u'\u009E':
-        case u'\u009F':
-        case u'\u00A0':
-        case u'\u1680':
-        case u'\u2000':
-        case u'\u2001':
-        case u'\u2002':
-        case u'\u2003':
-        case u'\u2004':
-        case u'\u2005':
-        case u'\u2006':
-        case u'\u2007':
-        case u'\u2008':
-        case u'\u2009':
-        case u'\u200A':
-        case u'\u2028':
-        case u'\u2029':
-        case u'\u202F':
-        case u'\u205F':
+        case u'\u0000': [[fallthrough]];
+        case u'\u0001': [[fallthrough]];
+        case u'\u0002': [[fallthrough]];
+        case u'\u0003': [[fallthrough]];
+        case u'\u0004': [[fallthrough]];
+        case u'\u0005': [[fallthrough]];
+        case u'\u0006': [[fallthrough]];
+        case u'\u0007': [[fallthrough]];
+        case u'\u0008': [[fallthrough]];
+        case u'\u0009': [[fallthrough]];
+        case u'\u000A': [[fallthrough]];
+        case u'\u000B': [[fallthrough]];
+        case u'\u000C': [[fallthrough]];
+        case u'\u000D': [[fallthrough]];
+        case u'\u000E': [[fallthrough]];
+        case u'\u000F': [[fallthrough]];
+        case u'\u0010': [[fallthrough]];
+        case u'\u0011': [[fallthrough]];
+        case u'\u0012': [[fallthrough]];
+        case u'\u0013': [[fallthrough]];
+        case u'\u0014': [[fallthrough]];
+        case u'\u0015': [[fallthrough]];
+        case u'\u0016': [[fallthrough]];
+        case u'\u0017': [[fallthrough]];
+        case u'\u0018': [[fallthrough]];
+        case u'\u0019': [[fallthrough]];
+        case u'\u001A': [[fallthrough]];
+        case u'\u001B': [[fallthrough]];
+        case u'\u001C': [[fallthrough]];
+        case u'\u001D': [[fallthrough]];
+        case u'\u001E': [[fallthrough]];
+        case u'\u001F': [[fallthrough]];
+        case u'\u0020': [[fallthrough]];
+        case u'\u007F': [[fallthrough]];
+        case u'\u0080': [[fallthrough]];
+        case u'\u0081': [[fallthrough]];
+        case u'\u0082': [[fallthrough]];
+        case u'\u0083': [[fallthrough]];
+        case u'\u0084': [[fallthrough]];
+        case u'\u0085': [[fallthrough]];
+        case u'\u0086': [[fallthrough]];
+        case u'\u0087': [[fallthrough]];
+        case u'\u0088': [[fallthrough]];
+        case u'\u0089': [[fallthrough]];
+        case u'\u008A': [[fallthrough]];
+        case u'\u008B': [[fallthrough]];
+        case u'\u008C': [[fallthrough]];
+        case u'\u008D': [[fallthrough]];
+        case u'\u008E': [[fallthrough]];
+        case u'\u008F': [[fallthrough]];
+        case u'\u0090': [[fallthrough]];
+        case u'\u0091': [[fallthrough]];
+        case u'\u0092': [[fallthrough]];
+        case u'\u0093': [[fallthrough]];
+        case u'\u0094': [[fallthrough]];
+        case u'\u0095': [[fallthrough]];
+        case u'\u0096': [[fallthrough]];
+        case u'\u0097': [[fallthrough]];
+        case u'\u0098': [[fallthrough]];
+        case u'\u0099': [[fallthrough]];
+        case u'\u009A': [[fallthrough]];
+        case u'\u009B': [[fallthrough]];
+        case u'\u009C': [[fallthrough]];
+        case u'\u009D': [[fallthrough]];
+        case u'\u009E': [[fallthrough]];
+        case u'\u009F': [[fallthrough]];
+        case u'\u00A0': [[fallthrough]];
+        case u'\u1680': [[fallthrough]];
+        case u'\u2000': [[fallthrough]];
+        case u'\u2001': [[fallthrough]];
+        case u'\u2002': [[fallthrough]];
+        case u'\u2003': [[fallthrough]];
+        case u'\u2004': [[fallthrough]];
+        case u'\u2005': [[fallthrough]];
+        case u'\u2006': [[fallthrough]];
+        case u'\u2007': [[fallthrough]];
+        case u'\u2008': [[fallthrough]];
+        case u'\u2009': [[fallthrough]];
+        case u'\u200A': [[fallthrough]];
+        case u'\u2028': [[fallthrough]];
+        case u'\u2029': [[fallthrough]];
+        case u'\u202F': [[fallthrough]];
+        case u'\u205F': [[fallthrough]];
         case u'\u3000': {
             return true;
         } break;

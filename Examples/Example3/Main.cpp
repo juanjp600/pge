@@ -60,7 +60,7 @@ class Program {
                 std::swap(bytes[i], bytes[i + 2]);
                 bytes[i + 3] = 255; // Bmp broken???
             }
-            int dim = sqrt((bytes.size() - headerOffset) / 4);
+            int dim = (int)sqrt((bytes.size() - headerOffset) / 4);
             return Texture::load(*graphics, dim, dim, bytes.data() + headerOffset, Texture::Format::RGBA32);
         }
 

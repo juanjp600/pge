@@ -3,6 +3,8 @@
 
 #include <algorithm>
 
+#include <PGE/String/String.h>
+
 namespace PGE {
 
 template <size_t N>
@@ -13,6 +15,7 @@ struct TemplateString {
 		consteval TemplateString(const char(&cstri)[N]) { std::copy_n(cstri, N, cstr); }
 
 		constexpr operator const char*() const { return cstr; }
+		constexpr operator const String() const { return String(cstr); }
 };
 
 }
