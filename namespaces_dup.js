@@ -25,7 +25,8 @@ var namespaces_dup =
       ] ],
       [ "\u202AInterpolator", null, [
         [ "\u202Acerp", "_interpolator_8h.html#a1a72b1af31352a2ca483f95091a3846f", null ],
-        [ "\u202Alerp", "_interpolator_8h.html#a708ddfe1234ce292488dfb4ebc37fa59", null ]
+        [ "\u202Alerp", "_interpolator_8h.html#a708ddfe1234ce292488dfb4ebc37fa59", null ],
+        [ "\u202AInterpolatable", "_interpolator_8h.html#a1cdfb4545acf8f8a30611fbf1530d794", null ]
       ] ],
       [ "\u202AMath", "namespace_p_g_e_1_1_math.html", [
         [ "\u202Aceil", "namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78", null ],
