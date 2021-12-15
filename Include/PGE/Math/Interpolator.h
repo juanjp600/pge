@@ -1,21 +1,26 @@
 #ifndef PGE_INTERPOLATOR_H_INCLUDED
 #define PGE_INTERPOLATOR_H_INCLUDED
 
-#include <cmath>
-
-#include <PGE/Types/Concepts.h>
+#include "Math.h"
 
 namespace PGE {
 
 namespace Interpolator {
-	template <Arithmetic T>
+	template <typename T>
+	concept Interpolatable = requires(const T & t, float f) {
+		{ t + t } -> std::convertible_to<T>;
+		{ t - t } -> std::convertible_to<T>;
+		{ f * t } -> std::convertible_to<T>;
+	};
+
+	template <Interpolatable T>
 	constexpr const T lerp(const T& from, const T& to, float lerp) {
-		return from * (T(1) - lerp) + to * lerp;
+		return from + lerp * (to - from);
 	}
 
-	template <Arithmetic T>
+	template <Interpolatable T>
 	inline const T cerp(const T& from, const T& to, float lerp) {
-		float s = (T(1) - cos(lerp * Math::PI)) / 2.f;
+		float s = (1.f - cos(lerp * Math::PI)) / 2.f;
 		return lerp(from, to, s);
 	}
 }
