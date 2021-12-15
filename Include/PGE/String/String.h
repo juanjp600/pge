@@ -27,7 +27,7 @@ class String;
 inline namespace StringLiterals {
     const String operator""_PGE(const char* cstr, size_t size);
     const String operator""_PGE(const char8_t* cstr, size_t size);
-    const String operator""_PGE(const char16 * wstr, size_t size);
+    const String operator""_PGE(const char16* wstr, size_t size);
 }
 
 /// A UTF-8 character sequence guaranteed to be terminated by a null byte.
