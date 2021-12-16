@@ -89,6 +89,7 @@
     <ClInclude Include="..\..\Include\PGE\String\Unicode.h" />
     <ClInclude Include="..\..\Include\PGE\StructuredData\StructuredData.h" />
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h" />
+    <ClInclude Include="..\..\Include\PGE\Types\CircularArray.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Concepts.h" />
     <ClInclude Include="..\..\Include\PGE\Types\TemplateEnableIf.h" />
     <ClInclude Include="..\..\Include\PGE\Types\PolymorphicHeap.h" />
