@@ -187,7 +187,7 @@ class CircularArray {
 
         template <typename... Args>
         constexpr T& emplaceFront(Args&&... args) {
-            reserve(capacity + 1);
+            reserve(_size + 1);
             beginIndex = (beginIndex - 1 + capacity) % capacity;
             T& newT = *new (elements + beginIndex) T(std::forward<Args>(args)...);
             _size++;
@@ -196,7 +196,7 @@ class CircularArray {
 
         template <typename... Args>
         constexpr T& emplaceBack(Args&&... args) {
-            reserve(capacity + 1);
+            reserve(_size + 1);
             T& newT = *new (elements + endIndex) T(std::forward<Args>(args)...);
             endIndex = (endIndex + 1) % capacity;
             _size++;
