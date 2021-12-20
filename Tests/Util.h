@@ -2,6 +2,7 @@
 #define PULSE_UTIL_H_INCLUDED
 
 #define DOCTEST_CONFIG_NO_COMPARISON_WARNING_SUPPRESSION
+#define DOCTEST_STL_STRINGIFY_FLIP
 #include <doctest/extensions/stl_stringifier.h>
 
 #define CONCAT(a, b) CONCAT_INNER(a, b)

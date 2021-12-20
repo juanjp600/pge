@@ -179,6 +179,25 @@ TEST_CASE("Empty") {
     CHECK_FALSE(ints.empty());
 }
 
+TEST_CASE("Iterators") {
+    CircularArray<int> ints;
+    CHECK(ints.begin() == ints.end());
+
+    ints = { 0, 1, 2, 3 };
+    for (int i = 0; int e : ints) {
+        CHECK(e == i++);
+    }
+
+    ints = { 0, 0, 0, 1 };
+    ints.popFront();
+    ints.popFront();
+    ints.pushBack(2);
+    ints.pushBack(3);
+    for (int i = 0; int e : ints) {
+        CHECK(e == i++);
+    }
+}
+
 struct MemLeakTester {
     static int counter;
     MemLeakTester() { counter++; }

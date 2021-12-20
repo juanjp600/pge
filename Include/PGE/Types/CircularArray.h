@@ -71,6 +71,44 @@ class CircularArray {
         }
 
     public:
+        class Iterator {
+            private:
+                CircularArray* carr = nullptr;
+                size_t off;
+                bool isEnd = true;
+
+                Iterator(CircularArray* carr, size_t off, bool isEnd)
+                    : carr(carr), off(off), isEnd(isEnd) { }
+
+            public:
+                Iterator() = default;
+
+                constexpr static const Iterator begin(CircularArray& carr) {
+                    return Iterator(&carr, carr.beginIndex, carr.empty());
+                }
+
+                constexpr static const Iterator end(CircularArray& carr) {
+                    return Iterator(&carr, carr.endIndex, true);
+                }
+
+                T& operator*() const {
+                    return carr->elements[off];
+                }
+
+                void operator++() {
+                    asrt(!isEnd, "Tried incrementing end iterator");
+                    off++;
+                    if (off == carr->endIndex) { isEnd = true; }
+                    off %= carr->capacity;
+                }
+
+                void operator++(int) { ++*this; }
+
+                bool operator==(const Iterator& other) const {
+                    return carr == other.carr && (off == other.off && isEnd == other.isEnd || isEnd && other.isEnd);
+                }
+        };
+
         constexpr CircularArray() = default;
 
         constexpr CircularArray(const Allocator& alloc) : alloc(alloc) { }
@@ -185,6 +223,14 @@ class CircularArray {
             return (*this <=> ts) == 0;
         }
 
+        constexpr const Iterator begin() {
+            return Iterator::begin(*this);
+        }
+
+        constexpr const Iterator end() {
+            return Iterator::end(*this);
+        }
+
         template <typename... Args>
         constexpr T& emplaceFront(Args&&... args) {
             reserve(_size + 1);
@@ -197,7 +243,7 @@ class CircularArray {
         template <typename... Args>
         constexpr T& emplaceBack(Args&&... args) {
             reserve(_size + 1);
-            T& newT = *new (elements + endIndex) T(std::forward<Args>(args)...);
+            T& newT = *new (elements + (endIndex % capacity)) T(std::forward<Args>(args)...);
             endIndex = (endIndex + 1) % capacity;
             _size++;
             return newT;
