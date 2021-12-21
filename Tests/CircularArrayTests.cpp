@@ -7,6 +7,13 @@ using namespace PGE;
 
 TEST_SUITE("Circular Array") {
 
+TEST_CASE("Static asserts") {
+    using CArray = CircularArray<int>;
+    static_assert(std::ranges::bidirectional_range<CArray>);
+    static_assert(std::ranges::sized_range<CArray>);
+    static_assert(std::ranges::common_range<CArray>);
+}
+
 TEST_CASE("Fill") {
     CircularArray<int> ints(50, 5);
     CHECK(ints.size() == 50);
@@ -181,9 +188,23 @@ TEST_CASE("Empty") {
 
 TEST_CASE("Iterators") {
     CircularArray<int> ints;
+    for (int i : ints) {
+        CHECK(false);
+    }
+    for (int i : std::ranges::reverse_view(ints)) {
+        CHECK(false);
+    }
+    for (auto it = ints.rbegin(); it != ints.rend(); it++) {
+        CHECK(false);
+    }
+
     CHECK(ints.begin() == ints.end());
+    CHECK_THROWS_AS(ints.end()++, Exception);
+    CHECK_THROWS_AS(ints.end()--, Exception);
 
     ints = { 0, 1, 2, 3 };
+    CHECK_THROWS_AS(ints.begin()--, Exception);
+    CHECK_THROWS_AS(ints.end()++, Exception);
     for (int i = 0; int e : ints) {
         CHECK(e == i++);
     }
@@ -193,9 +214,24 @@ TEST_CASE("Iterators") {
     ints.popFront();
     ints.pushBack(2);
     ints.pushBack(3);
+    CHECK_THROWS_AS(ints.begin()--, Exception);
+    CHECK_THROWS_AS(ints.end()++, Exception);
     for (int i = 0; int e : ints) {
         CHECK(e == i++);
     }
+    for (int i = 3; int e : std::views::reverse(ints)) {
+        CHECK(e == i--);
+    }
+    int i = 3;
+    for (CircularArray<int>::ReverseIterator it = ints.rbegin(); it != ints.rend(); it++, i--) {
+        CHECK(*it == i);
+    }
+
+    const CircularArray<int> constInts;
+    constInts.begin();
+    constInts.end();
+    constInts.rbegin();
+    constInts.rend();
 }
 
 struct MemLeakTester {

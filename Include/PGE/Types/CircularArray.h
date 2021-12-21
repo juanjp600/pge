@@ -70,44 +70,67 @@ class CircularArray {
             asrt(_size != 0, "circular array was empty", loc);
         }
 
-    public:
-        class Iterator {
+        template <bool CONST>
+        class BasicIterator {
             private:
-                CircularArray* carr = nullptr;
+                using CArray = std::conditional<CONST, const CircularArray, CircularArray>::type;
+                CArray* carr = nullptr;
                 size_t off;
                 bool isEnd = true;
 
-                Iterator(CircularArray* carr, size_t off, bool isEnd)
-                    : carr(carr), off(off), isEnd(isEnd) { }
-
             public:
-                Iterator() = default;
+                using iterator_category = std::bidirectional_iterator_tag;
+                using difference_type = std::ptrdiff_t;
+                using value_type = T;
+                using pointer = value_type*;
+                using reference = value_type&;
 
-                constexpr static const Iterator begin(CircularArray& carr) {
-                    return Iterator(&carr, carr.beginIndex, carr.empty());
+                constexpr static const BasicIterator begin(CArray& carr) {
+                    BasicIterator it;
+                    it.carr = &carr;
+                    it.off = carr.beginIndex;
+                    it.isEnd = carr.empty();
+                    return it;
                 }
 
-                constexpr static const Iterator end(CircularArray& carr) {
-                    return Iterator(&carr, carr.endIndex, true);
+                constexpr static const BasicIterator end(CArray& carr) {
+                    BasicIterator it;
+                    it.carr = &carr;
+                    it.off = carr.endIndex;
+                    it.isEnd = true;
+                    return it;
                 }
 
-                T& operator*() const {
+                constexpr std::conditional<CONST, const T&, T&>::type operator*() const {
                     return carr->elements[off];
                 }
 
-                void operator++() {
+                constexpr BasicIterator& operator++() {
                     asrt(!isEnd, "Tried incrementing end iterator");
                     off++;
                     if (off == carr->endIndex) { isEnd = true; }
                     off %= carr->capacity;
+                    return *this;
                 }
 
-                void operator++(int) { ++*this; }
+                constexpr BasicIterator& operator--() {
+                    asrt(off != carr->beginIndex || isEnd && !carr->empty(), "Tried decrementing begin iterator");
+                    off = (off + carr->capacity - 1) % carr->capacity;
+                    if (isEnd) { isEnd = false; }
+                    return *this;
+                }
 
-                bool operator==(const Iterator& other) const {
+                constexpr BasicIterator operator++(int) { BasicIterator it = *this; ++*this; return it; }
+                constexpr BasicIterator operator--(int) { BasicIterator it = *this; --*this; return it; }
+
+                constexpr bool operator==(const BasicIterator& other) const {
                     return carr == other.carr && (off == other.off && isEnd == other.isEnd || isEnd && other.isEnd);
                 }
         };
+
+    public:
+        using Iterator = BasicIterator<false>;
+        using ConstIterator = BasicIterator<true>;
 
         constexpr CircularArray() = default;
 
@@ -223,13 +246,22 @@ class CircularArray {
             return (*this <=> ts) == 0;
         }
 
-        constexpr const Iterator begin() {
-            return Iterator::begin(*this);
-        }
+        constexpr Iterator begin() { return Iterator::begin(*this); }
+        constexpr Iterator end() { return Iterator::end(*this); }
+        constexpr ConstIterator begin() const { return cbegin(); }
+        constexpr ConstIterator end() const { return cend(); }
+        constexpr ConstIterator cbegin() const { return ConstIterator::begin(*this); }
+        constexpr ConstIterator cend() const { return ConstIterator::end(*this); }
 
-        constexpr const Iterator end() {
-            return Iterator::end(*this);
-        }
+        using ReverseIterator = std::reverse_iterator<Iterator>;
+        constexpr const ReverseIterator rbegin() { return ReverseIterator(Iterator::end(*this)); }
+        constexpr const ReverseIterator rend() { return ReverseIterator(Iterator::begin(*this)); }
+
+        using ReverseConstIterator = std::reverse_iterator<ConstIterator>;
+        constexpr const ReverseConstIterator rbegin() const { return crbegin(); }
+        constexpr const ReverseConstIterator rend() const { return crend(); }
+        constexpr const ReverseConstIterator crbegin() const { return ReverseConstIterator(ConstIterator::end(*this)); }
+        constexpr const ReverseConstIterator crend() const { return ReverseConstIterator(ConstIterator::begin(*this)); }
 
         template <typename... Args>
         constexpr T& emplaceFront(Args&&... args) {
