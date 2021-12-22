@@ -139,11 +139,11 @@ class CircularArray {
                     return ret;
                 }
 
-                static constexpr friend BasicIterator operator+(i64 off, const BasicIterator& it) {
+                constexpr friend BasicIterator operator+(i64 off, const BasicIterator& it) {
                     return it + off;
                 }
 
-                static constexpr friend BasicIterator operator-(i64 off, const BasicIterator& it) {
+                constexpr friend BasicIterator operator-(i64 off, const BasicIterator& it) {
                     return it - off;
                 }
 
