@@ -227,11 +227,12 @@ TEST_CASE("Iterators") {
         CHECK(*it == i);
     }
 
-    const CircularArray<int> constInts;
+    const CircularArray<int> constInts{ 1 };
     constInts.begin();
     constInts.end();
     constInts.rbegin();
     constInts.rend();
+    constInts[0];
 }
 
 struct MemLeakTester {

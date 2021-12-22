@@ -70,6 +70,21 @@ class CircularArray {
             asrt(_size != 0, "circular array was empty", loc);
         }
 
+        constexpr T& frontInternal() const {
+            assertNotEmpty();
+            return elements[beginIndex];
+        }
+
+        constexpr T& backInternal() const {
+            assertNotEmpty();
+            return elements[(endIndex - 1 + capacity) % capacity];
+        }
+        
+        constexpr T& indexInternal(size_t index) const {
+            asrt(index < _size, "index must be less than size");
+            return elements[(beginIndex + index) % capacity];
+        }
+
         template <bool CONST>
         class BasicIterator {
             private:
@@ -311,15 +326,11 @@ class CircularArray {
             _size--;
         }
 
-        constexpr T& front() const {
-            assertNotEmpty();
-            return elements[beginIndex];
-        }
+        constexpr T& front() { return frontInternal(); }
+        constexpr const T& front() const { return frontInternal(); }
 
-        constexpr T& back() const {
-            assertNotEmpty();
-            return elements[(endIndex - 1 + capacity) % capacity];
-        }
+        constexpr T& back() { return backInternal(); }
+        constexpr const T& back() const { return backInternal(); }
 
         constexpr bool empty() const {
             return _size == 0;
@@ -329,10 +340,8 @@ class CircularArray {
             return _size;
         }
 
-        constexpr T& operator[](size_t index) const {
-            asrt(index < _size, "index must be less than size");
-            return elements[(beginIndex + index) % capacity];
-        }
+        constexpr T& operator[](size_t index) { return indexInternal(index); }
+        constexpr const T& operator[](size_t index) const { return indexInternal(index); }
 
         constexpr void reserve(size_t cap) {
             if (capacity >= cap) { return; }
