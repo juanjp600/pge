@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('_template_enable_if_8h_source.html',''
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PGE_TEMPLATE_ENABLE_IF</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#define PGE_TEMPLATE_ENABLE_IF(PREDICATE) template &lt;typename Y = T, typename = typename std::enable_if&lt;PREDICATE::value&gt;::type&gt;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#define PGE_TEMPLATE_ENABLE_IF(PREDICATE) template &lt;typename Y = T, typename = typename std::enable_if&lt;PREDICATE&gt;::type&gt;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_TEMPLATE_ENABLE_IF</span></div>
 </div><!-- fragment --></div><!-- contents -->

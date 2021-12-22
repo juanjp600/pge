@@ -139,13 +139,14 @@ const ReverseIterator&#160;</td><td class="memItemRight" valign="bottom"><b>rbeg
 <tr class="memitem:ab4d862f2b05bc45bfa8146e3dd48cee4"><td class="memItemLeft" align="right" valign="top"><a id="ab4d862f2b05bc45bfa8146e3dd48cee4"></a>
 const ReverseIterator&#160;</td><td class="memItemRight" valign="bottom"><b>rend</b> () const</td></tr>
 <tr class="separator:ab4d862f2b05bc45bfa8146e3dd48cee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a3cbcf569b45b229cb7eee95322825d"><td class="memItemLeft" align="right" valign="top"><a id="a9a3cbcf569b45b229cb7eee95322825d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>String</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;other)</td></tr>
-<tr class="separator:a9a3cbcf569b45b229cb7eee95322825d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acab3beef14fce2ae2b05d7c1de732f66"><td class="memTemplParams" colspan="2"><a id="acab3beef14fce2ae2b05d7c1de732f66"></a>
+<tr class="memitem:a47687d5216e6e70c43c7f07aee78030e"><td class="memTemplParams" colspan="2"><a id="a47687d5216e6e70c43c7f07aee78030e"></a>
 template&lt;size_t S&gt; </td></tr>
-<tr class="memitem:acab3beef14fce2ae2b05d7c1de732f66"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>String</b> (const char(&amp;cstri)[S])</td></tr>
-<tr class="separator:acab3beef14fce2ae2b05d7c1de732f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47687d5216e6e70c43c7f07aee78030e"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>requires</b> (S &gt; 1) <a class="el" href="class_p_g_e_1_1_string.html">String</a>(const char(&amp;cstri)[S])</td></tr>
+<tr class="separator:a47687d5216e6e70c43c7f07aee78030e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7aa889fe49c7f59bcf222d6d8a4c9ce"><td class="memTemplParams" colspan="2"><a id="ab7aa889fe49c7f59bcf222d6d8a4c9ce"></a>
+template&lt;size_t S&gt; </td></tr>
+<tr class="memitem:ab7aa889fe49c7f59bcf222d6d8a4c9ce"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>requires</b> (S==1) <a class="el" href="class_p_g_e_1_1_string.html">String</a>(const char(&amp;)[S])</td></tr>
+<tr class="separator:ab7aa889fe49c7f59bcf222d6d8a4c9ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fd9785dc424ebe3bd9bcb797e9b8e12"><td class="memTemplParams" colspan="2"><a id="a4fd9785dc424ebe3bd9bcb797e9b8e12"></a>
 template&lt;typename T , typename  = typename std::enable_if&lt;            std::conjunction&lt;                std::is_pointer&lt;T&gt;,                std::disjunction&lt;                    std::is_same&lt;char*, T&gt;,                    std::is_same&lt;const char*, T&gt;                &gt;            &gt;::value        &gt;::type&gt; </td></tr>
 <tr class="memitem:a4fd9785dc424ebe3bd9bcb797e9b8e12"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>String</b> (T cstri)</td></tr>
@@ -153,21 +154,24 @@ template&lt;typename T , typename  = typename std::enable_if&lt;            std:
 <tr class="memitem:a038da9f58867bc672b7e9793dfa70bd1"><td class="memItemLeft" align="right" valign="top"><a id="a038da9f58867bc672b7e9793dfa70bd1"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>String</b> (const char8_t *<a class="el" href="class_p_g_e_1_1_string.html#adc967f43aadf3ca053a0a9c9f4d7671c">cstr</a>)</td></tr>
 <tr class="separator:a038da9f58867bc672b7e9793dfa70bd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b42d8e900acddf2e138dcd62bafd92b"><td class="memItemLeft" align="right" valign="top"><a id="a1b42d8e900acddf2e138dcd62bafd92b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>String</b> (const std::string &amp;cppstr)</td></tr>
-<tr class="separator:a1b42d8e900acddf2e138dcd62bafd92b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9346aecd0e29796e7067f8a8eb5640c2"><td class="memItemLeft" align="right" valign="top"><a id="a9346aecd0e29796e7067f8a8eb5640c2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>String</b> (const char16 *wstr)</td></tr>
 <tr class="separator:a9346aecd0e29796e7067f8a8eb5640c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b42d8e900acddf2e138dcd62bafd92b"><td class="memItemLeft" align="right" valign="top"><a id="a1b42d8e900acddf2e138dcd62bafd92b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>String</b> (const std::string &amp;cppstr)</td></tr>
+<tr class="separator:a1b42d8e900acddf2e138dcd62bafd92b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67e122eb28d488b1374523a9d3e826e7"><td class="memItemLeft" align="right" valign="top"><a id="a67e122eb28d488b1374523a9d3e826e7"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>String</b> (char c)</td></tr>
 <tr class="separator:a67e122eb28d488b1374523a9d3e826e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24348496f312bbdce47aa5402da25e3e"><td class="memItemLeft" align="right" valign="top"><a id="a24348496f312bbdce47aa5402da25e3e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>String</b> (char8_t c)</td></tr>
+<tr class="separator:a24348496f312bbdce47aa5402da25e3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a374946c9d7c5b3077a422679020b9da5"><td class="memItemLeft" align="right" valign="top"><a id="a374946c9d7c5b3077a422679020b9da5"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>String</b> (char16 w)</td></tr>
 <tr class="separator:a374946c9d7c5b3077a422679020b9da5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad87d99bfc598457e2984b8bb477d4d34"><td class="memItemLeft" align="right" valign="top"><a id="ad87d99bfc598457e2984b8bb477d4d34"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;other)</td></tr>
-<tr class="separator:ad87d99bfc598457e2984b8bb477d4d34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa79a8ea3a2fbe9d3481d035293ea3f48"><td class="memItemLeft" align="right" valign="top"><a id="aa79a8ea3a2fbe9d3481d035293ea3f48"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>String</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;a, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;b)</td></tr>
+<tr class="separator:aa79a8ea3a2fbe9d3481d035293ea3f48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9f843058b010b583c68698f4859a2b8"><td class="memItemLeft" align="right" valign="top"><a id="ae9f843058b010b583c68698f4859a2b8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>operator+=</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;other)</td></tr>
 <tr class="separator:ae9f843058b010b583c68698f4859a2b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -266,15 +270,15 @@ const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td 
 <tr class="memitem:a27b578f14e42bd20fa373a0341435a29"><td class="memItemLeft" align="right" valign="top"><a id="a27b578f14e42bd20fa373a0341435a29"></a>
 const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reverse</b> () const</td></tr>
 <tr class="separator:a27b578f14e42bd20fa373a0341435a29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b4cd913b0622a404fbe4be5ea5343de"><td class="memItemLeft" align="right" valign="top"><a id="a8b4cd913b0622a404fbe4be5ea5343de"></a>
-const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>multiply</b> (unsigned count, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;separator=&quot;&quot;) const</td></tr>
-<tr class="separator:a8b4cd913b0622a404fbe4be5ea5343de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e985a932c1c36c6944eb4b559be5ec9"><td class="memItemLeft" align="right" valign="top"><a id="a4e985a932c1c36c6944eb4b559be5ec9"></a>
+const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>repeat</b> (int count, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;separator=&quot;&quot;) const</td></tr>
+<tr class="separator:a4e985a932c1c36c6944eb4b559be5ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ed1159b83344aa0d3e5ffe2f8421931"><td class="memItemLeft" align="right" valign="top"><a id="a6ed1159b83344aa0d3e5ffe2f8421931"></a>
 const std::vector&lt; <a class="el" href="class_p_g_e_1_1_string.html">String</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>split</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;needleStr, bool removeEmptyEntries) const</td></tr>
 <tr class="separator:a6ed1159b83344aa0d3e5ffe2f8421931"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dfb95702f5ff6ca679d37c2e6bdedd7"><td class="memItemLeft" align="right" valign="top"><a id="a7dfb95702f5ff6ca679d37c2e6bdedd7"></a>
-const std::cmatch&#160;</td><td class="memItemRight" valign="bottom"><b>regexMatch</b> (const std::regex &amp;pattern) const</td></tr>
-<tr class="separator:a7dfb95702f5ff6ca679d37c2e6bdedd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa69d76595b347e0bf5ae94a8dd4e9b3a"><td class="memItemLeft" align="right" valign="top"><a id="aa69d76595b347e0bf5ae94a8dd4e9b3a"></a>
+const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>regexMatch</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;pattern) const</td></tr>
+<tr class="separator:aa69d76595b347e0bf5ae94a8dd4e9b3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89f7f8a6556de85b8d7764b2b109d84c"><td class="memItemLeft" align="right" valign="top"><a id="a89f7f8a6556de85b8d7764b2b109d84c"></a>
 u64&#160;</td><td class="memItemRight" valign="bottom"><b>getHashCode</b> () const</td></tr>
 <tr class="separator:a89f7f8a6556de85b8d7764b2b109d84c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -315,21 +319,15 @@ static const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:ac7ed7097a8f45d0db575d0c8b056f76d"><td class="memItemLeft" align="right" valign="top"><a id="ac7ed7097a8f45d0db575d0c8b056f76d"></a>
-const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;a, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;b)</td></tr>
-<tr class="separator:ac7ed7097a8f45d0db575d0c8b056f76d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1badf08d4ab0972f518718fa019cbcad"><td class="memItemLeft" align="right" valign="top"><a id="a1badf08d4ab0972f518718fa019cbcad"></a>
-const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (const char *a, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;b)</td></tr>
-<tr class="separator:a1badf08d4ab0972f518718fa019cbcad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a629a01b990d11d305fd96c3768abb951"><td class="memItemLeft" align="right" valign="top"><a id="a629a01b990d11d305fd96c3768abb951"></a>
-const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;a, const char *b)</td></tr>
-<tr class="separator:a629a01b990d11d305fd96c3768abb951"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fe9bd52c04bc8c23b412f9ad90cd195"><td class="memItemLeft" align="right" valign="top"><a id="a6fe9bd52c04bc8c23b412f9ad90cd195"></a>
-const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;a, char16 b)</td></tr>
-<tr class="separator:a6fe9bd52c04bc8c23b412f9ad90cd195"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e22cf8d9505587c12484d9fc048f520"><td class="memItemLeft" align="right" valign="top"><a id="a5e22cf8d9505587c12484d9fc048f520"></a>
-const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (char16 a, const <a class="el" href="class_p_g_e_1_1_string.html">String</a> &amp;b)</td></tr>
-<tr class="separator:a5e22cf8d9505587c12484d9fc048f520"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3df7be9f1c3efbc3584d3260778ead4"><td class="memItemLeft" align="right" valign="top"><a id="ac3df7be9f1c3efbc3584d3260778ead4"></a>
+const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>StringLiterals::operator&quot;&quot;_PGE</b> (const char *<a class="el" href="class_p_g_e_1_1_string.html#adc967f43aadf3ca053a0a9c9f4d7671c">cstr</a>, size_t size)</td></tr>
+<tr class="separator:ac3df7be9f1c3efbc3584d3260778ead4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a0b892b9a8ef7d3c39dce416c012913"><td class="memItemLeft" align="right" valign="top"><a id="a2a0b892b9a8ef7d3c39dce416c012913"></a>
+const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>StringLiterals::operator&quot;&quot;_PGE</b> (const char8_t *<a class="el" href="class_p_g_e_1_1_string.html#adc967f43aadf3ca053a0a9c9f4d7671c">cstr</a>, size_t size)</td></tr>
+<tr class="separator:a2a0b892b9a8ef7d3c39dce416c012913"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38e0334e07ae9c08e7b829f1094da707"><td class="memItemLeft" align="right" valign="top"><a id="a38e0334e07ae9c08e7b829f1094da707"></a>
+const <a class="el" href="class_p_g_e_1_1_string.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><b>StringLiterals::operator&quot;&quot;_PGE</b> (const char16 *wstr, size_t size)</td></tr>
+<tr class="separator:a38e0334e07ae9c08e7b829f1094da707"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p class="DocNodeLTR">A UTF-8 character sequence guaranteed to be terminated by a null byte. </p>

@@ -10,6 +10,7 @@ var hierarchy =
       [ "\u202APGE::BinaryWriter", "class_p_g_e_1_1_binary_writer.html", null ],
       [ "\u202APGE::TextWriter", "class_p_g_e_1_1_text_writer.html", null ]
     ] ],
+    [ "\u202APGE::CircularArray< T, Allocator >", "class_p_g_e_1_1_circular_array.html", null ],
     [ "\u202APGE::Color", "class_p_g_e_1_1_color.html", null ],
     [ "\u202APGE::Shader::Constant", "class_p_g_e_1_1_shader_1_1_constant.html", null ],
     [ "\u202APGE::StructuredData::ElemLayout", "class_p_g_e_1_1_structured_data_1_1_elem_layout.html", null ],
