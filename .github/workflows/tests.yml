@@ -1,0 +1,32 @@
+name: Continuous Integration
+
+on:
+  push:
+    paths:
+      - "Include/**"
+      - "Src/**"
+      - "Tests/**"
+      - ".github/workflows/tests.yml"
+
+jobs:
+  ci:
+    runs-on: windows-2022
+
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+      
+      - name: Build
+        run: msbuild Windows/PGE.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=x64 /m
+        
+      - name: Run tests
+        timeout-minutes: 1
+        run: Windows/x64/${{ matrix.configuration }}/Tests.exe
