@@ -16,7 +16,6 @@ class CircularArray {
         Allocator alloc;
         T* elements = nullptr;
         size_t capacity = 0;
-        size_t _size = 0;
         size_t beginIndex = 0;
         size_t endIndex = 0;
 
@@ -24,27 +23,18 @@ class CircularArray {
             if constexpr (std::is_trivially_destructible<T>::value) {
                 return;
             }
-
-            if (endIndex > beginIndex) {
-                for (size_t i : Range(beginIndex, endIndex)) {
-                    elements[i].~T();
-                }
-            } else if (beginIndex < endIndex) {
-                for (size_t i : Range(beginIndex, capacity)) {
-                    elements[i].~T();
-                }
-                for (size_t i : Range(endIndex)) {
-                    elements[i].~T();
-                }
+            
+            for (size_t i : Range(beginIndex, endIndex)) {
+                elements[i % capacity].~T();
             }
         }
 
         constexpr void copyContents(T* loc) const {
-            if (endIndex > beginIndex) {
-                copy(loc, beginIndex, endIndex);
-            } else {
+            if (endIndex > capacity) {
                 copy(loc, beginIndex, capacity);
-                copy(loc + capacity - beginIndex, 0, endIndex);
+                copy(loc + capacity - beginIndex, 0, endIndex - capacity);
+            } else {
+                copy(loc, beginIndex, endIndex);
             }
         }
 
@@ -61,13 +51,13 @@ class CircularArray {
             copyContents(newT);
             alloc.deallocate(elements, capacity);
             elements = newT;
+            endIndex = endIndex - beginIndex;
             beginIndex = 0;
-            endIndex = _size;
             capacity = cap;
         }
 
         constexpr void assertNotEmpty(std::source_location loc = std::source_location::current()) const {
-            asrt(_size != 0, "circular array was empty", loc);
+            asrt(size() != 0, "circular array was empty", loc);
         }
 
         constexpr T& frontInternal() const {
@@ -77,11 +67,11 @@ class CircularArray {
 
         constexpr T& backInternal() const {
             assertNotEmpty();
-            return elements[(endIndex - 1 + capacity) % capacity];
+            return elements[(endIndex - 1) % capacity];
         }
         
         constexpr T& indexInternal(size_t index) const {
-            asrt(index < _size, "index must be less than size");
+            asrt(index < size(), "index must be less than size");
             return elements[(beginIndex + index) % capacity];
         }
 
@@ -90,8 +80,7 @@ class CircularArray {
             private:
                 using CArray = std::conditional<CONST, const CircularArray, CircularArray>::type;
                 CArray* carr = nullptr;
-                size_t off;
-                bool isEnd = true;
+                size_t pos;
 
             public:
                 using iterator_category = std::bidirectional_iterator_tag;
@@ -103,43 +92,43 @@ class CircularArray {
                 constexpr static const BasicIterator begin(CArray& carr) {
                     BasicIterator it;
                     it.carr = &carr;
-                    it.off = carr.beginIndex;
-                    it.isEnd = carr.empty();
+                    it.pos = carr.beginIndex;
                     return it;
                 }
 
                 constexpr static const BasicIterator end(CArray& carr) {
                     BasicIterator it;
                     it.carr = &carr;
-                    it.off = carr.endIndex;
-                    it.isEnd = true;
+                    it.pos = carr.endIndex;
                     return it;
                 }
 
                 constexpr std::conditional<CONST, const T&, T&>::type operator*() const {
-                    return carr->elements[off];
+                    return carr->elements[pos % carr->capacity];
                 }
 
                 constexpr BasicIterator& operator++() {
-                    asrt(!isEnd, "Tried incrementing end iterator");
-                    off++;
-                    if (off == carr->endIndex) { isEnd = true; }
-                    off %= carr->capacity;
+                    asrt(pos < carr->endIndex, "Tried incrementing end iterator");
+                    pos++;
                     return *this;
                 }
 
                 constexpr BasicIterator& operator--() {
-                    asrt(off != carr->beginIndex || isEnd && !carr->empty(), "Tried decrementing begin iterator");
-                    off = (off + carr->capacity - 1) % carr->capacity;
-                    if (isEnd) { isEnd = false; }
+                    asrt(pos > carr->beginIndex, "Tried decrementing begin iterator");
+                    pos--;
                     return *this;
                 }
 
                 constexpr BasicIterator operator++(int) { BasicIterator it = *this; ++*this; return it; }
                 constexpr BasicIterator operator--(int) { BasicIterator it = *this; --*this; return it; }
 
+                constexpr std::partial_ordering operator<=>(const BasicIterator& other) {
+                    if (carr != other.carr) { return std::partial_ordering::unordered; }
+                    return pos <=> other.pos;
+                }
+
                 constexpr bool operator==(const BasicIterator& other) const {
-                    return carr == other.carr && (off == other.off && isEnd == other.isEnd || isEnd && other.isEnd);
+                    return carr == other.carr && (pos == other.pos);
                 }
         };
 
@@ -171,7 +160,6 @@ class CircularArray {
             for (size_t i : Range(count)) {
                 new (elements + i) T(value);
             }
-            _size = count;
             endIndex = count;
         }
 
@@ -192,17 +180,15 @@ class CircularArray {
 
         constexpr void operator=(const CircularArray& other) {
             clear();
-            reserve(other._size);
+            reserve(other.size());
             other.copyContents(elements);
-            _size = other._size;
-            endIndex = other._size;
+            endIndex = other.size();
         }
 
         constexpr void operator=(CircularArray&& other) noexcept {
             std::swap(alloc, other.alloc);
             std::swap(elements, other.elements);
             std::swap(capacity, other.capacity);
-            std::swap(_size, other._size);
             std::swap(beginIndex, other.beginIndex);
             std::swap(endIndex, other.endIndex);
         }
@@ -220,7 +206,6 @@ class CircularArray {
                         i++;
                     }
                 }
-                _size = size;
                 endIndex = size;
             } else {
                 for (const T& t : ts) {
@@ -236,17 +221,17 @@ class CircularArray {
         constexpr auto operator<=>(const Enumerable<T> auto& ts) {
             using Ordering = decltype(ts <=> ts);
 
-            size_t i = 0;
+            size_t i = beginIndex;
             for (const T& t : ts) {
-                if (i >= _size) { return Ordering::less; }
+                if (i >= endIndex) { return Ordering::less; }
 
-                if (((*this)[i] <=> t) != Ordering::equivalent) {
-                    return (*this)[i] <=> t;
+                if ((elements[i % capacity] <=> t) != Ordering::equivalent) {
+                    return elements[i % capacity] <=> t;
                 }
                 i++;
             }
 
-            if (i == _size) {
+            if (i == endIndex) {
                 return Ordering::equivalent;
             } else {
                 return Ordering::greater;
@@ -280,19 +265,18 @@ class CircularArray {
 
         template <typename... Args>
         constexpr T& emplaceFront(Args&&... args) {
-            reserve(_size + 1);
+            reserve(size() + 1);
             beginIndex = (beginIndex - 1 + capacity) % capacity;
+            if (beginIndex > endIndex) { endIndex += capacity; }
             T& newT = *new (elements + beginIndex) T(std::forward<Args>(args)...);
-            _size++;
             return newT;
         }
 
         template <typename... Args>
         constexpr T& emplaceBack(Args&&... args) {
-            reserve(_size + 1);
+            reserve(size() + 1);
             T& newT = *new (elements + (endIndex % capacity)) T(std::forward<Args>(args)...);
-            endIndex = (endIndex + 1) % capacity;
-            _size++;
+            endIndex++;
             return newT;
         }
 
@@ -315,15 +299,17 @@ class CircularArray {
         constexpr void popFront() {
             assertNotEmpty();
             elements[beginIndex].~T();
-            beginIndex = (beginIndex + 1) % capacity;
-            _size--;
+            beginIndex++;
+            if (beginIndex >= capacity) {
+                beginIndex %= capacity;
+                endIndex %= capacity;
+            }
         }
 
         constexpr void popBack() {
             assertNotEmpty();
-            endIndex = (endIndex - 1 + capacity) % capacity;
-            elements[endIndex].~T();
-            _size--;
+            endIndex--;
+            elements[endIndex % capacity].~T();
         }
 
         constexpr T& front() { return frontInternal(); }
@@ -333,11 +319,11 @@ class CircularArray {
         constexpr const T& back() const { return backInternal(); }
 
         constexpr bool empty() const {
-            return _size == 0;
+            return beginIndex == endIndex;
         }
 
         constexpr size_t size() const {
-            return _size;
+            return endIndex - beginIndex;
         }
 
         constexpr T& operator[](size_t index) { return indexInternal(index); }
@@ -354,7 +340,6 @@ class CircularArray {
             deleteElems();
             beginIndex = 0;
             endIndex = 0;
-            _size = 0;
         }
 };
 
