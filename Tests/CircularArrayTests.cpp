@@ -272,6 +272,21 @@ TEST_CASE("Iterator distance") {
     }
 }
 
+TEST_CASE("Iterator random access") {
+    CircularArray<int> ints{ 0, 0, 0, 1 };
+    ints.popFront(); ints.popFront();
+    ints.pushBack(2); ints.pushBack(3);
+    for (int i : Range(4)) {
+        for (int j : Range(4)) {
+            if (i + j >= 4) {
+                CHECK_THROWS_AS((ints.begin() + i)[j], Exception);
+            } else {
+                CHECK((ints.begin() + i)[j] == i + j);
+            }
+        }
+    }
+}
+
 struct MemLeakTester {
     static int counter;
     MemLeakTester() { counter++; }

@@ -108,6 +108,7 @@ class CircularArray {
                 }
 
                 constexpr std::conditional<CONST, const T&, T&>::type operator*() const {
+                    asrt(pos < carr->endIndex, "tried dereferencing end iterator");
                     return carr->elements[pos % carr->capacity];
                 }
 
@@ -147,13 +148,13 @@ class CircularArray {
                 }
 
                 constexpr BasicIterator& operator+=(i64 off) {
-                    assertPosValid(off);
+                    assertPosValid(pos + off);
                     pos += off;
                     return *this;
                 }
 
                 constexpr BasicIterator& operator-=(i64 off) {
-                    assertPosValid(off);
+                    assertPosValid(pos - off);
                     pos -= off;
                     return *this;
                 }
