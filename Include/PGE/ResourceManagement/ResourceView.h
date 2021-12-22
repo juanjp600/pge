@@ -28,10 +28,10 @@ class ResourceView {
 
         operator const T&() const { return get(); }
 
-        PGE_TEMPLATE_ENABLE_IF(std::is_pointer<Y>)
+        PGE_TEMPLATE_ENABLE_IF(std::is_pointer<Y>::value)
         const T& operator->() const { return get(); }
 
-        PGE_TEMPLATE_ENABLE_IF(std::negation<std::is_pointer<Y>>)
+        PGE_TEMPLATE_ENABLE_IF(std::negation<std::is_pointer<Y>>::value)
         const T* operator->() const { return &get(); }
 
         const T* operator&() const { return &get(); }
