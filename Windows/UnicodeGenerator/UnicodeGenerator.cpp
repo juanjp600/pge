@@ -75,7 +75,7 @@ class SwitchWriter {
 class Folder : private SwitchWriter {
     public:
         Folder(const String& name)
-            : SwitchWriter(name, "std::queue<char16>& queue", "queue.push(", ");") { }
+            : SwitchWriter(name, "CircularArray<char16>& queue", "queue.pushBack(", ");") { }
 
         void feed(const String& from, const String& to, bool dominant) {
             // It dominantes!

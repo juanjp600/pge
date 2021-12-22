@@ -5,7 +5,6 @@
 
 #include <limits>
 #include <iostream>
-#include <queue>
 #include <mutex>
 #if defined(__APPLE__) && defined(__OBJC__)
 #import <Foundation/Foundation.h>
@@ -360,7 +359,7 @@ bool String::equals(const String& other) const {
     return memcmp(cstr(), other.cstr(), byteLength()) == 0;
 }
 
-static void fold(const char*& buf, std::queue<char16>& queue) {
+static void fold(const char*& buf, CircularArray<char16>& queue) {
     if (queue.empty() && *buf != '\0') {
         int codepoint = Unicode::measureCodepoint(*buf);
         char16 ch = Unicode::utf8ToWChar(buf, codepoint);
@@ -374,7 +373,7 @@ bool String::equalsIgnoreCase(const String& other) const {
     if (getData()->_hashCode != 0 && other.getData()->_hashCode != 0 && getHashCode() == other.getHashCode()) { return true; }
 
     const char* buf[2] = { cstr(), other.cstr() };
-    std::queue<char16> queue[2];
+    CircularArray<char16> queue[2];
 
     // Feed first char.
     for (int i : Range(2)) {
@@ -384,8 +383,8 @@ bool String::equalsIgnoreCase(const String& other) const {
     while (!queue[0].empty() && !queue[1].empty()) {
         if (queue[0].front() == queue[1].front()) {
             // Continue, are we done yet?
-            queue[0].pop();
-            queue[1].pop();
+            queue[0].popFront();
+            queue[1].popFront();
         } else {
             return false;
         }
