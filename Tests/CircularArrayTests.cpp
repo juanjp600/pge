@@ -9,7 +9,7 @@ TEST_SUITE("Circular Array") {
 
 TEST_CASE("Static asserts") {
     using CArray = CircularArray<int>;
-    static_assert(std::ranges::bidirectional_range<CArray>);
+    static_assert(std::ranges::random_access_range<CArray>);
     static_assert(std::ranges::sized_range<CArray>);
     static_assert(std::ranges::common_range<CArray>);
 }
@@ -248,6 +248,28 @@ TEST_CASE("Iterator spaceship") {
     CHECK(a.begin() <= a.begin());
     CHECK(a.end() >= a.begin());
     CHECK(a.end() > a.begin());
+}
+
+TEST_CASE("Iterator distance") {
+    CircularArray<int> ints;
+    CHECK(ints.begin().getPosition() == 0);
+    CHECK(ints.end().getPosition() == 0);
+    CHECK(ints.end() - ints.begin() == 0);
+    for (int i : Range(10)) {
+        CHECK(ints.begin().getPosition() == 0);
+        CHECK(ints.end().getPosition() == i);
+        CHECK(ints.end() - ints.begin() == i);
+        CHECK(ints.begin() - ints.end() == -i);
+        ints.pushBack(i);
+    }
+    int i = 0;
+    for (CircularArray<int>::Iterator it = ints.begin(); it != ints.end(); it++, i++) {
+        CHECK(it.getPosition() == i);
+        CHECK(ints.begin() - it == -i);
+        CHECK(it - ints.begin() == i);
+        CHECK(ints.end() - it == ints.size() - i);
+        CHECK(it - ints.end() == i - ints.size());
+    }
 }
 
 struct MemLeakTester {

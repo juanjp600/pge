@@ -82,9 +82,13 @@ class CircularArray {
                 CArray* carr = nullptr;
                 size_t pos;
 
+                constexpr void assertPosValid(size_t newPos, const std::source_location& = std::source_location::current()) const {
+                    asrt(newPos >= carr->beginIndex && newPos <= carr->endIndex, "invalid index");
+                }
+
             public:
-                using iterator_category = std::bidirectional_iterator_tag;
-                using difference_type = std::ptrdiff_t;
+                using iterator_category = std::random_access_iterator_tag;
+                using difference_type = i64;
                 using value_type = T;
                 using pointer = value_type*;
                 using reference = value_type&;
@@ -121,6 +125,51 @@ class CircularArray {
 
                 constexpr BasicIterator operator++(int) { BasicIterator it = *this; ++*this; return it; }
                 constexpr BasicIterator operator--(int) { BasicIterator it = *this; --*this; return it; }
+
+                constexpr BasicIterator operator+(i64 off) const {
+                    BasicIterator ret(*this);
+                    ret += off;
+                    return ret;
+                }
+
+                constexpr BasicIterator operator-(i64 off) const {
+                    BasicIterator ret(*this);
+                    ret -= off;
+                    return ret;
+                }
+
+                static constexpr friend BasicIterator operator+(i64 off, const BasicIterator& it) {
+                    return it + off;
+                }
+
+                static constexpr friend BasicIterator operator-(i64 off, const BasicIterator& it) {
+                    return it - off;
+                }
+
+                constexpr BasicIterator& operator+=(i64 off) {
+                    assertPosValid(off);
+                    pos += off;
+                    return *this;
+                }
+
+                constexpr BasicIterator& operator-=(i64 off) {
+                    assertPosValid(off);
+                    pos -= off;
+                    return *this;
+                }
+
+                constexpr std::conditional<CONST, const T&, T&>::type operator[](i64 off) const {
+                    return *(*this + off);
+                }
+
+                constexpr i64 operator-(const BasicIterator& other) const {
+                    asrt(carr == other.carr, "Tried calculating iterator difference for different carrays");
+                    return pos - other.pos;
+                }
+
+                constexpr size_t getPosition() const {
+                    return pos - carr->beginIndex;
+                }
 
                 constexpr std::partial_ordering operator<=>(const BasicIterator& other) const {
                     if (carr != other.carr) { return std::partial_ordering::unordered; }
