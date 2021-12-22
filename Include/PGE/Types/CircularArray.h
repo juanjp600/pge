@@ -122,13 +122,13 @@ class CircularArray {
                 constexpr BasicIterator operator++(int) { BasicIterator it = *this; ++*this; return it; }
                 constexpr BasicIterator operator--(int) { BasicIterator it = *this; --*this; return it; }
 
-                constexpr std::partial_ordering operator<=>(const BasicIterator& other) {
+                constexpr std::partial_ordering operator<=>(const BasicIterator& other) const {
                     if (carr != other.carr) { return std::partial_ordering::unordered; }
                     return pos <=> other.pos;
                 }
 
                 constexpr bool operator==(const BasicIterator& other) const {
-                    return carr == other.carr && (pos == other.pos);
+                    return carr == other.carr && pos == other.pos;
                 }
         };
 

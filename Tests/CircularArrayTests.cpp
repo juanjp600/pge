@@ -235,6 +235,21 @@ TEST_CASE("Iterators") {
     constInts[0];
 }
 
+TEST_CASE("Iterator spaceship") {
+    CircularArray<int> a;
+    CHECK(a.begin() == a.begin());
+    CHECK(a.end() == a.end());
+
+    CircularArray<int> b;
+    CHECK((a.begin() <=> b.begin()) == std::partial_ordering::unordered);
+    CHECK(a.begin() != b.begin());
+    a = { 1, 2 };
+    CHECK(a.begin() < a.end());
+    CHECK(a.begin() <= a.begin());
+    CHECK(a.end() >= a.begin());
+    CHECK(a.end() > a.begin());
+}
+
 struct MemLeakTester {
     static int counter;
     MemLeakTester() { counter++; }
