@@ -22,7 +22,7 @@ jobs:
           submodules: recursive
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v1.1.1
       
       - name: Build
         run: msbuild Windows/PGE.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=x64 /m
