@@ -268,7 +268,7 @@ class CircularArray {
             this->operator=<std::initializer_list<T>>(ts);
         }
 
-        constexpr auto operator<=>(const Enumerable<T> auto& ts) {
+        constexpr auto operator<=>(const Enumerable<T> auto& ts) const {
             using Ordering = decltype(ts <=> ts);
 
             size_t i = beginIndex;
