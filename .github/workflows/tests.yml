@@ -6,6 +6,8 @@ on:
       - "Include/**"
       - "Src/**"
       - "Tests/**"
+      - "Examples/**"
+      - "Windows/**"
       - ".github/workflows/tests.yml"
 
 jobs:
