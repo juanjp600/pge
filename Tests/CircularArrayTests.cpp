@@ -6,10 +6,6 @@
 using namespace PGE;
 
 TEST_SUITE("Circular Array") {
-    
-TEST_CASE("Test") {
-    CHECK(false);
-}
 
 TEST_CASE("Static asserts") {
     using CArray = CircularArray<int>;
