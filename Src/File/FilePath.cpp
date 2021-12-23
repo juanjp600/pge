@@ -212,7 +212,7 @@ const std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
 
 const std::vector<byte> FilePath::readBytes() const {
     asrt(valid, INVALID_STR);
-    std::ifstream file(str().c8str(), std::ios::ate | std::ios::binary);
+    std::ifstream file(str().cstr(), std::ios::ate | std::ios::binary);
     asrt(file.is_open(), "Couldn't read bytes from file (file: \"" + str() + "\")");
     std::vector<byte> bytes;
     size_t size = (size_t)file.tellg();
