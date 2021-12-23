@@ -31,11 +31,11 @@ jobs:
         run: msbuild Windows/PGE.sln /t:Tests /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} /m
         
       - name: Run tests x86
-        if: matrix.platform == x86
+        if: matrix.platform == 'x86'
         timeout-minutes: 1
         run: Windows/Win32/${{ matrix.configuration }}/Tests.exe
         
       - name: Run tests x64
-        if: matrix.platform == x64
+        if: matrix.platform == 'x64'
         timeout-minutes: 1
         run: Windows/x64/${{ matrix.configuration }}/Tests.exe
