@@ -32,7 +32,7 @@ class AbstractIO {
 
         AbstractIO(const PGE::FilePath& file, std::ios::openmode mode = std::ios::binary) {
             asrt(file.isValid(), INVALID_FILEPATH);
-            stream.open(file.str().c8str(), mode);
+            stream.open(file.str().cstr(), mode);
             asrt(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
         }
 
