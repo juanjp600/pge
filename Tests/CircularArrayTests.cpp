@@ -268,7 +268,7 @@ TEST_CASE("Iterator distance") {
         CHECK(ints.begin() - it == -i);
         CHECK(it - ints.begin() == i);
         CHECK(ints.end() - it == ints.size() - i);
-        CHECK(it - ints.end() == i - ints.size());
+        CHECK(it - ints.end() == i - (int)ints.size());
     }
 }
 

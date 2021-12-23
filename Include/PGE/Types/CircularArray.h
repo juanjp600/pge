@@ -165,7 +165,7 @@ class CircularArray {
 
                 constexpr i64 operator-(const BasicIterator& other) const {
                     asrt(carr == other.carr, "Tried calculating iterator difference for different carrays");
-                    return pos - other.pos;
+                    return (i64)pos - other.pos;
                 }
 
                 constexpr size_t getPosition() const {
