@@ -2,6 +2,7 @@
 #define PGE_MATH_H_INCLUDED
 
 #include <concepts>
+#include <numeric>
 
 namespace PGE {
 
