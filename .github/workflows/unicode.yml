@@ -1,0 +1,32 @@
+name: Unicode update
+
+on: workflow_dispatch
+
+jobs:
+  unicode:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "15.x"
+
+      - name: Generate Unicode Code
+        run: node .github/workflows/unicode-generator.js Src/String/Unicode.cpp
+
+      - name: Commit & Push
+        run: |
+          if git diff --exit-code; then
+            echo "Nothing to push!"
+          else
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "GitHub Actions Bot"
+            git add .
+            git commit -m "Update guidelines from [${GITHUB_SHA::8}]"
+            git push
+          fi

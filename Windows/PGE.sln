@@ -43,11 +43,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcxpro
 		{86FA7807-97DD-432B-BAFD-4B8304762DEA} = {86FA7807-97DD-432B-BAFD-4B8304762DEA}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnicodeGenerator", "UnicodeGenerator\UnicodeGenerator.vcxproj", "{6C590CEF-BAF6-4364-B8AF-CEAD1EA02911}"
-	ProjectSection(ProjectDependencies) = postProject
-		{86FA7807-97DD-432B-BAFD-4B8304762DEA} = {86FA7807-97DD-432B-BAFD-4B8304762DEA}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -114,14 +109,6 @@ Global
 		{76C45873-8E8C-4D14-841F-87643D6F2988}.Release|x64.Build.0 = Release|x64
 		{76C45873-8E8C-4D14-841F-87643D6F2988}.Release|x86.ActiveCfg = Release|Win32
 		{76C45873-8E8C-4D14-841F-87643D6F2988}.Release|x86.Build.0 = Release|Win32
-		{6C590CEF-BAF6-4364-B8AF-CEAD1EA02911}.Debug|x64.ActiveCfg = Debug|x64
-		{6C590CEF-BAF6-4364-B8AF-CEAD1EA02911}.Debug|x64.Build.0 = Debug|x64
-		{6C590CEF-BAF6-4364-B8AF-CEAD1EA02911}.Debug|x86.ActiveCfg = Debug|Win32
-		{6C590CEF-BAF6-4364-B8AF-CEAD1EA02911}.Debug|x86.Build.0 = Debug|Win32
-		{6C590CEF-BAF6-4364-B8AF-CEAD1EA02911}.Release|x64.ActiveCfg = Release|x64
-		{6C590CEF-BAF6-4364-B8AF-CEAD1EA02911}.Release|x64.Build.0 = Release|x64
-		{6C590CEF-BAF6-4364-B8AF-CEAD1EA02911}.Release|x86.ActiveCfg = Release|Win32
-		{6C590CEF-BAF6-4364-B8AF-CEAD1EA02911}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
