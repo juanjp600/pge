@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   push:
     paths:
-      .github/workflows/unicode.yml
-      .github/workflows/unicode-generator.js
-      .github/workflows/unicode-header.txt
-      Src/String/Unicode.cpp # Prevent vandalism
+      - ".github/workflows/unicode.yml"
+      - ".github/workflows/unicode-generator.js"
+      - ".github/workflows/unicode-header.txt"
+      - "Src/String/Unicode.cpp" # Prevent vandalism
 
 jobs:
   unicode:
