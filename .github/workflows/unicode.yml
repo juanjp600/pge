@@ -1,6 +1,13 @@
 name: Unicode update
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      .github/workflows/unicode.yml
+      .github/workflows/unicode-generator.js
+      .github/workflows/unicode-header.txt
+      Src/String/Unicode.cpp # Prevent vandalism
 
 jobs:
   unicode:
@@ -27,6 +34,10 @@ jobs:
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --local user.name "GitHub Actions Bot"
             git add .
-            git commit -m "Update Unicode Code"
+            if [ $GITHUB_EVENT_NAME = "push" ]; then
+              git commit -m "Update Unicode Code from [${GITHUB_SHA::8}]"
+            else
+              git commit -m "Update Unicode Code"
+            fi
             git push
           fi
