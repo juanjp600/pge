@@ -28,10 +28,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u0041': {
             queue.pushBack(u'\u0061');
         } break;
-        case u'\u1E9A': {
-            queue.pushBack(u'\u0061');
-            queue.pushBack(u'\u02BE');
-        } break;
         case u'\u0042': {
             queue.pushBack(u'\u0062');
         } break;
@@ -47,51 +43,17 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u0046': {
             queue.pushBack(u'\u0066');
         } break;
-        case u'\uFB00': {
-            queue.pushBack(u'\u0066');
-            queue.pushBack(u'\u0066');
-        } break;
-        case u'\uFB03': {
-            queue.pushBack(u'\u0066');
-            queue.pushBack(u'\u0066');
-            queue.pushBack(u'\u0069');
-        } break;
-        case u'\uFB04': {
-            queue.pushBack(u'\u0066');
-            queue.pushBack(u'\u0066');
-            queue.pushBack(u'\u006C');
-        } break;
-        case u'\uFB01': {
-            queue.pushBack(u'\u0066');
-            queue.pushBack(u'\u0069');
-        } break;
-        case u'\uFB02': {
-            queue.pushBack(u'\u0066');
-            queue.pushBack(u'\u006C');
-        } break;
         case u'\u0047': {
             queue.pushBack(u'\u0067');
         } break;
         case u'\u0048': {
             queue.pushBack(u'\u0068');
         } break;
-        case u'\u1E96': {
-            queue.pushBack(u'\u0068');
-            queue.pushBack(u'\u0331');
-        } break;
         case u'\u0049': {
             queue.pushBack(u'\u0069');
         } break;
-        case u'\u0130': {
-            queue.pushBack(u'\u0069');
-            queue.pushBack(u'\u0307');
-        } break;
         case u'\u004A': {
             queue.pushBack(u'\u006A');
-        } break;
-        case u'\u01F0': {
-            queue.pushBack(u'\u006A');
-            queue.pushBack(u'\u030C');
         } break;
         case u'\u004B': [[fallthrough]];
         case u'\u212A': {
@@ -122,22 +84,8 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u017F': {
             queue.pushBack(u'\u0073');
         } break;
-        case u'\u00DF': [[fallthrough]];
-        case u'\u1E9E': {
-            queue.pushBack(u'\u0073');
-            queue.pushBack(u'\u0073');
-        } break;
-        case u'\uFB05': [[fallthrough]];
-        case u'\uFB06': {
-            queue.pushBack(u'\u0073');
-            queue.pushBack(u'\u0074');
-        } break;
         case u'\u0054': {
             queue.pushBack(u'\u0074');
-        } break;
-        case u'\u1E97': {
-            queue.pushBack(u'\u0074');
-            queue.pushBack(u'\u0308');
         } break;
         case u'\u0055': {
             queue.pushBack(u'\u0075');
@@ -148,22 +96,18 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u0057': {
             queue.pushBack(u'\u0077');
         } break;
-        case u'\u1E98': {
-            queue.pushBack(u'\u0077');
-            queue.pushBack(u'\u030A');
-        } break;
         case u'\u0058': {
             queue.pushBack(u'\u0078');
         } break;
         case u'\u0059': {
             queue.pushBack(u'\u0079');
         } break;
-        case u'\u1E99': {
-            queue.pushBack(u'\u0079');
-            queue.pushBack(u'\u030A');
-        } break;
         case u'\u005A': {
             queue.pushBack(u'\u007A');
+        } break;
+        case u'\u00B5': [[fallthrough]];
+        case u'\u039C': {
+            queue.pushBack(u'\u03BC');
         } break;
         case u'\u00C0': {
             queue.pushBack(u'\u00E0');
@@ -256,8 +200,10 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u00DE': {
             queue.pushBack(u'\u00FE');
         } break;
-        case u'\u0178': {
-            queue.pushBack(u'\u00FF');
+        case u'\u00DF': [[fallthrough]];
+        case u'\u1E9E': {
+            queue.pushBack(u'\u0073');
+            queue.pushBack(u'\u0073');
         } break;
         case u'\u0100': {
             queue.pushBack(u'\u0101');
@@ -331,6 +277,10 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u012E': {
             queue.pushBack(u'\u012F');
         } break;
+        case u'\u0130': {
+            queue.pushBack(u'\u0069');
+            queue.pushBack(u'\u0307');
+        } break;
         case u'\u0132': {
             queue.pushBack(u'\u0133');
         } break;
@@ -363,6 +313,10 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         } break;
         case u'\u0147': {
             queue.pushBack(u'\u0148');
+        } break;
+        case u'\u0149': {
+            queue.pushBack(u'\u02BC');
+            queue.pushBack(u'\u006E');
         } break;
         case u'\u014A': {
             queue.pushBack(u'\u014B');
@@ -433,6 +387,9 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u0176': {
             queue.pushBack(u'\u0177');
         } break;
+        case u'\u0178': {
+            queue.pushBack(u'\u00FF');
+        } break;
         case u'\u0179': {
             queue.pushBack(u'\u017A');
         } break;
@@ -442,8 +399,8 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u017D': {
             queue.pushBack(u'\u017E');
         } break;
-        case u'\u0243': {
-            queue.pushBack(u'\u0180');
+        case u'\u0181': {
+            queue.pushBack(u'\u0253');
         } break;
         case u'\u0182': {
             queue.pushBack(u'\u0183');
@@ -451,26 +408,56 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u0184': {
             queue.pushBack(u'\u0185');
         } break;
+        case u'\u0186': {
+            queue.pushBack(u'\u0254');
+        } break;
         case u'\u0187': {
             queue.pushBack(u'\u0188');
+        } break;
+        case u'\u0189': {
+            queue.pushBack(u'\u0256');
+        } break;
+        case u'\u018A': {
+            queue.pushBack(u'\u0257');
         } break;
         case u'\u018B': {
             queue.pushBack(u'\u018C');
         } break;
+        case u'\u018E': {
+            queue.pushBack(u'\u01DD');
+        } break;
+        case u'\u018F': {
+            queue.pushBack(u'\u0259');
+        } break;
+        case u'\u0190': {
+            queue.pushBack(u'\u025B');
+        } break;
         case u'\u0191': {
             queue.pushBack(u'\u0192');
         } break;
-        case u'\u01F6': {
-            queue.pushBack(u'\u0195');
+        case u'\u0193': {
+            queue.pushBack(u'\u0260');
+        } break;
+        case u'\u0194': {
+            queue.pushBack(u'\u0263');
+        } break;
+        case u'\u0196': {
+            queue.pushBack(u'\u0269');
+        } break;
+        case u'\u0197': {
+            queue.pushBack(u'\u0268');
         } break;
         case u'\u0198': {
             queue.pushBack(u'\u0199');
         } break;
-        case u'\u023D': {
-            queue.pushBack(u'\u019A');
+        case u'\u019C': {
+            queue.pushBack(u'\u026F');
         } break;
-        case u'\u0220': {
-            queue.pushBack(u'\u019E');
+        case u'\u019D': {
+            queue.pushBack(u'\u0272');
+        } break;
+        case u'\u019F': {
+            queue.pushBack(u'\u0275');
         } break;
         case u'\u01A0': {
             queue.pushBack(u'\u01A1');
@@ -481,14 +468,29 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u01A4': {
             queue.pushBack(u'\u01A5');
         } break;
+        case u'\u01A6': {
+            queue.pushBack(u'\u0280');
+        } break;
         case u'\u01A7': {
             queue.pushBack(u'\u01A8');
+        } break;
+        case u'\u01A9': {
+            queue.pushBack(u'\u0283');
         } break;
         case u'\u01AC': {
             queue.pushBack(u'\u01AD');
         } break;
+        case u'\u01AE': {
+            queue.pushBack(u'\u0288');
+        } break;
         case u'\u01AF': {
             queue.pushBack(u'\u01B0');
+        } break;
+        case u'\u01B1': {
+            queue.pushBack(u'\u028A');
+        } break;
+        case u'\u01B2': {
+            queue.pushBack(u'\u028B');
         } break;
         case u'\u01B3': {
             queue.pushBack(u'\u01B4');
@@ -496,14 +498,14 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u01B5': {
             queue.pushBack(u'\u01B6');
         } break;
+        case u'\u01B7': {
+            queue.pushBack(u'\u0292');
+        } break;
         case u'\u01B8': {
             queue.pushBack(u'\u01B9');
         } break;
         case u'\u01BC': {
             queue.pushBack(u'\u01BD');
-        } break;
-        case u'\u01F7': {
-            queue.pushBack(u'\u01BF');
         } break;
         case u'\u01C4': [[fallthrough]];
         case u'\u01C5': {
@@ -541,9 +543,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u01DB': {
             queue.pushBack(u'\u01DC');
         } break;
-        case u'\u018E': {
-            queue.pushBack(u'\u01DD');
-        } break;
         case u'\u01DE': {
             queue.pushBack(u'\u01DF');
         } break;
@@ -571,12 +570,22 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u01EE': {
             queue.pushBack(u'\u01EF');
         } break;
+        case u'\u01F0': {
+            queue.pushBack(u'\u006A');
+            queue.pushBack(u'\u030C');
+        } break;
         case u'\u01F1': [[fallthrough]];
         case u'\u01F2': {
             queue.pushBack(u'\u01F3');
         } break;
         case u'\u01F4': {
             queue.pushBack(u'\u01F5');
+        } break;
+        case u'\u01F6': {
+            queue.pushBack(u'\u0195');
+        } break;
+        case u'\u01F7': {
+            queue.pushBack(u'\u01BF');
         } break;
         case u'\u01F8': {
             queue.pushBack(u'\u01F9');
@@ -638,6 +647,9 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u021E': {
             queue.pushBack(u'\u021F');
         } break;
+        case u'\u0220': {
+            queue.pushBack(u'\u019E');
+        } break;
         case u'\u0222': {
             queue.pushBack(u'\u0223');
         } break;
@@ -665,17 +677,29 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u0232': {
             queue.pushBack(u'\u0233');
         } break;
+        case u'\u023A': {
+            queue.pushBack(u'\u2C65');
+        } break;
         case u'\u023B': {
             queue.pushBack(u'\u023C');
         } break;
-        case u'\u2C7E': {
-            queue.pushBack(u'\u023F');
+        case u'\u023D': {
+            queue.pushBack(u'\u019A');
         } break;
-        case u'\u2C7F': {
-            queue.pushBack(u'\u0240');
+        case u'\u023E': {
+            queue.pushBack(u'\u2C66');
         } break;
         case u'\u0241': {
             queue.pushBack(u'\u0242');
+        } break;
+        case u'\u0243': {
+            queue.pushBack(u'\u0180');
+        } break;
+        case u'\u0244': {
+            queue.pushBack(u'\u0289');
+        } break;
+        case u'\u0245': {
+            queue.pushBack(u'\u028C');
         } break;
         case u'\u0246': {
             queue.pushBack(u'\u0247');
@@ -692,120 +716,10 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u024E': {
             queue.pushBack(u'\u024F');
         } break;
-        case u'\u2C6F': {
-            queue.pushBack(u'\u0250');
-        } break;
-        case u'\u2C6D': {
-            queue.pushBack(u'\u0251');
-        } break;
-        case u'\u2C70': {
-            queue.pushBack(u'\u0252');
-        } break;
-        case u'\u0181': {
-            queue.pushBack(u'\u0253');
-        } break;
-        case u'\u0186': {
-            queue.pushBack(u'\u0254');
-        } break;
-        case u'\u0189': {
-            queue.pushBack(u'\u0256');
-        } break;
-        case u'\u018A': {
-            queue.pushBack(u'\u0257');
-        } break;
-        case u'\u018F': {
-            queue.pushBack(u'\u0259');
-        } break;
-        case u'\u0190': {
-            queue.pushBack(u'\u025B');
-        } break;
-        case u'\uA7AB': {
-            queue.pushBack(u'\u025C');
-        } break;
-        case u'\u0193': {
-            queue.pushBack(u'\u0260');
-        } break;
-        case u'\uA7AC': {
-            queue.pushBack(u'\u0261');
-        } break;
-        case u'\u0194': {
-            queue.pushBack(u'\u0263');
-        } break;
-        case u'\uA78D': {
-            queue.pushBack(u'\u0265');
-        } break;
-        case u'\uA7AA': {
-            queue.pushBack(u'\u0266');
-        } break;
-        case u'\u0197': {
-            queue.pushBack(u'\u0268');
-        } break;
-        case u'\u0196': {
-            queue.pushBack(u'\u0269');
-        } break;
-        case u'\uA7AE': {
-            queue.pushBack(u'\u026A');
-        } break;
-        case u'\u2C62': {
-            queue.pushBack(u'\u026B');
-        } break;
-        case u'\uA7AD': {
-            queue.pushBack(u'\u026C');
-        } break;
-        case u'\u019C': {
-            queue.pushBack(u'\u026F');
-        } break;
-        case u'\u2C6E': {
-            queue.pushBack(u'\u0271');
-        } break;
-        case u'\u019D': {
-            queue.pushBack(u'\u0272');
-        } break;
-        case u'\u019F': {
-            queue.pushBack(u'\u0275');
-        } break;
-        case u'\u2C64': {
-            queue.pushBack(u'\u027D');
-        } break;
-        case u'\u01A6': {
-            queue.pushBack(u'\u0280');
-        } break;
-        case u'\uA7C5': {
-            queue.pushBack(u'\u0282');
-        } break;
-        case u'\u01A9': {
-            queue.pushBack(u'\u0283');
-        } break;
-        case u'\uA7B1': {
-            queue.pushBack(u'\u0287');
-        } break;
-        case u'\u01AE': {
-            queue.pushBack(u'\u0288');
-        } break;
-        case u'\u0244': {
-            queue.pushBack(u'\u0289');
-        } break;
-        case u'\u01B1': {
-            queue.pushBack(u'\u028A');
-        } break;
-        case u'\u01B2': {
-            queue.pushBack(u'\u028B');
-        } break;
-        case u'\u0245': {
-            queue.pushBack(u'\u028C');
-        } break;
-        case u'\u01B7': {
-            queue.pushBack(u'\u0292');
-        } break;
-        case u'\uA7B2': {
-            queue.pushBack(u'\u029D');
-        } break;
-        case u'\uA7B0': {
-            queue.pushBack(u'\u029E');
-        } break;
-        case u'\u0149': {
-            queue.pushBack(u'\u02BC');
-            queue.pushBack(u'\u006E');
+        case u'\u0345': [[fallthrough]];
+        case u'\u0399': [[fallthrough]];
+        case u'\u1FBE': {
+            queue.pushBack(u'\u03B9');
         } break;
         case u'\u0370': {
             queue.pushBack(u'\u0371');
@@ -816,21 +730,11 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u0376': {
             queue.pushBack(u'\u0377');
         } break;
-        case u'\u03FD': {
-            queue.pushBack(u'\u037B');
-        } break;
-        case u'\u03FE': {
-            queue.pushBack(u'\u037C');
-        } break;
-        case u'\u03FF': {
-            queue.pushBack(u'\u037D');
+        case u'\u037F': {
+            queue.pushBack(u'\u03F3');
         } break;
         case u'\u0386': {
             queue.pushBack(u'\u03AC');
-        } break;
-        case u'\u1FB4': {
-            queue.pushBack(u'\u03AC');
-            queue.pushBack(u'\u03B9');
         } break;
         case u'\u0388': {
             queue.pushBack(u'\u03AD');
@@ -838,29 +742,26 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u0389': {
             queue.pushBack(u'\u03AE');
         } break;
-        case u'\u1FC4': {
-            queue.pushBack(u'\u03AE');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u038A': {
             queue.pushBack(u'\u03AF');
         } break;
+        case u'\u038C': {
+            queue.pushBack(u'\u03CC');
+        } break;
+        case u'\u038E': {
+            queue.pushBack(u'\u03CD');
+        } break;
+        case u'\u038F': {
+            queue.pushBack(u'\u03CE');
+        } break;
+        case u'\u0390': [[fallthrough]];
+        case u'\u1FD3': {
+            queue.pushBack(u'\u03B9');
+            queue.pushBack(u'\u0308');
+            queue.pushBack(u'\u0301');
+        } break;
         case u'\u0391': {
             queue.pushBack(u'\u03B1');
-        } break;
-        case u'\u1FB6': {
-            queue.pushBack(u'\u03B1');
-            queue.pushBack(u'\u0342');
-        } break;
-        case u'\u1FB7': {
-            queue.pushBack(u'\u03B1');
-            queue.pushBack(u'\u0342');
-            queue.pushBack(u'\u03B9');
-        } break;
-        case u'\u1FB3': [[fallthrough]];
-        case u'\u1FBC': {
-            queue.pushBack(u'\u03B1');
-            queue.pushBack(u'\u03B9');
         } break;
         case u'\u0392': [[fallthrough]];
         case u'\u03D0': {
@@ -882,49 +783,10 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u0397': {
             queue.pushBack(u'\u03B7');
         } break;
-        case u'\u1FC6': {
-            queue.pushBack(u'\u03B7');
-            queue.pushBack(u'\u0342');
-        } break;
-        case u'\u1FC7': {
-            queue.pushBack(u'\u03B7');
-            queue.pushBack(u'\u0342');
-            queue.pushBack(u'\u03B9');
-        } break;
-        case u'\u1FC3': [[fallthrough]];
-        case u'\u1FCC': {
-            queue.pushBack(u'\u03B7');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u0398': [[fallthrough]];
         case u'\u03D1': [[fallthrough]];
         case u'\u03F4': {
             queue.pushBack(u'\u03B8');
-        } break;
-        case u'\u0345': [[fallthrough]];
-        case u'\u0399': [[fallthrough]];
-        case u'\u1FBE': {
-            queue.pushBack(u'\u03B9');
-        } break;
-        case u'\u1FD2': {
-            queue.pushBack(u'\u03B9');
-            queue.pushBack(u'\u0308');
-            queue.pushBack(u'\u0300');
-        } break;
-        case u'\u0390': [[fallthrough]];
-        case u'\u1FD3': {
-            queue.pushBack(u'\u03B9');
-            queue.pushBack(u'\u0308');
-            queue.pushBack(u'\u0301');
-        } break;
-        case u'\u1FD7': {
-            queue.pushBack(u'\u03B9');
-            queue.pushBack(u'\u0308');
-            queue.pushBack(u'\u0342');
-        } break;
-        case u'\u1FD6': {
-            queue.pushBack(u'\u03B9');
-            queue.pushBack(u'\u0342');
         } break;
         case u'\u039A': [[fallthrough]];
         case u'\u03F0': {
@@ -932,10 +794,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         } break;
         case u'\u039B': {
             queue.pushBack(u'\u03BB');
-        } break;
-        case u'\u00B5': [[fallthrough]];
-        case u'\u039C': {
-            queue.pushBack(u'\u03BC');
         } break;
         case u'\u039D': {
             queue.pushBack(u'\u03BD');
@@ -954,10 +812,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u03F1': {
             queue.pushBack(u'\u03C1');
         } break;
-        case u'\u1FE4': {
-            queue.pushBack(u'\u03C1');
-            queue.pushBack(u'\u0313');
-        } break;
         case u'\u03A3': [[fallthrough]];
         case u'\u03C2': {
             queue.pushBack(u'\u03C3');
@@ -967,45 +821,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         } break;
         case u'\u03A5': {
             queue.pushBack(u'\u03C5');
-        } break;
-        case u'\u1FE2': {
-            queue.pushBack(u'\u03C5');
-            queue.pushBack(u'\u0308');
-            queue.pushBack(u'\u0300');
-        } break;
-        case u'\u03B0': [[fallthrough]];
-        case u'\u1FE3': {
-            queue.pushBack(u'\u03C5');
-            queue.pushBack(u'\u0308');
-            queue.pushBack(u'\u0301');
-        } break;
-        case u'\u1FE7': {
-            queue.pushBack(u'\u03C5');
-            queue.pushBack(u'\u0308');
-            queue.pushBack(u'\u0342');
-        } break;
-        case u'\u1F50': {
-            queue.pushBack(u'\u03C5');
-            queue.pushBack(u'\u0313');
-        } break;
-        case u'\u1F52': {
-            queue.pushBack(u'\u03C5');
-            queue.pushBack(u'\u0313');
-            queue.pushBack(u'\u0300');
-        } break;
-        case u'\u1F54': {
-            queue.pushBack(u'\u03C5');
-            queue.pushBack(u'\u0313');
-            queue.pushBack(u'\u0301');
-        } break;
-        case u'\u1F56': {
-            queue.pushBack(u'\u03C5');
-            queue.pushBack(u'\u0313');
-            queue.pushBack(u'\u0342');
-        } break;
-        case u'\u1FE6': {
-            queue.pushBack(u'\u03C5');
-            queue.pushBack(u'\u0342');
         } break;
         case u'\u03A6': [[fallthrough]];
         case u'\u03D5': {
@@ -1017,42 +832,17 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u03A8': {
             queue.pushBack(u'\u03C8');
         } break;
-        case u'\u03A9': [[fallthrough]];
-        case u'\u2126': {
-            queue.pushBack(u'\u03C9');
-        } break;
-        case u'\u1FF6': {
-            queue.pushBack(u'\u03C9');
-            queue.pushBack(u'\u0342');
-        } break;
-        case u'\u1FF7': {
-            queue.pushBack(u'\u03C9');
-            queue.pushBack(u'\u0342');
-            queue.pushBack(u'\u03B9');
-        } break;
-        case u'\u1FF3': [[fallthrough]];
-        case u'\u1FFC': {
-            queue.pushBack(u'\u03C9');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u03AA': {
             queue.pushBack(u'\u03CA');
         } break;
         case u'\u03AB': {
             queue.pushBack(u'\u03CB');
         } break;
-        case u'\u038C': {
-            queue.pushBack(u'\u03CC');
-        } break;
-        case u'\u038E': {
-            queue.pushBack(u'\u03CD');
-        } break;
-        case u'\u038F': {
-            queue.pushBack(u'\u03CE');
-        } break;
-        case u'\u1FF4': {
-            queue.pushBack(u'\u03CE');
-            queue.pushBack(u'\u03B9');
+        case u'\u03B0': [[fallthrough]];
+        case u'\u1FE3': {
+            queue.pushBack(u'\u03C5');
+            queue.pushBack(u'\u0308');
+            queue.pushBack(u'\u0301');
         } break;
         case u'\u03CF': {
             queue.pushBack(u'\u03D7');
@@ -1093,17 +883,71 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u03EE': {
             queue.pushBack(u'\u03EF');
         } break;
-        case u'\u03F9': {
-            queue.pushBack(u'\u03F2');
-        } break;
-        case u'\u037F': {
-            queue.pushBack(u'\u03F3');
-        } break;
         case u'\u03F7': {
             queue.pushBack(u'\u03F8');
         } break;
+        case u'\u03F9': {
+            queue.pushBack(u'\u03F2');
+        } break;
         case u'\u03FA': {
             queue.pushBack(u'\u03FB');
+        } break;
+        case u'\u03FD': {
+            queue.pushBack(u'\u037B');
+        } break;
+        case u'\u03FE': {
+            queue.pushBack(u'\u037C');
+        } break;
+        case u'\u03FF': {
+            queue.pushBack(u'\u037D');
+        } break;
+        case u'\u0400': {
+            queue.pushBack(u'\u0450');
+        } break;
+        case u'\u0401': {
+            queue.pushBack(u'\u0451');
+        } break;
+        case u'\u0402': {
+            queue.pushBack(u'\u0452');
+        } break;
+        case u'\u0403': {
+            queue.pushBack(u'\u0453');
+        } break;
+        case u'\u0404': {
+            queue.pushBack(u'\u0454');
+        } break;
+        case u'\u0405': {
+            queue.pushBack(u'\u0455');
+        } break;
+        case u'\u0406': {
+            queue.pushBack(u'\u0456');
+        } break;
+        case u'\u0407': {
+            queue.pushBack(u'\u0457');
+        } break;
+        case u'\u0408': {
+            queue.pushBack(u'\u0458');
+        } break;
+        case u'\u0409': {
+            queue.pushBack(u'\u0459');
+        } break;
+        case u'\u040A': {
+            queue.pushBack(u'\u045A');
+        } break;
+        case u'\u040B': {
+            queue.pushBack(u'\u045B');
+        } break;
+        case u'\u040C': {
+            queue.pushBack(u'\u045C');
+        } break;
+        case u'\u040D': {
+            queue.pushBack(u'\u045D');
+        } break;
+        case u'\u040E': {
+            queue.pushBack(u'\u045E');
+        } break;
+        case u'\u040F': {
+            queue.pushBack(u'\u045F');
         } break;
         case u'\u0410': {
             queue.pushBack(u'\u0430');
@@ -1207,54 +1051,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         } break;
         case u'\u042F': {
             queue.pushBack(u'\u044F');
-        } break;
-        case u'\u0400': {
-            queue.pushBack(u'\u0450');
-        } break;
-        case u'\u0401': {
-            queue.pushBack(u'\u0451');
-        } break;
-        case u'\u0402': {
-            queue.pushBack(u'\u0452');
-        } break;
-        case u'\u0403': {
-            queue.pushBack(u'\u0453');
-        } break;
-        case u'\u0404': {
-            queue.pushBack(u'\u0454');
-        } break;
-        case u'\u0405': {
-            queue.pushBack(u'\u0455');
-        } break;
-        case u'\u0406': {
-            queue.pushBack(u'\u0456');
-        } break;
-        case u'\u0407': {
-            queue.pushBack(u'\u0457');
-        } break;
-        case u'\u0408': {
-            queue.pushBack(u'\u0458');
-        } break;
-        case u'\u0409': {
-            queue.pushBack(u'\u0459');
-        } break;
-        case u'\u040A': {
-            queue.pushBack(u'\u045A');
-        } break;
-        case u'\u040B': {
-            queue.pushBack(u'\u045B');
-        } break;
-        case u'\u040C': {
-            queue.pushBack(u'\u045C');
-        } break;
-        case u'\u040D': {
-            queue.pushBack(u'\u045D');
-        } break;
-        case u'\u040E': {
-            queue.pushBack(u'\u045E');
-        } break;
-        case u'\u040F': {
-            queue.pushBack(u'\u045F');
         } break;
         case u'\u0460': {
             queue.pushBack(u'\u0461');
@@ -1389,6 +1185,9 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u04BE': {
             queue.pushBack(u'\u04BF');
         } break;
+        case u'\u04C0': {
+            queue.pushBack(u'\u04CF');
+        } break;
         case u'\u04C1': {
             queue.pushBack(u'\u04C2');
         } break;
@@ -1409,9 +1208,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         } break;
         case u'\u04CD': {
             queue.pushBack(u'\u04CE');
-        } break;
-        case u'\u04C0': {
-            queue.pushBack(u'\u04CF');
         } break;
         case u'\u04D0': {
             queue.pushBack(u'\u04D1');
@@ -1572,10 +1368,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u0535': {
             queue.pushBack(u'\u0565');
         } break;
-        case u'\u0587': {
-            queue.pushBack(u'\u0565');
-            queue.pushBack(u'\u0582');
-        } break;
         case u'\u0536': {
             queue.pushBack(u'\u0566');
         } break;
@@ -1621,22 +1413,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u0544': {
             queue.pushBack(u'\u0574');
         } break;
-        case u'\uFB14': {
-            queue.pushBack(u'\u0574');
-            queue.pushBack(u'\u0565');
-        } break;
-        case u'\uFB15': {
-            queue.pushBack(u'\u0574');
-            queue.pushBack(u'\u056B');
-        } break;
-        case u'\uFB17': {
-            queue.pushBack(u'\u0574');
-            queue.pushBack(u'\u056D');
-        } break;
-        case u'\uFB13': {
-            queue.pushBack(u'\u0574');
-            queue.pushBack(u'\u0576');
-        } break;
         case u'\u0545': {
             queue.pushBack(u'\u0575');
         } break;
@@ -1667,10 +1443,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u054E': {
             queue.pushBack(u'\u057E');
         } break;
-        case u'\uFB16': {
-            queue.pushBack(u'\u057E');
-            queue.pushBack(u'\u0576');
-        } break;
         case u'\u054F': {
             queue.pushBack(u'\u057F');
         } break;
@@ -1694,6 +1466,152 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         } break;
         case u'\u0556': {
             queue.pushBack(u'\u0586');
+        } break;
+        case u'\u0587': {
+            queue.pushBack(u'\u0565');
+            queue.pushBack(u'\u0582');
+        } break;
+        case u'\u10A0': {
+            queue.pushBack(u'\u2D00');
+        } break;
+        case u'\u10A1': {
+            queue.pushBack(u'\u2D01');
+        } break;
+        case u'\u10A2': {
+            queue.pushBack(u'\u2D02');
+        } break;
+        case u'\u10A3': {
+            queue.pushBack(u'\u2D03');
+        } break;
+        case u'\u10A4': {
+            queue.pushBack(u'\u2D04');
+        } break;
+        case u'\u10A5': {
+            queue.pushBack(u'\u2D05');
+        } break;
+        case u'\u10A6': {
+            queue.pushBack(u'\u2D06');
+        } break;
+        case u'\u10A7': {
+            queue.pushBack(u'\u2D07');
+        } break;
+        case u'\u10A8': {
+            queue.pushBack(u'\u2D08');
+        } break;
+        case u'\u10A9': {
+            queue.pushBack(u'\u2D09');
+        } break;
+        case u'\u10AA': {
+            queue.pushBack(u'\u2D0A');
+        } break;
+        case u'\u10AB': {
+            queue.pushBack(u'\u2D0B');
+        } break;
+        case u'\u10AC': {
+            queue.pushBack(u'\u2D0C');
+        } break;
+        case u'\u10AD': {
+            queue.pushBack(u'\u2D0D');
+        } break;
+        case u'\u10AE': {
+            queue.pushBack(u'\u2D0E');
+        } break;
+        case u'\u10AF': {
+            queue.pushBack(u'\u2D0F');
+        } break;
+        case u'\u10B0': {
+            queue.pushBack(u'\u2D10');
+        } break;
+        case u'\u10B1': {
+            queue.pushBack(u'\u2D11');
+        } break;
+        case u'\u10B2': {
+            queue.pushBack(u'\u2D12');
+        } break;
+        case u'\u10B3': {
+            queue.pushBack(u'\u2D13');
+        } break;
+        case u'\u10B4': {
+            queue.pushBack(u'\u2D14');
+        } break;
+        case u'\u10B5': {
+            queue.pushBack(u'\u2D15');
+        } break;
+        case u'\u10B6': {
+            queue.pushBack(u'\u2D16');
+        } break;
+        case u'\u10B7': {
+            queue.pushBack(u'\u2D17');
+        } break;
+        case u'\u10B8': {
+            queue.pushBack(u'\u2D18');
+        } break;
+        case u'\u10B9': {
+            queue.pushBack(u'\u2D19');
+        } break;
+        case u'\u10BA': {
+            queue.pushBack(u'\u2D1A');
+        } break;
+        case u'\u10BB': {
+            queue.pushBack(u'\u2D1B');
+        } break;
+        case u'\u10BC': {
+            queue.pushBack(u'\u2D1C');
+        } break;
+        case u'\u10BD': {
+            queue.pushBack(u'\u2D1D');
+        } break;
+        case u'\u10BE': {
+            queue.pushBack(u'\u2D1E');
+        } break;
+        case u'\u10BF': {
+            queue.pushBack(u'\u2D1F');
+        } break;
+        case u'\u10C0': {
+            queue.pushBack(u'\u2D20');
+        } break;
+        case u'\u10C1': {
+            queue.pushBack(u'\u2D21');
+        } break;
+        case u'\u10C2': {
+            queue.pushBack(u'\u2D22');
+        } break;
+        case u'\u10C3': {
+            queue.pushBack(u'\u2D23');
+        } break;
+        case u'\u10C4': {
+            queue.pushBack(u'\u2D24');
+        } break;
+        case u'\u10C5': {
+            queue.pushBack(u'\u2D25');
+        } break;
+        case u'\u10C7': {
+            queue.pushBack(u'\u2D27');
+        } break;
+        case u'\u10CD': {
+            queue.pushBack(u'\u2D2D');
+        } break;
+        case u'\u13F8': {
+            queue.pushBack(u'\u13F0');
+        } break;
+        case u'\u13F9': {
+            queue.pushBack(u'\u13F1');
+        } break;
+        case u'\u13FA': {
+            queue.pushBack(u'\u13F2');
+        } break;
+        case u'\u13FB': {
+            queue.pushBack(u'\u13F3');
+        } break;
+        case u'\u13FC': {
+            queue.pushBack(u'\u13F4');
+        } break;
+        case u'\u13FD': {
+            queue.pushBack(u'\u13F5');
+        } break;
+        case u'\u1C88': [[fallthrough]];
+        case u'\uA64A': {
+            queue.pushBack(u'\uA64B');
         } break;
         case u'\u1C90': {
             queue.pushBack(u'\u10D0');
@@ -1832,273 +1750,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         } break;
         case u'\u1CBF': {
             queue.pushBack(u'\u10FF');
-        } break;
-        case u'\uAB70': {
-            queue.pushBack(u'\u13A0');
-        } break;
-        case u'\uAB71': {
-            queue.pushBack(u'\u13A1');
-        } break;
-        case u'\uAB72': {
-            queue.pushBack(u'\u13A2');
-        } break;
-        case u'\uAB73': {
-            queue.pushBack(u'\u13A3');
-        } break;
-        case u'\uAB74': {
-            queue.pushBack(u'\u13A4');
-        } break;
-        case u'\uAB75': {
-            queue.pushBack(u'\u13A5');
-        } break;
-        case u'\uAB76': {
-            queue.pushBack(u'\u13A6');
-        } break;
-        case u'\uAB77': {
-            queue.pushBack(u'\u13A7');
-        } break;
-        case u'\uAB78': {
-            queue.pushBack(u'\u13A8');
-        } break;
-        case u'\uAB79': {
-            queue.pushBack(u'\u13A9');
-        } break;
-        case u'\uAB7A': {
-            queue.pushBack(u'\u13AA');
-        } break;
-        case u'\uAB7B': {
-            queue.pushBack(u'\u13AB');
-        } break;
-        case u'\uAB7C': {
-            queue.pushBack(u'\u13AC');
-        } break;
-        case u'\uAB7D': {
-            queue.pushBack(u'\u13AD');
-        } break;
-        case u'\uAB7E': {
-            queue.pushBack(u'\u13AE');
-        } break;
-        case u'\uAB7F': {
-            queue.pushBack(u'\u13AF');
-        } break;
-        case u'\uAB80': {
-            queue.pushBack(u'\u13B0');
-        } break;
-        case u'\uAB81': {
-            queue.pushBack(u'\u13B1');
-        } break;
-        case u'\uAB82': {
-            queue.pushBack(u'\u13B2');
-        } break;
-        case u'\uAB83': {
-            queue.pushBack(u'\u13B3');
-        } break;
-        case u'\uAB84': {
-            queue.pushBack(u'\u13B4');
-        } break;
-        case u'\uAB85': {
-            queue.pushBack(u'\u13B5');
-        } break;
-        case u'\uAB86': {
-            queue.pushBack(u'\u13B6');
-        } break;
-        case u'\uAB87': {
-            queue.pushBack(u'\u13B7');
-        } break;
-        case u'\uAB88': {
-            queue.pushBack(u'\u13B8');
-        } break;
-        case u'\uAB89': {
-            queue.pushBack(u'\u13B9');
-        } break;
-        case u'\uAB8A': {
-            queue.pushBack(u'\u13BA');
-        } break;
-        case u'\uAB8B': {
-            queue.pushBack(u'\u13BB');
-        } break;
-        case u'\uAB8C': {
-            queue.pushBack(u'\u13BC');
-        } break;
-        case u'\uAB8D': {
-            queue.pushBack(u'\u13BD');
-        } break;
-        case u'\uAB8E': {
-            queue.pushBack(u'\u13BE');
-        } break;
-        case u'\uAB8F': {
-            queue.pushBack(u'\u13BF');
-        } break;
-        case u'\uAB90': {
-            queue.pushBack(u'\u13C0');
-        } break;
-        case u'\uAB91': {
-            queue.pushBack(u'\u13C1');
-        } break;
-        case u'\uAB92': {
-            queue.pushBack(u'\u13C2');
-        } break;
-        case u'\uAB93': {
-            queue.pushBack(u'\u13C3');
-        } break;
-        case u'\uAB94': {
-            queue.pushBack(u'\u13C4');
-        } break;
-        case u'\uAB95': {
-            queue.pushBack(u'\u13C5');
-        } break;
-        case u'\uAB96': {
-            queue.pushBack(u'\u13C6');
-        } break;
-        case u'\uAB97': {
-            queue.pushBack(u'\u13C7');
-        } break;
-        case u'\uAB98': {
-            queue.pushBack(u'\u13C8');
-        } break;
-        case u'\uAB99': {
-            queue.pushBack(u'\u13C9');
-        } break;
-        case u'\uAB9A': {
-            queue.pushBack(u'\u13CA');
-        } break;
-        case u'\uAB9B': {
-            queue.pushBack(u'\u13CB');
-        } break;
-        case u'\uAB9C': {
-            queue.pushBack(u'\u13CC');
-        } break;
-        case u'\uAB9D': {
-            queue.pushBack(u'\u13CD');
-        } break;
-        case u'\uAB9E': {
-            queue.pushBack(u'\u13CE');
-        } break;
-        case u'\uAB9F': {
-            queue.pushBack(u'\u13CF');
-        } break;
-        case u'\uABA0': {
-            queue.pushBack(u'\u13D0');
-        } break;
-        case u'\uABA1': {
-            queue.pushBack(u'\u13D1');
-        } break;
-        case u'\uABA2': {
-            queue.pushBack(u'\u13D2');
-        } break;
-        case u'\uABA3': {
-            queue.pushBack(u'\u13D3');
-        } break;
-        case u'\uABA4': {
-            queue.pushBack(u'\u13D4');
-        } break;
-        case u'\uABA5': {
-            queue.pushBack(u'\u13D5');
-        } break;
-        case u'\uABA6': {
-            queue.pushBack(u'\u13D6');
-        } break;
-        case u'\uABA7': {
-            queue.pushBack(u'\u13D7');
-        } break;
-        case u'\uABA8': {
-            queue.pushBack(u'\u13D8');
-        } break;
-        case u'\uABA9': {
-            queue.pushBack(u'\u13D9');
-        } break;
-        case u'\uABAA': {
-            queue.pushBack(u'\u13DA');
-        } break;
-        case u'\uABAB': {
-            queue.pushBack(u'\u13DB');
-        } break;
-        case u'\uABAC': {
-            queue.pushBack(u'\u13DC');
-        } break;
-        case u'\uABAD': {
-            queue.pushBack(u'\u13DD');
-        } break;
-        case u'\uABAE': {
-            queue.pushBack(u'\u13DE');
-        } break;
-        case u'\uABAF': {
-            queue.pushBack(u'\u13DF');
-        } break;
-        case u'\uABB0': {
-            queue.pushBack(u'\u13E0');
-        } break;
-        case u'\uABB1': {
-            queue.pushBack(u'\u13E1');
-        } break;
-        case u'\uABB2': {
-            queue.pushBack(u'\u13E2');
-        } break;
-        case u'\uABB3': {
-            queue.pushBack(u'\u13E3');
-        } break;
-        case u'\uABB4': {
-            queue.pushBack(u'\u13E4');
-        } break;
-        case u'\uABB5': {
-            queue.pushBack(u'\u13E5');
-        } break;
-        case u'\uABB6': {
-            queue.pushBack(u'\u13E6');
-        } break;
-        case u'\uABB7': {
-            queue.pushBack(u'\u13E7');
-        } break;
-        case u'\uABB8': {
-            queue.pushBack(u'\u13E8');
-        } break;
-        case u'\uABB9': {
-            queue.pushBack(u'\u13E9');
-        } break;
-        case u'\uABBA': {
-            queue.pushBack(u'\u13EA');
-        } break;
-        case u'\uABBB': {
-            queue.pushBack(u'\u13EB');
-        } break;
-        case u'\uABBC': {
-            queue.pushBack(u'\u13EC');
-        } break;
-        case u'\uABBD': {
-            queue.pushBack(u'\u13ED');
-        } break;
-        case u'\uABBE': {
-            queue.pushBack(u'\u13EE');
-        } break;
-        case u'\uABBF': {
-            queue.pushBack(u'\u13EF');
-        } break;
-        case u'\u13F8': {
-            queue.pushBack(u'\u13F0');
-        } break;
-        case u'\u13F9': {
-            queue.pushBack(u'\u13F1');
-        } break;
-        case u'\u13FA': {
-            queue.pushBack(u'\u13F2');
-        } break;
-        case u'\u13FB': {
-            queue.pushBack(u'\u13F3');
-        } break;
-        case u'\u13FC': {
-            queue.pushBack(u'\u13F4');
-        } break;
-        case u'\u13FD': {
-            queue.pushBack(u'\u13F5');
-        } break;
-        case u'\uA77D': {
-            queue.pushBack(u'\u1D79');
-        } break;
-        case u'\u2C63': {
-            queue.pushBack(u'\u1D7D');
-        } break;
-        case u'\uA7C6': {
-            queue.pushBack(u'\u1D8E');
         } break;
         case u'\u1E00': {
             queue.pushBack(u'\u1E01');
@@ -2326,6 +1977,26 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u1E94': {
             queue.pushBack(u'\u1E95');
         } break;
+        case u'\u1E96': {
+            queue.pushBack(u'\u0068');
+            queue.pushBack(u'\u0331');
+        } break;
+        case u'\u1E97': {
+            queue.pushBack(u'\u0074');
+            queue.pushBack(u'\u0308');
+        } break;
+        case u'\u1E98': {
+            queue.pushBack(u'\u0077');
+            queue.pushBack(u'\u030A');
+        } break;
+        case u'\u1E99': {
+            queue.pushBack(u'\u0079');
+            queue.pushBack(u'\u030A');
+        } break;
+        case u'\u1E9A': {
+            queue.pushBack(u'\u0061');
+            queue.pushBack(u'\u02BE');
+        } break;
         case u'\u1EA0': {
             queue.pushBack(u'\u1EA1');
         } break;
@@ -2473,66 +2144,26 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u1F08': {
             queue.pushBack(u'\u1F00');
         } break;
-        case u'\u1F80': [[fallthrough]];
-        case u'\u1F88': {
-            queue.pushBack(u'\u1F00');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u1F09': {
             queue.pushBack(u'\u1F01');
-        } break;
-        case u'\u1F81': [[fallthrough]];
-        case u'\u1F89': {
-            queue.pushBack(u'\u1F01');
-            queue.pushBack(u'\u03B9');
         } break;
         case u'\u1F0A': {
             queue.pushBack(u'\u1F02');
         } break;
-        case u'\u1F82': [[fallthrough]];
-        case u'\u1F8A': {
-            queue.pushBack(u'\u1F02');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u1F0B': {
             queue.pushBack(u'\u1F03');
-        } break;
-        case u'\u1F83': [[fallthrough]];
-        case u'\u1F8B': {
-            queue.pushBack(u'\u1F03');
-            queue.pushBack(u'\u03B9');
         } break;
         case u'\u1F0C': {
             queue.pushBack(u'\u1F04');
         } break;
-        case u'\u1F84': [[fallthrough]];
-        case u'\u1F8C': {
-            queue.pushBack(u'\u1F04');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u1F0D': {
             queue.pushBack(u'\u1F05');
-        } break;
-        case u'\u1F85': [[fallthrough]];
-        case u'\u1F8D': {
-            queue.pushBack(u'\u1F05');
-            queue.pushBack(u'\u03B9');
         } break;
         case u'\u1F0E': {
             queue.pushBack(u'\u1F06');
         } break;
-        case u'\u1F86': [[fallthrough]];
-        case u'\u1F8E': {
-            queue.pushBack(u'\u1F06');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u1F0F': {
             queue.pushBack(u'\u1F07');
-        } break;
-        case u'\u1F87': [[fallthrough]];
-        case u'\u1F8F': {
-            queue.pushBack(u'\u1F07');
-            queue.pushBack(u'\u03B9');
         } break;
         case u'\u1F18': {
             queue.pushBack(u'\u1F10');
@@ -2555,66 +2186,26 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u1F28': {
             queue.pushBack(u'\u1F20');
         } break;
-        case u'\u1F90': [[fallthrough]];
-        case u'\u1F98': {
-            queue.pushBack(u'\u1F20');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u1F29': {
             queue.pushBack(u'\u1F21');
-        } break;
-        case u'\u1F91': [[fallthrough]];
-        case u'\u1F99': {
-            queue.pushBack(u'\u1F21');
-            queue.pushBack(u'\u03B9');
         } break;
         case u'\u1F2A': {
             queue.pushBack(u'\u1F22');
         } break;
-        case u'\u1F92': [[fallthrough]];
-        case u'\u1F9A': {
-            queue.pushBack(u'\u1F22');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u1F2B': {
             queue.pushBack(u'\u1F23');
-        } break;
-        case u'\u1F93': [[fallthrough]];
-        case u'\u1F9B': {
-            queue.pushBack(u'\u1F23');
-            queue.pushBack(u'\u03B9');
         } break;
         case u'\u1F2C': {
             queue.pushBack(u'\u1F24');
         } break;
-        case u'\u1F94': [[fallthrough]];
-        case u'\u1F9C': {
-            queue.pushBack(u'\u1F24');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u1F2D': {
             queue.pushBack(u'\u1F25');
-        } break;
-        case u'\u1F95': [[fallthrough]];
-        case u'\u1F9D': {
-            queue.pushBack(u'\u1F25');
-            queue.pushBack(u'\u03B9');
         } break;
         case u'\u1F2E': {
             queue.pushBack(u'\u1F26');
         } break;
-        case u'\u1F96': [[fallthrough]];
-        case u'\u1F9E': {
-            queue.pushBack(u'\u1F26');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u1F2F': {
             queue.pushBack(u'\u1F27');
-        } break;
-        case u'\u1F97': [[fallthrough]];
-        case u'\u1F9F': {
-            queue.pushBack(u'\u1F27');
-            queue.pushBack(u'\u03B9');
         } break;
         case u'\u1F38': {
             queue.pushBack(u'\u1F30');
@@ -2658,6 +2249,25 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u1F4D': {
             queue.pushBack(u'\u1F45');
         } break;
+        case u'\u1F50': {
+            queue.pushBack(u'\u03C5');
+            queue.pushBack(u'\u0313');
+        } break;
+        case u'\u1F52': {
+            queue.pushBack(u'\u03C5');
+            queue.pushBack(u'\u0313');
+            queue.pushBack(u'\u0300');
+        } break;
+        case u'\u1F54': {
+            queue.pushBack(u'\u03C5');
+            queue.pushBack(u'\u0313');
+            queue.pushBack(u'\u0301');
+        } break;
+        case u'\u1F56': {
+            queue.pushBack(u'\u03C5');
+            queue.pushBack(u'\u0313');
+            queue.pushBack(u'\u0342');
+        } break;
         case u'\u1F59': {
             queue.pushBack(u'\u1F51');
         } break;
@@ -2673,76 +2283,202 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u1F68': {
             queue.pushBack(u'\u1F60');
         } break;
+        case u'\u1F69': {
+            queue.pushBack(u'\u1F61');
+        } break;
+        case u'\u1F6A': {
+            queue.pushBack(u'\u1F62');
+        } break;
+        case u'\u1F6B': {
+            queue.pushBack(u'\u1F63');
+        } break;
+        case u'\u1F6C': {
+            queue.pushBack(u'\u1F64');
+        } break;
+        case u'\u1F6D': {
+            queue.pushBack(u'\u1F65');
+        } break;
+        case u'\u1F6E': {
+            queue.pushBack(u'\u1F66');
+        } break;
+        case u'\u1F6F': {
+            queue.pushBack(u'\u1F67');
+        } break;
+        case u'\u1F80': [[fallthrough]];
+        case u'\u1F88': {
+            queue.pushBack(u'\u1F00');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F81': [[fallthrough]];
+        case u'\u1F89': {
+            queue.pushBack(u'\u1F01');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F82': [[fallthrough]];
+        case u'\u1F8A': {
+            queue.pushBack(u'\u1F02');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F83': [[fallthrough]];
+        case u'\u1F8B': {
+            queue.pushBack(u'\u1F03');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F84': [[fallthrough]];
+        case u'\u1F8C': {
+            queue.pushBack(u'\u1F04');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F85': [[fallthrough]];
+        case u'\u1F8D': {
+            queue.pushBack(u'\u1F05');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F86': [[fallthrough]];
+        case u'\u1F8E': {
+            queue.pushBack(u'\u1F06');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F87': [[fallthrough]];
+        case u'\u1F8F': {
+            queue.pushBack(u'\u1F07');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F90': [[fallthrough]];
+        case u'\u1F98': {
+            queue.pushBack(u'\u1F20');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F91': [[fallthrough]];
+        case u'\u1F99': {
+            queue.pushBack(u'\u1F21');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F92': [[fallthrough]];
+        case u'\u1F9A': {
+            queue.pushBack(u'\u1F22');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F93': [[fallthrough]];
+        case u'\u1F9B': {
+            queue.pushBack(u'\u1F23');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F94': [[fallthrough]];
+        case u'\u1F9C': {
+            queue.pushBack(u'\u1F24');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F95': [[fallthrough]];
+        case u'\u1F9D': {
+            queue.pushBack(u'\u1F25');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F96': [[fallthrough]];
+        case u'\u1F9E': {
+            queue.pushBack(u'\u1F26');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1F97': [[fallthrough]];
+        case u'\u1F9F': {
+            queue.pushBack(u'\u1F27');
+            queue.pushBack(u'\u03B9');
+        } break;
         case u'\u1FA0': [[fallthrough]];
         case u'\u1FA8': {
             queue.pushBack(u'\u1F60');
             queue.pushBack(u'\u03B9');
-        } break;
-        case u'\u1F69': {
-            queue.pushBack(u'\u1F61');
         } break;
         case u'\u1FA1': [[fallthrough]];
         case u'\u1FA9': {
             queue.pushBack(u'\u1F61');
             queue.pushBack(u'\u03B9');
         } break;
-        case u'\u1F6A': {
-            queue.pushBack(u'\u1F62');
-        } break;
         case u'\u1FA2': [[fallthrough]];
         case u'\u1FAA': {
             queue.pushBack(u'\u1F62');
             queue.pushBack(u'\u03B9');
-        } break;
-        case u'\u1F6B': {
-            queue.pushBack(u'\u1F63');
         } break;
         case u'\u1FA3': [[fallthrough]];
         case u'\u1FAB': {
             queue.pushBack(u'\u1F63');
             queue.pushBack(u'\u03B9');
         } break;
-        case u'\u1F6C': {
-            queue.pushBack(u'\u1F64');
-        } break;
         case u'\u1FA4': [[fallthrough]];
         case u'\u1FAC': {
             queue.pushBack(u'\u1F64');
             queue.pushBack(u'\u03B9');
-        } break;
-        case u'\u1F6D': {
-            queue.pushBack(u'\u1F65');
         } break;
         case u'\u1FA5': [[fallthrough]];
         case u'\u1FAD': {
             queue.pushBack(u'\u1F65');
             queue.pushBack(u'\u03B9');
         } break;
-        case u'\u1F6E': {
-            queue.pushBack(u'\u1F66');
-        } break;
         case u'\u1FA6': [[fallthrough]];
         case u'\u1FAE': {
             queue.pushBack(u'\u1F66');
             queue.pushBack(u'\u03B9');
-        } break;
-        case u'\u1F6F': {
-            queue.pushBack(u'\u1F67');
         } break;
         case u'\u1FA7': [[fallthrough]];
         case u'\u1FAF': {
             queue.pushBack(u'\u1F67');
             queue.pushBack(u'\u03B9');
         } break;
-        case u'\u1FBA': {
-            queue.pushBack(u'\u1F70');
-        } break;
         case u'\u1FB2': {
             queue.pushBack(u'\u1F70');
             queue.pushBack(u'\u03B9');
         } break;
+        case u'\u1FB3': [[fallthrough]];
+        case u'\u1FBC': {
+            queue.pushBack(u'\u03B1');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1FB4': {
+            queue.pushBack(u'\u03AC');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1FB6': {
+            queue.pushBack(u'\u03B1');
+            queue.pushBack(u'\u0342');
+        } break;
+        case u'\u1FB7': {
+            queue.pushBack(u'\u03B1');
+            queue.pushBack(u'\u0342');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1FB8': {
+            queue.pushBack(u'\u1FB0');
+        } break;
+        case u'\u1FB9': {
+            queue.pushBack(u'\u1FB1');
+        } break;
+        case u'\u1FBA': {
+            queue.pushBack(u'\u1F70');
+        } break;
         case u'\u1FBB': {
             queue.pushBack(u'\u1F71');
+        } break;
+        case u'\u1FC2': {
+            queue.pushBack(u'\u1F74');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1FC3': [[fallthrough]];
+        case u'\u1FCC': {
+            queue.pushBack(u'\u03B7');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1FC4': {
+            queue.pushBack(u'\u03AE');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1FC6': {
+            queue.pushBack(u'\u03B7');
+            queue.pushBack(u'\u0342');
+        } break;
+        case u'\u1FC7': {
+            queue.pushBack(u'\u03B7');
+            queue.pushBack(u'\u0342');
+            queue.pushBack(u'\u03B9');
         } break;
         case u'\u1FC8': {
             queue.pushBack(u'\u1F72');
@@ -2753,46 +2489,22 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u1FCA': {
             queue.pushBack(u'\u1F74');
         } break;
-        case u'\u1FC2': {
-            queue.pushBack(u'\u1F74');
-            queue.pushBack(u'\u03B9');
-        } break;
         case u'\u1FCB': {
             queue.pushBack(u'\u1F75');
         } break;
-        case u'\u1FDA': {
-            queue.pushBack(u'\u1F76');
-        } break;
-        case u'\u1FDB': {
-            queue.pushBack(u'\u1F77');
-        } break;
-        case u'\u1FF8': {
-            queue.pushBack(u'\u1F78');
-        } break;
-        case u'\u1FF9': {
-            queue.pushBack(u'\u1F79');
-        } break;
-        case u'\u1FEA': {
-            queue.pushBack(u'\u1F7A');
-        } break;
-        case u'\u1FEB': {
-            queue.pushBack(u'\u1F7B');
-        } break;
-        case u'\u1FFA': {
-            queue.pushBack(u'\u1F7C');
-        } break;
-        case u'\u1FF2': {
-            queue.pushBack(u'\u1F7C');
+        case u'\u1FD2': {
             queue.pushBack(u'\u03B9');
+            queue.pushBack(u'\u0308');
+            queue.pushBack(u'\u0300');
         } break;
-        case u'\u1FFB': {
-            queue.pushBack(u'\u1F7D');
+        case u'\u1FD6': {
+            queue.pushBack(u'\u03B9');
+            queue.pushBack(u'\u0342');
         } break;
-        case u'\u1FB8': {
-            queue.pushBack(u'\u1FB0');
-        } break;
-        case u'\u1FB9': {
-            queue.pushBack(u'\u1FB1');
+        case u'\u1FD7': {
+            queue.pushBack(u'\u03B9');
+            queue.pushBack(u'\u0308');
+            queue.pushBack(u'\u0342');
         } break;
         case u'\u1FD8': {
             queue.pushBack(u'\u1FD0');
@@ -2800,14 +2512,82 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u1FD9': {
             queue.pushBack(u'\u1FD1');
         } break;
+        case u'\u1FDA': {
+            queue.pushBack(u'\u1F76');
+        } break;
+        case u'\u1FDB': {
+            queue.pushBack(u'\u1F77');
+        } break;
+        case u'\u1FE2': {
+            queue.pushBack(u'\u03C5');
+            queue.pushBack(u'\u0308');
+            queue.pushBack(u'\u0300');
+        } break;
+        case u'\u1FE4': {
+            queue.pushBack(u'\u03C1');
+            queue.pushBack(u'\u0313');
+        } break;
+        case u'\u1FE6': {
+            queue.pushBack(u'\u03C5');
+            queue.pushBack(u'\u0342');
+        } break;
+        case u'\u1FE7': {
+            queue.pushBack(u'\u03C5');
+            queue.pushBack(u'\u0308');
+            queue.pushBack(u'\u0342');
+        } break;
         case u'\u1FE8': {
             queue.pushBack(u'\u1FE0');
         } break;
         case u'\u1FE9': {
             queue.pushBack(u'\u1FE1');
         } break;
+        case u'\u1FEA': {
+            queue.pushBack(u'\u1F7A');
+        } break;
+        case u'\u1FEB': {
+            queue.pushBack(u'\u1F7B');
+        } break;
         case u'\u1FEC': {
             queue.pushBack(u'\u1FE5');
+        } break;
+        case u'\u1FF2': {
+            queue.pushBack(u'\u1F7C');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1FF3': [[fallthrough]];
+        case u'\u1FFC': {
+            queue.pushBack(u'\u03C9');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1FF4': {
+            queue.pushBack(u'\u03CE');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1FF6': {
+            queue.pushBack(u'\u03C9');
+            queue.pushBack(u'\u0342');
+        } break;
+        case u'\u1FF7': {
+            queue.pushBack(u'\u03C9');
+            queue.pushBack(u'\u0342');
+            queue.pushBack(u'\u03B9');
+        } break;
+        case u'\u1FF8': {
+            queue.pushBack(u'\u1F78');
+        } break;
+        case u'\u1FF9': {
+            queue.pushBack(u'\u1F79');
+        } break;
+        case u'\u1FFA': {
+            queue.pushBack(u'\u1F7C');
+        } break;
+        case u'\u1FFB': {
+            queue.pushBack(u'\u1F7D');
+        } break;
+        case u'\u03A9': [[fallthrough]];
+        case u'\u2126': {
+            queue.pushBack(u'\u03C9');
         } break;
         case u'\u2132': {
             queue.pushBack(u'\u214E');
@@ -3088,11 +2868,14 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u2C60': {
             queue.pushBack(u'\u2C61');
         } break;
-        case u'\u023A': {
-            queue.pushBack(u'\u2C65');
+        case u'\u2C62': {
+            queue.pushBack(u'\u026B');
         } break;
-        case u'\u023E': {
-            queue.pushBack(u'\u2C66');
+        case u'\u2C63': {
+            queue.pushBack(u'\u1D7D');
+        } break;
+        case u'\u2C64': {
+            queue.pushBack(u'\u027D');
         } break;
         case u'\u2C67': {
             queue.pushBack(u'\u2C68');
@@ -3103,11 +2886,29 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u2C6B': {
             queue.pushBack(u'\u2C6C');
         } break;
+        case u'\u2C6D': {
+            queue.pushBack(u'\u0251');
+        } break;
+        case u'\u2C6E': {
+            queue.pushBack(u'\u0271');
+        } break;
+        case u'\u2C6F': {
+            queue.pushBack(u'\u0250');
+        } break;
+        case u'\u2C70': {
+            queue.pushBack(u'\u0252');
+        } break;
         case u'\u2C72': {
             queue.pushBack(u'\u2C73');
         } break;
         case u'\u2C75': {
             queue.pushBack(u'\u2C76');
+        } break;
+        case u'\u2C7E': {
+            queue.pushBack(u'\u023F');
+        } break;
+        case u'\u2C7F': {
+            queue.pushBack(u'\u0240');
         } break;
         case u'\u2C80': {
             queue.pushBack(u'\u2C81');
@@ -3268,126 +3069,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\u2CF2': {
             queue.pushBack(u'\u2CF3');
         } break;
-        case u'\u10A0': {
-            queue.pushBack(u'\u2D00');
-        } break;
-        case u'\u10A1': {
-            queue.pushBack(u'\u2D01');
-        } break;
-        case u'\u10A2': {
-            queue.pushBack(u'\u2D02');
-        } break;
-        case u'\u10A3': {
-            queue.pushBack(u'\u2D03');
-        } break;
-        case u'\u10A4': {
-            queue.pushBack(u'\u2D04');
-        } break;
-        case u'\u10A5': {
-            queue.pushBack(u'\u2D05');
-        } break;
-        case u'\u10A6': {
-            queue.pushBack(u'\u2D06');
-        } break;
-        case u'\u10A7': {
-            queue.pushBack(u'\u2D07');
-        } break;
-        case u'\u10A8': {
-            queue.pushBack(u'\u2D08');
-        } break;
-        case u'\u10A9': {
-            queue.pushBack(u'\u2D09');
-        } break;
-        case u'\u10AA': {
-            queue.pushBack(u'\u2D0A');
-        } break;
-        case u'\u10AB': {
-            queue.pushBack(u'\u2D0B');
-        } break;
-        case u'\u10AC': {
-            queue.pushBack(u'\u2D0C');
-        } break;
-        case u'\u10AD': {
-            queue.pushBack(u'\u2D0D');
-        } break;
-        case u'\u10AE': {
-            queue.pushBack(u'\u2D0E');
-        } break;
-        case u'\u10AF': {
-            queue.pushBack(u'\u2D0F');
-        } break;
-        case u'\u10B0': {
-            queue.pushBack(u'\u2D10');
-        } break;
-        case u'\u10B1': {
-            queue.pushBack(u'\u2D11');
-        } break;
-        case u'\u10B2': {
-            queue.pushBack(u'\u2D12');
-        } break;
-        case u'\u10B3': {
-            queue.pushBack(u'\u2D13');
-        } break;
-        case u'\u10B4': {
-            queue.pushBack(u'\u2D14');
-        } break;
-        case u'\u10B5': {
-            queue.pushBack(u'\u2D15');
-        } break;
-        case u'\u10B6': {
-            queue.pushBack(u'\u2D16');
-        } break;
-        case u'\u10B7': {
-            queue.pushBack(u'\u2D17');
-        } break;
-        case u'\u10B8': {
-            queue.pushBack(u'\u2D18');
-        } break;
-        case u'\u10B9': {
-            queue.pushBack(u'\u2D19');
-        } break;
-        case u'\u10BA': {
-            queue.pushBack(u'\u2D1A');
-        } break;
-        case u'\u10BB': {
-            queue.pushBack(u'\u2D1B');
-        } break;
-        case u'\u10BC': {
-            queue.pushBack(u'\u2D1C');
-        } break;
-        case u'\u10BD': {
-            queue.pushBack(u'\u2D1D');
-        } break;
-        case u'\u10BE': {
-            queue.pushBack(u'\u2D1E');
-        } break;
-        case u'\u10BF': {
-            queue.pushBack(u'\u2D1F');
-        } break;
-        case u'\u10C0': {
-            queue.pushBack(u'\u2D20');
-        } break;
-        case u'\u10C1': {
-            queue.pushBack(u'\u2D21');
-        } break;
-        case u'\u10C2': {
-            queue.pushBack(u'\u2D22');
-        } break;
-        case u'\u10C3': {
-            queue.pushBack(u'\u2D23');
-        } break;
-        case u'\u10C4': {
-            queue.pushBack(u'\u2D24');
-        } break;
-        case u'\u10C5': {
-            queue.pushBack(u'\u2D25');
-        } break;
-        case u'\u10C7': {
-            queue.pushBack(u'\u2D27');
-        } break;
-        case u'\u10CD': {
-            queue.pushBack(u'\u2D2D');
-        } break;
         case u'\uA640': {
             queue.pushBack(u'\uA641');
         } break;
@@ -3402,10 +3083,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         } break;
         case u'\uA648': {
             queue.pushBack(u'\uA649');
-        } break;
-        case u'\u1C88': [[fallthrough]];
-        case u'\uA64A': {
-            queue.pushBack(u'\uA64B');
         } break;
         case u'\uA64C': {
             queue.pushBack(u'\uA64D');
@@ -3620,6 +3297,9 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\uA77B': {
             queue.pushBack(u'\uA77C');
         } break;
+        case u'\uA77D': {
+            queue.pushBack(u'\u1D79');
+        } break;
         case u'\uA77E': {
             queue.pushBack(u'\uA77F');
         } break;
@@ -3638,14 +3318,14 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\uA78B': {
             queue.pushBack(u'\uA78C');
         } break;
+        case u'\uA78D': {
+            queue.pushBack(u'\u0265');
+        } break;
         case u'\uA790': {
             queue.pushBack(u'\uA791');
         } break;
         case u'\uA792': {
             queue.pushBack(u'\uA793');
-        } break;
-        case u'\uA7C4': {
-            queue.pushBack(u'\uA794');
         } break;
         case u'\uA796': {
             queue.pushBack(u'\uA797');
@@ -3677,6 +3357,33 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\uA7A8': {
             queue.pushBack(u'\uA7A9');
         } break;
+        case u'\uA7AA': {
+            queue.pushBack(u'\u0266');
+        } break;
+        case u'\uA7AB': {
+            queue.pushBack(u'\u025C');
+        } break;
+        case u'\uA7AC': {
+            queue.pushBack(u'\u0261');
+        } break;
+        case u'\uA7AD': {
+            queue.pushBack(u'\u026C');
+        } break;
+        case u'\uA7AE': {
+            queue.pushBack(u'\u026A');
+        } break;
+        case u'\uA7B0': {
+            queue.pushBack(u'\u029E');
+        } break;
+        case u'\uA7B1': {
+            queue.pushBack(u'\u0287');
+        } break;
+        case u'\uA7B2': {
+            queue.pushBack(u'\u029D');
+        } break;
+        case u'\uA7B3': {
+            queue.pushBack(u'\uAB53');
+        } break;
         case u'\uA7B4': {
             queue.pushBack(u'\uA7B5');
         } break;
@@ -3701,6 +3408,15 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\uA7C2': {
             queue.pushBack(u'\uA7C3');
         } break;
+        case u'\uA7C4': {
+            queue.pushBack(u'\uA794');
+        } break;
+        case u'\uA7C5': {
+            queue.pushBack(u'\u0282');
+        } break;
+        case u'\uA7C6': {
+            queue.pushBack(u'\u1D8E');
+        } break;
         case u'\uA7C7': {
             queue.pushBack(u'\uA7C8');
         } break;
@@ -3719,8 +3435,292 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
         case u'\uA7F5': {
             queue.pushBack(u'\uA7F6');
         } break;
-        case u'\uA7B3': {
-            queue.pushBack(u'\uAB53');
+        case u'\uAB70': {
+            queue.pushBack(u'\u13A0');
+        } break;
+        case u'\uAB71': {
+            queue.pushBack(u'\u13A1');
+        } break;
+        case u'\uAB72': {
+            queue.pushBack(u'\u13A2');
+        } break;
+        case u'\uAB73': {
+            queue.pushBack(u'\u13A3');
+        } break;
+        case u'\uAB74': {
+            queue.pushBack(u'\u13A4');
+        } break;
+        case u'\uAB75': {
+            queue.pushBack(u'\u13A5');
+        } break;
+        case u'\uAB76': {
+            queue.pushBack(u'\u13A6');
+        } break;
+        case u'\uAB77': {
+            queue.pushBack(u'\u13A7');
+        } break;
+        case u'\uAB78': {
+            queue.pushBack(u'\u13A8');
+        } break;
+        case u'\uAB79': {
+            queue.pushBack(u'\u13A9');
+        } break;
+        case u'\uAB7A': {
+            queue.pushBack(u'\u13AA');
+        } break;
+        case u'\uAB7B': {
+            queue.pushBack(u'\u13AB');
+        } break;
+        case u'\uAB7C': {
+            queue.pushBack(u'\u13AC');
+        } break;
+        case u'\uAB7D': {
+            queue.pushBack(u'\u13AD');
+        } break;
+        case u'\uAB7E': {
+            queue.pushBack(u'\u13AE');
+        } break;
+        case u'\uAB7F': {
+            queue.pushBack(u'\u13AF');
+        } break;
+        case u'\uAB80': {
+            queue.pushBack(u'\u13B0');
+        } break;
+        case u'\uAB81': {
+            queue.pushBack(u'\u13B1');
+        } break;
+        case u'\uAB82': {
+            queue.pushBack(u'\u13B2');
+        } break;
+        case u'\uAB83': {
+            queue.pushBack(u'\u13B3');
+        } break;
+        case u'\uAB84': {
+            queue.pushBack(u'\u13B4');
+        } break;
+        case u'\uAB85': {
+            queue.pushBack(u'\u13B5');
+        } break;
+        case u'\uAB86': {
+            queue.pushBack(u'\u13B6');
+        } break;
+        case u'\uAB87': {
+            queue.pushBack(u'\u13B7');
+        } break;
+        case u'\uAB88': {
+            queue.pushBack(u'\u13B8');
+        } break;
+        case u'\uAB89': {
+            queue.pushBack(u'\u13B9');
+        } break;
+        case u'\uAB8A': {
+            queue.pushBack(u'\u13BA');
+        } break;
+        case u'\uAB8B': {
+            queue.pushBack(u'\u13BB');
+        } break;
+        case u'\uAB8C': {
+            queue.pushBack(u'\u13BC');
+        } break;
+        case u'\uAB8D': {
+            queue.pushBack(u'\u13BD');
+        } break;
+        case u'\uAB8E': {
+            queue.pushBack(u'\u13BE');
+        } break;
+        case u'\uAB8F': {
+            queue.pushBack(u'\u13BF');
+        } break;
+        case u'\uAB90': {
+            queue.pushBack(u'\u13C0');
+        } break;
+        case u'\uAB91': {
+            queue.pushBack(u'\u13C1');
+        } break;
+        case u'\uAB92': {
+            queue.pushBack(u'\u13C2');
+        } break;
+        case u'\uAB93': {
+            queue.pushBack(u'\u13C3');
+        } break;
+        case u'\uAB94': {
+            queue.pushBack(u'\u13C4');
+        } break;
+        case u'\uAB95': {
+            queue.pushBack(u'\u13C5');
+        } break;
+        case u'\uAB96': {
+            queue.pushBack(u'\u13C6');
+        } break;
+        case u'\uAB97': {
+            queue.pushBack(u'\u13C7');
+        } break;
+        case u'\uAB98': {
+            queue.pushBack(u'\u13C8');
+        } break;
+        case u'\uAB99': {
+            queue.pushBack(u'\u13C9');
+        } break;
+        case u'\uAB9A': {
+            queue.pushBack(u'\u13CA');
+        } break;
+        case u'\uAB9B': {
+            queue.pushBack(u'\u13CB');
+        } break;
+        case u'\uAB9C': {
+            queue.pushBack(u'\u13CC');
+        } break;
+        case u'\uAB9D': {
+            queue.pushBack(u'\u13CD');
+        } break;
+        case u'\uAB9E': {
+            queue.pushBack(u'\u13CE');
+        } break;
+        case u'\uAB9F': {
+            queue.pushBack(u'\u13CF');
+        } break;
+        case u'\uABA0': {
+            queue.pushBack(u'\u13D0');
+        } break;
+        case u'\uABA1': {
+            queue.pushBack(u'\u13D1');
+        } break;
+        case u'\uABA2': {
+            queue.pushBack(u'\u13D2');
+        } break;
+        case u'\uABA3': {
+            queue.pushBack(u'\u13D3');
+        } break;
+        case u'\uABA4': {
+            queue.pushBack(u'\u13D4');
+        } break;
+        case u'\uABA5': {
+            queue.pushBack(u'\u13D5');
+        } break;
+        case u'\uABA6': {
+            queue.pushBack(u'\u13D6');
+        } break;
+        case u'\uABA7': {
+            queue.pushBack(u'\u13D7');
+        } break;
+        case u'\uABA8': {
+            queue.pushBack(u'\u13D8');
+        } break;
+        case u'\uABA9': {
+            queue.pushBack(u'\u13D9');
+        } break;
+        case u'\uABAA': {
+            queue.pushBack(u'\u13DA');
+        } break;
+        case u'\uABAB': {
+            queue.pushBack(u'\u13DB');
+        } break;
+        case u'\uABAC': {
+            queue.pushBack(u'\u13DC');
+        } break;
+        case u'\uABAD': {
+            queue.pushBack(u'\u13DD');
+        } break;
+        case u'\uABAE': {
+            queue.pushBack(u'\u13DE');
+        } break;
+        case u'\uABAF': {
+            queue.pushBack(u'\u13DF');
+        } break;
+        case u'\uABB0': {
+            queue.pushBack(u'\u13E0');
+        } break;
+        case u'\uABB1': {
+            queue.pushBack(u'\u13E1');
+        } break;
+        case u'\uABB2': {
+            queue.pushBack(u'\u13E2');
+        } break;
+        case u'\uABB3': {
+            queue.pushBack(u'\u13E3');
+        } break;
+        case u'\uABB4': {
+            queue.pushBack(u'\u13E4');
+        } break;
+        case u'\uABB5': {
+            queue.pushBack(u'\u13E5');
+        } break;
+        case u'\uABB6': {
+            queue.pushBack(u'\u13E6');
+        } break;
+        case u'\uABB7': {
+            queue.pushBack(u'\u13E7');
+        } break;
+        case u'\uABB8': {
+            queue.pushBack(u'\u13E8');
+        } break;
+        case u'\uABB9': {
+            queue.pushBack(u'\u13E9');
+        } break;
+        case u'\uABBA': {
+            queue.pushBack(u'\u13EA');
+        } break;
+        case u'\uABBB': {
+            queue.pushBack(u'\u13EB');
+        } break;
+        case u'\uABBC': {
+            queue.pushBack(u'\u13EC');
+        } break;
+        case u'\uABBD': {
+            queue.pushBack(u'\u13ED');
+        } break;
+        case u'\uABBE': {
+            queue.pushBack(u'\u13EE');
+        } break;
+        case u'\uABBF': {
+            queue.pushBack(u'\u13EF');
+        } break;
+        case u'\uFB00': {
+            queue.pushBack(u'\u0066');
+            queue.pushBack(u'\u0066');
+        } break;
+        case u'\uFB01': {
+            queue.pushBack(u'\u0066');
+            queue.pushBack(u'\u0069');
+        } break;
+        case u'\uFB02': {
+            queue.pushBack(u'\u0066');
+            queue.pushBack(u'\u006C');
+        } break;
+        case u'\uFB03': {
+            queue.pushBack(u'\u0066');
+            queue.pushBack(u'\u0066');
+            queue.pushBack(u'\u0069');
+        } break;
+        case u'\uFB04': {
+            queue.pushBack(u'\u0066');
+            queue.pushBack(u'\u0066');
+            queue.pushBack(u'\u006C');
+        } break;
+        case u'\uFB05': [[fallthrough]];
+        case u'\uFB06': {
+            queue.pushBack(u'\u0073');
+            queue.pushBack(u'\u0074');
+        } break;
+        case u'\uFB13': {
+            queue.pushBack(u'\u0574');
+            queue.pushBack(u'\u0576');
+        } break;
+        case u'\uFB14': {
+            queue.pushBack(u'\u0574');
+            queue.pushBack(u'\u0565');
+        } break;
+        case u'\uFB15': {
+            queue.pushBack(u'\u0574');
+            queue.pushBack(u'\u056B');
+        } break;
+        case u'\uFB16': {
+            queue.pushBack(u'\u057E');
+            queue.pushBack(u'\u0576');
+        } break;
+        case u'\uFB17': {
+            queue.pushBack(u'\u0574');
+            queue.pushBack(u'\u056D');
         } break;
         case u'\uFF21': {
             queue.pushBack(u'\uFF41');
@@ -3808,337 +3808,6 @@ void Unicode::fold(CircularArray<char16>& queue, char16 ch) {
 
 void Unicode::up(String& str, char16 ch) {
     switch (ch) {
-        case u'\u1E9A': {
-            str += u'\u0041';
-            str += u'\u02BE';
-        } break;
-        case u'\uFB00': {
-            str += u'\u0046';
-            str += u'\u0046';
-        } break;
-        case u'\uFB03': {
-            str += u'\u0046';
-            str += u'\u0046';
-            str += u'\u0049';
-        } break;
-        case u'\uFB04': {
-            str += u'\u0046';
-            str += u'\u0046';
-            str += u'\u004C';
-        } break;
-        case u'\uFB01': {
-            str += u'\u0046';
-            str += u'\u0049';
-        } break;
-        case u'\uFB02': {
-            str += u'\u0046';
-            str += u'\u004C';
-        } break;
-        case u'\u1E96': {
-            str += u'\u0048';
-            str += u'\u0331';
-        } break;
-        case u'\u01F0': {
-            str += u'\u004A';
-            str += u'\u030C';
-        } break;
-        case u'\uFB05': [[fallthrough]];
-        case u'\uFB06': {
-            str += u'\u0053';
-            str += u'\u0054';
-        } break;
-        case u'\u1E97': {
-            str += u'\u0054';
-            str += u'\u0308';
-        } break;
-        case u'\u1E98': {
-            str += u'\u0057';
-            str += u'\u030A';
-        } break;
-        case u'\u1E99': {
-            str += u'\u0059';
-            str += u'\u030A';
-        } break;
-        case u'\u0130': {
-            str += u'\u0130';
-        } break;
-        case u'\u0149': {
-            str += u'\u02BC';
-            str += u'\u004E';
-        } break;
-        case u'\u1FB4': {
-            str += u'\u0386';
-            str += u'\u0399';
-        } break;
-        case u'\u1FC4': {
-            str += u'\u0389';
-            str += u'\u0399';
-        } break;
-        case u'\u1FF4': {
-            str += u'\u038F';
-            str += u'\u0399';
-        } break;
-        case u'\u1FB6': {
-            str += u'\u0391';
-            str += u'\u0342';
-        } break;
-        case u'\u1FB7': {
-            str += u'\u0391';
-            str += u'\u0342';
-            str += u'\u0399';
-        } break;
-        case u'\u1FB3': [[fallthrough]];
-        case u'\u1FBC': {
-            str += u'\u0391';
-            str += u'\u0399';
-        } break;
-        case u'\u1FC6': {
-            str += u'\u0397';
-            str += u'\u0342';
-        } break;
-        case u'\u1FC7': {
-            str += u'\u0397';
-            str += u'\u0342';
-            str += u'\u0399';
-        } break;
-        case u'\u1FC3': [[fallthrough]];
-        case u'\u1FCC': {
-            str += u'\u0397';
-            str += u'\u0399';
-        } break;
-        case u'\u1FD2': {
-            str += u'\u0399';
-            str += u'\u0308';
-            str += u'\u0300';
-        } break;
-        case u'\u0390': [[fallthrough]];
-        case u'\u1FD3': {
-            str += u'\u0399';
-            str += u'\u0308';
-            str += u'\u0301';
-        } break;
-        case u'\u1FD7': {
-            str += u'\u0399';
-            str += u'\u0308';
-            str += u'\u0342';
-        } break;
-        case u'\u1FD6': {
-            str += u'\u0399';
-            str += u'\u0342';
-        } break;
-        case u'\u1FE4': {
-            str += u'\u03A1';
-            str += u'\u0313';
-        } break;
-        case u'\u1FE2': {
-            str += u'\u03A5';
-            str += u'\u0308';
-            str += u'\u0300';
-        } break;
-        case u'\u03B0': [[fallthrough]];
-        case u'\u1FE3': {
-            str += u'\u03A5';
-            str += u'\u0308';
-            str += u'\u0301';
-        } break;
-        case u'\u1FE7': {
-            str += u'\u03A5';
-            str += u'\u0308';
-            str += u'\u0342';
-        } break;
-        case u'\u1F50': {
-            str += u'\u03A5';
-            str += u'\u0313';
-        } break;
-        case u'\u1F52': {
-            str += u'\u03A5';
-            str += u'\u0313';
-            str += u'\u0300';
-        } break;
-        case u'\u1F54': {
-            str += u'\u03A5';
-            str += u'\u0313';
-            str += u'\u0301';
-        } break;
-        case u'\u1F56': {
-            str += u'\u03A5';
-            str += u'\u0313';
-            str += u'\u0342';
-        } break;
-        case u'\u1FE6': {
-            str += u'\u03A5';
-            str += u'\u0342';
-        } break;
-        case u'\u1FF6': {
-            str += u'\u03A9';
-            str += u'\u0342';
-        } break;
-        case u'\u1FF7': {
-            str += u'\u03A9';
-            str += u'\u0342';
-            str += u'\u0399';
-        } break;
-        case u'\u1FF3': [[fallthrough]];
-        case u'\u1FFC': {
-            str += u'\u03A9';
-            str += u'\u0399';
-        } break;
-        case u'\u0587': {
-            str += u'\u0535';
-            str += u'\u0552';
-        } break;
-        case u'\uFB14': {
-            str += u'\u0544';
-            str += u'\u0535';
-        } break;
-        case u'\uFB15': {
-            str += u'\u0544';
-            str += u'\u053B';
-        } break;
-        case u'\uFB17': {
-            str += u'\u0544';
-            str += u'\u053D';
-        } break;
-        case u'\uFB13': {
-            str += u'\u0544';
-            str += u'\u0546';
-        } break;
-        case u'\uFB16': {
-            str += u'\u054E';
-            str += u'\u0546';
-        } break;
-        case u'\u1F80': [[fallthrough]];
-        case u'\u1F88': {
-            str += u'\u1F08';
-            str += u'\u0399';
-        } break;
-        case u'\u1F81': [[fallthrough]];
-        case u'\u1F89': {
-            str += u'\u1F09';
-            str += u'\u0399';
-        } break;
-        case u'\u1F82': [[fallthrough]];
-        case u'\u1F8A': {
-            str += u'\u1F0A';
-            str += u'\u0399';
-        } break;
-        case u'\u1F83': [[fallthrough]];
-        case u'\u1F8B': {
-            str += u'\u1F0B';
-            str += u'\u0399';
-        } break;
-        case u'\u1F84': [[fallthrough]];
-        case u'\u1F8C': {
-            str += u'\u1F0C';
-            str += u'\u0399';
-        } break;
-        case u'\u1F85': [[fallthrough]];
-        case u'\u1F8D': {
-            str += u'\u1F0D';
-            str += u'\u0399';
-        } break;
-        case u'\u1F86': [[fallthrough]];
-        case u'\u1F8E': {
-            str += u'\u1F0E';
-            str += u'\u0399';
-        } break;
-        case u'\u1F87': [[fallthrough]];
-        case u'\u1F8F': {
-            str += u'\u1F0F';
-            str += u'\u0399';
-        } break;
-        case u'\u1F90': [[fallthrough]];
-        case u'\u1F98': {
-            str += u'\u1F28';
-            str += u'\u0399';
-        } break;
-        case u'\u1F91': [[fallthrough]];
-        case u'\u1F99': {
-            str += u'\u1F29';
-            str += u'\u0399';
-        } break;
-        case u'\u1F92': [[fallthrough]];
-        case u'\u1F9A': {
-            str += u'\u1F2A';
-            str += u'\u0399';
-        } break;
-        case u'\u1F93': [[fallthrough]];
-        case u'\u1F9B': {
-            str += u'\u1F2B';
-            str += u'\u0399';
-        } break;
-        case u'\u1F94': [[fallthrough]];
-        case u'\u1F9C': {
-            str += u'\u1F2C';
-            str += u'\u0399';
-        } break;
-        case u'\u1F95': [[fallthrough]];
-        case u'\u1F9D': {
-            str += u'\u1F2D';
-            str += u'\u0399';
-        } break;
-        case u'\u1F96': [[fallthrough]];
-        case u'\u1F9E': {
-            str += u'\u1F2E';
-            str += u'\u0399';
-        } break;
-        case u'\u1F97': [[fallthrough]];
-        case u'\u1F9F': {
-            str += u'\u1F2F';
-            str += u'\u0399';
-        } break;
-        case u'\u1FA0': [[fallthrough]];
-        case u'\u1FA8': {
-            str += u'\u1F68';
-            str += u'\u0399';
-        } break;
-        case u'\u1FA1': [[fallthrough]];
-        case u'\u1FA9': {
-            str += u'\u1F69';
-            str += u'\u0399';
-        } break;
-        case u'\u1FA2': [[fallthrough]];
-        case u'\u1FAA': {
-            str += u'\u1F6A';
-            str += u'\u0399';
-        } break;
-        case u'\u1FA3': [[fallthrough]];
-        case u'\u1FAB': {
-            str += u'\u1F6B';
-            str += u'\u0399';
-        } break;
-        case u'\u1FA4': [[fallthrough]];
-        case u'\u1FAC': {
-            str += u'\u1F6C';
-            str += u'\u0399';
-        } break;
-        case u'\u1FA5': [[fallthrough]];
-        case u'\u1FAD': {
-            str += u'\u1F6D';
-            str += u'\u0399';
-        } break;
-        case u'\u1FA6': [[fallthrough]];
-        case u'\u1FAE': {
-            str += u'\u1F6E';
-            str += u'\u0399';
-        } break;
-        case u'\u1FA7': [[fallthrough]];
-        case u'\u1FAF': {
-            str += u'\u1F6F';
-            str += u'\u0399';
-        } break;
-        case u'\u1FB2': {
-            str += u'\u1FBA';
-            str += u'\u0399';
-        } break;
-        case u'\u1FC2': {
-            str += u'\u1FCA';
-            str += u'\u0399';
-        } break;
-        case u'\u1FF2': {
-            str += u'\u1FFA';
-            str += u'\u0399';
-        } break;
         case u'\u0061': {
             str += u'\u0041';
         } break;
@@ -4218,6 +3887,13 @@ void Unicode::up(String& str, char16 ch) {
         } break;
         case u'\u007A': {
             str += u'\u005A';
+        } break;
+        case u'\u00B5': [[fallthrough]];
+        case u'\u03BC': {
+            str += u'\u039C';
+        } break;
+        case u'\u00DF': {
+            str += u'\u1E9E';
         } break;
         case u'\u00E0': {
             str += u'\u00C0';
@@ -4309,6 +3985,9 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u00FE': {
             str += u'\u00DE';
         } break;
+        case u'\u00FF': {
+            str += u'\u0178';
+        } break;
         case u'\u0101': {
             str += u'\u0100';
         } break;
@@ -4381,6 +4060,9 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u012F': {
             str += u'\u012E';
         } break;
+        case u'\u0130': {
+            str += u'\u0130';
+        } break;
         case u'\u0133': {
             str += u'\u0132';
         } break;
@@ -4413,6 +4095,10 @@ void Unicode::up(String& str, char16 ch) {
         } break;
         case u'\u0148': {
             str += u'\u0147';
+        } break;
+        case u'\u0149': {
+            str += u'\u02BC';
+            str += u'\u004E';
         } break;
         case u'\u014B': {
             str += u'\u014A';
@@ -4483,9 +4169,6 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u0177': {
             str += u'\u0176';
         } break;
-        case u'\u00FF': {
-            str += u'\u0178';
-        } break;
         case u'\u017A': {
             str += u'\u0179';
         } break;
@@ -4495,8 +4178,8 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u017E': {
             str += u'\u017D';
         } break;
-        case u'\u0253': {
-            str += u'\u0181';
+        case u'\u0180': {
+            str += u'\u0243';
         } break;
         case u'\u0183': {
             str += u'\u0182';
@@ -4504,56 +4187,26 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u0185': {
             str += u'\u0184';
         } break;
-        case u'\u0254': {
-            str += u'\u0186';
-        } break;
         case u'\u0188': {
             str += u'\u0187';
-        } break;
-        case u'\u0256': {
-            str += u'\u0189';
-        } break;
-        case u'\u0257': {
-            str += u'\u018A';
         } break;
         case u'\u018C': {
             str += u'\u018B';
         } break;
-        case u'\u01DD': {
-            str += u'\u018E';
-        } break;
-        case u'\u0259': {
-            str += u'\u018F';
-        } break;
-        case u'\u025B': {
-            str += u'\u0190';
-        } break;
         case u'\u0192': {
             str += u'\u0191';
         } break;
-        case u'\u0260': {
-            str += u'\u0193';
-        } break;
-        case u'\u0263': {
-            str += u'\u0194';
-        } break;
-        case u'\u0269': {
-            str += u'\u0196';
-        } break;
-        case u'\u0268': {
-            str += u'\u0197';
+        case u'\u0195': {
+            str += u'\u01F6';
         } break;
         case u'\u0199': {
             str += u'\u0198';
         } break;
-        case u'\u026F': {
-            str += u'\u019C';
+        case u'\u019A': {
+            str += u'\u023D';
         } break;
-        case u'\u0272': {
-            str += u'\u019D';
-        } break;
-        case u'\u0275': {
-            str += u'\u019F';
+        case u'\u019E': {
+            str += u'\u0220';
         } break;
         case u'\u01A1': {
             str += u'\u01A0';
@@ -4564,29 +4217,14 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u01A5': {
             str += u'\u01A4';
         } break;
-        case u'\u0280': {
-            str += u'\u01A6';
-        } break;
         case u'\u01A8': {
             str += u'\u01A7';
-        } break;
-        case u'\u0283': {
-            str += u'\u01A9';
         } break;
         case u'\u01AD': {
             str += u'\u01AC';
         } break;
-        case u'\u0288': {
-            str += u'\u01AE';
-        } break;
         case u'\u01B0': {
             str += u'\u01AF';
-        } break;
-        case u'\u028A': {
-            str += u'\u01B1';
-        } break;
-        case u'\u028B': {
-            str += u'\u01B2';
         } break;
         case u'\u01B4': {
             str += u'\u01B3';
@@ -4594,14 +4232,14 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u01B6': {
             str += u'\u01B5';
         } break;
-        case u'\u0292': {
-            str += u'\u01B7';
-        } break;
         case u'\u01B9': {
             str += u'\u01B8';
         } break;
         case u'\u01BD': {
             str += u'\u01BC';
+        } break;
+        case u'\u01BF': {
+            str += u'\u01F7';
         } break;
         case u'\u01C5': [[fallthrough]];
         case u'\u01C6': {
@@ -4639,6 +4277,9 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u01DC': {
             str += u'\u01DB';
         } break;
+        case u'\u01DD': {
+            str += u'\u018E';
+        } break;
         case u'\u01DF': {
             str += u'\u01DE';
         } break;
@@ -4666,18 +4307,16 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u01EF': {
             str += u'\u01EE';
         } break;
+        case u'\u01F0': {
+            str += u'\u004A';
+            str += u'\u030C';
+        } break;
         case u'\u01F2': [[fallthrough]];
         case u'\u01F3': {
             str += u'\u01F1';
         } break;
         case u'\u01F5': {
             str += u'\u01F4';
-        } break;
-        case u'\u0195': {
-            str += u'\u01F6';
-        } break;
-        case u'\u01BF': {
-            str += u'\u01F7';
         } break;
         case u'\u01F9': {
             str += u'\u01F8';
@@ -4739,9 +4378,6 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u021F': {
             str += u'\u021E';
         } break;
-        case u'\u019E': {
-            str += u'\u0220';
-        } break;
         case u'\u0223': {
             str += u'\u0222';
         } break;
@@ -4769,29 +4405,17 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u0233': {
             str += u'\u0232';
         } break;
-        case u'\u2C65': {
-            str += u'\u023A';
-        } break;
         case u'\u023C': {
             str += u'\u023B';
         } break;
-        case u'\u019A': {
-            str += u'\u023D';
+        case u'\u023F': {
+            str += u'\u2C7E';
         } break;
-        case u'\u2C66': {
-            str += u'\u023E';
+        case u'\u0240': {
+            str += u'\u2C7F';
         } break;
         case u'\u0242': {
             str += u'\u0241';
-        } break;
-        case u'\u0180': {
-            str += u'\u0243';
-        } break;
-        case u'\u0289': {
-            str += u'\u0244';
-        } break;
-        case u'\u028C': {
-            str += u'\u0245';
         } break;
         case u'\u0247': {
             str += u'\u0246';
@@ -4808,6 +4432,122 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u024F': {
             str += u'\u024E';
         } break;
+        case u'\u0250': {
+            str += u'\u2C6F';
+        } break;
+        case u'\u0251': {
+            str += u'\u2C6D';
+        } break;
+        case u'\u0252': {
+            str += u'\u2C70';
+        } break;
+        case u'\u0253': {
+            str += u'\u0181';
+        } break;
+        case u'\u0254': {
+            str += u'\u0186';
+        } break;
+        case u'\u0256': {
+            str += u'\u0189';
+        } break;
+        case u'\u0257': {
+            str += u'\u018A';
+        } break;
+        case u'\u0259': {
+            str += u'\u018F';
+        } break;
+        case u'\u025B': {
+            str += u'\u0190';
+        } break;
+        case u'\u025C': {
+            str += u'\uA7AB';
+        } break;
+        case u'\u0260': {
+            str += u'\u0193';
+        } break;
+        case u'\u0261': {
+            str += u'\uA7AC';
+        } break;
+        case u'\u0263': {
+            str += u'\u0194';
+        } break;
+        case u'\u0265': {
+            str += u'\uA78D';
+        } break;
+        case u'\u0266': {
+            str += u'\uA7AA';
+        } break;
+        case u'\u0268': {
+            str += u'\u0197';
+        } break;
+        case u'\u0269': {
+            str += u'\u0196';
+        } break;
+        case u'\u026A': {
+            str += u'\uA7AE';
+        } break;
+        case u'\u026B': {
+            str += u'\u2C62';
+        } break;
+        case u'\u026C': {
+            str += u'\uA7AD';
+        } break;
+        case u'\u026F': {
+            str += u'\u019C';
+        } break;
+        case u'\u0271': {
+            str += u'\u2C6E';
+        } break;
+        case u'\u0272': {
+            str += u'\u019D';
+        } break;
+        case u'\u0275': {
+            str += u'\u019F';
+        } break;
+        case u'\u027D': {
+            str += u'\u2C64';
+        } break;
+        case u'\u0280': {
+            str += u'\u01A6';
+        } break;
+        case u'\u0282': {
+            str += u'\uA7C5';
+        } break;
+        case u'\u0283': {
+            str += u'\u01A9';
+        } break;
+        case u'\u0287': {
+            str += u'\uA7B1';
+        } break;
+        case u'\u0288': {
+            str += u'\u01AE';
+        } break;
+        case u'\u0289': {
+            str += u'\u0244';
+        } break;
+        case u'\u028A': {
+            str += u'\u01B1';
+        } break;
+        case u'\u028B': {
+            str += u'\u01B2';
+        } break;
+        case u'\u028C': {
+            str += u'\u0245';
+        } break;
+        case u'\u0292': {
+            str += u'\u01B7';
+        } break;
+        case u'\u029D': {
+            str += u'\uA7B2';
+        } break;
+        case u'\u029E': {
+            str += u'\uA7B0';
+        } break;
+        case u'\u0345': [[fallthrough]];
+        case u'\u03B9': [[fallthrough]];
+        case u'\u1FBE': {
+            str += u'\u0399';
+        } break;
         case u'\u0371': {
             str += u'\u0370';
         } break;
@@ -4817,8 +4557,20 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u0377': {
             str += u'\u0376';
         } break;
-        case u'\u03F3': {
-            str += u'\u037F';
+        case u'\u037B': {
+            str += u'\u03FD';
+        } break;
+        case u'\u037C': {
+            str += u'\u03FE';
+        } break;
+        case u'\u037D': {
+            str += u'\u03FF';
+        } break;
+        case u'\u0390': [[fallthrough]];
+        case u'\u1FD3': {
+            str += u'\u0399';
+            str += u'\u0308';
+            str += u'\u0301';
         } break;
         case u'\u03AC': {
             str += u'\u0386';
@@ -4832,14 +4584,11 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u03AF': {
             str += u'\u038A';
         } break;
-        case u'\u03CC': {
-            str += u'\u038C';
-        } break;
-        case u'\u03CD': {
-            str += u'\u038E';
-        } break;
-        case u'\u03CE': {
-            str += u'\u038F';
+        case u'\u03B0': [[fallthrough]];
+        case u'\u1FE3': {
+            str += u'\u03A5';
+            str += u'\u0308';
+            str += u'\u0301';
         } break;
         case u'\u03B1': {
             str += u'\u0391';
@@ -4868,21 +4617,12 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u03D1': {
             str += u'\u0398';
         } break;
-        case u'\u0345': [[fallthrough]];
-        case u'\u03B9': [[fallthrough]];
-        case u'\u1FBE': {
-            str += u'\u0399';
-        } break;
         case u'\u03BA': [[fallthrough]];
         case u'\u03F0': {
             str += u'\u039A';
         } break;
         case u'\u03BB': {
             str += u'\u039B';
-        } break;
-        case u'\u00B5': [[fallthrough]];
-        case u'\u03BC': {
-            str += u'\u039C';
         } break;
         case u'\u03BD': {
             str += u'\u039D';
@@ -4930,6 +4670,15 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u03CB': {
             str += u'\u03AB';
         } break;
+        case u'\u03CC': {
+            str += u'\u038C';
+        } break;
+        case u'\u03CD': {
+            str += u'\u038E';
+        } break;
+        case u'\u03CE': {
+            str += u'\u038F';
+        } break;
         case u'\u03D7': {
             str += u'\u03CF';
         } break;
@@ -4969,71 +4718,17 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u03EF': {
             str += u'\u03EE';
         } break;
-        case u'\u03F8': {
-            str += u'\u03F7';
-        } break;
         case u'\u03F2': {
             str += u'\u03F9';
         } break;
+        case u'\u03F3': {
+            str += u'\u037F';
+        } break;
+        case u'\u03F8': {
+            str += u'\u03F7';
+        } break;
         case u'\u03FB': {
             str += u'\u03FA';
-        } break;
-        case u'\u037B': {
-            str += u'\u03FD';
-        } break;
-        case u'\u037C': {
-            str += u'\u03FE';
-        } break;
-        case u'\u037D': {
-            str += u'\u03FF';
-        } break;
-        case u'\u0450': {
-            str += u'\u0400';
-        } break;
-        case u'\u0451': {
-            str += u'\u0401';
-        } break;
-        case u'\u0452': {
-            str += u'\u0402';
-        } break;
-        case u'\u0453': {
-            str += u'\u0403';
-        } break;
-        case u'\u0454': {
-            str += u'\u0404';
-        } break;
-        case u'\u0455': {
-            str += u'\u0405';
-        } break;
-        case u'\u0456': {
-            str += u'\u0406';
-        } break;
-        case u'\u0457': {
-            str += u'\u0407';
-        } break;
-        case u'\u0458': {
-            str += u'\u0408';
-        } break;
-        case u'\u0459': {
-            str += u'\u0409';
-        } break;
-        case u'\u045A': {
-            str += u'\u040A';
-        } break;
-        case u'\u045B': {
-            str += u'\u040B';
-        } break;
-        case u'\u045C': {
-            str += u'\u040C';
-        } break;
-        case u'\u045D': {
-            str += u'\u040D';
-        } break;
-        case u'\u045E': {
-            str += u'\u040E';
-        } break;
-        case u'\u045F': {
-            str += u'\u040F';
         } break;
         case u'\u0430': {
             str += u'\u0410';
@@ -5137,6 +4832,54 @@ void Unicode::up(String& str, char16 ch) {
         } break;
         case u'\u044F': {
             str += u'\u042F';
+        } break;
+        case u'\u0450': {
+            str += u'\u0400';
+        } break;
+        case u'\u0451': {
+            str += u'\u0401';
+        } break;
+        case u'\u0452': {
+            str += u'\u0402';
+        } break;
+        case u'\u0453': {
+            str += u'\u0403';
+        } break;
+        case u'\u0454': {
+            str += u'\u0404';
+        } break;
+        case u'\u0455': {
+            str += u'\u0405';
+        } break;
+        case u'\u0456': {
+            str += u'\u0406';
+        } break;
+        case u'\u0457': {
+            str += u'\u0407';
+        } break;
+        case u'\u0458': {
+            str += u'\u0408';
+        } break;
+        case u'\u0459': {
+            str += u'\u0409';
+        } break;
+        case u'\u045A': {
+            str += u'\u040A';
+        } break;
+        case u'\u045B': {
+            str += u'\u040B';
+        } break;
+        case u'\u045C': {
+            str += u'\u040C';
+        } break;
+        case u'\u045D': {
+            str += u'\u040D';
+        } break;
+        case u'\u045E': {
+            str += u'\u040E';
+        } break;
+        case u'\u045F': {
+            str += u'\u040F';
         } break;
         case u'\u0461': {
             str += u'\u0460';
@@ -5271,9 +5014,6 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u04BF': {
             str += u'\u04BE';
         } break;
-        case u'\u04CF': {
-            str += u'\u04C0';
-        } break;
         case u'\u04C2': {
             str += u'\u04C1';
         } break;
@@ -5294,6 +5034,9 @@ void Unicode::up(String& str, char16 ch) {
         } break;
         case u'\u04CE': {
             str += u'\u04CD';
+        } break;
+        case u'\u04CF': {
+            str += u'\u04C0';
         } break;
         case u'\u04D1': {
             str += u'\u04D0';
@@ -5553,383 +5296,9 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u0586': {
             str += u'\u0556';
         } break;
-        case u'\u2D00': {
-            str += u'\u10A0';
-        } break;
-        case u'\u2D01': {
-            str += u'\u10A1';
-        } break;
-        case u'\u2D02': {
-            str += u'\u10A2';
-        } break;
-        case u'\u2D03': {
-            str += u'\u10A3';
-        } break;
-        case u'\u2D04': {
-            str += u'\u10A4';
-        } break;
-        case u'\u2D05': {
-            str += u'\u10A5';
-        } break;
-        case u'\u2D06': {
-            str += u'\u10A6';
-        } break;
-        case u'\u2D07': {
-            str += u'\u10A7';
-        } break;
-        case u'\u2D08': {
-            str += u'\u10A8';
-        } break;
-        case u'\u2D09': {
-            str += u'\u10A9';
-        } break;
-        case u'\u2D0A': {
-            str += u'\u10AA';
-        } break;
-        case u'\u2D0B': {
-            str += u'\u10AB';
-        } break;
-        case u'\u2D0C': {
-            str += u'\u10AC';
-        } break;
-        case u'\u2D0D': {
-            str += u'\u10AD';
-        } break;
-        case u'\u2D0E': {
-            str += u'\u10AE';
-        } break;
-        case u'\u2D0F': {
-            str += u'\u10AF';
-        } break;
-        case u'\u2D10': {
-            str += u'\u10B0';
-        } break;
-        case u'\u2D11': {
-            str += u'\u10B1';
-        } break;
-        case u'\u2D12': {
-            str += u'\u10B2';
-        } break;
-        case u'\u2D13': {
-            str += u'\u10B3';
-        } break;
-        case u'\u2D14': {
-            str += u'\u10B4';
-        } break;
-        case u'\u2D15': {
-            str += u'\u10B5';
-        } break;
-        case u'\u2D16': {
-            str += u'\u10B6';
-        } break;
-        case u'\u2D17': {
-            str += u'\u10B7';
-        } break;
-        case u'\u2D18': {
-            str += u'\u10B8';
-        } break;
-        case u'\u2D19': {
-            str += u'\u10B9';
-        } break;
-        case u'\u2D1A': {
-            str += u'\u10BA';
-        } break;
-        case u'\u2D1B': {
-            str += u'\u10BB';
-        } break;
-        case u'\u2D1C': {
-            str += u'\u10BC';
-        } break;
-        case u'\u2D1D': {
-            str += u'\u10BD';
-        } break;
-        case u'\u2D1E': {
-            str += u'\u10BE';
-        } break;
-        case u'\u2D1F': {
-            str += u'\u10BF';
-        } break;
-        case u'\u2D20': {
-            str += u'\u10C0';
-        } break;
-        case u'\u2D21': {
-            str += u'\u10C1';
-        } break;
-        case u'\u2D22': {
-            str += u'\u10C2';
-        } break;
-        case u'\u2D23': {
-            str += u'\u10C3';
-        } break;
-        case u'\u2D24': {
-            str += u'\u10C4';
-        } break;
-        case u'\u2D25': {
-            str += u'\u10C5';
-        } break;
-        case u'\u2D27': {
-            str += u'\u10C7';
-        } break;
-        case u'\u2D2D': {
-            str += u'\u10CD';
-        } break;
-        case u'\uAB70': {
-            str += u'\u13A0';
-        } break;
-        case u'\uAB71': {
-            str += u'\u13A1';
-        } break;
-        case u'\uAB72': {
-            str += u'\u13A2';
-        } break;
-        case u'\uAB73': {
-            str += u'\u13A3';
-        } break;
-        case u'\uAB74': {
-            str += u'\u13A4';
-        } break;
-        case u'\uAB75': {
-            str += u'\u13A5';
-        } break;
-        case u'\uAB76': {
-            str += u'\u13A6';
-        } break;
-        case u'\uAB77': {
-            str += u'\u13A7';
-        } break;
-        case u'\uAB78': {
-            str += u'\u13A8';
-        } break;
-        case u'\uAB79': {
-            str += u'\u13A9';
-        } break;
-        case u'\uAB7A': {
-            str += u'\u13AA';
-        } break;
-        case u'\uAB7B': {
-            str += u'\u13AB';
-        } break;
-        case u'\uAB7C': {
-            str += u'\u13AC';
-        } break;
-        case u'\uAB7D': {
-            str += u'\u13AD';
-        } break;
-        case u'\uAB7E': {
-            str += u'\u13AE';
-        } break;
-        case u'\uAB7F': {
-            str += u'\u13AF';
-        } break;
-        case u'\uAB80': {
-            str += u'\u13B0';
-        } break;
-        case u'\uAB81': {
-            str += u'\u13B1';
-        } break;
-        case u'\uAB82': {
-            str += u'\u13B2';
-        } break;
-        case u'\uAB83': {
-            str += u'\u13B3';
-        } break;
-        case u'\uAB84': {
-            str += u'\u13B4';
-        } break;
-        case u'\uAB85': {
-            str += u'\u13B5';
-        } break;
-        case u'\uAB86': {
-            str += u'\u13B6';
-        } break;
-        case u'\uAB87': {
-            str += u'\u13B7';
-        } break;
-        case u'\uAB88': {
-            str += u'\u13B8';
-        } break;
-        case u'\uAB89': {
-            str += u'\u13B9';
-        } break;
-        case u'\uAB8A': {
-            str += u'\u13BA';
-        } break;
-        case u'\uAB8B': {
-            str += u'\u13BB';
-        } break;
-        case u'\uAB8C': {
-            str += u'\u13BC';
-        } break;
-        case u'\uAB8D': {
-            str += u'\u13BD';
-        } break;
-        case u'\uAB8E': {
-            str += u'\u13BE';
-        } break;
-        case u'\uAB8F': {
-            str += u'\u13BF';
-        } break;
-        case u'\uAB90': {
-            str += u'\u13C0';
-        } break;
-        case u'\uAB91': {
-            str += u'\u13C1';
-        } break;
-        case u'\uAB92': {
-            str += u'\u13C2';
-        } break;
-        case u'\uAB93': {
-            str += u'\u13C3';
-        } break;
-        case u'\uAB94': {
-            str += u'\u13C4';
-        } break;
-        case u'\uAB95': {
-            str += u'\u13C5';
-        } break;
-        case u'\uAB96': {
-            str += u'\u13C6';
-        } break;
-        case u'\uAB97': {
-            str += u'\u13C7';
-        } break;
-        case u'\uAB98': {
-            str += u'\u13C8';
-        } break;
-        case u'\uAB99': {
-            str += u'\u13C9';
-        } break;
-        case u'\uAB9A': {
-            str += u'\u13CA';
-        } break;
-        case u'\uAB9B': {
-            str += u'\u13CB';
-        } break;
-        case u'\uAB9C': {
-            str += u'\u13CC';
-        } break;
-        case u'\uAB9D': {
-            str += u'\u13CD';
-        } break;
-        case u'\uAB9E': {
-            str += u'\u13CE';
-        } break;
-        case u'\uAB9F': {
-            str += u'\u13CF';
-        } break;
-        case u'\uABA0': {
-            str += u'\u13D0';
-        } break;
-        case u'\uABA1': {
-            str += u'\u13D1';
-        } break;
-        case u'\uABA2': {
-            str += u'\u13D2';
-        } break;
-        case u'\uABA3': {
-            str += u'\u13D3';
-        } break;
-        case u'\uABA4': {
-            str += u'\u13D4';
-        } break;
-        case u'\uABA5': {
-            str += u'\u13D5';
-        } break;
-        case u'\uABA6': {
-            str += u'\u13D6';
-        } break;
-        case u'\uABA7': {
-            str += u'\u13D7';
-        } break;
-        case u'\uABA8': {
-            str += u'\u13D8';
-        } break;
-        case u'\uABA9': {
-            str += u'\u13D9';
-        } break;
-        case u'\uABAA': {
-            str += u'\u13DA';
-        } break;
-        case u'\uABAB': {
-            str += u'\u13DB';
-        } break;
-        case u'\uABAC': {
-            str += u'\u13DC';
-        } break;
-        case u'\uABAD': {
-            str += u'\u13DD';
-        } break;
-        case u'\uABAE': {
-            str += u'\u13DE';
-        } break;
-        case u'\uABAF': {
-            str += u'\u13DF';
-        } break;
-        case u'\uABB0': {
-            str += u'\u13E0';
-        } break;
-        case u'\uABB1': {
-            str += u'\u13E1';
-        } break;
-        case u'\uABB2': {
-            str += u'\u13E2';
-        } break;
-        case u'\uABB3': {
-            str += u'\u13E3';
-        } break;
-        case u'\uABB4': {
-            str += u'\u13E4';
-        } break;
-        case u'\uABB5': {
-            str += u'\u13E5';
-        } break;
-        case u'\uABB6': {
-            str += u'\u13E6';
-        } break;
-        case u'\uABB7': {
-            str += u'\u13E7';
-        } break;
-        case u'\uABB8': {
-            str += u'\u13E8';
-        } break;
-        case u'\uABB9': {
-            str += u'\u13E9';
-        } break;
-        case u'\uABBA': {
-            str += u'\u13EA';
-        } break;
-        case u'\uABBB': {
-            str += u'\u13EB';
-        } break;
-        case u'\uABBC': {
-            str += u'\u13EC';
-        } break;
-        case u'\uABBD': {
-            str += u'\u13ED';
-        } break;
-        case u'\uABBE': {
-            str += u'\u13EE';
-        } break;
-        case u'\uABBF': {
-            str += u'\u13EF';
-        } break;
-        case u'\u13F8': {
-            str += u'\u13F0';
-        } break;
-        case u'\u13F9': {
-            str += u'\u13F1';
-        } break;
-        case u'\u13FA': {
-            str += u'\u13F2';
-        } break;
-        case u'\u13FB': {
-            str += u'\u13F3';
-        } break;
-        case u'\u13FC': {
-            str += u'\u13F4';
-        } break;
-        case u'\u13FD': {
-            str += u'\u13F5';
+        case u'\u0587': {
+            str += u'\u0535';
+            str += u'\u0552';
         } break;
         case u'\u10D0': {
             str += u'\u1C90';
@@ -6068,6 +5437,37 @@ void Unicode::up(String& str, char16 ch) {
         } break;
         case u'\u10FF': {
             str += u'\u1CBF';
+        } break;
+        case u'\u13F8': {
+            str += u'\u13F0';
+        } break;
+        case u'\u13F9': {
+            str += u'\u13F1';
+        } break;
+        case u'\u13FA': {
+            str += u'\u13F2';
+        } break;
+        case u'\u13FB': {
+            str += u'\u13F3';
+        } break;
+        case u'\u13FC': {
+            str += u'\u13F4';
+        } break;
+        case u'\u13FD': {
+            str += u'\u13F5';
+        } break;
+        case u'\u1C88': [[fallthrough]];
+        case u'\uA64B': {
+            str += u'\uA64A';
+        } break;
+        case u'\u1D79': {
+            str += u'\uA77D';
+        } break;
+        case u'\u1D7D': {
+            str += u'\u2C63';
+        } break;
+        case u'\u1D8E': {
+            str += u'\uA7C6';
         } break;
         case u'\u1E01': {
             str += u'\u1E00';
@@ -6295,8 +5695,25 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u1E95': {
             str += u'\u1E94';
         } break;
-        case u'\u00DF': {
-            str += u'\u1E9E';
+        case u'\u1E96': {
+            str += u'\u0048';
+            str += u'\u0331';
+        } break;
+        case u'\u1E97': {
+            str += u'\u0054';
+            str += u'\u0308';
+        } break;
+        case u'\u1E98': {
+            str += u'\u0057';
+            str += u'\u030A';
+        } break;
+        case u'\u1E99': {
+            str += u'\u0059';
+            str += u'\u030A';
+        } break;
+        case u'\u1E9A': {
+            str += u'\u0041';
+            str += u'\u02BE';
         } break;
         case u'\u1EA1': {
             str += u'\u1EA0';
@@ -6550,14 +5967,33 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u1F45': {
             str += u'\u1F4D';
         } break;
+        case u'\u1F50': {
+            str += u'\u03A5';
+            str += u'\u0313';
+        } break;
         case u'\u1F51': {
             str += u'\u1F59';
+        } break;
+        case u'\u1F52': {
+            str += u'\u03A5';
+            str += u'\u0313';
+            str += u'\u0300';
         } break;
         case u'\u1F53': {
             str += u'\u1F5B';
         } break;
+        case u'\u1F54': {
+            str += u'\u03A5';
+            str += u'\u0313';
+            str += u'\u0301';
+        } break;
         case u'\u1F55': {
             str += u'\u1F5D';
+        } break;
+        case u'\u1F56': {
+            str += u'\u03A5';
+            str += u'\u0313';
+            str += u'\u0342';
         } break;
         case u'\u1F57': {
             str += u'\u1F5F';
@@ -6586,12 +6022,6 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u1F67': {
             str += u'\u1F6F';
         } break;
-        case u'\u1FB0': {
-            str += u'\u1FB8';
-        } break;
-        case u'\u1FB1': {
-            str += u'\u1FB9';
-        } break;
         case u'\u1F70': {
             str += u'\u1FBA';
         } break;
@@ -6610,32 +6040,11 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u1F75': {
             str += u'\u1FCB';
         } break;
-        case u'\u1FD0': {
-            str += u'\u1FD8';
-        } break;
-        case u'\u1FD1': {
-            str += u'\u1FD9';
-        } break;
         case u'\u1F76': {
             str += u'\u1FDA';
         } break;
         case u'\u1F77': {
             str += u'\u1FDB';
-        } break;
-        case u'\u1FE0': {
-            str += u'\u1FE8';
-        } break;
-        case u'\u1FE1': {
-            str += u'\u1FE9';
-        } break;
-        case u'\u1F7A': {
-            str += u'\u1FEA';
-        } break;
-        case u'\u1F7B': {
-            str += u'\u1FEB';
-        } break;
-        case u'\u1FE5': {
-            str += u'\u1FEC';
         } break;
         case u'\u1F78': {
             str += u'\u1FF8';
@@ -6643,11 +6052,256 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u1F79': {
             str += u'\u1FF9';
         } break;
+        case u'\u1F7A': {
+            str += u'\u1FEA';
+        } break;
+        case u'\u1F7B': {
+            str += u'\u1FEB';
+        } break;
         case u'\u1F7C': {
             str += u'\u1FFA';
         } break;
         case u'\u1F7D': {
             str += u'\u1FFB';
+        } break;
+        case u'\u1F80': [[fallthrough]];
+        case u'\u1F88': {
+            str += u'\u1F08';
+            str += u'\u0399';
+        } break;
+        case u'\u1F81': [[fallthrough]];
+        case u'\u1F89': {
+            str += u'\u1F09';
+            str += u'\u0399';
+        } break;
+        case u'\u1F82': [[fallthrough]];
+        case u'\u1F8A': {
+            str += u'\u1F0A';
+            str += u'\u0399';
+        } break;
+        case u'\u1F83': [[fallthrough]];
+        case u'\u1F8B': {
+            str += u'\u1F0B';
+            str += u'\u0399';
+        } break;
+        case u'\u1F84': [[fallthrough]];
+        case u'\u1F8C': {
+            str += u'\u1F0C';
+            str += u'\u0399';
+        } break;
+        case u'\u1F85': [[fallthrough]];
+        case u'\u1F8D': {
+            str += u'\u1F0D';
+            str += u'\u0399';
+        } break;
+        case u'\u1F86': [[fallthrough]];
+        case u'\u1F8E': {
+            str += u'\u1F0E';
+            str += u'\u0399';
+        } break;
+        case u'\u1F87': [[fallthrough]];
+        case u'\u1F8F': {
+            str += u'\u1F0F';
+            str += u'\u0399';
+        } break;
+        case u'\u1F90': [[fallthrough]];
+        case u'\u1F98': {
+            str += u'\u1F28';
+            str += u'\u0399';
+        } break;
+        case u'\u1F91': [[fallthrough]];
+        case u'\u1F99': {
+            str += u'\u1F29';
+            str += u'\u0399';
+        } break;
+        case u'\u1F92': [[fallthrough]];
+        case u'\u1F9A': {
+            str += u'\u1F2A';
+            str += u'\u0399';
+        } break;
+        case u'\u1F93': [[fallthrough]];
+        case u'\u1F9B': {
+            str += u'\u1F2B';
+            str += u'\u0399';
+        } break;
+        case u'\u1F94': [[fallthrough]];
+        case u'\u1F9C': {
+            str += u'\u1F2C';
+            str += u'\u0399';
+        } break;
+        case u'\u1F95': [[fallthrough]];
+        case u'\u1F9D': {
+            str += u'\u1F2D';
+            str += u'\u0399';
+        } break;
+        case u'\u1F96': [[fallthrough]];
+        case u'\u1F9E': {
+            str += u'\u1F2E';
+            str += u'\u0399';
+        } break;
+        case u'\u1F97': [[fallthrough]];
+        case u'\u1F9F': {
+            str += u'\u1F2F';
+            str += u'\u0399';
+        } break;
+        case u'\u1FA0': [[fallthrough]];
+        case u'\u1FA8': {
+            str += u'\u1F68';
+            str += u'\u0399';
+        } break;
+        case u'\u1FA1': [[fallthrough]];
+        case u'\u1FA9': {
+            str += u'\u1F69';
+            str += u'\u0399';
+        } break;
+        case u'\u1FA2': [[fallthrough]];
+        case u'\u1FAA': {
+            str += u'\u1F6A';
+            str += u'\u0399';
+        } break;
+        case u'\u1FA3': [[fallthrough]];
+        case u'\u1FAB': {
+            str += u'\u1F6B';
+            str += u'\u0399';
+        } break;
+        case u'\u1FA4': [[fallthrough]];
+        case u'\u1FAC': {
+            str += u'\u1F6C';
+            str += u'\u0399';
+        } break;
+        case u'\u1FA5': [[fallthrough]];
+        case u'\u1FAD': {
+            str += u'\u1F6D';
+            str += u'\u0399';
+        } break;
+        case u'\u1FA6': [[fallthrough]];
+        case u'\u1FAE': {
+            str += u'\u1F6E';
+            str += u'\u0399';
+        } break;
+        case u'\u1FA7': [[fallthrough]];
+        case u'\u1FAF': {
+            str += u'\u1F6F';
+            str += u'\u0399';
+        } break;
+        case u'\u1FB0': {
+            str += u'\u1FB8';
+        } break;
+        case u'\u1FB1': {
+            str += u'\u1FB9';
+        } break;
+        case u'\u1FB2': {
+            str += u'\u1FBA';
+            str += u'\u0399';
+        } break;
+        case u'\u1FB3': [[fallthrough]];
+        case u'\u1FBC': {
+            str += u'\u0391';
+            str += u'\u0399';
+        } break;
+        case u'\u1FB4': {
+            str += u'\u0386';
+            str += u'\u0399';
+        } break;
+        case u'\u1FB6': {
+            str += u'\u0391';
+            str += u'\u0342';
+        } break;
+        case u'\u1FB7': {
+            str += u'\u0391';
+            str += u'\u0342';
+            str += u'\u0399';
+        } break;
+        case u'\u1FC2': {
+            str += u'\u1FCA';
+            str += u'\u0399';
+        } break;
+        case u'\u1FC3': [[fallthrough]];
+        case u'\u1FCC': {
+            str += u'\u0397';
+            str += u'\u0399';
+        } break;
+        case u'\u1FC4': {
+            str += u'\u0389';
+            str += u'\u0399';
+        } break;
+        case u'\u1FC6': {
+            str += u'\u0397';
+            str += u'\u0342';
+        } break;
+        case u'\u1FC7': {
+            str += u'\u0397';
+            str += u'\u0342';
+            str += u'\u0399';
+        } break;
+        case u'\u1FD0': {
+            str += u'\u1FD8';
+        } break;
+        case u'\u1FD1': {
+            str += u'\u1FD9';
+        } break;
+        case u'\u1FD2': {
+            str += u'\u0399';
+            str += u'\u0308';
+            str += u'\u0300';
+        } break;
+        case u'\u1FD6': {
+            str += u'\u0399';
+            str += u'\u0342';
+        } break;
+        case u'\u1FD7': {
+            str += u'\u0399';
+            str += u'\u0308';
+            str += u'\u0342';
+        } break;
+        case u'\u1FE0': {
+            str += u'\u1FE8';
+        } break;
+        case u'\u1FE1': {
+            str += u'\u1FE9';
+        } break;
+        case u'\u1FE2': {
+            str += u'\u03A5';
+            str += u'\u0308';
+            str += u'\u0300';
+        } break;
+        case u'\u1FE4': {
+            str += u'\u03A1';
+            str += u'\u0313';
+        } break;
+        case u'\u1FE5': {
+            str += u'\u1FEC';
+        } break;
+        case u'\u1FE6': {
+            str += u'\u03A5';
+            str += u'\u0342';
+        } break;
+        case u'\u1FE7': {
+            str += u'\u03A5';
+            str += u'\u0308';
+            str += u'\u0342';
+        } break;
+        case u'\u1FF2': {
+            str += u'\u1FFA';
+            str += u'\u0399';
+        } break;
+        case u'\u1FF3': [[fallthrough]];
+        case u'\u1FFC': {
+            str += u'\u03A9';
+            str += u'\u0399';
+        } break;
+        case u'\u1FF4': {
+            str += u'\u038F';
+            str += u'\u0399';
+        } break;
+        case u'\u1FF6': {
+            str += u'\u03A9';
+            str += u'\u0342';
+        } break;
+        case u'\u1FF7': {
+            str += u'\u03A9';
+            str += u'\u0342';
+            str += u'\u0399';
         } break;
         case u'\u214E': {
             str += u'\u2132';
@@ -6928,14 +6582,11 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u2C61': {
             str += u'\u2C60';
         } break;
-        case u'\u026B': {
-            str += u'\u2C62';
+        case u'\u2C65': {
+            str += u'\u023A';
         } break;
-        case u'\u1D7D': {
-            str += u'\u2C63';
-        } break;
-        case u'\u027D': {
-            str += u'\u2C64';
+        case u'\u2C66': {
+            str += u'\u023E';
         } break;
         case u'\u2C68': {
             str += u'\u2C67';
@@ -6946,29 +6597,11 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u2C6C': {
             str += u'\u2C6B';
         } break;
-        case u'\u0251': {
-            str += u'\u2C6D';
-        } break;
-        case u'\u0271': {
-            str += u'\u2C6E';
-        } break;
-        case u'\u0250': {
-            str += u'\u2C6F';
-        } break;
-        case u'\u0252': {
-            str += u'\u2C70';
-        } break;
         case u'\u2C73': {
             str += u'\u2C72';
         } break;
         case u'\u2C76': {
             str += u'\u2C75';
-        } break;
-        case u'\u023F': {
-            str += u'\u2C7E';
-        } break;
-        case u'\u0240': {
-            str += u'\u2C7F';
         } break;
         case u'\u2C81': {
             str += u'\u2C80';
@@ -7129,6 +6762,126 @@ void Unicode::up(String& str, char16 ch) {
         case u'\u2CF3': {
             str += u'\u2CF2';
         } break;
+        case u'\u2D00': {
+            str += u'\u10A0';
+        } break;
+        case u'\u2D01': {
+            str += u'\u10A1';
+        } break;
+        case u'\u2D02': {
+            str += u'\u10A2';
+        } break;
+        case u'\u2D03': {
+            str += u'\u10A3';
+        } break;
+        case u'\u2D04': {
+            str += u'\u10A4';
+        } break;
+        case u'\u2D05': {
+            str += u'\u10A5';
+        } break;
+        case u'\u2D06': {
+            str += u'\u10A6';
+        } break;
+        case u'\u2D07': {
+            str += u'\u10A7';
+        } break;
+        case u'\u2D08': {
+            str += u'\u10A8';
+        } break;
+        case u'\u2D09': {
+            str += u'\u10A9';
+        } break;
+        case u'\u2D0A': {
+            str += u'\u10AA';
+        } break;
+        case u'\u2D0B': {
+            str += u'\u10AB';
+        } break;
+        case u'\u2D0C': {
+            str += u'\u10AC';
+        } break;
+        case u'\u2D0D': {
+            str += u'\u10AD';
+        } break;
+        case u'\u2D0E': {
+            str += u'\u10AE';
+        } break;
+        case u'\u2D0F': {
+            str += u'\u10AF';
+        } break;
+        case u'\u2D10': {
+            str += u'\u10B0';
+        } break;
+        case u'\u2D11': {
+            str += u'\u10B1';
+        } break;
+        case u'\u2D12': {
+            str += u'\u10B2';
+        } break;
+        case u'\u2D13': {
+            str += u'\u10B3';
+        } break;
+        case u'\u2D14': {
+            str += u'\u10B4';
+        } break;
+        case u'\u2D15': {
+            str += u'\u10B5';
+        } break;
+        case u'\u2D16': {
+            str += u'\u10B6';
+        } break;
+        case u'\u2D17': {
+            str += u'\u10B7';
+        } break;
+        case u'\u2D18': {
+            str += u'\u10B8';
+        } break;
+        case u'\u2D19': {
+            str += u'\u10B9';
+        } break;
+        case u'\u2D1A': {
+            str += u'\u10BA';
+        } break;
+        case u'\u2D1B': {
+            str += u'\u10BB';
+        } break;
+        case u'\u2D1C': {
+            str += u'\u10BC';
+        } break;
+        case u'\u2D1D': {
+            str += u'\u10BD';
+        } break;
+        case u'\u2D1E': {
+            str += u'\u10BE';
+        } break;
+        case u'\u2D1F': {
+            str += u'\u10BF';
+        } break;
+        case u'\u2D20': {
+            str += u'\u10C0';
+        } break;
+        case u'\u2D21': {
+            str += u'\u10C1';
+        } break;
+        case u'\u2D22': {
+            str += u'\u10C2';
+        } break;
+        case u'\u2D23': {
+            str += u'\u10C3';
+        } break;
+        case u'\u2D24': {
+            str += u'\u10C4';
+        } break;
+        case u'\u2D25': {
+            str += u'\u10C5';
+        } break;
+        case u'\u2D27': {
+            str += u'\u10C7';
+        } break;
+        case u'\u2D2D': {
+            str += u'\u10CD';
+        } break;
         case u'\uA641': {
             str += u'\uA640';
         } break;
@@ -7143,10 +6896,6 @@ void Unicode::up(String& str, char16 ch) {
         } break;
         case u'\uA649': {
             str += u'\uA648';
-        } break;
-        case u'\u1C88': [[fallthrough]];
-        case u'\uA64B': {
-            str += u'\uA64A';
         } break;
         case u'\uA64D': {
             str += u'\uA64C';
@@ -7361,9 +7110,6 @@ void Unicode::up(String& str, char16 ch) {
         case u'\uA77C': {
             str += u'\uA77B';
         } break;
-        case u'\u1D79': {
-            str += u'\uA77D';
-        } break;
         case u'\uA77F': {
             str += u'\uA77E';
         } break;
@@ -7382,14 +7128,14 @@ void Unicode::up(String& str, char16 ch) {
         case u'\uA78C': {
             str += u'\uA78B';
         } break;
-        case u'\u0265': {
-            str += u'\uA78D';
-        } break;
         case u'\uA791': {
             str += u'\uA790';
         } break;
         case u'\uA793': {
             str += u'\uA792';
+        } break;
+        case u'\uA794': {
+            str += u'\uA7C4';
         } break;
         case u'\uA797': {
             str += u'\uA796';
@@ -7421,33 +7167,6 @@ void Unicode::up(String& str, char16 ch) {
         case u'\uA7A9': {
             str += u'\uA7A8';
         } break;
-        case u'\u0266': {
-            str += u'\uA7AA';
-        } break;
-        case u'\u025C': {
-            str += u'\uA7AB';
-        } break;
-        case u'\u0261': {
-            str += u'\uA7AC';
-        } break;
-        case u'\u026C': {
-            str += u'\uA7AD';
-        } break;
-        case u'\u026A': {
-            str += u'\uA7AE';
-        } break;
-        case u'\u029E': {
-            str += u'\uA7B0';
-        } break;
-        case u'\u0287': {
-            str += u'\uA7B1';
-        } break;
-        case u'\u029D': {
-            str += u'\uA7B2';
-        } break;
-        case u'\uAB53': {
-            str += u'\uA7B3';
-        } break;
         case u'\uA7B5': {
             str += u'\uA7B4';
         } break;
@@ -7472,15 +7191,6 @@ void Unicode::up(String& str, char16 ch) {
         case u'\uA7C3': {
             str += u'\uA7C2';
         } break;
-        case u'\uA794': {
-            str += u'\uA7C4';
-        } break;
-        case u'\u0282': {
-            str += u'\uA7C5';
-        } break;
-        case u'\u1D8E': {
-            str += u'\uA7C6';
-        } break;
         case u'\uA7C8': {
             str += u'\uA7C7';
         } break;
@@ -7498,6 +7208,296 @@ void Unicode::up(String& str, char16 ch) {
         } break;
         case u'\uA7F6': {
             str += u'\uA7F5';
+        } break;
+        case u'\uAB53': {
+            str += u'\uA7B3';
+        } break;
+        case u'\uAB70': {
+            str += u'\u13A0';
+        } break;
+        case u'\uAB71': {
+            str += u'\u13A1';
+        } break;
+        case u'\uAB72': {
+            str += u'\u13A2';
+        } break;
+        case u'\uAB73': {
+            str += u'\u13A3';
+        } break;
+        case u'\uAB74': {
+            str += u'\u13A4';
+        } break;
+        case u'\uAB75': {
+            str += u'\u13A5';
+        } break;
+        case u'\uAB76': {
+            str += u'\u13A6';
+        } break;
+        case u'\uAB77': {
+            str += u'\u13A7';
+        } break;
+        case u'\uAB78': {
+            str += u'\u13A8';
+        } break;
+        case u'\uAB79': {
+            str += u'\u13A9';
+        } break;
+        case u'\uAB7A': {
+            str += u'\u13AA';
+        } break;
+        case u'\uAB7B': {
+            str += u'\u13AB';
+        } break;
+        case u'\uAB7C': {
+            str += u'\u13AC';
+        } break;
+        case u'\uAB7D': {
+            str += u'\u13AD';
+        } break;
+        case u'\uAB7E': {
+            str += u'\u13AE';
+        } break;
+        case u'\uAB7F': {
+            str += u'\u13AF';
+        } break;
+        case u'\uAB80': {
+            str += u'\u13B0';
+        } break;
+        case u'\uAB81': {
+            str += u'\u13B1';
+        } break;
+        case u'\uAB82': {
+            str += u'\u13B2';
+        } break;
+        case u'\uAB83': {
+            str += u'\u13B3';
+        } break;
+        case u'\uAB84': {
+            str += u'\u13B4';
+        } break;
+        case u'\uAB85': {
+            str += u'\u13B5';
+        } break;
+        case u'\uAB86': {
+            str += u'\u13B6';
+        } break;
+        case u'\uAB87': {
+            str += u'\u13B7';
+        } break;
+        case u'\uAB88': {
+            str += u'\u13B8';
+        } break;
+        case u'\uAB89': {
+            str += u'\u13B9';
+        } break;
+        case u'\uAB8A': {
+            str += u'\u13BA';
+        } break;
+        case u'\uAB8B': {
+            str += u'\u13BB';
+        } break;
+        case u'\uAB8C': {
+            str += u'\u13BC';
+        } break;
+        case u'\uAB8D': {
+            str += u'\u13BD';
+        } break;
+        case u'\uAB8E': {
+            str += u'\u13BE';
+        } break;
+        case u'\uAB8F': {
+            str += u'\u13BF';
+        } break;
+        case u'\uAB90': {
+            str += u'\u13C0';
+        } break;
+        case u'\uAB91': {
+            str += u'\u13C1';
+        } break;
+        case u'\uAB92': {
+            str += u'\u13C2';
+        } break;
+        case u'\uAB93': {
+            str += u'\u13C3';
+        } break;
+        case u'\uAB94': {
+            str += u'\u13C4';
+        } break;
+        case u'\uAB95': {
+            str += u'\u13C5';
+        } break;
+        case u'\uAB96': {
+            str += u'\u13C6';
+        } break;
+        case u'\uAB97': {
+            str += u'\u13C7';
+        } break;
+        case u'\uAB98': {
+            str += u'\u13C8';
+        } break;
+        case u'\uAB99': {
+            str += u'\u13C9';
+        } break;
+        case u'\uAB9A': {
+            str += u'\u13CA';
+        } break;
+        case u'\uAB9B': {
+            str += u'\u13CB';
+        } break;
+        case u'\uAB9C': {
+            str += u'\u13CC';
+        } break;
+        case u'\uAB9D': {
+            str += u'\u13CD';
+        } break;
+        case u'\uAB9E': {
+            str += u'\u13CE';
+        } break;
+        case u'\uAB9F': {
+            str += u'\u13CF';
+        } break;
+        case u'\uABA0': {
+            str += u'\u13D0';
+        } break;
+        case u'\uABA1': {
+            str += u'\u13D1';
+        } break;
+        case u'\uABA2': {
+            str += u'\u13D2';
+        } break;
+        case u'\uABA3': {
+            str += u'\u13D3';
+        } break;
+        case u'\uABA4': {
+            str += u'\u13D4';
+        } break;
+        case u'\uABA5': {
+            str += u'\u13D5';
+        } break;
+        case u'\uABA6': {
+            str += u'\u13D6';
+        } break;
+        case u'\uABA7': {
+            str += u'\u13D7';
+        } break;
+        case u'\uABA8': {
+            str += u'\u13D8';
+        } break;
+        case u'\uABA9': {
+            str += u'\u13D9';
+        } break;
+        case u'\uABAA': {
+            str += u'\u13DA';
+        } break;
+        case u'\uABAB': {
+            str += u'\u13DB';
+        } break;
+        case u'\uABAC': {
+            str += u'\u13DC';
+        } break;
+        case u'\uABAD': {
+            str += u'\u13DD';
+        } break;
+        case u'\uABAE': {
+            str += u'\u13DE';
+        } break;
+        case u'\uABAF': {
+            str += u'\u13DF';
+        } break;
+        case u'\uABB0': {
+            str += u'\u13E0';
+        } break;
+        case u'\uABB1': {
+            str += u'\u13E1';
+        } break;
+        case u'\uABB2': {
+            str += u'\u13E2';
+        } break;
+        case u'\uABB3': {
+            str += u'\u13E3';
+        } break;
+        case u'\uABB4': {
+            str += u'\u13E4';
+        } break;
+        case u'\uABB5': {
+            str += u'\u13E5';
+        } break;
+        case u'\uABB6': {
+            str += u'\u13E6';
+        } break;
+        case u'\uABB7': {
+            str += u'\u13E7';
+        } break;
+        case u'\uABB8': {
+            str += u'\u13E8';
+        } break;
+        case u'\uABB9': {
+            str += u'\u13E9';
+        } break;
+        case u'\uABBA': {
+            str += u'\u13EA';
+        } break;
+        case u'\uABBB': {
+            str += u'\u13EB';
+        } break;
+        case u'\uABBC': {
+            str += u'\u13EC';
+        } break;
+        case u'\uABBD': {
+            str += u'\u13ED';
+        } break;
+        case u'\uABBE': {
+            str += u'\u13EE';
+        } break;
+        case u'\uABBF': {
+            str += u'\u13EF';
+        } break;
+        case u'\uFB00': {
+            str += u'\u0046';
+            str += u'\u0046';
+        } break;
+        case u'\uFB01': {
+            str += u'\u0046';
+            str += u'\u0049';
+        } break;
+        case u'\uFB02': {
+            str += u'\u0046';
+            str += u'\u004C';
+        } break;
+        case u'\uFB03': {
+            str += u'\u0046';
+            str += u'\u0046';
+            str += u'\u0049';
+        } break;
+        case u'\uFB04': {
+            str += u'\u0046';
+            str += u'\u0046';
+            str += u'\u004C';
+        } break;
+        case u'\uFB05': [[fallthrough]];
+        case u'\uFB06': {
+            str += u'\u0053';
+            str += u'\u0054';
+        } break;
+        case u'\uFB13': {
+            str += u'\u0544';
+            str += u'\u0546';
+        } break;
+        case u'\uFB14': {
+            str += u'\u0544';
+            str += u'\u0535';
+        } break;
+        case u'\uFB15': {
+            str += u'\u0544';
+            str += u'\u053B';
+        } break;
+        case u'\uFB16': {
+            str += u'\u054E';
+            str += u'\u0546';
+        } break;
+        case u'\uFB17': {
+            str += u'\u0544';
+            str += u'\u053D';
         } break;
         case u'\uFF41': {
             str += u'\uFF21';
@@ -7585,262 +7585,6 @@ void Unicode::up(String& str, char16 ch) {
 
 void Unicode::down(String& str, char16 ch) {
     switch (ch) {
-        case u'\u0130': {
-            str += u'\u0069';
-            str += u'\u0307';
-        } break;
-        case u'\u00DF': {
-            str += u'\u00DF';
-        } break;
-        case u'\u0149': {
-            str += u'\u0149';
-        } break;
-        case u'\u01F0': {
-            str += u'\u01F0';
-        } break;
-        case u'\u0390': {
-            str += u'\u0390';
-        } break;
-        case u'\u03B0': {
-            str += u'\u03B0';
-        } break;
-        case u'\u0587': {
-            str += u'\u0587';
-        } break;
-        case u'\u1E96': {
-            str += u'\u1E96';
-        } break;
-        case u'\u1E97': {
-            str += u'\u1E97';
-        } break;
-        case u'\u1E98': {
-            str += u'\u1E98';
-        } break;
-        case u'\u1E99': {
-            str += u'\u1E99';
-        } break;
-        case u'\u1E9A': {
-            str += u'\u1E9A';
-        } break;
-        case u'\u1F50': {
-            str += u'\u1F50';
-        } break;
-        case u'\u1F52': {
-            str += u'\u1F52';
-        } break;
-        case u'\u1F54': {
-            str += u'\u1F54';
-        } break;
-        case u'\u1F56': {
-            str += u'\u1F56';
-        } break;
-        case u'\u1F80': [[fallthrough]];
-        case u'\u1F88': {
-            str += u'\u1F80';
-        } break;
-        case u'\u1F81': [[fallthrough]];
-        case u'\u1F89': {
-            str += u'\u1F81';
-        } break;
-        case u'\u1F82': [[fallthrough]];
-        case u'\u1F8A': {
-            str += u'\u1F82';
-        } break;
-        case u'\u1F83': [[fallthrough]];
-        case u'\u1F8B': {
-            str += u'\u1F83';
-        } break;
-        case u'\u1F84': [[fallthrough]];
-        case u'\u1F8C': {
-            str += u'\u1F84';
-        } break;
-        case u'\u1F85': [[fallthrough]];
-        case u'\u1F8D': {
-            str += u'\u1F85';
-        } break;
-        case u'\u1F86': [[fallthrough]];
-        case u'\u1F8E': {
-            str += u'\u1F86';
-        } break;
-        case u'\u1F87': [[fallthrough]];
-        case u'\u1F8F': {
-            str += u'\u1F87';
-        } break;
-        case u'\u1F90': [[fallthrough]];
-        case u'\u1F98': {
-            str += u'\u1F90';
-        } break;
-        case u'\u1F91': [[fallthrough]];
-        case u'\u1F99': {
-            str += u'\u1F91';
-        } break;
-        case u'\u1F92': [[fallthrough]];
-        case u'\u1F9A': {
-            str += u'\u1F92';
-        } break;
-        case u'\u1F93': [[fallthrough]];
-        case u'\u1F9B': {
-            str += u'\u1F93';
-        } break;
-        case u'\u1F94': [[fallthrough]];
-        case u'\u1F9C': {
-            str += u'\u1F94';
-        } break;
-        case u'\u1F95': [[fallthrough]];
-        case u'\u1F9D': {
-            str += u'\u1F95';
-        } break;
-        case u'\u1F96': [[fallthrough]];
-        case u'\u1F9E': {
-            str += u'\u1F96';
-        } break;
-        case u'\u1F97': [[fallthrough]];
-        case u'\u1F9F': {
-            str += u'\u1F97';
-        } break;
-        case u'\u1FA0': [[fallthrough]];
-        case u'\u1FA8': {
-            str += u'\u1FA0';
-        } break;
-        case u'\u1FA1': [[fallthrough]];
-        case u'\u1FA9': {
-            str += u'\u1FA1';
-        } break;
-        case u'\u1FA2': [[fallthrough]];
-        case u'\u1FAA': {
-            str += u'\u1FA2';
-        } break;
-        case u'\u1FA3': [[fallthrough]];
-        case u'\u1FAB': {
-            str += u'\u1FA3';
-        } break;
-        case u'\u1FA4': [[fallthrough]];
-        case u'\u1FAC': {
-            str += u'\u1FA4';
-        } break;
-        case u'\u1FA5': [[fallthrough]];
-        case u'\u1FAD': {
-            str += u'\u1FA5';
-        } break;
-        case u'\u1FA6': [[fallthrough]];
-        case u'\u1FAE': {
-            str += u'\u1FA6';
-        } break;
-        case u'\u1FA7': [[fallthrough]];
-        case u'\u1FAF': {
-            str += u'\u1FA7';
-        } break;
-        case u'\u1FB2': {
-            str += u'\u1FB2';
-        } break;
-        case u'\u1FB3': [[fallthrough]];
-        case u'\u1FBC': {
-            str += u'\u1FB3';
-        } break;
-        case u'\u1FB4': {
-            str += u'\u1FB4';
-        } break;
-        case u'\u1FB6': {
-            str += u'\u1FB6';
-        } break;
-        case u'\u1FB7': {
-            str += u'\u1FB7';
-        } break;
-        case u'\u1FC2': {
-            str += u'\u1FC2';
-        } break;
-        case u'\u1FC3': [[fallthrough]];
-        case u'\u1FCC': {
-            str += u'\u1FC3';
-        } break;
-        case u'\u1FC4': {
-            str += u'\u1FC4';
-        } break;
-        case u'\u1FC6': {
-            str += u'\u1FC6';
-        } break;
-        case u'\u1FC7': {
-            str += u'\u1FC7';
-        } break;
-        case u'\u1FD2': {
-            str += u'\u1FD2';
-        } break;
-        case u'\u1FD3': {
-            str += u'\u1FD3';
-        } break;
-        case u'\u1FD6': {
-            str += u'\u1FD6';
-        } break;
-        case u'\u1FD7': {
-            str += u'\u1FD7';
-        } break;
-        case u'\u1FE2': {
-            str += u'\u1FE2';
-        } break;
-        case u'\u1FE3': {
-            str += u'\u1FE3';
-        } break;
-        case u'\u1FE4': {
-            str += u'\u1FE4';
-        } break;
-        case u'\u1FE6': {
-            str += u'\u1FE6';
-        } break;
-        case u'\u1FE7': {
-            str += u'\u1FE7';
-        } break;
-        case u'\u1FF2': {
-            str += u'\u1FF2';
-        } break;
-        case u'\u1FF3': [[fallthrough]];
-        case u'\u1FFC': {
-            str += u'\u1FF3';
-        } break;
-        case u'\u1FF4': {
-            str += u'\u1FF4';
-        } break;
-        case u'\u1FF6': {
-            str += u'\u1FF6';
-        } break;
-        case u'\u1FF7': {
-            str += u'\u1FF7';
-        } break;
-        case u'\uFB00': {
-            str += u'\uFB00';
-        } break;
-        case u'\uFB01': {
-            str += u'\uFB01';
-        } break;
-        case u'\uFB02': {
-            str += u'\uFB02';
-        } break;
-        case u'\uFB03': {
-            str += u'\uFB03';
-        } break;
-        case u'\uFB04': {
-            str += u'\uFB04';
-        } break;
-        case u'\uFB05': {
-            str += u'\uFB05';
-        } break;
-        case u'\uFB06': {
-            str += u'\uFB06';
-        } break;
-        case u'\uFB13': {
-            str += u'\uFB13';
-        } break;
-        case u'\uFB14': {
-            str += u'\uFB14';
-        } break;
-        case u'\uFB15': {
-            str += u'\uFB15';
-        } break;
-        case u'\uFB16': {
-            str += u'\uFB16';
-        } break;
-        case u'\uFB17': {
-            str += u'\uFB17';
-        } break;
         case u'\u0041': {
             str += u'\u0061';
         } break;
@@ -7919,9 +7663,6 @@ void Unicode::down(String& str, char16 ch) {
         } break;
         case u'\u005A': {
             str += u'\u007A';
-        } break;
-        case u'\u1E9E': {
-            str += u'\u00DF';
         } break;
         case u'\u00C0': {
             str += u'\u00E0';
@@ -8014,8 +7755,9 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u00DE': {
             str += u'\u00FE';
         } break;
-        case u'\u0178': {
-            str += u'\u00FF';
+        case u'\u00DF': [[fallthrough]];
+        case u'\u1E9E': {
+            str += u'\u00DF';
         } break;
         case u'\u0100': {
             str += u'\u0101';
@@ -8089,6 +7831,10 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u012E': {
             str += u'\u012F';
         } break;
+        case u'\u0130': {
+            str += u'\u0069';
+            str += u'\u0307';
+        } break;
         case u'\u0132': {
             str += u'\u0133';
         } break;
@@ -8121,6 +7867,9 @@ void Unicode::down(String& str, char16 ch) {
         } break;
         case u'\u0147': {
             str += u'\u0148';
+        } break;
+        case u'\u0149': {
+            str += u'\u0149';
         } break;
         case u'\u014A': {
             str += u'\u014B';
@@ -8191,6 +7940,9 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u0176': {
             str += u'\u0177';
         } break;
+        case u'\u0178': {
+            str += u'\u00FF';
+        } break;
         case u'\u0179': {
             str += u'\u017A';
         } break;
@@ -8200,8 +7952,8 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u017D': {
             str += u'\u017E';
         } break;
-        case u'\u0243': {
-            str += u'\u0180';
+        case u'\u0181': {
+            str += u'\u0253';
         } break;
         case u'\u0182': {
             str += u'\u0183';
@@ -8209,26 +7961,56 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u0184': {
             str += u'\u0185';
         } break;
+        case u'\u0186': {
+            str += u'\u0254';
+        } break;
         case u'\u0187': {
             str += u'\u0188';
+        } break;
+        case u'\u0189': {
+            str += u'\u0256';
+        } break;
+        case u'\u018A': {
+            str += u'\u0257';
         } break;
         case u'\u018B': {
             str += u'\u018C';
         } break;
+        case u'\u018E': {
+            str += u'\u01DD';
+        } break;
+        case u'\u018F': {
+            str += u'\u0259';
+        } break;
+        case u'\u0190': {
+            str += u'\u025B';
+        } break;
         case u'\u0191': {
             str += u'\u0192';
         } break;
-        case u'\u01F6': {
-            str += u'\u0195';
+        case u'\u0193': {
+            str += u'\u0260';
+        } break;
+        case u'\u0194': {
+            str += u'\u0263';
+        } break;
+        case u'\u0196': {
+            str += u'\u0269';
+        } break;
+        case u'\u0197': {
+            str += u'\u0268';
         } break;
         case u'\u0198': {
             str += u'\u0199';
         } break;
-        case u'\u023D': {
-            str += u'\u019A';
+        case u'\u019C': {
+            str += u'\u026F';
         } break;
-        case u'\u0220': {
-            str += u'\u019E';
+        case u'\u019D': {
+            str += u'\u0272';
+        } break;
+        case u'\u019F': {
+            str += u'\u0275';
         } break;
         case u'\u01A0': {
             str += u'\u01A1';
@@ -8239,14 +8021,29 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u01A4': {
             str += u'\u01A5';
         } break;
+        case u'\u01A6': {
+            str += u'\u0280';
+        } break;
         case u'\u01A7': {
             str += u'\u01A8';
+        } break;
+        case u'\u01A9': {
+            str += u'\u0283';
         } break;
         case u'\u01AC': {
             str += u'\u01AD';
         } break;
+        case u'\u01AE': {
+            str += u'\u0288';
+        } break;
         case u'\u01AF': {
             str += u'\u01B0';
+        } break;
+        case u'\u01B1': {
+            str += u'\u028A';
+        } break;
+        case u'\u01B2': {
+            str += u'\u028B';
         } break;
         case u'\u01B3': {
             str += u'\u01B4';
@@ -8254,14 +8051,14 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u01B5': {
             str += u'\u01B6';
         } break;
+        case u'\u01B7': {
+            str += u'\u0292';
+        } break;
         case u'\u01B8': {
             str += u'\u01B9';
         } break;
         case u'\u01BC': {
             str += u'\u01BD';
-        } break;
-        case u'\u01F7': {
-            str += u'\u01BF';
         } break;
         case u'\u01C4': [[fallthrough]];
         case u'\u01C5': {
@@ -8299,9 +8096,6 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u01DB': {
             str += u'\u01DC';
         } break;
-        case u'\u018E': {
-            str += u'\u01DD';
-        } break;
         case u'\u01DE': {
             str += u'\u01DF';
         } break;
@@ -8329,12 +8123,21 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u01EE': {
             str += u'\u01EF';
         } break;
+        case u'\u01F0': {
+            str += u'\u01F0';
+        } break;
         case u'\u01F1': [[fallthrough]];
         case u'\u01F2': {
             str += u'\u01F3';
         } break;
         case u'\u01F4': {
             str += u'\u01F5';
+        } break;
+        case u'\u01F6': {
+            str += u'\u0195';
+        } break;
+        case u'\u01F7': {
+            str += u'\u01BF';
         } break;
         case u'\u01F8': {
             str += u'\u01F9';
@@ -8396,6 +8199,9 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u021E': {
             str += u'\u021F';
         } break;
+        case u'\u0220': {
+            str += u'\u019E';
+        } break;
         case u'\u0222': {
             str += u'\u0223';
         } break;
@@ -8423,17 +8229,29 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u0232': {
             str += u'\u0233';
         } break;
+        case u'\u023A': {
+            str += u'\u2C65';
+        } break;
         case u'\u023B': {
             str += u'\u023C';
         } break;
-        case u'\u2C7E': {
-            str += u'\u023F';
+        case u'\u023D': {
+            str += u'\u019A';
         } break;
-        case u'\u2C7F': {
-            str += u'\u0240';
+        case u'\u023E': {
+            str += u'\u2C66';
         } break;
         case u'\u0241': {
             str += u'\u0242';
+        } break;
+        case u'\u0243': {
+            str += u'\u0180';
+        } break;
+        case u'\u0244': {
+            str += u'\u0289';
+        } break;
+        case u'\u0245': {
+            str += u'\u028C';
         } break;
         case u'\u0246': {
             str += u'\u0247';
@@ -8450,117 +8268,6 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u024E': {
             str += u'\u024F';
         } break;
-        case u'\u2C6F': {
-            str += u'\u0250';
-        } break;
-        case u'\u2C6D': {
-            str += u'\u0251';
-        } break;
-        case u'\u2C70': {
-            str += u'\u0252';
-        } break;
-        case u'\u0181': {
-            str += u'\u0253';
-        } break;
-        case u'\u0186': {
-            str += u'\u0254';
-        } break;
-        case u'\u0189': {
-            str += u'\u0256';
-        } break;
-        case u'\u018A': {
-            str += u'\u0257';
-        } break;
-        case u'\u018F': {
-            str += u'\u0259';
-        } break;
-        case u'\u0190': {
-            str += u'\u025B';
-        } break;
-        case u'\uA7AB': {
-            str += u'\u025C';
-        } break;
-        case u'\u0193': {
-            str += u'\u0260';
-        } break;
-        case u'\uA7AC': {
-            str += u'\u0261';
-        } break;
-        case u'\u0194': {
-            str += u'\u0263';
-        } break;
-        case u'\uA78D': {
-            str += u'\u0265';
-        } break;
-        case u'\uA7AA': {
-            str += u'\u0266';
-        } break;
-        case u'\u0197': {
-            str += u'\u0268';
-        } break;
-        case u'\u0196': {
-            str += u'\u0269';
-        } break;
-        case u'\uA7AE': {
-            str += u'\u026A';
-        } break;
-        case u'\u2C62': {
-            str += u'\u026B';
-        } break;
-        case u'\uA7AD': {
-            str += u'\u026C';
-        } break;
-        case u'\u019C': {
-            str += u'\u026F';
-        } break;
-        case u'\u2C6E': {
-            str += u'\u0271';
-        } break;
-        case u'\u019D': {
-            str += u'\u0272';
-        } break;
-        case u'\u019F': {
-            str += u'\u0275';
-        } break;
-        case u'\u2C64': {
-            str += u'\u027D';
-        } break;
-        case u'\u01A6': {
-            str += u'\u0280';
-        } break;
-        case u'\uA7C5': {
-            str += u'\u0282';
-        } break;
-        case u'\u01A9': {
-            str += u'\u0283';
-        } break;
-        case u'\uA7B1': {
-            str += u'\u0287';
-        } break;
-        case u'\u01AE': {
-            str += u'\u0288';
-        } break;
-        case u'\u0244': {
-            str += u'\u0289';
-        } break;
-        case u'\u01B1': {
-            str += u'\u028A';
-        } break;
-        case u'\u01B2': {
-            str += u'\u028B';
-        } break;
-        case u'\u0245': {
-            str += u'\u028C';
-        } break;
-        case u'\u01B7': {
-            str += u'\u0292';
-        } break;
-        case u'\uA7B2': {
-            str += u'\u029D';
-        } break;
-        case u'\uA7B0': {
-            str += u'\u029E';
-        } break;
         case u'\u0370': {
             str += u'\u0371';
         } break;
@@ -8570,14 +8277,8 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u0376': {
             str += u'\u0377';
         } break;
-        case u'\u03FD': {
-            str += u'\u037B';
-        } break;
-        case u'\u03FE': {
-            str += u'\u037C';
-        } break;
-        case u'\u03FF': {
-            str += u'\u037D';
+        case u'\u037F': {
+            str += u'\u03F3';
         } break;
         case u'\u0386': {
             str += u'\u03AC';
@@ -8590,6 +8291,18 @@ void Unicode::down(String& str, char16 ch) {
         } break;
         case u'\u038A': {
             str += u'\u03AF';
+        } break;
+        case u'\u038C': {
+            str += u'\u03CC';
+        } break;
+        case u'\u038E': {
+            str += u'\u03CD';
+        } break;
+        case u'\u038F': {
+            str += u'\u03CE';
+        } break;
+        case u'\u0390': {
+            str += u'\u0390';
         } break;
         case u'\u0391': {
             str += u'\u03B1';
@@ -8671,14 +8384,8 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u03AB': {
             str += u'\u03CB';
         } break;
-        case u'\u038C': {
-            str += u'\u03CC';
-        } break;
-        case u'\u038E': {
-            str += u'\u03CD';
-        } break;
-        case u'\u038F': {
-            str += u'\u03CE';
+        case u'\u03B0': {
+            str += u'\u03B0';
         } break;
         case u'\u03CF': {
             str += u'\u03D7';
@@ -8719,17 +8426,71 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u03EE': {
             str += u'\u03EF';
         } break;
-        case u'\u03F9': {
-            str += u'\u03F2';
-        } break;
-        case u'\u037F': {
-            str += u'\u03F3';
-        } break;
         case u'\u03F7': {
             str += u'\u03F8';
         } break;
+        case u'\u03F9': {
+            str += u'\u03F2';
+        } break;
         case u'\u03FA': {
             str += u'\u03FB';
+        } break;
+        case u'\u03FD': {
+            str += u'\u037B';
+        } break;
+        case u'\u03FE': {
+            str += u'\u037C';
+        } break;
+        case u'\u03FF': {
+            str += u'\u037D';
+        } break;
+        case u'\u0400': {
+            str += u'\u0450';
+        } break;
+        case u'\u0401': {
+            str += u'\u0451';
+        } break;
+        case u'\u0402': {
+            str += u'\u0452';
+        } break;
+        case u'\u0403': {
+            str += u'\u0453';
+        } break;
+        case u'\u0404': {
+            str += u'\u0454';
+        } break;
+        case u'\u0405': {
+            str += u'\u0455';
+        } break;
+        case u'\u0406': {
+            str += u'\u0456';
+        } break;
+        case u'\u0407': {
+            str += u'\u0457';
+        } break;
+        case u'\u0408': {
+            str += u'\u0458';
+        } break;
+        case u'\u0409': {
+            str += u'\u0459';
+        } break;
+        case u'\u040A': {
+            str += u'\u045A';
+        } break;
+        case u'\u040B': {
+            str += u'\u045B';
+        } break;
+        case u'\u040C': {
+            str += u'\u045C';
+        } break;
+        case u'\u040D': {
+            str += u'\u045D';
+        } break;
+        case u'\u040E': {
+            str += u'\u045E';
+        } break;
+        case u'\u040F': {
+            str += u'\u045F';
         } break;
         case u'\u0410': {
             str += u'\u0430';
@@ -8826,54 +8587,6 @@ void Unicode::down(String& str, char16 ch) {
         } break;
         case u'\u042F': {
             str += u'\u044F';
-        } break;
-        case u'\u0400': {
-            str += u'\u0450';
-        } break;
-        case u'\u0401': {
-            str += u'\u0451';
-        } break;
-        case u'\u0402': {
-            str += u'\u0452';
-        } break;
-        case u'\u0403': {
-            str += u'\u0453';
-        } break;
-        case u'\u0404': {
-            str += u'\u0454';
-        } break;
-        case u'\u0405': {
-            str += u'\u0455';
-        } break;
-        case u'\u0406': {
-            str += u'\u0456';
-        } break;
-        case u'\u0407': {
-            str += u'\u0457';
-        } break;
-        case u'\u0408': {
-            str += u'\u0458';
-        } break;
-        case u'\u0409': {
-            str += u'\u0459';
-        } break;
-        case u'\u040A': {
-            str += u'\u045A';
-        } break;
-        case u'\u040B': {
-            str += u'\u045B';
-        } break;
-        case u'\u040C': {
-            str += u'\u045C';
-        } break;
-        case u'\u040D': {
-            str += u'\u045D';
-        } break;
-        case u'\u040E': {
-            str += u'\u045E';
-        } break;
-        case u'\u040F': {
-            str += u'\u045F';
         } break;
         case u'\u0460': {
             str += u'\u0461';
@@ -9007,6 +8720,9 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u04BE': {
             str += u'\u04BF';
         } break;
+        case u'\u04C0': {
+            str += u'\u04CF';
+        } break;
         case u'\u04C1': {
             str += u'\u04C2';
         } break;
@@ -9027,9 +8743,6 @@ void Unicode::down(String& str, char16 ch) {
         } break;
         case u'\u04CD': {
             str += u'\u04CE';
-        } break;
-        case u'\u04C0': {
-            str += u'\u04CF';
         } break;
         case u'\u04D0': {
             str += u'\u04D1';
@@ -9289,6 +9002,387 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u0556': {
             str += u'\u0586';
         } break;
+        case u'\u0587': {
+            str += u'\u0587';
+        } break;
+        case u'\u10A0': {
+            str += u'\u2D00';
+        } break;
+        case u'\u10A1': {
+            str += u'\u2D01';
+        } break;
+        case u'\u10A2': {
+            str += u'\u2D02';
+        } break;
+        case u'\u10A3': {
+            str += u'\u2D03';
+        } break;
+        case u'\u10A4': {
+            str += u'\u2D04';
+        } break;
+        case u'\u10A5': {
+            str += u'\u2D05';
+        } break;
+        case u'\u10A6': {
+            str += u'\u2D06';
+        } break;
+        case u'\u10A7': {
+            str += u'\u2D07';
+        } break;
+        case u'\u10A8': {
+            str += u'\u2D08';
+        } break;
+        case u'\u10A9': {
+            str += u'\u2D09';
+        } break;
+        case u'\u10AA': {
+            str += u'\u2D0A';
+        } break;
+        case u'\u10AB': {
+            str += u'\u2D0B';
+        } break;
+        case u'\u10AC': {
+            str += u'\u2D0C';
+        } break;
+        case u'\u10AD': {
+            str += u'\u2D0D';
+        } break;
+        case u'\u10AE': {
+            str += u'\u2D0E';
+        } break;
+        case u'\u10AF': {
+            str += u'\u2D0F';
+        } break;
+        case u'\u10B0': {
+            str += u'\u2D10';
+        } break;
+        case u'\u10B1': {
+            str += u'\u2D11';
+        } break;
+        case u'\u10B2': {
+            str += u'\u2D12';
+        } break;
+        case u'\u10B3': {
+            str += u'\u2D13';
+        } break;
+        case u'\u10B4': {
+            str += u'\u2D14';
+        } break;
+        case u'\u10B5': {
+            str += u'\u2D15';
+        } break;
+        case u'\u10B6': {
+            str += u'\u2D16';
+        } break;
+        case u'\u10B7': {
+            str += u'\u2D17';
+        } break;
+        case u'\u10B8': {
+            str += u'\u2D18';
+        } break;
+        case u'\u10B9': {
+            str += u'\u2D19';
+        } break;
+        case u'\u10BA': {
+            str += u'\u2D1A';
+        } break;
+        case u'\u10BB': {
+            str += u'\u2D1B';
+        } break;
+        case u'\u10BC': {
+            str += u'\u2D1C';
+        } break;
+        case u'\u10BD': {
+            str += u'\u2D1D';
+        } break;
+        case u'\u10BE': {
+            str += u'\u2D1E';
+        } break;
+        case u'\u10BF': {
+            str += u'\u2D1F';
+        } break;
+        case u'\u10C0': {
+            str += u'\u2D20';
+        } break;
+        case u'\u10C1': {
+            str += u'\u2D21';
+        } break;
+        case u'\u10C2': {
+            str += u'\u2D22';
+        } break;
+        case u'\u10C3': {
+            str += u'\u2D23';
+        } break;
+        case u'\u10C4': {
+            str += u'\u2D24';
+        } break;
+        case u'\u10C5': {
+            str += u'\u2D25';
+        } break;
+        case u'\u10C7': {
+            str += u'\u2D27';
+        } break;
+        case u'\u10CD': {
+            str += u'\u2D2D';
+        } break;
+        case u'\u13A0': {
+            str += u'\uAB70';
+        } break;
+        case u'\u13A1': {
+            str += u'\uAB71';
+        } break;
+        case u'\u13A2': {
+            str += u'\uAB72';
+        } break;
+        case u'\u13A3': {
+            str += u'\uAB73';
+        } break;
+        case u'\u13A4': {
+            str += u'\uAB74';
+        } break;
+        case u'\u13A5': {
+            str += u'\uAB75';
+        } break;
+        case u'\u13A6': {
+            str += u'\uAB76';
+        } break;
+        case u'\u13A7': {
+            str += u'\uAB77';
+        } break;
+        case u'\u13A8': {
+            str += u'\uAB78';
+        } break;
+        case u'\u13A9': {
+            str += u'\uAB79';
+        } break;
+        case u'\u13AA': {
+            str += u'\uAB7A';
+        } break;
+        case u'\u13AB': {
+            str += u'\uAB7B';
+        } break;
+        case u'\u13AC': {
+            str += u'\uAB7C';
+        } break;
+        case u'\u13AD': {
+            str += u'\uAB7D';
+        } break;
+        case u'\u13AE': {
+            str += u'\uAB7E';
+        } break;
+        case u'\u13AF': {
+            str += u'\uAB7F';
+        } break;
+        case u'\u13B0': {
+            str += u'\uAB80';
+        } break;
+        case u'\u13B1': {
+            str += u'\uAB81';
+        } break;
+        case u'\u13B2': {
+            str += u'\uAB82';
+        } break;
+        case u'\u13B3': {
+            str += u'\uAB83';
+        } break;
+        case u'\u13B4': {
+            str += u'\uAB84';
+        } break;
+        case u'\u13B5': {
+            str += u'\uAB85';
+        } break;
+        case u'\u13B6': {
+            str += u'\uAB86';
+        } break;
+        case u'\u13B7': {
+            str += u'\uAB87';
+        } break;
+        case u'\u13B8': {
+            str += u'\uAB88';
+        } break;
+        case u'\u13B9': {
+            str += u'\uAB89';
+        } break;
+        case u'\u13BA': {
+            str += u'\uAB8A';
+        } break;
+        case u'\u13BB': {
+            str += u'\uAB8B';
+        } break;
+        case u'\u13BC': {
+            str += u'\uAB8C';
+        } break;
+        case u'\u13BD': {
+            str += u'\uAB8D';
+        } break;
+        case u'\u13BE': {
+            str += u'\uAB8E';
+        } break;
+        case u'\u13BF': {
+            str += u'\uAB8F';
+        } break;
+        case u'\u13C0': {
+            str += u'\uAB90';
+        } break;
+        case u'\u13C1': {
+            str += u'\uAB91';
+        } break;
+        case u'\u13C2': {
+            str += u'\uAB92';
+        } break;
+        case u'\u13C3': {
+            str += u'\uAB93';
+        } break;
+        case u'\u13C4': {
+            str += u'\uAB94';
+        } break;
+        case u'\u13C5': {
+            str += u'\uAB95';
+        } break;
+        case u'\u13C6': {
+            str += u'\uAB96';
+        } break;
+        case u'\u13C7': {
+            str += u'\uAB97';
+        } break;
+        case u'\u13C8': {
+            str += u'\uAB98';
+        } break;
+        case u'\u13C9': {
+            str += u'\uAB99';
+        } break;
+        case u'\u13CA': {
+            str += u'\uAB9A';
+        } break;
+        case u'\u13CB': {
+            str += u'\uAB9B';
+        } break;
+        case u'\u13CC': {
+            str += u'\uAB9C';
+        } break;
+        case u'\u13CD': {
+            str += u'\uAB9D';
+        } break;
+        case u'\u13CE': {
+            str += u'\uAB9E';
+        } break;
+        case u'\u13CF': {
+            str += u'\uAB9F';
+        } break;
+        case u'\u13D0': {
+            str += u'\uABA0';
+        } break;
+        case u'\u13D1': {
+            str += u'\uABA1';
+        } break;
+        case u'\u13D2': {
+            str += u'\uABA2';
+        } break;
+        case u'\u13D3': {
+            str += u'\uABA3';
+        } break;
+        case u'\u13D4': {
+            str += u'\uABA4';
+        } break;
+        case u'\u13D5': {
+            str += u'\uABA5';
+        } break;
+        case u'\u13D6': {
+            str += u'\uABA6';
+        } break;
+        case u'\u13D7': {
+            str += u'\uABA7';
+        } break;
+        case u'\u13D8': {
+            str += u'\uABA8';
+        } break;
+        case u'\u13D9': {
+            str += u'\uABA9';
+        } break;
+        case u'\u13DA': {
+            str += u'\uABAA';
+        } break;
+        case u'\u13DB': {
+            str += u'\uABAB';
+        } break;
+        case u'\u13DC': {
+            str += u'\uABAC';
+        } break;
+        case u'\u13DD': {
+            str += u'\uABAD';
+        } break;
+        case u'\u13DE': {
+            str += u'\uABAE';
+        } break;
+        case u'\u13DF': {
+            str += u'\uABAF';
+        } break;
+        case u'\u13E0': {
+            str += u'\uABB0';
+        } break;
+        case u'\u13E1': {
+            str += u'\uABB1';
+        } break;
+        case u'\u13E2': {
+            str += u'\uABB2';
+        } break;
+        case u'\u13E3': {
+            str += u'\uABB3';
+        } break;
+        case u'\u13E4': {
+            str += u'\uABB4';
+        } break;
+        case u'\u13E5': {
+            str += u'\uABB5';
+        } break;
+        case u'\u13E6': {
+            str += u'\uABB6';
+        } break;
+        case u'\u13E7': {
+            str += u'\uABB7';
+        } break;
+        case u'\u13E8': {
+            str += u'\uABB8';
+        } break;
+        case u'\u13E9': {
+            str += u'\uABB9';
+        } break;
+        case u'\u13EA': {
+            str += u'\uABBA';
+        } break;
+        case u'\u13EB': {
+            str += u'\uABBB';
+        } break;
+        case u'\u13EC': {
+            str += u'\uABBC';
+        } break;
+        case u'\u13ED': {
+            str += u'\uABBD';
+        } break;
+        case u'\u13EE': {
+            str += u'\uABBE';
+        } break;
+        case u'\u13EF': {
+            str += u'\uABBF';
+        } break;
+        case u'\u13F0': {
+            str += u'\u13F8';
+        } break;
+        case u'\u13F1': {
+            str += u'\u13F9';
+        } break;
+        case u'\u13F2': {
+            str += u'\u13FA';
+        } break;
+        case u'\u13F3': {
+            str += u'\u13FB';
+        } break;
+        case u'\u13F4': {
+            str += u'\u13FC';
+        } break;
+        case u'\u13F5': {
+            str += u'\u13FD';
+        } break;
         case u'\u1C90': {
             str += u'\u10D0';
         } break;
@@ -9426,33 +9520,6 @@ void Unicode::down(String& str, char16 ch) {
         } break;
         case u'\u1CBF': {
             str += u'\u10FF';
-        } break;
-        case u'\u13F0': {
-            str += u'\u13F8';
-        } break;
-        case u'\u13F1': {
-            str += u'\u13F9';
-        } break;
-        case u'\u13F2': {
-            str += u'\u13FA';
-        } break;
-        case u'\u13F3': {
-            str += u'\u13FB';
-        } break;
-        case u'\u13F4': {
-            str += u'\u13FC';
-        } break;
-        case u'\u13F5': {
-            str += u'\u13FD';
-        } break;
-        case u'\uA77D': {
-            str += u'\u1D79';
-        } break;
-        case u'\u2C63': {
-            str += u'\u1D7D';
-        } break;
-        case u'\uA7C6': {
-            str += u'\u1D8E';
         } break;
         case u'\u1E00': {
             str += u'\u1E01';
@@ -9678,6 +9745,21 @@ void Unicode::down(String& str, char16 ch) {
         } break;
         case u'\u1E94': {
             str += u'\u1E95';
+        } break;
+        case u'\u1E96': {
+            str += u'\u1E96';
+        } break;
+        case u'\u1E97': {
+            str += u'\u1E97';
+        } break;
+        case u'\u1E98': {
+            str += u'\u1E98';
+        } break;
+        case u'\u1E99': {
+            str += u'\u1E99';
+        } break;
+        case u'\u1E9A': {
+            str += u'\u1E9A';
         } break;
         case u'\u1EA0': {
             str += u'\u1EA1';
@@ -9931,6 +10013,18 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u1F4D': {
             str += u'\u1F45';
         } break;
+        case u'\u1F50': {
+            str += u'\u1F50';
+        } break;
+        case u'\u1F52': {
+            str += u'\u1F52';
+        } break;
+        case u'\u1F54': {
+            str += u'\u1F54';
+        } break;
+        case u'\u1F56': {
+            str += u'\u1F56';
+        } break;
         case u'\u1F59': {
             str += u'\u1F51';
         } break;
@@ -9967,11 +10061,145 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u1F6F': {
             str += u'\u1F67';
         } break;
+        case u'\u1F80': [[fallthrough]];
+        case u'\u1F88': {
+            str += u'\u1F80';
+        } break;
+        case u'\u1F81': [[fallthrough]];
+        case u'\u1F89': {
+            str += u'\u1F81';
+        } break;
+        case u'\u1F82': [[fallthrough]];
+        case u'\u1F8A': {
+            str += u'\u1F82';
+        } break;
+        case u'\u1F83': [[fallthrough]];
+        case u'\u1F8B': {
+            str += u'\u1F83';
+        } break;
+        case u'\u1F84': [[fallthrough]];
+        case u'\u1F8C': {
+            str += u'\u1F84';
+        } break;
+        case u'\u1F85': [[fallthrough]];
+        case u'\u1F8D': {
+            str += u'\u1F85';
+        } break;
+        case u'\u1F86': [[fallthrough]];
+        case u'\u1F8E': {
+            str += u'\u1F86';
+        } break;
+        case u'\u1F87': [[fallthrough]];
+        case u'\u1F8F': {
+            str += u'\u1F87';
+        } break;
+        case u'\u1F90': [[fallthrough]];
+        case u'\u1F98': {
+            str += u'\u1F90';
+        } break;
+        case u'\u1F91': [[fallthrough]];
+        case u'\u1F99': {
+            str += u'\u1F91';
+        } break;
+        case u'\u1F92': [[fallthrough]];
+        case u'\u1F9A': {
+            str += u'\u1F92';
+        } break;
+        case u'\u1F93': [[fallthrough]];
+        case u'\u1F9B': {
+            str += u'\u1F93';
+        } break;
+        case u'\u1F94': [[fallthrough]];
+        case u'\u1F9C': {
+            str += u'\u1F94';
+        } break;
+        case u'\u1F95': [[fallthrough]];
+        case u'\u1F9D': {
+            str += u'\u1F95';
+        } break;
+        case u'\u1F96': [[fallthrough]];
+        case u'\u1F9E': {
+            str += u'\u1F96';
+        } break;
+        case u'\u1F97': [[fallthrough]];
+        case u'\u1F9F': {
+            str += u'\u1F97';
+        } break;
+        case u'\u1FA0': [[fallthrough]];
+        case u'\u1FA8': {
+            str += u'\u1FA0';
+        } break;
+        case u'\u1FA1': [[fallthrough]];
+        case u'\u1FA9': {
+            str += u'\u1FA1';
+        } break;
+        case u'\u1FA2': [[fallthrough]];
+        case u'\u1FAA': {
+            str += u'\u1FA2';
+        } break;
+        case u'\u1FA3': [[fallthrough]];
+        case u'\u1FAB': {
+            str += u'\u1FA3';
+        } break;
+        case u'\u1FA4': [[fallthrough]];
+        case u'\u1FAC': {
+            str += u'\u1FA4';
+        } break;
+        case u'\u1FA5': [[fallthrough]];
+        case u'\u1FAD': {
+            str += u'\u1FA5';
+        } break;
+        case u'\u1FA6': [[fallthrough]];
+        case u'\u1FAE': {
+            str += u'\u1FA6';
+        } break;
+        case u'\u1FA7': [[fallthrough]];
+        case u'\u1FAF': {
+            str += u'\u1FA7';
+        } break;
+        case u'\u1FB2': {
+            str += u'\u1FB2';
+        } break;
+        case u'\u1FB3': [[fallthrough]];
+        case u'\u1FBC': {
+            str += u'\u1FB3';
+        } break;
+        case u'\u1FB4': {
+            str += u'\u1FB4';
+        } break;
+        case u'\u1FB6': {
+            str += u'\u1FB6';
+        } break;
+        case u'\u1FB7': {
+            str += u'\u1FB7';
+        } break;
+        case u'\u1FB8': {
+            str += u'\u1FB0';
+        } break;
+        case u'\u1FB9': {
+            str += u'\u1FB1';
+        } break;
         case u'\u1FBA': {
             str += u'\u1F70';
         } break;
         case u'\u1FBB': {
             str += u'\u1F71';
+        } break;
+        case u'\u1FC2': {
+            str += u'\u1FC2';
+        } break;
+        case u'\u1FC3': [[fallthrough]];
+        case u'\u1FCC': {
+            str += u'\u1FC3';
+        } break;
+        case u'\u1FC4': {
+            str += u'\u1FC4';
+        } break;
+        case u'\u1FC6': {
+            str += u'\u1FC6';
+        } break;
+        case u'\u1FC7': {
+            str += u'\u1FC7';
         } break;
         case u'\u1FC8': {
             str += u'\u1F72';
@@ -9985,35 +10213,17 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u1FCB': {
             str += u'\u1F75';
         } break;
-        case u'\u1FDA': {
-            str += u'\u1F76';
+        case u'\u1FD2': {
+            str += u'\u1FD2';
         } break;
-        case u'\u1FDB': {
-            str += u'\u1F77';
+        case u'\u1FD3': {
+            str += u'\u1FD3';
         } break;
-        case u'\u1FF8': {
-            str += u'\u1F78';
+        case u'\u1FD6': {
+            str += u'\u1FD6';
         } break;
-        case u'\u1FF9': {
-            str += u'\u1F79';
-        } break;
-        case u'\u1FEA': {
-            str += u'\u1F7A';
-        } break;
-        case u'\u1FEB': {
-            str += u'\u1F7B';
-        } break;
-        case u'\u1FFA': {
-            str += u'\u1F7C';
-        } break;
-        case u'\u1FFB': {
-            str += u'\u1F7D';
-        } break;
-        case u'\u1FB8': {
-            str += u'\u1FB0';
-        } break;
-        case u'\u1FB9': {
-            str += u'\u1FB1';
+        case u'\u1FD7': {
+            str += u'\u1FD7';
         } break;
         case u'\u1FD8': {
             str += u'\u1FD0';
@@ -10021,14 +10231,69 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u1FD9': {
             str += u'\u1FD1';
         } break;
+        case u'\u1FDA': {
+            str += u'\u1F76';
+        } break;
+        case u'\u1FDB': {
+            str += u'\u1F77';
+        } break;
+        case u'\u1FE2': {
+            str += u'\u1FE2';
+        } break;
+        case u'\u1FE3': {
+            str += u'\u1FE3';
+        } break;
+        case u'\u1FE4': {
+            str += u'\u1FE4';
+        } break;
+        case u'\u1FE6': {
+            str += u'\u1FE6';
+        } break;
+        case u'\u1FE7': {
+            str += u'\u1FE7';
+        } break;
         case u'\u1FE8': {
             str += u'\u1FE0';
         } break;
         case u'\u1FE9': {
             str += u'\u1FE1';
         } break;
+        case u'\u1FEA': {
+            str += u'\u1F7A';
+        } break;
+        case u'\u1FEB': {
+            str += u'\u1F7B';
+        } break;
         case u'\u1FEC': {
             str += u'\u1FE5';
+        } break;
+        case u'\u1FF2': {
+            str += u'\u1FF2';
+        } break;
+        case u'\u1FF3': [[fallthrough]];
+        case u'\u1FFC': {
+            str += u'\u1FF3';
+        } break;
+        case u'\u1FF4': {
+            str += u'\u1FF4';
+        } break;
+        case u'\u1FF6': {
+            str += u'\u1FF6';
+        } break;
+        case u'\u1FF7': {
+            str += u'\u1FF7';
+        } break;
+        case u'\u1FF8': {
+            str += u'\u1F78';
+        } break;
+        case u'\u1FF9': {
+            str += u'\u1F79';
+        } break;
+        case u'\u1FFA': {
+            str += u'\u1F7C';
+        } break;
+        case u'\u1FFB': {
+            str += u'\u1F7D';
         } break;
         case u'\u2132': {
             str += u'\u214E';
@@ -10309,11 +10574,14 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u2C60': {
             str += u'\u2C61';
         } break;
-        case u'\u023A': {
-            str += u'\u2C65';
+        case u'\u2C62': {
+            str += u'\u026B';
         } break;
-        case u'\u023E': {
-            str += u'\u2C66';
+        case u'\u2C63': {
+            str += u'\u1D7D';
+        } break;
+        case u'\u2C64': {
+            str += u'\u027D';
         } break;
         case u'\u2C67': {
             str += u'\u2C68';
@@ -10324,11 +10592,29 @@ void Unicode::down(String& str, char16 ch) {
         case u'\u2C6B': {
             str += u'\u2C6C';
         } break;
+        case u'\u2C6D': {
+            str += u'\u0251';
+        } break;
+        case u'\u2C6E': {
+            str += u'\u0271';
+        } break;
+        case u'\u2C6F': {
+            str += u'\u0250';
+        } break;
+        case u'\u2C70': {
+            str += u'\u0252';
+        } break;
         case u'\u2C72': {
             str += u'\u2C73';
         } break;
         case u'\u2C75': {
             str += u'\u2C76';
+        } break;
+        case u'\u2C7E': {
+            str += u'\u023F';
+        } break;
+        case u'\u2C7F': {
+            str += u'\u0240';
         } break;
         case u'\u2C80': {
             str += u'\u2C81';
@@ -10488,126 +10774,6 @@ void Unicode::down(String& str, char16 ch) {
         } break;
         case u'\u2CF2': {
             str += u'\u2CF3';
-        } break;
-        case u'\u10A0': {
-            str += u'\u2D00';
-        } break;
-        case u'\u10A1': {
-            str += u'\u2D01';
-        } break;
-        case u'\u10A2': {
-            str += u'\u2D02';
-        } break;
-        case u'\u10A3': {
-            str += u'\u2D03';
-        } break;
-        case u'\u10A4': {
-            str += u'\u2D04';
-        } break;
-        case u'\u10A5': {
-            str += u'\u2D05';
-        } break;
-        case u'\u10A6': {
-            str += u'\u2D06';
-        } break;
-        case u'\u10A7': {
-            str += u'\u2D07';
-        } break;
-        case u'\u10A8': {
-            str += u'\u2D08';
-        } break;
-        case u'\u10A9': {
-            str += u'\u2D09';
-        } break;
-        case u'\u10AA': {
-            str += u'\u2D0A';
-        } break;
-        case u'\u10AB': {
-            str += u'\u2D0B';
-        } break;
-        case u'\u10AC': {
-            str += u'\u2D0C';
-        } break;
-        case u'\u10AD': {
-            str += u'\u2D0D';
-        } break;
-        case u'\u10AE': {
-            str += u'\u2D0E';
-        } break;
-        case u'\u10AF': {
-            str += u'\u2D0F';
-        } break;
-        case u'\u10B0': {
-            str += u'\u2D10';
-        } break;
-        case u'\u10B1': {
-            str += u'\u2D11';
-        } break;
-        case u'\u10B2': {
-            str += u'\u2D12';
-        } break;
-        case u'\u10B3': {
-            str += u'\u2D13';
-        } break;
-        case u'\u10B4': {
-            str += u'\u2D14';
-        } break;
-        case u'\u10B5': {
-            str += u'\u2D15';
-        } break;
-        case u'\u10B6': {
-            str += u'\u2D16';
-        } break;
-        case u'\u10B7': {
-            str += u'\u2D17';
-        } break;
-        case u'\u10B8': {
-            str += u'\u2D18';
-        } break;
-        case u'\u10B9': {
-            str += u'\u2D19';
-        } break;
-        case u'\u10BA': {
-            str += u'\u2D1A';
-        } break;
-        case u'\u10BB': {
-            str += u'\u2D1B';
-        } break;
-        case u'\u10BC': {
-            str += u'\u2D1C';
-        } break;
-        case u'\u10BD': {
-            str += u'\u2D1D';
-        } break;
-        case u'\u10BE': {
-            str += u'\u2D1E';
-        } break;
-        case u'\u10BF': {
-            str += u'\u2D1F';
-        } break;
-        case u'\u10C0': {
-            str += u'\u2D20';
-        } break;
-        case u'\u10C1': {
-            str += u'\u2D21';
-        } break;
-        case u'\u10C2': {
-            str += u'\u2D22';
-        } break;
-        case u'\u10C3': {
-            str += u'\u2D23';
-        } break;
-        case u'\u10C4': {
-            str += u'\u2D24';
-        } break;
-        case u'\u10C5': {
-            str += u'\u2D25';
-        } break;
-        case u'\u10C7': {
-            str += u'\u2D27';
-        } break;
-        case u'\u10CD': {
-            str += u'\u2D2D';
         } break;
         case u'\uA640': {
             str += u'\uA641';
@@ -10840,6 +11006,9 @@ void Unicode::down(String& str, char16 ch) {
         case u'\uA77B': {
             str += u'\uA77C';
         } break;
+        case u'\uA77D': {
+            str += u'\u1D79';
+        } break;
         case u'\uA77E': {
             str += u'\uA77F';
         } break;
@@ -10858,14 +11027,14 @@ void Unicode::down(String& str, char16 ch) {
         case u'\uA78B': {
             str += u'\uA78C';
         } break;
+        case u'\uA78D': {
+            str += u'\u0265';
+        } break;
         case u'\uA790': {
             str += u'\uA791';
         } break;
         case u'\uA792': {
             str += u'\uA793';
-        } break;
-        case u'\uA7C4': {
-            str += u'\uA794';
         } break;
         case u'\uA796': {
             str += u'\uA797';
@@ -10897,6 +11066,33 @@ void Unicode::down(String& str, char16 ch) {
         case u'\uA7A8': {
             str += u'\uA7A9';
         } break;
+        case u'\uA7AA': {
+            str += u'\u0266';
+        } break;
+        case u'\uA7AB': {
+            str += u'\u025C';
+        } break;
+        case u'\uA7AC': {
+            str += u'\u0261';
+        } break;
+        case u'\uA7AD': {
+            str += u'\u026C';
+        } break;
+        case u'\uA7AE': {
+            str += u'\u026A';
+        } break;
+        case u'\uA7B0': {
+            str += u'\u029E';
+        } break;
+        case u'\uA7B1': {
+            str += u'\u0287';
+        } break;
+        case u'\uA7B2': {
+            str += u'\u029D';
+        } break;
+        case u'\uA7B3': {
+            str += u'\uAB53';
+        } break;
         case u'\uA7B4': {
             str += u'\uA7B5';
         } break;
@@ -10921,6 +11117,15 @@ void Unicode::down(String& str, char16 ch) {
         case u'\uA7C2': {
             str += u'\uA7C3';
         } break;
+        case u'\uA7C4': {
+            str += u'\uA794';
+        } break;
+        case u'\uA7C5': {
+            str += u'\u0282';
+        } break;
+        case u'\uA7C6': {
+            str += u'\u1D8E';
+        } break;
         case u'\uA7C7': {
             str += u'\uA7C8';
         } break;
@@ -10939,248 +11144,41 @@ void Unicode::down(String& str, char16 ch) {
         case u'\uA7F5': {
             str += u'\uA7F6';
         } break;
-        case u'\uA7B3': {
-            str += u'\uAB53';
+        case u'\uFB00': {
+            str += u'\uFB00';
         } break;
-        case u'\u13A0': {
-            str += u'\uAB70';
+        case u'\uFB01': {
+            str += u'\uFB01';
         } break;
-        case u'\u13A1': {
-            str += u'\uAB71';
+        case u'\uFB02': {
+            str += u'\uFB02';
         } break;
-        case u'\u13A2': {
-            str += u'\uAB72';
+        case u'\uFB03': {
+            str += u'\uFB03';
         } break;
-        case u'\u13A3': {
-            str += u'\uAB73';
+        case u'\uFB04': {
+            str += u'\uFB04';
         } break;
-        case u'\u13A4': {
-            str += u'\uAB74';
+        case u'\uFB05': {
+            str += u'\uFB05';
         } break;
-        case u'\u13A5': {
-            str += u'\uAB75';
+        case u'\uFB06': {
+            str += u'\uFB06';
         } break;
-        case u'\u13A6': {
-            str += u'\uAB76';
+        case u'\uFB13': {
+            str += u'\uFB13';
         } break;
-        case u'\u13A7': {
-            str += u'\uAB77';
+        case u'\uFB14': {
+            str += u'\uFB14';
         } break;
-        case u'\u13A8': {
-            str += u'\uAB78';
+        case u'\uFB15': {
+            str += u'\uFB15';
         } break;
-        case u'\u13A9': {
-            str += u'\uAB79';
+        case u'\uFB16': {
+            str += u'\uFB16';
         } break;
-        case u'\u13AA': {
-            str += u'\uAB7A';
-        } break;
-        case u'\u13AB': {
-            str += u'\uAB7B';
-        } break;
-        case u'\u13AC': {
-            str += u'\uAB7C';
-        } break;
-        case u'\u13AD': {
-            str += u'\uAB7D';
-        } break;
-        case u'\u13AE': {
-            str += u'\uAB7E';
-        } break;
-        case u'\u13AF': {
-            str += u'\uAB7F';
-        } break;
-        case u'\u13B0': {
-            str += u'\uAB80';
-        } break;
-        case u'\u13B1': {
-            str += u'\uAB81';
-        } break;
-        case u'\u13B2': {
-            str += u'\uAB82';
-        } break;
-        case u'\u13B3': {
-            str += u'\uAB83';
-        } break;
-        case u'\u13B4': {
-            str += u'\uAB84';
-        } break;
-        case u'\u13B5': {
-            str += u'\uAB85';
-        } break;
-        case u'\u13B6': {
-            str += u'\uAB86';
-        } break;
-        case u'\u13B7': {
-            str += u'\uAB87';
-        } break;
-        case u'\u13B8': {
-            str += u'\uAB88';
-        } break;
-        case u'\u13B9': {
-            str += u'\uAB89';
-        } break;
-        case u'\u13BA': {
-            str += u'\uAB8A';
-        } break;
-        case u'\u13BB': {
-            str += u'\uAB8B';
-        } break;
-        case u'\u13BC': {
-            str += u'\uAB8C';
-        } break;
-        case u'\u13BD': {
-            str += u'\uAB8D';
-        } break;
-        case u'\u13BE': {
-            str += u'\uAB8E';
-        } break;
-        case u'\u13BF': {
-            str += u'\uAB8F';
-        } break;
-        case u'\u13C0': {
-            str += u'\uAB90';
-        } break;
-        case u'\u13C1': {
-            str += u'\uAB91';
-        } break;
-        case u'\u13C2': {
-            str += u'\uAB92';
-        } break;
-        case u'\u13C3': {
-            str += u'\uAB93';
-        } break;
-        case u'\u13C4': {
-            str += u'\uAB94';
-        } break;
-        case u'\u13C5': {
-            str += u'\uAB95';
-        } break;
-        case u'\u13C6': {
-            str += u'\uAB96';
-        } break;
-        case u'\u13C7': {
-            str += u'\uAB97';
-        } break;
-        case u'\u13C8': {
-            str += u'\uAB98';
-        } break;
-        case u'\u13C9': {
-            str += u'\uAB99';
-        } break;
-        case u'\u13CA': {
-            str += u'\uAB9A';
-        } break;
-        case u'\u13CB': {
-            str += u'\uAB9B';
-        } break;
-        case u'\u13CC': {
-            str += u'\uAB9C';
-        } break;
-        case u'\u13CD': {
-            str += u'\uAB9D';
-        } break;
-        case u'\u13CE': {
-            str += u'\uAB9E';
-        } break;
-        case u'\u13CF': {
-            str += u'\uAB9F';
-        } break;
-        case u'\u13D0': {
-            str += u'\uABA0';
-        } break;
-        case u'\u13D1': {
-            str += u'\uABA1';
-        } break;
-        case u'\u13D2': {
-            str += u'\uABA2';
-        } break;
-        case u'\u13D3': {
-            str += u'\uABA3';
-        } break;
-        case u'\u13D4': {
-            str += u'\uABA4';
-        } break;
-        case u'\u13D5': {
-            str += u'\uABA5';
-        } break;
-        case u'\u13D6': {
-            str += u'\uABA6';
-        } break;
-        case u'\u13D7': {
-            str += u'\uABA7';
-        } break;
-        case u'\u13D8': {
-            str += u'\uABA8';
-        } break;
-        case u'\u13D9': {
-            str += u'\uABA9';
-        } break;
-        case u'\u13DA': {
-            str += u'\uABAA';
-        } break;
-        case u'\u13DB': {
-            str += u'\uABAB';
-        } break;
-        case u'\u13DC': {
-            str += u'\uABAC';
-        } break;
-        case u'\u13DD': {
-            str += u'\uABAD';
-        } break;
-        case u'\u13DE': {
-            str += u'\uABAE';
-        } break;
-        case u'\u13DF': {
-            str += u'\uABAF';
-        } break;
-        case u'\u13E0': {
-            str += u'\uABB0';
-        } break;
-        case u'\u13E1': {
-            str += u'\uABB1';
-        } break;
-        case u'\u13E2': {
-            str += u'\uABB2';
-        } break;
-        case u'\u13E3': {
-            str += u'\uABB3';
-        } break;
-        case u'\u13E4': {
-            str += u'\uABB4';
-        } break;
-        case u'\u13E5': {
-            str += u'\uABB5';
-        } break;
-        case u'\u13E6': {
-            str += u'\uABB6';
-        } break;
-        case u'\u13E7': {
-            str += u'\uABB7';
-        } break;
-        case u'\u13E8': {
-            str += u'\uABB8';
-        } break;
-        case u'\u13E9': {
-            str += u'\uABB9';
-        } break;
-        case u'\u13EA': {
-            str += u'\uABBA';
-        } break;
-        case u'\u13EB': {
-            str += u'\uABBB';
-        } break;
-        case u'\u13EC': {
-            str += u'\uABBC';
-        } break;
-        case u'\u13ED': {
-            str += u'\uABBD';
-        } break;
-        case u'\u13EE': {
-            str += u'\uABBE';
-        } break;
-        case u'\u13EF': {
-            str += u'\uABBF';
+        case u'\uFB17': {
+            str += u'\uFB17';
         } break;
         case u'\uFF21': {
             str += u'\uFF41';
