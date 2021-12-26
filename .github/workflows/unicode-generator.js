@@ -55,12 +55,12 @@ class Caser {
     #cases = {};
     #hasHad = new Set();
     feed(from, to) {
-        if (to.length === 0) { return; }
         from = from.trim();
+        to = to.trim();
+        if (to.length === 0 || from === to) { return; }
         // First come, first served
         if (!this.#hasHad.has(from)) {
             this.#hasHad.add(from);
-            to = to.trim();
             this.#cases[to] = this.#cases[to] || [];
             this.#cases[to].push(from);
         }
@@ -73,8 +73,10 @@ class Caser {
 let map = {};
 parseUnicode("https://www.unicode.org/Public/UCD/latest/ucd/CaseFolding.txt", (params) => {
     // It's full/multi-char folding or not yet folded!
-    if (params[1].trim() === "F" || !(params[0] in map)) {
-        map[params[0]] = params[2].trim();
+    params[0] = params[0].trim();
+    params[2] = params[2].trim();
+    if (params[0] !== params[2] && (params[1].trim() === "F" || !(params[0] in map))) {
+        map[params[0]] = params[2];
     }
 });
 let flipMap = {};
