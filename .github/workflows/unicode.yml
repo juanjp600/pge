@@ -28,7 +28,7 @@ jobs:
 
       - name: Commit & Push
         run: |
-          if git diff --exit-code; then
+          if git diff --staged --exit-code; then
             echo "Nothing to push!"
           else
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
