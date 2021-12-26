@@ -14,7 +14,7 @@ const file = {
     write: function(cnt) {
         this.contents += cnt;
     },
-    writeLine: function(cnt = "") { this.write(cnt + "\n") },
+    writeLine: function(cnt = "") { this.write(cnt + "\n"); },
     writeSwitch: function(map, name, param, action, retType = "void", defaultAction = () => action("ch")) {
         const strCmp = (a, b) => a < b ? -1 : (b > a ? 1 : 0);
         const codePointToCharLiteral = (codepoint) => `u'\\u${codepoint}'`;
@@ -49,7 +49,7 @@ const file = {
         this.writeLine(INDENT + "}");
         this.writeLine("}");
     }
-}
+};
 
 class Caser {
     #cases = {};
@@ -115,7 +115,7 @@ file.writeLine();
 file.writeSwitch({spaceIdent}, "isSpace", "", () => "return true;", "bool", () => "return false;");
 fs.writeFileSync(fileName, file.contents);
 
-console.log("Generated Unicode code!")
+console.log("Generated Unicode code!");
 
 function parseUnicode(url, func) {
     const unicode = cp.execSync(`curl ${url}`, { maxBuffer: 10_000_000 }).toString();
