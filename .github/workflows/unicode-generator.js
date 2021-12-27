@@ -61,7 +61,7 @@ class Caser {
         // First come, first served
         if (!this.#hasHad.has(from)) {
             this.#hasHad.add(from);
-            this.#cases[to] = this.#cases[to] || [];
+            this.#cases[to] ??= [];
             this.#cases[to].push(from);
         }
     }
@@ -81,7 +81,7 @@ parseUnicode("https://www.unicode.org/Public/UCD/latest/ucd/CaseFolding.txt", (p
 });
 let flipMap = {};
 for (const key in map) {
-    flipMap[map[key]] = flipMap[map[key]] || [];
+    flipMap[map[key]] ??= [];
     flipMap[map[key]].push(key);
 }
 file.writeSwitch(flipMap, "fold", "CircularArray<char16>& queue", (ch) => `queue.pushBack(${ch});`);
