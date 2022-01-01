@@ -6,7 +6,7 @@ using namespace PGE;
 
 template <int code>
 static std::ostream& writeColor(std::ostream& out, const Color& color) {
-    return out << "\x1b[" << code << ";2;" << (int)color.getRed() << ";" << (int)color.getGreen() << ";" << (int)color.getBlue() << "m";
+    return out << "\x1b[" << code << ";2;" << (int)color.getRed() << ';' << (int)color.getGreen() << ';' << (int)color.getBlue() << 'm';
 }
 
 std::ostream& operator<<(std::ostream& out, const Console::ForegroundColor& color) {
