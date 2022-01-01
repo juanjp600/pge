@@ -61,15 +61,21 @@ var namespaces_dup =
         [ "\u202AisDigit", "_unicode_8h.html#ad54bda5c7d5f005b25befb8be5be41eb", null ],
         [ "\u202AisSpace", "_unicode_8h.html#a1fb4e18653c7532da0bd14f40227ac59", null ]
       ] ],
-      [ "\u202AVectors", null, [
-        [ "\u202AONE2F", "_vector_8h.html#a011f4d8e8cb012885bd1c632d139a292", null ],
-        [ "\u202AONE2I", "_vector_8h.html#a737bd1fdfd33806f76123012768017a8", null ],
-        [ "\u202AONE3F", "_vector_8h.html#a93b372db3a531bb87edaeed365403bee", null ],
-        [ "\u202AONE4F", "_vector_8h.html#a63d27ad7be8524bf806baf4b66332d19", null ],
-        [ "\u202AZERO2F", "_vector_8h.html#ae39b66f635f74ebcdebdd1bf42b43b8f", null ],
-        [ "\u202AZERO2I", "_vector_8h.html#a9f3dd0f548a51023d42b37389d108baa", null ],
-        [ "\u202AZERO3F", "_vector_8h.html#a57ef0b9b697f82407903e636ac432bee", null ],
-        [ "\u202AZERO4F", "_vector_8h.html#a32bb3b9f560e4c6c2b024c9fbe708020", null ]
+      [ "\u202AVector2fs", null, [
+        [ "\u202AONE", "_vector_8h.html#a88c9a6a2e8c7d3a5a4fbd7dae22c8a68", null ],
+        [ "\u202AZERO", "_vector_8h.html#af8d9a16a406add738ea29e755f9d5dcd", null ]
+      ] ],
+      [ "\u202AVector2is", null, [
+        [ "\u202AONE", "_vector_8h.html#a66bd465c74e864ceb2d9e41441ce9e47", null ],
+        [ "\u202AZERO", "_vector_8h.html#ad4e49691c961c6355806d9642e5eea45", null ]
+      ] ],
+      [ "\u202AVector3fs", null, [
+        [ "\u202AONE", "_vector_8h.html#ac244ba7aad50b84b89c44439d0c98d46", null ],
+        [ "\u202AZERO", "_vector_8h.html#aca5829a593e2ef90a6d79912fcf1bb95", null ]
+      ] ],
+      [ "\u202AVector4fs", null, [
+        [ "\u202AONE", "_vector_8h.html#a73a9c2f29315f039d0facc0f3a7ec95d", null ],
+        [ "\u202AZERO", "_vector_8h.html#a4b6bd6d1e1eaa9ab14d6418a076180d6", null ]
       ] ],
       [ "\u202AColor", "class_p_g_e_1_1_color.html", "class_p_g_e_1_1_color" ],
       [ "\u202AException", "class_p_g_e_1_1_exception.html", "class_p_g_e_1_1_exception" ],
