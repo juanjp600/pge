@@ -59,6 +59,10 @@ class Vector2f {
         constexpr float distanceSquared(const Vector2f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector2f& other) const { return sqrt(distanceSquared(other)); }
 };
+namespace Vector2fs {
+    constexpr Vector2f ZERO(0.f);
+    constexpr Vector2f ONE(1.f);
+}
 constexpr const Vector2f operator*(float f, const Vector2f& vec) { return vec * f; }
 static_assert(sizeof(Vector2f) == 2 * sizeof(float));
 
@@ -117,6 +121,10 @@ class Vector3f {
         constexpr float distanceSquared(const Vector3f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector3f& other) const { return sqrt(distanceSquared(other)); }
 };
+namespace Vector3fs {
+    constexpr Vector3f ZERO(0.f);
+    constexpr Vector3f ONE(1.f);
+}
 constexpr const Vector3f operator*(float f, const Vector3f& vec) { return vec * f; }
 static_assert(sizeof(Vector3f) == 3 * sizeof(float));
 
@@ -175,6 +183,10 @@ class Vector4f {
         constexpr float distanceSquared(const Vector4f& other) const { return (*this - other).lengthSquared(); }
         inline float distance(const Vector4f& other) const { return sqrt(distanceSquared(other)); }
 };
+namespace Vector4fs {
+    constexpr Vector4f ZERO(0.f);
+    constexpr Vector4f ONE(1.f);
+}
 constexpr const Vector4f operator*(float f, const Vector4f& vec) { return vec * f; }
 static_assert(sizeof(Vector4f) == 4 * sizeof(float));
 
@@ -217,22 +229,12 @@ class Vector2i {
         constexpr i32 distanceSquared(const Vector2i& other) const { return ((*this) - other).lengthSquared(); }
         inline float distance(const Vector2i& other) const { return sqrt((float)distanceSquared(other)); }
 };
+namespace Vector2is {
+    constexpr Vector2i ZERO(0);
+    constexpr Vector2i ONE(1);
+}
 constexpr const Vector2i operator*(i32 i, const Vector2i& vec) { return vec * i; }
 static_assert(sizeof(Vector2i) == 2 * sizeof(i32));
-
-namespace Vectors {
-    constexpr Vector2f ZERO2F(0.f, 0.f);
-    constexpr Vector2f ONE2F(1.f, 1.f);
-
-    constexpr Vector3f ZERO3F(0.f, 0.f, 0.f);
-    constexpr Vector3f ONE3F(1.f, 1.f, 1.f);
-
-    constexpr Vector4f ZERO4F(0.f, 0.f, 0.f, 0.f);
-    constexpr Vector4f ONE4F(1.f, 1.f, 1.f, 1.f);
-
-    constexpr Vector2i ZERO2I(0, 0);
-    constexpr Vector2i ONE2I(1, 1);
-}
 
 }
 

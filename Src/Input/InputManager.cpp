@@ -403,7 +403,7 @@ void InputManagerInternal::setMouseRelativeInput(bool relative) {
 
 Vector2i InputManagerInternal::consumeMouseWheelDelta() {
     Vector2i mwp = mouseWheelPos;
-    mouseWheelPos = Vectors::ZERO2I;
+    mouseWheelPos = Vector2is::ZERO;
     return mwp;
 }
 
