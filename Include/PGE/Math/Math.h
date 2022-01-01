@@ -61,26 +61,6 @@ namespace Math {
             return ret;
         }
     }
-
-    /// Round down a float.
-    /// Rounding down is defined as always rounding towards 0.
-    /// 
-    /// The standard implementation returns a float, which we consider cringe.
-    constexpr int floor(float val) noexcept {
-        int i = (int)val;
-        if (i > val) { i--; }
-        return i;
-    }
-
-    /// Round up a float.
-    /// Rounding up is defined as always rounding towards +/-∞.
-    /// 
-    /// The standard implementation returns a float, which we consider cringe.
-    constexpr int ceil(float val) noexcept {
-        int i = (int)val;
-        if (i < val) { i++; }
-        return i;
-    }
 }
 
 }
