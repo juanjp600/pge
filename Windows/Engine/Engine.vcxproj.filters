@@ -91,6 +91,9 @@
     <Filter Include="Src\Graphics\Material">
       <UniqueIdentifier>{e010768f-1c19-49a7-b635-c460d9623e96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Color">
+      <UniqueIdentifier>{cf2e70d6-5bc5-4afa-bcb5-9ea2b2d52230}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Graphics\GraphicsDX11.cpp">
@@ -191,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Math\Assertions.cpp">
       <Filter>Src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Color\ConsoleColor.cpp">
+      <Filter>Src\Color</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -370,6 +376,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Include\PGE\Types\CircularArray.h">
       <Filter>Include\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Color\ConsoleColor.h">
+      <Filter>Include\Color</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

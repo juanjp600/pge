@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\Color\ConsoleColor.cpp" />
     <ClCompile Include="..\..\Src\Exception\Exception.cpp" />
     <ClCompile Include="..\..\Src\File\BinaryDefaultSpecializations.cpp" />
     <ClCompile Include="..\..\Src\File\BinaryReader.cpp" />
@@ -55,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\PGE\Color\Color.h" />
+    <ClInclude Include="..\..\Include\PGE\Color\ConsoleColor.h" />
     <ClInclude Include="..\..\Include\PGE\Exception\Exception.h" />
     <ClInclude Include="..\..\Include\PGE\File\AbstractIO.h" />
     <ClInclude Include="..\..\Include\PGE\File\BinaryReader.h" />
