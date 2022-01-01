@@ -13,6 +13,19 @@ var namespaces_dup =
         [ "\u202AWHITE", "namespace_p_g_e_1_1_colors.html#a2f2ae893c96771119539a76996ab0e5e", null ],
         [ "\u202AYELLOW", "namespace_p_g_e_1_1_colors.html#a121027dfd1eb4b69ee86c4696b59ec2b", null ]
       ] ],
+      [ "\u202AConsole", null, [
+        [ "\u202AForegroundColor", "struct_p_g_e_1_1_console_1_1_foreground_color.html", "struct_p_g_e_1_1_console_1_1_foreground_color" ],
+        [ "\u202ABackgroundColor", "struct_p_g_e_1_1_console_1_1_background_color.html", "struct_p_g_e_1_1_console_1_1_background_color" ],
+        [ "\u202ABold", "struct_p_g_e_1_1_console_1_1_bold.html", "struct_p_g_e_1_1_console_1_1_bold" ],
+        [ "\u202ADim", "struct_p_g_e_1_1_console_1_1_dim.html", "struct_p_g_e_1_1_console_1_1_dim" ],
+        [ "\u202AItalic", "struct_p_g_e_1_1_console_1_1_italic.html", "struct_p_g_e_1_1_console_1_1_italic" ],
+        [ "\u202AUnderline", "struct_p_g_e_1_1_console_1_1_underline.html", "struct_p_g_e_1_1_console_1_1_underline" ],
+        [ "\u202ABlinking", "struct_p_g_e_1_1_console_1_1_blinking.html", "struct_p_g_e_1_1_console_1_1_blinking" ],
+        [ "\u202AReverse", "struct_p_g_e_1_1_console_1_1_reverse.html", "struct_p_g_e_1_1_console_1_1_reverse" ],
+        [ "\u202AHidden", "struct_p_g_e_1_1_console_1_1_hidden.html", "struct_p_g_e_1_1_console_1_1_hidden" ],
+        [ "\u202AStrikethrough", "struct_p_g_e_1_1_console_1_1_strikethrough.html", "struct_p_g_e_1_1_console_1_1_strikethrough" ],
+        [ "\u202AResetAll", "struct_p_g_e_1_1_console_1_1_reset_all.html", null ]
+      ] ],
       [ "\u202AInfo", null, [
         [ "\u202ABRANCH", "_info_8h.html#ac9c27600b0c58b7ddfb7706d93236b21", null ],
         [ "\u202ACOMMIT", "_info_8h.html#ad8499f0d4183187ed9100256e61767f2", null ],

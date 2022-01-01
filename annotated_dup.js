@@ -1,6 +1,19 @@
 var annotated_dup =
 [
     [ "\u202APGE", null, [
+      [ "\u202AConsole", null, [
+        [ "\u202AForegroundColor", "struct_p_g_e_1_1_console_1_1_foreground_color.html", "struct_p_g_e_1_1_console_1_1_foreground_color" ],
+        [ "\u202ABackgroundColor", "struct_p_g_e_1_1_console_1_1_background_color.html", "struct_p_g_e_1_1_console_1_1_background_color" ],
+        [ "\u202ABold", "struct_p_g_e_1_1_console_1_1_bold.html", "struct_p_g_e_1_1_console_1_1_bold" ],
+        [ "\u202ADim", "struct_p_g_e_1_1_console_1_1_dim.html", "struct_p_g_e_1_1_console_1_1_dim" ],
+        [ "\u202AItalic", "struct_p_g_e_1_1_console_1_1_italic.html", "struct_p_g_e_1_1_console_1_1_italic" ],
+        [ "\u202AUnderline", "struct_p_g_e_1_1_console_1_1_underline.html", "struct_p_g_e_1_1_console_1_1_underline" ],
+        [ "\u202ABlinking", "struct_p_g_e_1_1_console_1_1_blinking.html", "struct_p_g_e_1_1_console_1_1_blinking" ],
+        [ "\u202AReverse", "struct_p_g_e_1_1_console_1_1_reverse.html", "struct_p_g_e_1_1_console_1_1_reverse" ],
+        [ "\u202AHidden", "struct_p_g_e_1_1_console_1_1_hidden.html", "struct_p_g_e_1_1_console_1_1_hidden" ],
+        [ "\u202AStrikethrough", "struct_p_g_e_1_1_console_1_1_strikethrough.html", "struct_p_g_e_1_1_console_1_1_strikethrough" ],
+        [ "\u202AResetAll", "struct_p_g_e_1_1_console_1_1_reset_all.html", null ]
+      ] ],
       [ "\u202AColor", "class_p_g_e_1_1_color.html", "class_p_g_e_1_1_color" ],
       [ "\u202AException", "class_p_g_e_1_1_exception.html", "class_p_g_e_1_1_exception" ],
       [ "\u202AAbstractIO", "class_p_g_e_1_1_abstract_i_o.html", "class_p_g_e_1_1_abstract_i_o" ],
