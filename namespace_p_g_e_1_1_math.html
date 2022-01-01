@@ -117,12 +117,6 @@ template&lt;std::unsigned_integral T&gt; </td></tr>
 template&lt;std::integral T&gt; </td></tr>
 <tr class="memitem:a190007c420b6ccf08dfc2410cb65ebb8"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ceilLog2</b> (T value)</td></tr>
 <tr class="separator:a190007c420b6ccf08dfc2410cb65ebb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad64e0f41b409c339ed5644f6b24e44d8"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_p_g_e_1_1_math.html#ad64e0f41b409c339ed5644f6b24e44d8">floor</a> (float val) noexcept</td></tr>
-<tr class="memdesc:ad64e0f41b409c339ed5644f6b24e44d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Round down a float.  <a href="namespace_p_g_e_1_1_math.html#ad64e0f41b409c339ed5644f6b24e44d8">More...</a><br /></td></tr>
-<tr class="separator:ad64e0f41b409c339ed5644f6b24e44d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12d5305ff965b3d0832fb946cf80bb78"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78">ceil</a> (float val) noexcept</td></tr>
-<tr class="memdesc:a12d5305ff965b3d0832fb946cf80bb78"><td class="mdescLeft">&#160;</td><td class="mdescRight">&#x202A;Round up a float.  <a href="namespace_p_g_e_1_1_math.html#a12d5305ff965b3d0832fb946cf80bb78">More...</a><br /></td></tr>
-<tr class="separator:a12d5305ff965b3d0832fb946cf80bb78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -138,68 +132,7 @@ constexpr float&#160;</td><td class="memItemRight" valign="bottom"><b>E</b> = 2.
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p class="DocNodeLTR">Various mathematical utility that is either not present, or unsatisfactory in the standard library. </p>
-</div><h2 class="groupheader">Function Documentation</h2>
-<a id="a12d5305ff965b3d0832fb946cf80bb78"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a12d5305ff965b3d0832fb946cf80bb78">&#9670;&nbsp;</a></span>ceil()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr int PGE::Math::ceil </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>val</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>&#x202A;Round up a float. </p>
-<p class="DocNodeLTR">Rounding up is defined as always rounding towards +/-∞.</p>
-<p class="DocNodeLTR">The standard implementation returns a float, which we consider cringe. </p>
-
-</div>
-</div>
-<a id="ad64e0f41b409c339ed5644f6b24e44d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad64e0f41b409c339ed5644f6b24e44d8">&#9670;&nbsp;</a></span>floor()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr int PGE::Math::floor </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>val</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>&#x202A;Round down a float. </p>
-<p class="DocNodeLTR">Rounding down is defined as always rounding towards 0.</p>
-<p class="DocNodeLTR">The standard implementation returns a float, which we consider cringe. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
+</div><h2 class="groupheader">Variable Documentation</h2>
 <a id="a6b04fd48d78229387dde0bddbe3d5c05"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6b04fd48d78229387dde0bddbe3d5c05">&#9670;&nbsp;</a></span>EPSILON_DEFAULT</h2>
 
