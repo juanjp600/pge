@@ -198,6 +198,9 @@
     <ClCompile Include="..\..\Src\Color\ConsoleColor.cpp">
       <Filter>Src\Color</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Math\Stringifications.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Graphics\GraphicsDX11.h">
