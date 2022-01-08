@@ -24,7 +24,7 @@ class Rectanglef {
         constexpr Rectanglef() = default;
         constexpr Rectanglef(const Vector2f& itl, const Vector2f& ibr) : tl(itl), br(ibr) { repair(); }
         constexpr Rectanglef(float il, float it, float ir, float ib) : tl(il, it), br(ir, ib) { repair(); }
-        static constexpr const Rectanglef fromDims(float x, float y, float width, float height) { return Rectanglef(x, y, x + width, y + height); }
+        static constexpr Rectanglef fromDims(float x, float y, float width, float height) { return Rectanglef(x, y, x + width, y + height); }
 
         constexpr bool operator==(const Rectanglef& other) const = default;
 
@@ -50,12 +50,12 @@ class Rectanglef {
         constexpr float height() const { return br.y - tl.y; }
         constexpr float area() const { return width() * height(); }
 
-        constexpr const Vector2f center() const { return (tl + br) * 0.5f; }
+        constexpr Vector2f center() const { return (tl + br) * 0.5f; }
 
-        constexpr const Vector2f topLeftCorner() const { return tl; }
-        constexpr const Vector2f bottomRightCorner() const { return br; }
-        constexpr const Vector2f topRightCorner() const { return Vector2f(br.x, tl.y); }
-        constexpr const Vector2f bottomLeftCorner() const { return Vector2f(tl.x, br.y); }
+        constexpr Vector2f topLeftCorner() const { return tl; }
+        constexpr Vector2f bottomRightCorner() const { return br; }
+        constexpr Vector2f topRightCorner() const { return Vector2f(br.x, tl.y); }
+        constexpr Vector2f bottomLeftCorner() const { return Vector2f(tl.x, br.y); }
 
         constexpr bool isPointInside(const Vector2f& point) const {
             return point.x >= tl.x && point.y >= tl.y && point.x <= br.x && point.y <= br.y;
@@ -86,7 +86,7 @@ class Rectanglei {
         constexpr Rectanglei() = default;
         constexpr Rectanglei(const Vector2i& itl, const Vector2i& ibr) : tl(itl), br(ibr) { repair(); }
         constexpr Rectanglei(int il, int it, int ir, int ib) : tl(il, it), br(ir, ib) { repair(); }
-        static constexpr const Rectanglei fromDims(int x, int y, int width, int height) { return Rectanglei(x, y, x + width, y + height); }
+        static constexpr Rectanglei fromDims(int x, int y, int width, int height) { return Rectanglei(x, y, x + width, y + height); }
 
         constexpr bool operator==(const Rectanglei& other) const { return tl == other.tl && br == other.br; }
         constexpr bool operator!=(const Rectanglei& other) const { return tl != other.tl || br != other.br; }
@@ -109,10 +109,10 @@ class Rectanglei {
         constexpr int height() const { return br.y - tl.y; }
         constexpr int area() const { return width() * height(); }
 
-        constexpr const Vector2i topLeftCorner() const { return tl; }
-        constexpr const Vector2i bottomRightCorner() const { return br; }
-        constexpr const Vector2i topRightCorner() const { return Vector2i(br.x, tl.y); }
-        constexpr const Vector2i bottomLeftCorner() const { return Vector2i(tl.x, br.y); }
+        constexpr Vector2i topLeftCorner() const { return tl; }
+        constexpr Vector2i bottomRightCorner() const { return br; }
+        constexpr Vector2i topRightCorner() const { return Vector2i(br.x, tl.y); }
+        constexpr Vector2i bottomLeftCorner() const { return Vector2i(tl.x, br.y); }
 
         constexpr bool isPointInside(const Vector2i& point) const {
             return point.x >= tl.x && point.y >= tl.y && point.x <= br.x && point.y <= br.y;

@@ -59,7 +59,7 @@ void ShaderOGL3::extractVertexUniforms(const String& vertexSource) {
 }
 
 void ShaderOGL3::extractVertexAttributes(const String& vertexSource) {
-    const String vertexInputPrefix = "vertexInput_";
+    static const String vertexInputPrefix = "vertexInput_";
 
     std::vector<ParsedShaderVar> parsedAttribs;
     extractShaderVars(vertexSource, "in", parsedAttribs);

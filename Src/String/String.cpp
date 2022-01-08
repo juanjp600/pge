@@ -108,35 +108,35 @@ void String::ReverseIterator::validate() {
     asrt(index < ref->byteLength(), INVALID_ITERATOR);
 }
 
-const String::Iterator String::Iterator::begin(const String& str) {
+String::Iterator String::Iterator::begin(const String& str) {
     return String::Iterator(str, 0, 0);
 }
 
-template <> const String::Iterator String::Iterator::end(const String& str) {
+template <> String::Iterator String::Iterator::end(const String& str) {
     return String::Iterator(str, str.byteLength(), str.getData()->_strLength);
 }
 
-const String::ReverseIterator String::ReverseIterator::begin(const String& str) {
+String::ReverseIterator String::ReverseIterator::begin(const String& str) {
     return str.isEmpty() ? end(str) : (ReverseIterator)(Iterator::end(str) - 1);
 }
 
-template <> const String::ReverseIterator String::ReverseIterator::end(const String& str) {
+template <> String::ReverseIterator String::ReverseIterator::end(const String& str) {
     return String::ReverseIterator(str, -1, -1);
 }
 
-const String::Iterator String::begin() const {
+String::Iterator String::begin() const {
     return Iterator::begin(*this);
 }
 
-const String::Iterator String::end() const {
+String::Iterator String::end() const {
     return Iterator::end(*this);
 }
 
-const String::ReverseIterator String::rbegin() const {
+String::ReverseIterator String::rbegin() const {
     return String::ReverseIterator::begin(*this);
 }
 
-const String::ReverseIterator String::rend() const {
+String::ReverseIterator String::rend() const {
     return String::ReverseIterator::end(*this);
 }
 
@@ -227,15 +227,15 @@ String::String(const String& a, const String& b) {
     }
 }
 
-const String PGE::StringLiterals::operator""_PGE(const char* cstr, size_t size) {
+String PGE::StringLiterals::operator""_PGE(const char* cstr, size_t size) {
     return String(cstr, size);
 }
 
-const String PGE::StringLiterals::operator""_PGE(const char8_t* cstr, size_t size) {
+String PGE::StringLiterals::operator""_PGE(const char8_t* cstr, size_t size) {
     return String((char*)cstr, size);
 }
 
-const String PGE::StringLiterals::operator""_PGE(const char16* wstr, size_t) {
+String PGE::StringLiterals::operator""_PGE(const char16* wstr, size_t) {
     return String(wstr);
 }
 
@@ -289,7 +289,7 @@ void String::operator+=(char16 ch) {
     data->_hashCode = 0; // TODO: Deal with partially evaluated hashcode.
 }
 
-const String PGE::operator+(const String& a, const String& b) {
+String PGE::operator+(const String& a, const String& b) {
     return String(a, b);
 }
 
@@ -333,7 +333,7 @@ u64 String::getHashCode() const {
     return data->_hashCode;
 }
 
-const std::weak_ordering String::compare(const String& other) const {
+std::weak_ordering String::compare(const String& other) const {
     String::Iterator a = begin();
     String::Iterator b = other.begin();
     while (a != end() && b != other.end() && *a == *b) { a++; b++; }
@@ -403,7 +403,7 @@ bool String::isEmpty() const {
     return getChars()[0] == '\0';
 }
 
-const String::CoreInfo String::reallocate(int size, bool copyOldChs) {
+String::CoreInfo String::reallocate(int size, bool copyOldChs) {
     // Accounting for the terminating byte.
     size++;
 
@@ -457,7 +457,7 @@ const char8_t* String::c8str() const {
     return (const char8_t*)getChars();
 }
 
-const std::vector<char16> String::wstr() const {
+std::vector<char16> String::wstr() const {
     std::vector<char16> chars;
     Metadata* data = getData();
     if (data->_strLength >= 0) {
@@ -481,7 +481,7 @@ static consteval byte maxIntegerDigits(byte base) {
 }
 
 template <std::integral I, byte BASE> requires ValidBaseForType<I, BASE>
-const String String::fromInteger(I i, Casing casing) {
+String String::fromInteger(I i, Casing casing) {
     constexpr byte digits = maxIntegerDigits<I>(BASE);
     char* buf; Metadata* retData;
     String ret(digits, buf, retData);
@@ -576,17 +576,17 @@ static I toInteger(const String& str, bool& success) {
 }
 
 #define PGE_STRING_TO_FROM_SIGNED_INTEGER(TYPE) \
-template <> const TYPE String::to(bool& success) const { return toInteger<TYPE>(*this, success); } \
-template <> const String String::from(const TYPE& t) { return fromInteger(t); }
+template <> TYPE String::to(bool& success) const { return toInteger<TYPE>(*this, success); } \
+template <> String String::from(const TYPE& t) { return fromInteger(t); }
 
 #define PGE_STRING_TO_FROM_UNSIGNED_INTEGER(TYPE) \
 PGE_STRING_TO_FROM_SIGNED_INTEGER(TYPE) \
 template <> TYPE String::binToInt(bool& success) const { return toInteger<TYPE, 2>(*this, success); } \
 template <> TYPE String::octToInt(bool& success) const { return toInteger<TYPE, 8>(*this, success); } \
 template <> TYPE String::hexToInt(bool& success) const { return toInteger<TYPE, 16>(*this, success); } \
-template <> const String String::binFromInt(TYPE t) { return fromInteger<TYPE, 2>(t); } \
-template <> const String String::octFromInt(TYPE t) { return fromInteger<TYPE, 8>(t); } \
-template <> const String String::hexFromInt(TYPE t, Casing casing) { return fromInteger<TYPE, 16>(t, casing); }
+template <> String String::binFromInt(TYPE t) { return fromInteger<TYPE, 2>(t); } \
+template <> String String::octFromInt(TYPE t) { return fromInteger<TYPE, 8>(t); } \
+template <> String String::hexFromInt(TYPE t, Casing casing) { return fromInteger<TYPE, 16>(t, casing); }
 
 PGE_STRING_TO_FROM_SIGNED_INTEGER(short)
 PGE_STRING_TO_FROM_SIGNED_INTEGER(int)
@@ -599,7 +599,7 @@ PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned long)
 PGE_STRING_TO_FROM_UNSIGNED_INTEGER(unsigned long long)
 
 template <std::floating_point F>
-const String String::fromFloatingPoint(F f) {
+String String::fromFloatingPoint(F f) {
     const char* format;
     if constexpr (std::is_same<F, long double>::value) {
         format = "%fL";
@@ -700,8 +700,8 @@ static F toFloatingPoint(const String& str, bool& success) {
 }
 
 #define PGE_STRING_TO_FLOAT(TYPE) \
-template <> const TYPE String::to(bool& success) const { return toFloatingPoint<TYPE>(*this, success); } \
-template <> const String String::from(const TYPE& t) { return fromFloatingPoint(t); }
+template <> TYPE String::to(bool& success) const { return toFloatingPoint<TYPE>(*this, success); } \
+template <> String String::from(const TYPE& t) { return fromFloatingPoint(t); }
 
 PGE_STRING_TO_FLOAT(float)
 PGE_STRING_TO_FLOAT(double)
@@ -739,13 +739,13 @@ bool String::contains(const String& fnd) const {
     return findFirst(fnd) != begin();
 }
 
-const String::Iterator String::findFirst(const String& fnd, int from) const {
+String::Iterator String::findFirst(const String& fnd, int from) const {
     return findFirst(fnd, begin() + from);
 }
 
 static const String EMPTY_FIND = "Find string can't be empty";
 
-const String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
+String::Iterator String::findFirst(const String& fnd, const Iterator& from) const {
     if (fnd.isEmpty()) { return from; }
     for (String::Iterator it = from; it.getBytePosition() <= byteLength() - fnd.byteLength(); it++) {
         if (memcmp(fnd.cstr(), cstr() + it.getBytePosition(), fnd.byteLength()) == 0) {
@@ -755,11 +755,11 @@ const String::Iterator String::findFirst(const String& fnd, const Iterator& from
     return end();
 }
 
-const String::ReverseIterator String::findLast(const String& fnd, int fromEnd) const {
+String::ReverseIterator String::findLast(const String& fnd, int fromEnd) const {
     return findLast(fnd, rbegin() + fromEnd);
 }
 
-const String::ReverseIterator String::findLast(const String& fnd, const ReverseIterator& from) const {
+String::ReverseIterator String::findLast(const String& fnd, const ReverseIterator& from) const {
     asrt(!fnd.isEmpty(), EMPTY_FIND);
     String::ReverseIterator it = from;
     while (it.getBytePosition() > byteLength() - fnd.byteLength()) {
@@ -771,20 +771,20 @@ const String::ReverseIterator String::findLast(const String& fnd, const ReverseI
     return rend();
 }
 
-const String String::substr(int start) const {
+String String::substr(int start) const {
     return substr(begin() + start);
 }
 
-const String String::substr(int start, int cnt) const {
+String String::substr(int start, int cnt) const {
     Iterator from = begin() + start;
     return substr(from, from + cnt);
 }
 
-const String String::substr(const Iterator& start) const {
+String String::substr(const Iterator& start) const {
     return substr(start, end());
 }
 
-const String String::substr(const Iterator& start, const Iterator& to) const {
+String String::substr(const Iterator& start, const Iterator& to) const {
     asrt(start.getBytePosition() <= to.getBytePosition(),
         "start iterator can't come after to iterator (start: " + from(start.getBytePosition())
         + "; to: " + from(to.getBytePosition()) + "; str: " + *this + ")");
@@ -800,13 +800,13 @@ const String String::substr(const Iterator& start, const Iterator& to) const {
     return ret;
 }
 
-const String::Iterator String::charAt(int pos) const {
+String::Iterator String::charAt(int pos) const {
     Iterator it;
     for (it = begin(); it != end() && it.getPosition() != pos; it++);
     return it;
 }
 
-const String String::replace(const String& fnd, const String& rplace) const {
+String String::replace(const String& fnd, const String& rplace) const {
     std::vector<int> foundPositions;
     for (String::Iterator it = findFirst(fnd); it != end(); it = findFirst(fnd, it + 1)) {
         foundPositions.emplace_back(it.getBytePosition());
@@ -884,7 +884,7 @@ String::Metadata* String::LiteralData::shareData() {
 }
 
 // TODO: Funny special cases!
-const String String::performCaseConversion(const std::function<void (String&, char16)>& func) const {
+String String::performCaseConversion(const std::function<void (String&, char16)>& func) const {
     char* buf; Metadata* retData;
     String ret(byteLength(), buf, retData);
     retData->strByteLength = 0;
@@ -895,15 +895,15 @@ const String String::performCaseConversion(const std::function<void (String&, ch
     return ret;
 }
 
-const String String::toUpper() const {
+String String::toUpper() const {
     return performCaseConversion(Unicode::up);
 }
 
-const String String::toLower() const {
+String String::toLower() const {
     return performCaseConversion(Unicode::down);
 }
 
-const String String::trim() const {
+String String::trim() const {
     if (isEmpty()) { return *this; }
 
     int newLen = getData()->_strLength;
@@ -923,7 +923,7 @@ const String String::trim() const {
     return ret;
 }
 
-const String String::reverse() const {
+String String::reverse() const {
     int len = byteLength();
     char* buf; Metadata* retData;
     String ret(len, buf, retData);
@@ -940,7 +940,7 @@ const String String::reverse() const {
     return ret;
 }
 
-const String String::repeat(int count, const String& separator) const {
+String String::repeat(int count, const String& separator) const {
     asrt(count >= 0, "count must be non-negative");
     if (count == 0) { return String(); }
     int curLength = byteLength();
@@ -962,7 +962,7 @@ const String String::repeat(int count, const String& separator) const {
     return ret;
 }
 
-const std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
+std::vector<String> String::split(const String& needleStr, bool removeEmptyEntries) const {
     std::vector<String> split;
     const char* haystack = cstr();
     int codepoint;
@@ -993,7 +993,7 @@ const std::vector<String> String::split(const String& needleStr, bool removeEmpt
     return split;
 }
 
-const String String::regexMatch(const String& pattern) const {
+String String::regexMatch(const String& pattern) const {
     // TODO: C++23 will add support for char8_t and/or deprecate std::regex
     // We will have to react accordingly. Perhaps implementing our own regex matcher.
     std::vector<char16> s = wstr();

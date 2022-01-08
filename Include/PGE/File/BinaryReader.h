@@ -50,7 +50,7 @@ class BinaryReader : private AbstractIO<std::ifstream> {
         /// @throws Exception if any kind of error occured.
         /// @see #tryRead
         template <std::default_initializable T>
-        const T read() {
+        T read() {
             T val;
             asrt(tryRead<T>(val), BAD_STREAM);
             return val;
@@ -73,14 +73,14 @@ class BinaryReader : private AbstractIO<std::ifstream> {
         /// Reads a specified amount of bytes.
         /// Adheres to the #read specification.
         /// @see #read
-        const std::vector<byte> readBytes(size_t count);
+        std::vector<byte> readBytes(size_t count);
         /// Behaves exactly as does #readBytes.
         /// This can be used in combination with the property of vectors to not contract their internal capacity automatically in order
         /// to avoid unnecessary allocations.
         /// 
         /// Any content previously in the supplied vector is overwritten.
         /// @see #readBytes
-        void readBytesInto(size_t count, std::vector<byte>& ref);
+        void readBytesInto(std::vector<byte>& ref, size_t count);
 
         /// Tries to skip a given amount of bytes from the file, simply discarding them.
         /// Adheres to the #tryRead specification.

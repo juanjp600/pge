@@ -32,7 +32,7 @@ void MeshOGL3::uploadInternalData() {
     asrt(glError == GL_NO_ERROR, "Failed to create data store for index buffer (GLERROR: " + String::from(glError) + ")");
 }
 
-const static GLenum glTextureLayers[] = {
+static const GLenum glTextureLayers[] = {
     GL_TEXTURE0,
     GL_TEXTURE1,
     GL_TEXTURE2,

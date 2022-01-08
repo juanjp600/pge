@@ -25,9 +25,9 @@ concept ValidBaseForType = BASE == 10 && std::integral<T> || std::unsigned_integ
 class String;
 
 inline namespace StringLiterals {
-    const String operator""_PGE(const char* cstr, size_t size);
-    const String operator""_PGE(const char8_t* cstr, size_t size);
-    const String operator""_PGE(const char16* wstr, size_t size);
+    String operator""_PGE(const char* cstr, size_t size);
+    String operator""_PGE(const char8_t* cstr, size_t size);
+    String operator""_PGE(const char16* wstr, size_t size);
 }
 
 /// A UTF-8 character sequence guaranteed to be terminated by a null byte.
@@ -87,8 +87,8 @@ class String {
                     validate();
                 }
 
-                static const ActualIterator begin(const String& str);
-                static const ActualIterator end(const String& str);
+                static ActualIterator begin(const String& str);
+                static ActualIterator end(const String& str);
 
                 // These need to return what they return to be recognized as iterators by the STL.
                 ActualIterator& operator++();
@@ -96,8 +96,8 @@ class String {
                 ActualIterator operator++(int) { ActualIterator temp = *this; ++*this; return temp; }
                 ActualIterator operator--(int) { ActualIterator temp = *this; --*this; return temp; }
 
-                const ActualIterator operator+(int steps) const { ActualIterator ret(*this); ret += steps; return ret; }
-                const ActualIterator operator-(int steps) const { ActualIterator ret(*this); ret -= steps; return ret; }
+                ActualIterator operator+(int steps) const { ActualIterator ret(*this); ret += steps; return ret; }
+                ActualIterator operator-(int steps) const { ActualIterator ret(*this); ret -= steps; return ret; }
                 void operator+=(int steps) {
                     if (steps < 0) { *this -= -steps; }
                     for (PGE_IT : Range(steps)) {
@@ -123,10 +123,10 @@ class String {
         static_assert(std::bidirectional_iterator<Iterator>);
         static_assert(std::bidirectional_iterator<ReverseIterator>);
 
-        const Iterator begin() const;
-        const Iterator end() const;
-        const ReverseIterator rbegin() const;
-        const ReverseIterator rend() const;
+        Iterator begin() const;
+        Iterator end() const;
+        ReverseIterator rbegin() const;
+        ReverseIterator rend() const;
         
         String();
 
@@ -168,21 +168,21 @@ class String {
 
         String(const String& a, const String& b);
 
-        friend const String StringLiterals::operator""_PGE(const char* cstr, size_t size);
-        friend const String StringLiterals::operator""_PGE(const char8_t* cstr, size_t size);
-        friend const String StringLiterals::operator""_PGE(const char16* wstr, size_t size);
+        friend String StringLiterals::operator""_PGE(const char* cstr, size_t size);
+        friend String StringLiterals::operator""_PGE(const char8_t* cstr, size_t size);
+        friend String StringLiterals::operator""_PGE(const char16* wstr, size_t size);
 
         template <typename T>
-        static const String from(const T& t);
+        static String from(const T& t);
 
         enum class Casing {
             UPPER,
             LOWER,
         };
 
-        template <std::unsigned_integral I> static const String binFromInt(I i);
-        template <std::unsigned_integral I> static const String octFromInt(I i);
-        template <std::unsigned_integral I> static const String hexFromInt(I i, Casing casing = Casing::UPPER);
+        template <std::unsigned_integral I> static String binFromInt(I i);
+        template <std::unsigned_integral I> static String octFromInt(I i);
+        template <std::unsigned_integral I> static String hexFromInt(I i, Casing casing = Casing::UPPER);
 
         void operator+=(const String& other);
         void operator+=(char16 ch);
@@ -193,11 +193,11 @@ class String {
         /// O(1)
         const char* cstr() const;
         const char8_t* c8str() const;
-        const std::vector<char16> wstr() const;
+        std::vector<char16> wstr() const;
 
-        template <typename T> const T to(bool& success) const;
+        template <typename T> T to(bool& success) const;
         template <typename T>
-        const T to() const {
+        T to() const {
             bool succ;
             T t = to<T>(succ);
             // TODO: C++20 Modules.
@@ -244,24 +244,24 @@ class String {
 
         bool contains(const String& fnd) const;
 
-        const Iterator findFirst(const String& fnd, int from = 0) const;
-        const Iterator findFirst(const String& fnd, const Iterator& from) const;
-        const ReverseIterator findLast(const String& fnd, int fromEnd = 0) const;
-        const ReverseIterator findLast(const String& fnd, const ReverseIterator& from) const;
+        Iterator findFirst(const String& fnd, int from = 0) const;
+        Iterator findFirst(const String& fnd, const Iterator& from) const;
+        ReverseIterator findLast(const String& fnd, int fromEnd = 0) const;
+        ReverseIterator findLast(const String& fnd, const ReverseIterator& from) const;
 
-        const String substr(int start) const;
-        const String substr(int start, int cnt) const;
-        const String substr(const Iterator& start) const;
-        const String substr(const Iterator& start, const Iterator& to) const;
-        const Iterator charAt(int pos) const;
-        const String replace(const String& fnd, const String& rplace) const;
-        const String toUpper() const;
-        const String toLower() const;
-        const String trim() const;
-        const String reverse() const;
-        const String repeat(int count, const String& separator = "") const;
-        const std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
-        static const String join(const Enumerable<String> auto& vect, const String& separator) {
+        String substr(int start) const;
+        String substr(int start, int cnt) const;
+        String substr(const Iterator& start) const;
+        String substr(const Iterator& start, const Iterator& to) const;
+        Iterator charAt(int pos) const;
+        String replace(const String& fnd, const String& rplace) const;
+        String toUpper() const;
+        String toLower() const;
+        String trim() const;
+        String reverse() const;
+        String repeat(int count, const String& separator = "") const;
+        std::vector<String> split(const String& needleStr, bool removeEmptyEntries) const;
+        static String join(const Enumerable<String> auto& vect, const String& separator) {
             if (std::ranges::empty(vect)) {
                 return String();
             }
@@ -277,13 +277,13 @@ class String {
             return retVal;
         }
 
-        const String regexMatch(const String& pattern) const;
+        String regexMatch(const String& pattern) const;
 
         //String unHex() const;
 
         u64 getHashCode() const;
 
-        const std::weak_ordering compare(const String& other) const;
+        std::weak_ordering compare(const String& other) const;
 
         bool equals(const String& other) const;
         bool equalsIgnoreCase(const String& other) const;
@@ -314,7 +314,7 @@ class String {
             Metadata data;
             int cCapacity;
             std::unique_ptr<char[]> cstrBuf;
-            const CoreInfo get() {
+            CoreInfo get() {
                 return { cstrBuf.get(), &data };
             }
         };
@@ -322,7 +322,7 @@ class String {
         struct StackAllocData {
             Metadata data;
             char cstrBuf[SHORT_STR_CAPACITY];
-            const CoreInfo get() {
+            CoreInfo get() {
                 return { cstrBuf, &data };
             }
         };
@@ -349,17 +349,17 @@ class String {
         char* getChars() const;
         Metadata* getData() const;
 
-        const String performCaseConversion(const std::function<void(String&, char16)>& func) const;
+        String performCaseConversion(const std::function<void(String&, char16)>& func) const;
 
         void wCharToUtf8Str(const char16* wbuffer);
-        const CoreInfo reallocate(int size, bool copyOldChs = false);
+        CoreInfo reallocate(int size, bool copyOldChs = false);
 
         template <std::integral I, byte BASE = 10> requires ValidBaseForType<I, BASE>
-        static const String fromInteger(I i, Casing casing = Casing::UPPER);
+        static String fromInteger(I i, Casing casing = Casing::UPPER);
         template <std::floating_point F>
-        static const String fromFloatingPoint(F f);
+        static String fromFloatingPoint(F f);
 };
-const String operator+(const String& a, const String& b);
+String operator+(const String& a, const String& b);
 bool operator==(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);
 std::istream& operator>>(std::istream& is, String& s);

@@ -36,7 +36,7 @@ class TextReader : private AbstractIO<std::ifstream> {
 
         /// Reads a line and returns it.
         /// `\n`, `\r`, `\n\r` and `\r\n` are considered to be line endings.
-        const String readLine();
+        String readLine();
         /// Reads a line into the given string.
         /// This can be used in combination with the property of strings to never contract their internal capacity in order to avoid
         /// unnecessary allocations.

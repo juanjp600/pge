@@ -21,7 +21,7 @@ using namespace PGE;
 
 static const String INVALID_STR = "Tried using an invalid path";
 
-static const String sanitizeFileSeperator(const String& str) {
+static String sanitizeFileSeperator(const String& str) {
     return str.replace("\\", "/");
 }
 
@@ -41,7 +41,7 @@ static const String& getResourceStr() {
     return resourceStr;
 }
 
-const FilePath& FilePath::getDataPath() {
+FilePath& FilePath::getDataPath() {
     static FilePath dataPath;
     if (!dataPath.isValid()) {
         // TODO: Linux.
@@ -75,7 +75,7 @@ FilePath::FilePath() noexcept {
     valid = false;
 }
 
-const FilePath FilePath::fromStr(const String& str) {
+FilePath FilePath::fromStr(const String& str) {
     std::filesystem::path pth(str.c8str());
     String sanitizedStr = sanitizeFileSeperator(str);
     if (pth.is_absolute()) {
@@ -97,7 +97,7 @@ bool FilePath::isDirectory() const {
     return isDir;
 }
 
-const FilePath FilePath::makeDirectory() const {
+FilePath FilePath::makeDirectory() const {
     asrt(valid, INVALID_STR);
     if (*str().charAt(name.length() - 1) != '/') {
         return *this + String("/");
@@ -105,7 +105,7 @@ const FilePath FilePath::makeDirectory() const {
     return *this;
 }
 
-const FilePath FilePath::getParentDirectory() const {
+FilePath FilePath::getParentDirectory() const {
     asrt(valid, INVALID_STR);
     String::Iterator to = name.findLast("/");
     int index;
@@ -117,14 +117,14 @@ const FilePath FilePath::getParentDirectory() const {
     return FilePath(name.substr(0, index + 1));
 }
 
-const String FilePath::getExtension() const {
+String FilePath::getExtension() const {
     asrt(valid, INVALID_STR);
     String::Iterator startIndex = name.findLast(".");
     if (startIndex == name.end()) { return ""; }
     return name.substr(startIndex+1);
 }
 
-const FilePath FilePath::trimExtension() const {
+FilePath FilePath::trimExtension() const {
     asrt(valid, INVALID_STR);
     String::Iterator startIndex = name.findLast(".");
     if (startIndex == name.end()) { return *this; }
@@ -155,7 +155,7 @@ bool FilePath::createDirectory() const {
     return created;
 }
 
-const std::vector<FilePath> FilePath::enumerateFolders() const {
+std::vector<FilePath> FilePath::enumerateFolders() const {
     asrt(valid, INVALID_STR);
     std::vector<FilePath> folders;
     for (const auto& it : std::filesystem::directory_iterator(str().c8str())) {
@@ -166,7 +166,7 @@ const std::vector<FilePath> FilePath::enumerateFolders() const {
     return folders;
 }
 
-const std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
+std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
     asrt(valid, INVALID_STR);
     std::vector<FilePath> files;
     if (recursive) {
@@ -185,18 +185,23 @@ const std::vector<FilePath> FilePath::enumerateFiles(bool recursive) const {
     return files;
 }
 
-const String FilePath::readText() const {
-    // TextReader checks if the path is valid.
-    TextReader reader(*this);
+String FilePath::readText() const {
     String ret;
-    while (!reader.endOfFile()) {
-        reader.readLine(ret);
-        ret += '\n';
-    }
+    readText(ret);
     return ret;
 }
 
-const std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
+void FilePath::readText(String& text) const {
+    // TextReader checks if the path is valid.
+    TextReader reader(*this);
+    text = String{ };
+    while (!reader.endOfFile()) {
+        reader.readLine(text);
+        text += '\n';
+    }
+}
+
+std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
     // TextReader checks if the path is valid.
     TextReader reader(*this);
     std::vector<String> lines;
@@ -210,16 +215,21 @@ const std::vector<String> FilePath::readLines(bool includeEmptyLines) const {
     return lines;
 }
 
-const std::vector<byte> FilePath::readBytes() const {
+std::vector<byte> FilePath::readBytes() const {
+    std::vector<byte> bytes;
+    readBytes(bytes);
+    return bytes;
+}
+
+void FilePath::readBytes(std::vector<byte>& bytes) const {
     asrt(valid, INVALID_STR);
     std::ifstream file(str().cstr(), std::ios::ate | std::ios::binary);
     asrt(file.is_open(), "Couldn't read bytes from file (file: \"" + str() + "\")");
-    std::vector<byte> bytes;
+
     size_t size = (size_t)file.tellg();
     bytes.resize(size);
     file.seekg(0);
     file.read((char*)bytes.data(), size);
-    return bytes;
 }
 
 const String& FilePath::str() const {
@@ -239,7 +249,7 @@ void FilePath::operator+=(const String& str) {
     name += sanitizeFileSeperator(str);
 }
 
-const FilePath FilePath::operator+(const String& str) const {
+FilePath FilePath::operator+(const String& str) const {
     asrt(valid, INVALID_STR);
     return FilePath(name + sanitizeFileSeperator(str));
 }

@@ -45,13 +45,13 @@ bool BinaryReader::tryReadBytes(size_t count, std::vector<byte>& out) {
     return stream.good();
 }
 
-const std::vector<byte> BinaryReader::readBytes(size_t count) {
+std::vector<byte> BinaryReader::readBytes(size_t count) {
     std::vector<byte> ret;
-    asrt(tryReadBytes(count, ret), BAD_STREAM);
+    readBytesInto(ret, count);
     return ret;
 }
 
-void BinaryReader::readBytesInto(size_t count, std::vector<byte>& out) {
+void BinaryReader::readBytesInto(std::vector<byte>& out, size_t count) {
     asrt(tryReadBytes(count, out), BAD_STREAM);
 }
 

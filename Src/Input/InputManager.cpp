@@ -366,7 +366,7 @@ const Vector2f& InputManagerInternal::getMousePosition() const {
     return mousePos;
 }
 
-const Vector2f InputManagerInternal::consumeMouseDelta() {
+Vector2f InputManagerInternal::consumeMouseDelta() {
     Vector2f ret = mouseDelta;
     mouseDelta = Vector2f();
     return ret;

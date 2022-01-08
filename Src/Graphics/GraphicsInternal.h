@@ -86,7 +86,7 @@ class GraphicsSpecialized : public GraphicsInternal {
             return new MATERIAL(*this, sh, tex, o);
         }
 
-        const String getInfo() const final override {
+        String getInfo() const final override {
             return caption + " (" + RENDERER_NAME + ") "
                 + String::from(dimensions.x) + 'x' + String::from(dimensions.y) + " / "
                 + String::from(viewport.width()) + 'x' + String::from(viewport.height())

@@ -23,7 +23,7 @@ class Line2f {
                 || pointA.equals(other.pointB, epsilon) && pointB.equals(other.pointA, epsilon);
         }
 
-        constexpr const Rectanglef boundingBox() const { return Rectanglef(pointA, pointB); }
+        constexpr Rectanglef boundingBox() const { return Rectanglef(pointA, pointB); }
 
         constexpr bool intersects(const Line2f& other, Vector2f& point, bool segmentOnly = true) const {
             Vector2f p1a(pointA); Vector2f p1b(pointB);
@@ -42,7 +42,7 @@ class Line2f {
             return boundingBox().isPointInside(point) && other.boundingBox().isPointInside(point);
         }
 
-        constexpr const Vector2f closestPoint(const Vector2f& point, bool segmentOnly = true) const {
+        constexpr Vector2f closestPoint(const Vector2f& point, bool segmentOnly = true) const {
             Vector2f aToP = point - pointA;
             Vector2f aToB = pointB - pointA;
 
@@ -65,9 +65,9 @@ class Line3f {
         constexpr Line3f(const Vector3f& a, const Vector3f& b) : pointA(a), pointB(b) { }
         constexpr Line3f(float ax, float ay, float az, float bx, float by, float bz) : pointA(ax, ay, az), pointB(bx, by, bz) { }
 
-        constexpr const AABBox boundingBox() const { AABBox box(pointA); box.addPoint(pointB); return box; }
+        constexpr AABBox boundingBox() const { AABBox box(pointA); box.addPoint(pointB); return box; }
 
-        constexpr const Vector3f closestPoint(const Vector3f& point, bool segmentOnly = true) const {
+        constexpr Vector3f closestPoint(const Vector3f& point, bool segmentOnly = true) const {
             Vector3f aToP = point - pointA;
             Vector3f aToB = pointB - pointA;
 
@@ -93,7 +93,7 @@ class Line2i {
 
         constexpr operator const Line2f() const { return Line2f(pointA, pointB); }
 
-        constexpr const Rectanglei boundingBox() const { return Rectanglei(pointA, pointB); }
+        constexpr Rectanglei boundingBox() const { return Rectanglei(pointA, pointB); }
 
         constexpr bool intersects(const Line2i& other, Vector2f& point, bool segmentOnly = true) const {
             Vector2i p1a = pointA; Vector2i p1b = pointB;

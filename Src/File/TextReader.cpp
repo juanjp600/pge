@@ -36,7 +36,7 @@ bool TextReader::endOfFile() const noexcept {
     return eof;
 }
 
-const String TextReader::readLine() {
+String TextReader::readLine() {
     String str;
     readLine(str);
     return str;

@@ -29,7 +29,7 @@ struct String::OrderedKey {
     OrderedKey() = default;
     OrderedKey(const String& str) : str(str) { }
     const String str;
-    const std::weak_ordering operator<=>(const OrderedKey& other) const {
+    std::weak_ordering operator<=>(const OrderedKey& other) const {
         return str.compare(other.str);
     }
 };
@@ -37,7 +37,7 @@ struct String::OrderedKey {
 }
 
 template<> struct std::hash<PGE::String::Key> {
-    const size_t operator()(const PGE::String::Key& key) const {
+    size_t operator()(const PGE::String::Key& key) const {
         return key.hash;
     }
 };

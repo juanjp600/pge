@@ -93,14 +93,14 @@ class CircularArray {
                 using pointer = value_type*;
                 using reference = value_type&;
 
-                constexpr static const BasicIterator begin(CArray& carr) {
+                constexpr static BasicIterator begin(CArray& carr) {
                     BasicIterator it;
                     it.carr = &carr;
                     it.pos = carr.beginIndex;
                     return it;
                 }
 
-                constexpr static const BasicIterator end(CArray& carr) {
+                constexpr static BasicIterator end(CArray& carr) {
                     BasicIterator it;
                     it.carr = &carr;
                     it.pos = carr.endIndex;
@@ -304,14 +304,14 @@ class CircularArray {
         constexpr ConstIterator cend() const { return ConstIterator::end(*this); }
 
         using ReverseIterator = std::reverse_iterator<Iterator>;
-        constexpr const ReverseIterator rbegin() { return ReverseIterator(Iterator::end(*this)); }
-        constexpr const ReverseIterator rend() { return ReverseIterator(Iterator::begin(*this)); }
+        constexpr ReverseIterator rbegin() { return ReverseIterator(Iterator::end(*this)); }
+        constexpr ReverseIterator rend() { return ReverseIterator(Iterator::begin(*this)); }
 
         using ReverseConstIterator = std::reverse_iterator<ConstIterator>;
-        constexpr const ReverseConstIterator rbegin() const { return crbegin(); }
-        constexpr const ReverseConstIterator rend() const { return crend(); }
-        constexpr const ReverseConstIterator crbegin() const { return ReverseConstIterator(ConstIterator::end(*this)); }
-        constexpr const ReverseConstIterator crend() const { return ReverseConstIterator(ConstIterator::begin(*this)); }
+        constexpr ReverseConstIterator rbegin() const { return crbegin(); }
+        constexpr ReverseConstIterator rend() const { return crend(); }
+        constexpr ReverseConstIterator crbegin() const { return ReverseConstIterator(ConstIterator::end(*this)); }
+        constexpr ReverseConstIterator crend() const { return ReverseConstIterator(ConstIterator::begin(*this)); }
 
         template <typename... Args>
         constexpr T& emplaceFront(Args&&... args) {
