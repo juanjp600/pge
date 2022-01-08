@@ -6,7 +6,7 @@ var class_p_g_e_1_1_graphics =
     [ "\u202AgetCulling", "class_p_g_e_1_1_graphics.html#a4f90a00fbd4b29074b75cc6f6cc9007d", null ],
     [ "\u202AgetDepthTest", "class_p_g_e_1_1_graphics.html#acbd644a9f7ffda988e3de5ddbb93c387", null ],
     [ "\u202AgetDimensions", "class_p_g_e_1_1_graphics.html#aa5b2de1f4b67e543d75f7201498d763a", null ],
-    [ "\u202AgetInfo", "class_p_g_e_1_1_graphics.html#a553db423a32eb6183814ab579774dea5", null ],
+    [ "\u202AgetInfo", "class_p_g_e_1_1_graphics.html#ae4a4f0df2b99436f5e4bf8fd0ad86a21", null ],
     [ "\u202AgetViewport", "class_p_g_e_1_1_graphics.html#a7cc1946dae4e2b92e19d8f618bb0f96e", null ],
     [ "\u202AgetVsync", "class_p_g_e_1_1_graphics.html#ac95c76a48aba5940b5cca496bec027df", null ],
     [ "\u202AisWindowFocused", "class_p_g_e_1_1_graphics.html#a2f7957ee51137e680b41586faf706a68", null ],

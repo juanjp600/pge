@@ -183,14 +183,14 @@ $(document).ready(function(){initNavTree('_circular_array_8h_source.html',''); i
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                <span class="keyword">using</span> pointer = value_type*;</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                <span class="keyword">using</span> reference = value_type&amp;;</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                constexpr <span class="keyword">static</span> <span class="keyword">const</span> BasicIterator begin(CArray&amp; carr) {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                constexpr <span class="keyword">static</span> BasicIterator begin(CArray&amp; carr) {</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                    BasicIterator it;</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                    it.carr = &amp;carr;</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                    it.pos = carr.beginIndex;</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                    <span class="keywordflow">return</span> it;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                }</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                constexpr <span class="keyword">static</span> <span class="keyword">const</span> BasicIterator end(CArray&amp; carr) {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                constexpr <span class="keyword">static</span> BasicIterator end(CArray&amp; carr) {</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                    BasicIterator it;</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                    it.carr = &amp;carr;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                    it.pos = carr.endIndex;</div>
@@ -394,14 +394,14 @@ $(document).ready(function(){initNavTree('_circular_array_8h_source.html',''); i
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        constexpr ConstIterator cend()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ConstIterator::end(*<span class="keyword">this</span>); }</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        <span class="keyword">using</span> ReverseIterator = std::reverse_iterator&lt;Iterator&gt;;</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        constexpr <span class="keyword">const</span> ReverseIterator rbegin() { <span class="keywordflow">return</span> ReverseIterator(Iterator::end(*<span class="keyword">this</span>)); }</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        constexpr <span class="keyword">const</span> ReverseIterator rend() { <span class="keywordflow">return</span> ReverseIterator(Iterator::begin(*<span class="keyword">this</span>)); }</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        constexpr ReverseIterator rbegin() { <span class="keywordflow">return</span> ReverseIterator(Iterator::end(*<span class="keyword">this</span>)); }</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        constexpr ReverseIterator rend() { <span class="keywordflow">return</span> ReverseIterator(Iterator::begin(*<span class="keyword">this</span>)); }</div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="keyword">using</span> ReverseConstIterator = std::reverse_iterator&lt;ConstIterator&gt;;</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        constexpr <span class="keyword">const</span> ReverseConstIterator rbegin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> crbegin(); }</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        constexpr <span class="keyword">const</span> ReverseConstIterator rend()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> crend(); }</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        constexpr <span class="keyword">const</span> ReverseConstIterator crbegin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ReverseConstIterator(ConstIterator::end(*<span class="keyword">this</span>)); }</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        constexpr <span class="keyword">const</span> ReverseConstIterator crend()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ReverseConstIterator(ConstIterator::begin(*<span class="keyword">this</span>)); }</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        constexpr ReverseConstIterator rbegin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> crbegin(); }</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        constexpr ReverseConstIterator rend()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> crend(); }</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        constexpr ReverseConstIterator crbegin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ReverseConstIterator(ConstIterator::end(*<span class="keyword">this</span>)); }</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        constexpr ReverseConstIterator crend()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ReverseConstIterator(ConstIterator::begin(*<span class="keyword">this</span>)); }</div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        constexpr T&amp; emplaceFront(Args&amp;&amp;... args) {</div>

@@ -37,8 +37,8 @@ var namespaces_dup =
         [ "\u202Aquit", "_init_8h.html#a50284fac91101dee5be54880c5ef63e5", null ]
       ] ],
       [ "\u202AInterpolator", null, [
-        [ "\u202Acerp", "_interpolator_8h.html#a1a72b1af31352a2ca483f95091a3846f", null ],
-        [ "\u202Alerp", "_interpolator_8h.html#a708ddfe1234ce292488dfb4ebc37fa59", null ],
+        [ "\u202Acerp", "_interpolator_8h.html#af5ee76925661cc97371ec5307d903492", null ],
+        [ "\u202Alerp", "_interpolator_8h.html#abc47cc8bf3ea90b9bdef0e0e86356cf6", null ],
         [ "\u202AInterpolatable", "_interpolator_8h.html#a1cdfb4545acf8f8a30611fbf1530d794", null ]
       ] ],
       [ "\u202AMath", "namespace_p_g_e_1_1_math.html", [
@@ -437,14 +437,14 @@ var namespaces_dup =
         [ "\u202AFullscreen", "_graphics_8h.html#a7b8d26803e0de6aeecd63c92b0854a33a0829ea6734059d66e6bf87096b215dc1", null ]
       ] ],
       [ "\u202Aasrt", "_exception_8h.html#a8527b2a836becaa6729b15c2910f8bb1", null ],
-      [ "\u202Aoperator\"\"_PGE", "namespace_p_g_e.html#aed3b267efb4fada7c200c54b7aaac2a2", null ],
-      [ "\u202Aoperator\"\"_PGE", "namespace_p_g_e.html#a4c513c172d3ca0a8b813737141d97efe", null ],
-      [ "\u202Aoperator\"\"_PGE", "namespace_p_g_e.html#a3b78c697f23907b169a21e2e3c3f0f1e", null ],
-      [ "\u202Aoperator*", "_vector_8h.html#aede1e38254b1febf3792d45919f0386b", null ],
-      [ "\u202Aoperator*", "_vector_8h.html#ac6f0de44e835b79052cff41c95a71f69", null ],
-      [ "\u202Aoperator*", "_vector_8h.html#a409a53c8665ffdf904d0ab7873e411e4", null ],
-      [ "\u202Aoperator*", "_vector_8h.html#ac933edcd292915ac97dd90e865653684", null ],
-      [ "\u202Aoperator+", "_string_8h.html#a5dae5af91c8e4814dbf8514fe66b7a26", null ],
+      [ "\u202Aoperator\"\"_PGE", "namespace_p_g_e.html#aaafbb31ea8ac0db15f7870f87ae56254", null ],
+      [ "\u202Aoperator\"\"_PGE", "namespace_p_g_e.html#a63ef98b6d4db7cf967adef26f22dc05d", null ],
+      [ "\u202Aoperator\"\"_PGE", "namespace_p_g_e.html#a97b35b7c32bb14fc247c5a14d8d4a462", null ],
+      [ "\u202Aoperator*", "_vector_8h.html#a8a0670ac5232ca8c6ee7e07d6683def9", null ],
+      [ "\u202Aoperator*", "_vector_8h.html#a9ca73e4beb3c2cda21d051cc309197aa", null ],
+      [ "\u202Aoperator*", "_vector_8h.html#a465c0d5eba4805e41aaa3e7fe5e56c5e", null ],
+      [ "\u202Aoperator*", "_vector_8h.html#a7e7abb6e0f4590fb840e22f0bda2991e", null ],
+      [ "\u202Aoperator+", "_string_8h.html#a7c8f76a042aba7a24a13b908724a0373", null ],
       [ "\u202Aoperator<<", "_string_8h.html#a16cf69148d6888a3a15f7fbd879d4325", null ],
       [ "\u202Aoperator==", "_string_8h.html#a93165ff0bbfe3d5a7fe2c351a81cab29", null ],
       [ "\u202Aoperator>>", "_string_8h.html#a9593b30614c942154e11567af2cf0ae9", null ],

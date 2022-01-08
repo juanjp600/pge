@@ -119,7 +119,7 @@ $(document).ready(function(){initNavTree('_key_8h_source.html',''); initResizabl
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="struct_p_g_e_1_1_string_1_1_ordered_key.html">OrderedKey</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="struct_p_g_e_1_1_string_1_1_ordered_key.html">OrderedKey</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; str) : str(str) { }</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_string.html">String</a> str;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">const</span> std::weak_ordering operator&lt;=&gt;(<span class="keyword">const</span> <a class="code" href="struct_p_g_e_1_1_string_1_1_ordered_key.html">OrderedKey</a>&amp; other)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    std::weak_ordering operator&lt;=&gt;(<span class="keyword">const</span> <a class="code" href="struct_p_g_e_1_1_string_1_1_ordered_key.html">OrderedKey</a>&amp; other)<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordflow">return</span> str.compare(other.str);</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    }</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;};</div>
@@ -127,7 +127,7 @@ $(document).ready(function(){initNavTree('_key_8h_source.html',''); initResizabl
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">template</span>&lt;&gt; <span class="keyword">struct </span>std::hash&lt;PGE::<a class="code" href="struct_p_g_e_1_1_string_1_1_key.html">String::Key</a>&gt; {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">size_t</span> operator()(<span class="keyword">const</span> <a class="code" href="struct_p_g_e_1_1_string_1_1_key.html">PGE::String::Key</a>&amp; key)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">size_t</span> operator()(<span class="keyword">const</span> <a class="code" href="struct_p_g_e_1_1_string_1_1_key.html">PGE::String::Key</a>&amp; key)<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordflow">return</span> key.hash;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;};</div>

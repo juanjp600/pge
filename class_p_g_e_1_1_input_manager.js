@@ -1,7 +1,7 @@
 var class_p_g_e_1_1_input_manager =
 [
     [ "\u202A~InputManager", "class_p_g_e_1_1_input_manager.html#ab0220841c2594e098f439ee34a723c30", null ],
-    [ "\u202AconsumeMouseDelta", "class_p_g_e_1_1_input_manager.html#a0a053b1ded6d2d6109a07bec9089567a", null ],
+    [ "\u202AconsumeMouseDelta", "class_p_g_e_1_1_input_manager.html#a5a5b46f0d2f44b609df4b005acdc26f8", null ],
     [ "\u202AconsumeMouseWheelDelta", "class_p_g_e_1_1_input_manager.html#ae40460d7174be380ced27cc7d1c24387", null ],
     [ "\u202AgetClipboardText", "class_p_g_e_1_1_input_manager.html#a551806e7422c83420dfe5feafaea24b2", null ],
     [ "\u202AgetController", "class_p_g_e_1_1_input_manager.html#a5a3cf09a710c5a9f05eda1783382f13c", null ],
