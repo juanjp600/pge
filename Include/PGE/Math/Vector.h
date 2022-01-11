@@ -138,6 +138,9 @@ class Vector4f {
         constexpr Vector4f(const Vector3f& v3, float iw) : x(v3.x), y(v3.y), z(v3.z), w(iw) { }
         constexpr Vector4f(float ix, const Vector3f& v3) : x(ix), y(v3.x), z(v3.y), w(v3.z) { }
         constexpr Vector4f(const Vector2f& v2a, const Vector2f& v2b) : x(v2a.x), y(v2a.y), z(v2b.x), w(v2b.y) { }
+        constexpr Vector4f(float ix, float iy, const Vector2f& v2a) : x(ix), y(iy), z(v2a.x), w(v2a.y) { }
+        constexpr Vector4f(const Vector2f& v2a, float iz, float iw) : x(v2a.x), y(v2a.y), z(iz), w(iw) { }
+        constexpr Vector4f(float ix, const Vector2f& v2a, float iw) : x(ix), y(v2a.x), z(v2a.y), w(iw) { }
 
         constexpr bool operator==(const Vector4f& other) const = default;
 
