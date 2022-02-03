@@ -410,7 +410,7 @@ String::CoreInfo String::reallocate(int size, bool copyOldChs) {
     CoreInfo str;
     if (std::holds_alternative<LiteralData>(internalData)) {
         if (size <= SHORT_STR_CAPACITY) {
-            LiteralData& lit = std::get<LiteralData>(internalData);
+            LiteralData lit = std::get<LiteralData>(internalData);
             Metadata* data = lit.getData();
             int prevLen = data->strByteLength;
             StackAllocData& u = internalData.emplace<StackAllocData>();
