@@ -114,7 +114,7 @@ $(document).ready(function(){initNavTree('_resource_view_8h_source.html',''); in
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <a class="code" href="class_p_g_e_1_1_resource_view.html">ResourceView</a>(T res, <span class="keyword">const</span> std::list&lt;ResourceBase*&gt;::iterator&amp; iter) { internalResource = res; holdsResource = <span class="keyword">true</span>; iterator = iter; }</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="comment">// Force cast.</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keyword">const</span> T&amp; get()<span class="keyword"> const </span>{ asrt(holdsResource, <span class="stringliteral">&quot;Reference not filled&quot;</span>); <span class="keywordflow">return</span> internalResource; }</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keyword">const</span> T&amp; get()<span class="keyword"> const </span>{ PGE_ASSERT(holdsResource, <span class="stringliteral">&quot;Reference not filled&quot;</span>); <span class="keywordflow">return</span> internalResource; }</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keyword">operator</span> <span class="keyword">const</span> T&amp;() <span class="keyword">const</span> { <span class="keywordflow">return</span> get(); }</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>

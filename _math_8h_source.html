@@ -136,7 +136,7 @@ $(document).ready(function(){initNavTree('_math_8h_source.html',''); initResizab
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                value = -value;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            }</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        }</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        asrt(value != 0, <span class="stringliteral">&quot;value mustn&#39;t be 0&quot;</span>);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        PGE_ASSERT(value != 0, <span class="stringliteral">&quot;value mustn&#39;t be 0&quot;</span>);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        T ret = 0;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">for</span> (T i = 1; i &lt; value; i *= 2) { ret++; }</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">if</span> constexpr (std::numeric_limits&lt;T&gt;::is_signed) {</div>

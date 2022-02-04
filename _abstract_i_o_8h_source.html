@@ -119,9 +119,9 @@ $(document).ready(function(){initNavTree('_abstract_i_o_8h_source.html',''); ini
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        T stream;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <a class="code" href="class_p_g_e_1_1_abstract_i_o.html">AbstractIO</a>(<span class="keyword">const</span> <a class="code" href="class_p_g_e_1_1_file_path.html">PGE::FilePath</a>&amp; file, std::ios::openmode mode = std::ios::binary) {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            asrt(file.<a class="code" href="class_p_g_e_1_1_file_path.html#ae405fc81a9bb80d4b3bd0c0c23649816">isValid</a>(), INVALID_FILEPATH);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            PGE_ASSERT(file.<a class="code" href="class_p_g_e_1_1_file_path.html#ae405fc81a9bb80d4b3bd0c0c23649816">isValid</a>(), INVALID_FILEPATH);</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            stream.open(file.<a class="code" href="class_p_g_e_1_1_file_path.html#a9c721acdf541d8e06baea01b86a22211">str</a>().<a class="code" href="class_p_g_e_1_1_string.html#adc967f43aadf3ca053a0a9c9f4d7671c">cstr</a>(), mode);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            asrt(stream.is_open(), <span class="stringliteral">&quot;Could not open (file: \&quot;&quot;</span> + file.<a class="code" href="class_p_g_e_1_1_file_path.html#a9c721acdf541d8e06baea01b86a22211">str</a>() + <span class="stringliteral">&quot;\&quot;)&quot;</span>);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            PGE_ASSERT(stream.is_open(), <span class="stringliteral">&quot;Could not open (file: \&quot;&quot;</span> + file.<a class="code" href="class_p_g_e_1_1_file_path.html#a9c721acdf541d8e06baea01b86a22211">str</a>() + <span class="stringliteral">&quot;\&quot;)&quot;</span>);</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        }</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordtype">void</span> validate() {</div>
@@ -134,7 +134,7 @@ $(document).ready(function(){initNavTree('_abstract_i_o_8h_source.html',''); ini
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">   54</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_p_g_e_1_1_abstract_i_o.html#af252120aa787246f2c0f2df43dce0e4d">earlyClose</a>() {</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            stream.close();</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            asrt(stream.good(), BAD_STREAM);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            PGE_ASSERT(stream.good(), BAD_STREAM);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        }</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;};</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>

@@ -21,6 +21,7 @@ var hierarchy =
     [ "\u202APGE::StructuredData::ElemLayout::Entry", "struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_entry.html", null ],
     [ "\u202APGE::Exception", "class_p_g_e_1_1_exception.html", null ],
     [ "\u202APGE::FilePath", "class_p_g_e_1_1_file_path.html", null ],
+    [ "\u202APGE::FlagEnum< E >", "class_p_g_e_1_1_flag_enum.html", null ],
     [ "\u202APGE::Console::ForegroundColor", "struct_p_g_e_1_1_console_1_1_foreground_color.html", null ],
     [ "\u202APGE::Hasher", "class_p_g_e_1_1_hasher.html", null ],
     [ "\u202APGE::Console::Hidden", "struct_p_g_e_1_1_console_1_1_hidden.html", null ],

@@ -122,6 +122,7 @@ var namespaces_dup =
       [ "\u202ACircularArray", "class_p_g_e_1_1_circular_array.html", "class_p_g_e_1_1_circular_array" ],
       [ "\u202AMeta", "struct_p_g_e_1_1_meta.html", "struct_p_g_e_1_1_meta" ],
       [ "\u202ANegator", "struct_p_g_e_1_1_negator.html", "struct_p_g_e_1_1_negator" ],
+      [ "\u202AFlagEnum", "class_p_g_e_1_1_flag_enum.html", "class_p_g_e_1_1_flag_enum" ],
       [ "\u202APolymorphicHeap", "class_p_g_e_1_1_polymorphic_heap.html", "class_p_g_e_1_1_polymorphic_heap" ],
       [ "\u202ARange", "class_p_g_e_1_1_range.html", "class_p_g_e_1_1_range" ],
       [ "\u202AReference", "class_p_g_e_1_1_reference.html", "class_p_g_e_1_1_reference" ],
@@ -439,7 +440,6 @@ var namespaces_dup =
         [ "\u202AWindowed", "_graphics_8h.html#a7b8d26803e0de6aeecd63c92b0854a33ab13311ab51c4c34757f67f26580018dd", null ],
         [ "\u202AFullscreen", "_graphics_8h.html#a7b8d26803e0de6aeecd63c92b0854a33a0829ea6734059d66e6bf87096b215dc1", null ]
       ] ],
-      [ "\u202Aasrt", "_exception_8h.html#a8527b2a836becaa6729b15c2910f8bb1", null ],
       [ "\u202Aoperator\"\"_PGE", "namespace_p_g_e.html#aaafbb31ea8ac0db15f7870f87ae56254", null ],
       [ "\u202Aoperator\"\"_PGE", "namespace_p_g_e.html#a63ef98b6d4db7cf967adef26f22dc05d", null ],
       [ "\u202Aoperator\"\"_PGE", "namespace_p_g_e.html#a97b35b7c32bb14fc247c5a14d8d4a462", null ],
@@ -455,6 +455,7 @@ var namespaces_dup =
       [ "\u202AAllExcept", "_concepts_8h.html#a0c9093318c92ebc12266cb8caa591809", null ],
       [ "\u202AAny", "_concepts_8h.html#a64679c47798200552b4f2c7000a238c1", null ],
       [ "\u202AArithmetic", "_concepts_8h.html#afcfb3d935167439420ae8f42d972caba", null ],
+      [ "\u202AEnum", "_concepts_8h.html#ad8a4e7bcf2f863bdf80a3af08d0c5a80", null ],
       [ "\u202AEnumerable", "_concepts_8h.html#a9759ad6cd1a0f8f51ec5a9e106945ecb", null ],
       [ "\u202AFileStream", "_abstract_i_o_8h.html#ac6b9ba9acf1f426d48555c50f4747823", null ],
       [ "\u202AOneOf", "_concepts_8h.html#a392274878ae97540e3725ef8c135d254", null ],

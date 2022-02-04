@@ -147,7 +147,7 @@ $(document).ready(function(){initNavTree('_circular_array_8h_source.html',''); i
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        }</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        constexpr <span class="keywordtype">void</span> assertNotEmpty(std::source_location loc = std::source_location::current())<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            asrt(size() != 0, <span class="stringliteral">&quot;circular array was empty&quot;</span>, loc);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            PGE_ASSERT_AT(size() != 0, <span class="stringliteral">&quot;circular array was empty&quot;</span>, loc);</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        }</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        constexpr T&amp; frontInternal()<span class="keyword"> const </span>{</div>
@@ -161,7 +161,7 @@ $(document).ready(function(){initNavTree('_circular_array_8h_source.html',''); i
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        }</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        </div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        constexpr T&amp; indexInternal(<span class="keywordtype">size_t</span> index)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            asrt(index &lt; size(), <span class="stringliteral">&quot;index must be less than size&quot;</span>);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            PGE_ASSERT(index &lt; size(), <span class="stringliteral">&quot;index must be less than size&quot;</span>);</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keywordflow">return</span> elements[(beginIndex + index) % capacity];</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        }</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
@@ -173,7 +173,7 @@ $(document).ready(function(){initNavTree('_circular_array_8h_source.html',''); i
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                <span class="keywordtype">size_t</span> pos;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                constexpr <span class="keywordtype">void</span> assertPosValid(<span class="keywordtype">size_t</span> newPos, <span class="keyword">const</span> std::source_location&amp; = std::source_location::current())<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                    asrt(newPos &gt;= carr-&gt;beginIndex &amp;&amp; newPos &lt;= carr-&gt;endIndex, <span class="stringliteral">&quot;invalid index&quot;</span>);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                    PGE_ASSERT(newPos &gt;= carr-&gt;beginIndex &amp;&amp; newPos &lt;= carr-&gt;endIndex, <span class="stringliteral">&quot;invalid index&quot;</span>);</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                }</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="keyword">public</span>:</div>
@@ -198,18 +198,18 @@ $(document).ready(function(){initNavTree('_circular_array_8h_source.html',''); i
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                }</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                constexpr std::conditional&lt;CONST, const T&amp;, T&amp;&gt;::type operator*()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                    asrt(pos &lt; carr-&gt;endIndex, <span class="stringliteral">&quot;tried dereferencing end iterator&quot;</span>);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                    PGE_ASSERT(pos &lt; carr-&gt;endIndex, <span class="stringliteral">&quot;tried dereferencing end iterator&quot;</span>);</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                    <span class="keywordflow">return</span> carr-&gt;elements[pos % carr-&gt;capacity];</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                }</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                constexpr BasicIterator&amp; operator++() {</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                    asrt(pos &lt; carr-&gt;endIndex, <span class="stringliteral">&quot;Tried incrementing end iterator&quot;</span>);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                    PGE_ASSERT(pos &lt; carr-&gt;endIndex, <span class="stringliteral">&quot;Tried incrementing end iterator&quot;</span>);</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                    pos++;</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                }</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                constexpr BasicIterator&amp; operator--() {</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                    asrt(pos &gt; carr-&gt;beginIndex, <span class="stringliteral">&quot;Tried decrementing begin iterator&quot;</span>);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                    PGE_ASSERT(pos &gt; carr-&gt;beginIndex, <span class="stringliteral">&quot;Tried decrementing begin iterator&quot;</span>);</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                    pos--;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                }</div>
@@ -254,7 +254,7 @@ $(document).ready(function(){initNavTree('_circular_array_8h_source.html',''); i
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                }</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                constexpr i64 operator-(<span class="keyword">const</span> BasicIterator&amp; other)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                    asrt(carr == other.carr, <span class="stringliteral">&quot;Tried calculating iterator difference for different carrays&quot;</span>);</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                    PGE_ASSERT(carr == other.carr, <span class="stringliteral">&quot;Tried calculating iterator difference for different carrays&quot;</span>);</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                    <span class="keywordflow">return</span> (i64)pos - other.pos;</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                }</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>

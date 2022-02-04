@@ -112,11 +112,10 @@ $(document).ready(function(){initNavTree('_exception_8h_source.html',''); initRe
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        std::optional&lt;<a class="code" href="class_p_g_e_1_1_string.html">String</a>&gt; info;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;};</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;constexpr <span class="keywordtype">void</span> asrt(<span class="keywordtype">bool</span> predicate, const <a class="code" href="class_p_g_e_1_1_string.html">String</a>&amp; info, const std::source_location&amp; location = std::source_location::current()) {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordflow">if</span> (!predicate) {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordflow">throw</span> <a class="code" href="class_p_g_e_1_1_exception.html#ab324a0de749aaaa8efca0e65f4edae7c">Exception</a>(info, location);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    }</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">// TODO: No worky.</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"></span><span class="preprocessor">#define PGE_ASSERT(COND, INFO) if (!(COND)) throw PGE::Exception(INFO)</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#define PGE_ASSERT_AT(COND, INFO, WHERE) if (!(COND)) throw PGE::Exception(INFO, WHERE)</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
