@@ -49,10 +49,10 @@ ShaderDX11::ShaderDX11(const Graphics& gfx,const FilePath& path) : Shader(path),
     textureCount = reader.read<u32>();
 
     std::vector<byte> vertexShaderBytecode = (path + "vertex.dxbc").readBytes();
-    asrt(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
+    PGE_ASSERT(vertexShaderBytecode.size() > 0, "Vertex shader is empty (filename: " + path.str() + ")");
 
     std::vector<byte> fragmentShaderBytecode = (path + "fragment.dxbc").readBytes();
-    asrt(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str() + ")");
+    PGE_ASSERT(fragmentShaderBytecode.size() > 0, "Fragment shader is empty (filename: " + path.str() + ")");
 
     dxVertexShader = resourceManager.addNewResource<D3D11VertexShader>(dxDevice, vertexShaderBytecode);
     dxFragmentShader = resourceManager.addNewResource<D3D11PixelShader>(dxDevice, fragmentShaderBytecode);

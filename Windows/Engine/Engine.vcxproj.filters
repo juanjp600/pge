@@ -383,5 +383,8 @@
     <ClInclude Include="..\..\Include\PGE\Color\ConsoleColor.h">
       <Filter>Include\Color</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\PGE\Types\FlagEnum.h">
+      <Filter>Include\Types</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

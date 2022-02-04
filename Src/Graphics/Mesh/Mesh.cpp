@@ -7,7 +7,7 @@ using namespace PGE;
 void Mesh::setGeometry(StructuredData&& verts, PrimitiveType type, std::vector<u32>&& inds) {
     assertMaterialLayout(verts);
     using enum PrimitiveType;
-    asrt(type == LINE && inds.size() % 2 == 0 || type == TRIANGLE && inds.size() % 3 == 0,
+    PGE_ASSERT(type == LINE && inds.size() % 2 == 0 || type == TRIANGLE && inds.size() % 3 == 0,
             "Invalid primitive type or inadequate indices count");
 
     vertices = std::move(verts);
@@ -24,7 +24,7 @@ void Mesh::clearGeometry() {
 }
 
 void Mesh::setMaterial(Material* m) {
-    asrt(
+    PGE_ASSERT(
         m == nullptr ||
         vertices.getDataSize() <= 0 ||
         m->getShader().getVertexLayout() == vertices.getLayout(),
@@ -61,7 +61,7 @@ Mesh::Triangle::Triangle(u32 a, u32 b, u32 c) {
 }
 
 void Mesh::assertMaterialLayout(const StructuredData& verts, const std::source_location& location) {
-    asrt(material == nullptr
+    PGE_ASSERT_AT(material == nullptr
         || verts.getDataSize() <= 0
         || material->getShader().getVertexLayout() == verts.getLayout(),
         "Material must be set before geometry can be set", location);

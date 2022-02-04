@@ -10,6 +10,9 @@ template <typename R, typename T>
 concept Enumerable = std::ranges::range<R>
 			      && std::same_as<std::ranges::range_value_t<R>, T>;
 
+template <typename E>
+concept Enum = std::is_enum<E>::value;
+
 struct Meta { Meta() = delete; };
 
 template <template <typename...> typename ToNegate>

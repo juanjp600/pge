@@ -50,7 +50,7 @@ class ReflectionInfo {
     public:
         ReflectionInfo(ID3DBlob* shader) {
             HRESULT hr = D3DReflect(shader->GetBufferPointer(), shader->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection);
-            asrt(SUCCEEDED(hr), "D3DReflect failed: HRESULT " + String::from(hr));
+            PGE_ASSERT(SUCCEEDED(hr), "D3DReflect failed: HRESULT " + String::from(hr));
         }
 
         ReflectionInfo(const ReflectionInfo& other) {
@@ -119,7 +119,7 @@ static void generateDXReflectionInformation(const FilePath& path, const CompileR
         vsInfo->GetInputParameterDesc(i, &vsParamDesc);
 
         auto it = vsInputStruct.findMember(vsParamDesc.SemanticName, vsParamDesc.SemanticIndex);
-        asrt(it != vsInputStruct.members.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::from(vsParamDesc.SemanticIndex) + ")");
+        PGE_ASSERT(it != vsInputStruct.members.end(), "Couldn't find semantic (" + String(vsParamDesc.SemanticName) + String::from(vsParamDesc.SemanticIndex) + ")");
         writer.write<String>(it->name);
         writer.write<String>(vsParamDesc.SemanticName);
         writer.write<byte>((byte)vsParamDesc.SemanticIndex);

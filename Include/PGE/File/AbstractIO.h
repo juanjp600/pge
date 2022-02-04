@@ -31,9 +31,9 @@ class AbstractIO {
         T stream;
 
         AbstractIO(const PGE::FilePath& file, std::ios::openmode mode = std::ios::binary) {
-            asrt(file.isValid(), INVALID_FILEPATH);
+            PGE_ASSERT(file.isValid(), INVALID_FILEPATH);
             stream.open(file.str().cstr(), mode);
-            asrt(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
+            PGE_ASSERT(stream.is_open(), "Could not open (file: \"" + file.str() + "\")");
         }
 
         void validate() {
@@ -53,7 +53,7 @@ class AbstractIO {
         /// @throws #PGE::Exception if closing was not wholly successful.
         void earlyClose() {
             stream.close();
-            asrt(stream.good(), BAD_STREAM);
+            PGE_ASSERT(stream.good(), BAD_STREAM);
         }
 };
 

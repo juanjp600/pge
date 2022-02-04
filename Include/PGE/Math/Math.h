@@ -53,7 +53,7 @@ namespace Math {
                 value = -value;
             }
         }
-        asrt(value != 0, "value mustn't be 0");
+        PGE_ASSERT(value != 0, "value mustn't be 0");
         T ret = 0;
         for (T i = 1; i < value; i *= 2) { ret++; }
         if constexpr (std::numeric_limits<T>::is_signed) {

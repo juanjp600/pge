@@ -49,7 +49,7 @@ int String::BasicIterator::operator-(const String::BasicIterator& other) const {
 }
 
 char16 String::BasicIterator::operator*() const {
-    asrt(index >= 0 && index < ref->byteLength(), "Tried dereferencing invalid iterator");
+    PGE_ASSERT(index >= 0 && index < ref->byteLength(), "Tried dereferencing invalid iterator");
     if (_ch == L'\uFFFF') {
         _ch = Unicode::utf8ToWChar(ref->cstr() + index);
     }
@@ -75,25 +75,25 @@ int String::BasicIterator::getPosition() const {
 }
 
 String::Iterator& String::Iterator::operator++() {
-    asrt(index < ref->byteLength(), "Tried incrementing end iterator");
+    PGE_ASSERT(index < ref->byteLength(), "Tried incrementing end iterator");
     increment();
     return *this;
 }
 
 String::Iterator& String::Iterator::operator--() {
-    asrt(index > 0, "Tried decrementing begin iterator");
+    PGE_ASSERT(index > 0, "Tried decrementing begin iterator");
     decrement();
     return *this;
 }
 
 String::ReverseIterator& String::ReverseIterator::operator++() {
-    asrt(index >= 0, "Tried decrementing end reverse iterator");
+    PGE_ASSERT(index >= 0, "Tried decrementing end reverse iterator");
     decrement();
     return *this;
 }
 
 String::ReverseIterator& String::ReverseIterator::operator--() {
-    asrt(index < String::Iterator::end(*ref).index, "Tried incrementing begin reverse iterator");
+    PGE_ASSERT(index < String::Iterator::end(*ref).index, "Tried incrementing begin reverse iterator");
     increment();
     return *this;
 }
@@ -101,11 +101,11 @@ String::ReverseIterator& String::ReverseIterator::operator--() {
 const inline String INVALID_ITERATOR = "Tried reversing invalid iterator";
 
 void String::Iterator::validate() {
-    asrt(index >= 0, INVALID_ITERATOR);
+    PGE_ASSERT(index >= 0, INVALID_ITERATOR);
 }
 
 void String::ReverseIterator::validate() {
-    asrt(index < ref->byteLength(), INVALID_ITERATOR);
+    PGE_ASSERT(index < ref->byteLength(), INVALID_ITERATOR);
 }
 
 String::Iterator String::Iterator::begin(const String& str) {
@@ -731,7 +731,7 @@ int String::length() const {
 
 int String::byteLength() const {
     Metadata* data = getData();
-    asrt(data->strByteLength >= 0, "String byte length must always be valid");
+    PGE_ASSERT(data->strByteLength >= 0, "String byte length must always be valid");
     return data->strByteLength;
 }
 
@@ -760,7 +760,7 @@ String::ReverseIterator String::findLast(const String& fnd, int fromEnd) const {
 }
 
 String::ReverseIterator String::findLast(const String& fnd, const ReverseIterator& from) const {
-    asrt(!fnd.isEmpty(), EMPTY_FIND);
+    PGE_ASSERT(!fnd.isEmpty(), EMPTY_FIND);
     String::ReverseIterator it = from;
     while (it.getBytePosition() > byteLength() - fnd.byteLength()) {
         it++;
@@ -785,7 +785,7 @@ String String::substr(const Iterator& start) const {
 }
 
 String String::substr(const Iterator& start, const Iterator& to) const {
-    asrt(start.getBytePosition() <= to.getBytePosition(),
+    PGE_ASSERT(start.getBytePosition() <= to.getBytePosition(),
         "start iterator can't come after to iterator (start: " + from(start.getBytePosition())
         + "; to: " + from(to.getBytePosition()) + "; str: " + *this + ")");
 
@@ -941,7 +941,7 @@ String String::reverse() const {
 }
 
 String String::repeat(int count, const String& separator) const {
-    asrt(count >= 0, "count must be non-negative");
+    PGE_ASSERT(count >= 0, "count must be non-negative");
     if (count == 0) { return String(); }
     int curLength = byteLength();
     int sepLength = separator.byteLength();

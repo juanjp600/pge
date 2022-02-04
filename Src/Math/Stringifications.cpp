@@ -1,6 +1,7 @@
 #include <PGE/String/String.h>
 
 #include <PGE/Math/Vector.h>
+#include <PGE/Math/Matrix.h>
 
 using namespace PGE;
 
@@ -23,4 +24,17 @@ template <> String String::from(const Vector4f& vec) {
 
 template <> String String::from(const Vector2i& vec) {
 	return concat<Vector2i, &Vector2i::x, &Vector2i::y>(vec);
+}
+
+template <> String String::from(const Matrix4x4f& mat) {
+	String ret{'\n'};
+	for (int i : Range(4)) {
+		ret += "(";
+		for (int j : Range(4)) {
+			if (j != 0) { ret += ", "; }
+			ret += String::from(mat[i][j]);
+		}
+		ret += ")\n";
+	}
+	return ret;
 }

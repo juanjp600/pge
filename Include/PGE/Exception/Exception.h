@@ -28,11 +28,11 @@ class Exception {
         std::optional<String> info;
 };
 
-constexpr void asrt(bool predicate, const String& info, const std::source_location& location = std::source_location::current()) {
-    if (!predicate) {
-        throw Exception(info, location);
-    }
-}
+// TODO: No worky.
+/// Asserts that COND evaluates to true and throws an exception containing INFO otherwise.
+#define PGE_ASSERT(COND, INFO) if (!(COND)) throw PGE::Exception(INFO)
+
+#define PGE_ASSERT_AT(COND, INFO, WHERE) if (!(COND)) throw PGE::Exception(INFO, WHERE)
 
 }
 
