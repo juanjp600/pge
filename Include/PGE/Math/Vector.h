@@ -44,7 +44,7 @@ class Vector2f {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector2f(); }
             if (Math::equalFloats(1.f, lenSqr)) { }
-            return *this / sqrt(lenSqr);
+            return *this / Math::sqrt(lenSqr);
         }
 
         constexpr Vector2f reflect(const Vector2f& normal) const {
@@ -54,10 +54,10 @@ class Vector2f {
         }
 
         constexpr float lengthSquared() const { return x * x + y * y; }
-        inline float length() const { return sqrt(lengthSquared()); }
+        constexpr float length() const { return Math::sqrt(lengthSquared()); }
 
         constexpr float distanceSquared(const Vector2f& other) const { return (*this - other).lengthSquared(); }
-        inline float distance(const Vector2f& other) const { return sqrt(distanceSquared(other)); }
+        constexpr float distance(const Vector2f& other) const { return Math::sqrt(distanceSquared(other)); }
 };
 namespace Vector2fs {
     constexpr Vector2f ZERO(0.f);
@@ -106,7 +106,7 @@ class Vector3f {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector3f(); }
             if (Math::equalFloats(1.f, lenSqr)) { return *this; }
-            return *this / sqrt(lenSqr);
+            return *this / Math::sqrt(lenSqr);
         }
 
         constexpr Vector3f reflect(const Vector3f& normal) const {
@@ -116,10 +116,10 @@ class Vector3f {
         }
 
         constexpr float lengthSquared() const { return x * x + y * y + z * z; }
-        inline float length() const { return sqrt(lengthSquared()); }
+        constexpr float length() const { return Math::sqrt(lengthSquared()); }
 
         constexpr float distanceSquared(const Vector3f& other) const { return (*this - other).lengthSquared(); }
-        inline float distance(const Vector3f& other) const { return sqrt(distanceSquared(other)); }
+        constexpr float distance(const Vector3f& other) const { return Math::sqrt(distanceSquared(other)); }
 };
 namespace Vector3fs {
     constexpr Vector3f ZERO(0.f);
@@ -171,7 +171,7 @@ class Vector4f {
             float lenSqr = lengthSquared();
             if (Math::equalFloats(0.f, lenSqr)) { return Vector4f(); }
             if (Math::equalFloats(1.f, lenSqr)) { }
-            return *this / sqrt(lenSqr);
+            return *this / Math::sqrt(lenSqr);
         }
 
         constexpr Vector4f reflect(const Vector4f& normal) const {
@@ -181,10 +181,10 @@ class Vector4f {
         }
 
         constexpr float lengthSquared() const { return x * x + y * y + z * z + w * w; }
-        inline float length() const { return sqrt(lengthSquared()); }
+        constexpr float length() const { return Math::sqrt(lengthSquared()); }
 
         constexpr float distanceSquared(const Vector4f& other) const { return (*this - other).lengthSquared(); }
-        inline float distance(const Vector4f& other) const { return sqrt(distanceSquared(other)); }
+        constexpr float distance(const Vector4f& other) const { return Math::sqrt(distanceSquared(other)); }
 };
 namespace Vector4fs {
     constexpr Vector4f ZERO(0.f);
@@ -224,13 +224,13 @@ class Vector2i {
         constexpr Vector2i entrywiseProduct(const Vector2i& other) const { return Vector2i(x * other.x, y * other.y); }
 
         constexpr i32 lengthSquared() const { return x * x + y * y; }
-        // Sacrificing vendor specific sqrt optimizations are not worth the constexpr here.
+        // Sacrificing vendor specific Math::sqrt optimizations are not worth the constexpr here.
         // Fuck you, C++ standard!
         // TODO: C++23 if consteval
-        inline float length() const { return sqrt((float)lengthSquared()); }
+        constexpr float length() const { return Math::sqrt((float)lengthSquared()); }
 
         constexpr i32 distanceSquared(const Vector2i& other) const { return ((*this) - other).lengthSquared(); }
-        inline float distance(const Vector2i& other) const { return sqrt((float)distanceSquared(other)); }
+        constexpr float distance(const Vector2i& other) const { return Math::sqrt((float)distanceSquared(other)); }
 };
 namespace Vector2is {
     constexpr Vector2i ZERO(0);

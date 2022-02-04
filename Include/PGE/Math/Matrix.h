@@ -40,46 +40,44 @@ class Matrix4x4f {
                 0.f, 0.f, 0.f, 1.f
             );
         }
-        // TODO: Custom trigonometric function implementation?
-        static inline Matrix4x4f rotate(const Vector3f& rotation) {
-            float sinPitch = sin(rotation.x);
-            float sinYaw = sin(rotation.y);
-            float sinRoll = sin(rotation.z);
-            float cosPitch = cos(rotation.x);
-            float cosYaw = cos(rotation.y);
-            float cosRoll = cos(rotation.z);
 
-            Matrix4x4f pitchMat(
+        static constexpr Matrix4x4f rotatePitch(float rot) {
+            float sinV = Math::sin(rot);
+            float cosV = Math::cos(rot);
+            return Matrix4x4f(
                 1.f, 0.f, 0.f, 0.f,
-                0.f, cosPitch, -sinPitch, 0.f,
-                0.f, sinPitch, cosPitch, 0.f,
+                0.f, cosV, -sinV, 0.f,
+                0.f, sinV, cosV, 0.f,
                 0.f, 0.f, 0.f, 1.f
             );
+        }
 
-            Matrix4x4f yawMat(
-                cosYaw, 0.f, sinYaw, 0.f,
+        static constexpr Matrix4x4f rotateYaw(float rot) {
+            float sinV = Math::sin(rot);
+            float cosV = Math::cos(rot);
+            return Matrix4x4f(
+                cosV, 0.f, sinV, 0.f,
                 0.f, 1.f, 0.f, 0.f,
-                -sinYaw, 0.f, cosYaw, 0.f,
+                -sinV, 0.f, cosV, 0.f,
                 0.f, 0.f, 0.f, 1.f
             );
+        }
 
-            Matrix4x4f rollMat(
-                cosRoll, -sinRoll, 0.f, 0.f,
-                sinRoll, cosRoll, 0.f, 0.f,
+        static constexpr Matrix4x4f rotateRoll(float rot) {
+            float sinV = Math::sin(rot);
+            float cosV = Math::cos(rot);
+            return Matrix4x4f(
+                cosV, -sinV, 0.f, 0.f,
+                sinV, cosV, 0.f, 0.f,
                 0.f, 0.f, 1.f, 0.f,
                 0.f, 0.f, 0.f, 1.f
             );
-
-            return yawMat * pitchMat * rollMat;
         }
 
-        static constexpr Matrix4x4f lookAt(const Vector3f& from, const Vector3f& to, const Vector3f& fixedDir = Vector3f(0.f, 1.f, 0.f)) {
-            Vector3f forward = (from - to).normalize();
-            Vector3f right = fixedDir.crossProduct(forward).normalize();
-            Vector3f up = forward.crossProduct(right).normalize();
-            return Matrix4x4f(
-                Vector4f(right, 0.f), Vector4f(up, 0.f), Vector4f(forward, 0.f), Vector4f(0.f, 0.f, 0.f, 1.f)
-            );
+        static constexpr Matrix4x4f rotate(const Vector3f& rotation) {
+            return rotateYaw(rotation.y) *
+                   rotatePitch(rotation.x) *
+                   rotateRoll(rotation.z);
         }
 
         static constexpr Matrix4x4f scale(const Vector3f& scale) {
@@ -88,6 +86,15 @@ class Matrix4x4f {
                 0.f, scale.y, 0.f, 0.f,
                 0.f, 0.f, scale.z, 0.f,
                 0.f, 0.f, 0.f, 1.f
+            );
+        }
+
+        static constexpr Matrix4x4f lookAt(const Vector3f& from, const Vector3f& to, const Vector3f& fixedDir = Vector3f(0.f, 1.f, 0.f)) {
+            Vector3f forward = (from - to).normalize();
+            Vector3f right = fixedDir.crossProduct(forward).normalize();
+            Vector3f up = forward.crossProduct(right).normalize();
+            return Matrix4x4f(
+                Vector4f(right, 0.f), Vector4f(up, 0.f), Vector4f(forward, 0.f), Vector4f(0.f, 0.f, 0.f, 1.f)
             );
         }
 
@@ -115,9 +122,9 @@ class Matrix4x4f {
 
         /// Constructs a perspective projection matrix.
         /// Horizontal field of view must be provided in radians.
-        static inline Matrix4x4f constructPerspectiveMat(float horizontalFovRad, float aspectRatio, float nearZ, float farZ) {
+        static constexpr Matrix4x4f constructPerspectiveMat(float horizontalFovRad, float aspectRatio, float nearZ, float farZ) {
             float halfFov = horizontalFovRad * 0.5f;
-            float cotanHalfFov = cos(halfFov) / sin(halfFov);
+            float cotanHalfFov = Math::cos(halfFov) / Math::sin(halfFov);
 
             return Matrix4x4f(
                 cotanHalfFov / aspectRatio, 0.f, 0.f, 0.f,

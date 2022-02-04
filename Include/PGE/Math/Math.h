@@ -1,6 +1,7 @@
 #ifndef PGE_MATH_H_INCLUDED
 #define PGE_MATH_H_INCLUDED
 
+#include <cmath>
 #include <concepts>
 #include <numeric>
 
@@ -59,6 +60,72 @@ namespace Math {
             return ret * (flip ? -1 : 1);
         } else {
             return ret;
+        }
+    }
+
+    template <std::floating_point F>
+    constexpr F sin(F value) {
+        if (std::is_constant_evaluated()) {
+            if (value < 0) { value = -value + PI; }
+            while (value >= 2 * PI) {
+                value -= 2 * PI;
+            }
+            // Taylor series
+            F oldV;
+            F newV = value;
+            uint64_t i = 0;
+            F running = value;
+            do {
+                oldV = newV;
+                i += 2;
+                running *= value * value / (i * (i + 1));
+                if (i % 4 != 0) { newV -= running; }
+                else { newV += running; }
+            } while (oldV != newV);
+            return newV;
+        } else {
+            return std::sin(value);
+        }
+    }
+
+    template <std::floating_point F>
+    constexpr F cos(F value) {
+        if (std::is_constant_evaluated()) {
+            if (value < 0) { value = -value + PI; }
+            while (value >= 2 * PI) {
+                value -= 2 * PI;
+            }
+            // Taylor series
+            F oldV;
+            F newV = 1;
+            uint64_t i = 0;
+            F running = 1;
+            do {
+                oldV = newV;
+                i += 2;
+                running *= value * value / (i * (i - 1));
+                if (i % 4 != 0) { newV -= running; }
+                else { newV += running; }
+            } while (oldV != newV);
+            return newV;
+        } else {
+            return std::cos(value);
+        }
+    }
+
+    template <std::floating_point F>
+    constexpr F sqrt(F value) {
+        if (std::is_constant_evaluated()) {
+            // Babylonian method
+            F oldV;
+            F newV = value;
+            do {
+                oldV = newV;
+                newV = (newV + value / newV) / 2;
+            } while (oldV != newV);
+            return newV;
+        } else {
+            return std::sqrt(value);
         }
     }
 }
