@@ -5,6 +5,8 @@
 #include <concepts>
 #include <numeric>
 
+#include <PGE/Exception/Exception.h>
+
 namespace PGE {
 
 /// Various mathematical utility that is either not present,
@@ -64,8 +66,20 @@ namespace Math {
     }
 
     template <std::floating_point F>
+    constexpr bool isNaN(F value) {
+        return value != value;
+    }
+
+    template <typename T>
+    constexpr T abs(T value) {
+        return value > 0 ? value : -value;
+    }
+
+    template <std::floating_point F>
     constexpr F sin(F value) {
         if (std::is_constant_evaluated()) {
+            PGE_ASSERT(!isNaN(value), "value is NaN");
+            PGE_ASSERT(abs(value) != std::numeric_limits<F>::infinity(), "value is infinity");
             if (value < 0) { value = -value + PI; }
             while (value >= 2 * PI) {
                 value -= 2 * PI;
@@ -91,7 +105,9 @@ namespace Math {
     template <std::floating_point F>
     constexpr F cos(F value) {
         if (std::is_constant_evaluated()) {
-            if (value < 0) { value = -value + PI; }
+            PGE_ASSERT(!isNaN(value), "value is NaN");
+            PGE_ASSERT(abs(value) != std::numeric_limits<F>::infinity(), "value is infinity");
+            if (value < 0) { value = -value; }
             while (value >= 2 * PI) {
                 value -= 2 * PI;
             }
@@ -116,6 +132,9 @@ namespace Math {
     template <std::floating_point F>
     constexpr F sqrt(F value) {
         if (std::is_constant_evaluated()) {
+            PGE_ASSERT(!isNaN(value), "value is NaN");
+            PGE_ASSERT(abs(value) != std::numeric_limits<F>::infinity(), "value is infinity");
+            PGE_ASSERT(value > 0, "value must be > 0");
             // Babylonian method
             F oldV;
             F newV = value;
