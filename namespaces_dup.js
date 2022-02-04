@@ -37,8 +37,8 @@ var namespaces_dup =
         [ "\u202Aquit", "_init_8h.html#a50284fac91101dee5be54880c5ef63e5", null ]
       ] ],
       [ "\u202AInterpolator", null, [
-        [ "\u202Acerp", "_interpolator_8h.html#af5ee76925661cc97371ec5307d903492", null ],
-        [ "\u202Alerp", "_interpolator_8h.html#abc47cc8bf3ea90b9bdef0e0e86356cf6", null ],
+        [ "\u202Acerp", "_interpolator_8h.html#a524b4b5ec5882542cc46d0cf9ef5f2da", null ],
+        [ "\u202Alerp", "_interpolator_8h.html#a49e4019dd4c45c89c60a8d6a3f10793c", null ],
         [ "\u202AInterpolatable", "_interpolator_8h.html#a1cdfb4545acf8f8a30611fbf1530d794", null ]
       ] ],
       [ "\u202AMath", "namespace_p_g_e_1_1_math.html", [
