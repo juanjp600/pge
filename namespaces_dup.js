@@ -43,10 +43,13 @@ var namespaces_dup =
       ] ],
       [ "\u202AMath", "namespace_p_g_e_1_1_math.html", [
         [ "\u202AceilLog2", "namespace_p_g_e_1_1_math.html#a190007c420b6ccf08dfc2410cb65ebb8", null ],
+        [ "\u202Acos", "namespace_p_g_e_1_1_math.html#ad39ffcf6eebcdc9702f4dfecef562e3c", null ],
         [ "\u202AdegToRad", "namespace_p_g_e_1_1_math.html#a24ce35a5ad40879ca3a9498e73ecc606", null ],
         [ "\u202AequalFloats", "namespace_p_g_e_1_1_math.html#a254393cd3a914e459f8ecedf76802e77", null ],
         [ "\u202AradToDeg", "namespace_p_g_e_1_1_math.html#aec5240ab51ce3a2760c11ebe761950f4", null ],
         [ "\u202AroundUp", "namespace_p_g_e_1_1_math.html#ad532a91076f09c19454ff67dec3cee66", null ],
+        [ "\u202Asin", "namespace_p_g_e_1_1_math.html#a57c78339972e4128885c620496da95e8", null ],
+        [ "\u202Asqrt", "namespace_p_g_e_1_1_math.html#abfa35f0500b26e60125bdb618114d91a", null ],
         [ "\u202AE", "namespace_p_g_e_1_1_math.html#ab76aa745b2e0aa7029e7c0c832ed70e3", null ],
         [ "\u202AEPSILON_DEFAULT", "namespace_p_g_e_1_1_math.html#a6b04fd48d78229387dde0bddbe3d5c05", null ],
         [ "\u202API", "namespace_p_g_e_1_1_math.html#a24b876f1c65434d6645c0b87c252dbab", null ]
