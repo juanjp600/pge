@@ -357,8 +357,7 @@ void InputManagerInternal::update() {
     }
 
     while (((SysEventsInternal::SubscriberInternal*)textSubscriber)->popEvent(event)) {
-        SDL_TextInputEvent txtEvent = event.text;
-        textInput = textInput + txtEvent.text;
+        textInput += (const char*)event.text.text;
     }
 }
 
