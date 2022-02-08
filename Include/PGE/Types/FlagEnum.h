@@ -6,36 +6,33 @@
 namespace PGE {
 
 template <Enum E>
-class FlagEnum {
-	public:
-		using UnderlyingType = std::underlying_type<E>::type;
+struct IsFlagEnum : Meta, std::false_type { };
 
-	private:
-		E value;
-	
-		FlagEnum(UnderlyingType val) : value((E)val) { }
-
-	public:
-		FlagEnum() = default;
-		FlagEnum(E e) : value(e) { }
-
-		operator bool() const { return (bool)value; }
-
-		explicit operator UnderlyingType() const { return value; }
-
-		FlagEnum operator~() const { return ~(UnderlyingType)value; }
-
-		FlagEnum operator&(FlagEnum other) const { return (UnderlyingType)value & (UnderlyingType)other.value; }
-		FlagEnum operator|(FlagEnum other) const { return (UnderlyingType)value | (UnderlyingType)other.value; }
-		FlagEnum operator^(FlagEnum other) const { return (UnderlyingType)value ^ (UnderlyingType)other.value; }
-
-		void operator&=(FlagEnum other) { (UnderlyingType&)value &= (UnderlyingType)other.value; }
-		void operator|=(FlagEnum other) { (UnderlyingType&)value |= (UnderlyingType)other.value; }
-		void operator^=(FlagEnum other) { (UnderlyingType&)value ^= (UnderlyingType)other.value; }
-
-		bool operator==(const FlagEnum&) const = default;
-};
+template <typename E>
+concept FlagEnum = Enum<E> && IsFlagEnum<E>::value;
 
 }
+
+template <PGE::FlagEnum E> bool operator!(E e) { return !(typename std::underlying_type<E>::type)e; }
+template <PGE::FlagEnum E>
+constexpr E operator~(E e) { return (E)~(std::underlying_type_t<E>)e; }
+template <PGE::FlagEnum E>
+constexpr E operator&(E lhs, E rhs) {
+	using UnderlyingType = std::underlying_type<E>::type;
+	return (E)((UnderlyingType)lhs & (UnderlyingType)rhs);
+}
+template <PGE::FlagEnum E>
+constexpr E operator|(E lhs, E rhs) {
+	using UnderlyingType = std::underlying_type<E>::type;
+	return (E)((UnderlyingType)lhs | (UnderlyingType)rhs);
+}
+template <PGE::FlagEnum E>
+constexpr E operator^(E lhs, E rhs) {
+	using UnderlyingType = std::underlying_type<E>::type;
+	return (E)((UnderlyingType)lhs ^ (UnderlyingType)rhs);
+}
+template <PGE::FlagEnum E> constexpr void operator&=(E& lhs, E rhs) { lhs = lhs & rhs; }
+template <PGE::FlagEnum E> constexpr void operator|=(E& lhs, E rhs) { lhs = lhs | rhs; }
+template <PGE::FlagEnum E> constexpr void operator^=(E& lhs, E rhs) { lhs = lhs ^ rhs; }
 
 #endif // PGE_FLAGENUM_H_INCLUDED

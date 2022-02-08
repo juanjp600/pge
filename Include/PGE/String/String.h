@@ -14,6 +14,7 @@
 
 #include <PGE/Types/Types.h>
 #include <PGE/Types/Range.h>
+#include <PGE/Types/FlagEnum.h>
 
 namespace PGE {
 
@@ -174,6 +175,11 @@ class String {
 
         template <typename T>
         static String from(const T& t);
+
+        template <FlagEnum E>
+        static String from(const E& e) {
+            return String::from((std::underlying_type_t<E>)e);
+        }
 
         enum class Casing {
             UPPER,
