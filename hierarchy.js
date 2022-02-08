@@ -20,8 +20,10 @@ var hierarchy =
     [ "\u202APGE::StructuredData::ElemLayout", "class_p_g_e_1_1_structured_data_1_1_elem_layout.html", null ],
     [ "\u202APGE::StructuredData::ElemLayout::Entry", "struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_entry.html", null ],
     [ "\u202APGE::Exception", "class_p_g_e_1_1_exception.html", null ],
+    [ "\u202Astd::false_type", null, [
+      [ "\u202APGE::IsFlagEnum< E >", "struct_p_g_e_1_1_is_flag_enum.html", null ]
+    ] ],
     [ "\u202APGE::FilePath", "class_p_g_e_1_1_file_path.html", null ],
-    [ "\u202APGE::FlagEnum< E >", "class_p_g_e_1_1_flag_enum.html", null ],
     [ "\u202APGE::Console::ForegroundColor", "struct_p_g_e_1_1_console_1_1_foreground_color.html", null ],
     [ "\u202APGE::Hasher", "class_p_g_e_1_1_hasher.html", null ],
     [ "\u202APGE::Console::Hidden", "struct_p_g_e_1_1_console_1_1_hidden.html", null ],
@@ -35,6 +37,7 @@ var hierarchy =
     [ "\u202APGE::StructuredData::ElemLayout::LocationAndSize", "struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_location_and_size.html", null ],
     [ "\u202APGE::Matrix4x4f", "class_p_g_e_1_1_matrix4x4f.html", null ],
     [ "\u202APGE::Meta", "struct_p_g_e_1_1_meta.html", [
+      [ "\u202APGE::IsFlagEnum< E >", "struct_p_g_e_1_1_is_flag_enum.html", null ],
       [ "\u202APGE::Negator< ToNegate >", "struct_p_g_e_1_1_negator.html", null ]
     ] ],
     [ "\u202APGE::Texture::Mipmap", "struct_p_g_e_1_1_texture_1_1_mipmap.html", null ],

@@ -124,7 +124,7 @@ var namespaces_dup =
       [ "\u202ACircularArray", "class_p_g_e_1_1_circular_array.html", "class_p_g_e_1_1_circular_array" ],
       [ "\u202AMeta", "struct_p_g_e_1_1_meta.html", "struct_p_g_e_1_1_meta" ],
       [ "\u202ANegator", "struct_p_g_e_1_1_negator.html", "struct_p_g_e_1_1_negator" ],
-      [ "\u202AFlagEnum", "class_p_g_e_1_1_flag_enum.html", "class_p_g_e_1_1_flag_enum" ],
+      [ "\u202AIsFlagEnum", "struct_p_g_e_1_1_is_flag_enum.html", null ],
       [ "\u202APolymorphicHeap", "class_p_g_e_1_1_polymorphic_heap.html", "class_p_g_e_1_1_polymorphic_heap" ],
       [ "\u202ARange", "class_p_g_e_1_1_range.html", "class_p_g_e_1_1_range" ],
       [ "\u202AReference", "class_p_g_e_1_1_reference.html", "class_p_g_e_1_1_reference" ],
@@ -460,6 +460,7 @@ var namespaces_dup =
       [ "\u202AEnum", "_concepts_8h.html#ad8a4e7bcf2f863bdf80a3af08d0c5a80", null ],
       [ "\u202AEnumerable", "_concepts_8h.html#a9759ad6cd1a0f8f51ec5a9e106945ecb", null ],
       [ "\u202AFileStream", "_abstract_i_o_8h.html#ac6b9ba9acf1f426d48555c50f4747823", null ],
+      [ "\u202AFlagEnum", "_flag_enum_8h.html#a5dca28d8b1aec6ca73a605419ac8e387", null ],
       [ "\u202AOneOf", "_concepts_8h.html#a392274878ae97540e3725ef8c135d254", null ],
       [ "\u202AStructuredType", "_structured_data_8h.html#ada924621754a0850cf8de6c546d60a79", null ],
       [ "\u202AValidBaseForType", "_string_8h.html#a9dd9d338dff6e547a9a684f7931f7bee", null ]
