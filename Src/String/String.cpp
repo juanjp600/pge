@@ -435,7 +435,8 @@ String::CoreInfo String::reallocate(int size, bool copyOldChs) {
     }
 
     int targetCapacity = 1;
-    while (targetCapacity < size) { targetCapacity <<= 1; }
+    while (targetCapacity < size && targetCapacity != 0) { targetCapacity <<= 1; }
+    PGE_ASSERT(targetCapacity != 0, "Max string length exceeded!");
 
     std::unique_ptr<char[]> newChs = std::make_unique<char[]>(targetCapacity);
     if (copyOldChs) {
