@@ -27,16 +27,19 @@ bool BinaryReader::tryRead(T& out) {
 template bool BinaryReader::tryRead(T& out); \
 template void BinaryWriter::write(const T& val)
 
-PGE_IO_DEFAULT_SPEC(byte);
+PGE_IO_DEFAULT_SPEC(signed char);
 PGE_IO_DEFAULT_SPEC(short);
 PGE_IO_DEFAULT_SPEC(int);
 PGE_IO_DEFAULT_SPEC(long);
 PGE_IO_DEFAULT_SPEC(long long);
+PGE_IO_DEFAULT_SPEC(unsigned char);
 PGE_IO_DEFAULT_SPEC(unsigned short);
 PGE_IO_DEFAULT_SPEC(unsigned int);
 PGE_IO_DEFAULT_SPEC(unsigned long);
 PGE_IO_DEFAULT_SPEC(unsigned long long);
 PGE_IO_DEFAULT_SPEC(float);
+PGE_IO_DEFAULT_SPEC(double);
+PGE_IO_DEFAULT_SPEC(long double);
 PGE_IO_DEFAULT_SPEC(Color);
 PGE_IO_DEFAULT_SPEC(Vector2f);
 PGE_IO_DEFAULT_SPEC(Vector3f);
