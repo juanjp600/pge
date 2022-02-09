@@ -37,8 +37,10 @@ var hierarchy =
     [ "\u202APGE::StructuredData::ElemLayout::LocationAndSize", "struct_p_g_e_1_1_structured_data_1_1_elem_layout_1_1_location_and_size.html", null ],
     [ "\u202APGE::Matrix4x4f", "class_p_g_e_1_1_matrix4x4f.html", null ],
     [ "\u202APGE::Meta", "struct_p_g_e_1_1_meta.html", [
+      [ "\u202APGE::False", "struct_p_g_e_1_1_false.html", null ],
       [ "\u202APGE::IsFlagEnum< E >", "struct_p_g_e_1_1_is_flag_enum.html", null ],
-      [ "\u202APGE::Negator< ToNegate >", "struct_p_g_e_1_1_negator.html", null ]
+      [ "\u202APGE::Negator< ToNegate >", "struct_p_g_e_1_1_negator.html", null ],
+      [ "\u202APGE::True", "struct_p_g_e_1_1_true.html", null ]
     ] ],
     [ "\u202APGE::Texture::Mipmap", "struct_p_g_e_1_1_texture_1_1_mipmap.html", null ],
     [ "\u202APGE::String::OrderedKey", "struct_p_g_e_1_1_string_1_1_ordered_key.html", null ],

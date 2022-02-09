@@ -123,6 +123,8 @@ var namespaces_dup =
       [ "\u202ASysEvents", "class_p_g_e_1_1_sys_events.html", "class_p_g_e_1_1_sys_events" ],
       [ "\u202ACircularArray", "class_p_g_e_1_1_circular_array.html", "class_p_g_e_1_1_circular_array" ],
       [ "\u202AMeta", "struct_p_g_e_1_1_meta.html", "struct_p_g_e_1_1_meta" ],
+      [ "\u202AFalse", "struct_p_g_e_1_1_false.html", null ],
+      [ "\u202ATrue", "struct_p_g_e_1_1_true.html", null ],
       [ "\u202ANegator", "struct_p_g_e_1_1_negator.html", "struct_p_g_e_1_1_negator" ],
       [ "\u202AIsFlagEnum", "struct_p_g_e_1_1_is_flag_enum.html", null ],
       [ "\u202APolymorphicHeap", "class_p_g_e_1_1_polymorphic_heap.html", "class_p_g_e_1_1_polymorphic_heap" ],

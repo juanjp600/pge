@@ -103,34 +103,42 @@ $(document).ready(function(){initNavTree('_concepts_8h_source.html',''); initRes
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;concept Enum = std::is_enum&lt;E&gt;::value;</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="struct_p_g_e_1_1_meta.html">   16</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_p_g_e_1_1_meta.html">Meta</a> { <a class="code" href="struct_p_g_e_1_1_meta.html">Meta</a>() = <span class="keyword">delete</span>; };</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>...&gt; <span class="keyword">typename</span> ToNegate&gt;</div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="struct_p_g_e_1_1_negator.html">   19</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_p_g_e_1_1_negator.html">Negator</a> : <a class="code" href="struct_p_g_e_1_1_meta.html">Meta</a> {</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">using</span> Type = std::negation&lt;ToNegate&lt;Args...&gt;&gt;;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;};</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#pragma warning(disable: 4624)</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="struct_p_g_e_1_1_meta.html">   19</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_p_g_e_1_1_meta.html">Meta</a> { <a class="code" href="struct_p_g_e_1_1_meta.html">Meta</a>() = <span class="keyword">delete</span>; ~<a class="code" href="struct_p_g_e_1_1_meta.html">Meta</a>() = <span class="keyword">delete</span>; };</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="struct_p_g_e_1_1_false.html">   21</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_p_g_e_1_1_false.html">False</a> : <a class="code" href="struct_p_g_e_1_1_meta.html">Meta</a> { <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> value = <span class="keyword">false</span>; };</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="struct_p_g_e_1_1_true.html">   22</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_p_g_e_1_1_true.html">True</a> : <a class="code" href="struct_p_g_e_1_1_meta.html">Meta</a> { <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> value = <span class="keyword">true</span>; };</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;concept Arithmetic = std::is_arithmetic&lt;T&gt;::value;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">template</span> &lt;<span class="keyword">typename</span>, <span class="keyword">typename</span>&gt; <span class="keyword">typename</span> Checker, <span class="keyword">typename</span>... CheckTypes&gt;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;concept Any = (Checker&lt;T, CheckTypes&gt;::value || ...);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>...&gt; <span class="keyword">typename</span> ToNegate&gt;</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="struct_p_g_e_1_1_negator.html">   25</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_p_g_e_1_1_negator.html">Negator</a> : <a class="code" href="struct_p_g_e_1_1_meta.html">Meta</a> {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">using</span> Type = std::negation&lt;ToNegate&lt;Args...&gt;&gt;;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;};</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">template</span> &lt;<span class="keyword">typename</span>, <span class="keyword">typename</span>&gt; <span class="keyword">typename</span> Checker, <span class="keyword">typename</span>... CheckTypes&gt;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;concept All = (Checker&lt;T, CheckTypes&gt;::value &amp;&amp; ...);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;concept Arithmetic = std::is_arithmetic&lt;T&gt;::value;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... CheckTypes&gt;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;concept OneOf = Any&lt;T, std::is_same, CheckTypes...&gt;;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">template</span> &lt;<span class="keyword">typename</span>, <span class="keyword">typename</span>&gt; <span class="keyword">typename</span> Checker, <span class="keyword">typename</span>... CheckTypes&gt;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;concept Any = (Checker&lt;T, CheckTypes&gt;::value || ...);</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... CheckTypes&gt;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;concept AllExcept = Any&lt;T, Negator&lt;std::is_same&gt;::Type, CheckTypes...&gt;;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">template</span> &lt;<span class="keyword">typename</span>, <span class="keyword">typename</span>&gt; <span class="keyword">typename</span> Checker, <span class="keyword">typename</span>... CheckTypes&gt;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;concept All = (Checker&lt;T, CheckTypes&gt;::value &amp;&amp; ...);</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_CONCEPTS_H_INCLUDED</span></div>
-<div class="ttc" id="astruct_p_g_e_1_1_meta_html"><div class="ttname"><a href="struct_p_g_e_1_1_meta.html">PGE::Meta</a></div><div class="ttdef"><b>Definition:</b> Concepts.h:16</div></div>
-<div class="ttc" id="astruct_p_g_e_1_1_negator_html"><div class="ttname"><a href="struct_p_g_e_1_1_negator.html">PGE::Negator</a></div><div class="ttdef"><b>Definition:</b> Concepts.h:19</div></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... CheckTypes&gt;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;concept OneOf = Any&lt;T, std::is_same, CheckTypes...&gt;;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... CheckTypes&gt;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;concept AllExcept = Any&lt;T, Negator&lt;std::is_same&gt;::Type, CheckTypes...&gt;;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PGE_CONCEPTS_H_INCLUDED</span></div>
+<div class="ttc" id="astruct_p_g_e_1_1_false_html"><div class="ttname"><a href="struct_p_g_e_1_1_false.html">PGE::False</a></div><div class="ttdef"><b>Definition:</b> Concepts.h:21</div></div>
+<div class="ttc" id="astruct_p_g_e_1_1_meta_html"><div class="ttname"><a href="struct_p_g_e_1_1_meta.html">PGE::Meta</a></div><div class="ttdef"><b>Definition:</b> Concepts.h:19</div></div>
+<div class="ttc" id="astruct_p_g_e_1_1_negator_html"><div class="ttname"><a href="struct_p_g_e_1_1_negator.html">PGE::Negator</a></div><div class="ttdef"><b>Definition:</b> Concepts.h:25</div></div>
+<div class="ttc" id="astruct_p_g_e_1_1_true_html"><div class="ttname"><a href="struct_p_g_e_1_1_true.html">PGE::True</a></div><div class="ttdef"><b>Definition:</b> Concepts.h:22</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
