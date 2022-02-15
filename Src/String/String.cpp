@@ -293,6 +293,11 @@ String PGE::operator+(const String& a, const String& b) {
     return String(a, b);
 }
 
+String PGE::operator+(String&& a, const String& b) {
+    a += b;
+    return std::move(a);
+}
+
 bool PGE::operator==(const String& a, const String& b) {
     return a.equals(b);
 }

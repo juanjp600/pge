@@ -366,6 +366,7 @@ class String {
         static String fromFloatingPoint(F f);
 };
 String operator+(const String& a, const String& b);
+String operator+(String&& a, const String& b);
 bool operator==(const String& a, const String& b);
 std::ostream& operator<<(std::ostream& os, const String& s);
 std::istream& operator>>(std::istream& is, String& s);
