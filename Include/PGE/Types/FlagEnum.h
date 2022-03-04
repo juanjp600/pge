@@ -13,7 +13,8 @@ concept FlagEnum = Enum<E> && IsFlagEnum<E>::value;
 
 }
 
-template <PGE::FlagEnum E> bool operator!(E e) { return !(typename std::underlying_type<E>::type)e; }
+template <PGE::FlagEnum E>
+constexpr bool operator!(E e) { return !(typename std::underlying_type<E>::type)e; }
 template <PGE::FlagEnum E>
 constexpr E operator~(E e) { return (E)~(std::underlying_type_t<E>)e; }
 template <PGE::FlagEnum E>
