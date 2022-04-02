@@ -8,6 +8,7 @@ var class_p_g_e_1_1_file_path =
     [ "\u202AgetExtension", "class_p_g_e_1_1_file_path.html#a15ea135551912a5492ccb64e7a0e2a3b", null ],
     [ "\u202AgetLastModifyTime", "class_p_g_e_1_1_file_path.html#ac7958a3096fe9e4fb9b8b1a364523197", null ],
     [ "\u202AgetParentDirectory", "class_p_g_e_1_1_file_path.html#a7cb5394f8d9709e2bf44c8e4680c5192", null ],
+    [ "\u202AgetRelativePath", "class_p_g_e_1_1_file_path.html#a9a7b33b21a70b9b5ba7ea1c78c54d91f", null ],
     [ "\u202AisDirectory", "class_p_g_e_1_1_file_path.html#a82a3f38aa2aec4ab42a2aa6d04c9f9d2", null ],
     [ "\u202AisValid", "class_p_g_e_1_1_file_path.html#ae405fc81a9bb80d4b3bd0c0c23649816", null ],
     [ "\u202AmakeDirectory", "class_p_g_e_1_1_file_path.html#a14c6cbe7cc469575dfd6927ce46c0e2e", null ],
