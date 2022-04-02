@@ -117,6 +117,22 @@ FilePath FilePath::getParentDirectory() const {
     return FilePath(name.substr(0, index + 1));
 }
 
+std::optional<String> FilePath::getRelativePath(const FilePath& other) const {
+    PGE_ASSERT(valid, INVALID_STR);
+    PGE_ASSERT(other.valid, INVALID_STR);
+    auto ita = name.begin();
+    auto itb = other.str().begin();
+    while (ita != name.end() && itb != other.name.end()) {
+        if (*ita != *itb) { return std::nullopt; }
+        ita++; itb++;
+    }
+    if (ita == name.end()) {
+        return other.name.substr(itb);
+    } else {
+        return name.substr(ita);
+    }
+}
+
 String FilePath::getExtension() const {
     PGE_ASSERT(valid, INVALID_STR);
     String::Iterator startIndex = name.findLast(".");

@@ -13,7 +13,7 @@ namespace PGE {
 /// or unsatisfactory in the standard library.
 namespace Math {
 	constexpr float PI = 3.1415926535f;
-	constexpr float E =  2.7182818284f;
+	constexpr float E  = 2.7182818284f;
     /// The default difference two floats are allowed to have in order to be considered "equal".
     /// @see #PGE::Math::equalFloats
     constexpr float EPSILON_DEFAULT = 0.001f;

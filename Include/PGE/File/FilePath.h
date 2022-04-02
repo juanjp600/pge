@@ -89,6 +89,8 @@ class FilePath {
         /// @throws #PGE::Exception If the path is not initialized.
         FilePath getParentDirectory() const;
 
+        std::optional<String> getRelativePath(const FilePath& other) const;
+
         /// Gets a file's extension.
         /// A file's extension is defined as the suffix after the last occurence of the "." character.
         /// @returns The file extension, without a leading dot.
