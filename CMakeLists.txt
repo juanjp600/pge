@@ -14,7 +14,9 @@ file(GLOB_RECURSE SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Src/*.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Libraries/glad/src/gl.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/Libraries/SPIRV-Reflect/spirv_reflect.c"
+
     )
+list(FILTER SOURCE_FILES EXCLUDE REGEX "Init.cpp")
 
 if(NOT WIN32 OR NOT D3D)
     list(FILTER SOURCE_FILES EXCLUDE REGEX "DX11")
