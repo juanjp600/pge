@@ -1,4 +1,3 @@
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_C_STANDARD 11)
@@ -11,20 +10,14 @@ add_executable(BuildShaders
     ${CMAKE_CURRENT_SOURCE_DIR}/Parser.cpp
     )
 
-target_link_libraries(BuildShaders PUBLIC
-    # ${SDL2_LIBRARIES}
-    Engine
-    d3d11
-    dxgi
-    dxguid
-    )
+target_link_libraries(BuildShaders PUBLIC Engine)
+if(WIN32 AND PGE_D3D)
+    target_link_libraries(BuildShaders PUBLIC d3d11 dxgi dxguid d3dcompiler)
+endif()
 
 target_include_directories(BuildShaders PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../Include
-    # ${CMAKE_CURRENT_SOURCE_DIR}/../../Libraries/DirectXShaderCompiler/include
-    # ${CMAKE_CURRENT_SOURCE_DIR}/../../Libraries/SPIRV-Cross
-    # ${CMAKE_CURRENT_SOURCE_DIR}/../../Libraries/ShaderConductor/include
     )
 
 add_custom_command(TARGET BuildShaders POST_BUILD

@@ -1,7 +1,7 @@
 #ifndef BUILDSHADERS_COMPILERESULT_H_INCLUDED
 #define BUILDSHADERS_COMPILERESULT_H_INCLUDED
 
-#ifdef USE_D3D
+#ifdef PGE_D3D
 #include <d3dcompiler.h>
 #endif
 #include <PGE/String/String.h>
@@ -9,7 +9,7 @@
 #include <vector>
 
 struct CompileResult {
-    #ifdef USE_D3D
+    #ifdef PGE_D3D
     ID3DBlob* compiledD3dBlob;
     #endif
     struct HlslStruct {

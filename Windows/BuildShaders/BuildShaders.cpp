@@ -1,4 +1,4 @@
-#ifdef USE_D3D
+#ifdef PGE_D3D
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #endif
@@ -18,7 +18,7 @@
 
 using namespace PGE;
 
-#ifdef USE_D3D
+#ifdef PGE_D3D
 static DXGI_FORMAT computeDxgiFormat(const D3D11_SIGNATURE_PARAMETER_DESC& paramDesc) {
     // https://takinginitiative.wordpress.com/2011/12/11/directx-1011-basic-shader-reflection-automatic-input-layout-creation/
     if (paramDesc.Mask == 1) {
@@ -172,7 +172,7 @@ static CompileResult compileReflectionInfo(const String& dxEntryPoint, const Str
     return result;
 }
 
-#ifdef USE_D3D
+#ifdef PGE_D3D
 static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoint, const String& hlsl) {
     CompileResult result = compileReflectionInfo(dxEntryPoint, hlsl);
     ID3DBlob* errorBlob = nullptr;
@@ -200,7 +200,7 @@ static void compileShader(const FilePath& path) {
     FilePath compiledPath = path.trimExtension().makeDirectory();
     compiledPath.createDirectory();
 
-    #ifdef USE_D3D
+    #ifdef PGE_D3D
     // TODO: The parsing inside here should only be done once.
     CompileResult vsResult = compileDXBC(compiledPath + "vertex.dxbc", "VS", input);
     CompileResult fsResult = compileDXBC(compiledPath + "fragment.dxbc", "PS", input); //it's called a fucking fragment shader, microsoft is wrong about this
