@@ -29,9 +29,9 @@ class Color {
         /// @param[in] a The alpha, should be in range [0, 1].
         /// @exception #PGE::Exception If hue, saturation or value are outside their expected range.
         /// @see https://en.wikipedia.org/wiki/HSL_and_HSV
-        static constexpr const Color fromHSV(float h, float s, float v, float a = 1.f) {
-            asrt(s >= 0 && s <= 1.f, "Saturation is outside of valid range (saturation: " + String::from(s) + ")");
-            asrt(v >= 0 && v <= 1.f, "Value is outside of valid range (value: " + String::from(v) + ")");
+        static constexpr Color fromHSV(float h, float s, float v, float a = 1.f) {
+            PGE_ASSERT(s >= 0 && s <= 1.f, "Saturation is outside of valid range (saturation: " + String::from(s) + ")");
+            PGE_ASSERT(v >= 0 && v <= 1.f, "Value is outside of valid range (value: " + String::from(v) + ")");
 
             while (h < 0.f) { h += 360.f; }
             while (h >= 360.f) { h -= 360.f; }
@@ -78,12 +78,20 @@ class Color {
                 && Math::equalFloats(alpha, other.alpha, epsilon);
         }
 
+        constexpr static Color cerp(const Color& a, const Color& b, float factor) {
+            return Color(
+                Interpolator::cerp(a.red, b.red, factor),
+                Interpolator::cerp(a.green, b.green, factor),
+                Interpolator::cerp(a.blue, b.blue, factor),
+                Interpolator::cerp(a.alpha, b.alpha, factor));
+        }
+
         constexpr static Color lerp(const Color& a, const Color& b, float factor) {
             return Color(
-                PGE::Interpolator::lerp(a.red, b.red, factor),
-                PGE::Interpolator::lerp(a.green, b.green, factor),
-                PGE::Interpolator::lerp(a.blue, b.blue, factor),
-                PGE::Interpolator::lerp(a.alpha, b.alpha, factor));
+                Interpolator::lerp(a.red, b.red, factor),
+                Interpolator::lerp(a.green, b.green, factor),
+                Interpolator::lerp(a.blue, b.blue, factor),
+                Interpolator::lerp(a.alpha, b.alpha, factor));
         }
 
         constexpr byte getRed() const noexcept { return (byte)(red * 255.f); }

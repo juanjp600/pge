@@ -19,16 +19,16 @@ for (const MyClass& m : myClasses) { /* ... */ }
 ```
 
 
-## Only ever return types by value as const
-This prevents assigning to/modifying temporaries.
-
-Built-in primitives already behave this way and thus adding the specifier would only introduce visual clutter.
+## Only ever return types by value as non-const
+Returning types by value as const can prevent move semantics from being utilized.
 
 **Example:**
 ```cpp
-const MyClass myFunc();
+const MyClass myFunc(); // Bad
+MyClass myFunc2(); // Good
 // ...
-myFunc() = MyClass(); // Error: This is no longer possible (which it shouldn't be!)
+MyClass mc{myFunc()}; // Likely copy instead of move!
+MyClass mc2{myFunc2()}; // Move!
 ```
 
 

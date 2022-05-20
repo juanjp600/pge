@@ -57,7 +57,7 @@ class CircularArray {
         }
 
         constexpr void assertNotEmpty(std::source_location loc = std::source_location::current()) const {
-            asrt(size() != 0, "circular array was empty", loc);
+            PGE_ASSERT_AT(size() != 0, "circular array was empty", loc);
         }
 
         constexpr T& frontInternal() const {
@@ -71,7 +71,7 @@ class CircularArray {
         }
         
         constexpr T& indexInternal(size_t index) const {
-            asrt(index < size(), "index must be less than size");
+            PGE_ASSERT(index < size(), "index must be less than size");
             return elements[(beginIndex + index) % capacity];
         }
 
@@ -83,7 +83,7 @@ class CircularArray {
                 size_t pos;
 
                 constexpr void assertPosValid(size_t newPos, const std::source_location& = std::source_location::current()) const {
-                    asrt(newPos >= carr->beginIndex && newPos <= carr->endIndex, "invalid index");
+                    PGE_ASSERT(newPos >= carr->beginIndex && newPos <= carr->endIndex, "invalid index");
                 }
 
             public:
@@ -93,14 +93,14 @@ class CircularArray {
                 using pointer = value_type*;
                 using reference = value_type&;
 
-                constexpr static const BasicIterator begin(CArray& carr) {
+                constexpr static BasicIterator begin(CArray& carr) {
                     BasicIterator it;
                     it.carr = &carr;
                     it.pos = carr.beginIndex;
                     return it;
                 }
 
-                constexpr static const BasicIterator end(CArray& carr) {
+                constexpr static BasicIterator end(CArray& carr) {
                     BasicIterator it;
                     it.carr = &carr;
                     it.pos = carr.endIndex;
@@ -108,18 +108,18 @@ class CircularArray {
                 }
 
                 constexpr std::conditional<CONST, const T&, T&>::type operator*() const {
-                    asrt(pos < carr->endIndex, "tried dereferencing end iterator");
+                    PGE_ASSERT(pos < carr->endIndex, "tried dereferencing end iterator");
                     return carr->elements[pos % carr->capacity];
                 }
 
                 constexpr BasicIterator& operator++() {
-                    asrt(pos < carr->endIndex, "Tried incrementing end iterator");
+                    PGE_ASSERT(pos < carr->endIndex, "Tried incrementing end iterator");
                     pos++;
                     return *this;
                 }
 
                 constexpr BasicIterator& operator--() {
-                    asrt(pos > carr->beginIndex, "Tried decrementing begin iterator");
+                    PGE_ASSERT(pos > carr->beginIndex, "Tried decrementing begin iterator");
                     pos--;
                     return *this;
                 }
@@ -164,7 +164,7 @@ class CircularArray {
                 }
 
                 constexpr i64 operator-(const BasicIterator& other) const {
-                    asrt(carr == other.carr, "Tried calculating iterator difference for different carrays");
+                    PGE_ASSERT(carr == other.carr, "Tried calculating iterator difference for different carrays");
                     return (i64)pos - other.pos;
                 }
 
@@ -304,14 +304,14 @@ class CircularArray {
         constexpr ConstIterator cend() const { return ConstIterator::end(*this); }
 
         using ReverseIterator = std::reverse_iterator<Iterator>;
-        constexpr const ReverseIterator rbegin() { return ReverseIterator(Iterator::end(*this)); }
-        constexpr const ReverseIterator rend() { return ReverseIterator(Iterator::begin(*this)); }
+        constexpr ReverseIterator rbegin() { return ReverseIterator(Iterator::end(*this)); }
+        constexpr ReverseIterator rend() { return ReverseIterator(Iterator::begin(*this)); }
 
         using ReverseConstIterator = std::reverse_iterator<ConstIterator>;
-        constexpr const ReverseConstIterator rbegin() const { return crbegin(); }
-        constexpr const ReverseConstIterator rend() const { return crend(); }
-        constexpr const ReverseConstIterator crbegin() const { return ReverseConstIterator(ConstIterator::end(*this)); }
-        constexpr const ReverseConstIterator crend() const { return ReverseConstIterator(ConstIterator::begin(*this)); }
+        constexpr ReverseConstIterator rbegin() const { return crbegin(); }
+        constexpr ReverseConstIterator rend() const { return crend(); }
+        constexpr ReverseConstIterator crbegin() const { return ReverseConstIterator(ConstIterator::end(*this)); }
+        constexpr ReverseConstIterator crend() const { return ReverseConstIterator(ConstIterator::begin(*this)); }
 
         template <typename... Args>
         constexpr T& emplaceFront(Args&&... args) {

@@ -45,6 +45,6 @@ void Parser::skipStatement(PGE::String::Iterator& it) {
 }
 
 void Parser::expectFixed(PGE::String::Iterator& it, PGE::char16 ch) {
-    asrt(*it == ch, PGE::String("Expected \"") + ch + "\", found \"" + *it + '"');
+    PGE_ASSERT(*it == ch, PGE::String("Expected \"") + ch + "\", found \"" + *it + '"');
     it++;
 }

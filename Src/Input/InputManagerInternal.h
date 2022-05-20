@@ -43,7 +43,7 @@ class InputManagerInternal : public InputManager {
         bool isControllerValid(Controller* controller) const override;
 
         const Vector2f& getMousePosition() const override;
-        const Vector2f consumeMouseDelta() override;
+        Vector2f consumeMouseDelta() override;
         void setMousePosition(const Vector2f& position) override;
         void setMouseRelativeInput(bool relative) override;
         Vector2i consumeMouseWheelDelta() override;

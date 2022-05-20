@@ -16,8 +16,12 @@ class Random {
         u32 next();
         bool nextBool();
         float nextFloat();
+        float nextGaussian();
+        float nextGaussian(float mean, float standardDeviation);
+        float nextGaussian(float mean, float standardDeviation, float min, float max);
+        float nextGaussianInRange(float min, float max);
         u32 nextInt(u32 max);
-        u32 nextInt(u32 min, u32 max);
+        i32 nextInt(i32 min, i32 max);
 
     private:
         u32 state[4];

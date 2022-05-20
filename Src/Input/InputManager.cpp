@@ -357,8 +357,7 @@ void InputManagerInternal::update() {
     }
 
     while (((SysEventsInternal::SubscriberInternal*)textSubscriber)->popEvent(event)) {
-        SDL_TextInputEvent txtEvent = event.text;
-        textInput = textInput + txtEvent.text;
+        textInput += (const char*)event.text.text;
     }
 }
 
@@ -366,7 +365,7 @@ const Vector2f& InputManagerInternal::getMousePosition() const {
     return mousePos;
 }
 
-const Vector2f InputManagerInternal::consumeMouseDelta() {
+Vector2f InputManagerInternal::consumeMouseDelta() {
     Vector2f ret = mouseDelta;
     mouseDelta = Vector2f();
     return ret;
@@ -398,7 +397,7 @@ void InputManagerInternal::setMousePosition(const Vector2f& position) {
 void InputManagerInternal::setMouseRelativeInput(bool relative) {
     int res = SDL_SetRelativeMouseMode(relative ? SDL_TRUE : SDL_FALSE);
     // It's fine if it's not available (-1).
-    asrt(res == 0 || res == -1, "Could not set relative mouse input (SDLERROR: " + String(SDL_GetError()) + ")");
+    PGE_ASSERT(res == 0 || res == -1, "Could not set relative mouse input (SDLERROR: " + String(SDL_GetError()) + ")");
 }
 
 Vector2i InputManagerInternal::consumeMouseWheelDelta() {

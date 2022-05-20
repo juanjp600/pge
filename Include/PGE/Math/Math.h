@@ -1,8 +1,11 @@
 #ifndef PGE_MATH_H_INCLUDED
 #define PGE_MATH_H_INCLUDED
 
+#include <cmath>
 #include <concepts>
 #include <numeric>
+
+#include <PGE/Exception/Exception.h>
 
 namespace PGE {
 
@@ -10,7 +13,7 @@ namespace PGE {
 /// or unsatisfactory in the standard library.
 namespace Math {
 	constexpr float PI = 3.1415926535f;
-	constexpr float E =  2.7182818284f;
+	constexpr float E  = 2.7182818284f;
     /// The default difference two floats are allowed to have in order to be considered "equal".
     /// @see #PGE::Math::equalFloats
     constexpr float EPSILON_DEFAULT = 0.001f;
@@ -52,7 +55,7 @@ namespace Math {
                 value = -value;
             }
         }
-        asrt(value != 0, "value mustn't be 0");
+        PGE_ASSERT(value != 0, "value mustn't be 0");
         T ret = 0;
         for (T i = 1; i < value; i *= 2) { ret++; }
         if constexpr (std::numeric_limits<T>::is_signed) {
@@ -62,24 +65,87 @@ namespace Math {
         }
     }
 
-    /// Round down a float.
-    /// Rounding down is defined as always rounding towards 0.
-    /// 
-    /// The standard implementation returns a float, which we consider cringe.
-    constexpr int floor(float val) noexcept {
-        int i = (int)val;
-        if (i > val) { i--; }
-        return i;
+    template <std::floating_point F>
+    constexpr bool isNaN(F value) {
+        return value != value;
     }
 
-    /// Round up a float.
-    /// Rounding up is defined as always rounding towards +/-∞.
-    /// 
-    /// The standard implementation returns a float, which we consider cringe.
-    constexpr int ceil(float val) noexcept {
-        int i = (int)val;
-        if (i < val) { i++; }
-        return i;
+    template <typename T>
+    constexpr T abs(T value) {
+        return value > 0 ? value : -value;
+    }
+
+    template <std::floating_point F>
+    constexpr F sin(F value) {
+        if (std::is_constant_evaluated()) {
+            PGE_ASSERT(!isNaN(value), "value is NaN");
+            PGE_ASSERT(abs(value) != std::numeric_limits<F>::infinity(), "value is infinity");
+            if (value < 0) { value = -value + PI; }
+            while (value >= 2 * PI) {
+                value -= 2 * PI;
+            }
+            // Taylor series
+            F oldV;
+            F newV = value;
+            uint64_t i = 0;
+            F running = value;
+            do {
+                oldV = newV;
+                i += 2;
+                running *= value * value / (i * (i + 1));
+                if (i % 4 != 0) { newV -= running; }
+                else { newV += running; }
+            } while (oldV != newV);
+            return newV;
+        } else {
+            return std::sin(value);
+        }
+    }
+
+    template <std::floating_point F>
+    constexpr F cos(F value) {
+        if (std::is_constant_evaluated()) {
+            PGE_ASSERT(!isNaN(value), "value is NaN");
+            PGE_ASSERT(abs(value) != std::numeric_limits<F>::infinity(), "value is infinity");
+            if (value < 0) { value = -value; }
+            while (value >= 2 * PI) {
+                value -= 2 * PI;
+            }
+            // Taylor series
+            F oldV;
+            F newV = 1;
+            uint64_t i = 0;
+            F running = 1;
+            do {
+                oldV = newV;
+                i += 2;
+                running *= value * value / (i * (i - 1));
+                if (i % 4 != 0) { newV -= running; }
+                else { newV += running; }
+            } while (oldV != newV);
+            return newV;
+        } else {
+            return std::cos(value);
+        }
+    }
+
+    template <std::floating_point F>
+    constexpr F sqrt(F value) {
+        if (std::is_constant_evaluated()) {
+            PGE_ASSERT(!isNaN(value), "value is NaN");
+            PGE_ASSERT(abs(value) != std::numeric_limits<F>::infinity(), "value is infinity");
+            PGE_ASSERT(value > 0, "value must be > 0");
+            // Babylonian method
+            F oldV;
+            F newV = value;
+            do {
+                oldV = newV;
+                newV = (newV + value / newV) / 2;
+            } while (oldV != newV);
+            return newV;
+        } else {
+            return std::sqrt(value);
+        }
     }
 }
 

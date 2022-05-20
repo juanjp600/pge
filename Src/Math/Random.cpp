@@ -54,7 +54,41 @@ namespace PGE {
         return (next() >> 8) * 0x1.0p-24f;
     }
 
-    // [0, max]
+    // Gaussian distribution with mean 0 and standard deviation 1
+    // https://www.alanzucconi.com/2015/09/16/how-to-sample-from-a-gaussian-distribution/
+    float Random::nextGaussian() {
+        float v1; float v2; float s;
+        do {
+            v1 = 2 * nextFloat() - 1; // (-1, 1)
+            v2 = 2 * nextFloat() - 1;
+            s = v1 * v1 + v2 * v2;
+        } while (s >= 1 || s == 0);
+        return v1 * std::sqrt(-2 * std::log(s) / s);
+    }
+
+    float Random::nextGaussian(float mean, float standardDeviation) {
+        return mean + nextGaussian() * standardDeviation;
+    }
+
+    // Gaussian-like distribution in range [min, max]
+    float Random::nextGaussianInRange(float min, float max) {
+        constexpr float STD_DEV_FROM_MEAN = 3.5f;
+        float res;
+        do {
+            res = nextGaussian(min + (max - min) / 2, (max - min) / 2 / STD_DEV_FROM_MEAN);
+        } while (res < min || res > max);
+        return res;
+    }
+
+    float Random::nextGaussian(float mean, float standardDeviation, float min, float max) {
+        float res;
+        do {
+            res = nextGaussian(mean, standardDeviation);
+        } while (res < min || res > max);
+        return res;
+    }
+
+    // [0, max)
     u32 Random::nextInt(u32 max) {
         /**
         * 
@@ -108,8 +142,8 @@ namespace PGE {
     }
 
     // [min, max)
-    u32 Random::nextInt(u32 min, u32 max) {
-        asrt(min <= max, "min > max (min: " + String::from(min) + ", max: " + String::from(max) + ")");
+    i32 Random::nextInt(i32 min, i32 max) {
+        PGE_ASSERT(min <= max, "min > max (min: " + String::from(min) + ", max: " + String::from(max) + ")");
         return nextInt(max - min) + min;
     }
 

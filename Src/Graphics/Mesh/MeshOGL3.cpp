@@ -26,13 +26,13 @@ void MeshOGL3::uploadInternalData() {
     //TODO: determine when we should use GL_DYNAMIC_DRAW
     glBufferData(GL_ARRAY_BUFFER, vertices.getDataSize(), vertices.getData(),GL_STATIC_DRAW);
     glError = glGetError();
-    asrt(glError == GL_NO_ERROR, "Failed to create data store for vertex buffer (GLERROR: " + String::from(glError) + ")");
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create data store for vertex buffer (GLERROR: " + String::from(glError) + ")");
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices.size()*sizeof(GLuint),indices.data(),GL_STATIC_DRAW);
     glError = glGetError();
-    asrt(glError == GL_NO_ERROR, "Failed to create data store for index buffer (GLERROR: " + String::from(glError) + ")");
+    PGE_ASSERT(glError == GL_NO_ERROR, "Failed to create data store for index buffer (GLERROR: " + String::from(glError) + ")");
 }
 
-const static GLenum glTextureLayers[] = {
+static const GLenum glTextureLayers[] = {
     GL_TEXTURE0,
     GL_TEXTURE1,
     GL_TEXTURE2,

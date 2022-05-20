@@ -14,13 +14,13 @@ namespace Interpolator {
 	};
 
 	template <Interpolatable T>
-	constexpr const T lerp(const T& from, const T& to, float lerp) {
-		return from + lerp * (to - from);
+	constexpr T lerp(const T& from, const T& to, float interp) {
+		return from + interp * (to - from);
 	}
 
 	template <Interpolatable T>
-	inline const T cerp(const T& from, const T& to, float lerp) {
-		float s = (1.f - cos(lerp * Math::PI)) / 2.f;
+	constexpr T cerp(const T& from, const T& to, float interp) {
+		float s = (1.f - Math::cos(interp * Math::PI)) / 2.f;
 		return lerp(from, to, s);
 	}
 }

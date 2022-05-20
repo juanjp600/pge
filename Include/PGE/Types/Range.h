@@ -44,10 +44,10 @@ class Range {
 				constexpr void operator+=(SIZE steps) { position += step * steps; }
 				constexpr void operator-=(SIZE steps) { position -= step * steps; }
 
-				constexpr const Iterator operator+(SIZE steps) const { return Iterator(position + step * steps, step); }
-				constexpr const Iterator operator-(SIZE steps) const { return Iterator(position - step * steps, step); }
+				constexpr Iterator operator+(SIZE steps) const { return Iterator(position + step * steps, step); }
+				constexpr Iterator operator-(SIZE steps) const { return Iterator(position - step * steps, step); }
 
-				constexpr const std::weak_ordering operator<=>(const Iterator& other) const { return position <=> other.position; }
+				constexpr std::weak_ordering operator<=>(const Iterator& other) const { return position <=> other.position; }
 
 			private:
 				constexpr Iterator(SIZE position, SIZE step) : position(position), step(step) { }

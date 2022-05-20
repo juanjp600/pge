@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Tests\CircularArrayTests.cpp" />
     <ClCompile Include="..\..\Tests\Main.cpp" />
+    <ClCompile Include="..\..\Tests\MathTests.cpp" />
     <ClCompile Include="..\..\Tests\StringTests.cpp" />
   </ItemGroup>
   <ItemGroup>

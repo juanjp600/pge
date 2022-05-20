@@ -10,7 +10,16 @@ template <typename R, typename T>
 concept Enumerable = std::ranges::range<R>
 			      && std::same_as<std::ranges::range_value_t<R>, T>;
 
-struct Meta { Meta() = delete; };
+template <typename E>
+concept Enum = std::is_enum<E>::value;
+
+#ifdef _MSC_VER
+#pragma warning(disable: 4624)
+#endif
+struct Meta { Meta() = delete; ~Meta() = delete; };
+
+struct False : Meta { static constexpr bool value = false; };
+struct True : Meta { static constexpr bool value = true; };
 
 template <template <typename...> typename ToNegate>
 struct Negator : Meta {

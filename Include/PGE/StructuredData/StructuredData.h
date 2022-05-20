@@ -63,8 +63,8 @@ class StructuredData {
         StructuredData(const StructuredData&) = delete;
         void operator=(const StructuredData&) = delete;
 
-        StructuredData(StructuredData&& other) noexcept;
-        void operator=(StructuredData&& other) noexcept;
+        StructuredData(StructuredData&&) = default;
+        StructuredData& operator=(StructuredData&&) = default;
 
         StructuredData copy() const;
 

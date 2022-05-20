@@ -15,7 +15,7 @@ struct TemplateString {
 		consteval TemplateString(const char(&cstri)[N]) { std::copy_n(cstri, N, cstr); }
 
 		constexpr operator const char*() const { return cstr; }
-		constexpr operator const String() const { return String(cstr); }
+		constexpr operator String() const { return String(cstr); }
 };
 
 }

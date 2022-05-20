@@ -36,7 +36,7 @@ template<> bool BinaryReader::tryRead(String& out) {
 
 void BinaryReader::readStringInto(String& ref) {
     String ret;
-    asrt(tryRead<String>(ref), BAD_STREAM);
+    PGE_ASSERT(tryRead<String>(ref), BAD_STREAM);
 }
 
 bool BinaryReader::tryReadBytes(size_t count, std::vector<byte>& out) {
@@ -45,14 +45,14 @@ bool BinaryReader::tryReadBytes(size_t count, std::vector<byte>& out) {
     return stream.good();
 }
 
-const std::vector<byte> BinaryReader::readBytes(size_t count) {
+std::vector<byte> BinaryReader::readBytes(size_t count) {
     std::vector<byte> ret;
-    asrt(tryReadBytes(count, ret), BAD_STREAM);
+    readBytesInto(ret, count);
     return ret;
 }
 
-void BinaryReader::readBytesInto(size_t count, std::vector<byte>& out) {
-    asrt(tryReadBytes(count, out), BAD_STREAM);
+void BinaryReader::readBytesInto(std::vector<byte>& out, size_t count) {
+    PGE_ASSERT(tryReadBytes(count, out), BAD_STREAM);
 }
 
 
@@ -62,5 +62,5 @@ bool BinaryReader::trySkip(size_t length) {
 }
 
 void BinaryReader::skip(size_t length) {
-    asrt(trySkip(length), BAD_STREAM);
+    PGE_ASSERT(trySkip(length), BAD_STREAM);
 }

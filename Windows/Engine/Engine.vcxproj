@@ -46,6 +46,7 @@
     <ClCompile Include="..\..\Src\Input\InputManager.cpp" />
     <ClCompile Include="..\..\Src\Math\Assertions.cpp" />
     <ClCompile Include="..\..\Src\Math\Random.cpp" />
+    <ClCompile Include="..\..\Src\Math\Stringifications.cpp" />
     <ClCompile Include="..\..\Src\ResourceManagement\ResourceManagerOGL3.cpp" />
     <ClCompile Include="..\..\Src\String\String.cpp" />
     <ClCompile Include="..\..\Src\String\Unicode.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="..\..\Include\PGE\SysEvents\SysEvents.h" />
     <ClInclude Include="..\..\Include\PGE\Types\CircularArray.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Concepts.h" />
+    <ClInclude Include="..\..\Include\PGE\Types\FlagEnum.h" />
     <ClInclude Include="..\..\Include\PGE\Types\TemplateEnableIf.h" />
     <ClInclude Include="..\..\Include\PGE\Types\PolymorphicHeap.h" />
     <ClInclude Include="..\..\Include\PGE\Types\Range.h" />

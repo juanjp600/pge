@@ -32,7 +32,7 @@ class Matrix4x4f {
             v1.w, v2.w, v3.w, v4.w
         } { }
 
-        static constexpr const Matrix4x4f translate(const Vector3f& position) {
+        static constexpr Matrix4x4f translate(const Vector3f& position) {
             return Matrix4x4f(
                 1.f, 0.f, 0.f, position.x,
                 0.f, 1.f, 0.f, position.y,
@@ -40,49 +40,47 @@ class Matrix4x4f {
                 0.f, 0.f, 0.f, 1.f
             );
         }
-        // TODO: Custom trigonometric function implementation?
-        static inline const Matrix4x4f rotate(const Vector3f& rotation) {
-            float sinPitch = sin(rotation.x);
-            float sinYaw = sin(rotation.y);
-            float sinRoll = sin(rotation.z);
-            float cosPitch = cos(rotation.x);
-            float cosYaw = cos(rotation.y);
-            float cosRoll = cos(rotation.z);
 
-            Matrix4x4f pitchMat(
+        static constexpr Matrix4x4f rotatePitch(float rot) {
+            float sinV = Math::sin(rot);
+            float cosV = Math::cos(rot);
+            return Matrix4x4f(
                 1.f, 0.f, 0.f, 0.f,
-                0.f, cosPitch, -sinPitch, 0.f,
-                0.f, sinPitch, cosPitch, 0.f,
+                0.f, cosV, -sinV, 0.f,
+                0.f, sinV, cosV, 0.f,
                 0.f, 0.f, 0.f, 1.f
             );
+        }
 
-            Matrix4x4f yawMat(
-                cosYaw, 0.f, sinYaw, 0.f,
+        static constexpr Matrix4x4f rotateYaw(float rot) {
+            float sinV = Math::sin(rot);
+            float cosV = Math::cos(rot);
+            return Matrix4x4f(
+                cosV, 0.f, sinV, 0.f,
                 0.f, 1.f, 0.f, 0.f,
-                -sinYaw, 0.f, cosYaw, 0.f,
+                -sinV, 0.f, cosV, 0.f,
                 0.f, 0.f, 0.f, 1.f
             );
+        }
 
-            Matrix4x4f rollMat(
-                cosRoll, -sinRoll, 0.f, 0.f,
-                sinRoll, cosRoll, 0.f, 0.f,
+        static constexpr Matrix4x4f rotateRoll(float rot) {
+            float sinV = Math::sin(rot);
+            float cosV = Math::cos(rot);
+            return Matrix4x4f(
+                cosV, -sinV, 0.f, 0.f,
+                sinV, cosV, 0.f, 0.f,
                 0.f, 0.f, 1.f, 0.f,
                 0.f, 0.f, 0.f, 1.f
             );
-
-            return yawMat * pitchMat * rollMat;
         }
 
-        static constexpr const Matrix4x4f lookAt(const Vector3f& from, const Vector3f& to, const Vector3f& fixedDir = Vector3f(0.f, 1.f, 0.f)) {
-            Vector3f forward = (from - to).normalize();
-            Vector3f right = fixedDir.crossProduct(forward).normalize();
-            Vector3f up = forward.crossProduct(right).normalize();
-            return Matrix4x4f(
-                Vector4f(right, 0.f), Vector4f(up, 0.f), Vector4f(forward, 0.f), Vector4f(0.f, 0.f, 0.f, 1.f)
-            );
+        static constexpr Matrix4x4f rotate(const Vector3f& rotation) {
+            return rotateYaw(rotation.y) *
+                   rotatePitch(rotation.x) *
+                   rotateRoll(rotation.z);
         }
 
-        static constexpr const Matrix4x4f scale(const Vector3f& scale) {
+        static constexpr Matrix4x4f scale(const Vector3f& scale) {
             return Matrix4x4f(
                 scale.x, 0.f, 0.f, 0.f,
                 0.f, scale.y, 0.f, 0.f,
@@ -91,12 +89,21 @@ class Matrix4x4f {
             );
         }
 
-        static constexpr const Matrix4x4f constructWorldMat(const Vector3f& position, const Vector3f& rotation, const Vector3f& scale) {
+        static constexpr Matrix4x4f lookAt(const Vector3f& from, const Vector3f& to, const Vector3f& fixedDir = Vector3f(0.f, 1.f, 0.f)) {
+            Vector3f forward = (from - to).normalize();
+            Vector3f right = fixedDir.crossProduct(forward).normalize();
+            Vector3f up = forward.crossProduct(right).normalize();
+            return Matrix4x4f(
+                Vector4f(right, 0.f), Vector4f(up, 0.f), Vector4f(forward, 0.f), Vector4f(0.f, 0.f, 0.f, 1.f)
+            );
+        }
+
+        static constexpr Matrix4x4f constructWorldMat(const Vector3f& position, const Vector3f& rotation, const Vector3f& scale) {
             return Matrix4x4f::translate(position) * Matrix4x4f::rotate(rotation) * Matrix4x4f::scale(scale);
         }
 
         /// Constructs a view matrix. Returns the identity matrix when position=(0,0,0), forwardVector=(0,0,1), upVector=(0,1,0)
-        static constexpr const Matrix4x4f constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector) {
+        static constexpr Matrix4x4f constructViewMat(const Vector3f& position, const Vector3f& forwardVector, const Vector3f& upVector) {
             Vector3f zAxis = forwardVector;
             zAxis = zAxis.normalize();
 
@@ -115,9 +122,9 @@ class Matrix4x4f {
 
         /// Constructs a perspective projection matrix.
         /// Horizontal field of view must be provided in radians.
-        static inline const Matrix4x4f constructPerspectiveMat(float horizontalFovRad, float aspectRatio, float nearZ, float farZ) {
+        static constexpr Matrix4x4f constructPerspectiveMat(float horizontalFovRad, float aspectRatio, float nearZ, float farZ) {
             float halfFov = horizontalFovRad * 0.5f;
-            float cotanHalfFov = cos(halfFov) / sin(halfFov);
+            float cotanHalfFov = Math::cos(halfFov) / Math::sin(halfFov);
 
             return Matrix4x4f(
                 cotanHalfFov / aspectRatio, 0.f, 0.f, 0.f,
@@ -127,7 +134,7 @@ class Matrix4x4f {
             );
         }
 
-        static constexpr const Matrix4x4f constructOrthographicMat(float width, float height, float nearZ, float farZ) {
+        static constexpr Matrix4x4f constructOrthographicMat(float width, float height, float nearZ, float farZ) {
             return Matrix4x4f(
                 -2.f / width, 0.f, 0.f, 0.f,
                 0.f, 2.f / height, 0.f, 0.f,
@@ -185,7 +192,7 @@ class Matrix4x4f {
             }
         }
 
-        constexpr const Matrix4x4f operator+(const Matrix4x4f& other) const {
+        constexpr Matrix4x4f operator+(const Matrix4x4f& other) const {
             Matrix4x4f retVal = *this;
             for (int i : Range(4)) {
                 for (int j : Range(4)) {
@@ -195,7 +202,7 @@ class Matrix4x4f {
             return retVal;
         }
 
-        constexpr const Matrix4x4f operator*(const Matrix4x4f& other) const {
+        constexpr Matrix4x4f operator*(const Matrix4x4f& other) const {
             Matrix4x4f retVal;
             for (int i : Range(4)) {
                 for (int j : Range(4)) {
@@ -207,7 +214,7 @@ class Matrix4x4f {
             return retVal;
         }
 
-        constexpr const Matrix4x4f operator*(float scalar) const {
+        constexpr Matrix4x4f operator*(float scalar) const {
             Matrix4x4f retVal = *this;
             for (int i : Range(4)) {
                 for (int j : Range(4)) {
@@ -217,7 +224,7 @@ class Matrix4x4f {
             return retVal;
         }
 
-        constexpr const Vector4f operator*(const Vector4f& vec) const {
+        constexpr Vector4f operator*(const Vector4f& vec) const {
             Vector4f retVal;
             retVal.x = vec.x * elements[0][0] + vec.y * elements[0][1] + vec.z * elements[0][2] + vec.w * elements[0][3];
             retVal.y = vec.x * elements[1][0] + vec.y * elements[1][1] + vec.z * elements[1][2] + vec.w * elements[1][3];
@@ -234,7 +241,7 @@ class Matrix4x4f {
         /// | r3c0 r3c1 r3c2 r3c3 |   | 1 |
         /// --                   --   -- --
         /// The w component of the result is discarded.
-        constexpr const Vector3f transform(const Vector3f& vec) const {
+        constexpr Vector3f transform(const Vector3f& vec) const {
             Vector4f retVal(vec.x, vec.y, vec.z, 1.f);
             retVal = (*this) * retVal;
             return Vector3f(retVal.x, retVal.y, retVal.z);
@@ -247,11 +254,11 @@ class Matrix4x4f {
         /// | r2c0 r2c1 r2c2 r2c3 |   | z |
         /// | r3c0 r3c1 r3c2 r3c3 |   | w |
         /// --                   --   -- --
-        constexpr const Vector4f transform(const Vector4f& vec) const {
+        constexpr Vector4f transform(const Vector4f& vec) const {
             return (*this) * vec;
         }
 
-        constexpr const Matrix4x4f transpose() const {
+        constexpr Matrix4x4f transpose() const {
             Matrix4x4f retVal;
             for (int i : Range(4)) {
                 for (int j : Range(4)) {
@@ -261,15 +268,15 @@ class Matrix4x4f {
             return retVal;
         }
 
-        constexpr const Vector3f extractViewTarget() const {
+        constexpr Vector3f extractViewTarget() const {
             return Vector3f(-elements[0][2], -elements[1][2], -elements[2][2]);
         }
 
-        constexpr const Vector3f extractViewUp() const {
+        constexpr Vector3f extractViewUp() const {
             return Vector3f(elements[0][1], elements[1][1], elements[2][1]);
         }
 
-        constexpr const Vector3f extractViewPosition() const {
+        constexpr Vector3f extractViewPosition() const {
             Vector3f xAxis = Vector3f(elements[0][0], elements[1][0], elements[2][0]);
             Vector3f yAxis = Vector3f(elements[0][1], elements[1][1], elements[2][1]);
             Vector3f zAxis = Vector3f(elements[0][2], elements[1][2], elements[2][2]);

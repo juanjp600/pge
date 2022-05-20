@@ -1,6 +1,6 @@
 - [Semantic](#semantic)
     * [Utilize references-to-const in parameters and for-each loops](#utilize-references-to-const-in-parameters-and-for-each-loops)
-    * [Only ever return types by value as const](#only-ever-return-types-by-value-as-const)
+    * [Only ever return types by value as non-const](#only-ever-return-types-by-value-as-non-const)
     * [Prefer references over pointers](#prefer-references-over-pointers)
     * [Utilize perfect forwarding for template arguments](#utilize-perfect-forwarding-for-template-arguments)
     * [Prefer concepts and `std::span` over concrete parameter types](#prefer-concepts-and-stdspan-over-concrete-parameter-types)
@@ -46,16 +46,16 @@ for (const MyClass& m : myClasses) { /* ... */ }
 ```
 
 
-## Only ever return types by value as const
-This prevents assigning to/modifying temporaries.
-
-Built-in primitives already behave this way and thus adding the specifier would only introduce visual clutter.
+## Only ever return types by value as non-const
+Returning types by value as const can prevent move semantics from being utilized.
 
 **Example:**
 ```cpp
-const MyClass myFunc();
+const MyClass myFunc(); // Bad
+MyClass myFunc2(); // Good
 // ...
-myFunc() = MyClass(); // Error: This is no longer possible (which it shouldn't be!)
+MyClass mc{myFunc()}; // Likely copy instead of move!
+MyClass mc2{myFunc2()}; // Move!
 ```
 
 
