@@ -742,7 +742,7 @@ int String::byteLength() const {
 }
 
 bool String::contains(const String& fnd) const {
-    return findFirst(fnd) != begin();
+    return findFirst(fnd) != end();
 }
 
 String::Iterator String::findFirst(const String& fnd, int from) const {
