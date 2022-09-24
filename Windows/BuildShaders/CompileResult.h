@@ -1,13 +1,17 @@
 #ifndef BUILDSHADERS_COMPILERESULT_H_INCLUDED
 #define BUILDSHADERS_COMPILERESULT_H_INCLUDED
 
+#ifdef PGE_D3D
 #include <d3dcompiler.h>
+#endif
 #include <PGE/String/String.h>
 
 #include <vector>
 
 struct CompileResult {
+    #ifdef PGE_D3D
     ID3DBlob* compiledD3dBlob;
+    #endif
     struct HlslStruct {
         struct Member {
             PGE::String type;

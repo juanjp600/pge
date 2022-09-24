@@ -1,5 +1,7 @@
+#ifdef PGE_D3D
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#endif
 
 #include <iostream>
 #include <execution>
@@ -16,6 +18,7 @@
 
 using namespace PGE;
 
+#ifdef PGE_D3D
 static DXGI_FORMAT computeDxgiFormat(const D3D11_SIGNATURE_PARAMETER_DESC& paramDesc) {
     // https://takinginitiative.wordpress.com/2011/12/11/directx-1011-basic-shader-reflection-automatic-input-layout-creation/
     if (paramDesc.Mask == 1) {
@@ -146,9 +149,32 @@ static void generateDXReflectionInformation(const FilePath& path, const CompileR
 
     fsCompileResult.compiledD3dBlob->Release();
 }
+#endif
 
-static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoint, const String& hlsl) {
+static CompileResult compileReflectionInfo(const String& dxEntryPoint, const String& hlsl) {
     CompileResult result;
+    CompileResult::extractFunctionData(hlsl, dxEntryPoint, result);
+    std::vector<CompileResult::Function> funcs = CompileResult::extractFunctions(hlsl);
+    for (const CompileResult::Function& f : funcs) {
+        if (result.hlslFunctionBody.contains(f.name)) {
+            result.functions.push_back(f);
+        }
+    }
+    std::vector<String> cBufferNames = CompileResult::extractCBufferNames(hlsl);
+    for (const String& cBufName : cBufferNames) {
+        CompileResult::CBuffer cBuffer = CompileResult::parseCBuffer(hlsl, cBufName);
+        if (cBuffer.usedByFunction(result.hlslFunctionBody)) {
+            result.cBuffers.emplace_back(std::move(cBuffer));
+        }
+    }
+    result.textureInputs = CompileResult::extractTextureInputs(hlsl);
+    result.constants = CompileResult::extractConstants(hlsl);
+    return result;
+}
+
+#ifdef PGE_D3D
+static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoint, const String& hlsl) {
+    CompileResult result = compileReflectionInfo(dxEntryPoint, hlsl);
     ID3DBlob* errorBlob = nullptr;
     HRESULT hr = D3DCompile(hlsl.cstr(), hlsl.byteLength(), nullptr, nullptr, nullptr, dxEntryPoint.cstr(), (dxEntryPoint.toLower() + "_5_0").cstr(),
         D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3 | D3DCOMPILE_WARNINGS_ARE_ERRORS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &result.compiledD3dBlob, &errorBlob);
@@ -163,26 +189,10 @@ static CompileResult compileDXBC(const FilePath& path, const String& dxEntryPoin
     } else {
         BinaryWriter writer(path);
         writer.writeBytes(std::span((byte*)result.compiledD3dBlob->GetBufferPointer(), result.compiledD3dBlob->GetBufferSize()));
-
-        CompileResult::extractFunctionData(hlsl, dxEntryPoint, result);
-        std::vector<CompileResult::Function> funcs = CompileResult::extractFunctions(hlsl);
-        for (const CompileResult::Function& f : funcs) {
-            if (result.hlslFunctionBody.contains(f.name)) {
-                result.functions.push_back(f);
-            }
-        }
-        std::vector<String> cBufferNames = CompileResult::extractCBufferNames(hlsl);
-        for (const String& cBufName : cBufferNames) {
-            CompileResult::CBuffer cBuffer = CompileResult::parseCBuffer(hlsl, cBufName);
-            if (cBuffer.usedByFunction(result.hlslFunctionBody)) {
-                result.cBuffers.emplace_back(std::move(cBuffer));
-            }
-        }
-        result.textureInputs = CompileResult::extractTextureInputs(hlsl);
-        result.constants = CompileResult::extractConstants(hlsl);
     }
     return result;
 }
+#endif
 
 static void compileShader(const FilePath& path) {
     String input = path.readText();
@@ -190,10 +200,15 @@ static void compileShader(const FilePath& path) {
     FilePath compiledPath = path.trimExtension().makeDirectory();
     compiledPath.createDirectory();
 
+    #ifdef PGE_D3D
     // TODO: The parsing inside here should only be done once.
     CompileResult vsResult = compileDXBC(compiledPath + "vertex.dxbc", "VS", input);
     CompileResult fsResult = compileDXBC(compiledPath + "fragment.dxbc", "PS", input); //it's called a fucking fragment shader, microsoft is wrong about this
     generateDXReflectionInformation(compiledPath + "reflection.dxri", vsResult, fsResult);
+    #else
+    CompileResult vsResult = compileReflectionInfo("VS", input);
+    CompileResult fsResult = compileReflectionInfo("PS", input);
+    #endif
 
     Glsl::convert(compiledPath + "vertex.glsl", vsResult, Glsl::ShaderType::VERTEX);
     Glsl::convert(compiledPath + "fragment.glsl", fsResult, Glsl::ShaderType::FRAGMENT);
